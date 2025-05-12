@@ -1,4 +1,3 @@
-import React from "react";
 import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -31,7 +30,8 @@ import {
   checkTrapDoors,
 } from "../balUtils.js";
 import drawLevel from "../drawLevel.js";
-import {getLevel} from "../levels.js";
+import { codeToNumber, numberToCode } from "../codes.js";
+import { getLevel } from "../levels.js";
 import sndCatapult from "../Sounds/catapult.wav";
 import sndEat1 from "../Sounds/eat1.wav";
 import sndEat2 from "../Sounds/eat2.wav";
@@ -67,7 +67,6 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 
-let completed = [];
 let ctx;
 let currentLevel = 200;
 let fishCounter = 0;
@@ -105,7 +104,6 @@ let settings = {
   lessQuestions: false,
 };
 let skipFalling = 0;
-let skipped = [];
 let teleporting = 0;
 let wave1 = 0;
 let wave2 = 0;
@@ -128,8 +126,6 @@ function BalPage() {
   const elementHelp = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
-  const [showNext, setShowNext] = useState(false);
-  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [messageTitle, setMessageTitle] = useState("");
   const [messageContent, setMessageContent] = useState("");
@@ -143,12 +139,6 @@ function BalPage() {
   const closeModal = () => {
     setShowModal(false);
   };
-
-  function updateNextButton() {
-    let level = currentLevel.toString();
-    let nextButton = completed.includes(level) || skipped.includes(level);
-    setShowNext(nextButton);
-  }
 
   function playSound(sound) {
     let snd = null;
@@ -432,11 +422,11 @@ function BalPage() {
     }
   }
 
-  function closeHelp(e) {
+  function closeHelp() {
     elementHelp.current.style.display = "none";
   }
 
-  function help(e) {
+  function help() {
     elementHelp.current.style.display = "block";
   }
 
@@ -447,7 +437,6 @@ function BalPage() {
     try {
       currentLevel = n;
       setLevelNumber(n);
-      updateNextButton();
       posX = -1;
       posY = -1;
       data = await getLevel(currentLevel);
@@ -469,7 +458,17 @@ function BalPage() {
     }
   }
 
-  function clickSeries1(e) {
+  function clickCode() {
+    let code = prompt("Enter the code");
+    if (code !== null) {
+      const level = codeToNumber(code);
+      if (level > 0) {
+        initLevel(level);
+      }
+    }
+  }
+
+  function clickSeries1() {
     if (settings.lessQuestions) {
       initLevel(200);
     } else {
@@ -492,7 +491,7 @@ function BalPage() {
     }
   }
 
-  function clickSeries2(e) {
+  function clickSeries2() {
     if (settings.lessQuestions) {
       initLevel(700);
     } else {
@@ -515,7 +514,7 @@ function BalPage() {
     }
   }
 
-  function clickSeriesSmall(e) {
+  function clickSeriesSmall() {
     if (settings.lessQuestions) {
       initLevel(750);
     } else {
@@ -538,25 +537,7 @@ function BalPage() {
     }
   }
 
-  function skipClick(e) {
-    confirmAlert({
-      title: "Question",
-      message: "Skip this level?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => {
-          },
-        },
-        {
-          label: "No",
-          onClick: () => { },
-        },
-      ],
-    });
-  }
-
-  function handleChangeSettings(e) {
+  function handleChangeSettings() {
     settings.sound = cbSound.current.checked;
     settings.nicerGraphics = cbGraphics.current.checked;
     settings.lessQuestions = cbQuestions.current.checked;
@@ -747,7 +728,18 @@ function BalPage() {
       playSound("eat");
       checkGameOver();
       if (!gameOver && gameInfo.greenBalls <= 0) {
-        initLevel(currentLevel + 1);
+        confirmAlert({
+          title: "Congratulations!",
+          message: `Write down the code ${numberToCode(currentLevel + 1)} to go to level ${currentLevel + 1} whenever you want.`,
+          buttons: [
+            {
+              label: "OK",
+              onClick: () => {
+                initLevel(currentLevel + 1);
+              },
+            },
+          ],
+        });
       }
     }
     if (info.divingGlasses) {
@@ -756,11 +748,11 @@ function BalPage() {
     }
   }
 
-  function handleResize(e) {
+  function handleResize() {
     updateScreen();
   }
 
-  function nextLevelClick(e) {
+  function nextLevelClick() {
     if (settings.lessQuestions) {
       initLevel(currentLevel + 1);
     } else {
@@ -783,7 +775,7 @@ function BalPage() {
     }
   }
 
-  function tryAgain(e) {
+  function tryAgain() {
     if (settings.lessQuestions) {
       initLevel(currentLevel);
     } else {
@@ -869,27 +861,27 @@ function BalPage() {
     );
   }
 
-  function buttonJumpLeft(e) {
+  function buttonJumpLeft() {
     handleKeyDown({ key: "7", shiftKey: false });
   }
 
-  function buttonJumpRight(e) {
+  function buttonJumpRight() {
     handleKeyDown({ key: "9", shiftKey: false });
   }
 
-  function buttonMoveLeft(e) {
+  function buttonMoveLeft() {
     handleKeyDown({ key: "4", shiftKey: false });
   }
 
-  function buttonMoveRight(e) {
+  function buttonMoveRight() {
     handleKeyDown({ key: "6", shiftKey: false });
   }
 
-  function buttonJump(e) {
+  function buttonJump() {
     handleKeyDown({ key: "8", shiftKey: false });
   }
 
-  function buttonDown(e) {
+  function buttonDown() {
     handleKeyDown({ key: "2", shiftKey: false });
   }
 
@@ -960,16 +952,9 @@ function BalPage() {
             <button className="balButton" onClick={tryAgain}>
               Try again
             </button>
-            {showNext && (
-              <button className="balButton" onClick={nextLevelClick}>
-                Next
-              </button>
-            )}
-            {!showNext && (
-              <button className="balButton" onClick={skipClick}>
-                Skip
-              </button>
-            )}
+            <button className="balButton" onClick={clickCode}>
+              Code
+            </button>
             <div className="balPanelText">
               Green: <span className="balPanelTextSpan">{green}</span>
             </div>
@@ -1177,12 +1162,11 @@ function BalPage() {
               </tbody>
             </table>
             <p>
-              If you have already solved or skipped a certain level before,
-              there is a Next button available to continue with the next level.
+              When you solve a level, you will get a code that gives you access
+              to the next level whenever you want by pressing the Code button, so
+              it is important to write down the code.
               Some levels are very difficult. If you can't solve a certain
-              level, you can start with another series or press the Skip button
-              to continue with the next level. Of course, you can't skip too
-              many levels.
+              level, you can start with another series.
             </p>
           </div>
         </div>

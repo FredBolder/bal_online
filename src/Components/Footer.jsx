@@ -1,5 +1,3 @@
-import React from "react";
-import PrivacyPolicy from "./PrivacyPolicy";
 import { Link } from "react-router-dom";
 
 function Footer() {

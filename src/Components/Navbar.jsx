@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import React from "react";
 
 function Navbar() {
   const navigate = useNavigate();
 
-  function aboutClick(e) {
+  function aboutClick() {
     navigate("/about");
   }
 
-  function balClick(e) {
+  function balClick() {
     navigate("/");
   }
 

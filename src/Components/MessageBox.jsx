@@ -1,4 +1,3 @@
-import React from 'react';
 import './MessageBox.css';
 
 const MessageBox = ({ title, message, onClose }) => {
