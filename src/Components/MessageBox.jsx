@@ -1,4 +1,5 @@
 import './MessageBox.css';
+import PropTypes from 'prop-types';
 
 const MessageBox = ({ title, message, onClose }) => {
   return (
@@ -17,5 +18,11 @@ const MessageBox = ({ title, message, onClose }) => {
     </div>
   );
 };
+
+MessageBox.propTypes = {
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+}
 
 export default MessageBox;

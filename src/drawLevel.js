@@ -1,4 +1,3 @@
-import { getGameInfo } from "./balUtils";
 import {
   drawBox,
   drawFilledBox,
@@ -151,7 +150,6 @@ export default function drawLevel(
   let x1 = 0;
   let y1 = 0;
   let x2 = 0;
-  let y2 = 0;
 
   ctx.lineWidth = 1;
   ctx.shadowBlur = 0;
@@ -174,54 +172,56 @@ export default function drawLevel(
       const gd = gameData[row][col];
       switch (bd) {
         case 20:
-          let waterLevel1 = ymin + 1;
-          let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
-          pt1.x = xmin;
-          pt1.y = ymax;
-          pt2.x = xmin;
-          pt2.y = waterLevel2;
-          switch (wave) {
-            case 1:
-              pt3.x = (xmin + xc) / 2;
-              break;
-            case 2:
-              pt3.x = xc;
-              break;
-            case 3:
-              pt3.x = (xc + xmax) / 2;
-              break;
-            case 4:
-              pt3.x = xmax;
-              break;
-            default:
-              pt3.x = xc;
-              break;
+          {
+            let waterLevel1 = ymin + 1;
+            let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
+            pt1.x = xmin;
+            pt1.y = ymax;
+            pt2.x = xmin;
+            pt2.y = waterLevel2;
+            switch (wave) {
+              case 1:
+                pt3.x = (xmin + xc) / 2;
+                break;
+              case 2:
+                pt3.x = xc;
+                break;
+              case 3:
+                pt3.x = (xc + xmax) / 2;
+                break;
+              case 4:
+                pt3.x = xmax;
+                break;
+              default:
+                pt3.x = xc;
+                break;
+            }
+            pt3.y = waterLevel1;
+            pt4.x = xmax;
+            pt4.y = waterLevel2;
+            pt5.x = xmax;
+            pt5.y = ymax;
+            drawFilledBox(
+              ctx,
+              xmin,
+              waterLevel2,
+              w1,
+              ymax - waterLevel2 + 1,
+              "rgb(0, 0, 90)"
+            );
+            ctx.fillStyle = "rgb(0, 0, 90)";
+            ctx.strokeStyle = "rgb(0, 0, 90)";
+            ctx.beginPath();
+            //ctx.moveTo(pt1.x, pt1.y);
+            ctx.lineTo(pt2.x, pt2.y);
+            ctx.lineTo(pt3.x, pt3.y);
+            ctx.lineTo(pt4.x, pt4.y);
+            //ctx.lineTo(pt5.x, pt5.y);
+            ctx.lineTo(pt2.x, pt2.y);
+            ctx.fill();
+            ctx.stroke();
+            break;
           }
-          pt3.y = waterLevel1;
-          pt4.x = xmax;
-          pt4.y = waterLevel2;
-          pt5.x = xmax;
-          pt5.y = ymax;
-          drawFilledBox(
-            ctx,
-            xmin,
-            waterLevel2,
-            w1,
-            ymax - waterLevel2 + 1,
-            "rgb(0, 0, 90)"
-          );
-          ctx.fillStyle = "rgb(0, 0, 90)";
-          ctx.strokeStyle = "rgb(0, 0, 90)";
-          ctx.beginPath();
-          //ctx.moveTo(pt1.x, pt1.y);
-          ctx.lineTo(pt2.x, pt2.y);
-          ctx.lineTo(pt3.x, pt3.y);
-          ctx.lineTo(pt4.x, pt4.y);
-          //ctx.lineTo(pt5.x, pt5.y);
-          ctx.lineTo(pt2.x, pt2.y);
-          ctx.fill();
-          ctx.stroke();
-          break;
         case 23:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(0, 0, 90)");
           break;
@@ -613,78 +613,80 @@ export default function drawLevel(
           // teleport - will be drawn later
           break;
         case 36:
-          // Bomb
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-          let factor = 0.1;
-          d1 = w1 / 6;
-          d2 = w1 / 2;
-          d3 = d2 + Math.round(w2 * factor);
-          d4 = d3 + Math.round(w2 * factor);
-          d5 = d4 + Math.round(w2 * factor);
-          d6 = w1 / 6;
-          drawFilledBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d2),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 * factor),
-            "red"
-          );
-          drawBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d2),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 * factor),
-            "black"
-          );
-          drawFilledBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d3),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 * factor),
-            "red"
-          );
-          drawBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d3),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 * factor),
-            "black"
-          );
-          drawFilledBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d4),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 * factor),
-            "red"
-          );
-          drawBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d4),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 * factor),
-            "black"
-          );
-          drawLine(
-            ctx,
-            Math.round(xc - d6),
-            Math.round(ymin + d2),
-            Math.round(xc - d6),
-            Math.round(ymin + d5)
-          );
-          drawLine(
-            ctx,
-            Math.round(xc + d6),
-            Math.round(ymin + d2),
-            Math.round(xc + d6),
-            Math.round(ymin + d5)
-          );
-          break;
+          {
+            // Bomb
+            drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+            let factor = 0.1;
+            d1 = w1 / 6;
+            d2 = w1 / 2;
+            d3 = d2 + Math.round(w2 * factor);
+            d4 = d3 + Math.round(w2 * factor);
+            d5 = d4 + Math.round(w2 * factor);
+            d6 = w1 / 6;
+            drawFilledBox(
+              ctx,
+              Math.round(xmin + d1),
+              Math.round(ymin + d2),
+              w1 - Math.round(2 * d1),
+              Math.round(w2 * factor),
+              "red"
+            );
+            drawBox(
+              ctx,
+              Math.round(xmin + d1),
+              Math.round(ymin + d2),
+              w1 - Math.round(2 * d1),
+              Math.round(w2 * factor),
+              "black"
+            );
+            drawFilledBox(
+              ctx,
+              Math.round(xmin + d1),
+              Math.round(ymin + d3),
+              w1 - Math.round(2 * d1),
+              Math.round(w2 * factor),
+              "red"
+            );
+            drawBox(
+              ctx,
+              Math.round(xmin + d1),
+              Math.round(ymin + d3),
+              w1 - Math.round(2 * d1),
+              Math.round(w2 * factor),
+              "black"
+            );
+            drawFilledBox(
+              ctx,
+              Math.round(xmin + d1),
+              Math.round(ymin + d4),
+              w1 - Math.round(2 * d1),
+              Math.round(w2 * factor),
+              "red"
+            );
+            drawBox(
+              ctx,
+              Math.round(xmin + d1),
+              Math.round(ymin + d4),
+              w1 - Math.round(2 * d1),
+              Math.round(w2 * factor),
+              "black"
+            );
+            drawLine(
+              ctx,
+              Math.round(xc - d6),
+              Math.round(ymin + d2),
+              Math.round(xc - d6),
+              Math.round(ymin + d5)
+            );
+            drawLine(
+              ctx,
+              Math.round(xc + d6),
+              Math.round(ymin + d2),
+              Math.round(xc + d6),
+              Math.round(ymin + d5)
+            );
+            break;
+          }
         case 37:
           // Detonator
           d1 = w1 / 7;

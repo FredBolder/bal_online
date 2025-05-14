@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 // https://www.npmjs.com/package/react-confirm-alert
@@ -32,25 +31,25 @@ import {
 import drawLevel from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
 import { getLevel } from "../levels.js";
-import sndCatapult from "../Sounds/catapult.wav";
+//import sndCatapult from "../Sounds/catapult.wav";
 import sndEat1 from "../Sounds/eat1.wav";
 import sndEat2 from "../Sounds/eat2.wav";
 import sndEat3 from "../Sounds/eat3.wav";
 import sndEat4 from "../Sounds/eat4.wav";
 import sndElectricity from "../Sounds/electricity.wav";
 import sndExplosion from "../Sounds/explosion.wav";
-import sndFloor1 from "../Sounds/floor1.wav";
-import sndFloor2 from "../Sounds/floor2.wav";
-import sndKey from "../Sounds/key.wav";
+//import sndFloor1 from "../Sounds/floor1.wav";
+//import sndFloor2 from "../Sounds/floor2.wav";
+//import sndKey from "../Sounds/key.wav";
 import sndLaserGun from "../Sounds/laser_gun.wav";
-import sndPain from "../Sounds/pain.wav";
-import sndPickaxe from "../Sounds/pickaxe.wav";
+//import sndPain from "../Sounds/pain.wav";
+//import sndPickaxe from "../Sounds/pickaxe.wav";
 import sndSplash1 from "../Sounds/splash1.wav";
 import sndSplash2 from "../Sounds/splash2.wav";
 import sndTake from "../Sounds/take.wav";
 import sndTeleport from "../Sounds/teleport.wav";
 import sndTrapDoor from "../Sounds/trap_door.wav";
-import sndUnlock from "../Sounds/unlock.wav";
+//import sndUnlock from "../Sounds/unlock.wav";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -98,6 +97,8 @@ let laserX2 = -1;
 let laserY = -1;
 let posX = -1;
 let posY = -1;
+let refreshCounter = 0;
+let refreshCountTo = 12;
 let settings = {
   sound: true,
   nicerGraphics: true,
@@ -130,6 +131,7 @@ function BalPage() {
   const [messageTitle, setMessageTitle] = useState("");
   const [messageContent, setMessageContent] = useState("");
 
+  // eslint-disable-next-line no-unused-vars
   const showMessage = (title, message) => {
     setMessageTitle(title);
     setMessageContent(message);
@@ -290,8 +292,14 @@ function BalPage() {
         skipFalling--;
       }
 
+      refreshCounter++;
+      if (refreshCounter >= refreshCountTo) {
+        refreshCounter = 0;
+        update = true;
+      }
+
       if (gameInfo.redFish.length > 0) {
-        fishCounter = fishCounter + 1;
+        fishCounter++;
         if (fishCounter >= fishCountTo) {
           fishCounter = 0;
           moveFish(backData, gameData, gameInfo, posX, posY);
@@ -637,6 +645,7 @@ function BalPage() {
               posX++;
               gameInfo.blueBall.x = posX;
               gameInfo.blueBall.y = posY;
+              // eslint-disable-next-line no-unused-vars
               rotate = rotateGame(backData, gameData, gameInfo);
               posX = gameInfo.blueBall.x;
               posY = gameInfo.blueBall.y;
@@ -716,10 +725,10 @@ function BalPage() {
       updateScreen();
       checkGameOver();
     }
-    if (!info.hasOwnProperty("eating")) {
+    if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
     }
-    if (!info.hasOwnProperty("divingGlasses")) {
+    if (!Object.prototype.hasOwnProperty.call(info, "divingGlasses")) {
       info.divingGlasses = false;
     }
     if (info.eating) {
@@ -752,29 +761,6 @@ function BalPage() {
     updateScreen();
   }
 
-  function nextLevelClick() {
-    if (settings.lessQuestions) {
-      initLevel(currentLevel + 1);
-    } else {
-      confirmAlert({
-        title: "Question",
-        message: "Load the next level?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              initLevel(currentLevel + 1);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
-    }
-  }
-
   function tryAgain() {
     if (settings.lessQuestions) {
       initLevel(currentLevel);
@@ -800,23 +786,23 @@ function BalPage() {
 
   const myRef = useRef(document);
 
+  
   useEffect(() => {
     cbSound.current.checked = settings.sound;
     cbGraphics.current.checked = settings.nicerGraphics;
     cbQuestions.current.checked = settings.lessQuestions;
     initLevel(200, false);
     updateScreen();
-    myRef.current.addEventListener("keydown", handleKeyDown);
-    //window.addEventListener("keydown", handleKeyDown);
+    const el = myRef.current;
+    el.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
     gameInterval = setInterval(gameScheduler, 50);
     return () => {
-      myRef.current.removeEventListener("keydown", handleKeyDown);
-      //window.removeEventListener("keydown", handleKeyDown);
+      el.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
       clearInterval(gameInterval);
     };
-  }, []);
+  }, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateScreen() {
     const displayWidth = canvas.current.clientWidth;
@@ -1089,7 +1075,7 @@ function BalPage() {
               door with a lock. You can control the blue ball with the letter
               keys, the arrow keys, the number keys or the arrow buttons. In the
               water you can swim in every direction. If you see for example a
-              level number 750, it doesn't mean that there are 750 or even more
+              level number 750, it doesn&apos;t mean that there are 750 or even more
               levels. The number depends also on the series and on the&nbsp;
               <a
                 className="link"
@@ -1165,7 +1151,7 @@ function BalPage() {
               When you solve a level, you will get a code that gives you access
               to the next level whenever you want by pressing the Code button, so
               it is important to write down the code.
-              Some levels are very difficult. If you can't solve a certain
+              Some levels are very difficult. If you can&apos;t solve a certain
               level, you can start with another series.
             </p>
           </div>
