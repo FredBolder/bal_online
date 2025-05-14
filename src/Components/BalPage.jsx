@@ -42,7 +42,7 @@ import sndExplosion from "../Sounds/explosion.wav";
 //import sndFloor2 from "../Sounds/floor2.wav";
 //import sndKey from "../Sounds/key.wav";
 import sndLaserGun from "../Sounds/laser_gun.wav";
-//import sndPain from "../Sounds/pain.wav";
+import sndPain from "../Sounds/pain.wav";
 //import sndPickaxe from "../Sounds/pickaxe.wav";
 import sndSplash1 from "../Sounds/splash1.wav";
 import sndSplash2 from "../Sounds/splash2.wav";
@@ -176,6 +176,9 @@ function BalPage() {
         case "laser":
           snd = sndLaserGun;
           break;
+        case "pain":
+          snd = sndPain;
+          break;
         case "splash1":
           snd = sndSplash1;
           break;
@@ -287,6 +290,11 @@ function BalPage() {
         }
         if (info.sound === 1) {
           playSound("splash1");
+        }
+        if (info.sound === 2) {
+          gameOver = true;
+          updateScreen();
+          playSound("pain");
         }
       } else {
         skipFalling--;
@@ -786,7 +794,7 @@ function BalPage() {
 
   const myRef = useRef(document);
 
-  
+
   useEffect(() => {
     cbSound.current.checked = settings.sound;
     cbGraphics.current.checked = settings.nicerGraphics;
@@ -802,7 +810,7 @@ function BalPage() {
       window.removeEventListener("resize", handleResize);
       clearInterval(gameInterval);
     };
-  }, [] ); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateScreen() {
     const displayWidth = canvas.current.clientWidth;

@@ -93,6 +93,9 @@ function charToNumber(c) {
     case "J":
       result = 18;
       break;
+    case "V":
+      result = 22;
+      break;
     case "=":
       result = 25;
       break;
@@ -214,6 +217,9 @@ function numberToChar(n) {
       break;
     case 18:
       result = "J";
+      break;
+    case 22:
+      result = "V";
       break;
     case 25:
       result = "=";
@@ -379,8 +385,20 @@ export function checkFalling(backData, gameData, gameInfo) {
       let element1 = gameData[i][j];
       let element2 = gameData[i + 1][j];
 
+      if ((element2 === 22) && ([2, 4, 8].includes(element1))) {
+        // lava
+        result.update = true;
+        if (element1 === 2) {
+          result.sound = 2;
+        } else {
+          result.sound = 1;
+        }
+        gameData[i][j] = 0;
+      }
+
       if (j < gameData[i].length - 1) {
         if (
+          // wall |\
           element2 === 15 &&
           (element1 === 2 || element1 === 4 || element1 === 8) &&
           gameData[i][j + 1] === 0 &&
@@ -401,6 +419,7 @@ export function checkFalling(backData, gameData, gameInfo) {
 
       if (j >= 1) {
         if (
+          // wall /|
           element2 === 16 &&
           (element1 === 2 || element1 === 4 || element1 === 8) &&
           gameData[i][j - 1] === 0 &&

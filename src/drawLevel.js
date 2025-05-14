@@ -6,7 +6,7 @@ import {
   drawText,
 } from "./drawUtils";
 
-import { polar } from "./utils";
+import { polar, randomInt } from "./utils";
 import { electricityTarget } from "./balUtils";
 
 export default function drawLevel(
@@ -20,6 +20,7 @@ export default function drawLevel(
   gameInfo,
   wave
 ) {
+
   function drawDivingGlasses(color) {
     d1 = w1 / 5;
     d2 = w1 / 4.5;
@@ -100,6 +101,34 @@ export default function drawLevel(
       Math.round(ymin + d7),
       color
     );
+  }
+
+  function drawLava() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    const n = 10;
+    const wp1 = w1 / n;
+    const wp2 = w2 / n;
+    for (let x = 0; x < n; x++) {
+      for (let y = 0; y < n; y++) {
+        const c = randomInt(1, 3);
+        let color = "yellow";
+        switch (c) {
+          case 1:
+            color = "yellow";
+            break;
+          case 2:
+            color = "red";
+            break;
+          case 3:
+            color = "orange";
+            break;
+          default:
+            color = "yellow";
+            break;
+        }
+        drawFilledBox(ctx, xmin + (x * wp1), ymin + (y * wp1), wp1, wp2, color);
+      }
+    }
   }
 
   if (
@@ -588,6 +617,10 @@ export default function drawLevel(
           ctx.lineTo(xmax + 1, ymax + 1);
           ctx.lineTo(xmin - 1, ymin - 1);
           ctx.fill();
+          break;
+        case 22:
+          // lava
+          drawLava();
           break;
         case 26:
           drawDivingGlasses("gray");
