@@ -21,6 +21,81 @@ export default function drawLevel(
   wave
 ) {
 
+  function drawBall(color) {
+    drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
+  }
+
+  function drawBlueBall() {
+    if (nicerGraphics) {
+      if (gameInfo.hasDivingGlasses) {
+        ctx.drawImage(elements.elementDiving, xmin, ymin, w1, w2);
+      } else {
+        if (status.gameOver) {
+          ctx.drawImage(elements.elementSad, xmin, ymin, w1, w2);
+        } else {
+          ctx.drawImage(elements.elementHappy, xmin, ymin, w1, w2);
+        }
+      }
+    } else {
+      drawBall("blue");
+
+      eye = Math.round(w1 / 20);
+      if (eye < 1) {
+        eye = 1;
+      }
+      d1 = size1 / 3.25;
+      d2 = Math.round(w1 / 12);
+      drawFilledCircle(ctx, xmin + d1, yc - d2, eye, "white");
+      drawFilledCircle(ctx, xmax - d1, yc - d2, eye, "white");
+
+      d1 = w1 / 3.5;
+      d2 = w1 / 3;
+      d3 = w1 / 2;
+      ctx.strokeStyle = "white";
+      ctx.beginPath();
+      if (status.gameOver) {
+        ctx.arc(xc, yc + d3, w1 - 2 * d1, 1.25 * Math.PI, 1.75 * Math.PI, false);
+      } else {
+        ctx.arc(xc, ymin + d2, w1 - 2 * d1, 0.25 * Math.PI, 0.75 * Math.PI, false);
+      }
+      ctx.stroke();
+      if (gameInfo.hasDivingGlasses) {
+        drawDivingGlasses("gray");
+      }
+    }
+  }
+
+  function drawBomb() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    let factor = 0.1;
+    d1 = w1 / 6;
+    d2 = w1 / 2;
+    d3 = d2 + w2 * factor;
+    d4 = d3 + w2 * factor;
+    d5 = d4 + w2 * factor;
+    d6 = w1 / 6;
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 * factor, "red");
+    drawBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 * factor, "black");
+    drawFilledBox(ctx, xmin + d1, ymin + d3, w1 - 2 * d1, w2 * factor, "red");
+    drawBox(ctx, xmin + d1, ymin + d3, w1 - 2 * d1, w2 * factor, "black");
+    drawFilledBox(ctx, xmin + d1, ymin + d4, w1 - 2 * d1, w2 * factor, "red");
+    drawBox(ctx, xmin + d1, ymin + d4, w1 - 2 * d1, w2 * factor, "black");
+    drawLine(ctx, xc - d6, ymin + d2, xc - d6, ymin + d5);
+    drawLine(ctx, xc + d6, ymin + d2, xc + d6, ymin + d5);
+  }
+
+  function drawDetonator() {
+    d1 = w1 / 7;
+    d2 = w1 / 2;
+    d3 = w1 / 1;
+    d4 = w1 / 8;
+    d5 = w1 / 6;
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red");
+    drawLine(ctx, xc, ymin + d4, xc, ymin + d2, "rgb(220,220,220)");
+    drawLine(ctx, xc - d5, ymin + d4, xc + d5, ymin + d4, "rgb(220,220,220)");
+    drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.45, w1 * 0.65, "white", 1);
+  }
+
   function drawDivingGlasses(color) {
     d1 = w1 / 5;
     d2 = w1 / 4.5;
@@ -29,78 +104,133 @@ export default function drawLevel(
     d5 = w1 / 1.8;
     d6 = w1 / 10;
     d7 = w1 / 2.5;
-    drawLine(
-      ctx,
-      Math.round(xmin + d1),
-      Math.round(ymin + d2),
-      Math.round(xmax - d1),
-      Math.round(ymin + d2),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xmin + d1),
-      Math.round(ymin + d2),
-      Math.round(xmin + d4),
-      Math.round(ymin + d3),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xmax - d1),
-      Math.round(ymin + d2),
-      Math.round(xmax - d4),
-      Math.round(ymin + d3),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xmin + d4),
-      Math.round(ymin + d3),
-      Math.round(xmin + d1),
-      Math.round(ymin + d5),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xmax - d4),
-      Math.round(ymin + d3),
-      Math.round(xmax - d1),
-      Math.round(ymin + d5),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xmin + d1),
-      Math.round(ymin + d5),
-      Math.round(xc - d6),
-      Math.round(ymin + d5),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xmax - d1),
-      Math.round(ymin + d5),
-      Math.round(xc + d6),
-      Math.round(ymin + d5),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xc - d6),
-      Math.round(ymin + d5),
-      Math.round(xc),
-      Math.round(ymin + d7),
-      color
-    );
-    drawLine(
-      ctx,
-      Math.round(xc + d6),
-      Math.round(ymin + d5),
-      Math.round(xc),
-      Math.round(ymin + d7),
-      color
-    );
+    drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2, color);
+    drawLine(ctx, xmin + d1, ymin + d2, xmin + d4, ymin + d3, color);
+    drawLine(ctx, xmax - d1, ymin + d2, xmax - d4, ymin + d3, color);
+    drawLine(ctx, xmin + d4, ymin + d3, xmin + d1, ymin + d5, color);
+    drawLine(ctx, xmax - d4, ymin + d3, xmax - d1, ymin + d5, color);
+    drawLine(ctx, xmin + d1, ymin + d5, xc - d6, ymin + d5, color);
+    drawLine(ctx, xmax - d1, ymin + d5, xc + d6, ymin + d5, color);
+    drawLine(ctx, xc - d6, ymin + d5, xc, ymin + d7, color);
+    drawLine(ctx, xc + d6, ymin + d5, xc, ymin + d7, color);
+  }
+
+  function drawElectricity() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    d1 = Math.round(w1 * 0.06);
+    d2 = Math.round(w1 * 0.28);
+    d3 = Math.round(w1 * 0.14);
+    d4 = Math.round(w1 * 0.2);
+    d5 = Math.round(w1 * 0.3);
+    d6 = Math.round(w1 * 0.07);
+    d7 = Math.round(w1 * 0.04);
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "yellow";
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.moveTo(xc, ymin + d1);
+    ctx.lineTo(xc - d3, yc - d6);
+    ctx.lineTo(xc + d3, yc - d6);
+    ctx.lineTo(xc + d7, ymax - d2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.moveTo(xc, ymax - d1);
+    ctx.lineTo(xc - d4, ymax - d2);
+    ctx.lineTo(xc + d5, ymax - d2);
+    ctx.lineTo(xc, ymax - d1);
+    ctx.fill();
+  }
+
+  function drawElevatorLeftRight() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    d1 = w1 / 3;
+    d2 = w1 / 10;
+    d3 = w1 / 8;
+    drawLine(ctx, xc - d1, yc, xc + d1, yc, "white");
+    drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "white");
+    drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "white");
+    drawLine(ctx, xc + d1, yc, xc + d3, yc - d2, "white");
+    drawLine(ctx, xc + d1, yc, xc + d3, yc + d2, "white");
+  }
+
+  function drawElevatorUpDown() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    d1 = w1 / 3;
+    d2 = w1 / 10;
+    d3 = w1 / 8;
+    drawLine(ctx, xc, yc - d1, xc, yc + d1, "white");
+    drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), "white";
+    drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), "white";
+    drawLine(ctx, xc, yc + d1, xc - d2, yc + d3), "white";
+    drawLine(ctx, xc, yc + d1, xc + d2, yc + d3), "white";
+  }
+
+  function drawExplosion() {
+    ctx.fillStyle = "yellow";
+    ctx.beginPath();
+    d1 = w1 / 10;
+    d2 = w2 / 2;
+    ctx.moveTo(xc - d1, yc - d2);
+    d1 = w1 / 8;
+    d2 = w2 / 7;
+    ctx.lineTo(xc + d1, yc - d2);
+    d1 = w1 / 2;
+    d2 = 0;
+    ctx.lineTo(xc + d1, yc - d2);
+    d1 = w1 / 6;
+    d2 = w2 / 7;
+    ctx.lineTo(xc + d1, yc + d2);
+    d1 = w1 / 8;
+    d2 = w2 / 2;
+    ctx.lineTo(xc + d1, yc + d2);
+    d1 = w1 / 8;
+    d2 = w2 / 9;
+    ctx.lineTo(xc - d1, yc + d2);
+    d1 = w1 / 2.5;
+    d2 = 0;
+    ctx.lineTo(xc - d1, yc - d2);
+    d1 = w1 / 4;
+    d2 = w2 / 12;
+    ctx.lineTo(xc - d1, yc - d2);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawGameRotator() {
+    drawBox(ctx, xmin + 1, ymin + 1, w1 - 2, w2 - 2, "white");
+    d1 = w1 * 0.3;
+    d2 = w1 * 0.15;
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.arc(xc, yc, d1, 0.75 * Math.PI, 0.25 * Math.PI, false);
+    ctx.stroke();
+    pt1 = polar(xc, yc, 45, d1);
+    pt1.x -= 1;
+    pt2 = polar(pt1.x, pt1.y, 0, d2);
+    pt3 = polar(pt1.x, pt1.y, -90, d2);
+    drawLine(ctx, pt1.x, pt1.y, pt2.x, pt2.y, "white");
+    drawLine(ctx, pt1.x, pt1.y, pt3.x, pt3.y, "white");
+  }
+
+  function drawGreenBall() {
+    if (nicerGraphics) {
+      ctx.drawImage(
+        elements.elementGreen,
+        xmin + w1 * 0.25,
+        ymin,
+        w1 * 0.5,
+        w2 * 0.5
+      );
+    } else {
+      drawFilledCircle(
+        ctx,
+        w1 * 0.5 + xmin,
+        w1 * 0.25 + ymin,
+        w1 * 0.25,
+        "green"
+      );
+    }
   }
 
   function drawLava() {
@@ -128,6 +258,116 @@ export default function drawLevel(
         }
         drawFilledBox(ctx, xmin + (x * wp1), ymin + (y * wp1), wp1, wp2, color);
       }
+    }
+  }
+
+  function drawLightBlueBall() {
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementLightBlue, xmin, ymin, w1, w2);
+    } else {
+      drawBall("deepskyblue");
+    }
+  }
+
+  function drawPurpleBall() {
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementPurple, xmin, ymin, w1, w2);
+    } else {
+      drawBall("darkmagenta");
+    }
+  }
+
+  function drawRedBall() {
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
+    } else {
+      drawBall("red");
+
+      eye = Math.round(w1 / 20);
+      if (eye < 1) {
+        eye = 1;
+      }
+      d1 = size1 / 3.25;
+      d2 = Math.round(w1 / 12);
+      drawFilledCircle(
+        ctx,
+        Math.round(xmin + d1),
+        Math.round(yc - d2),
+        eye,
+        "white"
+      );
+      drawFilledCircle(
+        ctx,
+        Math.round(xmax - d1),
+        Math.round(yc - d2),
+        eye,
+        "white"
+      );
+
+      d1 = w1 / 6;
+      d2 = w1 / 5;
+      drawLine(ctx, xc - d1, yc + d2, xc + d1, yc + d2, "white");
+    }
+  }
+
+  function drawWaterWave() {
+    let waterLevel1 = ymin + 1;
+    let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
+    pt1.x = xmin;
+    pt1.y = ymax;
+    pt2.x = xmin;
+    pt2.y = waterLevel2;
+    switch (wave) {
+      case 1:
+        pt3.x = (xmin + xc) / 2;
+        break;
+      case 2:
+        pt3.x = xc;
+        break;
+      case 3:
+        pt3.x = (xc + xmax) / 2;
+        break;
+      case 4:
+        pt3.x = xmax;
+        break;
+      default:
+        pt3.x = xc;
+        break;
+    }
+    pt3.y = waterLevel1;
+    pt4.x = xmax;
+    pt4.y = waterLevel2;
+    pt5.x = xmax;
+    pt5.y = ymax;
+    drawFilledBox(ctx, xmin, waterLevel2, w1, ymax - waterLevel2 + 1, "rgb(0, 0, 90)");
+    ctx.fillStyle = "rgb(0, 0, 90)";
+    ctx.strokeStyle = "rgb(0, 0, 90)";
+    ctx.beginPath();
+    //ctx.moveTo(pt1.x, pt1.y); // TODO: waarom uitgemarkeerd?
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.lineTo(pt3.x, pt3.y);
+    ctx.lineTo(pt4.x, pt4.y);
+    //ctx.lineTo(pt5.x, pt5.y); // TODO: waarom uitgemarkeerd?
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawWhiteBall() {
+    // white ball
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
+    } else {
+      drawBall("white");
+    }
+  }
+
+  function drawYellowBall() {
+    // yellow ball
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementYellow, xmin, ymin, w1, w2);
+    } else {
+      drawBall("yellow");
     }
   }
 
@@ -201,56 +441,8 @@ export default function drawLevel(
       const gd = gameData[row][col];
       switch (bd) {
         case 20:
-          {
-            let waterLevel1 = ymin + 1;
-            let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
-            pt1.x = xmin;
-            pt1.y = ymax;
-            pt2.x = xmin;
-            pt2.y = waterLevel2;
-            switch (wave) {
-              case 1:
-                pt3.x = (xmin + xc) / 2;
-                break;
-              case 2:
-                pt3.x = xc;
-                break;
-              case 3:
-                pt3.x = (xc + xmax) / 2;
-                break;
-              case 4:
-                pt3.x = xmax;
-                break;
-              default:
-                pt3.x = xc;
-                break;
-            }
-            pt3.y = waterLevel1;
-            pt4.x = xmax;
-            pt4.y = waterLevel2;
-            pt5.x = xmax;
-            pt5.y = ymax;
-            drawFilledBox(
-              ctx,
-              xmin,
-              waterLevel2,
-              w1,
-              ymax - waterLevel2 + 1,
-              "rgb(0, 0, 90)"
-            );
-            ctx.fillStyle = "rgb(0, 0, 90)";
-            ctx.strokeStyle = "rgb(0, 0, 90)";
-            ctx.beginPath();
-            //ctx.moveTo(pt1.x, pt1.y);
-            ctx.lineTo(pt2.x, pt2.y);
-            ctx.lineTo(pt3.x, pt3.y);
-            ctx.lineTo(pt4.x, pt4.y);
-            //ctx.lineTo(pt5.x, pt5.y);
-            ctx.lineTo(pt2.x, pt2.y);
-            ctx.fill();
-            ctx.stroke();
-            break;
-          }
+          drawWaterWave();
+          break;
         case 23:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(0, 0, 90)");
           break;
@@ -277,274 +469,30 @@ export default function drawLevel(
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
           break;
         case 2:
-          // blue ball
-          if (nicerGraphics) {
-            if (gameInfo.hasDivingGlasses) {
-              ctx.drawImage(elements.elementDiving, xmin, ymin, w1, w2);
-            } else {
-              if (status.gameOver) {
-                ctx.drawImage(elements.elementSad, xmin, ymin, w1, w2);
-              } else {
-                ctx.drawImage(elements.elementHappy, xmin, ymin, w1, w2);
-              }
-            }
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.5,
-              w1 * 0.5,
-              "blue"
-            );
-
-            eye = Math.round(w1 / 20);
-            if (eye < 1) {
-              eye = 1;
-            }
-            d1 = size1 / 3.25;
-            d2 = Math.round(w1 / 12);
-            drawFilledCircle(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(yc - d2),
-              eye,
-              "white"
-            );
-            drawFilledCircle(
-              ctx,
-              Math.round(xmax - d1),
-              Math.round(yc - d2),
-              eye,
-              "white"
-            );
-
-            d1 = w1 / 3.5;
-            d2 = w1 / 3;
-            d3 = w1 / 2;
-            ctx.strokeStyle = "white";
-            ctx.beginPath();
-            if (status.gameOver) {
-              ctx.arc(
-                Math.round(xc),
-                Math.round(yc + d3),
-                Math.round(w1 - 2 * d1),
-                1.25 * Math.PI,
-                1.75 * Math.PI,
-                false
-              );
-            } else {
-              ctx.arc(
-                Math.round(xc),
-                Math.round(ymin + d2),
-                Math.round(w1 - 2 * d1),
-                0.25 * Math.PI,
-                0.75 * Math.PI,
-                false
-              );
-            }
-            ctx.stroke();
-            if (gameInfo.hasDivingGlasses) {
-              drawDivingGlasses("gray");
-            }
-          }
+          drawBlueBall();
           break;
         case 3:
-          // green ball
-          if (nicerGraphics) {
-            ctx.drawImage(
-              elements.elementGreen,
-              xmin + w1 * 0.25,
-              ymin,
-              w1 * 0.5,
-              w2 * 0.5
-            );
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.75,
-              w1 * 0.25,
-              "green"
-            );
-          }
+          drawGreenBall();
           break;
         case 4:
-          // white ball
-          if (nicerGraphics) {
-            ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.5,
-              w1 * 0.5,
-              "white"
-            );
-          }
+          drawWhiteBall();
           break;
         case 5:
-          //light blue ball
-          if (nicerGraphics) {
-            ctx.drawImage(elements.elementLightBlue, xmin, ymin, w1, w2);
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.5,
-              w1 * 0.5,
-              "deepskyblue"
-            );
-          }
+          drawLightBlueBall();
           break;
         case 6:
         case 106:
-          // Elevator up/down
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-          d1 = w1 / 3;
-          d2 = w1 / 10;
-          d3 = w1 / 8;
-          drawLine(
-            ctx,
-            xc,
-            Math.round(yc - d1),
-            xc,
-            Math.round(yc + d1),
-            "white"
-          );
-          drawLine(
-            ctx,
-            xc,
-            Math.round(yc - d1),
-            Math.round(xc - d2),
-            Math.round(yc - d3),
-            "white"
-          );
-          drawLine(
-            ctx,
-            xc,
-            Math.round(yc - d1),
-            Math.round(xc + d2),
-            Math.round(yc - d3),
-            "white"
-          );
-          drawLine(
-            ctx,
-            xc,
-            Math.round(yc + d1),
-            Math.round(xc - d2),
-            Math.round(yc + d3),
-            "white"
-          );
-          drawLine(
-            ctx,
-            xc,
-            Math.round(yc + d1),
-            Math.round(xc + d2),
-            Math.round(yc + d3),
-            "white"
-          );
+          drawElevatorUpDown();
           break;
-        //elevator left/right
         case 7:
         case 107:
-          // Elevator left/right
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-          d1 = w1 / 3;
-          d2 = w1 / 10;
-          d3 = w1 / 8;
-          drawLine(
-            ctx,
-            Math.round(xc - d1),
-            yc,
-            Math.round(xc + d1),
-            yc,
-            "white"
-          );
-          drawLine(
-            ctx,
-            Math.round(xc - d1),
-            yc,
-            Math.round(xc - d3),
-            Math.round(yc - d2),
-            "white"
-          );
-          drawLine(
-            ctx,
-            Math.round(xc - d1),
-            yc,
-            Math.round(xc - d3),
-            Math.round(yc + d2),
-            "white"
-          );
-          drawLine(
-            ctx,
-            Math.round(xc + d1),
-            yc,
-            Math.round(xc + d3),
-            Math.round(yc - d2),
-            "white"
-          );
-          drawLine(
-            ctx,
-            Math.round(xc + d1),
-            yc,
-            Math.round(xc + d3),
-            Math.round(yc + d2),
-            "white"
-          );
+          drawElevatorLeftRight();
           break;
         case 8:
-          // red ball
-          if (nicerGraphics) {
-            ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.5,
-              w1 * 0.5,
-              "red"
-            );
-
-            eye = Math.round(w1 / 20);
-            if (eye < 1) {
-              eye = 1;
-            }
-            d1 = size1 / 3.25;
-            d2 = Math.round(w1 / 12);
-            drawFilledCircle(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(yc - d2),
-              eye,
-              "white"
-            );
-            drawFilledCircle(
-              ctx,
-              Math.round(xmax - d1),
-              Math.round(yc - d2),
-              eye,
-              "white"
-            );
-
-            d1 = w1 / 6;
-            d2 = w1 / 5;
-            drawLine(ctx, xc - d1, yc + d2, xc + d1, yc + d2, "white");
-          }
+          drawRedBall();
           break;
         case 9:
-          // yellow ball
-          if (nicerGraphics) {
-            ctx.drawImage(elements.elementYellow, xmin, ymin, w1, w2);
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.5,
-              w1 * 0.5,
-              "yellow"
-            );
-          }
+          drawYellowBall();
           break;
         case 10:
           // one direction to right >
@@ -629,171 +577,19 @@ export default function drawLevel(
           // Red fish - will be drawn later
           break;
         case 28:
-          // purple ball
-          if (nicerGraphics) {
-            ctx.drawImage(elements.elementPurple, xmin, ymin, w1, w2);
-          } else {
-            drawFilledCircle(
-              ctx,
-              xmin + w1 * 0.5,
-              (row + 1) * w1 - w1 * 0.5,
-              w1 * 0.5,
-              "darkmagenta"
-            );
-          }
+          drawPurpleBall();
           break;
         case 31:
           // teleport - will be drawn later
           break;
         case 36:
-          {
-            // Bomb
-            drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-            let factor = 0.1;
-            d1 = w1 / 6;
-            d2 = w1 / 2;
-            d3 = d2 + Math.round(w2 * factor);
-            d4 = d3 + Math.round(w2 * factor);
-            d5 = d4 + Math.round(w2 * factor);
-            d6 = w1 / 6;
-            drawFilledBox(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(ymin + d2),
-              w1 - Math.round(2 * d1),
-              Math.round(w2 * factor),
-              "red"
-            );
-            drawBox(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(ymin + d2),
-              w1 - Math.round(2 * d1),
-              Math.round(w2 * factor),
-              "black"
-            );
-            drawFilledBox(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(ymin + d3),
-              w1 - Math.round(2 * d1),
-              Math.round(w2 * factor),
-              "red"
-            );
-            drawBox(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(ymin + d3),
-              w1 - Math.round(2 * d1),
-              Math.round(w2 * factor),
-              "black"
-            );
-            drawFilledBox(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(ymin + d4),
-              w1 - Math.round(2 * d1),
-              Math.round(w2 * factor),
-              "red"
-            );
-            drawBox(
-              ctx,
-              Math.round(xmin + d1),
-              Math.round(ymin + d4),
-              w1 - Math.round(2 * d1),
-              Math.round(w2 * factor),
-              "black"
-            );
-            drawLine(
-              ctx,
-              Math.round(xc - d6),
-              Math.round(ymin + d2),
-              Math.round(xc - d6),
-              Math.round(ymin + d5)
-            );
-            drawLine(
-              ctx,
-              Math.round(xc + d6),
-              Math.round(ymin + d2),
-              Math.round(xc + d6),
-              Math.round(ymin + d5)
-            );
-            break;
-          }
+          drawBomb();
+          break;
         case 37:
-          // Detonator
-          d1 = w1 / 7;
-          d2 = w1 / 2;
-          d3 = w1 / 1;
-          d4 = w1 / 8;
-          d5 = w1 / 6;
-          drawFilledBox(
-            ctx,
-            Math.round(xmin + d1),
-            Math.round(ymin + d2),
-            w1 - Math.round(2 * d1),
-            Math.round(w2 - d2),
-            "red"
-          );
-          drawLine(
-            ctx,
-            xc,
-            Math.round(ymin + d4),
-            xc,
-            Math.round(ymin + d2),
-            "rgb(220,220,220)"
-          );
-          drawLine(
-            ctx,
-            Math.round(xc - d5),
-            Math.round(ymin + d4),
-            Math.round(xc + d5),
-            Math.round(ymin + d4),
-            "rgb(220,220,220)"
-          );
-          drawText(
-            ctx,
-            xc,
-            ymin + w2 * 0.8,
-            "TNT",
-            "middle",
-            "white",
-            Math.round(w2 * 0.45),
-            Math.round(w1 * 0.65),
-            "white",
-            1
-          );
+          drawDetonator();
           break;
         case 38:
-          // Explosion
-          ctx.fillStyle = "yellow";
-          ctx.beginPath();
-          d1 = w1 / 10;
-          d2 = w2 / 2;
-          ctx.moveTo(Math.round(xc - d1), Math.round(yc - d2));
-          d1 = w1 / 8;
-          d2 = w2 / 7;
-          ctx.lineTo(Math.round(xc + d1), Math.round(yc - d2));
-          d1 = w1 / 2;
-          d2 = 0;
-          ctx.lineTo(Math.round(xc + d1), Math.round(yc - d2));
-          d1 = w1 / 6;
-          d2 = w2 / 7;
-          ctx.lineTo(Math.round(xc + d1), Math.round(yc + d2));
-          d1 = w1 / 8;
-          d2 = w2 / 2;
-          ctx.lineTo(Math.round(xc + d1), Math.round(yc + d2));
-          d1 = w1 / 8;
-          d2 = w2 / 9;
-          ctx.lineTo(Math.round(xc - d1), Math.round(yc + d2));
-          d1 = w1 / 2.5;
-          d2 = 0;
-          ctx.lineTo(Math.round(xc - d1), Math.round(yc - d2));
-          d1 = w1 / 4;
-          d2 = w2 / 12;
-          ctx.lineTo(Math.round(xc - d1), Math.round(yc - d2));
-          ctx.closePath();
-          ctx.fill();
+          drawExplosion();
           break;
         case 84:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
@@ -819,67 +615,10 @@ export default function drawLevel(
           drawLine(ctx, xmax, ymin, xc, ymax, "white");
           break;
         case 89:
-          // rotate game t
-          drawBox(ctx, xmin + 1, ymin + 1, w1 - 2, w2 - 2, "white");
-          d1 = w1 * 0.3;
-          d2 = w1 * 0.15;
-          ctx.strokeStyle = "white";
-          ctx.beginPath();
-          ctx.arc(
-            Math.round(xc),
-            Math.round(yc),
-            Math.round(d1),
-            0.75 * Math.PI,
-            0.25 * Math.PI,
-            false
-          );
-          ctx.stroke();
-          pt1 = polar(xc, yc, 45, d1);
-          pt1.x -= 1;
-          pt2 = polar(pt1.x, pt1.y, 0, d2);
-          pt3 = polar(pt1.x, pt1.y, -90, d2);
-          drawLine(
-            ctx,
-            Math.round(pt1.x),
-            Math.round(pt1.y),
-            Math.round(pt2.x),
-            Math.round(pt2.y),
-            "white"
-          );
-          drawLine(
-            ctx,
-            Math.round(pt1.x),
-            Math.round(pt1.y),
-            Math.round(pt3.x),
-            Math.round(pt3.y),
-            "white"
-          );
+          drawGameRotator();
           break;
         case 91:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-          d1 = Math.round(w1 * 0.06);
-          d2 = Math.round(w1 * 0.28);
-          d3 = Math.round(w1 * 0.14);
-          d4 = Math.round(w1 * 0.2);
-          d5 = Math.round(w1 * 0.3);
-          d6 = Math.round(w1 * 0.07);
-          d7 = Math.round(w1 * 0.04);
-          ctx.fillStyle = "yellow";
-          ctx.strokeStyle = "yellow";
-          ctx.beginPath();
-          ctx.lineWidth = 3;
-          ctx.moveTo(xc, ymin + d1);
-          ctx.lineTo(xc - d3, yc - d6);
-          ctx.lineTo(xc + d3, yc - d6);
-          ctx.lineTo(xc + d7, ymax - d2);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.lineWidth = 1;
-          ctx.moveTo(xc, ymax - d1);
-          ctx.lineTo(xc - d4, ymax - d2);
-          ctx.lineTo(xc + d5, ymax - d2);
-          ctx.lineTo(xc, ymax - d1);
-          ctx.fill();
+          drawElectricity();
           break;
         default:
           // empty

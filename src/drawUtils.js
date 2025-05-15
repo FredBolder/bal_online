@@ -1,27 +1,27 @@
 export function drawBox(canvas, x, y, width, height, color) {
   canvas.strokeStyle = color;
-  canvas.strokeRect(x, y, width, height);
+  canvas.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 }
 
 export function drawFilledBox(canvas, x, y, width, height, color) {
   canvas.fillStyle = color;
-  canvas.fillRect(x, y, width, height);
+  canvas.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
   canvas.strokeStyle = color;
-  canvas.strokeRect(x, y, width, height);
+  canvas.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 }
 
 export function drawFilledCircle(canvas, xc, yc, radius, color) {
   canvas.fillStyle = color;
   canvas.beginPath();
-  canvas.arc(xc, yc, radius, 0, 2 * Math.PI, false);
+  canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius), 0, 2 * Math.PI, false);
   canvas.fill();
 }
 
 export function drawLine(canvas, x1, y1, x2, y2, color) {
   canvas.strokeStyle = color;
   canvas.beginPath();
-  canvas.moveTo(x1, y1);
-  canvas.lineTo(x2, y2);
+  canvas.moveTo(Math.round(x1), Math.round(y1));
+  canvas.lineTo(Math.round(x2), Math.round(y2));
   canvas.stroke();
 }
 
@@ -60,9 +60,9 @@ export function drawText(
       break;
   }
 
-  canvas.fillText(text, x, y, maxWidth);
+  canvas.fillText(text, Math.round(x), Math.round(y), Math.round(maxWidth));
   canvas.strokeStyle = outline;
   canvas.lineWidth = outlineWidth;
-  canvas.strokeText(text, x, y, maxWidth);
+  canvas.strokeText(text, Math.round(x), Math.round(y), Math.round(maxWidth));
   canvas.lineWidth = 1;
 }
