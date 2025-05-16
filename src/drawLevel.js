@@ -96,6 +96,23 @@ export default function drawLevel(
     drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.45, w1 * 0.65, "white", 1);
   }
 
+  function drawDirectionChanger1() {
+    // Direction: /, code: 84, C
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawLine(ctx, xmin, ymax, xmax, ymin, "black");
+  }
+
+  function drawDirectionChanger2() {
+    // Direction: \, code: 85, c
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawLine(ctx, xmin, ymin, xmax, ymax, "black");
+  }
+
+  function drawDirectionChanger3() {
+    // Direction: - and |, code: 86, +
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+  }
+
   function drawDivingGlasses(color) {
     d1 = w1 / 5;
     d2 = w1 / 4.5;
@@ -233,6 +250,20 @@ export default function drawLevel(
     }
   }
 
+  function drawLadder() {
+    // Code: 25, =
+    drawLine(ctx, xmin, ymin - 0.5, xmin, ymax + 0.5, "white");
+    drawLine(ctx, xmax, ymin - 0.5, xmax, ymax + 0.5, "white");
+    drawLine(ctx, xmin, yc, xmax, yc, "white");
+  }
+
+  function drawHorizontalLadder() {
+    // Code: 90, h
+    drawLine(ctx, xmin - 0.5, ymin, xmax + 0.5, ymin, "white");
+    drawLine(ctx, xmin - 0.5, ymax, xmax + 0.5, ymax, "white");
+    drawLine(ctx, xc, ymin, xc, ymax, "white");
+  }
+
   function drawLava() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
     const n = 10;
@@ -267,6 +298,30 @@ export default function drawLevel(
     } else {
       drawBall("deepskyblue");
     }
+  }
+
+  function drawOneDirectionDown() {
+    drawBox(ctx, xmin, ymin, w1, w2, "white");
+    drawLine(ctx, xmin, ymin, xc, ymax, "white");
+    drawLine(ctx, xmax, ymin, xc, ymax, "white");
+  }
+
+  function drawOneDirectionLeft() {
+    drawBox(ctx, xmin, ymin, w1, w2, "white");
+    drawLine(ctx, xmax, ymin, xmin, ymin + w2 / 2, "white");
+    drawLine(ctx, xmax, ymax, xmin, ymin + w2 / 2, "white");
+  }
+
+  function drawOneDirectionRight() {
+    drawBox(ctx, xmin, ymin, w1, w2, "white");
+    drawLine(ctx, xmin, ymin, xmax, ymin + w2 / 2, "white");
+    drawLine(ctx, xmin, ymax, xmax, ymin + w2 / 2, "white");
+  }
+
+  function drawOneDirectionUp() {
+    drawBox(ctx, xmin, ymin, w1, w2, "white");
+    drawLine(ctx, xmin, ymax, xc, ymin, "white");
+    drawLine(ctx, xmax, ymax, xc, ymin, "white");
   }
 
   function drawPurpleBall() {
@@ -310,45 +365,108 @@ export default function drawLevel(
     }
   }
 
-  function drawWaterWave() {
+  function drawStone() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+  }
+
+  function drawStoneTriangle90BottomLeft() {
+    // Shape: |\, code: 15, G 
+    ctx.fillStyle = "#464646";
+    ctx.beginPath();
+    ctx.moveTo(xmin - 1, ymax + 1);
+    ctx.lineTo(xmin - 1, ymin - 1);
+    ctx.lineTo(xmax + 1, ymax + 1);
+    ctx.lineTo(xmin - 1, ymax + 1);
+    ctx.fill();
+  }
+
+  function drawStoneTriangle90BottomRight() {
+    // Shape: /|, code: 16, H 
+    ctx.fillStyle = "#464646";
+    ctx.beginPath();
+    ctx.moveTo(xmin - 1, ymax + 1);
+    ctx.lineTo(xmax + 1, ymin - 1);
+    ctx.lineTo(xmax + 1, ymax + 1);
+    ctx.lineTo(xmin - 1, ymax + 1);
+    ctx.fill();
+  }
+
+  function drawStoneTriangle90TopLeft() {
+    // Shape: |/, code: 17, I
+    ctx.fillStyle = "#464646";
+    ctx.beginPath();
+    ctx.moveTo(xmin - 1, ymax + 1);
+    ctx.lineTo(xmin - 1, ymin - 1);
+    ctx.lineTo(xmax + 1, ymin - 1);
+    ctx.lineTo(xmin - 1, ymax + 1);
+    ctx.fill();
+  }
+
+  function drawStoneTriangle90TopRight() {
+    // Shape: \|, code: 18, J
+    ctx.fillStyle = "#464646";
+    ctx.beginPath();
+    ctx.moveTo(xmin - 1, ymin - 1);
+    ctx.lineTo(xmax + 1, ymin - 1);
+    ctx.lineTo(xmax + 1, ymax + 1);
+    ctx.lineTo(xmin - 1, ymin - 1);
+    ctx.fill();
+  }
+
+  function drawTrapDoor() {
+    ctx.lineWidth = 3;
+    drawLine(ctx, xmin, ymin + 1, xmax - 2, ymin + 1, "rgb(70, 70, 70)");
+    ctx.lineWidth = 1;
+  }
+
+  function drawTrapDoorHalfOpen() {
+    ctx.lineWidth = 3;
+    d1 = Math.round(w1 / Math.sqrt(2));
+    drawLine(ctx, xmin - 1, ymin + 1, xmin + d1, ymin + d1, "rgb(70, 70, 70)");
+    ctx.lineWidth = 1;
+  }
+
+  function drawWater() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(0, 0, 90)");
+  }
+
+  function drawWaterSurface() {
+    let pt1 = { x: 0, y: 0 };
+    let pt2 = { x: 0, y: 0 };
+    let pt3 = { x: 0, y: 0 };
     let waterLevel1 = ymin + 1;
     let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
+
     pt1.x = xmin;
-    pt1.y = ymax;
-    pt2.x = xmin;
-    pt2.y = waterLevel2;
+    pt1.y = waterLevel2;
     switch (wave) {
       case 1:
-        pt3.x = (xmin + xc) / 2;
+        pt2.x = (xmin + xc) / 2;
         break;
       case 2:
-        pt3.x = xc;
+        pt2.x = xc;
         break;
       case 3:
-        pt3.x = (xc + xmax) / 2;
+        pt2.x = (xc + xmax) / 2;
         break;
       case 4:
-        pt3.x = xmax;
+        pt2.x = xmax;
         break;
       default:
-        pt3.x = xc;
+        pt2.x = xc;
         break;
     }
-    pt3.y = waterLevel1;
-    pt4.x = xmax;
-    pt4.y = waterLevel2;
-    pt5.x = xmax;
-    pt5.y = ymax;
+    pt2.y = waterLevel1;
+    pt3.x = xmax;
+    pt3.y = waterLevel2;
     drawFilledBox(ctx, xmin, waterLevel2, w1, ymax - waterLevel2 + 1, "rgb(0, 0, 90)");
     ctx.fillStyle = "rgb(0, 0, 90)";
     ctx.strokeStyle = "rgb(0, 0, 90)";
     ctx.beginPath();
-    //ctx.moveTo(pt1.x, pt1.y); // TODO: waarom uitgemarkeerd?
+    ctx.moveTo(pt1.x, pt1.y);
     ctx.lineTo(pt2.x, pt2.y);
     ctx.lineTo(pt3.x, pt3.y);
-    ctx.lineTo(pt4.x, pt4.y);
-    //ctx.lineTo(pt5.x, pt5.y); // TODO: waarom uitgemarkeerd?
-    ctx.lineTo(pt2.x, pt2.y);
+    ctx.lineTo(pt1.x, pt1.y);
     ctx.fill();
     ctx.stroke();
   }
@@ -441,20 +559,16 @@ export default function drawLevel(
       const gd = gameData[row][col];
       switch (bd) {
         case 20:
-          drawWaterWave();
+          drawWaterSurface();
           break;
         case 23:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(0, 0, 90)");
+          drawWater();
           break;
         case 25:
-          drawLine(ctx, xmin, ymin - 0.5, xmin, ymax + 0.5, "white");
-          drawLine(ctx, xmax, ymin - 0.5, xmax, ymax + 0.5, "white");
-          drawLine(ctx, xmin, yc, xmax, yc, "white");
+          drawLadder();
           break;
         case 90:
-          drawLine(ctx, xmin - 0.5, ymin, xmax + 0.5, ymin, "white");
-          drawLine(ctx, xmin - 0.5, ymax, xmax + 0.5, ymax, "white");
-          drawLine(ctx, xc, ymin, xc, ymax, "white");
+          drawHorizontalLadder();
           break;
         default:
           // empty
@@ -463,10 +577,9 @@ export default function drawLevel(
       switch (gd) {
         case 0:
           // empty
-          //drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
           break;
         case 1:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+          drawStone();
           break;
         case 2:
           drawBlueBall();
@@ -495,79 +608,30 @@ export default function drawLevel(
           drawYellowBall();
           break;
         case 10:
-          // one direction to right >
-          drawBox(ctx, xmin, ymin, w1, w2, "white");
-          drawLine(ctx, xmin, ymin, xmax, ymin + w2 / 2, "white");
-          drawLine(ctx, xmin, ymax, xmax, ymin + w2 / 2, "white");
+          drawOneDirectionRight();
           break;
         case 11:
-          // one direction to left <
-          drawBox(ctx, xmin, ymin, w1, w2, "white");
-          drawLine(ctx, xmax, ymin, xmin, ymin + w2 / 2, "white");
-          drawLine(ctx, xmax, ymax, xmin, ymin + w2 / 2, "white");
+          drawOneDirectionLeft();
           break;
         case 13:
-          // Trap door
-          ctx.lineWidth = 3;
-          drawLine(ctx, xmin, ymin + 1, xmax - 2, ymin + 1, "rgb(70, 70, 70)");
-          ctx.lineWidth = 1;
+          drawTrapDoor();
           break;
         case 14:
-          // Trap door half open
-          ctx.lineWidth = 3;
-          d1 = Math.round(w1 / Math.sqrt(2));
-          drawLine(
-            ctx,
-            xmin - 1,
-            ymin + 1,
-            Math.round(xmin + d1),
-            Math.round(ymin + d1),
-            "rgb(70, 70, 70)"
-          );
-          ctx.lineWidth = 1;
+          drawTrapDoorHalfOpen();
           break;
         case 15:
-          // wall |\
-          ctx.fillStyle = "#464646";
-          ctx.beginPath();
-          ctx.moveTo(xmin - 1, ymax + 1);
-          ctx.lineTo(xmin - 1, ymin - 1);
-          ctx.lineTo(xmax + 1, ymax + 1);
-          ctx.lineTo(xmin - 1, ymax + 1);
-          ctx.fill();
+          drawStoneTriangle90BottomLeft();
           break;
         case 16:
-          // wall /|
-          ctx.fillStyle = "#464646";
-          ctx.beginPath();
-          ctx.moveTo(xmin - 1, ymax + 1);
-          ctx.lineTo(xmax + 1, ymin - 1);
-          ctx.lineTo(xmax + 1, ymax + 1);
-          ctx.lineTo(xmin - 1, ymax + 1);
-          ctx.fill();
+          drawStoneTriangle90BottomRight();
           break;
         case 17:
-          // wall |/
-          ctx.fillStyle = "#464646";
-          ctx.beginPath();
-          ctx.moveTo(xmin - 1, ymax + 1);
-          ctx.lineTo(xmin - 1, ymin - 1);
-          ctx.lineTo(xmax + 1, ymin - 1);
-          ctx.lineTo(xmin - 1, ymax + 1);
-          ctx.fill();
+          drawStoneTriangle90TopLeft();
           break;
         case 18:
-          // wall \|
-          ctx.fillStyle = "#464646";
-          ctx.beginPath();
-          ctx.moveTo(xmin - 1, ymin - 1);
-          ctx.lineTo(xmax + 1, ymin - 1);
-          ctx.lineTo(xmax + 1, ymax + 1);
-          ctx.lineTo(xmin - 1, ymin - 1);
-          ctx.fill();
+          drawStoneTriangle90TopRight();
           break;
         case 22:
-          // lava
           drawLava();
           break;
         case 26:
@@ -592,27 +656,19 @@ export default function drawLevel(
           drawExplosion();
           break;
         case 84:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
-          drawLine(ctx, xmin, ymax, xmax, ymin, "black");
+          drawDirectionChanger1();
           break;
         case 85:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
-          drawLine(ctx, xmin, ymin, xmax, ymax, "black");
+          drawDirectionChanger2();
           break;
         case 86:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+          drawDirectionChanger3();
           break;
         case 87:
-          // one direction up ^
-          drawBox(ctx, xmin, ymin, w1, w2, "white");
-          drawLine(ctx, xmin, ymax, xc, ymin, "white");
-          drawLine(ctx, xmax, ymax, xc, ymin, "white");
+          drawOneDirectionUp();
           break;
         case 88:
-          // one direction down v
-          drawBox(ctx, xmin, ymin, w1, w2, "white");
-          drawLine(ctx, xmin, ymin, xc, ymax, "white");
-          drawLine(ctx, xmax, ymin, xc, ymax, "white");
+          drawOneDirectionDown();
           break;
         case 89:
           drawGameRotator();
@@ -621,7 +677,6 @@ export default function drawLevel(
           drawElectricity();
           break;
         default:
-          // empty
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
           break;
       }
