@@ -84,8 +84,9 @@ gameInfo.redBalls = [];
 gameInfo.yellowBalls = [];
 gameInfo.detonator = { x: -1, y: -1 };
 gameInfo.teleports = [];
-gameInfo.hasWater = false;
 gameInfo.hasDivingGlasses = false;
+gameInfo.hasKey = false;
+gameInfo.hasWater = false;
 gameInfo.redFish = [];
 gameInfo.electricity = [];
 gameInfo.electricityActive = false;
@@ -623,7 +624,7 @@ function BalPage() {
           info = moveLeft(backData, gameData, posX, posY, gameInfo);
           if (info.player) {
             posX--;
-            if (info.oneDirection) {
+            if (info.moveOneMore) {
               posX--;
             }
             if (info.rotate) {
@@ -646,7 +647,7 @@ function BalPage() {
           info = moveRight(backData, gameData, posX, posY, gameInfo);
           if (info.player) {
             posX++;
-            if (info.oneDirection) {
+            if (info.moveOneMore) {
               posX++;
             }
             if (info.rotate) {
@@ -670,7 +671,7 @@ function BalPage() {
           info = jump(backData, gameData, posX, posY, gameInfo);
           if (info.player) {
             posY--;
-            if (info.oneDirection) {
+            if (info.moveOneMore) {
               posY--;
             }
             elevatorCounter++; // To prevent that you fall from the elevator
@@ -701,7 +702,7 @@ function BalPage() {
           info = pushDown(backData, gameData, posX, posY, gameInfo);
           if (info.player) {
             posY++;
-            if (info.oneDirection) {
+            if (info.moveOneMore) {
               posY++;
             }
           }
@@ -761,6 +762,10 @@ function BalPage() {
     }
     if (info.divingGlasses) {
       gameInfo.hasDivingGlasses = true;
+      playSound("take");
+    }
+    if (info.takingKey) {
+      gameInfo.hasKey = true;
       playSound("take");
     }
   }

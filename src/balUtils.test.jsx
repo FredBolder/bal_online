@@ -347,8 +347,9 @@ describe("balUtils", () => {
     expect(JSON.stringify(info5b)).toBe(
       JSON.stringify({
         eating: false,
+        takingKey: false,
         player: true,
-        oneDirection: false,
+        moveOneMore: false,
         teleporting: false,
         rotate: false,
         divingGlasses: false,
@@ -888,6 +889,7 @@ describe("balUtils", () => {
     teleports: [],
     hasWater: false,
     hasDivingGlasses: false,
+    hasKey: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
@@ -921,11 +923,12 @@ describe("balUtils", () => {
     teleports: [],
     hasWater: false,
     hasDivingGlasses: false,
+    hasKey: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
     trapDoors: [],
- };
+  };
   it("getGameInfo B", () => {
     expect(JSON.stringify(getGameInfo(inputBack9b, input9b))).toBe(
       JSON.stringify(expectedOutput9b)
@@ -951,11 +954,12 @@ describe("balUtils", () => {
     teleports: [],
     hasWater: false,
     hasDivingGlasses: false,
+    hasKey: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
     trapDoors: [],
- };
+  };
   it("getGameInfo C", () => {
     expect(JSON.stringify(getGameInfo(inputBack9c, input9c))).toBe(
       JSON.stringify(expectedOutput9c)
@@ -986,11 +990,12 @@ describe("balUtils", () => {
     teleports: [],
     hasWater: false,
     hasDivingGlasses: false,
+    hasKey: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
     trapDoors: [],
- };
+  };
   it("getGameInfo D", () => {
     expect(JSON.stringify(getGameInfo(inputBack9d, input9d))).toBe(
       JSON.stringify(expectedOutput9d)
@@ -1625,7 +1630,7 @@ describe("balUtils", () => {
 
   it("pushDown A info", () => {
     expect(JSON.stringify(info14a)).toBe(
-      JSON.stringify({ player: true, oneDirection: false })
+      JSON.stringify({ player: true, moveOneMore: false })
     );
   });
 
@@ -1655,7 +1660,7 @@ describe("balUtils", () => {
 
   it("pushDown B info", () => {
     expect(JSON.stringify(info14b)).toBe(
-      JSON.stringify({ player: true, oneDirection: false })
+      JSON.stringify({ player: true, moveOneMore: false })
     );
   });
 
@@ -1685,7 +1690,7 @@ describe("balUtils", () => {
 
   it("pushDown C info", () => {
     expect(JSON.stringify(info14c)).toBe(
-      JSON.stringify({ player: false, oneDirection: false })
+      JSON.stringify({ player: false, moveOneMore: false })
     );
   });
 
@@ -1713,8 +1718,9 @@ describe("balUtils", () => {
     expect(JSON.stringify(info15a)).toBe(
       JSON.stringify({
         eating: false,
+        takingKey: false,
         player: true,
-        oneDirection: true,
+        moveOneMore: true,
         teleporting: false,
         rotate: false,
         divingGlasses: false,
@@ -1807,7 +1813,7 @@ describe("balUtils", () => {
 
   it("One direction ports E info", () => {
     expect(JSON.stringify(info15e)).toBe(
-      JSON.stringify({ eating: false, player: true, oneDirection: true, divingGlasses: false })
+      JSON.stringify({ eating: false, takingKey: false, player: true, moveOneMore: true, divingGlasses: false })
     );
   });
 
@@ -1832,7 +1838,7 @@ describe("balUtils", () => {
 
   it("One direction ports F info", () => {
     expect(JSON.stringify(info15f)).toBe(
-      JSON.stringify({ eating: false, player: false, oneDirection: false, divingGlasses: false })
+      JSON.stringify({ eating: false, takingKey: false, player: false, moveOneMore: false, divingGlasses: false })
     );
   });
 
@@ -1857,7 +1863,7 @@ describe("balUtils", () => {
 
   it("One direction ports G info", () => {
     expect(JSON.stringify(info15g)).toBe(
-      JSON.stringify({ player: true, oneDirection: true })
+      JSON.stringify({ player: true, moveOneMore: true })
     );
   });
 
@@ -1882,7 +1888,7 @@ describe("balUtils", () => {
 
   it("One direction ports G info", () => {
     expect(JSON.stringify(info15h)).toBe(
-      JSON.stringify({ player: false, oneDirection: false })
+      JSON.stringify({ player: false, moveOneMore: false })
     );
   });
 
@@ -1907,7 +1913,7 @@ describe("balUtils", () => {
 
   it("One direction ports I info", () => {
     expect(JSON.stringify(info15i)).toBe(
-      JSON.stringify({ player: false, oneDirection: false })
+      JSON.stringify({ player: false, moveOneMore: false })
     );
   });
 
@@ -1932,7 +1938,7 @@ describe("balUtils", () => {
 
   it("One direction ports J info", () => {
     expect(JSON.stringify(info15j)).toBe(
-      JSON.stringify({ eating: false, player: false, oneDirection: false, divingGlasses: false })
+      JSON.stringify({ eating: false, takingKey: false, player: false, moveOneMore: false, divingGlasses: false })
     );
   });
 
@@ -2178,7 +2184,7 @@ describe("balUtils", () => {
   });
   it("Ladders B info", () => {
     expect(JSON.stringify(info17b)).toBe(
-      JSON.stringify({ player: true, oneDirection: false })
+      JSON.stringify({ player: true, moveOneMore: false })
     );
   });
 
@@ -2243,7 +2249,7 @@ describe("balUtils", () => {
   });
   it("Ladders D info", () => {
     expect(JSON.stringify(info17d)).toBe(
-      JSON.stringify({ eating: false, player: true, oneDirection: false, divingGlasses: false })
+      JSON.stringify({ eating: false, takingKey: false, player: true, moveOneMore: false, divingGlasses: false })
     );
   });
 
@@ -2349,6 +2355,149 @@ describe("balUtils", () => {
       JSON.stringify([{ x: 2, y: 1, right: true }])
     );
   });
+
+  // ***** LOCK *****
+
+  let gameInfo19 = {};
+  gameInfo19.elevators = [];
+  gameInfo19.horizontalElevators = [];
+  gameInfo19.greenBalls = 1;
+  gameInfo19.redBalls = [];
+  gameInfo19.yellowBalls = [];
+  gameInfo19.detonator = { x: -1, y: -1 };
+  gameInfo19.teleports = [];
+  gameInfo19.hasDivingGlasses = false;
+  gameInfo19.hasKey = true;
+  gameInfo19.hasWater = false;
+  gameInfo19.redFish = [];
+  gameInfo19.electricity = [];
+  gameInfo19.electricityActive = false;
+  gameInfo19.trapDoors = [];
+  let inputBack19abcd = zeroArray(4, 7);
+  let input19a = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 30, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput19a = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 0, 30, 2, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info19a = moveRight(inputBack19abcd, input19a, 2, 2, gameInfo19);
+  it("Locks A", () => {
+    expect(JSON.stringify(input19a)).toBe(JSON.stringify(expectedOutput19a));
+  });
+
+  it("Locks A info", () => {
+    expect(JSON.stringify(info19a)).toBe(
+      JSON.stringify({
+        eating: false,
+        takingKey: false,
+        player: true,
+        moveOneMore: true,
+        teleporting: false,
+        rotate: false,
+        divingGlasses: false,
+      })
+    );
+  });
+
+  let input19b = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 30, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput19b = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 30, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info19b = moveRight(inputBack19abcd, input19b, 2, 2, { ...gameInfo19, hasKey: false });
+  it("Locks B", () => {
+    expect(JSON.stringify(input19b)).toBe(JSON.stringify(expectedOutput19b));
+  });
+
+  it("Locks B info", () => {
+    expect(JSON.stringify(info19b)).toBe(
+      JSON.stringify({
+        eating: false,
+        takingKey: false,
+        player: false,
+        moveOneMore: false,
+        teleporting: false,
+        rotate: false,
+        divingGlasses: false,
+      })
+    );
+  });
+
+  let input19c = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 0, 30, 2, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput19c = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 30, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info19c = moveLeft(inputBack19abcd, input19c, 4, 2, gameInfo19);
+  it("Locks C", () => {
+    expect(JSON.stringify(input19c)).toBe(JSON.stringify(expectedOutput19c));
+  });
+
+  it("Locks C info", () => {
+    expect(JSON.stringify(info19c)).toBe(
+      JSON.stringify({
+        eating: false,
+        takingKey: false,
+        player: true,
+        moveOneMore: true,
+        teleporting: false,
+        rotate: false,
+        divingGlasses: false,
+      })
+    );
+  });
+
+  let input19d = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 0, 30, 2, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput19d = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 0, 30, 2, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info19d = moveLeft(inputBack19abcd, input19d, 4, 2, { ...gameInfo19, hasKey: false });
+  it("Locks D", () => {
+    expect(JSON.stringify(input19d)).toBe(JSON.stringify(expectedOutput19d));
+  });
+
+  it("Locks D info", () => {
+    expect(JSON.stringify(info19d)).toBe(
+      JSON.stringify({
+        eating: false,
+        takingKey: false,
+        player: false,
+        moveOneMore: false,
+        teleporting: false,
+        rotate: false,
+        divingGlasses: false,
+      })
+    );
+  });
+
 
   // Insert new tests here
 });

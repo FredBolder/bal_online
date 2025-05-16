@@ -215,6 +215,10 @@ export default function drawLevel(
   }
 
   function drawGameRotator() {
+    let pt1 = { x: 0, y: 0 };
+    let pt2 = { x: 0, y: 0 };
+    let pt3 = { x: 0, y: 0 };
+
     drawBox(ctx, xmin + 1, ymin + 1, w1 - 2, w2 - 2, "white");
     d1 = w1 * 0.3;
     d2 = w1 * 0.15;
@@ -250,18 +254,36 @@ export default function drawLevel(
     }
   }
 
-  function drawLadder() {
-    // Code: 25, =
-    drawLine(ctx, xmin, ymin - 0.5, xmin, ymax + 0.5, "white");
-    drawLine(ctx, xmax, ymin - 0.5, xmax, ymax + 0.5, "white");
-    drawLine(ctx, xmin, yc, xmax, yc, "white");
-  }
-
   function drawHorizontalLadder() {
     // Code: 90, h
     drawLine(ctx, xmin - 0.5, ymin, xmax + 0.5, ymin, "white");
     drawLine(ctx, xmin - 0.5, ymax, xmax + 0.5, ymax, "white");
     drawLine(ctx, xc, ymin, xc, ymax, "white");
+  }
+
+  function drawKey() {
+    d1 = w1 / 4;
+    d2 = w1 / 7;
+    d3 = w1 / 15; // Radius X
+    d4 = w1 / 7;  // Radius Y
+    d5 = w1 / 5;
+    d6 = w1 / 4;
+    d7 = w1 / 7;
+    ctx.strokeStyle = "silver";
+    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+    ctx.beginPath();
+    ctx.ellipse(Math.round(xmin + d1), Math.round(yc), Math.round(d3), Math.round(d4), 0, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    drawLine(ctx, xmin + d1 + d3, yc, xmax - d2, yc, "silver");
+    drawLine(ctx, xmax - d2, yc, xmax - d2, yc + d5, "silver");
+    drawLine(ctx, xmax - d6, yc, xmax - d6, yc + d7, "silver");
+  }
+
+  function drawLadder() {
+    // Code: 25, =
+    drawLine(ctx, xmin, ymin - 0.5, xmin, ymax + 0.5, "white");
+    drawLine(ctx, xmax, ymin - 0.5, xmax, ymax + 0.5, "white");
+    drawLine(ctx, xmin, yc, xmax, yc, "white");
   }
 
   function drawLava() {
@@ -298,6 +320,24 @@ export default function drawLevel(
     } else {
       drawBall("deepskyblue");
     }
+  }
+
+  function drawLock() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    d1 = w1 / 4;
+    d2 = w1 / 12;
+    d3 = w1 / 10;
+    d4 = w1 / 6;
+    d5 = w1 / 6;
+    drawFilledBox(ctx, xmin + d1, yc, (xmax - d1) - (xmin + d1), (w2 / 2) - d2, "gold");
+    ctx.strokeStyle = "silver";
+    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+    ctx.beginPath();
+    d6 = ymin + d3 + d5;
+    ctx.ellipse(Math.round(xc), Math.round(d6), Math.round(d4), Math.round(d5), 0, Math.PI, 2 * Math.PI, false);
+    ctx.stroke();
+    drawLine(ctx, xc - d4, d6, xc - d4, yc, "silver");
+    drawLine(ctx, xc + d4, d6, xc + d4, yc, "silver");
   }
 
   function drawOneDirectionDown() {
@@ -533,7 +573,6 @@ export default function drawLevel(
   let pt2 = { x: 0, y: 0 };
   let pt3 = { x: 0, y: 0 };
   let pt4 = { x: 0, y: 0 };
-  let pt5 = { x: 0, y: 0 };
   let x1 = 0;
   let y1 = 0;
   let x2 = 0;
@@ -642,6 +681,12 @@ export default function drawLevel(
           break;
         case 28:
           drawPurpleBall();
+          break;
+        case 29:
+          drawKey();
+          break;
+        case 30:
+          drawLock();
           break;
         case 31:
           // teleport - will be drawn later

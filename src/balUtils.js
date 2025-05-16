@@ -102,6 +102,12 @@ function charToNumber(c) {
     case "p":
       result = 28;
       break;
+    case "k":
+      result = 29;
+      break;
+    case "l":
+      result = 30;
+      break;
     case "T":
       result = 31;
       break;
@@ -226,6 +232,12 @@ function numberToChar(n) {
       break;
     case 28:
       result = "p";
+      break;
+    case 29:
+      result = "k";
+      break;
+    case 30:
+      result = "l";
       break;
     case 31:
       result = "T";
@@ -487,8 +499,9 @@ export function moveLeft(
   let result = {};
   let row = gameData[y];
   result.eating = false;
+  result.takingKey = false;
   result.player = false;
-  result.oneDirection = false;
+  result.moveOneMore = false;
   result.teleporting = false;
   result.rotate = false;
   result.divingGlasses = false;
@@ -497,12 +510,15 @@ export function moveLeft(
     if (notInAir(x, y, backData, gameData)) {
       if (x > 0) {
         // empty space, green ball or diving glasses
-        if (!result.player && [0, 3, 26].includes(row[x - 1])) {
+        if (!result.player && [0, 3, 29, 26].includes(row[x - 1])) {
           if (row[x - 1] === 3) {
             result.eating = true;
           }
           if (row[x - 1] === 26) {
             result.divingGlasses = true;
+          }
+          if (row[x - 1] === 29) {
+            result.takingKey = true;
           }
           row[x] = 0;
           row[x - 1] = 2;
@@ -524,11 +540,11 @@ export function moveLeft(
           row[x] = 0;
           result.player = true;
         }
-        if (!result.player && row[x - 1] === 11 && row[x - 2] === 0) {
+        if (!result.player && ((row[x - 1] === 11) || ((row[x - 1] === 30) && gameInfo.hasKey)) && row[x - 2] === 0) {
           row[x - 2] = 2;
           row[x] = 0;
           result.player = true;
-          result.oneDirection = true;
+          result.moveOneMore = true;
         }
         if (!result.player && row[x - 1] === 89 && row[x - 2] === 0) {
           row[x - 2] = 2;
@@ -581,8 +597,9 @@ export function moveRight(
   let row = gameData[y];
   let maxX = 0;
   result.eating = false;
+  result.takingKey = false;
   result.player = false;
-  result.oneDirection = false;
+  result.moveOneMore = false;
   result.teleporting = false;
   result.rotate = false;
   result.divingGlasses = false;
@@ -592,12 +609,15 @@ export function moveRight(
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball or diving glasses
-        if (!result.player && [0, 3, 26].includes(row[x + 1])) {
+        if (!result.player && [0, 3, 26, 29].includes(row[x + 1])) {
           if (row[x + 1] === 3) {
             result.eating = true;
           }
           if (row[x + 1] === 26) {
             result.divingGlasses = true;
+          }
+          if (row[x + 1] === 29) {
+            result.takingKey = true;
           }
           row[x] = 0;
           row[x + 1] = 2;
@@ -619,11 +639,11 @@ export function moveRight(
           row[x] = 0;
           result.player = true;
         }
-        if (!result.player && row[x + 1] === 10 && row[x + 2] === 0) {
+      if (!result.player && ((row[x + 1] === 10) || ((row[x + 1] === 30) && gameInfo.hasKey)) && row[x + 2] === 0) {
           row[x + 2] = 2;
           row[x] = 0;
           result.player = true;
-          result.oneDirection = true;
+          result.moveOneMore = true;
         }
         if (!result.player && row[x + 1] === 89 && row[x + 2] === 0) {
           row[x + 2] = 2;
@@ -674,19 +694,23 @@ export function jump(
 ) {
   let result = {};
   result.eating = false;
+  result.takingKey = false;
   result.player = false;
-  result.oneDirection = false;
+  result.moveOneMore = false;
   result.divingGlasses = false;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
       if (y > 0 && notInAir(x, y, backData, gameData)) {
-        if (!result.player && [0, 3, 26].includes(gameData[y - 1][x])) {
+        if (!result.player && [0, 3, 26, 29].includes(gameData[y - 1][x])) {
           if (gameData[y - 1][x] === 3) {
             result.eating = true;
           }
           if (gameData[y - 1][x] === 26) {
             result.divingGlasses = true;
+          }
+          if (gameData[y - 1][x] === 29) {
+            result.takingKey = true;
           }
           gameData[y - 1][x] = 2;
           gameData[y][x] = 0;
@@ -715,7 +739,7 @@ export function jump(
           gameData[y - 2][x] = 2;
           gameData[y][x] = 0;
           result.player = true;
-          result.oneDirection = true;
+          result.moveOneMore = true;
         }
       }
     }
@@ -732,6 +756,7 @@ export function jumpLeft(
 ) {
   let result = {};
   result.eating = false;
+  result.takingKey = false;
   result.player = false;
   result.divingGlasses = false;
 
@@ -739,12 +764,15 @@ export function jumpLeft(
     if (gameData.length > 0) {
       if (y > 0 && x > 0 && notInAir(x, y, backData, gameData)) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26].includes(gameData[y - 1][x - 1])) {
+          if ([0, 3, 26, 29].includes(gameData[y - 1][x - 1])) {
             if (gameData[y - 1][x - 1] === 3) {
               result.eating = true;
             }
             if (gameData[y - 1][x - 1] === 26) {
               result.divingGlasses = true;
+            }
+            if (gameData[y - 1][x - 1] === 29) {
+              result.takingKey = true;
             }
             gameData[y - 1][x - 1] = 2;
             gameData[y][x] = 0;
@@ -766,6 +794,7 @@ export function jumpRight(
 ) {
   let result = {};
   result.eating = false;
+  result.takingKey = false;
   result.player = false;
   result.divingGlasses = false;
 
@@ -777,12 +806,15 @@ export function jumpRight(
         notInAir(x, y, backData, gameData)
       ) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26].includes(gameData[y - 1][x + 1])) {
+          if ([0, 3, 26, 29].includes(gameData[y - 1][x + 1])) {
             if (gameData[y - 1][x + 1] === 3) {
               result.eating = true;
             }
             if (gameData[y - 1][x + 1] === 26) {
               result.divingGlasses = true;
+            }
+            if (gameData[y - 1][x + 1] === 29) {
+              result.takingKey = true;
             }
             gameData[y - 1][x + 1] = 2;
             gameData[y][x] = 0;
@@ -804,7 +836,7 @@ export function pushDown(
 ) {
   let result = {};
   result.player = false;
-  result.oneDirection = false;
+  result.moveOneMore = false;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0 && y < gameData.length - 2) {
@@ -829,7 +861,7 @@ export function pushDown(
         gameData[y + 2][x] = 2;
         gameData[y][x] = 0;
         result.player = true;
-        result.oneDirection = true;
+        result.moveOneMore = true;
       }
       if (
         !result.player &&
@@ -911,6 +943,7 @@ export function getGameInfo(backData, gameData) {
   result.teleports = [];
   result.hasWater = false;
   result.hasDivingGlasses = false;
+  result.hasKey = false;
   result.redFish = [];
   result.electricity = [];
   result.electricityActive = false;
