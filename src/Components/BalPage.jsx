@@ -28,7 +28,7 @@ import {
   inWater,
   checkTrapDoors,
 } from "../balUtils.js";
-import drawLevel from "../drawLevel.js";
+import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
 import { getLevel } from "../levels.js";
 //import sndCatapult from "../Sounds/catapult.wav";
@@ -43,7 +43,7 @@ import sndExplosion from "../Sounds/explosion.wav";
 //import sndKey from "../Sounds/key.wav";
 import sndLaserGun from "../Sounds/laser_gun.wav";
 import sndPain from "../Sounds/pain.wav";
-//import sndPickaxe from "../Sounds/pickaxe.wav";
+import sndPickaxe from "../Sounds/pickaxe.wav";
 import sndSplash1 from "../Sounds/splash1.wav";
 import sndSplash2 from "../Sounds/splash2.wav";
 import sndTake from "../Sounds/take.wav";
@@ -86,6 +86,7 @@ gameInfo.detonator = { x: -1, y: -1 };
 gameInfo.teleports = [];
 gameInfo.hasDivingGlasses = false;
 gameInfo.hasKey = false;
+gameInfo.hasPickaxe = false;
 gameInfo.hasWater = false;
 gameInfo.redFish = [];
 gameInfo.electricity = [];
@@ -179,6 +180,9 @@ function BalPage() {
           break;
         case "pain":
           snd = sndPain;
+          break;
+        case "pickaxe":
+          snd = sndPickaxe;
           break;
         case "splash1":
           snd = sndSplash1;
@@ -304,6 +308,7 @@ function BalPage() {
       refreshCounter++;
       if (refreshCounter >= refreshCountTo) {
         refreshCounter = 0;
+        clearBitMapLava();
         update = true;
       }
 
@@ -564,7 +569,11 @@ function BalPage() {
   function handleKeyDown(e) {
     let info = {};
     info.player = false;
+    info.breaking = false;
+    info.divingGlasses = false;
     info.eating = false;
+    info.takingKey = false;
+    info.takingPickaxe = false;
     info.rotate = false;
     let rotate = false;
 
@@ -767,6 +776,13 @@ function BalPage() {
     if (info.takingKey) {
       gameInfo.hasKey = true;
       playSound("take");
+    }
+    if (info.takingPickaxe) {
+      gameInfo.hasPickaxe = true;
+      playSound("take");
+    }
+    if (info.breaking) {
+      playSound("pickaxe");
     }
   }
 

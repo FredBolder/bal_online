@@ -18,6 +18,24 @@ import {
   zeroArray,
 } from "./balUtils.js";
 
+function initGameInfo(info) {
+  info.elevators = [];
+  info.horizontalElevators = [];
+  info.greenBalls = 0;
+  info.redBalls = [];
+  info.yellowBalls = [];
+  info.detonator = { x: -1, y: -1 };
+  info.teleports = [];
+  info.hasDivingGlasses = false;
+  info.hasKey = false;
+  info.Pickaxe = false;
+  info.hasWater = false;
+  info.redFish = [];
+  info.electricity = [];
+  info.electricityActive = false;
+  info.trapDoors = [];
+}
+
 describe("balUtils", () => {
   let input1a = ["111111", "13 3 1", "1 2481", "111111"];
   let expectedOutput1a = {
@@ -346,8 +364,10 @@ describe("balUtils", () => {
   it("moveRight B info", () => {
     expect(JSON.stringify(info5b)).toBe(
       JSON.stringify({
+        breaking: false,
         eating: false,
         takingKey: false,
+        takingPickaxe: false,
         player: true,
         moveOneMore: false,
         teleporting: false,
@@ -890,6 +910,7 @@ describe("balUtils", () => {
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
+    hasPickaxe: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
@@ -924,6 +945,7 @@ describe("balUtils", () => {
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
+    hasPickaxe: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
@@ -955,6 +977,7 @@ describe("balUtils", () => {
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
+    hasPickaxe: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
@@ -991,6 +1014,7 @@ describe("balUtils", () => {
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
+    hasPickaxe: false,
     redFish: [],
     electricity: [],
     electricityActive: false,
@@ -1630,7 +1654,7 @@ describe("balUtils", () => {
 
   it("pushDown A info", () => {
     expect(JSON.stringify(info14a)).toBe(
-      JSON.stringify({ player: true, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: true, moveOneMore: false })
     );
   });
 
@@ -1660,7 +1684,7 @@ describe("balUtils", () => {
 
   it("pushDown B info", () => {
     expect(JSON.stringify(info14b)).toBe(
-      JSON.stringify({ player: true, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: true, moveOneMore: false })
     );
   });
 
@@ -1690,7 +1714,7 @@ describe("balUtils", () => {
 
   it("pushDown C info", () => {
     expect(JSON.stringify(info14c)).toBe(
-      JSON.stringify({ player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
     );
   });
 
@@ -1717,8 +1741,10 @@ describe("balUtils", () => {
   it("One direction ports A info", () => {
     expect(JSON.stringify(info15a)).toBe(
       JSON.stringify({
+        breaking: false,
         eating: false,
         takingKey: false,
+        takingPickaxe: false,
         player: true,
         moveOneMore: true,
         teleporting: false,
@@ -1782,7 +1808,7 @@ describe("balUtils", () => {
     [1, 0, 0, 10, 2, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info15d = moveLeft(inputBack15abcd, input15d, 4, 2, []);
+  let info15d = moveLeft(inputBack15abcd, input15d, 4, 2);
   it("One direction ports D", () => {
     expect(JSON.stringify(input15d)).toBe(JSON.stringify(expectedOutput15d));
   });
@@ -1813,7 +1839,7 @@ describe("balUtils", () => {
 
   it("One direction ports E info", () => {
     expect(JSON.stringify(info15e)).toBe(
-      JSON.stringify({ eating: false, takingKey: false, player: true, moveOneMore: true, divingGlasses: false })
+      JSON.stringify({ breaking: false, eating: false, takingKey: false, takingPickaxe: false, player: true, moveOneMore: true, divingGlasses: false })
     );
   });
 
@@ -1838,7 +1864,7 @@ describe("balUtils", () => {
 
   it("One direction ports F info", () => {
     expect(JSON.stringify(info15f)).toBe(
-      JSON.stringify({ eating: false, takingKey: false, player: false, moveOneMore: false, divingGlasses: false })
+      JSON.stringify({ breaking: false, eating: false, takingKey: false, takingPickaxe: false, player: false, moveOneMore: false, divingGlasses: false })
     );
   });
 
@@ -1863,7 +1889,7 @@ describe("balUtils", () => {
 
   it("One direction ports G info", () => {
     expect(JSON.stringify(info15g)).toBe(
-      JSON.stringify({ player: true, moveOneMore: true })
+      JSON.stringify({ breaking: false, player: true, moveOneMore: true })
     );
   });
 
@@ -1888,7 +1914,7 @@ describe("balUtils", () => {
 
   it("One direction ports G info", () => {
     expect(JSON.stringify(info15h)).toBe(
-      JSON.stringify({ player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
     );
   });
 
@@ -1913,7 +1939,7 @@ describe("balUtils", () => {
 
   it("One direction ports I info", () => {
     expect(JSON.stringify(info15i)).toBe(
-      JSON.stringify({ player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
     );
   });
 
@@ -1938,7 +1964,7 @@ describe("balUtils", () => {
 
   it("One direction ports J info", () => {
     expect(JSON.stringify(info15j)).toBe(
-      JSON.stringify({ eating: false, takingKey: false, player: false, moveOneMore: false, divingGlasses: false })
+      JSON.stringify({ breaking: false, eating: false, takingKey: false, takingPickaxe: false, player: false, moveOneMore: false, divingGlasses: false })
     );
   });
 
@@ -2184,7 +2210,7 @@ describe("balUtils", () => {
   });
   it("Ladders B info", () => {
     expect(JSON.stringify(info17b)).toBe(
-      JSON.stringify({ player: true, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: true, moveOneMore: false })
     );
   });
 
@@ -2249,7 +2275,7 @@ describe("balUtils", () => {
   });
   it("Ladders D info", () => {
     expect(JSON.stringify(info17d)).toBe(
-      JSON.stringify({ eating: false, takingKey: false, player: true, moveOneMore: false, divingGlasses: false })
+      JSON.stringify({ breaking: false, eating: false, takingKey: false, takingPickaxe: false, player: true, moveOneMore: false, divingGlasses: false })
     );
   });
 
@@ -2356,23 +2382,13 @@ describe("balUtils", () => {
     );
   });
 
-  // ***** LOCK *****
+  // ***** LOCKS *****
 
   let gameInfo19 = {};
-  gameInfo19.elevators = [];
-  gameInfo19.horizontalElevators = [];
-  gameInfo19.greenBalls = 1;
-  gameInfo19.redBalls = [];
-  gameInfo19.yellowBalls = [];
-  gameInfo19.detonator = { x: -1, y: -1 };
-  gameInfo19.teleports = [];
-  gameInfo19.hasDivingGlasses = false;
+  gameInfo19 = {};
+  initGameInfo(gameInfo19);
   gameInfo19.hasKey = true;
-  gameInfo19.hasWater = false;
-  gameInfo19.redFish = [];
-  gameInfo19.electricity = [];
-  gameInfo19.electricityActive = false;
-  gameInfo19.trapDoors = [];
+
   let inputBack19abcd = zeroArray(4, 7);
   let input19a = [
     [1, 1, 1, 1, 1, 1, 1],
@@ -2394,8 +2410,10 @@ describe("balUtils", () => {
   it("Locks A info", () => {
     expect(JSON.stringify(info19a)).toBe(
       JSON.stringify({
+        breaking: false,
         eating: false,
         takingKey: false,
+        takingPickaxe: false,
         player: true,
         moveOneMore: true,
         teleporting: false,
@@ -2425,8 +2443,10 @@ describe("balUtils", () => {
   it("Locks B info", () => {
     expect(JSON.stringify(info19b)).toBe(
       JSON.stringify({
+        breaking: false,
         eating: false,
         takingKey: false,
+        takingPickaxe: false,
         player: false,
         moveOneMore: false,
         teleporting: false,
@@ -2456,8 +2476,10 @@ describe("balUtils", () => {
   it("Locks C info", () => {
     expect(JSON.stringify(info19c)).toBe(
       JSON.stringify({
+        breaking: false,
         eating: false,
         takingKey: false,
+        takingPickaxe: false,
         player: true,
         moveOneMore: true,
         teleporting: false,
@@ -2487,8 +2509,10 @@ describe("balUtils", () => {
   it("Locks D info", () => {
     expect(JSON.stringify(info19d)).toBe(
       JSON.stringify({
+        breaking: false,
         eating: false,
         takingKey: false,
+        takingPickaxe: false,
         player: false,
         moveOneMore: false,
         teleporting: false,
@@ -2498,6 +2522,79 @@ describe("balUtils", () => {
     );
   });
 
+  // ***** PICKAXE *****
+
+  let gameInfo20 = {};
+  gameInfo20 = {};
+  initGameInfo(gameInfo20);
+  gameInfo20.hasPickaxe = true;
+
+  let inputBack20 = zeroArray(4, 7);
+  let input20a = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 35, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput20a = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 0, 2, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info20a = moveRight(inputBack20, input20a, 2, 2, gameInfo20);
+  it("Pickaxe A", () => {
+    expect(JSON.stringify(input20a)).toBe(JSON.stringify(expectedOutput20a));
+  });
+
+  it("Pickaxe A info", () => {
+    expect(JSON.stringify(info20a)).toBe(
+      JSON.stringify({
+        breaking: true,
+        eating: false,
+        takingKey: false,
+        takingPickaxe: false,
+        player: true,
+        moveOneMore: false,
+        teleporting: false,
+        rotate: false,
+        divingGlasses: false,
+      })
+    );
+  });
+
+  let input20b = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 35, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput20b = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 0, 2, 35, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info20b = moveRight(inputBack20, input20b, 2, 2, { ...gameInfo20, hasPickaxe: false });
+  it("Pickaxe B", () => {
+    expect(JSON.stringify(input20b)).toBe(JSON.stringify(expectedOutput20b));
+  });
+
+  it("Pickaxe B info", () => {
+    expect(JSON.stringify(info20b)).toBe(
+      JSON.stringify({
+        breaking: false,
+        eating: false,
+        takingKey: false,
+        takingPickaxe: false,
+        player: false,
+        moveOneMore: false,
+        teleporting: false,
+        rotate: false,
+        divingGlasses: false,
+      })
+    );
+  });
 
   // Insert new tests here
 });

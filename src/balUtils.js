@@ -111,6 +111,12 @@ function charToNumber(c) {
     case "T":
       result = 31;
       break;
+    case "Y":
+      result = 34;
+      break;
+    case "y":
+      result = 35;
+      break;
     case "B":
       result = 36;
       break;
@@ -241,6 +247,12 @@ function numberToChar(n) {
       break;
     case 31:
       result = "T";
+      break;
+    case 34:
+      result = "Y";
+      break;
+    case 35:
+      result = "y";
       break;
     case 36:
       result = "B";
@@ -494,12 +506,14 @@ export function moveLeft(
   gameData,
   x,
   y,
-  gameInfo = { yellowBalls: [], teleports: [] }
+  gameInfo = { yellowBalls: [], teleports: [], hasPickaxe: false }
 ) {
   let result = {};
   let row = gameData[y];
+  result.breaking = false;
   result.eating = false;
   result.takingKey = false;
+  result.takingPickaxe = false;
   result.player = false;
   result.moveOneMore = false;
   result.teleporting = false;
@@ -509,16 +523,26 @@ export function moveLeft(
   if (gameData.length > 0) {
     if (notInAir(x, y, backData, gameData)) {
       if (x > 0) {
-        // empty space, green ball or diving glasses
-        if (!result.player && [0, 3, 29, 26].includes(row[x - 1])) {
-          if (row[x - 1] === 3) {
-            result.eating = true;
-          }
-          if (row[x - 1] === 26) {
-            result.divingGlasses = true;
-          }
-          if (row[x - 1] === 29) {
-            result.takingKey = true;
+        // empty space, green ball, diving glasses, key or pickaxe
+        if (!result.player && ([0, 3, 26, 29, 34].includes(row[x - 1]) || ((row[x - 1]) === 35) && gameInfo.hasPickaxe)) {
+          switch (row[x - 1]) {
+            case 3:
+              result.eating = true;
+              break;
+            case 26:
+              result.divingGlasses = true;
+              break;
+            case 29:
+              result.takingKey = true;
+              break;
+            case 34:
+              result.takingPickaxe = true;
+              break;
+            case 35:
+              result.breaking = true;
+              break;
+            default:
+              break;
           }
           row[x] = 0;
           row[x - 1] = 2;
@@ -591,13 +615,15 @@ export function moveRight(
   gameData,
   x,
   y,
-  gameInfo = { yellowBalls: [], teleports: [] }
+  gameInfo = { yellowBalls: [], teleports: [], hasPickaxe: false }
 ) {
   let result = {};
   let row = gameData[y];
   let maxX = 0;
+  result.breaking = false;
   result.eating = false;
   result.takingKey = false;
+  result.takingPickaxe = false;
   result.player = false;
   result.moveOneMore = false;
   result.teleporting = false;
@@ -608,16 +634,26 @@ export function moveRight(
     if (notInAir(x, y, backData, gameData)) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
-        // empty space, green ball or diving glasses
-        if (!result.player && [0, 3, 26, 29].includes(row[x + 1])) {
-          if (row[x + 1] === 3) {
-            result.eating = true;
-          }
-          if (row[x + 1] === 26) {
-            result.divingGlasses = true;
-          }
-          if (row[x + 1] === 29) {
-            result.takingKey = true;
+        // empty space, green ball, diving glasses, key or pickaxe
+        if (!result.player && ([0, 3, 26, 29, 34].includes(row[x + 1]) || ((row[x + 1]) === 35) && gameInfo.hasPickaxe)) {
+          switch (row[x + 1]) {
+            case 3:
+              result.eating = true;
+              break;
+            case 26:
+              result.divingGlasses = true;
+              break;
+            case 29:
+              result.takingKey = true;
+              break;
+            case 34:
+              result.takingPickaxe = true;
+              break;
+            case 35:
+              result.breaking = true;
+              break;
+            default:
+              break;
           }
           row[x] = 0;
           row[x + 1] = 2;
@@ -639,7 +675,7 @@ export function moveRight(
           row[x] = 0;
           result.player = true;
         }
-      if (!result.player && ((row[x + 1] === 10) || ((row[x + 1] === 30) && gameInfo.hasKey)) && row[x + 2] === 0) {
+        if (!result.player && ((row[x + 1] === 10) || ((row[x + 1] === 30) && gameInfo.hasKey)) && row[x + 2] === 0) {
           row[x + 2] = 2;
           row[x] = 0;
           result.player = true;
@@ -690,11 +726,13 @@ export function jump(
   gameData,
   x,
   y,
-  gameInfo = { yellowBalls: [], teleports: [] }
+  gameInfo = { yellowBalls: [], teleports: [], hasPickaxe: false }
 ) {
   let result = {};
+  result.breaking = false;
   result.eating = false;
   result.takingKey = false;
+  result.takingPickaxe = false;
   result.player = false;
   result.moveOneMore = false;
   result.divingGlasses = false;
@@ -702,15 +740,25 @@ export function jump(
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
       if (y > 0 && notInAir(x, y, backData, gameData)) {
-        if (!result.player && [0, 3, 26, 29].includes(gameData[y - 1][x])) {
-          if (gameData[y - 1][x] === 3) {
-            result.eating = true;
-          }
-          if (gameData[y - 1][x] === 26) {
-            result.divingGlasses = true;
-          }
-          if (gameData[y - 1][x] === 29) {
-            result.takingKey = true;
+        if (!result.player && ([0, 3, 26, 29, 34].includes(gameData[y - 1][x]) || ((gameData[y - 1][x]) === 35) && gameInfo.hasPickaxe)) {
+          switch (gameData[y - 1][x]) {
+            case 3:
+              result.eating = true;
+              break;
+            case 26:
+              result.divingGlasses = true;
+              break;
+            case 29:
+              result.takingKey = true;
+              break;
+            case 34:
+              result.takingPickaxe = true;
+              break;
+            case 35:
+              result.breaking = true;
+              break;
+            default:
+              break;
           }
           gameData[y - 1][x] = 2;
           gameData[y][x] = 0;
@@ -832,9 +880,10 @@ export function pushDown(
   gameData,
   x,
   y,
-  gameInfo = { yellowBalls: [], teleports: [] }
+  gameInfo = { yellowBalls: [], teleports: [], hasPickaxe: false }
 ) {
   let result = {};
+  result.breaking = false;
   result.player = false;
   result.moveOneMore = false;
 
@@ -873,6 +922,12 @@ export function pushDown(
         gameData[y + 1][x] = 2;
         gameData[y][x] = 0;
         result.player = true;
+      }
+      if (!result.player && (gameData[y + 1][x] === 35) && gameInfo.hasPickaxe) {
+        gameData[y + 1][x] = 2;
+        gameData[y][x] = 0;
+        result.player = true;
+        result.breaking = true;
       }
     }
   }
@@ -944,6 +999,7 @@ export function getGameInfo(backData, gameData) {
   result.hasWater = false;
   result.hasDivingGlasses = false;
   result.hasKey = false;
+  result.hasPickaxe = false;
   result.redFish = [];
   result.electricity = [];
   result.electricityActive = false;

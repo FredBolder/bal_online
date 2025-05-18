@@ -9,7 +9,14 @@ import {
 import { polar, randomInt } from "./utils";
 import { electricityTarget } from "./balUtils";
 
-export default function drawLevel(
+let bitmapLava = null;
+let bitmapWeakStone = null;
+
+function clearBitMapLava() {
+  bitmapLava = null;
+}
+
+function drawLevel(
   canvas,
   ctx,
   backData,
@@ -20,6 +27,53 @@ export default function drawLevel(
   gameInfo,
   wave
 ) {
+
+  function createLavaBitmap(size = 32) {
+    const bmpCanvas = document.createElement('canvas');
+    bmpCanvas.width = size;
+    bmpCanvas.height = size;
+    const bmpCtx = bmpCanvas.getContext('2d');
+    const imageData = bmpCtx.createImageData(size, size);
+    const data = imageData.data;
+    const colors = [[255, 0, 0], [255, 255, 0], [255, 69, 0]];
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const color = colors[randomInt(0, 2)];
+        const index = (y * size + x) * 4;
+        data[index] = color[0];
+        data[index + 1] = color[1];
+        data[index + 2] = color[2];
+        data[index + 3] = 255; // Full opacity
+      }
+    }
+    bmpCtx.putImageData(imageData, 0, 0);
+    return bmpCanvas;
+  }
+
+  function createWeakStoneBitmap(size = 32) {
+    const bmpCanvas = document.createElement('canvas');
+    bmpCanvas.width = size;
+    bmpCanvas.height = size;
+    const bmpCtx = bmpCanvas.getContext('2d');
+    const imageData = bmpCtx.createImageData(size, size);
+    const data = imageData.data;
+    const colors = [[70, 70, 70], [20, 20, 20], [40, 40, 40]];
+    const colorNumbers = [1, 3, 2, 2, 1, 3, 1, 2, 1, 1, 2, 3, 3, 3, 2, 1, 3, 2, 1, 3, 2, 1, 2, 3, 1, 2, 1, 3, 2, 1, 3, 3, 2, 2, 1, 3, 2];
+    let c = 0;
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const color = colors[colorNumbers[c % colorNumbers.length] - 1];
+        const index = (y * size + x) * 4;
+        data[index] = color[0];
+        data[index + 1] = color[1];
+        data[index + 2] = color[2];
+        data[index + 3] = 255; // Full opacity
+        c++;
+      }
+    }
+    bmpCtx.putImageData(imageData, 0, 0);
+    return bmpCanvas;
+  }
 
   function drawBall(color) {
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
@@ -287,31 +341,10 @@ export default function drawLevel(
   }
 
   function drawLava() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
-    const n = 10;
-    const wp1 = w1 / n;
-    const wp2 = w2 / n;
-    for (let x = 0; x < n; x++) {
-      for (let y = 0; y < n; y++) {
-        const c = randomInt(1, 3);
-        let color = "yellow";
-        switch (c) {
-          case 1:
-            color = "yellow";
-            break;
-          case 2:
-            color = "red";
-            break;
-          case 3:
-            color = "orange";
-            break;
-          default:
-            color = "yellow";
-            break;
-        }
-        drawFilledBox(ctx, xmin + (x * wp1), ymin + (y * wp1), wp1, wp2, color);
-      }
+    if (bitmapLava === null) {
+      bitmapLava = createLavaBitmap(32);
     }
+    ctx.drawImage(bitmapLava, xmin, ymin, w1, w2);
   }
 
   function drawLightBlueBall() {
@@ -362,6 +395,19 @@ export default function drawLevel(
     drawBox(ctx, xmin, ymin, w1, w2, "white");
     drawLine(ctx, xmin, ymax, xc, ymin, "white");
     drawLine(ctx, xmax, ymax, xc, ymin, "white");
+  }
+
+  function drawPickaxe() {
+    d1 = w1 / 4;
+    d2 = w1 / 4;
+    d3 = w1 / 3;
+    ctx.lineWidth = 3;
+    drawLine(ctx, xmin + d1, ymin + d1, xmax - d2, ymax - d2, "silver");
+    ctx.lineWidth = 1;
+    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+    ctx.beginPath();
+    ctx.ellipse(xc + d3, yc + d3, w1 * 0.7, w2 * 0.7, 0, 1.1 * Math.PI, 1.4 * Math.PI, false);
+    ctx.stroke();
   }
 
   function drawPurpleBall() {
@@ -511,6 +557,13 @@ export default function drawLevel(
     ctx.stroke();
   }
 
+  function drawWeakStone() {
+    if (bitmapWeakStone === null) {
+      bitmapWeakStone = createWeakStoneBitmap(32);
+    }
+    ctx.drawImage(bitmapWeakStone, xmin, ymin, w1, w2);
+  }
+
   function drawWhiteBall() {
     // white ball
     if (nicerGraphics) {
@@ -538,6 +591,7 @@ export default function drawLevel(
   ) {
     return false;
   }
+
   const rows = gameData.length;
   const columns = gameData[0].length;
 
@@ -690,6 +744,12 @@ export default function drawLevel(
           break;
         case 31:
           // teleport - will be drawn later
+          break;
+        case 34:
+          drawPickaxe();
+          break;
+        case 35:
+          drawWeakStone();
           break;
         case 36:
           drawBomb();
@@ -847,3 +907,5 @@ export default function drawLevel(
     }
   }
 }
+
+export { clearBitMapLava, drawLevel };

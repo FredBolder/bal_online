@@ -15,7 +15,8 @@ function Navbar() {
   return (
     <div className="navbar">
       <div className="logo">
-        <h1>Bal - The Game for Smart People</h1>
+        <h1 className="headerSmall">Bal</h1>
+        <h1 className="headerLarge">Bal - The Game for Smart People</h1>
       </div>
       <div className="nav-links">
         <Link onClick={balClick} to="/">
