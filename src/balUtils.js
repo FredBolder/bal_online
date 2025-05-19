@@ -3,6 +3,17 @@ function canMoveAlone(n) {
   return [9, 28, 84, 85, 86].includes(n);
 }
 
+export function findTeleport(x, y, teleports) {
+  let result = -1;
+
+  for (let i = 0; i < teleports.length; i++) {
+    if (teleports[i].x === x && teleports[i].y === y) {
+      result = i;
+    }
+  }
+  return result;
+}
+
 export function inWater(x, y, backData) {
   let result = [20, 23].includes(backData[y][x]);
   return result;
@@ -21,11 +32,8 @@ function isLadder(x, y, backData) {
 function isTeleport(x, y, teleports) {
   let result = false;
 
-  if (teleports.length === 2) {
-    if (
-      (teleports[0].x === x && teleports[0].y === y) ||
-      (teleports[1].x === x && teleports[1].y === y)
-    ) {
+  for (let i = 0; i < teleports.length; i++) {
+    if (teleports[i].x === x && teleports[i].y === y) {
       result = true;
     }
   }
@@ -63,23 +71,26 @@ function charToNumber(c) {
     case "5":
       result = 5;
       break;
-    case "U":
-      result = 106;
-      break;
     case "D":
       result = 6;
       break;
     case "L":
       result = 7;
       break;
-    case "R":
-      result = 107;
-      break;
     case "8":
       result = 8;
       break;
     case "9":
       result = 9;
+      break;
+    case ">":
+      result = 10;
+      break;
+    case "<":
+      result = 11;
+      break;
+    case "-":
+      result = 13;
       break;
     case "G":
       result = 15;
@@ -93,11 +104,23 @@ function charToNumber(c) {
     case "J":
       result = 18;
       break;
+    case "W":
+      result = 20;
+      break;
     case "V":
       result = 22;
       break;
+    case "w":
+      result = 23;
+      break;
     case "=":
       result = 25;
+      break;
+    case "d":
+      result = 26;
+      break;
+    case "f":
+      result = 27;
       break;
     case "p":
       result = 28;
@@ -135,12 +158,6 @@ function charToNumber(c) {
     case "+":
       result = 86;
       break;
-    case ">":
-      result = 10;
-      break;
-    case "<":
-      result = 11;
-      break;
     case "^":
       result = 87;
       break;
@@ -153,23 +170,17 @@ function charToNumber(c) {
     case "h":
       result = 90;
       break;
-    case "W":
-      result = 20;
-      break;
-    case "w":
-      result = 23;
-      break;
-    case "d":
-      result = 26;
-      break;
-    case "f":
-      result = 27;
-      break;
     case "!":
       result = 91;
       break;
-    case "-":
-      result = 13;
+    case "τ":
+      result = 92;
+      break;
+    case "U":
+      result = 106;
+      break;
+    case "R":
+      result = 107;
       break;
     default:
       result = 0;
@@ -200,23 +211,26 @@ function numberToChar(n) {
     case 5:
       result = "5";
       break;
-    case 106:
-      result = "U";
-      break;
     case 6:
       result = "D";
       break;
     case 7:
       result = "L";
       break;
-    case 107:
-      result = "R";
-      break;
     case 8:
       result = "8";
       break;
     case 9:
       result = "9";
+      break;
+    case 10:
+      result = ">";
+      break;
+    case 11:
+      result = "<";
+      break;
+    case 13:
+      result = "-";
       break;
     case 15:
       result = "G";
@@ -230,11 +244,23 @@ function numberToChar(n) {
     case 18:
       result = "J";
       break;
+    case 20:
+      result = "W";
+      break;
     case 22:
       result = "V";
       break;
+    case 23:
+      result = "w";
+      break;
     case 25:
       result = "=";
+      break;
+    case 26:
+      result = "d";
+      break;
+    case 27:
+      result = "f";
       break;
     case 28:
       result = "p";
@@ -272,12 +298,6 @@ function numberToChar(n) {
     case 86:
       result = "+";
       break;
-    case 10:
-      result = ">";
-      break;
-    case 11:
-      result = "<";
-      break;
     case 87:
       result = "^";
       break;
@@ -290,23 +310,17 @@ function numberToChar(n) {
     case 90:
       result = "h";
       break;
-    case 20:
-      result = "W";
-      break;
-    case 23:
-      result = "w";
-      break;
-    case 26:
-      result = "d";
-      break;
-    case 27:
-      result = "f";
-      break;
     case 91:
       result = "!";
       break;
-    case 13:
-      result = "-";
+    case 92:
+      result = "τ";
+      break;
+    case 106:
+      result = "U";
+      break;
+    case 107:
+      result = "R";
       break;
     default:
       result = " ";
@@ -593,16 +607,21 @@ export function moveLeft(
         }
       }
       if (!result.player && x > 0) {
-        if (row[x - 1] === 31) {
+        if ((row[x - 1] === 31) || (row[x - 1] === 92)) {
           row[x - 1] = 2;
           row[x] = 0;
           result.player = true;
           result.teleporting = true;
         }
       }
-      if (result.player && gameInfo.teleports.length === 2) {
-        if (isTeleport(x, y, gameInfo.teleports)) {
-          row[x] = 31;
+      if (result.player) {
+        const teleport = findTeleport(x, y, gameInfo.teleports);
+        if (teleport >= 0) {
+          if (gameInfo.teleports[teleport].selfDestructing) {
+            row[x] = 0;
+          } else {
+            row[x] = 31;
+          }
         }
       }
     }
@@ -704,16 +723,21 @@ export function moveRight(
         }
       }
       if (!result.player && x < gameData[0].length - 1) {
-        if (row[x + 1] === 31) {
+        if ((row[x + 1] === 31) || (row[x + 1] === 92)) {
           row[x + 1] = 2;
           row[x] = 0;
           result.player = true;
           result.teleporting = true;
         }
       }
-      if (result.player && gameInfo.teleports.length === 2) {
-        if (isTeleport(x, y, gameInfo.teleports)) {
-          row[x] = 31;
+      if (result.player) {
+        const teleport = findTeleport(x, y, gameInfo.teleports);
+        if (teleport >= 0) {
+          if (gameInfo.teleports[teleport].selfDestructing) {
+            row[x] = 0;
+          } else {
+            row[x] = 31;
+          }
         }
       }
     }
@@ -1047,6 +1071,14 @@ export function getGameInfo(backData, gameData) {
         let teleport = {};
         teleport.x = j;
         teleport.y = i;
+        teleport.selfDestructing = false;
+        result.teleports.push(teleport);
+      }
+      if (gameData[i][j] === 92) {
+        let teleport = {};
+        teleport.x = j;
+        teleport.y = i;
+        teleport.selfDestructing = true;
         result.teleports.push(teleport);
       }
       if (backData[i][j] === 20 || backData[i][j] === 23) {

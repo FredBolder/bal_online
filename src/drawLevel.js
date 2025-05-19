@@ -743,7 +743,7 @@ function drawLevel(
           drawLock();
           break;
         case 31:
-          // teleport - will be drawn later
+          // Teleport - will be drawn later
           break;
         case 34:
           drawPickaxe();
@@ -781,6 +781,9 @@ function drawLevel(
         case 91:
           drawElectricity();
           break;
+        case 92:
+          // Teleport - will be drawn later
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
           break;
@@ -791,6 +794,11 @@ function drawLevel(
   }
   ctx.lineWidth = 3;
   for (let i = 0; i < gameInfo.teleports.length; i++) {
+    if (gameInfo.teleports[i].selfDestructing) {
+      ctx.setLineDash([2, 2]);
+    } else {
+      ctx.setLineDash([]);
+    }
     drawBox(
       ctx,
       gameInfo.teleports[i].x * size1 + leftMargin + 1,
@@ -800,6 +808,7 @@ function drawLevel(
       "white"
     );
   }
+  ctx.setLineDash([]);
   ctx.lineWidth = 1;
 
   // Fish

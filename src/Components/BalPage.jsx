@@ -27,6 +27,7 @@ import {
   electricityTarget,
   inWater,
   checkTrapDoors,
+  findTeleport,
 } from "../balUtils.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
@@ -386,23 +387,31 @@ function BalPage() {
         }
       }
 
-      if (gameInfo.teleports.length === 2) {
+      if (gameInfo.teleports.length > 0) {
+        let teleport = -1;
         switch (teleporting) {
           case 1:
             playSound("teleport");
             teleporting = 2;
             break;
           case 2:
-            gameData[posY][posX] = 31;
-            if (
-              posX === gameInfo.teleports[0].x &&
-              posY === gameInfo.teleports[0].y
-            ) {
-              posX = gameInfo.teleports[1].x;
-              posY = gameInfo.teleports[1].y;
-            } else {
-              posX = gameInfo.teleports[0].x;
-              posY = gameInfo.teleports[0].y;
+            teleport = findTeleport(posX, posY, gameInfo.teleports);
+            if (teleport >= 0) {
+              if (gameInfo.teleports[teleport].selfDestructing) {
+                gameData[posY][posX] = 0;
+              } else {
+                gameData[posY][posX] = 31;
+              }
+              for (let i = 0; i < gameInfo.teleports.length; i++) {
+                if ((i !== teleport) && (gameInfo.teleports[i].selfDestructing === gameInfo.teleports[teleport].selfDestructing)) {
+                  posX = gameInfo.teleports[i].x;
+                  posY = gameInfo.teleports[i].y;
+                }
+              }
+              if (gameInfo.teleports[teleport].selfDestructing) {
+                // Delete all self-destructing teleports
+                gameInfo.teleports = gameInfo.teleports.filter((teleport) => teleport.selfDestructing === false);
+              }
             }
             gameData[posY][posX] = 2;
             update = true;
