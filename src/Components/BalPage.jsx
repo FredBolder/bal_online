@@ -29,6 +29,8 @@ import {
   checkTrapDoors,
   findTeleport,
 } from "../balUtils.js";
+
+import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
 import { getLevel } from "../levels.js";
@@ -144,6 +146,42 @@ function BalPage() {
   const closeModal = () => {
     setShowModal(false);
   };
+
+  function loadProgress() {
+    let level = -1;
+    const levelStr = localStorage.getItem("lastSolvedLevel");
+    if (levelStr !== null) {
+      level = tryParseInt(levelStr, -1);
+      if (level !== -1) {
+        currentLevel = level;
+      }
+    }
+  }
+
+  function saveProgress() {
+    localStorage.setItem("lastSolvedLevel", currentLevel.toString());
+  }
+
+  function loadSettings() {
+    const lessQuestions = localStorage.getItem("lessQuestions")
+    if (lessQuestions) {
+      settings.lessQuestions = stringToBoolean(lessQuestions);
+    }
+    const nicerGraphics = localStorage.getItem("nicerGraphics")
+    if (nicerGraphics) {
+      settings.nicerGraphics = stringToBoolean(nicerGraphics);
+    }
+    const sound = localStorage.getItem("sound")
+    if (sound) {
+      settings.sound = stringToBoolean(sound);
+    }
+  }
+
+  function saveSettings() {
+    localStorage.setItem("lessQuestions", booleanToString(settings.lessQuestions));
+    localStorage.setItem("nicerGraphics", booleanToString(settings.nicerGraphics));
+    localStorage.setItem("sound", booleanToString(settings.sound));
+  }
 
   function playSound(sound) {
     let snd = null;
@@ -572,6 +610,7 @@ function BalPage() {
     settings.sound = cbSound.current.checked;
     settings.nicerGraphics = cbGraphics.current.checked;
     settings.lessQuestions = cbQuestions.current.checked;
+    saveSettings();
     updateScreen();
   }
 
@@ -771,11 +810,12 @@ function BalPage() {
             {
               label: "OK",
               onClick: () => {
-                initLevel(currentLevel + 1);
               },
             },
           ],
         });
+        initLevel(currentLevel + 1);
+        saveProgress();
       }
     }
     if (info.divingGlasses) {
@@ -826,10 +866,13 @@ function BalPage() {
 
 
   useEffect(() => {
+    loadSettings();
     cbSound.current.checked = settings.sound;
     cbGraphics.current.checked = settings.nicerGraphics;
     cbQuestions.current.checked = settings.lessQuestions;
-    initLevel(200, false);
+    currentLevel = 200;
+    loadProgress();
+    initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;
     el.addEventListener("keydown", handleKeyDown);

@@ -1,3 +1,7 @@
+export function booleanToString(value) {
+  return value ? "1": "0";
+}
+
 // eslint-disable-next-line no-unused-vars
 function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
@@ -48,6 +52,26 @@ export function randomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.trunc(Math.random() * (max - min + 1)) + min;
+}
+
+export function stringToBoolean(value) {
+  return value === "1" ? true: false;
+}
+
+export function tryParseInt(str, defaultValue) {
+  let result = defaultValue;
+  if (str !== null) {
+    if (typeof str === "string") {
+      str = str.trim();
+      if (str.length > 0) {
+        result = parseInt(str);
+        if (isNaN(result)) {
+          result = defaultValue;
+        }
+      }
+    }
+  }
+  return result;
 }
 
 

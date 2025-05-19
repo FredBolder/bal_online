@@ -829,6 +829,7 @@ export function jumpLeft(
   let result = {};
   result.eating = false;
   result.takingKey = false;
+  result.takingPickaxe = false;
   result.player = false;
   result.divingGlasses = false;
 
@@ -836,15 +837,22 @@ export function jumpLeft(
     if (gameData.length > 0) {
       if (y > 0 && x > 0 && notInAir(x, y, backData, gameData)) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29].includes(gameData[y - 1][x - 1])) {
-            if (gameData[y - 1][x - 1] === 3) {
-              result.eating = true;
-            }
-            if (gameData[y - 1][x - 1] === 26) {
-              result.divingGlasses = true;
-            }
-            if (gameData[y - 1][x - 1] === 29) {
-              result.takingKey = true;
+          if ([0, 3, 26, 29, 34].includes(gameData[y - 1][x - 1])) {
+            switch (gameData[y - 1][x - 1]) {
+              case 3:
+                result.eating = true;
+                break;
+              case 26:
+                result.divingGlasses = true;
+                break;
+              case 29:
+                result.takingKey = true;
+                break;
+              case 34:
+                result.takingPickaxe = true;
+                break;
+              default:
+                break;
             }
             gameData[y - 1][x - 1] = 2;
             gameData[y][x] = 0;
@@ -867,6 +875,7 @@ export function jumpRight(
   let result = {};
   result.eating = false;
   result.takingKey = false;
+  result.takingPickaxe = false;
   result.player = false;
   result.divingGlasses = false;
 
@@ -878,15 +887,22 @@ export function jumpRight(
         notInAir(x, y, backData, gameData)
       ) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29].includes(gameData[y - 1][x + 1])) {
-            if (gameData[y - 1][x + 1] === 3) {
-              result.eating = true;
-            }
-            if (gameData[y - 1][x + 1] === 26) {
-              result.divingGlasses = true;
-            }
-            if (gameData[y - 1][x + 1] === 29) {
-              result.takingKey = true;
+          if ([0, 3, 26, 29, 34].includes(gameData[y - 1][x + 1])) {
+            switch (gameData[y - 1][x + 1]) {
+              case 3:
+                result.eating = true;
+                break;
+              case 26:
+                result.divingGlasses = true;
+                break;
+              case 29:
+                result.takingKey = true;
+                break;
+              case 34:
+                result.takingPickaxe = true;
+                break;
+              default:
+                break;
             }
             gameData[y - 1][x + 1] = 2;
             gameData[y][x] = 0;
