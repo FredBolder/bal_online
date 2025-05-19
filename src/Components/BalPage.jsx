@@ -164,15 +164,15 @@ function BalPage() {
 
   function loadSettings() {
     const lessQuestions = localStorage.getItem("lessQuestions")
-    if (lessQuestions) {
+    if (lessQuestions !== null) {
       settings.lessQuestions = stringToBoolean(lessQuestions);
     }
     const nicerGraphics = localStorage.getItem("nicerGraphics")
-    if (nicerGraphics) {
+    if (nicerGraphics !== null) {
       settings.nicerGraphics = stringToBoolean(nicerGraphics);
     }
     const sound = localStorage.getItem("sound")
-    if (sound) {
+    if (sound !== null) {
       settings.sound = stringToBoolean(sound);
     }
   }
