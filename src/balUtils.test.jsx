@@ -901,8 +901,8 @@ describe("balUtils", () => {
     greenBalls: 2,
     horizontalElevators: [],
     redBalls: [
-      { x: 1, y: 2 },
-      { x: 1, y: 3 },
+      { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0 },
+      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0 },
     ],
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
@@ -936,8 +936,8 @@ describe("balUtils", () => {
     greenBalls: 4,
     horizontalElevators: [],
     redBalls: [
-      { x: 1, y: 2 },
-      { x: 1, y: 3 },
+      { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0 },
+      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0 },
     ],
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
@@ -1023,6 +1023,41 @@ describe("balUtils", () => {
   it("getGameInfo D", () => {
     expect(JSON.stringify(getGameInfo(inputBack9d, input9d))).toBe(
       JSON.stringify(expectedOutput9d)
+    );
+  });
+
+  let inputBack9e = zeroArray(5, 5);
+  let input9e = [
+    [1, 1, 1, 1, 1],
+    [1, 0, 0, 3, 1],
+    [1, 93, 0, 0, 1],
+    [1, 8, 3, 2, 1],
+    [1, 1, 1, 1, 1],
+  ];
+  let expectedOutput9e = {
+    blueBall: { x: 3, y: 3 },
+    elevators: [],
+    greenBalls: 2,
+    horizontalElevators: [],
+    redBalls: [
+      { x: 1, y: 2, smart: 1, direction: "none", skipElevatorCount: 0 },
+      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0 },
+    ],
+    yellowBalls: [],
+    detonator: { x: -1, y: -1 },
+    teleports: [],
+    hasWater: false,
+    hasDivingGlasses: false,
+    hasKey: false,
+    hasPickaxe: false,
+    redFish: [],
+    electricity: [],
+    electricityActive: false,
+    trapDoors: [],
+  };
+  it("getGameInfo E", () => {
+    expect(JSON.stringify(getGameInfo(inputBack9e, input9e))).toBe(
+      JSON.stringify(expectedOutput9e)
     );
   });
 

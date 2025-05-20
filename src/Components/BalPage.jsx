@@ -17,6 +17,7 @@ import {
   checkRed,
   moveElevators,
   moveHorizontalElevators,
+  moveRedBalls,
   moveYellowBalls,
   pushDown,
   moveDownLeft,
@@ -102,6 +103,7 @@ let laserX2 = -1;
 let laserY = -1;
 let posX = -1;
 let posY = -1;
+let redCounter = 0;
 let refreshCounter = 0;
 let refreshCountTo = 12;
 let settings = {
@@ -399,6 +401,15 @@ function BalPage() {
         }
       }
 
+      if (redCounter > 0) {
+        redCounter--;
+      } else {
+        redCounter = 2;
+        if (moveRedBalls(backData, gameData, posX, posX, gameInfo)) {
+          update = true;
+        }
+      }
+      
       if (yellowCounter > 0) {
         yellowCounter--;
       } else {
@@ -872,6 +883,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
+    //currentLevel = 721; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;

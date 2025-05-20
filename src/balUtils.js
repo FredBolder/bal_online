@@ -1,3 +1,5 @@
+import { randomInt } from "./utils";
+
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
   return [9, 28, 84, 85, 86].includes(n);
@@ -27,6 +29,10 @@ function isLadder(x, y, backData) {
     }
   }
   return result;
+}
+
+function isRedBall(element) {
+  return [8, 93, 94].includes(element);
 }
 
 function isTeleport(x, y, teleports) {
@@ -176,6 +182,12 @@ function charToNumber(c) {
     case "τ":
       result = 92;
       break;
+    case "s":
+      result = 93;
+      break;
+    case "S":
+      result = 94;
+      break;
     case "U":
       result = 106;
       break;
@@ -316,6 +328,12 @@ function numberToChar(n) {
     case 92:
       result = "τ";
       break;
+    case 93:
+      result = "s";
+      break;
+    case 94:
+      result = "S";
+      break;
     case 106:
       result = "U";
       break;
@@ -423,7 +441,7 @@ export function checkFalling(backData, gameData, gameInfo) {
       let element1 = gameData[i][j];
       let element2 = gameData[i + 1][j];
 
-      if ((element2 === 22) && ([2, 4, 8].includes(element1))) {
+      if ((element2 === 22) && ([2, 4, 8, 93, 94].includes(element1))) {
         // lava
         result.update = true;
         if (element1 === 2) {
@@ -437,17 +455,15 @@ export function checkFalling(backData, gameData, gameInfo) {
       if (j < gameData[i].length - 1) {
         if (
           // wall |\
-          element2 === 15 &&
-          (element1 === 2 || element1 === 4 || element1 === 8) &&
-          gameData[i][j + 1] === 0 &&
-          gameData[i + 1][j + 1] === 0
+          element2 === 15 && [2, 4, 8, 93, 94].includes(element1) &&
+          gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0
         ) {
           result.update = true;
           if (element1 === 2) {
             result.ballX = j + 1;
             result.ballY = i;
           }
-          if (element1 === 8) {
+          if (isRedBall(element1)) {
             updateRed(gameInfo.redBalls, j, i, j + 1, i);
           }
           gameData[i][j + 1] = gameData[i][j];
@@ -458,17 +474,15 @@ export function checkFalling(backData, gameData, gameInfo) {
       if (j >= 1) {
         if (
           // wall /|
-          element2 === 16 &&
-          (element1 === 2 || element1 === 4 || element1 === 8) &&
-          gameData[i][j - 1] === 0 &&
-          gameData[i + 1][j - 1] === 0
+          element2 === 16 && [2, 4, 8, 93, 94].includes(element1) &&
+          gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0
         ) {
           result.update = true;
           if (element1 === 2) {
             result.ballX = j - 1;
             result.ballY = i;
           }
-          if (element1 === 8) {
+          if (isRedBall(element1)) {
             updateRed(gameInfo.redBalls, j, i, j - 1, i);
           }
           gameData[i][j - 1] = gameData[i][j];
@@ -485,19 +499,18 @@ export function checkFalling(backData, gameData, gameInfo) {
 
       if (
         element2 === 0 &&
-        ((element1 === 2 &&
+        (([2, 8, 93, 94].includes(element1) &&
           !isLadder(j, i, backData) &&
           !isLadder(j, i + 1, backData) &&
           !inWater(j, i, backData)) ||
-          element1 === 4 ||
-          element1 === 8)
+          element1 === 4)
       ) {
         result.update = true;
         if (element1 === 2) {
           result.ballX = j;
           result.ballY = i + 1;
         }
-        if (element1 === 8) {
+        if (isRedBall(element1)) {
           updateRed(gameInfo.redBalls, j, i, j, i + 1);
         }
         if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
@@ -1056,10 +1069,23 @@ export function getGameInfo(backData, gameData) {
       if (gameData[i][j] === 37) {
         result.detonator = { x: j, y: i };
       }
-      if (gameData[i][j] === 8) {
+      if (isRedBall(gameData[i][j])) {
         let redBall = {};
         redBall.x = j;
         redBall.y = i;
+        switch (gameData[i][j]) {
+          case 93:
+            redBall.smart = 1;
+            break;
+          case 94:
+            redBall.smart = 2;
+            break;
+          default:
+            redBall.smart = 0;
+            break;
+        }
+        redBall.direction = "none";
+        redBall.skipElevatorCount = 0;
         result.redBalls.push(redBall);
       }
       if (gameData[i][j] === 106 || gameData[i][j] === 6) {
@@ -1220,7 +1246,7 @@ export function moveElevators(arr, elevators, redBalls) {
         emptyUp = j;
       }
       if (emptyUp === -1) {
-        if (![2, 4, 8, 6, 106].includes(arr[j][elevators[i].x])) {
+        if (![2, 4, 8, 93, 94, 6, 106].includes(arr[j][elevators[i].x])) {
           upPossible = false;
         }
       }
@@ -1265,6 +1291,8 @@ export function moveElevators(arr, elevators, redBalls) {
                 result.playerY = j;
                 break;
               case 8:
+              case 93:
+              case 94:
                 updateRed(redBalls, x, j + 1, x, j);
                 break;
               default:
@@ -1281,12 +1309,12 @@ export function moveElevators(arr, elevators, redBalls) {
           arr[y][x] = 0;
           elevators[i].y = y + 1;
           for (let j = arr.length - 2; j >= 0; j--) {
-            if (arr[j + 1][x] === 0 && [2, 4, 8].includes(arr[j][x])) {
+            if (arr[j + 1][x] === 0 && [2, 4, 8, 93, 94].includes(arr[j][x])) {
               if (arr[j][x] === 2) {
                 result.playerX = x;
                 result.playerY = j + 1;
               }
-              if (arr[j][x] === 8) {
+              if (isRedBall(arr[j][x] === 8)) {
                 updateRed(redBalls, x, j, x, j + 1);
               }
               arr[j + 1][x] = arr[j][x];
@@ -1375,6 +1403,183 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
     }
   }
   return result;
+}
+
+export function moveRedBalls(
+  backData,
+  gameData,
+  x,
+  y,
+  gameInfo,
+) {
+  let changeDirection = false;
+  let directionAfterJump = "none";
+  let maxX = 0;
+  let n1 = 0;
+  let n2 = 0;
+  let saveRed = 93;
+  let updated = false;
+  let waitLeft = false;
+  let waitRight = false;
+
+  if (gameData.length > 0) {
+    maxX = gameData[0].length - 1;
+    for (let i = 0; i < gameInfo.redBalls.length; i++) {
+      const red = gameInfo.redBalls[i];
+      const row = gameData[red.y];
+
+      if ((red.smart > 0) && notInAir(red.x, red.y, backData, gameData)) {
+        changeDirection = false;
+
+        waitLeft = false;
+        waitRight = false;
+        if (red.skipElevatorCount > 0) {
+          red.skipElevatorCount--;
+        } else {
+          if ((red.y > 0) && [0].includes(gameData[red.y - 1][red.x])) {
+            for (let j = 0; j <= red.y; j++) {
+              if (red.x > 0) {
+                if ([6, 106].includes(gameData[j][red.x - 1])) {
+                  waitLeft = true;
+                } else {
+                  if (gameData[j][red.x - 1] !== 0) {
+                    waitLeft = false;
+                  }
+                }
+              }
+              if (red.x < maxX) {
+                if ([6, 106].includes(gameData[j][red.x + 1])) {
+                  waitRight = true;
+                } else {
+                  if (gameData[j][red.x + 1] !== 0) {
+                    waitRight = false;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (!waitLeft && !waitRight) {
+          n1 = randomInt(1, 20);
+          switch (n1) {
+            case 5:
+              changeDirection = true;
+              break;
+            default:
+              break;
+          }
+          if (changeDirection) {
+            n2 = randomInt(0, 2);
+            switch (n2) {
+              case 0:
+                red.direction = "none";
+                break;
+              case 1:
+                red.direction = "left";
+                break;
+              case 2:
+                red.direction = "right";
+                break;
+              default:
+                break;
+            }
+          }
+        }
+
+        if (waitLeft) {
+          if (red.x > 0) {
+            if ([6, 106].includes(gameData[red.y][red.x - 1])) {
+              waitLeft = false;
+              waitRight = false;
+              red.direction = "upLeft"
+              directionAfterJump = "none";
+            }
+          }
+        }
+        if (waitRight) {
+          if (red.x < maxX) {
+            if ([6, 106].includes(gameData[red.y][red.x + 1])) {
+              waitLeft = false;
+              waitRight = false;
+              red.direction = "upRight"
+              directionAfterJump = "none";
+            }
+          }
+        }
+
+        if (!waitLeft && !waitRight) {
+          if (red.y > 0) {
+            if ((red.direction === "left") && (red.x > 0)) {
+              if (![0].includes(gameData[red.y][red.x - 1]) && [0].includes(gameData[red.y - 1][red.x]) && [0].includes(gameData[red.y - 1][red.x - 1])) {
+                red.direction = "upLeft"
+                directionAfterJump = "left";
+              }
+            }
+            if ((red.direction === "right") && (red.x < maxX)) {
+              if (![0].includes(gameData[red.y][red.x + 1]) && [0].includes(gameData[red.y - 1][red.x]) && [0].includes(gameData[red.y - 1][red.x + 1])) {
+                red.direction = "upRight"
+                directionAfterJump = "right";
+              }
+            }
+          }
+          saveRed = row[red.x];
+          switch (red.direction) {
+            case "left":
+              if (red.x > 0) {
+                if ([0].includes(row[red.x - 1])) {
+                  row[red.x] = 0;
+                  red.x--;
+                  row[red.x] = saveRed;
+                  updated = true;
+                }
+              }
+              break;
+            case "right":
+              if (red.x < maxX) {
+                if ([0].includes(row[red.x + 1])) {
+                  row[red.x] = 0;
+                  red.x++;
+                  row[red.x] = saveRed;
+                  updated = true;
+                }
+              }
+              break;
+            case "upLeft":
+              if ((red.x > 0) && (red.y > 0)) {
+                if ([0].includes(gameData[red.y - 1][red.x - 1]) && [0].includes(gameData[red.y - 1][red.x])) {
+                  gameData[red.y][red.x] = 0;
+                  red.x--;
+                  red.y--;
+                  gameData[red.y][red.x] = saveRed;
+                }
+              }
+              red.direction = directionAfterJump;
+              updated = true;
+              break;
+            case "upRight":
+              if ((red.x < maxX) && (red.y > 0)) {
+                if ([0].includes(gameData[red.y - 1][red.x + 1]) && [0].includes(gameData[red.y - 1][red.x])) {
+                  gameData[red.y][red.x] = 0;
+                  red.x++;
+                  red.y--;
+                  gameData[red.y][red.x] = saveRed;
+                }
+              }
+              red.direction = directionAfterJump;
+              updated = true;
+              break;
+            default:
+              break;
+          }
+        }
+        if ([6, 106, 7, 107].includes(gameData[red.y + 1][red.x])) {
+          red.skipElevatorCount = 25;
+        }
+      }
+    }
+  }
+  return updated;
 }
 
 export function moveYellowBalls(arr, yellowBalls) {

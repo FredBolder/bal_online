@@ -784,6 +784,10 @@ function drawLevel(
         case 92:
           // Teleport - will be drawn later
           break;
+        case 93:
+          // Smart red ball
+          drawRedBall();
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
           break;
