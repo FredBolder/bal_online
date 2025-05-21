@@ -5,6 +5,34 @@ function canMoveAlone(n) {
   return [9, 28, 84, 85, 86].includes(n);
 }
 
+export function isEmpty(gameData, columnOrRow, start, end, horizontal = true) {
+  let n1 = 0;
+  let n2 = 0;
+  let result = true;
+
+  if (Math.abs(end - start) > 1) {
+    if (end > start) {
+      n1 = start + 1;
+      n2 = end - 1;
+    } else {
+      n1 = end + 1;
+      n2 = start - 1;
+    }
+    for (let i = n1; i <= n2; i++) {
+      if (horizontal) {
+        if (![0, 20, 23].includes(gameData[columnOrRow][i])) {
+          result = false;
+        }
+      } else {
+        if (![0, 20, 23].includes(gameData[i][columnOrRow])) {
+          result = false;
+        }
+      }
+    }
+  }
+  return result;
+}
+
 export function findTeleport(x, y, teleports) {
   let result = -1;
 
@@ -1086,6 +1114,7 @@ export function getGameInfo(backData, gameData) {
         }
         redBall.direction = "none";
         redBall.skipElevatorCount = 0;
+        redBall.skipFollowCount = 0;
         result.redBalls.push(redBall);
       }
       if (gameData[i][j] === 106 || gameData[i][j] === 6) {
@@ -1231,7 +1260,6 @@ export function moveElevators(arr, elevators, redBalls) {
   result.playerX = -1; // Set to new position if player is moved
   result.playerY = -1; // Set to new position if player is moved
 
-  //console.log("moveElevators");
   for (let i = 0; i < elevators.length; i++) {
     let directionChanged = false;
     let downPossible = false;
@@ -1314,7 +1342,7 @@ export function moveElevators(arr, elevators, redBalls) {
                 result.playerX = x;
                 result.playerY = j + 1;
               }
-              if (isRedBall(arr[j][x] === 8)) {
+              if (isRedBall(arr[j][x])) {
                 updateRed(redBalls, x, j, x, j + 1);
               }
               arr[j + 1][x] = arr[j][x];
@@ -1426,7 +1454,6 @@ export function moveRedBalls(
     maxX = gameData[0].length - 1;
     for (let i = 0; i < gameInfo.redBalls.length; i++) {
       const red = gameInfo.redBalls[i];
-      const row = gameData[red.y];
 
       if ((red.smart > 0) && notInAir(red.x, red.y, backData, gameData)) {
         changeDirection = false;
@@ -1486,7 +1513,6 @@ export function moveRedBalls(
             }
           }
         }
-
         if (waitLeft) {
           if (red.x > 0) {
             if ([6, 106].includes(gameData[red.y][red.x - 1])) {
@@ -1509,6 +1535,24 @@ export function moveRedBalls(
         }
 
         if (!waitLeft && !waitRight) {
+          if (red.smart > 1) {
+            if (red.x === x) {
+              red.skipFollowCount = 50;
+            }
+            if (red.skipFollowCount > 0) {
+              red.skipFollowCount--;
+            } else {
+              if (![6, 106, 7, 107].includes(gameData[red.y + 1][red.x])) {
+                if ((x > red.x) && [0, 20, 23].includes(gameData[red.y][red.x + 1])) {
+                  red.direction = "right";
+                }
+                if ((x < red.x) && [0, 20, 23].includes(gameData[red.y][red.x - 1])) {
+                  red.direction = "left";
+                }
+              }
+            }
+          }
+
           if (red.y > 0) {
             if ((red.direction === "left") && (red.x > 0)) {
               if (![0].includes(gameData[red.y][red.x - 1]) && [0].includes(gameData[red.y - 1][red.x]) && [0].includes(gameData[red.y - 1][red.x - 1])) {
@@ -1523,24 +1567,24 @@ export function moveRedBalls(
               }
             }
           }
-          saveRed = row[red.x];
+          saveRed = gameData[red.y][red.x];
           switch (red.direction) {
             case "left":
               if (red.x > 0) {
-                if ([0].includes(row[red.x - 1])) {
-                  row[red.x] = 0;
+                if ([0].includes(gameData[red.y][red.x - 1])) {
+                  gameData[red.y][red.x] = 0;
                   red.x--;
-                  row[red.x] = saveRed;
+                  gameData[red.y][red.x] = saveRed;
                   updated = true;
                 }
               }
               break;
             case "right":
               if (red.x < maxX) {
-                if ([0].includes(row[red.x + 1])) {
-                  row[red.x] = 0;
+                if ([0].includes(gameData[red.y][red.x + 1])) {
+                  gameData[red.y][red.x] = 0;
                   red.x++;
-                  row[red.x] = saveRed;
+                  gameData[red.y][red.x] = saveRed;
                   updated = true;
                 }
               }

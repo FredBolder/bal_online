@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  isEmpty,
   numberArrayToStringArray,
   stringArrayToNumberArray,
   checkFalling,
@@ -901,8 +902,8 @@ describe("balUtils", () => {
     greenBalls: 2,
     horizontalElevators: [],
     redBalls: [
-      { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0 },
-      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0 },
+      { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
+      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
     ],
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
@@ -936,8 +937,8 @@ describe("balUtils", () => {
     greenBalls: 4,
     horizontalElevators: [],
     redBalls: [
-      { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0 },
-      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0 },
+      { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
+      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
     ],
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
@@ -1040,8 +1041,8 @@ describe("balUtils", () => {
     greenBalls: 2,
     horizontalElevators: [],
     redBalls: [
-      { x: 1, y: 2, smart: 1, direction: "none", skipElevatorCount: 0 },
-      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0 },
+      { x: 1, y: 2, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
+      { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
     ],
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
@@ -2629,6 +2630,67 @@ describe("balUtils", () => {
         divingGlasses: false,
       })
     );
+  });
+
+  // ***** isEmpty *****
+
+  let input21a = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 2, 0, 0, 0, 8, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let result21a = isEmpty(input21a, 2, 1, 5);
+  it("isEmpty A", () => {
+    expect(result21a).toBe(true);
+  });
+
+  let input21b = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 3, 1],
+    [1, 2, 4, 0, 0, 8, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let result21b = isEmpty(input21b, 2, 1, 5);
+  it("isEmpty B", () => {
+    expect(result21b).toBe(false);
+  });
+
+  let input21c = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 5, 0, 0, 3, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let result21c = isEmpty(input21c, 3, 5, 1, false);
+  it("isEmpty C", () => {
+    expect(result21c).toBe(true);
+  });
+
+  let input21d = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 5, 0, 0, 3, 1],
+    [1, 0, 0, 9, 0, 0, 0, 1],
+    [1, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let result21d = isEmpty(input21d, 3, 1, 3, false);
+  it("isEmpty D", () => {
+    expect(result21d).toBe(false);
+  });
+
+  let input21e = [
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 5, 0, 3, 1],
+    [1, 0, 0, 2, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1],
+  ];
+  let result21e = isEmpty(input21e, 3, 1, 2, false);
+  it("isEmpty E", () => {
+    expect(result21e).toBe(true);
   });
 
   // Insert new tests here

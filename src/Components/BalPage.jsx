@@ -244,8 +244,12 @@ function BalPage() {
           break;
       }
       if (snd !== sound) {
-        const audio = new Audio(snd);
-        audio.play();
+        try {
+          const audio = new Audio(snd);
+          audio.play();
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   }
@@ -405,11 +409,11 @@ function BalPage() {
         redCounter--;
       } else {
         redCounter = 2;
-        if (moveRedBalls(backData, gameData, posX, posX, gameInfo)) {
+        if (moveRedBalls(backData, gameData, posX, posY, gameInfo)) {
           update = true;
         }
       }
-      
+
       if (yellowCounter > 0) {
         yellowCounter--;
       } else {
@@ -883,7 +887,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 721; // TODO: Comment out when publishing
+    //currentLevel = 722; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;

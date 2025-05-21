@@ -785,7 +785,11 @@ function drawLevel(
           // Teleport - will be drawn later
           break;
         case 93:
-          // Smart red ball
+          // Smart red ball (smart level 1)
+          drawRedBall();
+          break;
+        case 94:
+          // Smart red ball (smart level 2)
           drawRedBall();
           break;
         default:
