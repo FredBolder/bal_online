@@ -27,10 +27,11 @@ function initGameInfo(info) {
   info.yellowBalls = [];
   info.detonator = { x: -1, y: -1 };
   info.teleports = [];
+  info.hasMirror = false;
+  info.hasWater = false;
   info.hasDivingGlasses = false;
   info.hasKey = false;
   info.Pickaxe = false;
-  info.hasWater = false;
   info.redFish = [];
   info.electricity = [];
   info.electricityActive = false;
@@ -908,6 +909,7 @@ describe("balUtils", () => {
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
+    hasMirror: false,
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
@@ -943,6 +945,7 @@ describe("balUtils", () => {
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
+    hasMirror: false,
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
@@ -975,6 +978,7 @@ describe("balUtils", () => {
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
+    hasMirror: false,
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
@@ -1012,6 +1016,7 @@ describe("balUtils", () => {
     yellowBalls: [{ x: 1, y: 4, direction: "none" }],
     detonator: { x: 8, y: 5 },
     teleports: [],
+    hasMirror: false,
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
@@ -1047,6 +1052,7 @@ describe("balUtils", () => {
     yellowBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
+    hasMirror: false,
     hasWater: false,
     hasDivingGlasses: false,
     hasKey: false,
@@ -1071,12 +1077,7 @@ describe("balUtils", () => {
     [1, 0, 8, 0, 0, 2, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput10a = {
-    hit: true,
-    x1: 3,
-    x2: 4,
-    y: 3,
-  };
+  let expectedOutput10a = [{ x: 2, y: 3 }, { x: 5, y: 3 }];
   it("checkRed A", () => {
     expect(JSON.stringify(checkRed(input10a, 5, 3, [{ x: 2, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10a)
@@ -1090,12 +1091,7 @@ describe("balUtils", () => {
     [1, 0, 2, 0, 0, 8, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput10b = {
-    hit: true,
-    x1: 3,
-    x2: 4,
-    y: 3,
-  };
+  let expectedOutput10b = [{ x: 5, y: 3 }, { x: 2, y: 3 }];
   it("checkRed B", () => {
     expect(JSON.stringify(checkRed(input10b, 2, 3, [{ x: 5, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10b)
@@ -1109,12 +1105,7 @@ describe("balUtils", () => {
     [1, 0, 8, 0, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput10c = {
-    hit: false,
-    x1: -1,
-    x2: -1,
-    y: -1,
-  };
+  let expectedOutput10c = [];
   it("checkRed C", () => {
     expect(JSON.stringify(checkRed(input10c, 5, 3, [{ x: 2, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10c)
@@ -1128,12 +1119,7 @@ describe("balUtils", () => {
     [1, 0, 2, 4, 0, 8, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput10d = {
-    hit: false,
-    x1: -1,
-    x2: -1,
-    y: -1,
-  };
+  let expectedOutput10d = [];
   it("checkRed D", () => {
     expect(JSON.stringify(checkRed(input10d, 2, 3, [{ x: 5, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10d)
@@ -1147,12 +1133,7 @@ describe("balUtils", () => {
     [1, 0, 2, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput10e = {
-    hit: false,
-    x1: -1,
-    x2: -1,
-    y: -1,
-  };
+  let expectedOutput10e = [];
   it("checkRed E", () => {
     expect(JSON.stringify(checkRed(input10e, 2, 3, [{ x: 5, y: 2 }]))).toBe(
       JSON.stringify(expectedOutput10e)
@@ -1166,12 +1147,7 @@ describe("balUtils", () => {
     [1, 0, 2, 0, 8, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput10f = {
-    hit: true,
-    x1: 3,
-    x2: 3,
-    y: 3,
-  };
+  let expectedOutput10f = [{ x: 4, y: 3 }, { x: 2, y: 3 }];
   it("checkRed F", () => {
     expect(
       JSON.stringify(
@@ -1181,6 +1157,42 @@ describe("balUtils", () => {
         ])
       )
     ).toBe(JSON.stringify(expectedOutput10f));
+  });
+
+  let input10g = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 95, 0, 0, 8, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 96, 0, 0, 0, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput10g = [{ x: 5, y: 1 }, { x: 2, y: 1 }, { x: 2, y: 3 }, { x: 6, y: 3 }];
+  it("checkRed G", () => {
+    expect(JSON.stringify(checkRed(input10g, 6, 3, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10g));
+  });
+
+  let input10h = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 95, 0, 0, 8, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 0, 96, 0, 0, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput10h = [];
+  it("checkRed H", () => {
+    expect(JSON.stringify(checkRed(input10h, 6, 3, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10h));
+  });
+
+  let input10i = [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 95, 0, 0, 8, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 95, 0, 0, 0, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput10i = [];
+  it("checkRed I", () => {
+    expect(JSON.stringify(checkRed(input10i, 6, 3, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10i));
   });
 
   // ***** MOVE ELEVATORS *****

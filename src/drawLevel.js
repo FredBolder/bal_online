@@ -6,7 +6,7 @@ import {
   drawText,
 } from "./drawUtils";
 
-import { polar, randomInt } from "./utils";
+import { booleanToInt, polar, randomInt } from "./utils";
 import { electricityTarget } from "./balUtils";
 
 let bitmapLava = null;
@@ -340,6 +340,61 @@ function drawLevel(
     drawLine(ctx, xmin, yc, xmax, yc, "white");
   }
 
+  function drawLaser(laser) {
+    let isMirror1 = 0;
+    let isMirror2 = 0;
+    let temp = 0;
+    let x1 = 0;
+    let y1 = 0;
+    let x2 = 0;
+    let y2 = 0;
+    let xp1 = 0;
+    let yp1 = 0;
+    let xp2 = 0;
+    let yp2 = 0;
+
+    if (laser.length >= 2) {
+      for (let i = 1; i < laser.length; i++) {
+        isMirror1 = booleanToInt(i !== 1);
+        isMirror2 = booleanToInt(i !== (laser.length - 1));
+        x1 = laser[i - 1].x;
+        y1 = laser[i - 1].y;
+        x2 = laser[i].x;
+        y2 = laser[i].y;
+        if (x1 > x2) {
+          temp = x1;
+          x1 = x2;
+          x2 = temp;
+          temp = isMirror1;
+          isMirror1 = isMirror2;
+          isMirror2 = temp;
+        }
+        if (y1 > y2) {
+          temp = y1;
+          y1 = y2;
+          y2 = temp;
+          temp = isMirror1;
+          isMirror1 = isMirror2;
+          isMirror2 = temp;
+        }
+        if (y1 === y2) {
+          // Horizontal line
+          xp1 = leftMargin + (x1 * size1) + size1 - (0.5 * size1 * isMirror1);
+          xp2 = leftMargin + (x2 * size1) + (0.5 * size1 * isMirror2);
+          yp1 = Math.round(topMargin + (y1 * size1) + (0.5 * size1));
+          yp2 = yp1;
+        } else {
+          // Vertical line
+          xp1 = leftMargin + (x1 * size1) + (0.5 * size1);
+          xp2 = xp1;
+          yp1 = Math.round(topMargin + (y1 * size1) + size1 - (0.5 * size1 * isMirror1));
+          yp2 = Math.round(topMargin + (y2 * size1) + (0.5 * size1 * isMirror2));
+        }
+        drawLine(ctx, xp1, yp1, xp2, yp2, "yellow");
+      }
+    }
+  }
+
   function drawLava() {
     if (bitmapLava === null) {
       bitmapLava = createLavaBitmap(32);
@@ -371,6 +426,16 @@ function drawLevel(
     ctx.stroke();
     drawLine(ctx, xc - d4, d6, xc - d4, yc, "silver");
     drawLine(ctx, xc + d4, d6, xc + d4, yc, "silver");
+  }
+
+  function drawMirror(bottomLeftToUpperRight = true) {
+    ctx.lineWidth = 3;
+    if (bottomLeftToUpperRight) {
+      drawLine(ctx, xmin + 1, ymax - 1, xmax - 1, ymin + 1, "silver");
+    } else {
+      drawLine(ctx, xmin + 1, ymin + 1, xmax - 1, ymax - 1, "silver");
+    }
+    ctx.lineWidth = 1;
   }
 
   function drawOneDirectionDown() {
@@ -792,6 +857,12 @@ function drawLevel(
           // Smart red ball (smart level 2)
           drawRedBall();
           break;
+        case 95:
+          drawMirror(true);
+          break;
+        case 96:
+          drawMirror(false);
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
           break;
@@ -916,11 +987,8 @@ function drawLevel(
       5
     );
 
-    if (status.laserX1 >= 0 && status.laserX2 >= 0 && status.laserY >= 0) {
-      x1 = leftMargin + status.laserX1 * size1;
-      x2 = leftMargin + size1 + status.laserX2 * size1;
-      y1 = Math.round(status.laserY * size1 + size1 / 2 + topMargin);
-      drawLine(ctx, x1, y1, x2, y1, "yellow");
+    if (status.laser !== null) {
+      drawLaser(status.laser);
     }
   }
 }

@@ -216,6 +216,12 @@ function charToNumber(c) {
     case "S":
       result = 94;
       break;
+    case "α":
+      result = 95;
+      break;
+    case "β":
+      result = 96;
+      break;
     case "U":
       result = 106;
       break;
@@ -361,6 +367,12 @@ function numberToChar(n) {
       break;
     case 94:
       result = "S";
+      break;
+    case 95:
+      result = "α";
+      break;
+    case 96:
+      result = "β";
       break;
     case 106:
       result = "U";
@@ -1077,7 +1089,8 @@ export function getGameInfo(backData, gameData) {
   result.yellowBalls = [];
   result.detonator = { x: -1, y: -1 };
   result.teleports = [];
-  result.hasWater = false;
+  result.hasMirror = false,
+    result.hasWater = false;
   result.hasDivingGlasses = false;
   result.hasKey = false;
   result.hasPickaxe = false;
@@ -1152,6 +1165,9 @@ export function getGameInfo(backData, gameData) {
         teleport.selfDestructing = true;
         result.teleports.push(teleport);
       }
+      if (gameData[i][j] === 95 || gameData[i][j] === 96) {
+        result.hasMirror = true;
+      }
       if (backData[i][j] === 20 || backData[i][j] === 23) {
         result.hasWater = true;
       }
@@ -1186,33 +1202,114 @@ export function getGameInfo(backData, gameData) {
 }
 
 export function checkRed(arr, x, y, redBalls) {
-  let result = {};
-  result.hit = false;
-  result.x1 = -1;
-  result.x2 = -1;
-  result.y = -1;
-  for (let i = 0; i < redBalls.length; i++) {
-    if (redBalls[i].y === y) {
-      result.y = y;
-      result.hit = true;
-      if (redBalls[i].x > x) {
-        result.x1 = x + 1;
-        result.x2 = redBalls[i].x - 1;
+  let direction = 0;
+  let hit = -1; // -1 = not known yet, 0 = no, 1 = yes 
+  let result = [];
+  let checkX = 0;
+  let checkY = 0;
+
+  for (let i = 0; (i < redBalls.length) && (hit !== 1); i++) {
+    const red = redBalls[i];
+    for (let j = 0; (j < 2) && (hit !== 1); j++) {
+      hit = -1;
+      if (j === 0) {
+        direction = 4;
       } else {
-        result.x1 = redBalls[i].x + 1;
-        result.x2 = x - 1;
+        direction = 6;
       }
-      if (result.x2 >= result.x1) {
-        for (let j = result.x1; j <= result.x2; j++) {
-          if (arr[y][j] !== 0) {
-            result.hit = false;
-            result.x1 = -1;
-            result.x2 = -1;
-            result.y = -1;
-          }
+      result = [];
+      result.push({ x: red.x, y: red.y });
+      checkX = red.x;
+      checkY = red.y;
+      while (hit === -1) {
+        switch (direction) {
+          case 2:
+            if (checkY < arr.length - 1) {
+              checkY++;
+            } else {
+              hit = 0;
+            }
+            break;
+          case 4:
+            if (checkX > 0) {
+              checkX--;
+            } else {
+              hit = 0;
+            }
+            break;
+          case 6:
+            if (checkX < arr[checkY].length) {
+              checkX++;
+            } else {
+              hit = 0;
+            }
+            break;
+          case 8:
+            if (checkY > 0) {
+              checkY--;
+            } else {
+              hit = 0;
+            }
+            break;
+          default:
+            break;
+        }
+        switch (arr[checkY][checkX]) {
+          case 0:
+            break;
+          case 2:
+            hit = 1;
+            result.push({ x: checkX, y: checkY });
+            break;
+          case 95:
+            // Mirror /
+            result.push({ x: checkX, y: checkY });
+            switch (direction) {
+              case 2:
+                direction = 4;
+                break;
+              case 4:
+                direction = 2;
+                break;
+              case 6:
+                direction = 8;
+                break;
+              case 8:
+                direction = 6;
+                break;
+              default:
+                break;
+            }
+            break;
+          case 96:
+            // Mirror \
+            result.push({ x: checkX, y: checkY });
+            switch (direction) {
+              case 2:
+                direction = 6;
+                break;
+              case 4:
+                direction = 8;
+                break;
+              case 6:
+                direction = 2;
+                break;
+              case 8:
+                direction = 4;
+                break;
+              default:
+                break;
+            }
+            break;
+          default:
+            hit = 0;
+            break;
         }
       }
     }
+  }
+  if (hit !== 1) {
+    result = [];
   }
   return result;
 }
@@ -1639,8 +1736,8 @@ export function moveRedBalls(
         }
         if (red.smart > 1) {
           if (red.x === x) {
-              red.skipFollowCount = 50;
-              updated = true;
+            red.skipFollowCount = 50;
+            updated = true;
           }
           if (!waitLeft && !waitRight && (red.skipFollowCount === 0) && (prevX === red.x)) {
             if ((x > red.x) && (red.direction === "right")) {

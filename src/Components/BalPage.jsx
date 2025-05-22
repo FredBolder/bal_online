@@ -88,19 +88,18 @@ gameInfo.redBalls = [];
 gameInfo.yellowBalls = [];
 gameInfo.detonator = { x: -1, y: -1 };
 gameInfo.teleports = [];
+gameInfo.hasMirror = false;
+gameInfo.hasWater = false;
 gameInfo.hasDivingGlasses = false;
 gameInfo.hasKey = false;
 gameInfo.hasPickaxe = false;
-gameInfo.hasWater = false;
 gameInfo.redFish = [];
 gameInfo.electricity = [];
 gameInfo.electricityActive = false;
 gameInfo.trapDoors = [];
 let gameInterval;
 let gameOver = false;
-let laserX1 = -1;
-let laserX2 = -1;
-let laserY = -1;
+let laser = null;
 let posX = -1;
 let posY = -1;
 let redCounter = 0;
@@ -286,12 +285,12 @@ function BalPage() {
     }
     if (!gameOver) {
       let redInfo = checkRed(gameData, posX, posY, gameInfo.redBalls);
-      if (redInfo.hit) {
+      if (redInfo.length > 0) {
+        laser = redInfo;
         gameOver = true;
-        laserX1 = redInfo.x1;
-        laserX2 = redInfo.x2;
-        laserY = redInfo.y;
         playSound("laser");
+      } else {
+        laser = null;
       }
     }
     if (!gameOver && gameInfo.hasWater && !gameInfo.hasDivingGlasses) {
@@ -527,9 +526,7 @@ function BalPage() {
       gd = stringArrayToNumberArray(data);
       backData = gd.backData;
       gameData = gd.gameData;
-      laserX1 = -1;
-      laserX2 = -1;
-      laserY = -1;
+      laser = null;
       gameOver = false;
       updateScreen();
       gameInfo = getGameInfo(backData, gameData);
@@ -887,7 +884,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 722; // TODO: Comment out when publishing
+    //currentLevel = 724; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;
@@ -926,9 +923,7 @@ function BalPage() {
     };
     const status = {
       gameOver: gameOver,
-      laserX1: laserX1,
-      laserX2: laserX2,
-      laserY: laserY,
+      laser: laser,
     };
     ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
     drawLevel(

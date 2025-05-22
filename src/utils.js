@@ -1,3 +1,7 @@
+export function booleanToInt(value) {
+  return value ? 1: 0;
+}
+
 export function booleanToString(value) {
   return value ? "1": "0";
 }

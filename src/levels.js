@@ -32,7 +32,7 @@ async function loadFromFile(n) {
 async function getLevel(n) {
   let data = [];
 
-  if ((n >= 200 && n <= 219) || (n >= 700 && n <= 722) || (n >= 750 && n <= 760) || (n >= 990 && n <= 990)) {
+  if ((n >= 200 && n <= 219) || (n >= 700 && n <= 724) || (n >= 750 && n <= 760) || (n >= 990 && n <= 990)) {
     data = await loadFromFile(n);
   } else {
     data = await loadFromFile(1000);
