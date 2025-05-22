@@ -1390,8 +1390,8 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
         elevators[i].x = x + 1;
         stop = false;
         for (let j = y - 1; j >= 0 && !stop; j--) {
-          if ([2, 4, 8].includes(arr[j][x]) && arr[j][x + 1] === 0) {
-            if (arr[j][x] === 8) {
+          if ([2, 4, 8, 93, 94].includes(arr[j][x]) && arr[j][x + 1] === 0) {
+            if (isRedBall(arr[j][x])) {
               updateRed(redBalls, x, j, x + 1, j);
             }
             if (arr[j][x] === 2) {
@@ -1413,8 +1413,8 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
         elevators[i].x = x - 1;
         stop = false;
         for (let j = y - 1; j >= 0 && !stop; j--) {
-          if ([2, 4, 8].includes(arr[j][x]) && arr[j][x - 1] === 0) {
-            if (arr[j][x] === 8) {
+          if ([2, 4, 8, 93, 94].includes(arr[j][x]) && arr[j][x - 1] === 0) {
+            if (isRedBall(arr[j][x])) {
               updateRed(redBalls, x, j, x - 1, j);
             }
             if (arr[j][x] === 2) {
@@ -1445,6 +1445,7 @@ export function moveRedBalls(
   let maxX = 0;
   let n1 = 0;
   let n2 = 0;
+  let prevX = 0;
   let saveRed = 93;
   let updated = false;
   let waitLeft = false;
@@ -1454,6 +1455,7 @@ export function moveRedBalls(
     maxX = gameData[0].length - 1;
     for (let i = 0; i < gameInfo.redBalls.length; i++) {
       const red = gameInfo.redBalls[i];
+      prevX = red.x;
 
       if ((red.smart > 0) && notInAir(red.x, red.y, backData, gameData)) {
         changeDirection = false;
@@ -1536,9 +1538,6 @@ export function moveRedBalls(
 
         if (!waitLeft && !waitRight) {
           if (red.smart > 1) {
-            if (red.x === x) {
-              red.skipFollowCount = 50;
-            }
             if (red.skipFollowCount > 0) {
               red.skipFollowCount--;
             } else {
@@ -1556,15 +1555,22 @@ export function moveRedBalls(
           if (red.y > 0) {
             if ((red.direction === "left") && (red.x > 0)) {
               if (![0].includes(gameData[red.y][red.x - 1]) && [0].includes(gameData[red.y - 1][red.x]) && [0].includes(gameData[red.y - 1][red.x - 1])) {
-                red.direction = "upLeft"
+                red.direction = "upLeft";
                 directionAfterJump = "left";
               }
             }
             if ((red.direction === "right") && (red.x < maxX)) {
               if (![0].includes(gameData[red.y][red.x + 1]) && [0].includes(gameData[red.y - 1][red.x]) && [0].includes(gameData[red.y - 1][red.x + 1])) {
-                red.direction = "upRight"
+                red.direction = "upRight";
                 directionAfterJump = "right";
               }
+            }
+          }
+
+          if ((red.smart > 1) && (red.y === (y + 1))) {
+            if (isEmpty(gameData, y, red.x - 1, x)) {
+              red.direction = "up";
+              directionAfterJump = "none";
             }
           }
           saveRed = gameData[red.y][red.x];
@@ -1588,6 +1594,17 @@ export function moveRedBalls(
                   updated = true;
                 }
               }
+              break;
+            case "up":
+              if (red.y > 0) {
+                if ([0].includes(gameData[red.y - 1][red.x])) {
+                  gameData[red.y][red.x] = 0;
+                  red.y--;
+                  gameData[red.y][red.x] = saveRed;
+                }
+              }
+              red.direction = directionAfterJump;
+              updated = true;
               break;
             case "upLeft":
               if ((red.x > 0) && (red.y > 0)) {
@@ -1619,6 +1636,24 @@ export function moveRedBalls(
         }
         if ([6, 106, 7, 107].includes(gameData[red.y + 1][red.x])) {
           red.skipElevatorCount = 25;
+        }
+        if (red.smart > 1) {
+          if (red.x === x) {
+              red.skipFollowCount = 50;
+              updated = true;
+          }
+          if (!waitLeft && !waitRight && (red.skipFollowCount === 0) && (prevX === red.x)) {
+            if ((x > red.x) && (red.direction === "right")) {
+              red.direction = "left";
+              red.skipFollowCount = 50;
+              updated = true;
+            }
+            if ((x < red.x) && (red.direction === "left")) {
+              red.direction = "right";
+              red.skipFollowCount = 50;
+              updated = true;
+            }
+          }
         }
       }
     }
