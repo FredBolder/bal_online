@@ -691,7 +691,7 @@ function BalPage() {
       switch (e.key) {
         case "p":
         case "P":
-          initLevel(990);
+          initLevel(991);
           break;
         case "ArrowLeft":
         case "a":
@@ -891,7 +891,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 725; // TODO: Comment out when publishing
+    //currentLevel = 991; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;
