@@ -17,6 +17,7 @@ import {
   pushDown,
   rotateGame,
   zeroArray,
+  checkCopiers,
 } from "./balUtils.js";
 
 function initGameInfo(info) {
@@ -36,6 +37,7 @@ function initGameInfo(info) {
   info.electricity = [];
   info.electricityActive = false;
   info.trapDoors = [];
+  info.copiers = [];
 }
 
 describe("balUtils", () => {
@@ -918,6 +920,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    copiers: [],
   };
   it("getGameInfo A", () => {
     expect(JSON.stringify(getGameInfo(inputBack9a, input9a))).toBe(
@@ -954,6 +957,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    copiers: [],
   };
   it("getGameInfo B", () => {
     expect(JSON.stringify(getGameInfo(inputBack9b, input9b))).toBe(
@@ -987,6 +991,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    copiers: [],
   };
   it("getGameInfo C", () => {
     expect(JSON.stringify(getGameInfo(inputBack9c, input9c))).toBe(
@@ -1025,6 +1030,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    copiers: [],
   };
   it("getGameInfo D", () => {
     expect(JSON.stringify(getGameInfo(inputBack9d, input9d))).toBe(
@@ -1061,6 +1067,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    copiers: [],
   };
   it("getGameInfo E", () => {
     expect(JSON.stringify(getGameInfo(inputBack9e, input9e))).toBe(
@@ -2704,6 +2711,92 @@ describe("balUtils", () => {
   it("isEmpty E", () => {
     expect(result21e).toBe(true);
   });
+
+  // ***** checkCopiers *****
+
+  let gameInfo22a = {};
+  gameInfo22a = {};
+  initGameInfo(gameInfo22a);
+  gameInfo22a.copiers.push({ x: 5, y: 3 });
+  let input22a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 4, 0, 0, 1],
+    [1, 2, 0, 0, 0, 97, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput22a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 2, 0, 4, 0, 97, 0, 4, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info22a = checkCopiers(input22a, gameInfo22a);
+  it("checkCopiers A", () => {
+    expect(JSON.stringify(input22a)).toBe(JSON.stringify(expectedOutput22a));
+  });
+  it("checkCopiers A info", () => {
+    expect(JSON.stringify(info22a)).toBe(JSON.stringify({ updated: true }));
+  });
+
+  let gameInfo22b = {};
+  gameInfo22b = {};
+  initGameInfo(gameInfo22b);
+  gameInfo22b.copiers.push({ x: 5, y: 3 });
+  gameInfo22b.redBalls.push({ smart: 1, x: 5, y: 2, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 });
+
+  let input22b = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 93, 0, 0, 1],
+    [1, 2, 0, 4, 0, 97, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput22b = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 2, 0, 4, 93, 97, 0, 93, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info22b = checkCopiers(input22b, gameInfo22b);
+  it("checkCopiers B", () => {
+    expect(JSON.stringify(input22b)).toBe(JSON.stringify(expectedOutput22b));
+  });
+  it("checkCopiers B info", () => {
+    expect(JSON.stringify(info22b)).toBe(JSON.stringify({ updated: true }));
+  });
+  it("checkCopiers B red balls", () => {
+    expect(gameInfo22b.redBalls.length).toBe(2);
+  });
+
+  let gameInfo22c = {};
+  gameInfo22c = {};
+  initGameInfo(gameInfo22c);
+  gameInfo22c.copiers.push({ x: 5, y: 3 });
+  let input22c = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 4, 0, 0, 1],
+    [1, 2, 0, 0, 4, 97, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput22c = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 4, 0, 0, 1],
+    [1, 2, 0, 0, 4, 97, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info22c = checkCopiers(input22c, gameInfo22c);
+  it("checkCopiers C", () => {
+    expect(JSON.stringify(input22c)).toBe(JSON.stringify(expectedOutput22c));
+  });
+  it("checkCopiers C info", () => {
+    expect(JSON.stringify(info22c)).toBe(JSON.stringify({ updated: false }));
+  });
+
 
   // Insert new tests here
 });

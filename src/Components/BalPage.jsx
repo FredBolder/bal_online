@@ -28,7 +28,8 @@ import {
   electricityTarget,
   inWater,
   checkTrapDoors,
-  findTeleport,
+  checkCopiers,
+  findElementByCoordinate,
 } from "../balUtils.js";
 
 import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
@@ -97,6 +98,7 @@ gameInfo.redFish = [];
 gameInfo.electricity = [];
 gameInfo.electricityActive = false;
 gameInfo.trapDoors = [];
+gameInfo.copiers = [];
 let gameInterval;
 let gameOver = false;
 let laser = null;
@@ -349,6 +351,11 @@ function BalPage() {
         skipFalling--;
       }
 
+      info = checkCopiers(gameData, gameInfo);
+      if (info.updated) {
+        update = true;
+      }
+
       refreshCounter++;
       if (refreshCounter >= refreshCountTo) {
         refreshCounter = 0;
@@ -447,7 +454,7 @@ function BalPage() {
             teleporting = 2;
             break;
           case 2:
-            teleport = findTeleport(posX, posY, gameInfo.teleports);
+            teleport = findElementByCoordinate(posX, posY, gameInfo.teleports);
             if (teleport >= 0) {
               if (gameInfo.teleports[teleport].selfDestructing) {
                 gameData[posY][posX] = 0;
@@ -884,7 +891,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 724; // TODO: Comment out when publishing
+    //currentLevel = 725; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;

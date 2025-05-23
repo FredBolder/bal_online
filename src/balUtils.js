@@ -33,11 +33,11 @@ export function isEmpty(gameData, columnOrRow, start, end, horizontal = true) {
   return result;
 }
 
-export function findTeleport(x, y, teleports) {
+export function findElementByCoordinate(x, y, elements) {
   let result = -1;
 
-  for (let i = 0; i < teleports.length; i++) {
-    if (teleports[i].x === x && teleports[i].y === y) {
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i].x === x && elements[i].y === y) {
       result = i;
     }
   }
@@ -222,6 +222,9 @@ function charToNumber(c) {
     case "β":
       result = 96;
       break;
+    case "Δ":
+      result = 97;
+      break;
     case "U":
       result = 106;
       break;
@@ -374,6 +377,9 @@ function numberToChar(n) {
     case 96:
       result = "β";
       break;
+    case 97:
+      result = "Δ";
+      break;
     case 106:
       result = "U";
       break;
@@ -445,6 +451,66 @@ function updateYellow(yellowBalls, x1, y1, x2, y2, direction) {
       yellowBalls[i].direction = direction;
     }
   }
+}
+
+export function checkCopiers(arr, gameInfo) {
+  let element = 0;
+  let idx = -1;
+  let info = { updated: false };
+  let redBall1 = null;
+  let redBall2 = null;
+  let x = 0;
+
+  for (let i = 0; i < gameInfo.copiers.length; i++) {
+    const copier = gameInfo.copiers[i];
+    redBall1 = null;
+    redBall2 = null;
+    if ((copier.x > 2) && (copier.x < (arr[0].length - 2))) {
+      element = arr[copier.y - 1][copier.x];
+      if (([4, 93, 94].includes(element)) && (arr[copier.y][copier.x - 1] === 0) && (arr[copier.y][copier.x + 1] === 0)) {
+        info.updated = true;
+        arr[copier.y - 1][copier.x] = 0;
+        if (arr[copier.y][copier.x - 2] === 0) {
+          x = copier.x - 2;
+        } else {
+          x = copier.x - 1;
+        }
+        arr[copier.y][x] = element;
+        if ([93, 94].includes(element)) {
+          idx = findElementByCoordinate(copier.x, copier.y - 1, gameInfo.redBalls);
+          if (idx >= 0) {
+            redBall1 = gameInfo.redBalls[idx];
+            redBall1.x = x;
+            redBall1.y = copier.y;
+            redBall1.direction = "none";
+            redBall1.skipElevatorCount = 0;
+            redBall1.skipFollowCount = 0;
+          }
+        }
+        if (arr[copier.y][copier.x + 2] === 0) {
+          x = copier.x + 2;
+        } else {
+          x = copier.x + 1;
+        }
+        arr[copier.y][x] = element;
+        if ([93, 94].includes(element)) {
+          redBall2 = {};
+          if (element === 94) {
+            redBall2.smart = 2;
+          } else {
+            redBall2.smart = 1;
+          }
+          redBall2.x = x;
+          redBall2.y = copier.y;
+          redBall2.direction = "none";
+          redBall2.skipElevatorCount = 0;
+          redBall2.skipFollowCount = 0;
+          gameInfo.redBalls.push(redBall2);
+        }
+      }
+    }
+  }
+  return info;
 }
 
 export function checkDetonator(arr, x, y) {
@@ -668,7 +734,7 @@ export function moveLeft(
         }
       }
       if (result.player) {
-        const teleport = findTeleport(x, y, gameInfo.teleports);
+        const teleport = findElementByCoordinate(x, y, gameInfo.teleports);
         if (teleport >= 0) {
           if (gameInfo.teleports[teleport].selfDestructing) {
             row[x] = 0;
@@ -784,7 +850,7 @@ export function moveRight(
         }
       }
       if (result.player) {
-        const teleport = findTeleport(x, y, gameInfo.teleports);
+        const teleport = findElementByCoordinate(x, y, gameInfo.teleports);
         if (teleport >= 0) {
           if (gameInfo.teleports[teleport].selfDestructing) {
             row[x] = 0;
@@ -1098,6 +1164,7 @@ export function getGameInfo(backData, gameData) {
   result.electricity = [];
   result.electricityActive = false;
   result.trapDoors = [];
+  result.copiers = [];
 
   for (let i = 0; i < gameData.length; i++) {
     for (let j = 0; j < gameData[i].length; j++) {
@@ -1195,6 +1262,12 @@ export function getGameInfo(backData, gameData) {
         trap.y = i;
         trap.status = 0;
         result.trapDoors.push(trap);
+      }
+      if (gameData[i][j] === 97) {
+        let copier = {};
+        copier.x = j;
+        copier.y = i;
+        result.copiers.push(copier);
       }
     }
   }

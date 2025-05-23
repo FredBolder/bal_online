@@ -138,6 +138,11 @@ function drawLevel(
     drawLine(ctx, xc + d6, ymin + d2, xc + d6, ymin + d5);
   }
 
+  function drawCopier() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
+    drawText(ctx, xc, yc, "2x", "middle", "white", w2 * 0.7, w1 * 0.8, "black", 1);
+  }
+
   function drawDetonator() {
     d1 = w1 / 7;
     d2 = w1 / 2;
@@ -862,6 +867,9 @@ function drawLevel(
           break;
         case 96:
           drawMirror(false);
+          break;
+        case 97:
+          drawCopier();
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
