@@ -891,7 +891,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 991; // TODO: Comment out when publishing
+    //currentLevel = 726; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;

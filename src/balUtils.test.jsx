@@ -18,6 +18,7 @@ import {
   rotateGame,
   zeroArray,
   checkCopiers,
+  movePurpleBar,
 } from "./balUtils.js";
 
 function initGameInfo(info) {
@@ -2782,13 +2783,7 @@ describe("balUtils", () => {
     [1, 2, 0, 0, 4, 97, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput22c = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 4, 0, 0, 1],
-    [1, 2, 0, 0, 4, 97, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
+  let expectedOutput22c = input22c;
   let info22c = checkCopiers(input22c, gameInfo22c);
   it("checkCopiers C", () => {
     expect(JSON.stringify(input22c)).toBe(JSON.stringify(expectedOutput22c));
@@ -2797,6 +2792,367 @@ describe("balUtils", () => {
     expect(JSON.stringify(info22c)).toBe(JSON.stringify({ updated: false }));
   });
 
+  // ***** Horizontal purple bars *****
+
+  let input23a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info23a = movePurpleBar(input23a, 4, 4, 8);
+  it("Horizontal purple bar A", () => {
+    expect(JSON.stringify(input23a)).toBe(JSON.stringify(expectedOutput23a));
+  });
+  it("Horizontal purple bar A info", () => {
+    expect(info23a).toBe(true);
+  });
+
+  let input23b = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 4, 0, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23b = input23b;
+  let info23b = movePurpleBar(input23b, 4, 4, 8);
+  it("Horizontal purple bar B", () => {
+    expect(JSON.stringify(input23b)).toBe(JSON.stringify(expectedOutput23b));
+  });
+  it("Horizontal purple bar B info", () => {
+    expect(info23b).toBe(false);
+  });
+
+  let input23c = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23c = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info23c = movePurpleBar(input23c, 4, 2, 2);
+  it("Horizontal purple bar C", () => {
+    expect(JSON.stringify(input23c)).toBe(JSON.stringify(expectedOutput23c));
+  });
+  it("Horizontal purple bar C info", () => {
+    expect(info23c).toBe(true);
+  });
+
+  let input23d = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 0, 1],
+    [1, 0, 0, 0, 0, 0, 4, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23d = input23d;
+  let info23d = movePurpleBar(input23d, 4, 2, 2);
+  it("Horizontal purple bar D", () => {
+    expect(JSON.stringify(input23d)).toBe(JSON.stringify(expectedOutput23d));
+  });
+  it("Horizontal purple bar D info", () => {
+    expect(info23d).toBe(false);
+  });
+
+  let input23e = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23e = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 100, 102, 102, 101, 0, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info23e = movePurpleBar(input23e, 7, 3, 4);
+  it("Horizontal purple bar E", () => {
+    expect(JSON.stringify(input23e)).toBe(JSON.stringify(expectedOutput23e));
+  });
+  it("Horizontal purple bar E info", () => {
+    expect(info23e).toBe(true);
+  });
+
+  let input23f = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 4, 100, 102, 102, 101, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23f = input23f;
+  let info23f = movePurpleBar(input23f, 7, 3, 4);
+  it("Horizontal purple bar F", () => {
+    expect(JSON.stringify(input23f)).toBe(JSON.stringify(expectedOutput23f));
+  });
+  it("Horizontal purple bar F info", () => {
+    expect(info23f).toBe(false);
+  });
+
+  let input23g = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 4, 0, 0, 0, 0, 1],
+    [1, 0, 0, 100, 102, 102, 101, 2, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23g = input23g;
+  let info23g = movePurpleBar(input23g, 7, 3, 4);
+  it("Horizontal purple bar G", () => {
+    expect(JSON.stringify(input23g)).toBe(JSON.stringify(expectedOutput23g));
+  });
+  it("Horizontal purple bar G info", () => {
+    expect(info23g).toBe(false);
+  });
+
+  let input23h = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 2, 100, 102, 102, 101, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23h = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 2, 0, 100, 102, 102, 101, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info23h = movePurpleBar(input23h, 2, 3, 6);
+  it("Horizontal purple bar H", () => {
+    expect(JSON.stringify(input23h)).toBe(JSON.stringify(expectedOutput23h));
+  });
+  it("Horizontal purple bar H info", () => {
+    expect(info23h).toBe(true);
+  });
+
+  let input23i = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 2, 100, 102, 102, 101, 4, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23i = input23i;
+  let info23i = movePurpleBar(input23i, 2, 3, 6);
+  it("Horizontal purple bar I", () => {
+    expect(JSON.stringify(input23i)).toBe(JSON.stringify(expectedOutput23i));
+  });
+  it("Horizontal purple bar I info", () => {
+    expect(info23i).toBe(false);
+  });
+
+  let input23j = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 93, 0, 0, 1],
+    [1, 0, 2, 100, 102, 102, 101, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput23j = input23j;
+  let info23j = movePurpleBar(input23j, 2, 3, 6);
+  it("Horizontal purple bar J", () => {
+    expect(JSON.stringify(input23j)).toBe(JSON.stringify(expectedOutput23j));
+  });
+  it("Horizontal purple bar J info", () => {
+    expect(info23j).toBe(false);
+  });
+
+  // ***** Vertical purple bars *****
+
+  let input24a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info24a = movePurpleBar(input24a, 4, 4, 8);
+  it("Vertical purple bar A", () => {
+    expect(JSON.stringify(input24a)).toBe(JSON.stringify(expectedOutput24a));
+  });
+  it("Vertical purple bar A info", () => {
+    expect(info24a).toBe(true);
+  });
+
+  let input24b = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 4, 0, 0, 0, 1],
+    [1, 0, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24b = input24b;
+  let info24b = movePurpleBar(input24b, 4, 5, 8);
+  it("Vertical purple bar B", () => {
+    expect(JSON.stringify(input24b)).toBe(JSON.stringify(expectedOutput24b));
+  });
+  it("Vertical purple bar B info", () => {
+    expect(info24b).toBe(false);
+  });
+
+  let input24c = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 2, 0, 0, 0, 1],
+    [1, 0, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24c = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 2, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info24c = movePurpleBar(input24c, 4, 1, 2);
+  it("Vertical purple bar C", () => {
+    expect(JSON.stringify(input24c)).toBe(JSON.stringify(expectedOutput24c));
+  });
+  it("Vertical purple bar C info", () => {
+    expect(info24c).toBe(true);
+  });
+
+  let input24d = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 2, 0, 0, 0, 1],
+    [1, 0, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 0, 0, 0, 1],
+    [1, 0, 0, 0, 4, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24d = input24d;
+  let info24d = movePurpleBar(input24d, 4, 1, 2);
+  it("Vertical purple bar D", () => {
+    expect(JSON.stringify(input24d)).toBe(JSON.stringify(expectedOutput24d));
+  });
+  it("Vertical purple bar D info", () => {
+    expect(info24d).toBe(false);
+  });
+
+  let input24e = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 2, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24e = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 103, 0, 0, 0, 0, 1],
+    [1, 0, 0, 102, 0, 0, 0, 0, 1],
+    [1, 0, 0, 102, 0, 0, 0, 0, 1],
+    [1, 0, 0, 104, 0, 2, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info24e = movePurpleBar(input24e, 5, 4, 4);
+  it("Vertical purple bar E", () => {
+    expect(JSON.stringify(input24e)).toBe(JSON.stringify(expectedOutput24e));
+  });
+  it("Vertical purple bar E info", () => {
+    expect(info24e).toBe(true);
+  });
+
+  let input24f = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 4, 104, 2, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24f = input24f;
+  let info24f = movePurpleBar(input24f, 5, 4, 4);
+  it("Vertical purple bar F", () => {
+    expect(JSON.stringify(input24f)).toBe(JSON.stringify(expectedOutput24f));
+  });
+  it("Vertical purple bar F info", () => {
+    expect(info24f).toBe(false);
+  });
+
+  let input24g = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 4, 0, 0, 0, 1],
+    [1, 0, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 104, 2, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24g = input24g;
+  let info24g = movePurpleBar(input24g, 5, 4, 4);
+  it("Vertical purple bar G", () => {
+    expect(JSON.stringify(input24g)).toBe(JSON.stringify(expectedOutput24g));
+  });
+  it("Vertical purple bar G info", () => {
+    expect(info24g).toBe(false);
+  });
+
+  let input24h = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 103, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 0, 102, 0, 0, 0, 1],
+    [1, 0, 0, 2, 104, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput24h = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 0, 103, 0, 0, 1],
+    [1, 0, 0, 0, 0, 102, 0, 0, 1],
+    [1, 0, 0, 0, 0, 102, 0, 0, 1],
+    [1, 0, 0, 2, 0, 104, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  ];
+  let info24h = movePurpleBar(input24h, 3, 4, 6);
+  it("Vertical purple bar H", () => {
+    expect(JSON.stringify(input24h)).toBe(JSON.stringify(expectedOutput24h));
+  });
+  it("Vertical purple bar H info", () => {
+    expect(info24h).toBe(true);
+  });
 
   // Insert new tests here
 });

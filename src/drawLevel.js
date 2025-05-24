@@ -488,6 +488,30 @@ function drawLevel(
     }
   }
 
+  function drawPurpleBarBottom() {
+    drawBall("darkmagenta");
+    drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, "darkmagenta");
+  }
+
+  function drawPurpleBarLeft() {
+    drawBall("darkmagenta");
+    drawFilledBox(ctx, xc, ymin, w1 / 2, w2, "darkmagenta");
+  }
+
+  function drawPurpleBarMiddle() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "darkmagenta");
+  }
+
+  function drawPurpleBarRight() {
+    drawBall("darkmagenta");
+    drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, "darkmagenta");
+  }
+
+  function drawPurpleBarTop() {
+    drawBall("darkmagenta");
+    drawFilledBox(ctx, xmin, yc, w1, w2 / 2, "darkmagenta");
+  }
+
   function drawRedBall() {
     if (nicerGraphics) {
       ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
@@ -870,6 +894,21 @@ function drawLevel(
           break;
         case 97:
           drawCopier();
+          break;
+        case 100:
+          drawPurpleBarLeft();
+          break;
+        case 101:
+          drawPurpleBarRight();
+          break;
+        case 102:
+          drawPurpleBarMiddle();
+          break;
+        case 103:
+          drawPurpleBarTop();
+          break;
+        case 104:
+          drawPurpleBarBottom();
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
