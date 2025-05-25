@@ -35,7 +35,7 @@ import {
 import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
-import { getLevel } from "../levels.js";
+import { getLevel, getRandomLevel } from "../levels.js";
 //import sndCatapult from "../Sounds/catapult.wav";
 import sndEat1 from "../Sounds/eat1.wav";
 import sndEat2 from "../Sounds/eat2.wav";
@@ -60,6 +60,7 @@ import imgBlueSad from "../Images/blue_ball_sad.svg";
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgLightBlue from "../Images/light_blue_ball.svg";
 import imgRed from "../Images/red_ball.svg";
+import imgGray from "../Images/gray_ball.svg";
 import imgGreen from "../Images/green_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
 import imgWhite from "../Images/white_ball.svg";
@@ -124,6 +125,7 @@ function BalPage() {
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
   const elementDiving = useRef(null);
+  const elementGray = useRef(null);
   const elementGreen = useRef(null);
   const elementHappy = useRef(null);
   const elementLightBlue = useRef(null);
@@ -625,6 +627,25 @@ function BalPage() {
     }
   }
 
+  function randomLevel() {
+    confirmAlert({
+      title: "Question",
+      message: "Load a random level?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            initLevel(getRandomLevel(currentLevel));
+          },
+        },
+        {
+          label: "No",
+          onClick: () => { },
+        },
+      ],
+    });
+  }
+
   function handleChangeSettings() {
     settings.sound = cbSound.current.checked;
     settings.nicerGraphics = cbGraphics.current.checked;
@@ -670,6 +691,9 @@ function BalPage() {
             initLevel(currentLevel - 1);
           }
           break;
+        case "R":
+          randomLevel();
+          break;
         case "ArrowLeft":
           info = jumpLeft(backData, gameData, posX, posY, gameInfo);
           if (info.player) {
@@ -691,7 +715,7 @@ function BalPage() {
       switch (e.key) {
         case "p":
         case "P":
-          initLevel(991);
+          initLevel(716); // 991
           break;
         case "ArrowLeft":
         case "a":
@@ -891,7 +915,7 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 726; // TODO: Comment out when publishing
+    //currentLevel = 727; // TODO: Comment out when publishing
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;
@@ -919,6 +943,7 @@ function BalPage() {
     //console.log("gameData: ", gameData);
     const elements = {
       elementDiving: elementDiving.current,
+      elementGray: elementGray.current,
       elementGreen: elementGreen.current,
       elementHappy: elementHappy.current,
       elementLightBlue: elementLightBlue.current,
@@ -1032,6 +1057,9 @@ function BalPage() {
                 <div onClick={clickSeriesSmall}>
                   <label>Series Small</label>
                 </div>
+                <div onClick={randomLevel}>
+                  <label>Random level</label>
+                </div>
               </div>
             </div>
             <button className="balButton" onClick={tryAgain}>
@@ -1135,6 +1163,9 @@ function BalPage() {
             <img ref={elementRed} src={imgRed} />
           </div>
           <div style={{ display: "none" }}>
+            <img ref={elementGray} src={imgGray} />
+          </div>
+          <div style={{ display: "none" }}>
             <img ref={elementGreen} src={imgGreen} />
           </div>
           <div style={{ display: "none" }}>
@@ -1173,18 +1204,7 @@ function BalPage() {
               a ball through a one direction, a teleport, a game rotator or a
               door with a lock. You can control the blue ball with the letter
               keys, the arrow keys, the number keys or the arrow buttons. In the
-              water you can swim in every direction. If you see for example a
-              level number 750, it doesn&apos;t mean that there are 750 or even more
-              levels. The number depends also on the series and on the&nbsp;
-              <a
-                className="link"
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://fredbolder.github.io/bal/"
-              >
-                original Bal game
-              </a>
-              .
+              water you can swim in every direction. 
             </p>
             <table>
               <thead>
@@ -1247,11 +1267,26 @@ function BalPage() {
               </tbody>
             </table>
             <p>
+              If you see for example a
+              level number 750, it doesn&apos;t mean that there are 750 or even more
+              levels. The number depends also on the series and on the&nbsp;
+              <a
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://fredbolder.github.io/bal/"
+              >
+                original Bal game
+              </a>
+              .
               When you solve a level, you will get a code that gives you access
               to the next level whenever you want by pressing the Code button, so
               it is important to write down the code.
               Some levels are very difficult. If you can&apos;t solve a certain
-              level, you can start with another series.
+              level, you can start with another series or load a random level.
+            </p>
+            <p>
+              Download the <a className="link" target="_blank" rel="noopener noreferrer" href="./bal_online_manual.pdf">manual</a> for more information.
             </p>
           </div>
         </div>

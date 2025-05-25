@@ -10,8 +10,9 @@ function PrivacyPolicy() {
       <main>
         <h1 className="title">Privacy Policy</h1>
         <div className="boxWithScroll">
-          This site does not collect or store any personal information. 
-          However, it may contain links to other websites, which may collect personal 
+          This site does not collect or store any personal information.
+          For your convenience, only the last solved level and your preferences are saved in the local storage.
+          This site contains links to other websites, which may collect personal 
           data according to their own privacy policies. We recommend reviewing those policies 
           before interacting with their content.
           If you have any questions or concerns, please feel free to contact me by sending a message to&nbsp;

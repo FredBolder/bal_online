@@ -1,3 +1,12 @@
+import { randomInt } from "./utils";
+
+const series1Start = 200;
+const series1End = 219;
+const series2Start = 700;
+const series2End = 726;
+const seriesSmallStart = 750;
+const seriesSmallEnd = 760;
+
 async function loadFromFile(n) {
   let data = [];
   const fn = `/Levels/${n}.dat`;
@@ -32,7 +41,8 @@ async function loadFromFile(n) {
 async function getLevel(n) {
   let data = [];
 
-  if ((n >= 200 && n <= 219) || (n >= 700 && n <= 726) || (n >= 750 && n <= 760) || (n >= 990 && n <= 991)) {
+  if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) || 
+  (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= 990 && n <= 991)) {
     data = await loadFromFile(n);
   } else {
     data = await loadFromFile(1000);
@@ -40,4 +50,23 @@ async function getLevel(n) {
   return data;
 }
 
-export { getLevel };
+function getRandomLevel(currentLevel) {
+  let levels = [];
+  let result = currentLevel;
+
+  for (let i = series1Start + 1; i <= series1End; i++) {
+    levels.push(i);
+  }
+  for (let i = series2Start + 1; i <= series2End; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
+    levels.push(i);
+  }
+  while (result === currentLevel) {
+    result = levels[randomInt(0, levels.length - 1)];
+  }
+  return result;
+}
+
+export { getLevel, getRandomLevel };

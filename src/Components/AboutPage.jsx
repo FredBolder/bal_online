@@ -11,17 +11,13 @@ function AboutPage() {
         <h1 className="title">About</h1>
         <div className="boxWithScroll">
           <p>
-            During a webdevelopment course, I (Fred Bolder) made together with Michał Kotkowicz,
-            Donnie Avant and Diana Sahlean the web site 
-            &nbsp;<a href="https://games-41ql.onrender.com/" target="_blank" rel="noreferrer">Games From Scratch</a>&nbsp;
-            including the game
-            &nbsp;<a href="https://fredbolder.github.io/bal/" target="_blank" rel="noreferrer">Bal</a>&nbsp;
-            that was first programmed by me in C# for Windows. Bal was totally rewritten for JavaScript by our team.
-            Games From Scratch consists of a frontend and a backend and is deployed on render.com.
-            When you use a frontend and a backend for free on render, there are long delays, which is of course not nice.
-            Therefore I decided to make a new Bal website using the Bal code of Games From Scratch, but without backend.
-            This has advantages and disadvantages. Everything works now very fast, but no information on the progress of
-            the game is stored.
+            The first Bal game was programmed by Fred Bolder in Turbo Pascal. Later it was converted by Fred Bolder to C# and 
+            many levels and new objects were added. During a webdevelopment course, Fred Bolder made together with Michał Kotkowicz, 
+            Donnie Avant and Diana Sahlean the web site Games From Scratch including the game Bal. 
+            Bal was totally rewritten for JavaScript. The series 1 levels were copied from the C# bal game, but the series 2 levels 
+            and the series Small levels were made during the course. The C# bal game has more level series, but they were not copied. 
+            Later Fred Bolder decided to make a separate Bal web site based on the Bal code from Games From Scratch, but most of the 
+            code had to change a lot, because of the many new objects. There were also a lot of levels added to the existing series.
           </p>
         </div>
       </main>

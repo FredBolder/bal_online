@@ -26,24 +26,34 @@ function LetterToNumberChar(n) {
 }
 
 export function codeToNumber(code) {
+    let extraChar = "";
     let s = "";
+    let sum = 0;
     let result = -1;
-    if (code.length === 3) {
-      s = LetterToNumberChar(code[1]) + LetterToNumberChar(code[2]) + LetterToNumberChar(code[0]);
-      if (!s.includes("?")) {
-        result = parseInt(s) - 2;
-      }
+    if (code.length === 4) {
+        extraChar = code[3];
+        s = LetterToNumberChar(code[1]) + LetterToNumberChar(code[2]) + LetterToNumberChar(code[0]);
+        if (!s.includes("?")) {
+            sum = (parseInt(s[0]) + parseInt(s[1]) + parseInt(s[2])) % 10;
+            if (sum === parseInt(LetterToNumberChar(extraChar))) {
+                result = parseInt(s) - 2;
+            }
+        }
     }
     return result;
 }
 
 export function numberToCode(n) {
     // n = 1-997
+    let extraChar = "";
+    let sum = 0;
     let s = (n + 2).toString();
     while (s.length < 3) {
-      s = "0" + s;
+        s = "0" + s;
     }
-    s = numberCharToLetter(s[2]) + numberCharToLetter(s[0]) + numberCharToLetter(s[1]);
+    sum = (parseInt(s[0]) + parseInt(s[1]) + parseInt(s[2])) % 10;
+    extraChar = numberCharToLetter(sum.toString());
+    s = numberCharToLetter(s[2]) + numberCharToLetter(s[0]) + numberCharToLetter(s[1]) + extraChar;
     return s;
 }
 

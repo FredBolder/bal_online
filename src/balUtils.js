@@ -2,7 +2,7 @@ import { randomInt } from "./utils";
 
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 84, 85, 86].includes(n);
+  return [9, 28, 82, 84, 85, 86, 98].includes(n);
 }
 
 export function isEmpty(gameData, columnOrRow, start, end, horizontal = true) {
@@ -183,6 +183,12 @@ function charToNumber(c) {
     case "*":
       result = 38;
       break;
+    case "o":
+      result = 82;
+      break;
+    case ".":
+      result = 83;
+      break;
     case "C":
       result = 84;
       break;
@@ -225,6 +231,9 @@ function charToNumber(c) {
     case "Δ":
       result = 97;
       break;
+    case "δ":
+      result = 98;
+      break;
     case "á":
       result = 100;
       break;
@@ -245,6 +254,9 @@ function charToNumber(c) {
       break;
     case "R":
       result = 107;
+      break;
+    case "|":
+      result = 1000;
       break;
     default:
       result = 0;
@@ -353,6 +365,12 @@ function numberToChar(n) {
     case 38:
       result = "*";
       break;
+    case 82:
+      result = "o";
+      break;
+    case 83:
+      result = ".";
+      break;
     case 84:
       result = "C";
       break;
@@ -395,6 +413,9 @@ function numberToChar(n) {
     case 97:
       result = "Δ";
       break;
+    case 98:
+      result = "δ";
+      break;
     case 100:
       result = "á";
       break;
@@ -415,6 +436,10 @@ function numberToChar(n) {
       break;
     case 107:
       result = "R";
+      break;
+    case 1000:
+      // For manual only
+      result = "|";
       break;
     default:
       result = " ";
@@ -714,17 +739,23 @@ export function moveLeft(
       }
       if (x > 1) {
         // 1 object
-        if (
-          !result.player &&
-          (whiteOrBlue(row[x - 1]) || canMoveAlone(row[x - 1])) &&
-          row[x - 2] === 0
-        ) {
-          if (row[x - 1] === 9) {
-            updateYellow(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
-          }
+        if (!result.player && (whiteOrBlue(row[x - 1]) || canMoveAlone(row[x - 1])) && row[x - 2] === 0) {
           row[x - 2] = row[x - 1];
           row[x - 1] = 2;
           row[x] = 0;
+          switch (row[x - 2]) {
+            case 9:
+              updateYellow(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
+              break;
+            case 82:
+              row[x - 2] = 83;
+              break;
+            case 98:
+              row[x - 2] = 82;
+              break;
+            default:
+              break;
+          }
           result.player = true;
         }
         if (!result.player && ((row[x - 1] === 11) || ((row[x - 1] === 30) && gameInfo.hasKey)) && row[x - 2] === 0) {
@@ -837,17 +868,23 @@ export function moveRight(
       }
       if (x < maxX - 1) {
         // 1 object
-        if (
-          !result.player &&
-          (whiteOrBlue(row[x + 1]) || canMoveAlone(row[x + 1])) &&
-          row[x + 2] === 0
-        ) {
-          if (row[x + 1] === 9) {
-            updateYellow(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
-          }
+        if (!result.player && (whiteOrBlue(row[x + 1]) || canMoveAlone(row[x + 1])) && row[x + 2] === 0) {
           row[x + 2] = row[x + 1];
           row[x + 1] = 2;
           row[x] = 0;
+          switch (row[x + 2]) {
+            case 9:
+              updateYellow(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
+              break;
+            case 82:
+              row[x + 2] = 83;
+              break;
+            case 98:
+              row[x + 2] = 82;
+              break;
+            default:
+              break;
+          }
           result.player = true;
         }
         if (!result.player && ((row[x + 1] === 10) || ((row[x + 1] === 30) && gameInfo.hasKey)) && row[x + 2] === 0) {
@@ -953,17 +990,23 @@ export function jump(
         }
       }
       if (y > 1 && notInAir(x, y, backData, gameData)) {
-        if (
-          !result.player &&
-          canMoveAlone(gameData[y - 1][x]) &&
-          gameData[y - 2][x] === 0
-        ) {
-          if (gameData[y - 1][x] === 9) {
-            updateYellow(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
-          }
+        if (!result.player && canMoveAlone(gameData[y - 1][x]) && gameData[y - 2][x] === 0) {
           gameData[y - 2][x] = gameData[y - 1][x];
           gameData[y - 1][x] = 2;
           gameData[y][x] = 0;
+          switch (gameData[y - 2][x]) {
+            case 9:
+              updateYellow(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
+              break;
+            case 82:
+              gameData[y - 2][x] = 83;
+              break;
+            case 98:
+              gameData[y - 2][x] = 82;
+              break;
+            default:
+              break;
+          }
           result.player = true;
         }
         if (
@@ -1099,16 +1142,22 @@ export function pushDown(
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0 && y < gameData.length - 2) {
-      if (
-        !result.player &&
-        canMoveAlone(gameData[y + 1][x]) &&
-        gameData[y + 2][x] === 0
-      ) {
+      if (!result.player && canMoveAlone(gameData[y + 1][x]) && gameData[y + 2][x] === 0) {
         gameData[y + 2][x] = gameData[y + 1][x];
         gameData[y + 1][x] = 2;
         gameData[y][x] = 0;
-        if (gameData[y + 2][x] === 9) {
-          updateYellow(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
+        switch (gameData[y + 2][x]) {
+          case 9:
+            updateYellow(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
+            break;
+          case 82:
+            gameData[y + 2][x] = 83;
+            break;
+          case 98:
+            gameData[y + 2][x] = 82;
+            break;
+          default:
+            break;
         }
         result.player = true;
       }

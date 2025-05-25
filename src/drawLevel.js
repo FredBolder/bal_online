@@ -140,7 +140,7 @@ function drawLevel(
 
   function drawCopier() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
-    drawText(ctx, xc, yc, "2x", "middle", "white", w2 * 0.7, w1 * 0.8, "black", 1);
+    drawText(ctx, xc, yc, "2x", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
   function drawDetonator() {
@@ -291,6 +291,20 @@ function drawLevel(
     pt3 = polar(pt1.x, pt1.y, -90, d2);
     drawLine(ctx, pt1.x, pt1.y, pt2.x, pt2.y, "white");
     drawLine(ctx, pt1.x, pt1.y, pt3.x, pt3.y, "white");
+  }
+
+  function drawGrayBall(moves) {
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementGray, xmin, ymin, w1, w2);
+      if (moves > 0) {
+      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+      }
+    } else {
+      drawBall("rgb(70, 70, 70)");
+      if (moves > 0) {
+      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+      }
+    }
   }
 
   function drawGreenBall() {
@@ -659,7 +673,6 @@ function drawLevel(
   }
 
   function drawWhiteBall() {
-    // white ball
     if (nicerGraphics) {
       ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
     } else {
@@ -668,7 +681,6 @@ function drawLevel(
   }
 
   function drawYellowBall() {
-    // yellow ball
     if (nicerGraphics) {
       ctx.drawImage(elements.elementYellow, xmin, ymin, w1, w2);
     } else {
@@ -854,6 +866,12 @@ function drawLevel(
         case 38:
           drawExplosion();
           break;
+        case 82:
+          drawGrayBall(1);
+          break;
+        case 83:
+          drawGrayBall(0);
+          break;
         case 84:
           drawDirectionChanger1();
           break;
@@ -895,6 +913,9 @@ function drawLevel(
         case 97:
           drawCopier();
           break;
+        case 98:
+          drawGrayBall(2);
+          break;
         case 100:
           drawPurpleBarLeft();
           break;
@@ -909,6 +930,9 @@ function drawLevel(
           break;
         case 104:
           drawPurpleBarBottom();
+          break;
+        case 1000:
+          // For manual only (empty)
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
