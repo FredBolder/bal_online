@@ -273,6 +273,20 @@ function drawLevel(
     ctx.fill();
   }
 
+  function drawForceUp() {
+    d1 = w2 / 8;
+    d2 = w1 / 8;
+    d3 = w2 / 4;
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    for (let i = -1; i <= 1; i++) {
+      d4 = (w1 / 3) * i;
+      drawLine(ctx, xc + d4, ymin + d1, xc + d4, ymax - d1, "white");
+      drawLine(ctx, xc + d4, ymin + d1, xc + d4 - d2, ymin + d1 + d3, "white");
+      drawLine(ctx, xc + d4, ymin + d1, xc + d4 + d2, ymin + d1 + d3, "white");
+    }
+  }
+
   function drawGameRotator() {
     let pt1 = { x: 0, y: 0 };
     let pt2 = { x: 0, y: 0 };
@@ -297,12 +311,12 @@ function drawLevel(
     if (nicerGraphics) {
       ctx.drawImage(elements.elementGray, xmin, ymin, w1, w2);
       if (moves > 0) {
-      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+        drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
       }
     } else {
       drawBall("rgb(70, 70, 70)");
       if (moves > 0) {
-      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+        drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
       }
     }
   }
@@ -426,6 +440,22 @@ function drawLevel(
       ctx.drawImage(elements.elementLightBlue, xmin, ymin, w1, w2);
     } else {
       drawBall("deepskyblue");
+    }
+  }
+
+  function drawLightBulb() {
+    d1 = w1 / 2.5;
+    d2 = w2 / 4;
+    d3 = w2 / 4; // Length of screw
+    d4 = d3 / 4;
+    d5 = w2 / 15;
+    d6 = w1 / 2.2;
+    drawFilledCircle(ctx, xc, (ymin + yc) / 2, w1 / 4, "#FFFFC5");
+    drawFilledBox(ctx, xmin + d1, yc - d2, w1 - (d1 * 2), d2, "#FFFFC5");
+    drawFilledBox(ctx, xmin + d1, yc, w1 - (d1 * 2), d3, "silver");
+    drawFilledBox(ctx, xmin + d6, yc + d3, w1 - (d6 * 2), d5, "silver");
+    for (let i = 0; i < 4; i++) {
+      drawLine(ctx, xmin + d1, yc + (d4 * i) + (d4 / 2), xmax - d1, yc + (d4 * i) + d4, "black");
     }
   }
 
@@ -557,6 +587,22 @@ function drawLevel(
       d2 = w1 / 5;
       drawLine(ctx, xc - d1, yc + d2, xc + d1, yc + d2, "white");
     }
+  }
+
+  function drawSmallLadder() {
+    d1 = w1 / 8;
+    d2 = w2 / 8;
+    drawLine(ctx, xc - d1, ymin, xc - d1, yc, "white");
+    drawLine(ctx, xc + d1, ymin, xc + d1, yc, "white");
+    drawLine(ctx, xc - d1, ymin + d2, xc + d1, ymin + d2, "white");
+    drawLine(ctx, xc - d1, yc - d2, xc + d1, yc - d2, "white");
+  }
+
+  function drawSmallWeakStone() {
+    if (bitmapWeakStone === null) {
+      bitmapWeakStone = createWeakStoneBitmap(32);
+    }
+    ctx.drawImage(bitmapWeakStone, xmin + (w1 / 4), ymin, w1 / 2, w2 / 2);
   }
 
   function drawStone() {
@@ -916,6 +962,9 @@ function drawLevel(
         case 98:
           drawGrayBall(2);
           break;
+        case 99:
+          drawSmallWeakStone();
+          break;
         case 100:
           drawPurpleBarLeft();
           break;
@@ -930,6 +979,15 @@ function drawLevel(
           break;
         case 104:
           drawPurpleBarBottom();
+          break;
+        case 105:
+          drawLightBulb();
+          break;
+        case 108:
+          drawSmallLadder();
+          break;
+        case 109:
+          drawForceUp();
           break;
         case 1000:
           // For manual only (empty)

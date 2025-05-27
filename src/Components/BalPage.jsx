@@ -8,6 +8,7 @@ import MessageBox from './MessageBox';
 import {
   stringArrayToNumberArray,
   checkFalling,
+  checkForces,
   moveLeft,
   moveRight,
   jump,
@@ -72,6 +73,7 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 
+let fred = false; // TODO: Set to false when publishing
 let ctx;
 let currentLevel = 200;
 let fishCounter = 0;
@@ -84,6 +86,7 @@ let backData = [];
 let gameData = [];
 let gameInfo = {};
 gameInfo.elevators = [];
+gameInfo.forces = [];
 gameInfo.horizontalElevators = [];
 gameInfo.greenBalls = 0;
 gameInfo.redBalls = [];
@@ -94,7 +97,9 @@ gameInfo.hasMirror = false;
 gameInfo.hasWater = false;
 gameInfo.hasDivingGlasses = false;
 gameInfo.hasKey = false;
+gameInfo.hasLadder = false;
 gameInfo.hasPickaxe = false;
+gameInfo.hasWeakStone = false;
 gameInfo.redFish = [];
 gameInfo.electricity = [];
 gameInfo.electricityActive = false;
@@ -353,6 +358,15 @@ function BalPage() {
         skipFalling--;
       }
 
+      info = checkForces(gameData, gameInfo);
+      if (info.playerX !== -1) {
+        posX = info.playerX;
+        posY = info.playerY;
+      }
+      if (info.update) {
+        update = true;
+      }
+
       info = checkCopiers(gameData, gameInfo);
       if (info.updated) {
         update = true;
@@ -417,8 +431,12 @@ function BalPage() {
         redCounter--;
       } else {
         redCounter = 2;
-        if (moveRedBalls(backData, gameData, posX, posY, gameInfo)) {
+        info = moveRedBalls(backData, gameData, posX, posY, gameInfo);
+        if (info.updated) {
           update = true;
+        }
+        if (info.eating) {
+          playSound("eat");
         }
       }
 
@@ -661,6 +679,8 @@ function BalPage() {
     info.divingGlasses = false;
     info.eating = false;
     info.takingKey = false;
+    info.takingLadder = false;
+    info.takingLightBulb = false;
     info.takingPickaxe = false;
     info.rotate = false;
     let rotate = false;
@@ -715,7 +735,7 @@ function BalPage() {
       switch (e.key) {
         case "p":
         case "P":
-          initLevel(716); // 991
+          initLevel(727); // 991
           break;
         case "ArrowLeft":
         case "a":
@@ -869,8 +889,19 @@ function BalPage() {
       gameInfo.hasKey = true;
       playSound("take");
     }
+    if (info.takingLadder) {
+      gameInfo.hasLadder = true;
+      playSound("take");
+    }
+    if (info.takingLightBulb) {
+      playSound("take");
+    }
     if (info.takingPickaxe) {
       gameInfo.hasPickaxe = true;
+      playSound("take");
+    }
+    if (info.takingWeakStone) {
+      gameInfo.hasWeakStone = true;
       playSound("take");
     }
     if (info.breaking) {
@@ -915,7 +946,9 @@ function BalPage() {
     cbQuestions.current.checked = settings.lessQuestions;
     currentLevel = 200;
     loadProgress();
-    //currentLevel = 727; // TODO: Comment out when publishing
+    if (fred) {
+      currentLevel = 730;
+    }
     initLevel(currentLevel);
     updateScreen();
     const el = myRef.current;
@@ -996,7 +1029,7 @@ function BalPage() {
   }
 
   function putBallPosition(e) {
-    if (e.altKey && e.shiftKey && e.ctrlKey) {
+    if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
       if (!gameData || gameData.length < 1) {
         return false;
       }
@@ -1204,7 +1237,7 @@ function BalPage() {
               a ball through a one direction, a teleport, a game rotator or a
               door with a lock. You can control the blue ball with the letter
               keys, the arrow keys, the number keys or the arrow buttons. In the
-              water you can swim in every direction. 
+              water you can swim in every direction.
             </p>
             <table>
               <thead>
