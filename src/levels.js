@@ -3,7 +3,7 @@ import { randomInt } from "./utils";
 const series1Start = 200;
 const series1End = 219;
 const series2Start = 700;
-const series2End = 731;
+const series2End = 732;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 760;
 

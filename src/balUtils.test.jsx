@@ -160,7 +160,9 @@ describe("balUtils", () => {
     );
   });
 
-  let inputBack4abcdefg = zeroArray(3, 6);
+  // ***** MOVE LEFT *****
+
+  let inputBack4_3_6 = zeroArray(3, 6);
   let input4a = [
     [1, 1, 1, 1, 1, 1],
     [1, 2, 0, 4, 0, 1],
@@ -171,7 +173,7 @@ describe("balUtils", () => {
     [1, 2, 0, 4, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info4a = moveLeft(inputBack4abcdefg, input4a, 1, 1, defaultGameInfo);
+  let info4a = moveLeft(inputBack4_3_6, input4a, 1, 1, defaultGameInfo);
   it("moveLeft A", () => {
     expect(JSON.stringify(input4a)).toBe(JSON.stringify(expectedOutput4a));
   });
@@ -192,7 +194,7 @@ describe("balUtils", () => {
     [1, 2, 0, 4, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info4b = moveLeft(inputBack4abcdefg, input4b, 2, 1, defaultGameInfo);
+  let info4b = moveLeft(inputBack4_3_6, input4b, 2, 1, defaultGameInfo);
   it("moveLeft B", () => {
     expect(JSON.stringify(input4b)).toBe(JSON.stringify(expectedOutput4b));
   });
@@ -213,7 +215,7 @@ describe("balUtils", () => {
     [1, 2, 0, 4, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info4c = moveLeft(inputBack4abcdefg, input4c, 2, 1, defaultGameInfo);
+  let info4c = moveLeft(inputBack4_3_6, input4c, 2, 1, defaultGameInfo);
   it("moveLeft C", () => {
     expect(JSON.stringify(input4c)).toBe(JSON.stringify(expectedOutput4c));
   });
@@ -234,7 +236,7 @@ describe("balUtils", () => {
     [1, 4, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info4d = moveLeft(inputBack4abcdefg, input4d, 4, 1, defaultGameInfo);
+  let info4d = moveLeft(inputBack4_3_6, input4d, 4, 1, defaultGameInfo);
   it("moveLeft D", () => {
     expect(JSON.stringify(input4d)).toBe(JSON.stringify(expectedOutput4d));
   });
@@ -255,7 +257,7 @@ describe("balUtils", () => {
     [1, 4, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info4e = moveLeft(inputBack4abcdefg, input4e, 3, 1, defaultGameInfo);
+  let info4e = moveLeft(inputBack4_3_6, input4e, 3, 1, defaultGameInfo);
   it("moveLeft E", () => {
     expect(JSON.stringify(input4e)).toBe(JSON.stringify(expectedOutput4e));
   });
@@ -276,7 +278,7 @@ describe("balUtils", () => {
     [1, 0, 4, 4, 4, 2, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info4f = moveLeft(inputBack4abcdefg, input4f, 5, 1, defaultGameInfo);
+  let info4f = moveLeft(inputBack4_3_6, input4f, 5, 1, defaultGameInfo);
   it("moveLeft F", () => {
     expect(JSON.stringify(input4f)).toBe(JSON.stringify(expectedOutput4f));
   });
@@ -297,7 +299,7 @@ describe("balUtils", () => {
     [1, 5, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info4g = moveLeft(inputBack4abcdefg, input4g, 4, 1, defaultGameInfo);
+  let info4g = moveLeft(inputBack4_3_6, input4g, 4, 1, defaultGameInfo);
   it("moveLeft G", () => {
     expect(JSON.stringify(input4g)).toBe(JSON.stringify(expectedOutput4g));
   });
@@ -307,6 +309,22 @@ describe("balUtils", () => {
   it("moveLeft G player", () => {
     expect(info4g.player).toBe(true);
   });
+
+  let input4h = [
+    [1, 1, 1, 1, 1, 1],
+    [1, 111, 0, 5, 2, 1],
+    [1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput4h = input4h;
+  let info4h = moveLeft(inputBack4_3_6, input4h, 4, 1, { ...defaultGameInfo, forces: [{ x: 1, y: 1, direction: 6 }] });
+  it("moveLeft H", () => {
+    expect(JSON.stringify(input4h)).toBe(JSON.stringify(expectedOutput4h));
+  });
+  it("moveLeft H player", () => {
+    expect(info4h.player).toBe(false);
+  });
+
+  // ***** MOVE RIGHT *****
 
   let inputBack5_3_6 = zeroArray(3, 6);
   let input5a = [
@@ -594,6 +612,20 @@ describe("balUtils", () => {
   });
   it("moveRight L player", () => {
     expect(info5l.player).toBe(false);
+  });
+
+  let input5m = [
+    [1, 1, 1, 1, 1, 1],
+    [1, 2, 5, 0, 112, 1],
+    [1, 1, 1, 1, 1, 1],
+  ];
+  let expectedOutput5m = input5m;
+  let info5m = moveRight(inputBack5_3_6, input5m, 1, 1, { ...defaultGameInfo, forces: [{ x: 4, y: 1, direction: 4 }] });
+  it("moveRight M", () => {
+    expect(JSON.stringify(input5m)).toBe(JSON.stringify(expectedOutput5m));
+  });
+  it("moveRight M player", () => {
+    expect(info5m.player).toBe(false);
   });
 
   // ***** JUMP *****

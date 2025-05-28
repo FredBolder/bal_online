@@ -2,6 +2,10 @@ import { describe, it, expect } from "vitest";
 import {
     initGameInfo,
     checkForces,
+    hasForceDown,
+    hasForceLeft,
+    hasForceRight,
+    hasForceUp,
 } from "./balUtils.js";
 
 
@@ -212,6 +216,7 @@ describe("balUtils", () => {
         expect(JSON.stringify(info03c)).toBe(JSON.stringify({ update: false, playerX: -1, playerY: -1 }));
     });
 
+
     // ***** Force down *****
 
     let input04a = [
@@ -241,7 +246,163 @@ describe("balUtils", () => {
     });
 
 
+    // ***** hasForceRight *****
+    let input5a = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 111, 0, 0, 2, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let info5a = hasForceRight(input5a, { ...defaultGameInfo, forces: [{ x: 1, y: 1, direction: 6 }] }, 4, 1);
+    it("hasForceRight A", () => {
+        expect(info5a).toBe(true);
+    });
 
+    let input5b = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 111, 4, 0, 2, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let info5b = hasForceRight(input5b, { ...defaultGameInfo, forces: [{ x: 1, y: 1, direction: 6 }] }, 4, 1);
+    it("hasForceRight B", () => {
+        expect(info5b).toBe(true);
+    });
+
+    let input5c = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 111, 5, 0, 2, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let info5c = hasForceRight(input5c, { ...defaultGameInfo, forces: [{ x: 1, y: 1, direction: 6 }] }, 4, 1);
+    it("hasForceRight C", () => {
+        expect(info5c).toBe(false);
+    });
+
+    // ***** hasForceLeft *****
+    let input6a = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 2, 0, 0, 112, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let info6a = hasForceLeft(input6a, { ...defaultGameInfo, forces: [{ x: 4, y: 1, direction: 4 }] }, 1, 1);
+    it("hasForceLeft A", () => {
+        expect(info6a).toBe(true);
+    });
+
+    let input6b = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 2, 4, 0, 112, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let info6b = hasForceLeft(input6b, { ...defaultGameInfo, forces: [{ x: 4, y: 1, direction: 4 }] }, 1, 1);
+    it("hasForceLeft B", () => {
+        expect(info6b).toBe(true);
+    });
+
+    let input6c = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 2, 5, 0, 112, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let info6c = hasForceLeft(input6c, { ...defaultGameInfo, forces: [{ x: 4, y: 1, direction: 4 }] }, 1, 1);
+    it("hasForceLeft C", () => {
+        expect(info6c).toBe(false);
+    });
+
+    // ***** hasForceUp *****
+    let input7a = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 109, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info7a = hasForceUp(input7a, { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: 8 }] }, 2, 2);
+    it("hasForceUp A", () => {
+        expect(info7a).toBe(true);
+    });
+
+    let input7b = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 0, 4, 0, 1],
+        [1, 0, 109, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info7b = hasForceUp(input7b, { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: 8 }] }, 2, 2);
+    it("hasForceUp B", () => {
+        expect(info7b).toBe(true);
+    });
+
+    let input7c = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 0, 5, 0, 1],
+        [1, 0, 109, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info7c = hasForceUp(input7c, { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: 8 }] }, 2, 2);
+    it("hasForceUp C", () => {
+        expect(info7c).toBe(false);
+    });
+
+    let input7d = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 109, 0, 1],
+        [1, 1, 0, 1, 1],
+        [1, 1, 0, 1, 1],
+        [1, 1, 109, 1, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info7d = hasForceUp(input7d, { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: 8 }, { x: 2, y: 7, direction: 8 }] }, 2, 2);
+    it("hasForceUp D", () => {
+        expect(info7d).toBe(true);
+    });
+
+    // ***** hasForceDown *****
+    let input8a = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 110, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info8a = hasForceDown(input8a, { ...defaultGameInfo, forces: [{ x: 2, y: 1, direction: 2 }] }, 2, 4);
+    it("hasForceDown A", () => {
+        expect(info8a).toBe(true);
+    });
+
+    let input8b = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 110, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 4, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info8b = hasForceDown(input8b, { ...defaultGameInfo, forces: [{ x: 2, y: 1, direction: 2 }] }, 2, 4);
+    it("hasForceDown B", () => {
+        expect(info8b).toBe(true);
+    });
+
+    let input8c = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 110, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 5, 0, 1],
+        [1, 0, 2, 0, 1],
+        [1, 1, 1, 1, 1],
+    ];
+    let info8c = hasForceDown(input8c, { ...defaultGameInfo, forces: [{ x: 2, y: 1, direction: 2 }] }, 2, 4);
+    it("hasForceDown C", () => {
+        expect(info8c).toBe(false);
+    });
 
     // Insert new tests here
 });

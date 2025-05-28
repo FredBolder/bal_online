@@ -9,17 +9,21 @@ export function hasForceDown(gameData, gameInfo, x, y) {
   let result = false;
 
   for (let i = 0; i < gameInfo.forces.length; i++) {
+    let found = false;
     const force = gameInfo.forces[i];
     if ((force.direction === 2) && (force.x === x) && (force.y < y)) {
-      result = true;
+      found = true;
       if (force.y < y - 1) {
         for (let j = y - 1; j > force.y; j--) {
           const element = gameData[j][x];
           if (![0, 2, 4, 8, 93, 94].includes(element)) {
-            result = false;
+            found = false;
           }
         }
       }
+    }
+    if (found) {
+      result = true;
     }
   }
   return result;
@@ -29,17 +33,21 @@ export function hasForceLeft(gameData, gameInfo, x, y) {
   let result = false;
 
   for (let i = 0; i < gameInfo.forces.length; i++) {
+    let found = false;
     const force = gameInfo.forces[i];
     if ((force.direction === 4) && (force.y === y) && (force.x > x)) {
-      result = true;
+      found = true;
       if (force.x > x + 1) {
         for (let j = x + 1; j < force.x; j++) {
           const element = gameData[y][j];
           if (![0, 2, 4, 8, 93, 94].includes(element)) {
-            result = false;
+            found = false;
           }
         }
       }
+    }
+    if (found) {
+      result = true;
     }
   }
   return result;
@@ -49,17 +57,21 @@ export function hasForceRight(gameData, gameInfo, x, y) {
   let result = false;
 
   for (let i = 0; i < gameInfo.forces.length; i++) {
+    let found = false;
     const force = gameInfo.forces[i];
     if ((force.direction === 6) && (force.y === y) && (force.x < x)) {
-      result = true;
+      found = true;
       if (force.x < x - 1) {
         for (let j = x - 1; j > force.x; j--) {
           const element = gameData[y][j];
           if (![0, 2, 4, 8, 93, 94].includes(element)) {
-            result = false;
+            found = false;
           }
         }
       }
+    }
+    if (found) {
+      result = true;
     }
   }
   return result;
@@ -69,17 +81,21 @@ export function hasForceUp(gameData, gameInfo, x, y) {
   let result = false;
 
   for (let i = 0; i < gameInfo.forces.length; i++) {
+    let found = false;
     const force = gameInfo.forces[i];
     if ((force.direction === 8) && (force.x === x) && (force.y > y)) {
-      result = true;
+      found = true;
       if (force.y > y + 1) {
         for (let j = y + 1; j < force.y; j++) {
           const element = gameData[j][x];
           if (![0, 2, 4, 8, 93, 94].includes(element)) {
-            result = false;
+            found = false;
           }
         }
       }
+    }
+    if (found) {
+      result = true;
     }
   }
   return result;
@@ -177,12 +193,15 @@ function isTeleport(x, y, teleports) {
 }
 
 function notInAir(x, y, backData, gameData, gameInfo) {
+  let forceDown = hasForceDown(gameData, gameInfo, x, y);
+  let forceUp = hasForceUp(gameData, gameInfo, x, y);
   return (
     gameData[y + 1][x] !== 0 ||
     isLadder(x, y, backData) ||
     isLadder(x, y + 1, backData) ||
     inWater(x, y, backData) ||
-    ((gameData[y - 1][x] !== 0) && hasForceUp(gameData, gameInfo, x, y))
+    ((gameData[y - 1][x] !== 0) && forceUp) ||
+    (forceUp && forceDown)
   );
 }
 
@@ -1011,13 +1030,7 @@ function whiteOrBlue(n) {
   return n === 4 || n === 5;
 }
 
-export function moveLeft(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function moveLeft(backData, gameData, x, y, gameInfo) {
   let result = {};
   let row = gameData[y];
   result.breaking = false;
@@ -1074,7 +1087,8 @@ export function moveLeft(
       }
       if (x > 1) {
         // 1 object
-        if (!result.player && (whiteOrBlue(row[x - 1]) || (canMoveAlone(row[x - 1]) && (row[x - 1] !== 111))) && row[x - 2] === 0) {
+        if (!result.player && (whiteOrBlue(row[x - 1]) || (canMoveAlone(row[x - 1]) && (row[x - 1] !== 111))) && row[x - 2] === 0 &&
+          !hasForceRight(gameData, gameInfo, x - 1, y)) {
           row[x - 2] = row[x - 1];
           row[x - 1] = 2;
           row[x] = element;
@@ -1112,7 +1126,7 @@ export function moveLeft(
         }
       }
       if (x > 2) {
-        // 2 white balls
+        // 2 white or blue balls
         if (
           !result.player &&
           whiteOrBlue(row[x - 1]) &&
@@ -1221,7 +1235,8 @@ export function moveRight(
       }
       if (x < maxX - 1) {
         // 1 object
-        if (!result.player && (whiteOrBlue(row[x + 1]) || (canMoveAlone(row[x + 1]) && (row[x + 1] !== 112))) && row[x + 2] === 0) {
+        if (!result.player && (whiteOrBlue(row[x + 1]) || (canMoveAlone(row[x + 1]) && (row[x + 1] !== 112))) && row[x + 2] === 0 &&
+          !hasForceLeft(gameData, gameInfo, x + 1, y)) {
           row[x + 2] = row[x + 1];
           row[x + 1] = 2;
           row[x] = element;
@@ -1259,13 +1274,8 @@ export function moveRight(
         }
       }
       if (x < maxX - 2) {
-        // 2 white balls
-        if (
-          !result.player &&
-          whiteOrBlue(row[x + 1]) &&
-          whiteOrBlue(row[x + 2]) &&
-          row[x + 3] === 0
-        ) {
+        // 2 white or blue balls
+        if (!result.player && whiteOrBlue(row[x + 1]) && whiteOrBlue(row[x + 2]) && row[x + 3] === 0) {
           row[x + 3] = row[x + 2];
           row[x + 2] = row[x + 1];
           row[x + 1] = 2;
@@ -1433,7 +1443,7 @@ export function jumpLeft(
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && x > 0 && notInAir(x, y, backData, gameData, gameInfo)) {
+      if (y > 0 && x > 0 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (gameData[y - 1][x] === 0) {
           if ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x - 1])) {
             switch (gameData[y - 1][x - 1]) {
@@ -1492,11 +1502,7 @@ export function jumpRight(
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (
-        y > 0 &&
-        x < gameData[0].length - 1 &&
-        notInAir(x, y, backData, gameData, gameInfo)
-      ) {
+      if (y > 0 && x < gameData[0].length - 1 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (gameData[y - 1][x] === 0) {
           if ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x + 1])) {
             switch (gameData[y - 1][x + 1]) {
