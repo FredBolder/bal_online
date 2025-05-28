@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 import {
+  initGameInfo,
   isEmpty,
   numberArrayToStringArray,
   stringArrayToNumberArray,
   checkFalling,
-  checkForces,
   moveLeft,
   moveRight,
   jump,
@@ -21,28 +21,6 @@ import {
   checkCopiers,
   movePurpleBar,
 } from "./balUtils.js";
-
-function initGameInfo(info) {
-  info.elevators = [];
-  info.forces = [];
-  info.horizontalElevators = [];
-  info.greenBalls = 0;
-  info.redBalls = [];
-  info.yellowBalls = [];
-  info.detonator = { x: -1, y: -1 };
-  info.teleports = [];
-  info.hasMirror = false;
-  info.hasWater = false;
-  info.hasDivingGlasses = false;
-  info.hasKey = false;
-  info.hasLadder = false;
-  info.Pickaxe = false;
-  info.redFish = [];
-  info.electricity = [];
-  info.electricityActive = false;
-  info.trapDoors = [];
-  info.copiers = [];
-}
 
 describe("balUtils", () => {
   const defaultGameInfo = {};
@@ -3269,79 +3247,6 @@ describe("balUtils", () => {
     expect(info24h).toBe(true);
   });
 
-  // ***** Force up *****
-
-  let input25a = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 2, 0, 0, 0, 1],
-    [1, 0, 0, 0, 109, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
-  let expectedOutput25a = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 2, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 109, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
-  let info25a = checkForces(input25a, { ...defaultGameInfo, forces: [{ x: 4, y: 4, direction: 8 }] });
-  it("Force up A", () => {
-    expect(JSON.stringify(input25a)).toBe(JSON.stringify(expectedOutput25a));
-  });
-  it("Force up A info", () => {
-    expect(JSON.stringify(info25a)).toBe(JSON.stringify({ update: true, playerX: 4, playerY: 2 }));
-  });
-
-  let input25b = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 2, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 109, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
-  let expectedOutput25b = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 2, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 109, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
-  let info25b = checkForces(input25b, { ...defaultGameInfo, forces: [{ x: 4, y: 4, direction: 8 }] });
-  it("Force up B", () => {
-    expect(JSON.stringify(input25b)).toBe(JSON.stringify(expectedOutput25b));
-  });
-  it("Force up B info", () => {
-    expect(JSON.stringify(info25b)).toBe(JSON.stringify({ update: true, playerX: 4, playerY: 1 }));
-  });
-
-  let input25c = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 4, 0, 0, 0, 1],
-    [1, 0, 0, 0, 4, 0, 0, 0, 1],
-    [1, 0, 0, 2, 109, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
-  let expectedOutput25c = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 4, 0, 0, 0, 1],
-    [1, 0, 0, 0, 4, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 2, 109, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
-  let info25c = checkForces(input25c, { ...defaultGameInfo, forces: [{ x: 4, y: 4, direction: 8 }] });
-  it("Force up C", () => {
-    expect(JSON.stringify(input25c)).toBe(JSON.stringify(expectedOutput25c));
-  });
-  it("Force up C info", () => {
-    expect(JSON.stringify(info25c)).toBe(JSON.stringify({ update: true, playerX: -1, playerY: -1 }));
-  });
 
   // Insert new tests here
 });

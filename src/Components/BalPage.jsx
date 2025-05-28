@@ -947,7 +947,7 @@ function BalPage() {
     currentLevel = 200;
     loadProgress();
     if (fred) {
-      currentLevel = 730;
+      currentLevel = 731;
     }
     initLevel(currentLevel);
     updateScreen();

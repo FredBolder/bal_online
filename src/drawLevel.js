@@ -273,6 +273,48 @@ function drawLevel(
     ctx.fill();
   }
 
+  function drawForceDown() {
+    d1 = w2 / 8;
+    d2 = w1 / 8;
+    d3 = w2 / 4;
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    for (let i = -1; i <= 1; i++) {
+      d4 = (w1 / 3) * i;
+      drawLine(ctx, xc + d4, ymin + d1, xc + d4, ymax - d1, "white");
+      drawLine(ctx, xc + d4, ymax - d1, xc + d4 - d2, ymax - d1 - d3, "white");
+      drawLine(ctx, xc + d4, ymax - d1, xc + d4 + d2, ymax - d1 - d3, "white");
+    }
+  }
+
+  function drawForceLeft() {
+    d1 = w1 / 8;
+    d2 = w2 / 8;
+    d3 = w1 / 4;
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    for (let i = -1; i <= 1; i++) {
+      d4 = (w2 / 3) * i;
+      drawLine(ctx, xmin + d1, yc + d4, xmax - d1, yc + d4, "white");
+      drawLine(ctx, xmin + d1, yc + d4, xmin + d1 + d3, yc + d4 - d2, "white");
+      drawLine(ctx, xmin + d1, yc + d4, xmin + d1 + d3, yc + d4 + d2, "white");
+    }
+  }
+
+  function drawForceRight() {
+    d1 = w1 / 8;
+    d2 = w2 / 8;
+    d3 = w1 / 4;
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    for (let i = -1; i <= 1; i++) {
+      d4 = (w2 / 3) * i;
+      drawLine(ctx, xmin + d1, yc + d4, xmax - d1, yc + d4, "white");
+      drawLine(ctx, xmax - d1, yc + d4, xmax - d1 - d3, yc + d4 - d2, "white");
+      drawLine(ctx, xmax - d1, yc + d4, xmax - d1 - d3, yc + d4 + d2, "white");
+    }
+  }
+
   function drawForceUp() {
     d1 = w2 / 8;
     d2 = w1 / 8;
@@ -988,6 +1030,15 @@ function drawLevel(
           break;
         case 109:
           drawForceUp();
+          break;
+        case 110:
+          drawForceDown();
+          break;
+        case 111:
+          drawForceRight();
+          break;
+        case 112:
+          drawForceLeft();
           break;
         case 1000:
           // For manual only (empty)

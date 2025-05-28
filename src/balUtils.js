@@ -2,7 +2,67 @@ import { randomInt } from "./utils";
 
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 82, 84, 85, 86, 98].includes(n);
+  return [9, 28, 82, 84, 85, 86, 98, 109, 110, 111, 112].includes(n);
+}
+
+export function hasForceDown(gameData, gameInfo, x, y) {
+  let result = false;
+
+  for (let i = 0; i < gameInfo.forces.length; i++) {
+    const force = gameInfo.forces[i];
+    if ((force.direction === 2) && (force.x === x) && (force.y < y)) {
+      result = true;
+      if (force.y < y - 1) {
+        for (let j = y - 1; j > force.y; j--) {
+          const element = gameData[j][x];
+          if (![0, 2, 4, 8, 93, 94].includes(element)) {
+            result = false;
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+export function hasForceLeft(gameData, gameInfo, x, y) {
+  let result = false;
+
+  for (let i = 0; i < gameInfo.forces.length; i++) {
+    const force = gameInfo.forces[i];
+    if ((force.direction === 4) && (force.y === y) && (force.x > x)) {
+      result = true;
+      if (force.x > x + 1) {
+        for (let j = x + 1; j < force.x; j++) {
+          const element = gameData[y][j];
+          if (![0, 2, 4, 8, 93, 94].includes(element)) {
+            result = false;
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
+export function hasForceRight(gameData, gameInfo, x, y) {
+  let result = false;
+
+  for (let i = 0; i < gameInfo.forces.length; i++) {
+    const force = gameInfo.forces[i];
+    if ((force.direction === 6) && (force.y === y) && (force.x < x)) {
+      result = true;
+      if (force.x < x - 1) {
+        for (let j = x - 1; j > force.x; j--) {
+          const element = gameData[y][j];
+          if (![0, 2, 4, 8, 93, 94].includes(element)) {
+            result = false;
+          }
+        }
+      }
+    }
+  }
+  return result;
 }
 
 export function hasForceUp(gameData, gameInfo, x, y) {
@@ -15,7 +75,7 @@ export function hasForceUp(gameData, gameInfo, x, y) {
       if (force.y > y + 1) {
         for (let j = y + 1; j < force.y; j++) {
           const element = gameData[j][x];
-          if (![0].includes(element)) {
+          if (![0, 2, 4, 8, 93, 94].includes(element)) {
             result = false;
           }
         }
@@ -23,6 +83,28 @@ export function hasForceUp(gameData, gameInfo, x, y) {
     }
   }
   return result;
+}
+
+export function initGameInfo(info) {
+  info.elevators = [];
+  info.forces = [];
+  info.horizontalElevators = [];
+  info.greenBalls = 0;
+  info.redBalls = [];
+  info.yellowBalls = [];
+  info.detonator = { x: -1, y: -1 };
+  info.teleports = [];
+  info.hasMirror = false;
+  info.hasWater = false;
+  info.hasDivingGlasses = false;
+  info.hasKey = false;
+  info.hasLadder = false;
+  info.Pickaxe = false;
+  info.redFish = [];
+  info.electricity = [];
+  info.electricityActive = false;
+  info.trapDoors = [];
+  info.copiers = [];
 }
 
 export function isEmpty(gameData, columnOrRow, start, end, horizontal = true) {
@@ -288,6 +370,15 @@ function charToNumber(c) {
     case "Ω":
       result = 109;
       break;
+    case "ω":
+      result = 110;
+      break;
+    case "Φ":
+      result = 111;
+      break;
+    case "φ":
+      result = 112;
+      break;
     case "|":
       result = 1000;
       break;
@@ -482,6 +573,15 @@ function numberToChar(n) {
     case 109:
       result = "Ω";
       break;
+    case 110:
+      result = "ω";
+      break;
+    case 111:
+      result = "Φ";
+      break;
+    case 112:
+      result = "φ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -534,11 +634,11 @@ export function numberArrayToStringArray(arr) {
   return result;
 }
 
-function updateRed(redBalls, x1, y1, x2, y2) {
-  for (let i = 0; i < redBalls.length; i++) {
-    if (redBalls[i].x === x1 && redBalls[i].y === y1) {
-      redBalls[i].x = x2;
-      redBalls[i].y = y2;
+function updateObject(objects, x1, y1, x2, y2) {
+  for (let i = 0; i < objects.length; i++) {
+    if (objects[i].x === x1 && objects[i].y === y1) {
+      objects[i].x = x2;
+      objects[i].y = y2;
     }
   }
 }
@@ -671,7 +771,7 @@ export function checkFalling(backData, gameData, gameInfo) {
             result.ballY = i;
           }
           if (isRedBall(element1)) {
-            updateRed(gameInfo.redBalls, j, i, j + 1, i);
+            updateObject(gameInfo.redBalls, j, i, j + 1, i);
           }
           gameData[i][j + 1] = gameData[i][j];
           gameData[i][j] = 0;
@@ -690,7 +790,7 @@ export function checkFalling(backData, gameData, gameInfo) {
             result.ballY = i;
           }
           if (isRedBall(element1)) {
-            updateRed(gameInfo.redBalls, j, i, j - 1, i);
+            updateObject(gameInfo.redBalls, j, i, j - 1, i);
           }
           gameData[i][j - 1] = gameData[i][j];
           gameData[i][j] = 0;
@@ -722,7 +822,7 @@ export function checkFalling(backData, gameData, gameInfo) {
           result.ballY = i + 1;
         }
         if (isRedBall(element1)) {
-          updateRed(gameInfo.redBalls, j, i, j, i + 1);
+          updateObject(gameInfo.redBalls, j, i, j, i + 1);
         }
         if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
           result.sound = 1;
@@ -736,52 +836,171 @@ export function checkFalling(backData, gameData, gameInfo) {
 }
 
 export function checkForces(gameData, gameInfo) {
-  let emptyUp = -1
+  let empty = -1
+  let maxX = 0;
   let result = {};
   result.update = false;
   result.playerX = -1;
   result.playerY = -1;
-  let upPossible = false;
+  let possible = false;
 
-  for (let i = 0; i < gameInfo.forces.length; i++) {
-    const force = gameInfo.forces[i];
-    emptyUp = -1;
-    upPossible = false;
-    for (let j = 0; j < force.y; j++) {
-      const element = gameData[j][force.x];
-      if ((element === 0) && (emptyUp === -1)) {
-        emptyUp = j;
-        upPossible = true;
-      }
-      if (emptyUp !== -1) {
-        if (![0, 2, 4, 8, 93, 94].includes(gameData[j][force.x])) {
-          upPossible = false;
-          emptyUp = -1;
-        }
-      }
-    }
-
-    if (force.direction === 8) {
-      // Move up
-      if (upPossible) {
-        result.update = true;
-        for (let j = emptyUp; j < force.y - 1; j++) {
-          gameData[j][force.x] = gameData[j + 1][force.x];
-          gameData[j + 1][force.x] = 0;
-          switch (gameData[j][force.x]) {
-            case 2:
-              result.playerX = force.x;
-              result.playerY = j;
-              break;
-            case 8:
-            case 93:
-            case 94:
-              updateRed(gameInfo.redBalls, force.x, j + 1, force.x, j);
-              break;
-            default:
-              break;
+  if (gameData.length > 0) {
+    maxX = gameData[0].length - 1;
+    for (let i = 0; i < gameInfo.forces.length; i++) {
+      const force = gameInfo.forces[i];
+      empty = -1;
+      possible = false;
+      switch (force.direction) {
+        case 2:
+          for (let j = gameData.length - 1; j > force.y; j--) {
+            const element = gameData[j][force.x];
+            if ((element === 0) && (empty === -1)) {
+              empty = j;
+              possible = true;
+            }
+            if (empty !== -1) {
+              if (![0, 2, 4, 8, 93, 94].includes(gameData[j][force.x])) {
+                possible = false;
+                empty = -1;
+              }
+            }
           }
-        }
+
+          // Move down
+          if (possible) {
+            for (let j = empty; j > force.y + 1; j--) {
+              result.update = true;
+              gameData[j][force.x] = gameData[j - 1][force.x];
+              gameData[j - 1][force.x] = 0;
+              switch (gameData[j][force.x]) {
+                case 2:
+                  result.playerX = force.x;
+                  result.playerY = j;
+                  break;
+                case 8:
+                case 93:
+                case 94:
+                  updateObject(gameInfo.redBalls, force.x, j - 1, force.x, j);
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        case 4:
+          for (let j = 0; j < force.x; j++) {
+            const element = gameData[force.y][j];
+            if ((element === 0) && (empty === -1)) {
+              empty = j;
+              possible = true;
+            }
+            if (empty !== -1) {
+              if (![0, 2, 4, 8, 93, 94].includes(gameData[force.y][j])) {
+                possible = false;
+                empty = -1;
+              }
+            }
+          }
+
+          // Move left
+          if (possible) {
+            for (let j = empty; j < force.x - 1; j++) {
+              result.update = true;
+              gameData[force.y][j] = gameData[force.y][j + 1];
+              gameData[force.y][j + 1] = 0;
+              switch (gameData[force.y][j]) {
+                case 2:
+                  result.playerX = j;
+                  result.playerY = force.y;
+                  break;
+                case 8:
+                case 93:
+                case 94:
+                  updateObject(gameInfo.redBalls, j + 1, force.y, j, force.y);
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        case 6:
+          for (let j = maxX; j > force.x; j--) {
+            const element = gameData[force.y][j];
+            if ((element === 0) && (empty === -1)) {
+              empty = j;
+              possible = true;
+            }
+            if (empty !== -1) {
+              if (![0, 2, 4, 8, 93, 94].includes(gameData[force.y][j])) {
+                possible = false;
+                empty = -1;
+              }
+            }
+          }
+
+          // Move right
+          if (possible) {
+            for (let j = empty; j > force.x + 1; j--) {
+              result.update = true;
+              gameData[force.y][j] = gameData[force.y][j - 1];
+              gameData[force.y][j - 1] = 0;
+              switch (gameData[force.y][j]) {
+                case 2:
+                  result.playerX = j;
+                  result.playerY = force.y;
+                  break;
+                case 8:
+                case 93:
+                case 94:
+                  updateObject(gameInfo.redBalls, j - 1, force.y, j, force.y);
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        case 8:
+          for (let j = 0; j < force.y; j++) {
+            const element = gameData[j][force.x];
+            if ((element === 0) && (empty === -1)) {
+              empty = j;
+              possible = true;
+            }
+            if (empty !== -1) {
+              if (![0, 2, 4, 8, 93, 94].includes(gameData[j][force.x])) {
+                possible = false;
+                empty = -1;
+              }
+            }
+          }
+
+          // Move up
+          if (possible) {
+            for (let j = empty; j < force.y - 1; j++) {
+              result.update = true;
+              gameData[j][force.x] = gameData[j + 1][force.x];
+              gameData[j + 1][force.x] = 0;
+              switch (gameData[j][force.x]) {
+                case 2:
+                  result.playerX = force.x;
+                  result.playerY = j;
+                  break;
+                case 8:
+                case 93:
+                case 94:
+                  updateObject(gameInfo.redBalls, force.x, j + 1, force.x, j);
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        default:
+          break;
       }
     }
   }
@@ -816,7 +1035,7 @@ export function moveLeft(
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (gameData.length > 0) {
-    if (notInAir(x, y, backData, gameData, gameInfo)) {
+    if (notInAir(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key or pickaxe
         if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x - 1]) || ((row[x - 1]) === 35) && gameInfo.hasPickaxe)) {
@@ -855,7 +1074,7 @@ export function moveLeft(
       }
       if (x > 1) {
         // 1 object
-        if (!result.player && (whiteOrBlue(row[x - 1]) || canMoveAlone(row[x - 1])) && row[x - 2] === 0) {
+        if (!result.player && (whiteOrBlue(row[x - 1]) || (canMoveAlone(row[x - 1]) && (row[x - 1] !== 111))) && row[x - 2] === 0) {
           row[x - 2] = row[x - 1];
           row[x - 1] = 2;
           row[x] = element;
@@ -868,6 +1087,11 @@ export function moveLeft(
               break;
             case 98:
               row[x - 2] = 82;
+              break;
+            case 109:
+            case 110:
+            case 112:
+              updateObject(gameInfo.forces, x - 1, y, x - 2, y);
               break;
             default:
               break;
@@ -957,7 +1181,7 @@ export function moveRight(
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (gameData.length > 0) {
-    if (notInAir(x, y, backData, gameData, gameInfo)) {
+    if (notInAir(x, y, backData, gameData, gameInfo) && !hasForceLeft(gameData, gameInfo, x, y)) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key or pickaxe
@@ -997,7 +1221,7 @@ export function moveRight(
       }
       if (x < maxX - 1) {
         // 1 object
-        if (!result.player && (whiteOrBlue(row[x + 1]) || canMoveAlone(row[x + 1])) && row[x + 2] === 0) {
+        if (!result.player && (whiteOrBlue(row[x + 1]) || (canMoveAlone(row[x + 1]) && (row[x + 1] !== 112))) && row[x + 2] === 0) {
           row[x + 2] = row[x + 1];
           row[x + 1] = 2;
           row[x] = element;
@@ -1010,6 +1234,11 @@ export function moveRight(
               break;
             case 98:
               row[x + 2] = 82;
+              break;
+            case 109:
+            case 110:
+            case 111:
+              updateObject(gameInfo.forces, x + 1, y, x + 2, y);
               break;
             default:
               break;
@@ -1096,7 +1325,7 @@ export function jump(
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && notInAir(x, y, backData, gameData, gameInfo)) {
+      if (y > 0 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x]) || ((gameData[y - 1][x]) === 35) && gameInfo.hasPickaxe)) {
           switch (gameData[y - 1][x]) {
             case 0:
@@ -1137,7 +1366,7 @@ export function jump(
         }
       }
       if (y > 1 && notInAir(x, y, backData, gameData, gameInfo)) {
-        if (!result.player && canMoveAlone(gameData[y - 1][x]) && gameData[y - 2][x] === 0) {
+        if (!result.player && (canMoveAlone(gameData[y - 1][x]) && (gameData[y - 1][x] !== 110)) && gameData[y - 2][x] === 0) {
           gameData[y - 2][x] = gameData[y - 1][x];
           gameData[y - 1][x] = 2;
           gameData[y][x] = element;
@@ -1150,6 +1379,11 @@ export function jump(
               break;
             case 98:
               gameData[y - 2][x] = 82;
+              break;
+            case 109:
+            case 111:
+            case 112:
+              updateObject(gameInfo.forces, x, y - 1, x, y - 2);
               break;
             default:
               break;
@@ -1315,8 +1549,8 @@ export function pushDown(
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
-    if (gameData.length > 0 && y < gameData.length - 2) {
-      if (!result.player && canMoveAlone(gameData[y + 1][x]) && gameData[y + 2][x] === 0) {
+    if (gameData.length > 0 && y < gameData.length - 2 && !hasForceUp(gameData, gameInfo, x, y)) {
+      if (!result.player && (canMoveAlone(gameData[y + 1][x]) && (gameData[y + 1][x] !== 109)) && gameData[y + 2][x] === 0) {
         gameData[y + 2][x] = gameData[y + 1][x];
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
@@ -1329,6 +1563,11 @@ export function pushDown(
             break;
           case 98:
             gameData[y + 2][x] = 82;
+            break;
+          case 110:
+          case 111:
+          case 112:
+            updateObject(gameInfo.forces, x, y + 1, x, y + 2);
             break;
           default:
             break;
@@ -1835,8 +2074,8 @@ export function getGameInfo(backData, gameData) {
   result.yellowBalls = [];
   result.detonator = { x: -1, y: -1 };
   result.teleports = [];
-  result.hasMirror = false,
-    result.hasWater = false;
+  result.hasMirror = false;
+  result.hasWater = false;
   result.hasDivingGlasses = false;
   result.hasKey = false;
   result.hasLadder = false;
@@ -1850,113 +2089,135 @@ export function getGameInfo(backData, gameData) {
 
   for (let i = 0; i < gameData.length; i++) {
     for (let j = 0; j < gameData[i].length; j++) {
-      if (gameData[i][j] === 2) {
-        result.blueBall = { x: j, y: i };
-      }
-      if (gameData[i][j] === 3) {
-        result.greenBalls++;
-      }
-      if (gameData[i][j] === 37) {
-        result.detonator = { x: j, y: i };
-      }
-      if (isRedBall(gameData[i][j])) {
-        let redBall = {};
-        redBall.x = j;
-        redBall.y = i;
-        switch (gameData[i][j]) {
-          case 93:
-            redBall.smart = 1;
+      switch (gameData[i][j]) {
+        case 2:
+          result.blueBall = { x: j, y: i };
+          break;
+        case 3:
+          result.greenBalls++;
+          break;
+        case 37:
+          result.detonator = { x: j, y: i };
+          break;
+        case 8:
+        case 93:
+        case 94:
+          {
+            let redBall = { x: j, y: i };
+            switch (gameData[i][j]) {
+              case 93:
+                redBall.smart = 1;
+                break;
+              case 94:
+                redBall.smart = 2;
+                break;
+              default:
+                redBall.smart = 0;
+                break;
+            }
+            redBall.direction = "none";
+            redBall.skipElevatorCount = 0;
+            redBall.skipFollowCount = 0;
+            result.redBalls.push(redBall);
             break;
-          case 94:
-            redBall.smart = 2;
-            break;
-          default:
-            redBall.smart = 0;
-            break;
+          }
+        case 106:
+        case 6: {
+          let elevator = {
+            x: j,
+            y: i,
+            up: gameData[i][j] === 106
+          };
+          result.elevators.push(elevator);
+          break;
         }
-        redBall.direction = "none";
-        redBall.skipElevatorCount = 0;
-        redBall.skipFollowCount = 0;
-        result.redBalls.push(redBall);
-      }
-      if (gameData[i][j] === 106 || gameData[i][j] === 6) {
-        let elevator = {};
-        elevator.x = j;
-        elevator.y = i;
-        elevator.up = gameData[i][j] === 106;
-        result.elevators.push(elevator);
-      }
-      if (gameData[i][j] === 107 || gameData[i][j] === 7) {
-        let elevator = {};
-        elevator.x = j;
-        elevator.y = i;
-        elevator.right = gameData[i][j] === 107;
-        result.horizontalElevators.push(elevator);
-      }
-      if (gameData[i][j] === 9) {
-        let yellowBall = {};
-        yellowBall.x = j;
-        yellowBall.y = i;
-        yellowBall.direction = "none";
-        result.yellowBalls.push(yellowBall);
-      }
-      if (gameData[i][j] === 31) {
-        let teleport = {};
-        teleport.x = j;
-        teleport.y = i;
-        teleport.selfDestructing = false;
-        result.teleports.push(teleport);
-      }
-      if (gameData[i][j] === 92) {
-        let teleport = {};
-        teleport.x = j;
-        teleport.y = i;
-        teleport.selfDestructing = true;
-        result.teleports.push(teleport);
-      }
-      if (gameData[i][j] === 95 || gameData[i][j] === 96) {
-        result.hasMirror = true;
+        case 107:
+        case 7: {
+          let elevator = {
+            x: j,
+            y: i,
+            right: gameData[i][j] === 107
+          };
+          result.horizontalElevators.push(elevator);
+          break;
+        }
+        case 9: {
+          let yellowBall = {
+            x: j,
+            y: i,
+            direction: "none"
+          };
+          result.yellowBalls.push(yellowBall);
+          break;
+        }
+        case 31:
+        case 92: {
+          let teleport = {
+            x: j,
+            y: i,
+            selfDestructing: gameData[i][j] === 92
+          };
+          result.teleports.push(teleport);
+          break;
+        }
+        case 95:
+        case 96:
+          result.hasMirror = true;
+          break;
+        case 27: {
+          let fish = {
+            x: j,
+            y: i,
+            direction: Math.random() > 0.5 ? 6 : 4,
+            isDead: false
+          };
+          result.redFish.push(fish);
+          break;
+        }
+        case 91: {
+          let elec = { x: j, y: i };
+          result.electricity.push(elec);
+          break;
+        }
+        case 13: {
+          let trap = {
+            x: j,
+            y: i,
+            status: 0
+          };
+          result.trapDoors.push(trap);
+          break;
+        }
+        case 97: {
+          let copier = { x: j, y: i };
+          result.copiers.push(copier);
+          break;
+        }
+        case 109: {
+          let force = { x: j, y: i, direction: 8 };
+          result.forces.push(force);
+          break;
+        }
+        case 110: {
+          let force = { x: j, y: i, direction: 2 };
+          result.forces.push(force);
+          break;
+        }
+        case 111: {
+          let force = { x: j, y: i, direction: 6 };
+          result.forces.push(force);
+          break;
+        }
+        case 112: {
+          let force = { x: j, y: i, direction: 4 };
+          result.forces.push(force);
+          break;
+        }
+        default:
+          break;
       }
       if (backData[i][j] === 20 || backData[i][j] === 23) {
         result.hasWater = true;
-      }
-      if (gameData[i][j] === 27) {
-        let fish = {};
-        fish.x = j;
-        fish.y = i;
-        if (Math.random() > 0.5) {
-          fish.direction = 6;
-        } else {
-          fish.direction = 4;
-        }
-        fish.isDead = false;
-        result.redFish.push(fish);
-      }
-      if (gameData[i][j] === 91) {
-        let elec = {};
-        elec.x = j;
-        elec.y = i;
-        result.electricity.push(elec);
-      }
-      if (gameData[i][j] === 13) {
-        let trap = {};
-        trap.x = j;
-        trap.y = i;
-        trap.status = 0;
-        result.trapDoors.push(trap);
-      }
-      if (gameData[i][j] === 97) {
-        let copier = {};
-        copier.x = j;
-        copier.y = i;
-        result.copiers.push(copier);
-      }
-      if (gameData[i][j] === 109) {
-        let force = {};
-        force.x = j;
-        force.y = i;
-        force.direction = 8;
-        result.forces.push(force);
       }
     }
   }
@@ -2180,7 +2441,7 @@ export function moveElevators(arr, elevators, redBalls) {
               case 8:
               case 93:
               case 94:
-                updateRed(redBalls, x, j + 1, x, j);
+                updateObject(redBalls, x, j + 1, x, j);
                 break;
               default:
                 break;
@@ -2202,7 +2463,7 @@ export function moveElevators(arr, elevators, redBalls) {
                 result.playerY = j + 1;
               }
               if (isRedBall(arr[j][x])) {
-                updateRed(redBalls, x, j, x, j + 1);
+                updateObject(redBalls, x, j, x, j + 1);
               }
               arr[j + 1][x] = arr[j][x];
               arr[j][x] = 0;
@@ -2251,7 +2512,7 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
         for (let j = y - 1; j >= 0 && !stop; j--) {
           if ([2, 4, 8, 93, 94].includes(arr[j][x]) && arr[j][x + 1] === 0) {
             if (isRedBall(arr[j][x])) {
-              updateRed(redBalls, x, j, x + 1, j);
+              updateObject(redBalls, x, j, x + 1, j);
             }
             if (arr[j][x] === 2) {
               result.playerX = x + 1;
@@ -2274,7 +2535,7 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
         for (let j = y - 1; j >= 0 && !stop; j--) {
           if ([2, 4, 8, 93, 94].includes(arr[j][x]) && arr[j][x - 1] === 0) {
             if (isRedBall(arr[j][x])) {
-              updateRed(redBalls, x, j, x - 1, j);
+              updateObject(redBalls, x, j, x - 1, j);
             }
             if (arr[j][x] === 2) {
               result.playerX = x - 1;
