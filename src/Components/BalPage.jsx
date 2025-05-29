@@ -14,7 +14,7 @@ import {
   jumpLeft,
   jumpRight,
   getGameInfo,
-  checkRed,
+  checkRedBalls,
   moveElevators,
   moveHorizontalElevators,
   moveRedBalls,
@@ -293,7 +293,7 @@ function BalPage() {
       }
     }
     if (!gameOver) {
-      let redInfo = checkRed(gameData, posX, posY, gameInfo.redBalls);
+      let redInfo = checkRedBalls(gameData, gameInfo.redBalls);
       if (redInfo.length > 0) {
         laser = redInfo;
         gameOver = true;
@@ -947,7 +947,7 @@ function BalPage() {
     currentLevel = 200;
     loadProgress();
     if (fred) {
-      currentLevel = 734;
+      currentLevel = 735;
     }
     initLevel(currentLevel);
     updateScreen();

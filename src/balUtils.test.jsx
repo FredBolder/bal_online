@@ -11,7 +11,7 @@ import {
   jumpLeft,
   jumpRight,
   getGameInfo,
-  checkRed,
+  checkRedBalls,
   moveElevators,
   moveHorizontalElevators,
   moveYellowBalls,
@@ -1186,8 +1186,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10a = [{ x: 2, y: 3 }, { x: 5, y: 3 }];
-  it("checkRed A", () => {
-    expect(JSON.stringify(checkRed(input10a, 5, 3, [{ x: 2, y: 3 }]))).toBe(
+  it("checkRedBalls A", () => {
+    expect(JSON.stringify(checkRedBalls(input10a, [{ x: 2, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10a)
     );
   });
@@ -1200,8 +1200,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10b = [{ x: 5, y: 3 }, { x: 2, y: 3 }];
-  it("checkRed B", () => {
-    expect(JSON.stringify(checkRed(input10b, 2, 3, [{ x: 5, y: 3 }]))).toBe(
+  it("checkRedBalls B", () => {
+    expect(JSON.stringify(checkRedBalls(input10b, [{ x: 5, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10b)
     );
   });
@@ -1214,8 +1214,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10c = [];
-  it("checkRed C", () => {
-    expect(JSON.stringify(checkRed(input10c, 5, 3, [{ x: 2, y: 3 }]))).toBe(
+  it("checkRedBalls C", () => {
+    expect(JSON.stringify(checkRedBalls(input10c, [{ x: 2, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10c)
     );
   });
@@ -1228,8 +1228,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10d = [];
-  it("checkRed D", () => {
-    expect(JSON.stringify(checkRed(input10d, 2, 3, [{ x: 5, y: 3 }]))).toBe(
+  it("checkRedBalls D", () => {
+    expect(JSON.stringify(checkRedBalls(input10d, [{ x: 5, y: 3 }]))).toBe(
       JSON.stringify(expectedOutput10d)
     );
   });
@@ -1242,8 +1242,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10e = [];
-  it("checkRed E", () => {
-    expect(JSON.stringify(checkRed(input10e, 2, 3, [{ x: 5, y: 2 }]))).toBe(
+  it("checkRedBalls E", () => {
+    expect(JSON.stringify(checkRedBalls(input10e, [{ x: 5, y: 2 }]))).toBe(
       JSON.stringify(expectedOutput10e)
     );
   });
@@ -1256,15 +1256,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10f = [{ x: 4, y: 3 }, { x: 2, y: 3 }];
-  it("checkRed F", () => {
-    expect(
-      JSON.stringify(
-        checkRed(input10f, 2, 3, [
-          { x: 5, y: 2 },
-          { x: 4, y: 3 },
-        ])
-      )
-    ).toBe(JSON.stringify(expectedOutput10f));
+  it("checkRedBalls F", () => {
+    expect(JSON.stringify(checkRedBalls(input10f, [{ x: 5, y: 2 }, { x: 4, y: 3 },]))).toBe(JSON.stringify(expectedOutput10f));
   });
 
   let input10g = [
@@ -1275,8 +1268,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10g = [{ x: 5, y: 1 }, { x: 2, y: 1 }, { x: 2, y: 3 }, { x: 6, y: 3 }];
-  it("checkRed G", () => {
-    expect(JSON.stringify(checkRed(input10g, 6, 3, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10g));
+  it("checkRedBalls G", () => {
+    expect(JSON.stringify(checkRedBalls(input10g, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10g));
   });
 
   let input10h = [
@@ -1287,8 +1280,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10h = [];
-  it("checkRed H", () => {
-    expect(JSON.stringify(checkRed(input10h, 6, 3, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10h));
+  it("checkRedBalls H", () => {
+    expect(JSON.stringify(checkRedBalls(input10h, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10h));
   });
 
   let input10i = [
@@ -1299,8 +1292,8 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput10i = [];
-  it("checkRed I", () => {
-    expect(JSON.stringify(checkRed(input10i, 6, 3, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10i));
+  it("checkRedBalls I", () => {
+    expect(JSON.stringify(checkRedBalls(input10i, [{ x: 5, y: 1 }]))).toBe(JSON.stringify(expectedOutput10i));
   });
 
   // ***** MOVE ELEVATORS *****

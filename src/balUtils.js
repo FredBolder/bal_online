@@ -1570,7 +1570,7 @@ export function getGameInfo(backData, gameData) {
   return result;
 }
 
-export function checkRed(arr, x, y, redBalls) {
+export function checkRedBalls(arr, redBalls) {
   let direction = 0;
   let hit = -1; // -1 = not known yet, 0 = no, 1 = yes 
   let result = [];
@@ -2268,6 +2268,18 @@ export function rotateGame(backData, gameData, gameInfo) {
         for (let j = rows - 1; j >= 0; j--) {
           let gd = gameData[j][i];
           switch (gd) {
+            case 6:
+              gd = 7;
+              break;
+            case 7:
+              gd = 106;
+              break;
+            case 10:
+              gd = 88;
+              break;
+            case 11:
+              gd = 87;
+              break;
             case 15:
               gd = 17;
               break;
@@ -2280,11 +2292,35 @@ export function rotateGame(backData, gameData, gameInfo) {
             case 18:
               gd = 16;
               break;
-            case 6:
-              gd = 7;
+            case 84:
+              gd = 85;
               break;
-            case 7:
-              gd = 106;
+            case 85:
+              gd = 84;
+              break;
+            case 87:
+              gd = 10;
+              break;
+            case 88:
+              gd = 11;
+              break;
+            case 95:
+              gd = 96;
+              break;
+            case 96:
+              gd = 95;
+              break;
+            case 100:
+              gd = 103;
+              break;
+            case 101:
+              gd = 104;
+              break;
+            case 103:
+              gd = 101;
+              break;
+            case 104:
+              gd = 100;
               break;
             case 106:
               gd = 107;
@@ -2292,23 +2328,17 @@ export function rotateGame(backData, gameData, gameInfo) {
             case 107:
               gd = 6;
               break;
-            case 10:
-              gd = 88;
+            case 109:
+              gd = 111;
               break;
-            case 88:
-              gd = 11;
+            case 110:
+              gd = 112;
               break;
-            case 11:
-              gd = 87;
+            case 111:
+              gd = 110;
               break;
-            case 87:
-              gd = 10;
-              break;
-            case 84:
-              gd = 85;
-              break;
-            case 85:
-              gd = 84;
+            case 112:
+              gd = 109;
               break;
             default:
               break;
@@ -2341,22 +2371,29 @@ export function rotateGame(backData, gameData, gameInfo) {
         }
       }
 
+      // Blue ball
       x = gameInfo.blueBall.x;
       y = gameInfo.blueBall.y;
       gameInfo.blueBall.y = x;
       gameInfo.blueBall.x = rows - (y + 1);
+
+      // Red balls
       for (let i = 0; i < gameInfo.redBalls.length; i++) {
         x = gameInfo.redBalls[i].x;
         y = gameInfo.redBalls[i].y;
         gameInfo.redBalls[i].y = x;
         gameInfo.redBalls[i].x = rows - (y + 1);
       }
+
+      // Teleports
       for (let i = 0; i < gameInfo.teleports.length; i++) {
         x = gameInfo.teleports[i].x;
         y = gameInfo.teleports[i].y;
         gameInfo.teleports[i].y = x;
         gameInfo.teleports[i].x = rows - (y + 1);
       }
+
+      // Yellow balls
       for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
         x = gameInfo.yellowBalls[i].x;
         y = gameInfo.yellowBalls[i].y;
@@ -2381,8 +2418,9 @@ export function rotateGame(backData, gameData, gameInfo) {
         }
         gameInfo.yellowBalls[i].direction = data;
       }
-      let newHorElevators = [];
 
+      // Elevators
+      let newHorElevators = [];
       for (let i = 0; i < gameInfo.elevators.length; i++) {
         x = gameInfo.elevators[i].x;
         y = gameInfo.elevators[i].y;
@@ -2392,9 +2430,7 @@ export function rotateGame(backData, gameData, gameInfo) {
         newHor.right = gameInfo.elevators[i].up;
         newHorElevators.push(newHor);
       }
-
       let newVerElevators = [];
-
       for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
         x = gameInfo.horizontalElevators[i].x;
         y = gameInfo.horizontalElevators[i].y;
@@ -2404,7 +2440,6 @@ export function rotateGame(backData, gameData, gameInfo) {
         newVer.up = gameInfo.horizontalElevators[i].right;
         newVerElevators.push(newVer);
       }
-
       while (gameInfo.horizontalElevators.length > 0) {
         gameInfo.horizontalElevators.pop();
       }
@@ -2417,6 +2452,36 @@ export function rotateGame(backData, gameData, gameInfo) {
       for (let i = 0; i < newVerElevators.length; i++) {
         gameInfo.elevators.push(newVerElevators[i]);
       }
+
+      // Forces
+      for (let i = 0; i < gameInfo.forces.length; i++) {
+        x = gameInfo.forces[i].x;
+        y = gameInfo.forces[i].y;
+        gameInfo.forces[i].y = x;
+        gameInfo.forces[i].x = rows - (y + 1);
+        let data = gameInfo.forces[i].direction;
+        switch (data) {
+          case 2:
+            data = 4;
+            break;
+          case 4:
+            data = 8;
+            break;
+          case 6:
+            data = 2;
+            break;
+          case 8:
+            data = 6;
+            break;
+          default:
+            break;
+        }
+        gameInfo.forces[i].direction = data;
+      }
+
+
+
+
     }
   }
   return rotated;
