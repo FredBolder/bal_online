@@ -8,7 +8,6 @@ import MessageBox from './MessageBox';
 import {
   stringArrayToNumberArray,
   checkFalling,
-  checkForces,
   moveLeft,
   moveRight,
   jump,
@@ -32,6 +31,7 @@ import {
   checkCopiers,
   findElementByCoordinate,
 } from "../balUtils.js";
+import { checkForces } from "../force";
 
 import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
@@ -947,7 +947,7 @@ function BalPage() {
     currentLevel = 200;
     loadProgress();
     if (fred) {
-      currentLevel = 732;
+      currentLevel = 734;
     }
     initLevel(currentLevel);
     updateScreen();

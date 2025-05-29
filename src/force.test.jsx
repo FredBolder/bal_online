@@ -1,15 +1,8 @@
 import { describe, it, expect } from "vitest";
-import {
-    initGameInfo,
-    checkForces,
-    hasForceDown,
-    hasForceLeft,
-    hasForceRight,
-    hasForceUp,
-} from "./balUtils.js";
+import { initGameInfo } from "./balUtils.js";
+import { checkForces, hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force";
 
-
-describe("balUtils", () => {
+describe("Force", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
 
@@ -145,7 +138,7 @@ describe("balUtils", () => {
         [1, 0, 111, 5, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02c = input02c;
+    let expectedOutput02c = input02c.map(row => [...row]);
     let info02c = checkForces(input02c, { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: 6 }] });
     it("Force right C", () => {
         expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
@@ -207,7 +200,7 @@ describe("balUtils", () => {
         [1, 0, 2, 5, 0, 112, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput03c = input03c;
+    let expectedOutput03c = input03c.map(row => [...row]);
     let info03c = checkForces(input03c, { ...defaultGameInfo, forces: [{ x: 5, y: 3, direction: 4 }] });
     it("Force left C", () => {
         expect(JSON.stringify(input03c)).toBe(JSON.stringify(expectedOutput03c));
