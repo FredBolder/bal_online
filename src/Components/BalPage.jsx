@@ -117,6 +117,7 @@ let settings = {
   sound: true,
   nicerGraphics: true,
   lessQuestions: false,
+  arrowButtons: true,
 };
 let skipFalling = 0;
 let teleporting = 0;
@@ -126,6 +127,7 @@ let yellowCounter = 0;
 
 function BalPage() {
   const canvas = useRef(null);
+  const cbArrowButtons = useRef(null);
   const cbGraphics = useRef(null);
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
@@ -134,6 +136,7 @@ function BalPage() {
   const elementGreen = useRef(null);
   const elementHappy = useRef(null);
   const elementLightBlue = useRef(null);
+  const elementMoveButtons = useRef(null);
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
   const elementSad = useRef(null);
@@ -173,6 +176,10 @@ function BalPage() {
   }
 
   function loadSettings() {
+    const arrowButtons = localStorage.getItem("arrowButtons")
+    if (arrowButtons !== null) {
+      settings.arrowButtons = stringToBoolean(arrowButtons);
+    }
     const lessQuestions = localStorage.getItem("lessQuestions")
     if (lessQuestions !== null) {
       settings.lessQuestions = stringToBoolean(lessQuestions);
@@ -188,6 +195,7 @@ function BalPage() {
   }
 
   function saveSettings() {
+    localStorage.setItem("arrowButtons", booleanToString(settings.arrowButtons));
     localStorage.setItem("lessQuestions", booleanToString(settings.lessQuestions));
     localStorage.setItem("nicerGraphics", booleanToString(settings.nicerGraphics));
     localStorage.setItem("sound", booleanToString(settings.sound));
@@ -665,10 +673,12 @@ function BalPage() {
   }
 
   function handleChangeSettings() {
-    settings.sound = cbSound.current.checked;
-    settings.nicerGraphics = cbGraphics.current.checked;
+    settings.arrowButtons = cbArrowButtons.current.checked;
     settings.lessQuestions = cbQuestions.current.checked;
+    settings.nicerGraphics = cbGraphics.current.checked;
+    settings.sound = cbSound.current.checked;
     saveSettings();
+    updateMoveButtons();
     updateScreen();
   }
 
@@ -940,14 +950,17 @@ function BalPage() {
 
 
   useEffect(() => {
+    if (!canvas.current) return;
     loadSettings();
-    cbSound.current.checked = settings.sound;
-    cbGraphics.current.checked = settings.nicerGraphics;
+    cbArrowButtons.current.checked = settings.arrowButtons;
     cbQuestions.current.checked = settings.lessQuestions;
+    cbGraphics.current.checked = settings.nicerGraphics;
+    cbSound.current.checked = settings.sound;
+    updateMoveButtons();
     currentLevel = 200;
     loadProgress();
     if (fred) {
-      currentLevel = 735;
+      currentLevel = 735; // 735
     }
     initLevel(currentLevel);
     updateScreen();
@@ -962,7 +975,13 @@ function BalPage() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  function updateMoveButtons() {
+    elementMoveButtons.current.style.display = settings.arrowButtons ? "block" : "none";
+  }
+
   function updateScreen() {
+    if (!canvas.current) return;
+
     const displayWidth = canvas.current.clientWidth;
     const displayHeight = canvas.current.clientHeight;
     if (
@@ -972,6 +991,7 @@ function BalPage() {
       canvas.current.width = displayWidth;
       canvas.current.height = displayHeight;
     }
+
     ctx = canvas.current.getContext("2d");
     //console.log("gameData: ", gameData);
     const elements = {
@@ -1150,6 +1170,17 @@ function BalPage() {
                   />
                   <label htmlFor="questions">Less questions</label>
                 </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    id="arrowButtons"
+                    ref={cbArrowButtons}
+                    name="arrowButtons"
+                    value="arrowButtons"
+                    onChange={handleChangeSettings}
+                  />
+                  <label htmlFor="arrowButtons">Arrow buttons</label>
+                </div>
               </div>
             </div>
           </div>
@@ -1158,26 +1189,28 @@ function BalPage() {
               className="gameCanvas"
               ref={canvas}
               onClick={putBallPosition}
-            ></canvas>
+            />
             <div className="moveButtons">
-              <button onClick={buttonJumpLeft}>
-                <img src={arrowJumpLeft} alt="ArrowJumpLeft" />
-              </button>
-              <button onClick={buttonMoveLeft}>
-                <img src={arrowLeft} alt="ArrowLeft" />
-              </button>
-              <button onClick={buttonJump}>
-                <img src={arrowUp} alt="ArrowUp" />
-              </button>
-              <button onClick={buttonDown}>
-                <img src={arrowDown} alt="ArrowDown" />
-              </button>
-              <button onClick={buttonMoveRight}>
-                <img src={arrowRight} alt="ArrowRight" />
-              </button>
-              <button onClick={buttonJumpRight}>
-                <img src={arrowJumpRight} alt="ArrowJumpRight" />
-              </button>
+              <div ref={elementMoveButtons}>
+                <button className="moveButton" onClick={buttonJumpLeft}>
+                  <img src={arrowJumpLeft} alt="ArrowJumpLeft" />
+                </button>
+                <button className="moveButton" onClick={buttonMoveLeft}>
+                  <img src={arrowLeft} alt="ArrowLeft" />
+                </button>
+                <button className="moveButton" onClick={buttonJump}>
+                  <img src={arrowUp} alt="ArrowUp" />
+                </button>
+                <button className="moveButton" onClick={buttonDown}>
+                  <img src={arrowDown} alt="ArrowDown" />
+                </button>
+                <button className="moveButton" onClick={buttonMoveRight}>
+                  <img src={arrowRight} alt="ArrowRight" />
+                </button>
+                <button className="moveButton" onClick={buttonJumpRight}>
+                  <img src={arrowJumpRight} alt="ArrowJumpRight" />
+                </button>
+              </div>
             </div>
           </div>
           <div style={{ display: "none" }}>
