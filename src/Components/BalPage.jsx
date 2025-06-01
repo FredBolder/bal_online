@@ -83,6 +83,8 @@ let electricityCounter = 0;
 let elevatorCounter = 0;
 let explosionCounter = 0;
 let backData = [];
+let bgcolor;
+let fgcolor;
 let gameData = [];
 let gameInfo = {};
 gameInfo.elevators = [];
@@ -549,8 +551,14 @@ function BalPage() {
   }
 
   async function initLevel(n) {
+    let color = "";
     let data = [];
     let gd;
+    let h = -1;
+    let p1 = -1;
+    let w = -1;
+    let x = -1;
+    let y = -1;
 
     try {
       currentLevel = n;
@@ -558,7 +566,43 @@ function BalPage() {
       posX = -1;
       posY = -1;
       data = await getLevel(currentLevel);
-      gd = stringArrayToNumberArray(data);
+
+      // Colors
+      bgcolor = null;
+      bgcolor = [];
+      fgcolor = null;
+      fgcolor = [];
+      for (let i = 0; i < data.levelSettings.length; i++) {
+        const setting = data.levelSettings[i];
+        p1 = setting.indexOf(":");
+        if (p1 >= 0) {
+          const name = setting.slice(0, p1).toLowerCase().trim();
+          const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+          switch (name) {
+            case "$bgcolor":
+            case "$fgcolor":
+              if (values.length === 5) {
+                x = tryParseInt(values[0], -1);
+                y = tryParseInt(values[1], -1);
+                w = tryParseInt(values[2], -1);
+                h = tryParseInt(values[3], -1);
+                color = values[4];
+                if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
+                  if (name === "$bgcolor") {
+                    bgcolor.push({ x, y, w, h, color })
+                  } else {
+                    fgcolor.push({ x, y, w, h, color })
+                  }
+                }
+              }
+              break;
+            default:
+              break;
+          }
+        }
+      }
+
+      gd = stringArrayToNumberArray(data.levelData);
       backData = gd.backData;
       gameData = gd.gameData;
       laser = null;
@@ -960,7 +1004,7 @@ function BalPage() {
     currentLevel = 200;
     loadProgress();
     if (fred) {
-      currentLevel = 735; // 735
+      currentLevel = 737;
     }
     initLevel(currentLevel);
     updateScreen();
@@ -1020,7 +1064,9 @@ function BalPage() {
       elements,
       status,
       gameInfo,
-      wave2
+      wave2,
+      bgcolor,
+      fgcolor
     );
   }
 

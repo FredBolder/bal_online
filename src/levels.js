@@ -3,27 +3,45 @@ import { randomInt } from "./utils";
 const series1Start = 200;
 const series1End = 219;
 const series2Start = 700;
-const series2End = 735;
+const series2End = 737;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 760;
 
 async function loadFromFile(n) {
-  let data = [];
+  let levelData = [];
+  let levelSettings = [];
   const fn = `/Levels/${n}.dat`;
   try {
     const response = await fetch(fn);
     if (!response.ok) throw new Error(`Failed to load file: ${fn}`);
-    
+
     const d = await response.text();
-    data = d.split("\n").map(line => line.trim()).filter(line => line.length > 0);
-    
-    const lineLength = data[0].length;
-    if (!data.every(line => line.length === lineLength)) {
-      throw new Error("Inconsistent line lengths");
+    const data = d.split("\n");
+    for (let i = 0; i < data.length; i++) {
+      const line = data[i].trim();
+      if (line !== "") {
+        if (line.startsWith("$")) {
+          levelSettings.push(line);
+        } else {
+          levelData.push(line);
+        }
+      }
+    }
+
+    if (levelData.length > 0) {
+      const lineLength = levelData[0].length;
+      if (!levelData.every(line => line.length === lineLength)) {
+        throw new Error("Inconsistent line lengths");
+      }
+    } else {
+        throw new Error("Level is empty");
     }
   } catch (err) {
     console.error(err);
-    data = [
+    levelSettings = null;
+    levelSettings = [];
+    levelData = null;
+    levelData = [
       "11111111111111111111111111111111111111111",
       "1                                       1",
       "1   55555  5555   5555    555   5555    1",
@@ -35,19 +53,19 @@ async function loadFromFile(n) {
       "11111111111111111111111111111111111111111"
     ];
   }
-  return data;
+  return { levelSettings, levelData };
 }
 
 async function getLevel(n) {
-  let data = [];
+  let result = [];
 
-  if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) || 
-  (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= 990 && n <= 991)) {
-    data = await loadFromFile(n);
+  if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) ||
+    (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= 990 && n <= 991)) {
+    result = await loadFromFile(n);
   } else {
-    data = await loadFromFile(1000);
+    result = await loadFromFile(1000);
   }
-  return data;
+  return result;
 }
 
 function getRandomLevel(currentLevel) {

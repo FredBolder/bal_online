@@ -25,7 +25,9 @@ function drawLevel(
   elements,
   status,
   gameInfo,
-  wave
+  wave,
+  bgcolor,
+  fgcolor
 ) {
 
   function createLavaBitmap(size = 32) {
@@ -75,6 +77,30 @@ function drawLevel(
     return bmpCanvas;
   }
 
+  function getBgcolor(x, y, defaultValue) {
+    let result = defaultValue;
+    for (let i = 0; i < bgcolor.length; i++) {
+      const colorSetting = bgcolor[i];
+      if ((x >= colorSetting.x) && (y >= colorSetting.y) &&
+        (x <= colorSetting.x + colorSetting.w - 1) && (y <= colorSetting.y + colorSetting.h - 1)) {
+        result = colorSetting.color;
+      }
+    }
+    return result;
+  }
+
+  function getFgcolor(x, y, defaultValue) {
+    let result = defaultValue;
+    for (let i = 0; i < fgcolor.length; i++) {
+      const colorSetting = fgcolor[i];
+      if ((x >= colorSetting.x) && (y >= colorSetting.y) &&
+        (x <= colorSetting.x + colorSetting.w - 1) && (y <= colorSetting.y + colorSetting.h - 1)) {
+        result = colorSetting.color;
+      }
+    }
+    return result;
+  }
+
   function drawBall(color) {
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
   }
@@ -119,8 +145,8 @@ function drawLevel(
     }
   }
 
-  function drawBomb() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+  function drawBomb(x, y) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
     let factor = 0.1;
     d1 = w1 / 6;
     d2 = w1 / 2;
@@ -191,8 +217,8 @@ function drawLevel(
     drawLine(ctx, xc + d6, ymin + d5, xc, ymin + d7, color);
   }
 
-  function drawElectricity() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+  function drawElectricity(x, y) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
     d1 = Math.round(w1 * 0.06);
     d2 = Math.round(w1 * 0.28);
     d3 = Math.round(w1 * 0.14);
@@ -501,8 +527,8 @@ function drawLevel(
     }
   }
 
-  function drawLock() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+  function drawLock(x, y) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
     d1 = w1 / 4;
     d2 = w1 / 12;
     d3 = w1 / 10;
@@ -551,6 +577,17 @@ function drawLevel(
     drawBox(ctx, xmin, ymin, w1, w2, "white");
     drawLine(ctx, xmin, ymax, xc, ymin, "white");
     drawLine(ctx, xmax, ymax, xc, ymin, "white");
+  }
+
+  function drawPalmTreeTrunkPart() {
+    ctx.fillStyle = "brown";
+    ctx.beginPath();
+    ctx.moveTo(xmin, ymax);
+    ctx.lineTo(xmin + Math.round(w1 * 0.2), ymin);
+    ctx.lineTo(xmin + Math.round(w1 * 0.8), ymin);
+    ctx.lineTo(xmax, ymax);
+    ctx.closePath();
+    ctx.fill();
   }
 
   function drawPickaxe() {
@@ -647,13 +684,13 @@ function drawLevel(
     ctx.drawImage(bitmapWeakStone, xmin + (w1 / 4), ymin, w1 / 2, w2 / 2);
   }
 
-  function drawStone() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+  function drawStone(x, y) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
   }
 
-  function drawStoneTriangle90BottomLeft() {
+  function drawStoneTriangle90BottomLeft(x, y) {
     // Shape: |\, code: 15, G 
-    ctx.fillStyle = "#464646";
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
     ctx.moveTo(xmin - 1, ymax + 1);
     ctx.lineTo(xmin - 1, ymin - 1);
@@ -662,9 +699,9 @@ function drawLevel(
     ctx.fill();
   }
 
-  function drawStoneTriangle90BottomRight() {
+  function drawStoneTriangle90BottomRight(x, y) {
     // Shape: /|, code: 16, H 
-    ctx.fillStyle = "#464646";
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
     ctx.moveTo(xmin - 1, ymax + 1);
     ctx.lineTo(xmax + 1, ymin - 1);
@@ -673,9 +710,9 @@ function drawLevel(
     ctx.fill();
   }
 
-  function drawStoneTriangle90TopLeft() {
+  function drawStoneTriangle90TopLeft(x, y) {
     // Shape: |/, code: 17, I
-    ctx.fillStyle = "#464646";
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
     ctx.moveTo(xmin - 1, ymax + 1);
     ctx.lineTo(xmin - 1, ymin - 1);
@@ -684,9 +721,9 @@ function drawLevel(
     ctx.fill();
   }
 
-  function drawStoneTriangle90TopRight() {
+  function drawStoneTriangle90TopRight(x, y) {
     // Shape: \|, code: 18, J
-    ctx.fillStyle = "#464646";
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
     ctx.moveTo(xmin - 1, ymin - 1);
     ctx.lineTo(xmax + 1, ymin - 1);
@@ -842,6 +879,10 @@ function drawLevel(
       xc = Math.round((xmax + xmin) / 2);
       yc = Math.round((ymax + ymin) / 2);
 
+      const backgroundColor = getBgcolor(col, row, "");
+      if (backgroundColor !== "") {
+        drawFilledBox(ctx, xmin, ymin, w1, w2, backgroundColor);
+      }
       const bd = backData[row][col];
       const gd = gameData[row][col];
       switch (bd) {
@@ -866,7 +907,7 @@ function drawLevel(
           // empty
           break;
         case 1:
-          drawStone();
+          drawStone(col, row);
           break;
         case 2:
           drawBlueBall();
@@ -907,16 +948,19 @@ function drawLevel(
           drawTrapDoorHalfOpen();
           break;
         case 15:
-          drawStoneTriangle90BottomLeft();
+          drawStoneTriangle90BottomLeft(col, row);
           break;
         case 16:
-          drawStoneTriangle90BottomRight();
+          drawStoneTriangle90BottomRight(col, row);
           break;
         case 17:
-          drawStoneTriangle90TopLeft();
+          drawStoneTriangle90TopLeft(col, row);
           break;
         case 18:
-          drawStoneTriangle90TopRight();
+          drawStoneTriangle90TopRight(col, row);
+          break;
+        case 21:
+          drawPalmTreeTrunkPart();
           break;
         case 22:
           drawLava();
@@ -934,7 +978,7 @@ function drawLevel(
           drawKey();
           break;
         case 30:
-          drawLock();
+          drawLock(col, row);
           break;
         case 31:
           // Teleport - will be drawn later
@@ -946,7 +990,7 @@ function drawLevel(
           drawWeakStone();
           break;
         case 36:
-          drawBomb();
+          drawBomb(col, row);
           break;
         case 37:
           drawDetonator();
@@ -979,7 +1023,7 @@ function drawLevel(
           drawGameRotator();
           break;
         case 91:
-          drawElectricity();
+          drawElectricity(col, row);
           break;
         case 92:
           // Teleport - will be drawn later

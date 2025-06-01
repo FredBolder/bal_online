@@ -6,8 +6,6 @@ export function drawBox(canvas, x, y, width, height, color) {
 export function drawFilledBox(canvas, x, y, width, height, color) {
   canvas.fillStyle = color;
   canvas.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
-  canvas.strokeStyle = color;
-  canvas.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 }
 
 export function drawFilledCircle(canvas, xc, yc, radius, color) {

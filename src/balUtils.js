@@ -169,6 +169,9 @@ function charToNumber(c) {
     case "W":
       result = 20;
       break;
+    case "P":
+      result = 21;
+      break;
     case "V":
       result = 22;
       break;
@@ -371,6 +374,9 @@ function numberToChar(n) {
       break;
     case 20:
       result = "W";
+      break;
+    case 21:
+      result = "P";
       break;
     case 22:
       result = "V";
