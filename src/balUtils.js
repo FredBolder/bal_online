@@ -115,6 +115,7 @@ function charToNumber(c) {
   let result = 0;
 
   switch (c) {
+    case "0":
     case " ":
       result = 0;
       break;
@@ -306,6 +307,9 @@ function charToNumber(c) {
       break;
     case "φ":
       result = 112;
+      break;
+    case "ς":
+      result = 113;
       break;
     case "|":
       result = 1000;
@@ -513,6 +517,9 @@ function numberToChar(n) {
     case 112:
       result = "φ";
       break;
+    case 113:
+      result = "ς";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -694,7 +701,7 @@ export function checkFalling(backData, gameData, gameInfo) {
         if (
           // wall |\
           element2 === 15 && [2, 4, 8, 93, 94].includes(element1) &&
-          gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0
+          gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData)
         ) {
           result.update = true;
           if (element1 === 2) {
@@ -713,7 +720,7 @@ export function checkFalling(backData, gameData, gameInfo) {
         if (
           // wall /|
           element2 === 16 && [2, 4, 8, 93, 94].includes(element1) &&
-          gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0
+          gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData)
         ) {
           result.update = true;
           if (element1 === 2) {

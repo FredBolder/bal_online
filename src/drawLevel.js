@@ -108,7 +108,7 @@ function drawLevel(
   function drawBlueBall() {
     if (nicerGraphics) {
       if (gameInfo.hasDivingGlasses) {
-        ctx.drawImage(elements.elementDiving, xmin, ymin, w1, w2);
+        ctx.drawImage(elements.elementDiving, xmin - (w1 * 0.05), ymin, w1 * 1.1, w2);
       } else {
         if (status.gameOver) {
           ctx.drawImage(elements.elementSad, xmin, ymin, w1, w2);
@@ -581,13 +581,15 @@ function drawLevel(
 
   function drawPalmTreeTrunkPart() {
     ctx.fillStyle = "brown";
+    ctx.strokeStyle = "brown";
     ctx.beginPath();
-    ctx.moveTo(xmin, ymax);
+    ctx.moveTo(xmin, ymax + 0.5);
     ctx.lineTo(xmin + Math.round(w1 * 0.2), ymin);
     ctx.lineTo(xmin + Math.round(w1 * 0.8), ymin);
-    ctx.lineTo(xmax, ymax);
+    ctx.lineTo(xmax, ymax + 0.5);
     ctx.closePath();
     ctx.fill();
+    ctx.stroke();
   }
 
   function drawPickaxe() {
@@ -786,6 +788,69 @@ function drawLevel(
     ctx.lineTo(pt2.x, pt2.y);
     ctx.lineTo(pt3.x, pt3.y);
     ctx.lineTo(pt1.x, pt1.y);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawWaterSurfaceRight(x, y) {
+    let fg;
+    let pt1 = { x: 0, y: 0 };
+    let pt2 = { x: 0, y: 0 };
+    let pt3 = { x: 0, y: 0 };
+    let waterLevel1 = ymin + 1;
+    let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
+
+    pt1.x = xmin;
+    pt1.y = waterLevel2;
+    switch (wave) {
+      case 1:
+        pt2.x = (xmin + xc) / 2;
+        break;
+      case 2:
+        pt2.x = xc;
+        break;
+      case 3:
+        pt2.x = (xc + xmax) / 2;
+        break;
+      case 4:
+        pt2.x = xmax;
+        break;
+      default:
+        pt2.x = xc;
+        break;
+    }
+    pt2.y = waterLevel1;
+    pt3.x = xmax;
+    pt3.y = waterLevel2;
+    // Wave
+    ctx.fillStyle = "rgb(0, 0, 90)";
+    ctx.strokeStyle = "rgb(0, 0, 90)";
+    ctx.beginPath();
+    ctx.moveTo(pt1.x, pt1.y);
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.lineTo(pt3.x, pt3.y);
+    ctx.lineTo(pt1.x, pt1.y);
+    ctx.fill();
+    ctx.stroke();
+    // Water
+    ctx.fillStyle = "rgb(0, 0, 90)";
+    ctx.strokeStyle = "rgb(0, 0, 90)";
+    ctx.beginPath();
+    ctx.moveTo(xmin, waterLevel2);
+    ctx.lineTo(xmax + 0.5, waterLevel2);
+    ctx.lineTo(xmax + 0.5, ymax);
+    ctx.lineTo(xmin, waterLevel2);
+    ctx.fill();
+    ctx.stroke();
+    // Stone or sand
+    fg = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = fg;
+    ctx.strokeStyle = fg;
+    ctx.beginPath();
+    ctx.moveTo(xmin, waterLevel2);
+    ctx.lineTo(xmax, ymax);
+    ctx.lineTo(xmin, ymax);
+    ctx.lineTo(xmin, waterLevel2);
     ctx.fill();
     ctx.stroke();
   }
@@ -1083,6 +1148,9 @@ function drawLevel(
           break;
         case 112:
           drawForceLeft();
+          break;
+        case 113:
+          drawWaterSurfaceRight(col, row);
           break;
         case 1000:
           // For manual only (empty)
