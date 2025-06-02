@@ -726,3 +726,15 @@ tr:nth-child(even) td {
         margin-right: 0.5rem;
     }
 }
+
+@media (orientation: portrait) {
+    .canvasAndButtons {
+        height: 50vh;
+    }
+}
+
+@media (orientation: landscape) {
+    .canvasAndButtons {
+        height: 70vh;
+    }
+}

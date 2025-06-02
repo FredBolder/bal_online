@@ -1815,7 +1815,7 @@ export function moveElevators(arr, elevators, redBalls) {
           arr[y + 1][x] = arr[y][x];
           arr[y][x] = 0;
           elevators[i].y = y + 1;
-          for (let j = arr.length - 2; j >= 0; j--) {
+          for (let j = y; j >= 0; j--) {
             if (arr[j + 1][x] === 0 && [2, 4, 8, 93, 94].includes(arr[j][x])) {
               if (arr[j][x] === 2) {
                 result.playerX = x;
