@@ -790,7 +790,7 @@ function BalPage() {
     } else {
       switch (e.key) {
         case "p":
-          initLevel(727); // 991
+          initLevel(736); // 991
           break;
         case "ArrowLeft":
         case "a":
