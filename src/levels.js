@@ -1,9 +1,9 @@
 import { randomInt } from "./utils";
 
 const series1Start = 200;
-const series1End = 219;
+const series1End = 220;
 const series2Start = 700;
-const series2End = 738;
+const series2End = 739;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 760;
 

@@ -763,6 +763,8 @@ function BalPage() {
         case "P":
           if (e.altKey) {
             initLevel(currentLevel - 1);
+          } else {
+            initLevel(220); // Levels made by Panagiotis
           }
           break;
         case "R":
@@ -788,7 +790,6 @@ function BalPage() {
     } else {
       switch (e.key) {
         case "p":
-        case "P":
           initLevel(727); // 991
           break;
         case "ArrowLeft":
@@ -1095,33 +1096,39 @@ function BalPage() {
   }
 
   function putBallPosition(e) {
-    if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
-      if (!gameData || gameData.length < 1) {
-        return false;
+    if (!gameData || gameData.length < 1) {
+      return false;
+    }
+
+    const rows = gameData.length;
+    const columns = gameData[0].length;
+
+    let size1 = canvas.current.width / columns;
+    let size2 = canvas.current.height / rows;
+
+    if (size2 < size1) {
+      size1 = size2;
+    }
+    size1 = Math.trunc(size1);
+    let gameWidth = columns * size1;
+    let gameHeight = rows * size1;
+    let leftMargin = Math.trunc((canvas.current.width - gameWidth) / 2);
+    let topMargin = Math.trunc(canvas.current.height - gameHeight);
+
+    let rect = canvas.current.getBoundingClientRect();
+    let x = e.clientX - rect.left - leftMargin;
+    let y = e.clientY - rect.top - topMargin;
+
+    let squareX = Math.floor(x / size1);
+    let squareY = Math.floor(y / size1);
+
+    if (squareX >= 0 && squareX < columns && squareY >= 0 && squareY < rows) {
+      if (!e.altKey && e.shiftKey && e.ctrlKey) {
+        if (gameData[squareY][squareX] === 24) {
+          alert("No, this is not The Net! The π indicates that this level is made by Panagiotis.");
+        }
       }
-      const rows = gameData.length;
-      const columns = gameData[0].length;
-
-      let size1 = canvas.current.width / columns;
-      let size2 = canvas.current.height / rows;
-
-      if (size2 < size1) {
-        size1 = size2;
-      }
-      size1 = Math.trunc(size1);
-      let gameWidth = columns * size1;
-      let gameHeight = rows * size1;
-      let leftMargin = Math.trunc((canvas.current.width - gameWidth) / 2);
-      let topMargin = Math.trunc(canvas.current.height - gameHeight);
-
-      let rect = canvas.current.getBoundingClientRect();
-      let x = e.clientX - rect.left - leftMargin;
-      let y = e.clientY - rect.top - topMargin;
-
-      let squareX = Math.floor(x / size1);
-      let squareY = Math.floor(y / size1);
-
-      if (squareX >= 0 && squareX < columns && squareY >= 0 && squareY < rows) {
+      if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
         if (gameData[squareY][squareX] === 0) {
           gameData[posY][posX] = 0;
           posX = squareX;

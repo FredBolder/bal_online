@@ -583,13 +583,18 @@ function drawLevel(
     ctx.fillStyle = "brown";
     ctx.strokeStyle = "brown";
     ctx.beginPath();
-    ctx.moveTo(xmin, ymax + 0.5);
-    ctx.lineTo(xmin + Math.round(w1 * 0.2), ymin);
-    ctx.lineTo(xmin + Math.round(w1 * 0.8), ymin);
-    ctx.lineTo(xmax, ymax + 0.5);
+    ctx.moveTo(xmin + Math.round(w1 * 0.2), ymax + 0.5);
+    ctx.lineTo(xmin, ymin);
+    ctx.lineTo(xmax, ymin);
+    ctx.lineTo(xmin + Math.round(w1 * 0.8), ymax + 0.5);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
+  }
+
+  function drawPanagiotis() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
+    drawText(ctx, xc, yc, "π", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
   function drawPickaxe() {
@@ -1029,6 +1034,9 @@ function drawLevel(
           break;
         case 22:
           drawLava();
+          break;
+        case 24:
+          drawPanagiotis();
           break;
         case 26:
           drawDivingGlasses("gray");

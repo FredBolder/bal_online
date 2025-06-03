@@ -179,6 +179,9 @@ function charToNumber(c) {
     case "w":
       result = 23;
       break;
+    case "@":
+      result = 24;
+      break;
     case "=":
       result = 25;
       break;
@@ -387,6 +390,9 @@ function numberToChar(n) {
       break;
     case 23:
       result = "w";
+      break;
+    case 24:
+      result = "@";
       break;
     case 25:
       result = "=";
