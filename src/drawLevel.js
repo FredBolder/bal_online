@@ -108,7 +108,7 @@ function drawLevel(
   function drawBlueBall() {
     if (nicerGraphics) {
       if (gameInfo.hasDivingGlasses) {
-        ctx.drawImage(elements.elementDiving, xmin - (w1 * 0.05), ymin, w1 * 1.1, w2);
+        ctx.drawImage(elements.elementDiving, xmin, ymin, w1, w2);
       } else {
         if (status.gameOver) {
           ctx.drawImage(elements.elementSad, xmin, ymin, w1, w2);
