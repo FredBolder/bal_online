@@ -7,6 +7,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import MessageBox from './MessageBox';
 import {
   stringArrayToNumberArray,
+  checkElevatorInOuts,
   checkFalling,
   moveLeft,
   moveRight,
@@ -73,7 +74,7 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let ctx;
 let currentLevel = 200;
 let fishCounter = 0;
@@ -87,6 +88,7 @@ let bgcolor;
 let fgcolor;
 let gameData = [];
 let gameInfo = {};
+gameInfo.elevatorInOuts = [];
 gameInfo.elevators = [];
 gameInfo.forces = [];
 gameInfo.horizontalElevators = [];
@@ -435,6 +437,15 @@ function BalPage() {
         if (gameInfo.horizontalElevators.length > 0) {
           update = true;
         }
+      }
+
+      info = checkElevatorInOuts(gameData, gameInfo);
+      if (info.playerX !== -1) {
+        posX = info.playerX;
+        posY = info.playerY;
+      }
+      if (info.update) {
+        update = true;
       }
 
       if (redCounter > 0) {

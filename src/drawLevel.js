@@ -244,6 +244,24 @@ function drawLevel(
     ctx.fill();
   }
 
+  function ElevatorEntranceAndExit(x, y) {
+    const color = getFgcolor(x, y, "white");
+    d1 = w1 / 3;
+    d2 = w1 / 10;
+    d3 = w1 / 8;
+    d4 = w1 / 8;
+    drawLine(ctx, xc, ymin, xmax, ymin, color);
+    drawLine(ctx, xmax, ymin, xmax, ymax, color);
+    drawLine(ctx, xmax, ymax, xc, ymax, color);
+    drawLine(ctx, xc, ymin, xc, ymin + d4, color);
+    drawLine(ctx, xc, ymax - d4, xc, ymax, color);
+    drawLine(ctx, xc - d1, yc, xc + d1, yc, color);
+    drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, color);
+    drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, color);
+    drawLine(ctx, xc + d1, yc, xc + d3, yc - d2, color);
+    drawLine(ctx, xc + d1, yc, xc + d3, yc + d2, color);
+  }
+
   function drawElevatorLeftRight() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
     d1 = w1 / 3;
@@ -1070,6 +1088,9 @@ function drawLevel(
           break;
         case 38:
           drawExplosion();
+          break;
+        case 39:
+          ElevatorEntranceAndExit(col, row);
           break;
         case 82:
           drawGrayBall(1);

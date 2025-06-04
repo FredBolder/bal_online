@@ -8,6 +8,7 @@ function canMoveAlone(n) {
 }
 
 export function initGameInfo(info) {
+  info.elevatorInOuts = [];
   info.elevators = [];
   info.forces = [];
   info.horizontalElevators = [];
@@ -217,6 +218,9 @@ function charToNumber(c) {
       break;
     case "*":
       result = 38;
+      break;
+    case "E":
+      result = 39;
       break;
     case "o":
       result = 82;
@@ -429,6 +433,9 @@ function numberToChar(n) {
       break;
     case 38:
       result = "*";
+      break;
+    case 39:
+      result = "E";
       break;
     case 82:
       result = "o";
@@ -678,6 +685,134 @@ export function checkDetonator(arr, x, y) {
   }
   return info;
 }
+
+export function checkElevatorInOuts(arr, gameInfo) {
+  let data1 = 0;
+  let data2 = 0;
+  let data3 = 0;
+  let data4 = 0;
+  let data5 = 0;
+  let info = { updated: false, playerX: -1, playerY: -1 };
+
+  for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
+    const elevatorInOut = gameInfo.elevatorInOuts[i];
+    data1 = arr[elevatorInOut.y][elevatorInOut.x + 1];
+    data2 = arr[elevatorInOut.y - 1][elevatorInOut.x];
+    data3 = arr[elevatorInOut.y - 1][elevatorInOut.x + 1];
+    data4 = arr[elevatorInOut.y - 1][elevatorInOut.x - 1];
+    data5 = arr[elevatorInOut.y][elevatorInOut.x - 1];
+    elevatorInOut.player = false;
+    switch (elevatorInOut.status) {
+      case 0:
+        if ([6, 7, 106, 107].includes(data1)) {
+          if ([2, 4, 8, 93, 94].includes(data2) && (data3 === 0) && (elevatorInOut.status === 0)) {
+            // Enter from the left
+            info.updated = true;
+            arr[elevatorInOut.y - 1][elevatorInOut.x + 1] = data2;
+            arr[elevatorInOut.y - 1][elevatorInOut.x] = 0;
+            if (data2 === 2) {
+              elevatorInOut.player = true;
+              info.playerX = elevatorInOut.x + 1;
+              info.playerY = elevatorInOut.y - 1;
+            }
+            if ([8, 93, 94].includes(data2)) {
+              updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x + 1, elevatorInOut.y - 1);
+            }
+            elevatorInOut.status = 10;
+          }
+          if ([2, 4, 8, 93, 94].includes(data3) && (data2 === 0) && (elevatorInOut.status === 0)) {
+            // Exit to the left
+            info.updated = true;
+            arr[elevatorInOut.y - 1][elevatorInOut.x] = data3;
+            arr[elevatorInOut.y - 1][elevatorInOut.x + 1] = 0;
+            if (data3 === 2) {
+              elevatorInOut.player = true;
+              info.playerX = elevatorInOut.x;
+              info.playerY = elevatorInOut.y - 1;
+            }
+            if ([8, 93, 94].includes(data3)) {
+              updateObject(gameInfo.redBalls, elevatorInOut.x + 1, elevatorInOut.y - 1, elevatorInOut.x, elevatorInOut.y - 1);
+            }
+            elevatorInOut.status = 1;
+          }
+        }
+        if ([6, 7, 106, 107].includes(data5)) {
+          if ([2, 4, 8, 93, 94].includes(data2) && (data4 === 0) && (elevatorInOut.status === 0)) {
+            // Enter from the right
+            info.updated = true;
+            arr[elevatorInOut.y - 1][elevatorInOut.x - 1] = data2;
+            arr[elevatorInOut.y - 1][elevatorInOut.x] = 0;
+            if (data2 === 2) {
+              elevatorInOut.player = true;
+              info.playerX = elevatorInOut.x - 1;
+              info.playerY = elevatorInOut.y - 1;
+            }
+            if ([8, 93, 94].includes(data2)) {
+              updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x - 1, elevatorInOut.y - 1);
+            }
+            elevatorInOut.status = 10;
+          }
+          if ([2, 4, 8, 93, 94].includes(data4) && (data2 === 0) && (elevatorInOut.status === 0)) {
+            // Exit to the right
+            info.updated = true;
+            arr[elevatorInOut.y - 1][elevatorInOut.x] = data4;
+            arr[elevatorInOut.y - 1][elevatorInOut.x - 1] = 0;
+            if (data4 === 2) {
+              elevatorInOut.player = true;
+              info.playerX = elevatorInOut.x;
+              info.playerY = elevatorInOut.y - 1;
+            }
+            if ([8, 93, 94].includes(data4)) {
+              updateObject(gameInfo.redBalls, elevatorInOut.x - 1, elevatorInOut.y - 1, elevatorInOut.x, elevatorInOut.y - 1);
+            }
+            elevatorInOut.status = 2;
+          }
+        }
+        break;
+      case 1:
+        if (data4 === 0) {
+          // Further to the left
+          info.updated = true;
+          arr[elevatorInOut.y - 1][elevatorInOut.x - 1] = arr[elevatorInOut.y - 1][elevatorInOut.x];
+          arr[elevatorInOut.y - 1][elevatorInOut.x] = 0;
+          if (arr[elevatorInOut.y - 1][elevatorInOut.x - 1] === 2) {
+            info.playerX = elevatorInOut.x - 1;
+            info.playerY = elevatorInOut.y - 1;
+          }
+          if ([8, 93, 94].includes(arr[elevatorInOut.y - 1][elevatorInOut.x - 1])) {
+            updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x - 1, elevatorInOut.y - 1);
+          }
+        }
+        elevatorInOut.status = 10;
+        break;
+      case 2:
+        if (data3 === 0) {
+          // Further to the right
+          info.updated = true;
+          arr[elevatorInOut.y - 1][elevatorInOut.x + 1] = arr[elevatorInOut.y - 1][elevatorInOut.x];
+          arr[elevatorInOut.y - 1][elevatorInOut.x] = 0;
+          if (arr[elevatorInOut.y - 1][elevatorInOut.x + 1] === 2) {
+            info.playerX = elevatorInOut.x + 1;
+            info.playerY = elevatorInOut.y - 1;
+          }
+          if ([8, 93, 94].includes(arr[elevatorInOut.y - 1][elevatorInOut.x + 1])) {
+            updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x + 1, elevatorInOut.y - 1);
+          }
+        }
+        elevatorInOut.status = 10;
+        break;
+      case 10:
+        if (![6, 7, 106, 107].includes(data1) && ![6, 7, 106, 107].includes(data5)) {
+          elevatorInOut.status = 0;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  return info;
+}
+
 
 export function checkFalling(backData, gameData, gameInfo) {
   let forceUp = false;
@@ -1431,6 +1566,7 @@ export function moveDownRight(
 export function getGameInfo(backData, gameData) {
   let result = {};
   result.blueBall = { x: -1, y: -1 };
+  result.elevatorInOuts = [];
   result.elevators = [];
   result.forces = [];
   result.greenBalls = 0;
@@ -1463,6 +1599,9 @@ export function getGameInfo(backData, gameData) {
           break;
         case 37:
           result.detonator = { x: j, y: i };
+          break;
+        case 39:
+          result.elevatorInOuts.push({ x: j, y: i, player: false, status: 0 });
           break;
         case 8:
         case 93:

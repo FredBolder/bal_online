@@ -987,6 +987,7 @@ describe("balUtils", () => {
   ];
   let expectedOutput9a = {
     blueBall: { x: 3, y: 3 },
+    elevatorInOuts: [],
     elevators: [],
     forces: [],
     greenBalls: 2,
@@ -1027,6 +1028,7 @@ describe("balUtils", () => {
   ];
   let expectedOutput9b = {
     blueBall: { x: 3, y: 3 },
+    elevatorInOuts: [],
     elevators: [],
     forces: [],
     greenBalls: 4,
@@ -1067,6 +1069,7 @@ describe("balUtils", () => {
   ];
   let expectedOutput9c = {
     blueBall: { x: 3, y: 3 },
+    elevatorInOuts: [],
     elevators: [],
     forces: [],
     greenBalls: 8,
@@ -1106,6 +1109,7 @@ describe("balUtils", () => {
   ];
   let expectedOutput9d = {
     blueBall: { x: 4, y: 5 },
+    elevatorInOuts: [],
     elevators: [
       { x: 8, y: 2, up: false },
       { x: 2, y: 5, up: true },
@@ -1146,6 +1150,7 @@ describe("balUtils", () => {
   ];
   let expectedOutput9e = {
     blueBall: { x: 3, y: 3 },
+    elevatorInOuts: [],
     elevators: [],
     forces: [],
     greenBalls: 2,
@@ -2492,6 +2497,7 @@ describe("balUtils", () => {
   ];
   let gameInfo18a = {
     blueBall: { x: 2, y: 4 },
+    elevatorInOuts: [],
     elevators: [],
     forces: [],
     greenBalls: 1,
@@ -2551,6 +2557,7 @@ describe("balUtils", () => {
   ];
   let gameInfo18b = {
     blueBall: { x: 5, y: 5 },
+    elevatorInOuts: [],
     elevators: [{ x: 1, y: 4, up: true }],
     forces: [],
     greenBalls: 1,
