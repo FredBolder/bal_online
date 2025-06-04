@@ -997,6 +997,7 @@ describe("balUtils", () => {
       { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
     ],
     yellowBalls: [],
+    orangeBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
     hasMirror: false,
@@ -1038,6 +1039,7 @@ describe("balUtils", () => {
       { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
     ],
     yellowBalls: [],
+    orangeBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
     hasMirror: false,
@@ -1076,6 +1078,7 @@ describe("balUtils", () => {
     horizontalElevators: [],
     redBalls: [],
     yellowBalls: [],
+    orangeBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
     hasMirror: false,
@@ -1119,6 +1122,7 @@ describe("balUtils", () => {
     horizontalElevators: [],
     redBalls: [],
     yellowBalls: [{ x: 1, y: 4, direction: "none" }],
+    orangeBalls: [],
     detonator: { x: 8, y: 5 },
     teleports: [],
     hasMirror: false,
@@ -1160,6 +1164,7 @@ describe("balUtils", () => {
       { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
     ],
     yellowBalls: [],
+    orangeBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
     hasMirror: false,
@@ -1329,6 +1334,7 @@ describe("balUtils", () => {
       { x: 6, y: 2, up: false },
       { x: 3, y: 5, up: true },
     ],
+    [],
     []
   );
   it("moveElevators A", () => {
@@ -1370,6 +1376,7 @@ describe("balUtils", () => {
       { x: 6, y: 2, up: false },
       { x: 3, y: 5, up: true },
     ],
+    [],
     []
   );
   it("moveElevators B", () => {
@@ -1407,7 +1414,7 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
   let elevatorsInput12a = [{ x: 5, y: 6, right: false }];
-  let info12a = moveHorizontalElevators(input12a, elevatorsInput12a, []);
+  let info12a = moveHorizontalElevators(input12a, elevatorsInput12a, [], []);
   it("moveHorizontalElevators A", () => {
     expect(JSON.stringify(input12a)).toBe(JSON.stringify(expectedOutput12a));
   });
@@ -1447,7 +1454,7 @@ describe("balUtils", () => {
     [1, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1],
   ];
-  let info12b = moveHorizontalElevators(input12b, elevatorsInput12b, []);
+  let info12b = moveHorizontalElevators(input12b, elevatorsInput12b, [], []);
   it("moveHorizontalElevators B", () => {
     expect(JSON.stringify(input12b)).toBe(JSON.stringify(expectedOutput12b));
   });
@@ -1504,7 +1511,8 @@ describe("balUtils", () => {
   let info12c = moveHorizontalElevators(
     input12c,
     elevatorsInput12c,
-    redInput12c
+    redInput12c,
+    []
   );
   it("moveHorizontalElevators C", () => {
     expect(JSON.stringify(input12c)).toBe(JSON.stringify(expectedOutput12c));
@@ -2507,6 +2515,7 @@ describe("balUtils", () => {
       { x: 3, y: 2 },
     ],
     yellowBalls: [{ x: 1, y: 3, direction: "down" }],
+    orangeBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
   };
@@ -2564,6 +2573,7 @@ describe("balUtils", () => {
     horizontalElevators: [],
     redBalls: [],
     yellowBalls: [],
+    orangeBalls: [],
     detonator: { x: -1, y: -1 },
     teleports: [],
   };

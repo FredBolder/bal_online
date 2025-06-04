@@ -1,10 +1,11 @@
 import { randomInt } from "./utils";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force";
 import { movePurpleBar } from "./purpleBar";
+import { moveOrangeBallInDirection } from "./orangeBalls"
 
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 82, 84, 85, 86, 98, 109, 110, 111, 112].includes(n);
+  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112].includes(n);
 }
 
 export function initGameInfo(info) {
@@ -15,6 +16,7 @@ export function initGameInfo(info) {
   info.greenBalls = 0;
   info.redBalls = [];
   info.yellowBalls = [];
+  info.orangeBalls = [];
   info.detonator = { x: -1, y: -1 };
   info.teleports = [];
   info.hasMirror = false;
@@ -221,6 +223,9 @@ function charToNumber(c) {
       break;
     case "E":
       result = 39;
+      break;
+    case "O":
+      result = 40;
       break;
     case "o":
       result = 82;
@@ -436,6 +441,9 @@ function numberToChar(n) {
       break;
     case 39:
       result = "E";
+      break;
+    case 40:
+      result = "O";
       break;
     case 82:
       result = "o";
@@ -816,6 +824,7 @@ export function checkElevatorInOuts(arr, gameInfo) {
 
 export function checkFalling(backData, gameData, gameInfo) {
   let forceUp = false;
+  let idx = -1;
   let result = {};
   result.update = false;
   result.ballX = -1;
@@ -827,7 +836,7 @@ export function checkFalling(backData, gameData, gameInfo) {
       let element1 = gameData[i][j];
       let element2 = gameData[i + 1][j];
 
-      if ((element2 === 22) && ([2, 4, 8, 93, 94].includes(element1))) {
+      if ((element2 === 22) && ([2, 4, 8, 9, 40, 93, 94].includes(element1))) {
         // lava
         result.update = true;
         if (element1 === 2) {
@@ -836,12 +845,36 @@ export function checkFalling(backData, gameData, gameInfo) {
           result.sound = 1;
         }
         gameData[i][j] = 0;
+        switch (element1) {
+          case 8:
+          case 93:
+          case 94:
+            idx = findElementByCoordinate(j, i, gameInfo.redBalls);
+            if (idx >= 0) {
+              gameInfo.redBalls.splice(idx, 1);
+            }
+            break;
+          case 9:
+            idx = findElementByCoordinate(j, i, gameInfo.yellowBalls);
+            if (idx >= 0) {
+              gameInfo.yellowBalls.splice(idx, 1);
+            }
+            break;
+          case 40:
+            idx = findElementByCoordinate(j, i, gameInfo.orangeBalls);
+            if (idx >= 0) {
+              gameInfo.orangeBalls.splice(idx, 1);
+            }
+            break;
+          default:
+            break;
+        }
       }
 
       if (j < gameData[i].length - 1) {
         if (
           // wall |\
-          element2 === 15 && [2, 4, 8, 93, 94].includes(element1) &&
+          element2 === 15 && [2, 4, 8, 40, 93, 94].includes(element1) &&
           gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData)
         ) {
           result.update = true;
@@ -852,6 +885,9 @@ export function checkFalling(backData, gameData, gameInfo) {
           if (isRedBall(element1)) {
             updateObject(gameInfo.redBalls, j, i, j + 1, i);
           }
+          if (element1 === 40) {
+            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "rightDown", true);
+          }
           gameData[i][j + 1] = gameData[i][j];
           gameData[i][j] = 0;
         }
@@ -860,7 +896,7 @@ export function checkFalling(backData, gameData, gameInfo) {
       if (j >= 1) {
         if (
           // wall /|
-          element2 === 16 && [2, 4, 8, 93, 94].includes(element1) &&
+          element2 === 16 && [2, 4, 8, 40, 93, 94].includes(element1) &&
           gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData)
         ) {
           result.update = true;
@@ -870,6 +906,9 @@ export function checkFalling(backData, gameData, gameInfo) {
           }
           if (isRedBall(element1)) {
             updateObject(gameInfo.redBalls, j, i, j - 1, i);
+          }
+          if (element1 === 40) {
+            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "leftDown", true);
           }
           gameData[i][j - 1] = gameData[i][j];
           gameData[i][j] = 0;
@@ -893,7 +932,7 @@ export function checkFalling(backData, gameData, gameInfo) {
           !inWater(j, i, backData) &&
           !forceUp
         ) ||
-          ((element1 === 4) && !forceUp))
+          (((element1 === 4) || (element1 === 40)) && !forceUp))
       ) {
         result.update = true;
         if (element1 === 2) {
@@ -902,6 +941,9 @@ export function checkFalling(backData, gameData, gameInfo) {
         }
         if (isRedBall(element1)) {
           updateObject(gameInfo.redBalls, j, i, j, i + 1);
+        }
+        if (element1 === 40) {
+          moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
         }
         if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
           result.sound = 1;
@@ -983,6 +1025,9 @@ export function moveLeft(backData, gameData, x, y, gameInfo) {
           switch (row[x - 2]) {
             case 9:
               updateYellow(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
+              break;
+            case 40:
+              moveOrangeBallInDirection(gameInfo.orangeBalls, x - 1, y, "left", true);
               break;
             case 82:
               row[x - 2] = 83;
@@ -1131,6 +1176,9 @@ export function moveRight(
           switch (row[x + 2]) {
             case 9:
               updateYellow(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
+              break;
+            case 40:
+              moveOrangeBallInDirection(gameInfo.orangeBalls, x + 1, y, "right", true);
               break;
             case 82:
               row[x + 2] = 83;
@@ -1573,6 +1621,7 @@ export function getGameInfo(backData, gameData) {
   result.horizontalElevators = [];
   result.redBalls = [];
   result.yellowBalls = [];
+  result.orangeBalls = [];
   result.detonator = { x: -1, y: -1 };
   result.teleports = [];
   result.hasMirror = false;
@@ -1652,6 +1701,15 @@ export function getGameInfo(backData, gameData) {
             direction: "none"
           };
           result.yellowBalls.push(yellowBall);
+          break;
+        }
+        case 40: {
+          let orangeBall = {
+            x: j,
+            y: i,
+            direction: "none"
+          };
+          result.orangeBalls.push(orangeBall);
           break;
         }
         case 31:
@@ -1879,7 +1937,7 @@ export function checkTrapDoors(gameData, gameInfo) {
   return result;
 }
 
-export function moveElevators(arr, elevators, redBalls) {
+export function moveElevators(arr, elevators, redBalls, orangeBalls) {
   let result = {};
   result.playerX = -1; // Set to new position if player is moved
   result.playerY = -1; // Set to new position if player is moved
@@ -1898,7 +1956,7 @@ export function moveElevators(arr, elevators, redBalls) {
         emptyUp = j;
       }
       if (emptyUp === -1) {
-        if (![2, 4, 8, 93, 94, 6, 106].includes(arr[j][elevators[i].x])) {
+        if (![2, 4, 8, 40, 93, 94, 6, 106].includes(arr[j][elevators[i].x])) {
           upPossible = false;
         }
       }
@@ -1947,6 +2005,9 @@ export function moveElevators(arr, elevators, redBalls) {
               case 94:
                 updateObject(redBalls, x, j + 1, x, j);
                 break;
+              case 40:
+                moveOrangeBallInDirection(orangeBalls, x, j + 1, "up", false);
+                break;
               default:
                 break;
             }
@@ -1961,13 +2022,16 @@ export function moveElevators(arr, elevators, redBalls) {
           arr[y][x] = 0;
           elevators[i].y = y + 1;
           for (let j = y; j >= 0; j--) {
-            if (arr[j + 1][x] === 0 && [2, 4, 8, 93, 94].includes(arr[j][x])) {
+            if (arr[j + 1][x] === 0 && [2, 4, 8, 40, 93, 94].includes(arr[j][x])) {
               if (arr[j][x] === 2) {
                 result.playerX = x;
                 result.playerY = j + 1;
               }
               if (isRedBall(arr[j][x])) {
                 updateObject(redBalls, x, j, x, j + 1);
+              }
+              if (arr[j][x] === 40) {
+                moveOrangeBallInDirection(orangeBalls, x, j, "down", false);
               }
               arr[j + 1][x] = arr[j][x];
               arr[j][x] = 0;
@@ -1980,7 +2044,7 @@ export function moveElevators(arr, elevators, redBalls) {
   return result;
 }
 
-export function moveHorizontalElevators(arr, elevators, redBalls) {
+export function moveHorizontalElevators(arr, elevators, redBalls, orangeBalls) {
   let result = {};
   let stop = false;
 
@@ -2014,9 +2078,12 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
         elevators[i].x = x + 1;
         stop = false;
         for (let j = y - 1; j >= 0 && !stop; j--) {
-          if ([2, 4, 8, 93, 94].includes(arr[j][x]) && arr[j][x + 1] === 0) {
+          if ([2, 4, 8, 40, 93, 94].includes(arr[j][x]) && arr[j][x + 1] === 0) {
             if (isRedBall(arr[j][x])) {
               updateObject(redBalls, x, j, x + 1, j);
+            }
+            if (arr[j][x] === 40) {
+                moveOrangeBallInDirection(orangeBalls, x, j, "right", false);
             }
             if (arr[j][x] === 2) {
               result.playerX = x + 1;
@@ -2037,9 +2104,12 @@ export function moveHorizontalElevators(arr, elevators, redBalls) {
         elevators[i].x = x - 1;
         stop = false;
         for (let j = y - 1; j >= 0 && !stop; j--) {
-          if ([2, 4, 8, 93, 94].includes(arr[j][x]) && arr[j][x - 1] === 0) {
+          if ([2, 4, 8, 40, 93, 94].includes(arr[j][x]) && arr[j][x - 1] === 0) {
             if (isRedBall(arr[j][x])) {
               updateObject(redBalls, x, j, x - 1, j);
+            }
+            if (arr[j][x] === 40) {
+                moveOrangeBallInDirection(orangeBalls, x, j, "left", false);
             }
             if (arr[j][x] === 2) {
               result.playerX = x - 1;

@@ -244,7 +244,7 @@ function drawLevel(
     ctx.fill();
   }
 
-  function ElevatorEntranceAndExit(x, y) {
+  function drawElevatorEntranceAndExit(x, y) {
     const color = getFgcolor(x, y, "white");
     d1 = w1 / 3;
     d2 = w1 / 10;
@@ -595,6 +595,14 @@ function drawLevel(
     drawBox(ctx, xmin, ymin, w1, w2, "white");
     drawLine(ctx, xmin, ymax, xc, ymin, "white");
     drawLine(ctx, xmax, ymax, xc, ymin, "white");
+  }
+
+  function drawOrangeBall() {
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementOrange, xmin, ymin, w1, w2);
+    } else {
+      drawBall("orange");
+    }
   }
 
   function drawPalmTreeTrunkPart() {
@@ -1090,7 +1098,10 @@ function drawLevel(
           drawExplosion();
           break;
         case 39:
-          ElevatorEntranceAndExit(col, row);
+          drawElevatorEntranceAndExit(col, row);
+          break;
+        case 40:
+          drawOrangeBall();
           break;
         case 82:
           drawGrayBall(1);

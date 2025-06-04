@@ -33,6 +33,7 @@ import {
   findElementByCoordinate,
 } from "../balUtils.js";
 import { checkForces } from "../force";
+import { moveOrangeBalls } from "../orangeBalls";
 
 import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
@@ -64,6 +65,7 @@ import imgLightBlue from "../Images/light_blue_ball.svg";
 import imgRed from "../Images/red_ball.svg";
 import imgGray from "../Images/gray_ball.svg";
 import imgGreen from "../Images/green_ball.svg";
+import imgOrange from "../Images/orange_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
 import imgWhite from "../Images/white_ball.svg";
 import imgYellow from "../Images/yellow_ball.svg";
@@ -74,7 +76,7 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let ctx;
 let currentLevel = 200;
 let fishCounter = 0;
@@ -95,6 +97,7 @@ gameInfo.horizontalElevators = [];
 gameInfo.greenBalls = 0;
 gameInfo.redBalls = [];
 gameInfo.yellowBalls = [];
+gameInfo.orangeBalls = [];
 gameInfo.detonator = { x: -1, y: -1 };
 gameInfo.teleports = [];
 gameInfo.hasMirror = false;
@@ -112,6 +115,7 @@ gameInfo.copiers = [];
 let gameInterval;
 let gameOver = false;
 let laser = null;
+let orangeCounter = 0;
 let posX = -1;
 let posY = -1;
 let redCounter = 0;
@@ -141,6 +145,7 @@ function BalPage() {
   const elementHappy = useRef(null);
   const elementLightBlue = useRef(null);
   const elementMoveButtons = useRef(null);
+  const elementOrange = useRef(null);
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
   const elementSad = useRef(null);
@@ -416,7 +421,7 @@ function BalPage() {
         elevatorCounter--;
       } else {
         elevatorCounter = 5;
-        info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls);
+        info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls, gameInfo.orangeBalls);
         if (info.playerX !== -1 && info.playerY !== -1) {
           posX = info.playerX;
           posY = info.playerY;
@@ -428,7 +433,8 @@ function BalPage() {
         info = moveHorizontalElevators(
           gameData,
           gameInfo.horizontalElevators,
-          gameInfo.redBalls
+          gameInfo.redBalls,
+          gameInfo.orangeBalls
         );
         if (info.playerX !== -1 && info.playerY !== -1) {
           posX = info.playerX;
@@ -466,6 +472,14 @@ function BalPage() {
       } else {
         yellowCounter = 1;
         if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
+          update = true;
+        }
+      }
+      if (orangeCounter > 0) {
+        orangeCounter--;
+      } else {
+        orangeCounter = 1;
+        if (moveOrangeBalls(gameData, gameInfo.orangeBalls)) {
           update = true;
         }
       }
@@ -1056,6 +1070,7 @@ function BalPage() {
       elementGreen: elementGreen.current,
       elementHappy: elementHappy.current,
       elementLightBlue: elementLightBlue.current,
+      elementOrange: elementOrange.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
       elementSad: elementSad.current,
@@ -1297,6 +1312,9 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementGreen} src={imgGreen} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementOrange} src={imgOrange} />
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementPurple} src={imgPurple} />
