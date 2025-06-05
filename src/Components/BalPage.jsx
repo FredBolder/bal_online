@@ -29,6 +29,7 @@ import {
   electricityTarget,
   inWater,
   checkTrapDoors,
+  CheckDamagedStones,
   checkCopiers,
   findElementByCoordinate,
 } from "../balUtils.js";
@@ -40,14 +41,14 @@ import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
 import { getLevel, getRandomLevel } from "../levels.js";
 //import sndCatapult from "../Sounds/catapult.wav";
+import sndBreaking1 from "../Sounds/breaking1.wav";
+import sndBreaking2 from "../Sounds/breaking2.wav";
 import sndEat1 from "../Sounds/eat1.wav";
 import sndEat2 from "../Sounds/eat2.wav";
 import sndEat3 from "../Sounds/eat3.wav";
 import sndEat4 from "../Sounds/eat4.wav";
 import sndElectricity from "../Sounds/electricity.wav";
 import sndExplosion from "../Sounds/explosion.wav";
-//import sndFloor1 from "../Sounds/floor1.wav";
-//import sndFloor2 from "../Sounds/floor2.wav";
 //import sndKey from "../Sounds/key.wav";
 import sndLaserGun from "../Sounds/laser_gun.wav";
 import sndPain from "../Sounds/pain.wav";
@@ -216,6 +217,12 @@ function BalPage() {
 
     if (settings.sound) {
       switch (sound) {
+        case "breaking1":
+          snd = sndBreaking1;
+          break;
+        case "breaking2":
+          snd = sndBreaking2;
+          break;
         case "eat":
           n = Math.trunc(Math.random() * 4) + 1;
           switch (n) {
@@ -353,26 +360,15 @@ function BalPage() {
       if (info.updated) {
         update = true;
       }
-
-      if (skipFalling <= 0) {
-        info = checkFalling(backData, gameData, gameInfo);
-        if (info.ballX !== -1) {
-          posX = info.ballX;
-          posY = info.ballY;
-        }
-        if (info.update) {
-          update = true;
-        }
-        if (info.sound === 1) {
-          playSound("splash1");
-        }
-        if (info.sound === 2) {
-          gameOver = true;
-          updateScreen();
-          playSound("pain");
-        }
-      } else {
-        skipFalling--;
+      info = CheckDamagedStones(gameData, gameInfo);
+      if (info.sound === 1) {
+        playSound("breaking1");
+      }
+      if (info.sound === 2) {
+        playSound("breaking2");
+      }
+      if (info.updated) {
+        update = true;
       }
 
       info = checkForces(gameData, gameInfo);
@@ -560,6 +556,28 @@ function BalPage() {
         electricityCounter++;
       }
 
+      if (skipFalling <= 0) {
+        info = checkFalling(backData, gameData, gameInfo);
+        if (info.ballX !== -1) {
+          posX = info.ballX;
+          posY = info.ballY;
+        }
+        if (info.update) {
+          update = true;
+        }
+        if (info.sound === 1) {
+          playSound("splash1");
+        }
+        if (info.sound === 2) {
+          gameOver = true;
+          updateScreen();
+          playSound("pain");
+        }
+      } else {
+        skipFalling--;
+      }
+     
+
       if (update) {
         updateScreen();
         checkGameOver();
@@ -722,6 +740,29 @@ function BalPage() {
     }
   }
 
+  function clickSeriesExtreme() {
+    if (settings.lessQuestions) {
+      initLevel(901);
+    } else {
+      confirmAlert({
+        title: "Question",
+        message: "Load the first level of series Extreme?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => {
+              initLevel(901);
+            },
+          },
+          {
+            label: "No",
+            onClick: () => { },
+          },
+        ],
+      });
+    }
+  }
+
   function randomLevel() {
     confirmAlert({
       title: "Question",
@@ -789,7 +830,7 @@ function BalPage() {
           if (e.altKey) {
             initLevel(currentLevel - 1);
           } else {
-            initLevel(220); // Levels made by Panagiotis
+            initLevel(220); // Level made by Panagiotis
           }
           break;
         case "R":
@@ -1188,6 +1229,9 @@ function BalPage() {
                 </div>
                 <div onClick={clickSeriesSmall}>
                   <label>Series Small</label>
+                </div>
+                <div onClick={clickSeriesExtreme}>
+                  <label>Extreme</label>
                 </div>
                 <div onClick={randomLevel}>
                   <label>Random level</label>

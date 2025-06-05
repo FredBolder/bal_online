@@ -169,6 +169,18 @@ function drawLevel(
     drawText(ctx, xc, yc, "2x", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
+  function drawDamagedStone(x, y) {
+    let bgcolor = getBgcolor(x, y, "black");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawLine(ctx, xmin + (w1 * 0.75), ymin, xmin + (w1 * 0.4), ymin + (w2 * 0.35), bgcolor);
+    drawLine(ctx, xmin + (w1 * 0.4), ymin + (w2 * 0.35), xc, ymin + (w2 * 0.6), bgcolor);
+    drawLine(ctx, xmin + (w1 * 0.7), yc, xmin + (w1 * 0.6), ymin + (w2 * 0.8), bgcolor);
+    drawLine(ctx, xmin + (w1 * 0.6), ymin + (w2 * 0.8), xmin + (w1 * 0.9), ymax, bgcolor);
+    drawLine(ctx, xmin + (w1 * 0.1), ymin, xmin + (w1 * 0.2), ymin + (w2 * 0.3), bgcolor);
+    drawLine(ctx, xmin + (w1 * 0.25), ymin + (w2 * 0.6), xmin + (w1 * 0.1), ymin + (w2 * 0.7), bgcolor);
+    drawLine(ctx, xmin + (w1 * 0.1), ymin + (w2 * 0.7), xmin, ymax, bgcolor);
+  }
+
   function drawDetonator() {
     d1 = w1 / 7;
     d2 = w1 / 2;
@@ -1036,6 +1048,9 @@ function drawLevel(
           break;
         case 11:
           drawOneDirectionLeft();
+          break;
+        case 12:
+          drawDamagedStone(col, row);
           break;
         case 13:
           drawTrapDoor();

@@ -1,4 +1,5 @@
 import { updateObject } from "./balUtils";
+import { moveOrangeBallInDirection } from "./orangeBalls";
 
 export function checkForces(gameData, gameInfo) {
     let empty = -1
@@ -24,7 +25,7 @@ export function checkForces(gameData, gameInfo) {
                             possible = true;
                         }
                         if (empty !== -1) {
-                            if (![0, 2, 4, 8, 93, 94].includes(gameData[j][force.x])) {
+                            if (![0, 2, 4, 8, 40, 93, 94].includes(gameData[j][force.x])) {
                                 possible = false;
                                 empty = -1;
                             }
@@ -47,6 +48,9 @@ export function checkForces(gameData, gameInfo) {
                                 case 94:
                                     updateObject(gameInfo.redBalls, force.x, j - 1, force.x, j);
                                     break;
+                                case 40:
+                                    moveOrangeBallInDirection(gameInfo.orangeBalls, force.x, j - 1, "down", false);
+                                    break;
                                 default:
                                     break;
                             }
@@ -61,7 +65,7 @@ export function checkForces(gameData, gameInfo) {
                             possible = true;
                         }
                         if (empty !== -1) {
-                            if (![0, 2, 4, 8, 93, 94].includes(gameData[force.y][j])) {
+                            if (![0, 2, 4, 8, 40, 93, 94].includes(gameData[force.y][j])) {
                                 possible = false;
                                 empty = -1;
                             }
@@ -84,6 +88,9 @@ export function checkForces(gameData, gameInfo) {
                                 case 94:
                                     updateObject(gameInfo.redBalls, j + 1, force.y, j, force.y);
                                     break;
+                                case 40:
+                                    moveOrangeBallInDirection(gameInfo.orangeBalls, j + 1, force.y, "left", false);
+                                    break;
                                 default:
                                     break;
                             }
@@ -98,7 +105,7 @@ export function checkForces(gameData, gameInfo) {
                             possible = true;
                         }
                         if (empty !== -1) {
-                            if (![0, 2, 4, 8, 93, 94].includes(gameData[force.y][j])) {
+                            if (![0, 2, 4, 8, 40, 93, 94].includes(gameData[force.y][j])) {
                                 possible = false;
                                 empty = -1;
                             }
@@ -121,6 +128,9 @@ export function checkForces(gameData, gameInfo) {
                                 case 94:
                                     updateObject(gameInfo.redBalls, j - 1, force.y, j, force.y);
                                     break;
+                                case 40:
+                                    moveOrangeBallInDirection(gameInfo.orangeBalls, j - 1, force.y, "right", false);
+                                    break;
                                 default:
                                     break;
                             }
@@ -135,7 +145,7 @@ export function checkForces(gameData, gameInfo) {
                             possible = true;
                         }
                         if (empty !== -1) {
-                            if (![0, 2, 4, 8, 93, 94].includes(gameData[j][force.x])) {
+                            if (![0, 2, 4, 8, 40, 93, 94].includes(gameData[j][force.x])) {
                                 possible = false;
                                 empty = -1;
                             }
@@ -157,6 +167,9 @@ export function checkForces(gameData, gameInfo) {
                                 case 93:
                                 case 94:
                                     updateObject(gameInfo.redBalls, force.x, j + 1, force.x, j);
+                                    break;
+                                case 40:
+                                    moveOrangeBallInDirection(gameInfo.orangeBalls, force.x, j + 1, "up", false);
                                     break;
                                 default:
                                     break;
@@ -183,7 +196,7 @@ export function hasForceDown(gameData, gameInfo, x, y) {
             if (force.y < y - 1) {
                 for (let j = y - 1; j > force.y; j--) {
                     const element = gameData[j][x];
-                    if (![0, 2, 4, 8, 93, 94].includes(element)) {
+                    if (![0, 2, 4, 8, 40, 93, 94].includes(element)) {
                         found = false;
                     }
                 }
@@ -207,7 +220,7 @@ export function hasForceLeft(gameData, gameInfo, x, y) {
             if (force.x > x + 1) {
                 for (let j = x + 1; j < force.x; j++) {
                     const element = gameData[y][j];
-                    if (![0, 2, 4, 8, 93, 94].includes(element)) {
+                    if (![0, 2, 4, 8, 40, 93, 94].includes(element)) {
                         found = false;
                     }
                 }
@@ -231,7 +244,7 @@ export function hasForceRight(gameData, gameInfo, x, y) {
             if (force.x < x - 1) {
                 for (let j = x - 1; j > force.x; j--) {
                     const element = gameData[y][j];
-                    if (![0, 2, 4, 8, 93, 94].includes(element)) {
+                    if (![0, 2, 4, 8, 40, 93, 94].includes(element)) {
                         found = false;
                     }
                 }
@@ -255,7 +268,7 @@ export function hasForceUp(gameData, gameInfo, x, y) {
             if (force.y > y + 1) {
                 for (let j = y + 1; j < force.y; j++) {
                     const element = gameData[j][x];
-                    if (![0, 2, 4, 8, 93, 94].includes(element)) {
+                    if (![0, 2, 4, 8, 40, 93, 94].includes(element)) {
                         found = false;
                     }
                 }

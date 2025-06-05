@@ -29,6 +29,7 @@ export function initGameInfo(info) {
   info.electricity = [];
   info.electricityActive = false;
   info.trapDoors = [];
+  info.damagedStones = [],
   info.copiers = [];
 }
 
@@ -154,6 +155,9 @@ function charToNumber(c) {
       break;
     case "<":
       result = 11;
+      break;
+    case "F":
+      result = 12;
       break;
     case "-":
       result = 13;
@@ -372,6 +376,9 @@ function numberToChar(n) {
       break;
     case 11:
       result = "<";
+      break;
+    case 12:
+      result = "F";
       break;
     case 13:
       result = "-";
@@ -713,7 +720,7 @@ export function checkElevatorInOuts(arr, gameInfo) {
     switch (elevatorInOut.status) {
       case 0:
         if ([6, 7, 106, 107].includes(data1)) {
-          if ([2, 4, 8, 93, 94].includes(data2) && (data3 === 0) && (elevatorInOut.status === 0)) {
+          if ([2, 4, 8, 40, 93, 94].includes(data2) && (data3 === 0) && (elevatorInOut.status === 0)) {
             // Enter from the left
             info.updated = true;
             arr[elevatorInOut.y - 1][elevatorInOut.x + 1] = data2;
@@ -726,9 +733,12 @@ export function checkElevatorInOuts(arr, gameInfo) {
             if ([8, 93, 94].includes(data2)) {
               updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x + 1, elevatorInOut.y - 1);
             }
+            if (data2 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, elevatorInOut.x, elevatorInOut.y - 1, "right", false);
+            }
             elevatorInOut.status = 10;
           }
-          if ([2, 4, 8, 93, 94].includes(data3) && (data2 === 0) && (elevatorInOut.status === 0)) {
+          if ([2, 4, 8, 40, 93, 94].includes(data3) && (data2 === 0) && (elevatorInOut.status === 0)) {
             // Exit to the left
             info.updated = true;
             arr[elevatorInOut.y - 1][elevatorInOut.x] = data3;
@@ -741,11 +751,14 @@ export function checkElevatorInOuts(arr, gameInfo) {
             if ([8, 93, 94].includes(data3)) {
               updateObject(gameInfo.redBalls, elevatorInOut.x + 1, elevatorInOut.y - 1, elevatorInOut.x, elevatorInOut.y - 1);
             }
+            if (data3 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, elevatorInOut.x + 1, elevatorInOut.y - 1, "left", false);
+            }
             elevatorInOut.status = 1;
           }
         }
         if ([6, 7, 106, 107].includes(data5)) {
-          if ([2, 4, 8, 93, 94].includes(data2) && (data4 === 0) && (elevatorInOut.status === 0)) {
+          if ([2, 4, 8, 40, 93, 94].includes(data2) && (data4 === 0) && (elevatorInOut.status === 0)) {
             // Enter from the right
             info.updated = true;
             arr[elevatorInOut.y - 1][elevatorInOut.x - 1] = data2;
@@ -758,9 +771,12 @@ export function checkElevatorInOuts(arr, gameInfo) {
             if ([8, 93, 94].includes(data2)) {
               updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x - 1, elevatorInOut.y - 1);
             }
+            if (data2 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, elevatorInOut.x, elevatorInOut.y - 1, "left", false);
+            }
             elevatorInOut.status = 10;
           }
-          if ([2, 4, 8, 93, 94].includes(data4) && (data2 === 0) && (elevatorInOut.status === 0)) {
+          if ([2, 4, 8, 40, 93, 94].includes(data4) && (data2 === 0) && (elevatorInOut.status === 0)) {
             // Exit to the right
             info.updated = true;
             arr[elevatorInOut.y - 1][elevatorInOut.x] = data4;
@@ -772,6 +788,9 @@ export function checkElevatorInOuts(arr, gameInfo) {
             }
             if ([8, 93, 94].includes(data4)) {
               updateObject(gameInfo.redBalls, elevatorInOut.x - 1, elevatorInOut.y - 1, elevatorInOut.x, elevatorInOut.y - 1);
+            }
+            if (data4 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, elevatorInOut.x - 1, elevatorInOut.y - 1, "right", false);
             }
             elevatorInOut.status = 2;
           }
@@ -790,6 +809,9 @@ export function checkElevatorInOuts(arr, gameInfo) {
           if ([8, 93, 94].includes(arr[elevatorInOut.y - 1][elevatorInOut.x - 1])) {
             updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x - 1, elevatorInOut.y - 1);
           }
+          if (arr[elevatorInOut.y - 1][elevatorInOut.x - 1] === 40) {
+            moveOrangeBallInDirection(gameInfo.orangeBalls, elevatorInOut.x, elevatorInOut.y - 1, "left", false);
+          }
         }
         elevatorInOut.status = 10;
         break;
@@ -805,6 +827,9 @@ export function checkElevatorInOuts(arr, gameInfo) {
           }
           if ([8, 93, 94].includes(arr[elevatorInOut.y - 1][elevatorInOut.x + 1])) {
             updateObject(gameInfo.redBalls, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x + 1, elevatorInOut.y - 1);
+          }
+          if (arr[elevatorInOut.y - 1][elevatorInOut.x + 1] === 40) {
+            moveOrangeBallInDirection(gameInfo.orangeBalls, elevatorInOut.x, elevatorInOut.y - 1, "right", false);
           }
         }
         elevatorInOut.status = 10;
@@ -981,7 +1006,8 @@ export function moveLeft(backData, gameData, x, y, gameInfo) {
     if (notInAir(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x - 1]) || ((row[x - 1]) === 35) && gameInfo.hasPickaxe)) {
+        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x - 1]) ||
+          (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
           switch (row[x - 1]) {
             case 3:
               result.eating = true;
@@ -995,6 +1021,7 @@ export function moveLeft(backData, gameData, x, y, gameInfo) {
             case 34:
               result.takingPickaxe = true;
               break;
+            case 12:
             case 35:
               result.breaking = true;
               break;
@@ -1132,7 +1159,8 @@ export function moveRight(
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x + 1]) || ((row[x + 1]) === 35) && gameInfo.hasPickaxe)) {
+        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x + 1]) ||
+          (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
           switch (row[x + 1]) {
             case 3:
               result.eating = true;
@@ -1146,6 +1174,7 @@ export function moveRight(
             case 34:
               result.takingPickaxe = true;
               break;
+            case 12:
             case 35:
               result.breaking = true;
               break;
@@ -1272,7 +1301,8 @@ export function jump(
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
       if (y > 0 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x]) || ((gameData[y - 1][x]) === 35) && gameInfo.hasPickaxe)) {
+        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x]) ||
+          (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
           switch (gameData[y - 1][x]) {
             case 0:
               if (!gameInfo.hasWeakStone && gameInfo.hasLadder) {
@@ -1291,6 +1321,7 @@ export function jump(
             case 34:
               result.takingPickaxe = true;
               break;
+            case 12:
             case 35:
               result.breaking = true;
               break;
@@ -1539,7 +1570,7 @@ export function pushDown(
         gameData[y][x] = element;
         result.player = true;
       }
-      if (!result.player && (gameData[y + 1][x] === 35) && gameInfo.hasPickaxe) {
+      if (!result.player && ((gameData[y + 1][x] === 12) || (gameData[y + 1][x] === 35)) && gameInfo.hasPickaxe) {
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
         result.player = true;
@@ -1635,6 +1666,7 @@ export function getGameInfo(backData, gameData) {
   result.electricity = [];
   result.electricityActive = false;
   result.trapDoors = [];
+  result.damagedStones = [];
   result.copiers = [];
 
   for (let i = 0; i < gameData.length; i++) {
@@ -1741,6 +1773,15 @@ export function getGameInfo(backData, gameData) {
           result.electricity.push(elec);
           break;
         }
+        case 12: {
+          let damagedStone = {
+            x: j,
+            y: i,
+            status: 0
+          };
+          result.damagedStones.push(damagedStone);
+          break;
+        }
         case 13: {
           let trap = {
             x: j,
@@ -1780,6 +1821,33 @@ export function getGameInfo(backData, gameData) {
       }
       if (backData[i][j] === 20 || backData[i][j] === 23) {
         result.hasWater = true;
+      }
+    }
+  }
+  return result;
+}
+
+export function CheckDamagedStones(arr, gameInfo) {
+  let result = { update: false, sound: 0 };
+  let data = 0;
+
+  for (let i = 0; i < gameInfo.damagedStones.length; i++) {
+    const damagedStone = gameInfo.damagedStones[i];
+    if (damagedStone.status !== -1) {
+      data = arr[damagedStone.y - 1][damagedStone.x];
+      if ([2, 4, 8, 40, 93, 94].includes(data)) {
+        damagedStone.status++;
+        if ((damagedStone.status >= 5) && (result.sound === 0)) {
+          result.sound = 1;
+        }
+        if (damagedStone.status >= 12) {
+          result.sound = 2;
+          damagedStone.status = -1;
+          arr[damagedStone.y][damagedStone.x] = 0;
+          result.update = true;
+        }
+      } else {
+        damagedStone.status = 0;
       }
     }
   }
@@ -2083,7 +2151,7 @@ export function moveHorizontalElevators(arr, elevators, redBalls, orangeBalls) {
               updateObject(redBalls, x, j, x + 1, j);
             }
             if (arr[j][x] === 40) {
-                moveOrangeBallInDirection(orangeBalls, x, j, "right", false);
+              moveOrangeBallInDirection(orangeBalls, x, j, "right", false);
             }
             if (arr[j][x] === 2) {
               result.playerX = x + 1;
@@ -2109,7 +2177,7 @@ export function moveHorizontalElevators(arr, elevators, redBalls, orangeBalls) {
               updateObject(redBalls, x, j, x - 1, j);
             }
             if (arr[j][x] === 40) {
-                moveOrangeBallInDirection(orangeBalls, x, j, "left", false);
+              moveOrangeBallInDirection(orangeBalls, x, j, "left", false);
             }
             if (arr[j][x] === 2) {
               result.playerX = x - 1;

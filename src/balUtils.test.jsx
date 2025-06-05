@@ -1011,6 +1011,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    damagedStones: [],
     copiers: [],
   };
   it("getGameInfo A", () => {
@@ -1053,6 +1054,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    damagedStones: [],
     copiers: [],
   };
   it("getGameInfo B", () => {
@@ -1092,6 +1094,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    damagedStones: [],
     copiers: [],
   };
   it("getGameInfo C", () => {
@@ -1136,6 +1139,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    damagedStones: [],
     copiers: [],
   };
   it("getGameInfo D", () => {
@@ -1178,6 +1182,7 @@ describe("balUtils", () => {
     electricity: [],
     electricityActive: false,
     trapDoors: [],
+    damagedStones: [],
     copiers: [],
   };
   it("getGameInfo E", () => {

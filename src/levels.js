@@ -6,6 +6,8 @@ const series2Start = 700;
 const series2End = 739;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 760;
+const seriesExtremeStart = 901;
+const seriesExtremeEnd = 902;
 
 async function loadFromFile(n) {
   let levelData = [];
@@ -60,7 +62,8 @@ async function getLevel(n) {
   let result = [];
 
   if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) ||
-    (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= 990 && n <= 991)) {
+    (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) || 
+    (n >= 990 && n <= 991)) {
     result = await loadFromFile(n);
   } else {
     result = await loadFromFile(1000);

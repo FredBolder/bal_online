@@ -147,6 +147,35 @@ describe("Force", () => {
         expect(JSON.stringify(info02c)).toBe(JSON.stringify({ update: false, playerX: -1, playerY: -1 }));
     });
 
+    let input02d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 111, 0, 40, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 111, 0, 0, 40, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let gameInfo02d = { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: 6 }], 
+        orangeBalls: [{ x: 4, y: 4, direction: "none" }] };
+    let info02d = checkForces(input02d, gameInfo02d);
+    it("Force right D", () => {
+        expect(JSON.stringify(input02d)).toBe(JSON.stringify(expectedOutput02d));
+    });
+    it("Force right D info", () => {
+        expect(JSON.stringify(info02d)).toBe(JSON.stringify({ update: true, playerX: -1, playerY: -1 }));
+    });
+    it("Force right D orangeBalls", () => {
+        expect(JSON.stringify(gameInfo02d.orangeBalls)).toBe(JSON.stringify([{ x: 5, y: 4, direction: "none" }]));
+    });
+
     // ***** Force left *****
 
     let input03a = [
