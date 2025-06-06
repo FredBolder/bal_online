@@ -32,6 +32,7 @@ import {
   CheckDamagedStones,
   checkCopiers,
   findElementByCoordinate,
+  initGameInfo,
 } from "../balUtils.js";
 import { checkForces } from "../force";
 import { moveOrangeBalls } from "../orangeBalls";
@@ -86,39 +87,17 @@ let elecActiveSaved = false;
 let electricityCounter = 0;
 let elevatorCounter = 0;
 let explosionCounter = 0;
+let initialized = false;
 let backData = [];
 let bgcolor;
 let fgcolor;
 let gameData = [];
 let gameInfo = {};
-gameInfo.elevatorInOuts = [];
-gameInfo.elevators = [];
-gameInfo.forces = [];
-gameInfo.horizontalElevators = [];
-gameInfo.greenBalls = 0;
-gameInfo.redBalls = [];
-gameInfo.yellowBalls = [];
-gameInfo.orangeBalls = [];
-gameInfo.detonator = { x: -1, y: -1 };
-gameInfo.teleports = [];
-gameInfo.hasMirror = false;
-gameInfo.hasWater = false;
-gameInfo.hasDivingGlasses = false;
-gameInfo.hasKey = false;
-gameInfo.hasLadder = false;
-gameInfo.hasPickaxe = false;
-gameInfo.hasWeakStone = false;
-gameInfo.redFish = [];
-gameInfo.electricity = [];
-gameInfo.electricityActive = false;
-gameInfo.trapDoors = [];
-gameInfo.copiers = [];
+initGameInfo(gameInfo);
 let gameInterval;
 let gameOver = false;
 let laser = null;
 let orangeCounter = 0;
-let posX = -1;
-let posY = -1;
 let redCounter = 0;
 let refreshCounter = 0;
 let refreshCountTo = 12;
@@ -305,7 +284,7 @@ function BalPage() {
             backData[target][elec.x] === 20 ||
             backData[target][elec.x] === 23
           ) {
-            if (inWater(posX, posY, backData)) {
+            if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
               gameOver = true;
             }
             for (let j = 0; j < gameInfo.redFish.length; j++) {
@@ -327,7 +306,7 @@ function BalPage() {
       }
     }
     if (!gameOver && gameInfo.hasWater && !gameInfo.hasDivingGlasses) {
-      if (backData[posY][posX] === 20 || backData[posY][posX] === 23) {
+      if (backData[gameInfo.blueBall.y][gameInfo.blueBall.x] === 20 || backData[gameInfo.blueBall.y][gameInfo.blueBall.x] === 23) {
         gameOver = true;
       }
     }
@@ -336,8 +315,8 @@ function BalPage() {
         const fish = gameInfo.redFish[i];
         if (
           !fish.isDead &&
-          Math.abs(posX - fish.x) < 2 &&
-          Math.abs(posY - fish.y) < 2
+          Math.abs(gameInfo.blueBall.x - fish.x) < 2 &&
+          Math.abs(gameInfo.blueBall.y - fish.y) < 2
         ) {
           gameOver = true;
         }
@@ -373,8 +352,8 @@ function BalPage() {
 
       info = checkForces(gameData, gameInfo);
       if (info.playerX !== -1) {
-        posX = info.playerX;
-        posY = info.playerY;
+        gameInfo.blueBall.x = info.playerX;
+        gameInfo.blueBall.y = info.playerY;
       }
       if (info.update) {
         update = true;
@@ -396,7 +375,7 @@ function BalPage() {
         fishCounter++;
         if (fishCounter >= fishCountTo) {
           fishCounter = 0;
-          moveFish(backData, gameData, gameInfo, posX, posY);
+          moveFish(backData, gameData, gameInfo, gameInfo.blueBall.x, gameInfo.blueBall.y);
           update = true;
         }
       }
@@ -419,8 +398,8 @@ function BalPage() {
         elevatorCounter = 5;
         info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls, gameInfo.orangeBalls);
         if (info.playerX !== -1 && info.playerY !== -1) {
-          posX = info.playerX;
-          posY = info.playerY;
+          gameInfo.blueBall.x = info.playerX;
+          gameInfo.blueBall.y = info.playerY;
         }
         if (gameInfo.elevators.length > 0) {
           update = true;
@@ -433,8 +412,8 @@ function BalPage() {
           gameInfo.orangeBalls
         );
         if (info.playerX !== -1 && info.playerY !== -1) {
-          posX = info.playerX;
-          posY = info.playerY;
+          gameInfo.blueBall.x = info.playerX;
+          gameInfo.blueBall.y = info.playerY;
         }
         if (gameInfo.horizontalElevators.length > 0) {
           update = true;
@@ -443,8 +422,8 @@ function BalPage() {
 
       info = checkElevatorInOuts(gameData, gameInfo);
       if (info.playerX !== -1) {
-        posX = info.playerX;
-        posY = info.playerY;
+        gameInfo.blueBall.x = info.playerX;
+        gameInfo.blueBall.y = info.playerY;
       }
       if (info.update) {
         update = true;
@@ -454,7 +433,7 @@ function BalPage() {
         redCounter--;
       } else {
         redCounter = 2;
-        info = moveRedBalls(backData, gameData, posX, posY, gameInfo);
+        info = moveRedBalls(backData, gameData, gameInfo);
         if (info.updated) {
           update = true;
         }
@@ -505,17 +484,17 @@ function BalPage() {
             teleporting = 2;
             break;
           case 2:
-            teleport = findElementByCoordinate(posX, posY, gameInfo.teleports);
+            teleport = findElementByCoordinate(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
             if (teleport >= 0) {
               if (gameInfo.teleports[teleport].selfDestructing) {
-                gameData[posY][posX] = 0;
+                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
               } else {
-                gameData[posY][posX] = 31;
+                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 31;
               }
               for (let i = 0; i < gameInfo.teleports.length; i++) {
                 if ((i !== teleport) && (gameInfo.teleports[i].selfDestructing === gameInfo.teleports[teleport].selfDestructing)) {
-                  posX = gameInfo.teleports[i].x;
-                  posY = gameInfo.teleports[i].y;
+                  gameInfo.blueBall.x = gameInfo.teleports[i].x;
+                  gameInfo.blueBall.y = gameInfo.teleports[i].y;
                 }
               }
               if (gameInfo.teleports[teleport].selfDestructing) {
@@ -523,7 +502,7 @@ function BalPage() {
                 gameInfo.teleports = gameInfo.teleports.filter((teleport) => teleport.selfDestructing === false);
               }
             }
-            gameData[posY][posX] = 2;
+            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
             update = true;
             teleporting = 0;
             break;
@@ -559,8 +538,8 @@ function BalPage() {
       if (skipFalling <= 0) {
         info = checkFalling(backData, gameData, gameInfo);
         if (info.ballX !== -1) {
-          posX = info.ballX;
-          posY = info.ballY;
+          gameInfo.blueBall.x = info.ballX;
+          gameInfo.blueBall.y = info.ballY;
         }
         if (info.update) {
           update = true;
@@ -576,7 +555,7 @@ function BalPage() {
       } else {
         skipFalling--;
       }
-     
+
 
       if (update) {
         updateScreen();
@@ -606,8 +585,8 @@ function BalPage() {
     try {
       currentLevel = n;
       setLevelNumber(n);
-      posX = -1;
-      posY = -1;
+      gameInfo.blueBall.x = -1;
+      gameInfo.blueBall.y = -1;
       data = await getLevel(currentLevel);
 
       // Colors
@@ -653,8 +632,6 @@ function BalPage() {
       updateScreen();
       gameInfo = getGameInfo(backData, gameData);
       updateScreen();
-      posX = gameInfo.blueBall.x;
-      posY = gameInfo.blueBall.y;
       setGreen(gameInfo.greenBalls);
     } catch (err) {
       console.log(err);
@@ -808,7 +785,7 @@ function BalPage() {
     if (gameOver || teleporting > 0) {
       return false;
     }
-    if (posX === -1 || posY === -1 || gameData.length === 0) {
+    if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
       return false;
     }
     if (
@@ -837,17 +814,17 @@ function BalPage() {
           randomLevel();
           break;
         case "ArrowLeft":
-          info = jumpLeft(backData, gameData, posX, posY, gameInfo);
+          info = jumpLeft(backData, gameData, gameInfo);
           if (info.player) {
-            posX--;
-            posY--;
+            gameInfo.blueBall.x--;
+            gameInfo.blueBall.y--;
           }
           break;
         case "ArrowRight":
-          info = jumpRight(backData, gameData, posX, posY, gameInfo);
+          info = jumpRight(backData, gameData, gameInfo);
           if (info.player) {
-            posX++;
-            posY--;
+            gameInfo.blueBall.x++;
+            gameInfo.blueBall.y--;
           }
           break;
         default:
@@ -862,19 +839,15 @@ function BalPage() {
         case "a":
         case "A":
         case "4":
-          info = moveLeft(backData, gameData, posX, posY, gameInfo);
+          info = moveLeft(backData, gameData, gameInfo);
           if (info.player) {
-            posX--;
+            gameInfo.blueBall.x--;
             if (info.moveOneMore) {
-              posX--;
+              gameInfo.blueBall.x--;
             }
             if (info.rotate) {
-              posX--;
-              gameInfo.blueBall.x = posX;
-              gameInfo.blueBall.y = posY;
+              gameInfo.blueBall.x--;
               rotate = rotateGame(backData, gameData, gameInfo);
-              posX = gameInfo.blueBall.x;
-              posY = gameInfo.blueBall.y;
             }
           }
           if (info.teleporting) {
@@ -885,20 +858,16 @@ function BalPage() {
         case "d":
         case "D":
         case "6":
-          info = moveRight(backData, gameData, posX, posY, gameInfo);
+          info = moveRight(backData, gameData, gameInfo);
           if (info.player) {
-            posX++;
+            gameInfo.blueBall.x++;
             if (info.moveOneMore) {
-              posX++;
+              gameInfo.blueBall.x++;
             }
             if (info.rotate) {
-              posX++;
-              gameInfo.blueBall.x = posX;
-              gameInfo.blueBall.y = posY;
+              gameInfo.blueBall.x++;
               // eslint-disable-next-line no-unused-vars
               rotate = rotateGame(backData, gameData, gameInfo);
-              posX = gameInfo.blueBall.x;
-              posY = gameInfo.blueBall.y;
             }
           }
           if (info.teleporting) {
@@ -909,11 +878,11 @@ function BalPage() {
         case "w":
         case "W":
         case "8":
-          info = jump(backData, gameData, posX, posY, gameInfo);
+          info = jump(backData, gameData, gameInfo);
           if (info.player) {
-            posY--;
+            gameInfo.blueBall.y--;
             if (info.moveOneMore) {
-              posY--;
+              gameInfo.blueBall.y--;
             }
             elevatorCounter++; // To prevent that you fall from the elevator
           }
@@ -921,49 +890,49 @@ function BalPage() {
         case "q":
         case "Q":
         case "7":
-          info = jumpLeft(backData, gameData, posX, posY, gameInfo);
+          info = jumpLeft(backData, gameData, gameInfo);
           if (info.player) {
-            posX--;
-            posY--;
+            gameInfo.blueBall.x--;
+            gameInfo.blueBall.y--;
           }
           break;
         case "e":
         case "E":
         case "9":
-          info = jumpRight(backData, gameData, posX, posY, gameInfo);
+          info = jumpRight(backData, gameData, gameInfo);
           if (info.player) {
-            posX++;
-            posY--;
+            gameInfo.blueBall.x++;
+            gameInfo.blueBall.y--;
           }
           break;
         case "ArrowDown":
         case "s":
         case "S":
         case "2":
-          info = pushDown(backData, gameData, posX, posY, gameInfo);
+          info = pushDown(backData, gameData, gameInfo);
           if (info.player) {
-            posY++;
+            gameInfo.blueBall.y++;
             if (info.moveOneMore) {
-              posY++;
+              gameInfo.blueBall.y++;
             }
           }
           break;
         case "y":
         case "Y":
         case "1":
-          info = moveDownLeft(backData, gameData, posX, posY, gameInfo);
+          info = moveDownLeft(backData, gameData, gameInfo);
           if (info.player) {
-            posY++;
-            posX--;
+            gameInfo.blueBall.y++;
+            gameInfo.blueBall.x--;
           }
           break;
         case "c":
         case "C":
         case "3":
-          info = moveDownRight(backData, gameData, posX, posY, gameInfo);
+          info = moveDownRight(backData, gameData, gameInfo);
           if (info.player) {
-            posY++;
-            posX++;
+            gameInfo.blueBall.y++;
+            gameInfo.blueBall.x++;
           }
           break;
         default:
@@ -1062,19 +1031,25 @@ function BalPage() {
 
   useEffect(() => {
     if (!canvas.current) return;
-    loadSettings();
-    cbArrowButtons.current.checked = settings.arrowButtons;
-    cbQuestions.current.checked = settings.lessQuestions;
-    cbGraphics.current.checked = settings.nicerGraphics;
-    cbSound.current.checked = settings.sound;
-    updateMoveButtons();
-    currentLevel = 200;
-    loadProgress();
-    if (fred) {
-      currentLevel = 739;
+    if (!initialized) {
+      initialized = true;
+      loadSettings();
+      cbArrowButtons.current.checked = settings.arrowButtons;
+      cbQuestions.current.checked = settings.lessQuestions;
+      cbGraphics.current.checked = settings.nicerGraphics;
+      cbSound.current.checked = settings.sound;
+      updateMoveButtons();
+      currentLevel = 200;
+      loadProgress();
+      if (fred) {
+        currentLevel = 739;
+      }
+      initLevel(currentLevel);
     }
-    initLevel(currentLevel);
+
     updateScreen();
+    setGreen(gameInfo.greenBalls);
+
     const el = myRef.current;
     el.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
@@ -1197,10 +1172,10 @@ function BalPage() {
       }
       if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
         if (gameData[squareY][squareX] === 0) {
-          gameData[posY][posX] = 0;
-          posX = squareX;
-          posY = squareY;
-          gameData[posY][posX] = 2;
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+          gameInfo.blueBall.x = squareX;
+          gameInfo.blueBall.y = squareY;
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
           updateScreen();
         }
       }

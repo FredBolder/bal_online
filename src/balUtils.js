@@ -9,28 +9,30 @@ function canMoveAlone(n) {
 }
 
 export function initGameInfo(info) {
+  info.blueBall = { x: -1, y: -1 };
+  info.copiers = [];
+  info.damagedStones = [];
+  info.detonator = { x: -1, y: -1 };
+  info.electricity = [];
+  info.electricityActive = false;
   info.elevatorInOuts = [];
   info.elevators = [];
   info.forces = [];
-  info.horizontalElevators = [];
   info.greenBalls = 0;
-  info.redBalls = [];
-  info.yellowBalls = [];
-  info.orangeBalls = [];
-  info.detonator = { x: -1, y: -1 };
-  info.teleports = [];
-  info.hasMirror = false;
-  info.hasWater = false;
   info.hasDivingGlasses = false;
   info.hasKey = false;
   info.hasLadder = false;
-  info.Pickaxe = false;
+  info.hasMirror = false;
+  info.hasPickaxe = false;
+  info.hasWater = false;
+  info.hasWeakStone = false;
+  info.horizontalElevators = [];
+  info.orangeBalls = [];
+  info.redBalls = [];
   info.redFish = [];
-  info.electricity = [];
-  info.electricityActive = false;
+  info.teleports = [];
   info.trapDoors = [];
-  info.damagedStones = [],
-  info.copiers = [];
+  info.yellowBalls = [];
 }
 
 export function isEmpty(gameData, columnOrRow, start, end, horizontal = true) {
@@ -985,7 +987,9 @@ function whiteOrBlue(n) {
   return n === 4 || n === 5;
 }
 
-export function moveLeft(backData, gameData, x, y, gameInfo) {
+export function moveLeft(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;  
   let result = {};
   let row = gameData[y];
   result.breaking = false;
@@ -1130,13 +1134,9 @@ export function moveLeft(backData, gameData, x, y, gameInfo) {
   return result;
 }
 
-export function moveRight(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function moveRight(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   let row = gameData[y];
   let maxX = 0;
@@ -1278,13 +1278,9 @@ export function moveRight(
   return result;
 }
 
-export function jump(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function jump(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   result.breaking = false;
   result.eating = false;
@@ -1391,13 +1387,9 @@ export function jump(
   return result;
 }
 
-export function jumpLeft(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function jumpLeft(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
   result.takingKey = false;
@@ -1450,13 +1442,9 @@ export function jumpLeft(
   return result;
 }
 
-export function jumpRight(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function jumpRight(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
   result.takingKey = false;
@@ -1509,13 +1497,9 @@ export function jumpRight(
   return result;
 }
 
-export function pushDown(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function pushDown(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   result.breaking = false;
   result.player = false;
@@ -1588,13 +1572,9 @@ export function pushDown(
   return result;
 }
 
-export function moveDownLeft(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function moveDownLeft(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   result.player = false;
   let element = gameInfo.hasWeakStone ? 35 : 0;
@@ -1615,13 +1595,9 @@ export function moveDownLeft(
   return result;
 }
 
-export function moveDownRight(
-  backData,
-  gameData,
-  x,
-  y,
-  gameInfo
-) {
+export function moveDownRight(backData, gameData, gameInfo) {
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
   let result = {};
   result.player = false;
   let element = gameInfo.hasWeakStone ? 35 : 0;
@@ -1644,42 +1620,20 @@ export function moveDownRight(
 
 export function getGameInfo(backData, gameData) {
   let result = {};
-  result.blueBall = { x: -1, y: -1 };
-  result.elevatorInOuts = [];
-  result.elevators = [];
-  result.forces = [];
-  result.greenBalls = 0;
-  result.horizontalElevators = [];
-  result.redBalls = [];
-  result.yellowBalls = [];
-  result.orangeBalls = [];
-  result.detonator = { x: -1, y: -1 };
-  result.teleports = [];
-  result.hasMirror = false;
-  result.hasWater = false;
-  result.hasDivingGlasses = false;
-  result.hasKey = false;
-  result.hasLadder = false;
-  result.hasPickaxe = false;
-  result.hasWeakStone = false;
-  result.redFish = [];
-  result.electricity = [];
-  result.electricityActive = false;
-  result.trapDoors = [];
-  result.damagedStones = [];
-  result.copiers = [];
-
+  initGameInfo(result);
   for (let i = 0; i < gameData.length; i++) {
     for (let j = 0; j < gameData[i].length; j++) {
       switch (gameData[i][j]) {
         case 2:
-          result.blueBall = { x: j, y: i };
+          result.blueBall.x = j;
+          result.blueBall.y = i;
           break;
         case 3:
           result.greenBalls++;
           break;
         case 37:
-          result.detonator = { x: j, y: i };
+          result.detonator.x = j;
+          result.detonator.y = i;
           break;
         case 39:
           result.elevatorInOuts.push({ x: j, y: i, player: false, status: 0 });
@@ -2198,8 +2152,6 @@ export function moveHorizontalElevators(arr, elevators, redBalls, orangeBalls) {
 export function moveRedBalls(
   backData,
   gameData,
-  x,
-  y,
   gameInfo,
 ) {
   let changeDirection = false;
@@ -2212,6 +2164,8 @@ export function moveRedBalls(
   let saveRed = 93;
   let waitLeft = false;
   let waitRight = false;
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
 
   if (gameData.length > 0) {
     maxX = gameData[0].length - 1;
