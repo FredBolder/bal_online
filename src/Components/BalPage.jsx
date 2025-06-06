@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import MessageBox from './MessageBox';
+import { loadFromMemory, saveToMemory } from '../memory.js'
 import {
   stringArrayToNumberArray,
   checkElevatorInOuts,
@@ -33,6 +34,7 @@ import {
   checkCopiers,
   findElementByCoordinate,
   initGameInfo,
+  initGameVars,
 } from "../balUtils.js";
 import { checkForces } from "../force";
 import { moveOrangeBalls } from "../orangeBalls";
@@ -78,40 +80,24 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 
-let fred = false; // TODO: Set to false when publishing
 let ctx;
-let currentLevel = 200;
-let fishCounter = 0;
-let fishCountTo = 12;
-let elecActiveSaved = false;
-let electricityCounter = 0;
-let elevatorCounter = 0;
-let explosionCounter = 0;
-let initialized = false;
-let backData = [];
-let bgcolor;
-let fgcolor;
-let gameData = [];
-let gameInfo = {};
-initGameInfo(gameInfo);
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
-let gameOver = false;
-let laser = null;
-let orangeCounter = 0;
-let redCounter = 0;
-let refreshCounter = 0;
-let refreshCountTo = 12;
+let initialized = false;
+
 let settings = {
   sound: true,
   nicerGraphics: true,
   lessQuestions: false,
   arrowButtons: true,
 };
-let skipFalling = 0;
-let teleporting = 0;
-let wave1 = 0;
-let wave2 = 0;
-let yellowCounter = 0;
+
+let gameData = [];
+let backData = [];
+let gameInfo = {};
+initGameInfo(gameInfo);
+let gameVars = {};
+initGameVars(gameVars);
 
 function BalPage() {
   const canvas = useRef(null);
@@ -155,13 +141,13 @@ function BalPage() {
     if (levelStr !== null) {
       level = tryParseInt(levelStr, -1);
       if (level !== -1) {
-        currentLevel = level;
+        gameVars.currentLevel = level;
       }
     }
   }
 
   function saveProgress() {
-    localStorage.setItem("lastSolvedLevel", currentLevel.toString());
+    localStorage.setItem("lastSolvedLevel", gameVars.currentLevel.toString());
   }
 
   function loadSettings() {
@@ -269,7 +255,7 @@ function BalPage() {
     let target = -1;
 
     if (
-      !gameOver &&
+      !gameVars.gameOver &&
       gameInfo.electricity.length > 0 &&
       gameInfo.electricityActive
     ) {
@@ -278,14 +264,14 @@ function BalPage() {
         target = electricityTarget(backData, gameData, elec.x, elec.y);
         if (target > 0) {
           if (gameData[target][elec.x] === 2) {
-            gameOver = true;
+            gameVars.gameOver = true;
           }
           if (
             backData[target][elec.x] === 20 ||
             backData[target][elec.x] === 23
           ) {
             if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
-              gameOver = true;
+              gameVars.gameOver = true;
             }
             for (let j = 0; j < gameInfo.redFish.length; j++) {
               const fish = gameInfo.redFish[j];
@@ -295,34 +281,34 @@ function BalPage() {
         }
       }
     }
-    if (!gameOver) {
+    if (!gameVars.gameOver) {
       let redInfo = checkRedBalls(gameData, gameInfo.redBalls);
       if (redInfo.length > 0) {
-        laser = redInfo;
-        gameOver = true;
+        gameVars.laser = redInfo;
+        gameVars.gameOver = true;
         playSound("laser");
       } else {
-        laser = null;
+        gameVars.laser = null;
       }
     }
-    if (!gameOver && gameInfo.hasWater && !gameInfo.hasDivingGlasses) {
+    if (!gameVars.gameOver && gameInfo.hasWater && !gameInfo.hasDivingGlasses) {
       if (backData[gameInfo.blueBall.y][gameInfo.blueBall.x] === 20 || backData[gameInfo.blueBall.y][gameInfo.blueBall.x] === 23) {
-        gameOver = true;
+        gameVars.gameOver = true;
       }
     }
-    if (!gameOver && gameInfo.redFish.length > 0) {
-      for (let i = 0; i < gameInfo.redFish.length && !gameOver; i++) {
+    if (!gameVars.gameOver && gameInfo.redFish.length > 0) {
+      for (let i = 0; i < gameInfo.redFish.length && !gameVars.gameOver; i++) {
         const fish = gameInfo.redFish[i];
         if (
           !fish.isDead &&
           Math.abs(gameInfo.blueBall.x - fish.x) < 2 &&
           Math.abs(gameInfo.blueBall.y - fish.y) < 2
         ) {
-          gameOver = true;
+          gameVars.gameOver = true;
         }
       }
     }
-    if (gameOver) {
+    if (gameVars.gameOver) {
       updateScreen();
     }
   }
@@ -331,7 +317,7 @@ function BalPage() {
     let info = {};
     let update = false;
 
-    if (!gameOver && gameData && backData) {
+    if (!gameVars.gameOver && gameData && backData) {
       info = checkTrapDoors(gameData, gameInfo);
       if (info.sound) {
         playSound("trap");
@@ -364,38 +350,38 @@ function BalPage() {
         update = true;
       }
 
-      refreshCounter++;
-      if (refreshCounter >= refreshCountTo) {
-        refreshCounter = 0;
+      gameVars.refreshCounter++;
+      if (gameVars.refreshCounter >= gameVars.refreshCountTo) {
+        gameVars.refreshCounter = 0;
         clearBitMapLava();
         update = true;
       }
 
       if (gameInfo.redFish.length > 0) {
-        fishCounter++;
-        if (fishCounter >= fishCountTo) {
-          fishCounter = 0;
+        gameVars.fishCounter++;
+        if (gameVars.fishCounter >= gameVars.fishCountTo) {
+          gameVars.fishCounter = 0;
           moveFish(backData, gameData, gameInfo, gameInfo.blueBall.x, gameInfo.blueBall.y);
           update = true;
         }
       }
 
       if (gameInfo.hasWater) {
-        wave1++;
-        if (wave1 > 5) {
-          wave1 = 1;
-          wave2++;
-          if (wave2 > 3) {
-            wave2 = 1;
+        gameVars.wave1++;
+        if (gameVars.wave1 > 5) {
+          gameVars.wave1 = 1;
+          gameVars.wave2++;
+          if (gameVars.wave2 > 3) {
+            gameVars.wave2 = 1;
           }
           update = true;
         }
       }
 
-      if (elevatorCounter > 0) {
-        elevatorCounter--;
+      if (gameVars.elevatorCounter > 0) {
+        gameVars.elevatorCounter--;
       } else {
-        elevatorCounter = 5;
+        gameVars.elevatorCounter = 5;
         info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls, gameInfo.orangeBalls);
         if (info.playerX !== -1 && info.playerY !== -1) {
           gameInfo.blueBall.x = info.playerX;
@@ -429,10 +415,10 @@ function BalPage() {
         update = true;
       }
 
-      if (redCounter > 0) {
-        redCounter--;
+      if (gameVars.redCounter > 0) {
+        gameVars.redCounter--;
       } else {
-        redCounter = 2;
+        gameVars.redCounter = 2;
         info = moveRedBalls(backData, gameData, gameInfo);
         if (info.updated) {
           update = true;
@@ -442,27 +428,27 @@ function BalPage() {
         }
       }
 
-      if (yellowCounter > 0) {
-        yellowCounter--;
+      if (gameVars.yellowCounter > 0) {
+        gameVars.yellowCounter--;
       } else {
-        yellowCounter = 1;
+        gameVars.yellowCounter = 1;
         if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
           update = true;
         }
       }
-      if (orangeCounter > 0) {
-        orangeCounter--;
+      if (gameVars.orangeCounter > 0) {
+        gameVars.orangeCounter--;
       } else {
-        orangeCounter = 1;
+        gameVars.orangeCounter = 1;
         if (moveOrangeBalls(gameData, gameInfo.orangeBalls)) {
           update = true;
         }
       }
 
-      if (explosionCounter > 0) {
-        explosionCounter--;
+      if (gameVars.explosionCounter > 0) {
+        gameVars.explosionCounter--;
       } else {
-        explosionCounter = 2;
+        gameVars.explosionCounter = 2;
         info = checkDetonator(
           gameData,
           gameInfo.detonator.x,
@@ -478,10 +464,10 @@ function BalPage() {
 
       if (gameInfo.teleports.length > 0) {
         let teleport = -1;
-        switch (teleporting) {
+        switch (gameVars.teleporting) {
           case 1:
             playSound("teleport");
-            teleporting = 2;
+            gameVars.teleporting = 2;
             break;
           case 2:
             teleport = findElementByCoordinate(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
@@ -504,7 +490,7 @@ function BalPage() {
             }
             gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
             update = true;
-            teleporting = 0;
+            gameVars.teleporting = 0;
             break;
           default:
             break;
@@ -512,30 +498,30 @@ function BalPage() {
       }
 
       if (gameInfo.electricity.length > 0) {
-        if (electricityCounter > 110) {
-          electricityCounter = 0;
+        if (gameVars.electricityCounter > 110) {
+          gameVars.electricityCounter = 0;
         }
         gameInfo.electricityActive = false;
         if (
-          (electricityCounter > 50 && electricityCounter < 60) ||
-          (electricityCounter > 90 && electricityCounter < 100)
+          (gameVars.electricityCounter > 50 && gameVars.electricityCounter < 60) ||
+          (gameVars.electricityCounter > 90 && gameVars.electricityCounter < 100)
         ) {
           gameInfo.electricityActive = true;
         }
-        if (!elecActiveSaved && gameInfo.electricityActive) {
+        if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
           playSound("electricity");
         }
         if (
           gameInfo.electricityActive ||
-          elecActiveSaved !== gameInfo.electricityActive
+          gameVars.elecActiveSaved !== gameInfo.electricityActive
         ) {
           update = true;
         }
-        elecActiveSaved = gameInfo.electricityActive;
-        electricityCounter++;
+        gameVars.elecActiveSaved = gameInfo.electricityActive;
+        gameVars.electricityCounter++;
       }
 
-      if (skipFalling <= 0) {
+      if (gameVars.skipFalling <= 0) {
         info = checkFalling(backData, gameData, gameInfo);
         if (info.ballX !== -1) {
           gameInfo.blueBall.x = info.ballX;
@@ -548,12 +534,12 @@ function BalPage() {
           playSound("splash1");
         }
         if (info.sound === 2) {
-          gameOver = true;
+          gameVars.gameOver = true;
           updateScreen();
           playSound("pain");
         }
       } else {
-        skipFalling--;
+        gameVars.skipFalling--;
       }
 
 
@@ -583,17 +569,17 @@ function BalPage() {
     let y = -1;
 
     try {
-      currentLevel = n;
+      gameVars.currentLevel = n;
       setLevelNumber(n);
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
-      data = await getLevel(currentLevel);
+      data = await getLevel(gameVars.currentLevel);
 
       // Colors
-      bgcolor = null;
-      bgcolor = [];
-      fgcolor = null;
-      fgcolor = [];
+      gameVars.bgcolor = null;
+      gameVars.bgcolor = [];
+      gameVars.fgcolor = null;
+      gameVars.fgcolor = [];
       for (let i = 0; i < data.levelSettings.length; i++) {
         const setting = data.levelSettings[i];
         p1 = setting.indexOf(":");
@@ -611,9 +597,9 @@ function BalPage() {
                 color = values[4];
                 if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
                   if (name === "$bgcolor") {
-                    bgcolor.push({ x, y, w, h, color })
+                    gameVars.bgcolor.push({ x, y, w, h, color })
                   } else {
-                    fgcolor.push({ x, y, w, h, color })
+                    gameVars.fgcolor.push({ x, y, w, h, color })
                   }
                 }
               }
@@ -627,8 +613,8 @@ function BalPage() {
       gd = stringArrayToNumberArray(data.levelData);
       backData = gd.backData;
       gameData = gd.gameData;
-      laser = null;
-      gameOver = false;
+      gameVars.laser = null;
+      gameVars.gameOver = false;
       updateScreen();
       gameInfo = getGameInfo(backData, gameData);
       updateScreen();
@@ -740,6 +726,70 @@ function BalPage() {
     }
   }
 
+  function clickSaveToMemory() {
+    if (settings.lessQuestions) {
+      saveToMemory(gameData, backData, gameInfo, gameVars);
+    } else {
+      confirmAlert({
+        title: "Question",
+        message: "Save level to memory?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => {
+              saveToMemory(gameData, backData, gameInfo, gameVars);
+            },
+          },
+          {
+            label: "No",
+            onClick: () => { },
+          },
+        ],
+      });
+    }
+  }
+
+  function clickLoadFromMemory() {
+    function load() {
+      const data = loadFromMemory();
+      if (data === null) {
+        alert("No level in memory!");
+      } else {
+        gameData = null;
+        gameData = data.gameData;
+        backData = null;
+        backData = data.backData;
+        gameInfo = null;
+        gameInfo = data.gameInfo;
+        gameVars = null;
+        gameVars = data.gameVars;
+        setLevelNumber(gameVars.currentLevel);
+        setGreen(gameInfo.greenBalls);
+      }
+    }
+
+    if (settings.lessQuestions) {
+      load();
+    } else {
+      confirmAlert({
+        title: "Question",
+        message: "Load level from memory?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => {
+              load();
+            },
+          },
+          {
+            label: "No",
+            onClick: () => { },
+          },
+        ],
+      });
+    }
+  }
+
   function randomLevel() {
     confirmAlert({
       title: "Question",
@@ -748,7 +798,7 @@ function BalPage() {
         {
           label: "Yes",
           onClick: () => {
-            initLevel(getRandomLevel(currentLevel));
+            initLevel(getRandomLevel(gameVars.currentLevel));
           },
         },
         {
@@ -782,7 +832,7 @@ function BalPage() {
     info.rotate = false;
     let rotate = false;
 
-    if (gameOver || teleporting > 0) {
+    if (gameVars.gameOver || gameVars.teleporting > 0) {
       return false;
     }
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
@@ -800,12 +850,12 @@ function BalPage() {
       switch (e.key) {
         case "N":
           if (e.altKey) {
-            initLevel(currentLevel + 1);
+            initLevel(gameVars.currentLevel + 1);
           }
           break;
         case "P":
           if (e.altKey) {
-            initLevel(currentLevel - 1);
+            initLevel(gameVars.currentLevel - 1);
           } else {
             initLevel(220); // Level made by Panagiotis
           }
@@ -851,7 +901,7 @@ function BalPage() {
             }
           }
           if (info.teleporting) {
-            teleporting = 1;
+            gameVars.teleporting = 1;
           }
           break;
         case "ArrowRight":
@@ -871,7 +921,7 @@ function BalPage() {
             }
           }
           if (info.teleporting) {
-            teleporting = 1;
+            gameVars.teleporting = 1;
           }
           break;
         case "ArrowUp":
@@ -884,7 +934,7 @@ function BalPage() {
             if (info.moveOneMore) {
               gameInfo.blueBall.y--;
             }
-            elevatorCounter++; // To prevent that you fall from the elevator
+            gameVars.elevatorCounter++; // To prevent that you fall from the elevator
           }
           break;
         case "q":
@@ -940,7 +990,7 @@ function BalPage() {
       }
     }
     if (info.player) {
-      skipFalling = 1;
+      gameVars.skipFalling = 1;
       updateScreen();
       checkGameOver();
     }
@@ -955,10 +1005,10 @@ function BalPage() {
       setGreen(gameInfo.greenBalls);
       playSound("eat");
       checkGameOver();
-      if (!gameOver && gameInfo.greenBalls <= 0) {
+      if (!gameVars.gameOver && gameInfo.greenBalls <= 0) {
         confirmAlert({
           title: "Congratulations!",
-          message: `Write down the code ${numberToCode(currentLevel + 1)} to go to level ${currentLevel + 1} whenever you want.`,
+          message: `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`,
           buttons: [
             {
               label: "OK",
@@ -967,7 +1017,7 @@ function BalPage() {
             },
           ],
         });
-        initLevel(currentLevel + 1);
+        initLevel(gameVars.currentLevel + 1);
         saveProgress();
       }
     }
@@ -1005,7 +1055,7 @@ function BalPage() {
 
   function tryAgain() {
     if (settings.lessQuestions) {
-      initLevel(currentLevel);
+      initLevel(gameVars.currentLevel);
     } else {
       confirmAlert({
         title: "Question",
@@ -1014,7 +1064,7 @@ function BalPage() {
           {
             label: "Yes",
             onClick: () => {
-              initLevel(currentLevel);
+              initLevel(gameVars.currentLevel);
             },
           },
           {
@@ -1039,15 +1089,16 @@ function BalPage() {
       cbGraphics.current.checked = settings.nicerGraphics;
       cbSound.current.checked = settings.sound;
       updateMoveButtons();
-      currentLevel = 200;
+      gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        currentLevel = 739;
+        gameVars.currentLevel = 739;
       }
-      initLevel(currentLevel);
+      initLevel(gameVars.currentLevel);
     }
 
     updateScreen();
+    setLevelNumber(gameVars.currentLevel);
     setGreen(gameInfo.greenBalls);
 
     const el = myRef.current;
@@ -1094,8 +1145,8 @@ function BalPage() {
       elementYellow: elementYellow.current,
     };
     const status = {
-      gameOver: gameOver,
-      laser: laser,
+      gameOver: gameVars.gameOver,
+      laser: gameVars.laser,
     };
     ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
     drawLevel(
@@ -1107,9 +1158,7 @@ function BalPage() {
       elements,
       status,
       gameInfo,
-      wave2,
-      bgcolor,
-      fgcolor
+      gameVars
     );
   }
 
@@ -1190,11 +1239,8 @@ function BalPage() {
         </header>
         <main>
           <div className="balPanel">
-            <div className="balPanelText">
-              Level: <span className="balPanelTextSpan">{levelNumber}</span>
-            </div>
             <div className="menu">
-              <button className="balButton">Load</button>
+              <button className="balButton">Level: {levelNumber}</button>
               <div className="menu-content">
                 <div onClick={clickSeries1}>
                   <label>Series 1</label>
@@ -1210,6 +1256,12 @@ function BalPage() {
                 </div>
                 <div onClick={randomLevel}>
                   <label>Random level</label>
+                </div>
+                <div onClick={clickSaveToMemory}>
+                  <label>Save to memory</label>
+                </div>
+                <div onClick={clickLoadFromMemory}>
+                  <label>Load from memory</label>
                 </div>
               </div>
             </div>

@@ -25,10 +25,11 @@ function drawLevel(
   elements,
   status,
   gameInfo,
-  wave,
-  bgcolor,
-  fgcolor
+  gameVars,
 ) {
+  let wave = gameVars.wave2;
+  let bgcolor = gameVars.bgcolor;
+  let fgcolor = gameVars.fgcolor;
 
   function createLavaBitmap(size = 32) {
     const bmpCanvas = document.createElement('canvas');

@@ -1,9 +1,13 @@
 let memoryString = "";
 
 export function loadFromMemory() {
-    return JSON.parse(memoryString);
+    if (memoryString === "") {
+        return null;
+    } else {
+        return JSON.parse(memoryString);
+    }
 }
 
-export function SaveToMemory(gameData, backData, gameInfo) {
-    memoryString = JSON.stringify({ gameData, backData, gameInfo });
+export function saveToMemory(gameData, backData, gameInfo, gameVars) {
+    memoryString = JSON.stringify({ gameData, backData, gameInfo, gameVars });
 }

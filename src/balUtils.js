@@ -35,6 +35,29 @@ export function initGameInfo(info) {
   info.yellowBalls = [];
 }
 
+export function initGameVars(vars) {
+  vars.bgcolor;
+  vars.currentLevel = 200;
+  vars.elecActiveSaved = false;
+  vars.electricityCounter = 0;
+  vars.elevatorCounter = 0;
+  vars.explosionCounter = 0;
+  vars.fgcolor;
+  vars.fishCounter = 0;
+  vars.fishCountTo = 12;
+  vars.gameOver = false;
+  vars.laser = null;
+  vars.orangeCounter = 0;
+  vars.redCounter = 0;
+  vars.refreshCounter = 0;
+  vars.refreshCountTo = 12;
+  vars.skipFalling = 0;
+  vars.teleporting = 0;
+  vars.wave1 = 0;
+  vars.wave2 = 0;
+  vars.yellowCounter = 0;
+}
+
 export function isEmpty(gameData, columnOrRow, start, end, horizontal = true) {
   let n1 = 0;
   let n2 = 0;
@@ -989,7 +1012,7 @@ function whiteOrBlue(n) {
 
 export function moveLeft(backData, gameData, gameInfo) {
   let x = gameInfo.blueBall.x;
-  let y = gameInfo.blueBall.y;  
+  let y = gameInfo.blueBall.y;
   let result = {};
   let row = gameData[y];
   result.breaking = false;
