@@ -80,6 +80,7 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 
+let kPressed = false;
 let ctx;
 let fred = false; // TODO: Set to false when publishing
 let gameInterval;
@@ -819,6 +820,18 @@ function BalPage() {
     updateScreen();
   }
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function pressKeysSequentially(keys) {
+    for (let i = 0; i < keys.length; i++) {
+      const e = { key: keys[i], altKey: false, ctrlKey: false, shiftKey: false };
+      handleKeyDown(e);
+      await sleep(150);
+    }
+  }
+
   function handleKeyDown(e) {
     let info = {};
     info.player = false;
@@ -831,6 +844,11 @@ function BalPage() {
     info.takingPickaxe = false;
     info.rotate = false;
     let rotate = false;
+
+    // Ignore 
+    if (["Alt", "Ctrl", "Shift"].includes(e.key)) {
+      return;
+    }
 
     if (gameVars.gameOver || gameVars.teleporting > 0) {
       return false;
@@ -848,20 +866,10 @@ function BalPage() {
     }
     if (e.shiftKey) {
       switch (e.key) {
-        case "N":
-          if (e.altKey) {
-            initLevel(gameVars.currentLevel + 1);
-          }
-          break;
-        case "P":
-          if (e.altKey) {
-            initLevel(gameVars.currentLevel - 1);
-          } else {
-            initLevel(220); // Level made by Panagiotis
-          }
-          break;
         case "R":
-          randomLevel();
+          if (!kPressed) {
+            randomLevel();
+          }
           break;
         case "ArrowLeft":
           info = jumpLeft(backData, gameData, gameInfo);
@@ -882,9 +890,6 @@ function BalPage() {
       }
     } else {
       switch (e.key) {
-        case "p":
-          initLevel(736); // 991
-          break;
         case "ArrowLeft":
         case "a":
         case "A":
@@ -1046,6 +1051,49 @@ function BalPage() {
     }
     if (info.breaking) {
       playSound("pickaxe");
+    }
+
+    if (!e.altKey && !e.ctrlKey) {
+      if (kPressed) {
+        if (!e.shiftKey) {
+          switch (e.key) {
+            case "l":
+              // Move a 2-step stairs to the left
+              pressKeysSequentially("qaeda");
+              break;
+            case "r":
+              // Move a 2-step stairs to the right
+              pressKeysSequentially("edqad");
+              break;
+            default:
+              break;
+          }
+        } else {
+          switch (e.key) {
+            case "L":
+              // Move a 3-step stairs to the left
+              pressKeysSequentially("qqaddedaqaeda");
+              break;
+            case "N":
+              // Next level
+              initLevel(gameVars.currentLevel + 1);
+              break;
+            case "P":
+              // Previous level
+              initLevel(gameVars.currentLevel - 1);
+              break;
+            case "R":
+              // Move a 3-step stairs to the right
+              pressKeysSequentially("eedaaqadedqad");
+              break;
+            default:
+              break;
+          }
+        }
+      }
+      kPressed = ((e.key === "k") || (e.key === "K"));
+    } else {
+      kPressed = false;
     }
   }
 

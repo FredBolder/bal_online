@@ -1814,11 +1814,13 @@ export function CheckDamagedStones(arr, gameInfo) {
       data = arr[damagedStone.y - 1][damagedStone.x];
       if ([2, 4, 8, 40, 93, 94].includes(data)) {
         damagedStone.status++;
-        if ((damagedStone.status >= 5) && (result.sound === 0)) {
+        if ((damagedStone.status === 5) && (result.sound === 0)) {
           result.sound = 1;
         }
-        if (damagedStone.status >= 12) {
+        if (damagedStone.status === 12) {
           result.sound = 2;
+        }
+        if (damagedStone.status >= 12) {
           damagedStone.status = -1;
           arr[damagedStone.y][damagedStone.x] = 0;
           result.update = true;
@@ -1970,6 +1972,8 @@ export function checkTrapDoors(gameData, gameInfo) {
       if (trapDoor.status >= 5) {
         gameData[trapDoor.y][trapDoor.x] = 14;
         result.updated = true;
+      }
+      if (trapDoor.status === 5) {
         result.sound = true;
       }
       if (trapDoor.status >= 10) {
