@@ -5,7 +5,7 @@ import { moveOrangeBallInDirection } from "./orangeBalls"
 
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112].includes(n);
+  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115].includes(n);
 }
 
 export function initGameInfo(info) {
@@ -33,6 +33,8 @@ export function initGameInfo(info) {
   info.teleports = [];
   info.trapDoors = [];
   info.yellowBalls = [];
+  info.yellowBallPushers = [];
+  info.yellowBallPushersTrigger = { x: -1, y: -1 };
 }
 
 export function initGameVars(vars) {
@@ -55,6 +57,7 @@ export function initGameVars(vars) {
   vars.teleporting = 0;
   vars.wave1 = 0;
   vars.wave2 = 0;
+  vars.ballPushersActive = false;
   vars.yellowCounter = 0;
 }
 
@@ -352,6 +355,15 @@ function charToNumber(c) {
     case "ς":
       result = 113;
       break;
+    case "σ":
+      result = 114;
+      break;
+    case "Ψ":
+      result = 115;
+      break;
+    case "ψ":
+      result = 116;
+      break;
     case "|":
       result = 1000;
       break;
@@ -573,6 +585,15 @@ function numberToChar(n) {
     case 113:
       result = "ς";
       break;
+    case 114:
+      result = "σ";
+      break;
+    case 115:
+      result = "Ψ";
+      break;
+    case 116:
+      result = "ψ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -634,7 +655,7 @@ export function updateObject(objects, x1, y1, x2, y2) {
   }
 }
 
-function updateYellow(yellowBalls, x1, y1, x2, y2, direction) {
+export function updateYellow(yellowBalls, x1, y1, x2, y2, direction) {
   for (let i = 0; i < yellowBalls.length; i++) {
     if (yellowBalls[i].x === x1 && yellowBalls[i].y === y1) {
       yellowBalls[i].x = x2;
@@ -709,7 +730,7 @@ export function checkDetonator(arr, x, y) {
   let detonator = false;
 
   if (y > 0) {
-    detonator = [2, 4, 8, 9].includes(arr[y - 1][x]);
+    detonator = [2, 4, 8, 9, 40, 93, 94].includes(arr[y - 1][x]);
     for (let i = 0; i < arr.length; i++) {
       for (let j = 0; j < arr[i].length; j++) {
         if (arr[i][j] === 36 && detonator) {
@@ -1094,6 +1115,9 @@ export function moveLeft(backData, gameData, gameInfo) {
             case 112:
               updateObject(gameInfo.forces, x - 1, y, x - 2, y);
               break;
+            case 115:
+              updateObject(gameInfo.yellowBallPushers, x - 1, y, x - 2, y);
+              break;
             default:
               break;
           }
@@ -1243,6 +1267,9 @@ export function moveRight(backData, gameData, gameInfo) {
             case 111:
               updateObject(gameInfo.forces, x + 1, y, x + 2, y);
               break;
+            case 115:
+              updateObject(gameInfo.yellowBallPushers, x + 1, y, x + 2, y);
+              break;
             default:
               break;
           }
@@ -1381,6 +1408,9 @@ export function jump(backData, gameData, gameInfo) {
             case 111:
             case 112:
               updateObject(gameInfo.forces, x, y - 1, x, y - 2);
+              break;
+            case 115:
+              updateObject(gameInfo.yellowBallPushers, x, y - 1, x, y - 2);
               break;
             default:
               break;
@@ -1550,6 +1580,9 @@ export function pushDown(backData, gameData, gameInfo) {
           case 111:
           case 112:
             updateObject(gameInfo.forces, x, y + 1, x, y + 2);
+            break;
+          case 115:
+            updateObject(gameInfo.yellowBallPushers, x, y + 1, x, y + 2);
             break;
           default:
             break;
@@ -1793,10 +1826,19 @@ export function getGameInfo(backData, gameData) {
           result.forces.push(force);
           break;
         }
+        case 115: {
+          let yellowBallPusher = { x: j, y: i };
+          result.yellowBallPushers.push(yellowBallPusher);
+          break;
+        }
+        case 116:
+          result.yellowBallPushersTrigger.x = j;
+          result.yellowBallPushersTrigger.y = i;
+          break;
         default:
           break;
       }
-      if (backData[i][j] === 20 || backData[i][j] === 23) {
+      if (backData[i][j] === 20 || backData[i][j] === 23 || gameData[i][j] === 113 || gameData[i][j] === 114) {
         result.hasWater = true;
       }
     }

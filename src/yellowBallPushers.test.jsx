@@ -1,0 +1,121 @@
+import { describe, it, expect } from "vitest";
+import { initGameInfo, initGameVars } from "./balUtils.js";
+import { checkYellowBallPushersTrigger } from "./yellowBallPushers";
+
+describe("Yellow ball pushers", () => {
+    const defaultGameInfo = {};
+    initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
+
+    // ***** checkYellowBallPushersTrigger *****
+
+    let gameInfo01a = {
+        ...defaultGameInfo,
+        yellowBallPushers: [{ x: 4, y: 2 }],
+        yellowBallPushersTrigger: { x: 7, y: 4 },
+        yellowBalls: [{ x: 3, y: 2, direction: "none" }, { x: 5, y: 2, direction: "none" }],
+    };
+
+    let input01a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 115, 9, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 0, 0, 0, 0, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 9, 0, 115, 0, 9, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 0, 0, 0, 0, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01a = checkYellowBallPushersTrigger(input01a, gameInfo01a, { ...defaultGameVars });
+    it("checkYellowBallPushersTrigger A", () => {
+        expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
+    });
+    it("checkYellowBallPushersTrigger A info", () => {
+        expect(JSON.stringify(info01a)).toBe(JSON.stringify({ updated: true }));
+    });
+    it("checkYellowBallPushersTrigger A yellow balls", () => {
+        expect(JSON.stringify(gameInfo01a.yellowBalls)).toBe(JSON.stringify([{ x: 2, y: 2, direction: "left" }, { x: 6, y: 2, direction: "right" }]));
+    });
+
+    let gameInfo01b = {
+        ...defaultGameInfo,
+        yellowBallPushers: [{ x: 4, y: 3 }],
+        yellowBallPushersTrigger: { x: 7, y: 5 },
+        yellowBalls: [{ x: 4, y: 2, direction: "none" }, { x: 4, y: 4, direction: "none" }],
+    };
+
+    let input01b = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 9, 0, 0, 0, 1],
+        [1, 0, 0, 0, 115, 0, 0, 0, 1],
+        [1, 0, 0, 0, 9, 0, 0, 2, 1],
+        [1, 0, 0, 0, 0, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01b = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 9, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 115, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 0, 0, 0, 9, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01b = checkYellowBallPushersTrigger(input01b, gameInfo01b, { ...defaultGameVars });
+    it("checkYellowBallPushersTrigger B", () => {
+        expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
+    });
+    it("checkYellowBallPushersTrigger B info", () => {
+        expect(JSON.stringify(info01b)).toBe(JSON.stringify({ updated: true }));
+    });
+    it("checkYellowBallPushersTrigger B yellow balls", () => {
+        expect(JSON.stringify(gameInfo01b.yellowBalls)).toBe(JSON.stringify([{ x: 4, y: 1, direction: "up" }, { x: 4, y: 5, direction: "down" }]));
+    });
+
+    let gameInfo01c = {
+        ...defaultGameInfo,
+        forces: [{ x: 1, y: 2, direction: 6 }],
+        yellowBallPushers: [{ x: 4, y: 2 }],
+        yellowBallPushersTrigger: { x: 7, y: 4 },
+        yellowBalls: [{ x: 3, y: 2, direction: "none" }, { x: 5, y: 2, direction: "none" }],
+    };
+
+    let input01c = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 111, 0, 9, 115, 9, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 0, 0, 0, 0, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01c = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 111, 0, 9, 115, 0, 9, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 0, 0, 0, 0, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01c = checkYellowBallPushersTrigger(input01c, gameInfo01c, { ...defaultGameVars });
+    it("checkYellowBallPushersTrigger C", () => {
+        expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
+    });
+    it("checkYellowBallPushersTrigger C info", () => {
+        expect(JSON.stringify(info01c)).toBe(JSON.stringify({ updated: true }));
+    });
+    it("checkYellowBallPushersTrigger C yellow balls", () => {
+        expect(JSON.stringify(gameInfo01c.yellowBalls)).toBe(JSON.stringify([{ x: 3, y: 2, direction: "none" }, { x: 6, y: 2, direction: "right" }]));
+    });
+
+
+
+    // Insert new tests here
+});

@@ -738,10 +738,10 @@ function drawLevel(
     // Shape: |\, code: 15, G 
     ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
-    ctx.moveTo(xmin - 1, ymax + 1);
-    ctx.lineTo(xmin - 1, ymin - 1);
-    ctx.lineTo(xmax + 1, ymax + 1);
-    ctx.lineTo(xmin - 1, ymax + 1);
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.fill();
   }
 
@@ -749,10 +749,10 @@ function drawLevel(
     // Shape: /|, code: 16, H 
     ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
-    ctx.moveTo(xmin - 1, ymax + 1);
-    ctx.lineTo(xmax + 1, ymin - 1);
-    ctx.lineTo(xmax + 1, ymax + 1);
-    ctx.lineTo(xmin - 1, ymax + 1);
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.fill();
   }
 
@@ -760,10 +760,10 @@ function drawLevel(
     // Shape: |/, code: 17, I
     ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
-    ctx.moveTo(xmin - 1, ymax + 1);
-    ctx.lineTo(xmin - 1, ymin - 1);
-    ctx.lineTo(xmax + 1, ymin - 1);
-    ctx.lineTo(xmin - 1, ymax + 1);
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.fill();
   }
 
@@ -771,10 +771,10 @@ function drawLevel(
     // Shape: \|, code: 18, J
     ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
     ctx.beginPath();
-    ctx.moveTo(xmin - 1, ymin - 1);
-    ctx.lineTo(xmax + 1, ymin - 1);
-    ctx.lineTo(xmax + 1, ymax + 1);
-    ctx.lineTo(xmin - 1, ymin - 1);
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.fill();
   }
 
@@ -836,67 +836,13 @@ function drawLevel(
     ctx.stroke();
   }
 
-  function drawWaterSurfaceRight(x, y) {
-    let fg;
-    let pt1 = { x: 0, y: 0 };
-    let pt2 = { x: 0, y: 0 };
-    let pt3 = { x: 0, y: 0 };
-    let waterLevel1 = ymin + 1;
-    let waterLevel2 = Math.round(ymin + (ymax - ymin) * 0.2);
-
-    pt1.x = xmin;
-    pt1.y = waterLevel2;
-    switch (wave) {
-      case 1:
-        pt2.x = (xmin + xc) / 2;
-        break;
-      case 2:
-        pt2.x = xc;
-        break;
-      case 3:
-        pt2.x = (xc + xmax) / 2;
-        break;
-      case 4:
-        pt2.x = xmax;
-        break;
-      default:
-        pt2.x = xc;
-        break;
+  function drawWaterSurfaceLeftOrRight(x, y, left) {
+    drawWaterSurface();
+    if (left) {
+      drawStoneTriangle90BottomRight(x, y);
+    } else {
+      drawStoneTriangle90BottomLeft(x, y);
     }
-    pt2.y = waterLevel1;
-    pt3.x = xmax;
-    pt3.y = waterLevel2;
-    // Wave
-    ctx.fillStyle = "rgb(0, 0, 90)";
-    ctx.strokeStyle = "rgb(0, 0, 90)";
-    ctx.beginPath();
-    ctx.moveTo(pt1.x, pt1.y);
-    ctx.lineTo(pt2.x, pt2.y);
-    ctx.lineTo(pt3.x, pt3.y);
-    ctx.lineTo(pt1.x, pt1.y);
-    ctx.fill();
-    ctx.stroke();
-    // Water
-    ctx.fillStyle = "rgb(0, 0, 90)";
-    ctx.strokeStyle = "rgb(0, 0, 90)";
-    ctx.beginPath();
-    ctx.moveTo(xmin, waterLevel2);
-    ctx.lineTo(xmax + 0.5, waterLevel2);
-    ctx.lineTo(xmax + 0.5, ymax);
-    ctx.lineTo(xmin, waterLevel2);
-    ctx.fill();
-    ctx.stroke();
-    // Stone or sand
-    fg = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.fillStyle = fg;
-    ctx.strokeStyle = fg;
-    ctx.beginPath();
-    ctx.moveTo(xmin, waterLevel2);
-    ctx.lineTo(xmax, ymax);
-    ctx.lineTo(xmin, ymax);
-    ctx.lineTo(xmin, waterLevel2);
-    ctx.fill();
-    ctx.stroke();
   }
 
   function drawWeakStone() {
@@ -920,6 +866,34 @@ function drawLevel(
     } else {
       drawBall("yellow");
     }
+  }
+
+  function drawYellowBallPusher() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    d1 = w1 / 2.5;
+    d2 = w1 / 10;
+    d3 = w1 / 4;
+    drawLine(ctx, xc - d1, yc, xc + d1, yc, "black");
+    drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "black");
+    drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "black");
+    drawLine(ctx, xc + d1, yc, xc + d3, yc - d2, "black");
+    drawLine(ctx, xc + d1, yc, xc + d3, yc + d2, "black");
+    drawLine(ctx, xc, yc - d1, xc, yc + d1, "black");
+    drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), "black";
+    drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), "black";
+    drawLine(ctx, xc, yc + d1, xc - d2, yc + d3), "black";
+    drawLine(ctx, xc, yc + d1, xc + d2, yc + d3), "black";
+  }
+
+  function drawYellowBallPushersTrigger() {
+    d1 = w1 / 7;
+    d2 = w1 / 2;
+    d3 = w1 / 1;
+    d4 = w1 / 8;
+    d5 = w1 / 6;
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "yellow");
+    drawLine(ctx, xc, ymin + d4, xc, ymin + d2, "rgb(220,220,220)");
+    drawLine(ctx, xc - d5, ymin + d4, xc + d5, ymin + d4, "rgb(220,220,220)");
   }
 
   if (
@@ -1206,7 +1180,16 @@ function drawLevel(
           drawForceLeft();
           break;
         case 113:
-          drawWaterSurfaceRight(col, row);
+          drawWaterSurfaceLeftOrRight(col, row, false);
+          break;
+        case 114:
+          drawWaterSurfaceLeftOrRight(col, row, true);
+          break;
+        case 115:
+          drawYellowBallPusher();
+          break;
+        case 116:
+          drawYellowBallPushersTrigger();
           break;
         case 1000:
           // For manual only (empty)

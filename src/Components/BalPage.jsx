@@ -37,6 +37,7 @@ import {
   initGameVars,
 } from "../balUtils.js";
 import { checkForces } from "../force";
+import { checkYellowBallPushersTrigger } from "../yellowBallPushers";
 import { moveOrangeBalls } from "../orangeBalls";
 
 import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
@@ -461,6 +462,11 @@ function BalPage() {
         if (info.updated) {
           update = true;
         }
+      }
+
+      info = checkYellowBallPushersTrigger(gameData, gameInfo, gameVars);
+      if (info.updated) {
+        update = true;
       }
 
       if (gameInfo.teleports.length > 0) {
@@ -1140,7 +1146,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 739;
+        gameVars.currentLevel = 740;
       }
       initLevel(gameVars.currentLevel);
     }
