@@ -149,7 +149,7 @@ describe("balUtils", () => {
     [1, 4, 2, 0, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info3c = checkFalling(inputBack3c, input3c, defaultGameInfo);
+  let info3c = checkFalling(inputBack3c, input3c, { ...defaultGameInfo });
   it("checkFalling C", () => {
     expect(JSON.stringify(input3c)).toBe(JSON.stringify(expectedOutput3c));
   });
@@ -1719,7 +1719,7 @@ describe("balUtils", () => {
 
   it("pushDown A info", () => {
     expect(JSON.stringify(info14a)).toBe(
-      JSON.stringify({ breaking: false, player: true, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: true, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -1749,7 +1749,7 @@ describe("balUtils", () => {
 
   it("pushDown B info", () => {
     expect(JSON.stringify(info14b)).toBe(
-      JSON.stringify({ breaking: false, player: true, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: true, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -1779,7 +1779,7 @@ describe("balUtils", () => {
 
   it("pushDown C info", () => {
     expect(JSON.stringify(info14c)).toBe(
-      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -1800,7 +1800,7 @@ describe("balUtils", () => {
   });
   it("pushDown D info", () => {
     expect(JSON.stringify(info14d)).toBe(
-      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -2000,7 +2000,7 @@ describe("balUtils", () => {
 
   it("One direction ports G info", () => {
     expect(JSON.stringify(info15g)).toBe(
-      JSON.stringify({ breaking: false, player: true, moveOneMore: true })
+      JSON.stringify({ breaking: false, player: true, playerAlreadyUpdated: false, moveOneMore: true })
     );
   });
 
@@ -2025,7 +2025,7 @@ describe("balUtils", () => {
 
   it("One direction ports G info", () => {
     expect(JSON.stringify(info15h)).toBe(
-      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -2050,7 +2050,7 @@ describe("balUtils", () => {
 
   it("One direction ports I info", () => {
     expect(JSON.stringify(info15i)).toBe(
-      JSON.stringify({ breaking: false, player: false, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: false, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -2107,7 +2107,7 @@ describe("balUtils", () => {
     [1, 1, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info16a = checkFalling(inputBack16abcde, input16a, defaultGameInfo);
+  let info16a = checkFalling(inputBack16abcde, input16a, { ...defaultGameInfo });
   it("Triangled Walls A", () => {
     expect(JSON.stringify(input16a)).toBe(JSON.stringify(expectedOutput16a));
   });
@@ -2131,7 +2131,7 @@ describe("balUtils", () => {
     [1, 0, 0, 0, 0, 1, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info16b = checkFalling(inputBack16abcde, input16b, defaultGameInfo);
+  let info16b = checkFalling(inputBack16abcde, input16b, { ...defaultGameInfo });
   it("Triangled Walls B", () => {
     expect(JSON.stringify(input16b)).toBe(JSON.stringify(expectedOutput16b));
   });
@@ -2155,7 +2155,7 @@ describe("balUtils", () => {
     [1, 1, 0, 0, 2, 1, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info16c = checkFalling(inputBack16abcde, input16c, defaultGameInfo);
+  let info16c = checkFalling(inputBack16abcde, input16c, { ...defaultGameInfo });
   it("Triangled Walls C", () => {
     expect(JSON.stringify(input16c)).toBe(JSON.stringify(expectedOutput16c));
   });
@@ -2179,7 +2179,7 @@ describe("balUtils", () => {
     [1, 1, 0, 0, 2, 1, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info16d = checkFalling(inputBack16abcde, input16d, defaultGameInfo);
+  let info16d = checkFalling(inputBack16abcde, input16d, { ...defaultGameInfo });
   it("Triangled Walls D", () => {
     expect(JSON.stringify(input16d)).toBe(JSON.stringify(expectedOutput16d));
   });
@@ -2203,7 +2203,7 @@ describe("balUtils", () => {
     [1, 1, 0, 0, 2, 1, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info16e = checkFalling(inputBack16abcde, input16e, defaultGameInfo);
+  let info16e = checkFalling(inputBack16abcde, input16e, { ...defaultGameInfo });
   it("Triangled Walls E", () => {
     expect(JSON.stringify(input16e)).toBe(JSON.stringify(expectedOutput16e));
   });
@@ -2236,7 +2236,7 @@ describe("balUtils", () => {
   ];
   let info16f;
   for (let i = 0; i < 5; i++) {
-    info16f = checkFalling(inputBack16f, input16f, defaultGameInfo);
+    info16f = checkFalling(inputBack16f, input16f, { ...defaultGameInfo });
   }
   it("Triangled Walls F", () => {
     expect(JSON.stringify(input16f)).toBe(JSON.stringify(expectedOutput16f));
@@ -2279,7 +2279,7 @@ describe("balUtils", () => {
     [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info17a = checkFalling(inputBack17abcd, input17a, defaultGameInfo);
+  let info17a = checkFalling(inputBack17abcd, input17a, { ...defaultGameInfo });
   it("Ladders A", () => {
     expect(JSON.stringify(input17a)).toBe(JSON.stringify(expectedOutput17a));
   });
@@ -2315,7 +2315,7 @@ describe("balUtils", () => {
   });
   it("Ladders B info", () => {
     expect(JSON.stringify(info17b)).toBe(
-      JSON.stringify({ breaking: false, player: true, moveOneMore: false })
+      JSON.stringify({ breaking: false, player: true, playerAlreadyUpdated: false, moveOneMore: false })
     );
   });
 
@@ -2339,7 +2339,7 @@ describe("balUtils", () => {
     [1, 0, 2, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info17c = checkFalling(inputBack17abcd, input17c, defaultGameInfo);
+  let info17c = checkFalling(inputBack17abcd, input17c, { ...defaultGameInfo });
   it("Ladders C", () => {
     expect(JSON.stringify(input17c)).toBe(JSON.stringify(expectedOutput17c));
   });

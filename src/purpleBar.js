@@ -1,6 +1,9 @@
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force";
+import { updateObject } from "./balUtils";
 
-export function movePurpleBar(arr, gameInfo, x, y, direction) {
+export function movePurpleBar(arr, gameInfo, direction) {
+    let x = gameInfo.blueBall.x;
+    let y = gameInfo.blueBall.y;
     let error = false;
     let maxCol = 0;
     let stop = false;
@@ -277,11 +280,41 @@ export function movePurpleBar(arr, gameInfo, x, y, direction) {
                             }
                         }
                     }
+                    if (update) {
+                        for (let i = xmin; i <= xmax; i++) {
+                            stop = false;
+                            for (let j = ymin; (j > 0) && !stop; j--) {
+                                const el = arr[j - 1][i];
+                                if ([2, 4, 8, 40, 93, 94].includes(el)) {
+                                    arr[j][i] = arr[j - 1][i];
+                                    arr[j - 1][i] = 0;
+                                    switch (el) {
+                                        case 2:
+                                            gameInfo.blueBall.x = i;
+                                            gameInfo.blueBall.y = j;
+                                            break;
+                                        case 8:
+                                        case 93:
+                                        case 94:
+                                            updateObject(gameInfo.redBalls, i, j - 1, i, j);
+                                            break;
+                                        case 40:
+                                            updateObject(gameInfo.orangeBalls, i, j - 1, i, j);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                } else {
+                                    stop = true;
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 4:
                     if (vertical) {
-                        // Do not move when there is an object with weight on top of a horizontal bar
-                        if ([4, 8, 93, 94].includes(arr[ymin - 1][xmin]) === false) {
+                        // Do not move when there is an object with weight on top
+                        if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][xmin]) === false) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
                                 const el = arr[i][x - 2];
@@ -302,9 +335,9 @@ export function movePurpleBar(arr, gameInfo, x, y, direction) {
                             if ((arr[ymin][xmin - 1] === 0) && !hasForceRight(arr, gameInfo, xmin - 1, ymin)) {
                                 update = true;
 
-                                // Do not move when there is an object with weight on top of a horizontal bar
+                                // Do not move when there is an object with weight on top
                                 for (let i = xmin; i <= xmax; i++) {
-                                    if ([4, 8, 93, 94].includes(arr[ymin - 1][i])) {
+                                    if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
                                         update = false;
                                     }
                                 }
@@ -321,8 +354,8 @@ export function movePurpleBar(arr, gameInfo, x, y, direction) {
                     break;
                 case 6:
                     if (vertical) {
-                        // Do not move when there is an object with weight on top of a horizontal bar
-                        if ([4, 8, 93, 94].includes(arr[ymin - 1][xmin]) === false) {
+                        // Do not move when there is an object with weight on top
+                        if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][xmin]) === false) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
                                 const el = arr[i][x + 2];
@@ -343,9 +376,9 @@ export function movePurpleBar(arr, gameInfo, x, y, direction) {
                             if ((arr[ymin][xmax + 1] === 0) && !hasForceLeft(arr, gameInfo, xmax + 1, ymin)) {
                                 update = true;
 
-                                // Do not move when there is an object with weight on top of a horizontal bar
+                                // Do not move when there is an object with weight on top
                                 for (let i = xmin; i <= xmax; i++) {
-                                    if ([4, 8, 93, 94].includes(arr[ymin - 1][i])) {
+                                    if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
                                         update = false;
                                     }
                                 }

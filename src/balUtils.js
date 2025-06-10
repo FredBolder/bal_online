@@ -1170,7 +1170,7 @@ export function moveLeft(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([101, 102, 103, 104].includes(gameData[y][x - 1]))) {
-        if (movePurpleBar(gameData, gameInfo, x, y, 4)) {
+        if (movePurpleBar(gameData, gameInfo, 4)) {
           result.player = true;
           gameData[y][x - 1] = 2;
           gameData[y][x] = element;
@@ -1317,7 +1317,7 @@ export function moveRight(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([100, 102, 103, 104].includes(gameData[y][x + 1]))) {
-        if (movePurpleBar(gameData, gameInfo, x, y, 6)) {
+        if (movePurpleBar(gameData, gameInfo, 6)) {
           result.player = true;
           gameData[y][x + 1] = 2;
           gameData[y][x] = element;
@@ -1428,7 +1428,7 @@ export function jump(backData, gameData, gameInfo) {
           result.moveOneMore = true;
         }
         if (!result.player && ([100, 101, 102, 104].includes(gameData[y - 1][x]))) {
-          if (movePurpleBar(gameData, gameInfo, x, y, 8)) {
+          if (movePurpleBar(gameData, gameInfo, 8)) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
@@ -1556,6 +1556,7 @@ export function pushDown(backData, gameData, gameInfo) {
   let result = {};
   result.breaking = false;
   result.player = false;
+  result.playerAlreadyUpdated = false;
   result.moveOneMore = false;
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
@@ -1617,10 +1618,12 @@ export function pushDown(backData, gameData, gameInfo) {
         result.breaking = true;
       }
       if (!result.player && ([100, 101, 102, 103].includes(gameData[y + 1][x]))) {
-        if (movePurpleBar(gameData, gameInfo, x, y, 2)) {
+        if (movePurpleBar(gameData, gameInfo, 2)) {
+          result.playerAlreadyUpdated = true;
           result.player = true;
-          gameData[y + 1][x] = 2;
-          gameData[y][x] = element;
+          if (gameData[y][x] === 0) {
+            gameData[y][x] = element;
+          }
         }
       }
     }

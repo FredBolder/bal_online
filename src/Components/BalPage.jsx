@@ -971,7 +971,7 @@ function BalPage() {
         case "S":
         case "2":
           info = pushDown(backData, gameData, gameInfo);
-          if (info.player) {
+          if (info.player && !info.playerAlreadyUpdated) {
             gameInfo.blueBall.y++;
             if (info.moveOneMore) {
               gameInfo.blueBall.y++;
@@ -990,10 +990,12 @@ function BalPage() {
         case "c":
         case "C":
         case "3":
-          info = moveDownRight(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.y++;
-            gameInfo.blueBall.x++;
+          if (!kPressed || (e.key === "3")) {
+            info = moveDownRight(backData, gameData, gameInfo);
+            if (info.player) {
+              gameInfo.blueBall.y++;
+              gameInfo.blueBall.x++;
+            }
           }
           break;
         default:
@@ -1076,6 +1078,11 @@ function BalPage() {
           }
         } else {
           switch (e.key) {
+            case "C":
+              if (fred) {
+                alert(numberToCode(gameVars.currentLevel));
+              }
+              break;
             case "L":
               // Move a 3-step stairs to the left
               pressKeysSequentially("qqaddedaqaeda");
