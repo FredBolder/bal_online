@@ -5,11 +5,11 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
     let result = { updated: false };
     if ((gameInfo.yellowBallPushersTrigger.x >= 0) && (gameInfo.yellowBallPushersTrigger.y > 0)) {
         if (gameVars.ballPushersActive) {
-            if (![2, 4, 8, 9, 40, 93, 94].includes(gameData[gameInfo.yellowBallPushersTrigger.y - 1][gameInfo.yellowBallPushersTrigger.x])) {
+            if (![2, 4, 8, 40, 93, 94].includes(gameData[gameInfo.yellowBallPushersTrigger.y - 1][gameInfo.yellowBallPushersTrigger.x])) {
                 gameVars.ballPushersActive = false;
             }
         } else {
-            if ([2, 4, 8, 9, 40, 93, 94].includes(gameData[gameInfo.yellowBallPushersTrigger.y - 1][gameInfo.yellowBallPushersTrigger.x])) {
+            if ([2, 4, 8, 40, 93, 94].includes(gameData[gameInfo.yellowBallPushersTrigger.y - 1][gameInfo.yellowBallPushersTrigger.x])) {
                 gameVars.ballPushersActive = true;
                 for (let i = 0; i < gameInfo.yellowBallPushers.length; i++) {
                     const yellowBallPusher = gameInfo.yellowBallPushers[i];

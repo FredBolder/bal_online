@@ -730,7 +730,7 @@ export function checkDetonator(arr, x, y) {
   let detonator = false;
 
   if (y > 0) {
-    detonator = [2, 4, 8, 9, 40, 93, 94].includes(arr[y - 1][x]);
+    detonator = [2, 4, 8, 40, 93, 94].includes(arr[y - 1][x]);
     for (let i = 0; i < arr.length; i++) {
       for (let j = 0; j < arr[i].length; j++) {
         if (arr[i][j] === 36 && detonator) {
