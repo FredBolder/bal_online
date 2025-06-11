@@ -3,9 +3,11 @@ import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force";
 import { movePurpleBar } from "./purpleBar";
 import { moveOrangeBallInDirection } from "./orangeBalls"
 
+const timeBombsTime = 100;
+
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115].includes(n);
+  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117].includes(n);
 }
 
 export function initGameInfo(info) {
@@ -31,6 +33,7 @@ export function initGameInfo(info) {
   info.redBalls = [];
   info.redFish = [];
   info.teleports = [];
+  info.timeBombs = [];
   info.trapDoors = [];
   info.yellowBalls = [];
   info.yellowBallPushers = [];
@@ -364,6 +367,9 @@ function charToNumber(c) {
     case "ψ":
       result = 116;
       break;
+    case "Ξ":
+      result = 117;
+      break;
     case "|":
       result = 1000;
       break;
@@ -593,6 +599,9 @@ function numberToChar(n) {
       break;
     case 116:
       result = "ψ";
+      break;
+    case 117:
+      result = "Ξ";
       break;
     case 1000:
       // For manual only
@@ -892,7 +901,6 @@ export function checkElevatorInOuts(arr, gameInfo) {
   return info;
 }
 
-
 export function checkFalling(backData, gameData, gameInfo) {
   let forceUp = false;
   let idx = -1;
@@ -1032,6 +1040,7 @@ function whiteOrBlue(n) {
 }
 
 export function moveLeft(backData, gameData, gameInfo) {
+  let idx = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1118,6 +1127,13 @@ export function moveLeft(backData, gameData, gameInfo) {
             case 115:
               updateObject(gameInfo.yellowBallPushers, x - 1, y, x - 2, y);
               break;
+            case 117:
+              idx = findElementByCoordinate(x - 1, y, gameInfo.timeBombs);
+              if (idx >= 0) {
+                gameInfo.timeBombs[idx].x = x - 2;
+                gameInfo.timeBombs[idx].status = timeBombsTime;
+              }
+              break;
             default:
               break;
           }
@@ -1182,6 +1198,7 @@ export function moveLeft(backData, gameData, gameInfo) {
 }
 
 export function moveRight(backData, gameData, gameInfo) {
+  let idx = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1270,6 +1287,13 @@ export function moveRight(backData, gameData, gameInfo) {
             case 115:
               updateObject(gameInfo.yellowBallPushers, x + 1, y, x + 2, y);
               break;
+            case 117:
+              idx = findElementByCoordinate(x + 1, y, gameInfo.timeBombs);
+              if (idx >= 0) {
+                gameInfo.timeBombs[idx].x = x + 2;
+                gameInfo.timeBombs[idx].status = timeBombsTime;
+              }
+              break;
             default:
               break;
           }
@@ -1329,6 +1353,7 @@ export function moveRight(backData, gameData, gameInfo) {
 }
 
 export function jump(backData, gameData, gameInfo) {
+  let idx = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1411,6 +1436,13 @@ export function jump(backData, gameData, gameInfo) {
               break;
             case 115:
               updateObject(gameInfo.yellowBallPushers, x, y - 1, x, y - 2);
+              break;
+            case 117:
+              idx = findElementByCoordinate(x, y - 1, gameInfo.timeBombs);
+              if (idx >= 0) {
+                gameInfo.timeBombs[idx].y = y - 2;
+                gameInfo.timeBombs[idx].status = timeBombsTime;
+              }
               break;
             default:
               break;
@@ -1551,6 +1583,7 @@ export function jumpRight(backData, gameData, gameInfo) {
 }
 
 export function pushDown(backData, gameData, gameInfo) {
+  let idx = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1584,6 +1617,13 @@ export function pushDown(backData, gameData, gameInfo) {
             break;
           case 115:
             updateObject(gameInfo.yellowBallPushers, x, y + 1, x, y + 2);
+            break;
+          case 117:
+            idx = findElementByCoordinate(x, y + 1, gameInfo.timeBombs);
+            if (idx >= 0) {
+              gameInfo.timeBombs[idx].y = y + 2;
+              gameInfo.timeBombs[idx].status = timeBombsTime;
+            }
             break;
           default:
             break;
@@ -1838,6 +1878,11 @@ export function getGameInfo(backData, gameData) {
           result.yellowBallPushersTrigger.x = j;
           result.yellowBallPushersTrigger.y = i;
           break;
+        case 117: {
+          let timeBomb = { x: j, y: i, status: -1 };
+          result.timeBombs.push(timeBomb);
+          break;
+        }
         default:
           break;
       }

@@ -37,6 +37,7 @@ import {
   initGameVars,
 } from "../balUtils.js";
 import { checkForces } from "../force";
+import { checkTimeBombs } from "../timeBombs";
 import { checkYellowBallPushersTrigger } from "../yellowBallPushers";
 import { moveOrangeBalls } from "../orangeBalls";
 
@@ -451,17 +452,25 @@ function BalPage() {
         gameVars.explosionCounter--;
       } else {
         gameVars.explosionCounter = 2;
-        info = checkDetonator(
-          gameData,
-          gameInfo.detonator.x,
-          gameInfo.detonator.y
-        );
+        info = checkDetonator(gameData, gameInfo.detonator.x, gameInfo.detonator.y);
         if (info.explosion) {
           playSound("explosion");
         }
         if (info.updated) {
           update = true;
         }
+      }
+
+      info = checkTimeBombs(gameData, backData, gameInfo);
+      if (info.explosion) {
+        playSound("explosion");
+      }
+      if (info.updated) {
+        update = true;
+      }
+      if (info.gameOver) {
+        gameVars.gameOver = true;
+        updateScreen();
       }
 
       info = checkYellowBallPushersTrigger(gameData, gameInfo, gameVars);

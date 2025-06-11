@@ -1,5 +1,6 @@
 import {
   drawBox,
+  drawCircle,
   drawFilledBox,
   drawFilledCircle,
   drawLine,
@@ -102,11 +103,83 @@ function drawLevel(
     return result;
   }
 
+  function drawAllRedFish() {
+    let d1 = 0;
+    let d2 = 0;
+    let d3 = 0;
+    let d4 = 0;
+    let d5 = 0;
+    let d6 = 0;
+    let pt1 = { x: 0, y: 0 };
+    let pt2 = { x: 0, y: 0 };
+    let pt3 = { x: 0, y: 0 };
+    let pt4 = { x: 0, y: 0 };
+
+    for (let i = 0; i < gameInfo.redFish.length; i++) {
+      const fish = gameInfo.redFish[i];
+      xmin = fish.x * size1 + leftMargin;
+      xmax = xmin + size1 - 1;
+      ymin = fish.y * size1 + topMargin;
+      ymax = ymin + size1 - 1;
+      w1 = xmax - xmin + 1;
+      w2 = ymax - ymin + 1;
+      xc = Math.round((xmax + xmin) / 2);
+      yc = Math.round((ymax + ymin) / 2);
+      let mirror = 1;
+      if (fish.direction == 4) {
+        mirror = -1;
+      }
+      d1 = (w1 / 2.3) * mirror;
+      d2 = w1 / 2.3;
+      d3 = 0;
+      d4 = (w1 / 3.5) * mirror;
+      d5 = w1 / 3;
+      d6 = w1 / 12;
+      pt1.x = Math.round(xc - d1);
+      pt1.y = Math.round(yc - d2);
+      pt2.x = Math.round(xc - d3);
+      pt2.y = Math.round(yc - d6);
+      pt3.x = Math.round(xc - d1);
+      pt3.y = Math.round(yc + d5);
+      pt4.x = Math.round(xc - d4);
+      pt4.y = Math.round(yc);
+      ctx.fillStyle = "red";
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.moveTo(pt1.x, pt1.y);
+      ctx.lineTo(pt2.x, pt2.y);
+      ctx.lineTo(pt3.x, pt3.y);
+      ctx.lineTo(pt4.x, pt4.y);
+      ctx.lineTo(pt1.x, pt1.y);
+      ctx.fill();
+      ctx.stroke();
+      if (mirror === 1) {
+        d1 = w1 / 7;
+      } else {
+        d1 = w1 / 2.5;
+      }
+      d2 = w1 / 3;
+      d3 = w1 / 3.2;
+      d4 = w1 / 3.8;
+      ctx.fillStyle = "red";
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+      ctx.ellipse(xc - d1 + d3, yc - d2 + d4, d3, d4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+  }
+
   function drawBall(color) {
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
   }
 
   function drawBlueBall() {
+    let d1 = 0;
+    let d2 = 0;
+    let d3 = 0;
+    let eye = 0;
     if (nicerGraphics) {
       if (gameInfo.hasDivingGlasses) {
         ctx.drawImage(elements.elementDiving, xmin, ymin, w1, w2);
@@ -147,22 +220,18 @@ function drawLevel(
   }
 
   function drawBomb(x, y) {
+    const sticks = 3;
     drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
     let factor = 0.1;
-    d1 = w1 / 6;
-    d2 = w1 / 2;
-    d3 = d2 + w2 * factor;
-    d4 = d3 + w2 * factor;
-    d5 = d4 + w2 * factor;
-    d6 = w1 / 6;
-    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 * factor, "red");
-    drawBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 * factor, "black");
-    drawFilledBox(ctx, xmin + d1, ymin + d3, w1 - 2 * d1, w2 * factor, "red");
-    drawBox(ctx, xmin + d1, ymin + d3, w1 - 2 * d1, w2 * factor, "black");
-    drawFilledBox(ctx, xmin + d1, ymin + d4, w1 - 2 * d1, w2 * factor, "red");
-    drawBox(ctx, xmin + d1, ymin + d4, w1 - 2 * d1, w2 * factor, "black");
-    drawLine(ctx, xc - d6, ymin + d2, xc - d6, ymin + d5);
-    drawLine(ctx, xc + d6, ymin + d2, xc + d6, ymin + d5);
+    let d1 = w1 / 6;
+    let d2 = w2 / 2;
+    let d3 = w1 / 6;
+    for (let i = 0; i < sticks; i++) {
+      drawFilledBox(ctx, xmin + d1, ymin + d2 + (i * w2 * factor), w1 - 2 * d1, w2 * factor, "red");
+      drawBox(ctx, xmin + d1, ymin + d2 + (i * w2 * factor), w1 - 2 * d1, w2 * factor, "black");
+    }
+    drawLine(ctx, xc - d3, ymin + d2, xc - d3, ymin + d2 + (sticks * w2 * factor), "black");
+    drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
   }
 
   function drawCopier() {
@@ -183,14 +252,13 @@ function drawLevel(
   }
 
   function drawDetonator() {
-    d1 = w1 / 7;
-    d2 = w1 / 2;
-    d3 = w1 / 1;
-    d4 = w1 / 8;
-    d5 = w1 / 6;
+    let d1 = w1 / 7;
+    let d2 = w2 / 2;
+    let d3 = w2 / 8;
+    let d4 = w1 / 6;
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red");
-    drawLine(ctx, xc, ymin + d4, xc, ymin + d2, "rgb(220,220,220)");
-    drawLine(ctx, xc - d5, ymin + d4, xc + d5, ymin + d4, "rgb(220,220,220)");
+    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, "rgb(220,220,220)");
+    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, "rgb(220,220,220)");
     drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.45, w1 * 0.65, "white", 1);
   }
 
@@ -212,13 +280,13 @@ function drawLevel(
   }
 
   function drawDivingGlasses(color) {
-    d1 = w1 / 5;
-    d2 = w1 / 4.5;
-    d3 = w1 / 2.5;
-    d4 = w1 / 10;
-    d5 = w1 / 1.8;
-    d6 = w1 / 10;
-    d7 = w1 / 2.5;
+    let d1 = w1 / 5;
+    let d2 = w1 / 4.5;
+    let d3 = w1 / 2.5;
+    let d4 = w1 / 10;
+    let d5 = w1 / 1.8;
+    let d6 = w1 / 10;
+    let d7 = w1 / 2.5;
     drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2, color);
     drawLine(ctx, xmin + d1, ymin + d2, xmin + d4, ymin + d3, color);
     drawLine(ctx, xmax - d1, ymin + d2, xmax - d4, ymin + d3, color);
@@ -231,14 +299,14 @@ function drawLevel(
   }
 
   function drawElectricity(x, y) {
+    let d1 = Math.round(w1 * 0.06);
+    let d2 = Math.round(w1 * 0.28);
+    let d3 = Math.round(w1 * 0.14);
+    let d4 = Math.round(w1 * 0.2);
+    let d5 = Math.round(w1 * 0.3);
+    let d6 = Math.round(w1 * 0.07);
+    let d7 = Math.round(w1 * 0.04);
     drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
-    d1 = Math.round(w1 * 0.06);
-    d2 = Math.round(w1 * 0.28);
-    d3 = Math.round(w1 * 0.14);
-    d4 = Math.round(w1 * 0.2);
-    d5 = Math.round(w1 * 0.3);
-    d6 = Math.round(w1 * 0.07);
-    d7 = Math.round(w1 * 0.04);
     ctx.fillStyle = "yellow";
     ctx.strokeStyle = "yellow";
     ctx.beginPath();
@@ -259,10 +327,10 @@ function drawLevel(
 
   function drawElevatorEntranceAndExit(x, y) {
     const color = getFgcolor(x, y, "white");
-    d1 = w1 / 3;
-    d2 = w1 / 10;
-    d3 = w1 / 8;
-    d4 = w1 / 8;
+    let d1 = w1 / 3;
+    let d2 = w1 / 10;
+    let d3 = w1 / 8;
+    let d4 = w1 / 8;
     drawLine(ctx, xc, ymin, xmax, ymin, color);
     drawLine(ctx, xmax, ymin, xmax, ymax, color);
     drawLine(ctx, xmax, ymax, xc, ymax, color);
@@ -276,10 +344,10 @@ function drawLevel(
   }
 
   function drawElevatorLeftRight() {
+    let d1 = w1 / 3;
+    let d2 = w1 / 10;
+    let d3 = w1 / 8;
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-    d1 = w1 / 3;
-    d2 = w1 / 10;
-    d3 = w1 / 8;
     drawLine(ctx, xc - d1, yc, xc + d1, yc, "white");
     drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "white");
     drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "white");
@@ -288,10 +356,10 @@ function drawLevel(
   }
 
   function drawElevatorUpDown() {
+    let d1 = w1 / 3;
+    let d2 = w1 / 10;
+    let d3 = w1 / 8;
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
-    d1 = w1 / 3;
-    d2 = w1 / 10;
-    d3 = w1 / 8;
     drawLine(ctx, xc, yc - d1, xc, yc + d1, "white");
     drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), "white";
     drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), "white";
@@ -302,38 +370,23 @@ function drawLevel(
   function drawExplosion() {
     ctx.fillStyle = "yellow";
     ctx.beginPath();
-    d1 = w1 / 10;
-    d2 = w2 / 2;
-    ctx.moveTo(xc - d1, yc - d2);
-    d1 = w1 / 8;
-    d2 = w2 / 7;
-    ctx.lineTo(xc + d1, yc - d2);
-    d1 = w1 / 2;
-    d2 = 0;
-    ctx.lineTo(xc + d1, yc - d2);
-    d1 = w1 / 6;
-    d2 = w2 / 7;
-    ctx.lineTo(xc + d1, yc + d2);
-    d1 = w1 / 8;
-    d2 = w2 / 2;
-    ctx.lineTo(xc + d1, yc + d2);
-    d1 = w1 / 8;
-    d2 = w2 / 9;
-    ctx.lineTo(xc - d1, yc + d2);
-    d1 = w1 / 2.5;
-    d2 = 0;
-    ctx.lineTo(xc - d1, yc - d2);
-    d1 = w1 / 4;
-    d2 = w2 / 12;
-    ctx.lineTo(xc - d1, yc - d2);
+    ctx.moveTo(xc - (w1 / 10), yc - (w2 / 2));
+    ctx.lineTo(xc + (w1 / 8), yc - (w2 / 7));
+    ctx.lineTo(xc + (w1 / 2), yc);
+    ctx.lineTo(xc + (w1 / 6), yc + (w2 / 7));
+    ctx.lineTo(xc + (w1 / 8), yc + (w2 / 2));
+    ctx.lineTo(xc - (w1 / 8), yc + (w2 / 9));
+    ctx.lineTo(xc - (w1 / 2.5), yc);
+    ctx.lineTo(xc - (w1 / 4), yc - (w2 / 12));
     ctx.closePath();
     ctx.fill();
   }
 
   function drawForceDown() {
-    d1 = w2 / 8;
-    d2 = w1 / 8;
-    d3 = w2 / 4;
+    let d1 = w2 / 8;
+    let d2 = w1 / 8;
+    let d3 = w2 / 4;
+    let d4 = 0;
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
     for (let i = -1; i <= 1; i++) {
@@ -345,9 +398,10 @@ function drawLevel(
   }
 
   function drawForceLeft() {
-    d1 = w1 / 8;
-    d2 = w2 / 8;
-    d3 = w1 / 4;
+    let d1 = w1 / 8;
+    let d2 = w2 / 8;
+    let d3 = w1 / 4;
+    let d4 = 0;
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
     for (let i = -1; i <= 1; i++) {
@@ -359,9 +413,10 @@ function drawLevel(
   }
 
   function drawForceRight() {
-    d1 = w1 / 8;
-    d2 = w2 / 8;
-    d3 = w1 / 4;
+    let d1 = w1 / 8;
+    let d2 = w2 / 8;
+    let d3 = w1 / 4;
+    let d4 = 0;
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
     for (let i = -1; i <= 1; i++) {
@@ -373,9 +428,10 @@ function drawLevel(
   }
 
   function drawForceUp() {
-    d1 = w2 / 8;
-    d2 = w1 / 8;
-    d3 = w2 / 4;
+    let d1 = w2 / 8;
+    let d2 = w1 / 8;
+    let d3 = w2 / 4;
+    let d4 = 0;
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
     for (let i = -1; i <= 1; i++) {
@@ -387,13 +443,13 @@ function drawLevel(
   }
 
   function drawGameRotator() {
+    let d1 = w1 * 0.3;
+    let d2 = w1 * 0.15;
     let pt1 = { x: 0, y: 0 };
     let pt2 = { x: 0, y: 0 };
     let pt3 = { x: 0, y: 0 };
 
     drawBox(ctx, xmin + 1, ymin + 1, w1 - 2, w2 - 2, "white");
-    d1 = w1 * 0.3;
-    d2 = w1 * 0.15;
     ctx.strokeStyle = "white";
     ctx.beginPath();
     ctx.arc(xc, yc, d1, 0.75 * Math.PI, 0.25 * Math.PI, false);
@@ -422,21 +478,9 @@ function drawLevel(
 
   function drawGreenBall() {
     if (nicerGraphics) {
-      ctx.drawImage(
-        elements.elementGreen,
-        xmin + w1 * 0.25,
-        ymin,
-        w1 * 0.5,
-        w2 * 0.5
-      );
+      ctx.drawImage(elements.elementGreen, xmin + w1 * 0.25, ymin, w1 * 0.5, w2 * 0.5);
     } else {
-      drawFilledCircle(
-        ctx,
-        w1 * 0.5 + xmin,
-        w1 * 0.25 + ymin,
-        w1 * 0.25,
-        "green"
-      );
+      drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "green");
     }
   }
 
@@ -448,13 +492,13 @@ function drawLevel(
   }
 
   function drawKey() {
-    d1 = w1 / 4;
-    d2 = w1 / 7;
-    d3 = w1 / 15; // Radius X
-    d4 = w1 / 7;  // Radius Y
-    d5 = w1 / 5;
-    d6 = w1 / 4;
-    d7 = w1 / 7;
+    let d1 = w1 / 4;
+    let d2 = w1 / 7;
+    let d3 = w1 / 15; // Radius X
+    let d4 = w1 / 7;  // Radius Y
+    let d5 = w1 / 5;
+    let d6 = w1 / 4;
+    let d7 = w1 / 7;
     ctx.strokeStyle = "silver";
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.beginPath();
@@ -543,12 +587,12 @@ function drawLevel(
   }
 
   function drawLightBulb() {
-    d1 = w1 / 2.5;
-    d2 = w2 / 4;
-    d3 = w2 / 4; // Length of screw
-    d4 = d3 / 4;
-    d5 = w2 / 15;
-    d6 = w1 / 2.2;
+    let d1 = w1 / 2.5;
+    let d2 = w2 / 4;
+    let d3 = w2 / 4; // Length of screw
+    let d4 = d3 / 4;
+    let d5 = w2 / 15;
+    let d6 = w1 / 2.2;
     drawFilledCircle(ctx, xc, (ymin + yc) / 2, w1 / 4, "#FFFFC5");
     drawFilledBox(ctx, xmin + d1, yc - d2, w1 - (d1 * 2), d2, "#FFFFC5");
     drawFilledBox(ctx, xmin + d1, yc, w1 - (d1 * 2), d3, "silver");
@@ -560,16 +604,16 @@ function drawLevel(
 
   function drawLock(x, y) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
-    d1 = w1 / 4;
-    d2 = w1 / 12;
-    d3 = w1 / 10;
-    d4 = w1 / 6;
-    d5 = w1 / 6;
+    let d1 = w1 / 4;
+    let d2 = w1 / 12;
+    let d3 = w1 / 10;
+    let d4 = w1 / 6;
+    let d5 = w1 / 6;
+    let d6 = ymin + d3 + d5;
     drawFilledBox(ctx, xmin + d1, yc, (xmax - d1) - (xmin + d1), (w2 / 2) - d2, "gold");
     ctx.strokeStyle = "silver";
-    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.beginPath();
-    d6 = ymin + d3 + d5;
+    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.ellipse(Math.round(xc), Math.round(d6), Math.round(d4), Math.round(d5), 0, Math.PI, 2 * Math.PI, false);
     ctx.stroke();
     drawLine(ctx, xc - d4, d6, xc - d4, yc, "silver");
@@ -637,14 +681,14 @@ function drawLevel(
   }
 
   function drawPickaxe() {
-    d1 = w1 / 4;
-    d2 = w1 / 4;
-    d3 = w1 / 3;
+    let d1 = w1 / 4;
+    let d2 = w1 / 4;
+    let d3 = w1 / 3;
     ctx.lineWidth = 3;
     drawLine(ctx, xmin + d1, ymin + d1, xmax - d2, ymax - d2, "silver");
     ctx.lineWidth = 1;
-    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.beginPath();
+    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.ellipse(xc + d3, yc + d3, w1 * 0.7, w2 * 0.7, 0, 1.1 * Math.PI, 1.4 * Math.PI, false);
     ctx.stroke();
   }
@@ -682,6 +726,10 @@ function drawLevel(
   }
 
   function drawRedBall() {
+    let d1 = 0;
+    let d2 = 0;
+    let eye = 0;
+
     if (nicerGraphics) {
       ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
     } else {
@@ -715,8 +763,8 @@ function drawLevel(
   }
 
   function drawSmallLadder() {
-    d1 = w1 / 8;
-    d2 = w2 / 8;
+    let d1 = w1 / 8;
+    let d2 = w2 / 8;
     drawLine(ctx, xc - d1, ymin, xc - d1, yc, "white");
     drawLine(ctx, xc + d1, ymin, xc + d1, yc, "white");
     drawLine(ctx, xc - d1, ymin + d2, xc + d1, ymin + d2, "white");
@@ -778,6 +826,25 @@ function drawLevel(
     ctx.fill();
   }
 
+  function drawTimeBomb(x, y) {
+    const sticks = 4;
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    let factor = 0.1;
+    let d1 = w1 / 6;
+    let d2 = w2 / 2.5;
+    let d3 = w1 / 6;
+    for (let i = 0; i < sticks; i++) {
+      drawFilledBox(ctx, xmin + d1, ymin + d2 + (i * w2 * factor), w1 - 2 * d1, w2 * factor, "red");
+      drawBox(ctx, xmin + d1, ymin + d2 + (i * w2 * factor), w1 - 2 * d1, w2 * factor, "black");
+    }
+    drawLine(ctx, xc - d3, ymin + d2, xc - d3, ymin + d2 + (sticks * w2 * factor), "black");
+    drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor)), "black";
+    drawFilledCircle(ctx, xc, ymin + d2 + (sticks * 0.5 * w2 * factor), w1 * 0.15, "white");
+    drawCircle(ctx, xc, ymin + d2 + (sticks * 0.5 * w2 * factor), w1 * 0.15, "black");
+    drawLine(ctx, xc, ymin + d2 + (sticks * 0.5 * w2 * factor), xc, ymin + d2 + (sticks * 0.5 * w2 * factor) - (w2 * 0.12), "black");
+    drawLine(ctx, xc, ymin + d2 + (sticks * 0.5 * w2 * factor), xc + (w1 * 0.08), ymin + d2 + (sticks * 0.5 * w2 * factor), "black");
+  }
+
   function drawTrapDoor() {
     ctx.lineWidth = 3;
     drawLine(ctx, xmin, ymin + 1, xmax - 2, ymin + 1, "rgb(70, 70, 70)");
@@ -785,8 +852,8 @@ function drawLevel(
   }
 
   function drawTrapDoorHalfOpen() {
+    let d1 = Math.round(w1 / Math.sqrt(2));
     ctx.lineWidth = 3;
-    d1 = Math.round(w1 / Math.sqrt(2));
     drawLine(ctx, xmin - 1, ymin + 1, xmin + d1, ymin + d1, "rgb(70, 70, 70)");
     ctx.lineWidth = 1;
   }
@@ -869,10 +936,10 @@ function drawLevel(
   }
 
   function drawYellowBallPusher() {
+    let d1 = w1 / 2.5;
+    let d2 = w1 / 10;
+    let d3 = w1 / 4;
     drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
-    d1 = w1 / 2.5;
-    d2 = w1 / 10;
-    d3 = w1 / 4;
     drawLine(ctx, xc - d1, yc, xc + d1, yc, "black");
     drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "black");
     drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "black");
@@ -886,14 +953,13 @@ function drawLevel(
   }
 
   function drawYellowBallPushersTrigger() {
-    d1 = w1 / 7;
-    d2 = w1 / 2;
-    d3 = w1 / 1;
-    d4 = w1 / 8;
-    d5 = w1 / 6;
+    let d1 = w1 / 7;
+    let d2 = w1 / 2;
+    let d3 = w1 / 8;
+    let d4 = w1 / 6;
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "yellow");
-    drawLine(ctx, xc, ymin + d4, xc, ymin + d2, "rgb(220,220,220)");
-    drawLine(ctx, xc - d5, ymin + d4, xc + d5, ymin + d4, "rgb(220,220,220)");
+    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, "rgb(220,220,220)");
+    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, "rgb(220,220,220)");
   }
 
   if (
@@ -929,18 +995,6 @@ function drawLevel(
   let yc = 0;
   let w1 = 0;
   let w2 = 0;
-  let eye = 0;
-  let d1 = 0;
-  let d2 = 0;
-  let d3 = 0;
-  let d4 = 0;
-  let d5 = 0;
-  let d6 = 0;
-  let d7 = 0;
-  let pt1 = { x: 0, y: 0 };
-  let pt2 = { x: 0, y: 0 };
-  let pt3 = { x: 0, y: 0 };
-  let pt4 = { x: 0, y: 0 };
   let x1 = 0;
   let y1 = 0;
   let x2 = 0;
@@ -1191,6 +1245,9 @@ function drawLevel(
         case 116:
           drawYellowBallPushersTrigger();
           break;
+        case 117:
+          drawTimeBomb(col, row);
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -1221,61 +1278,7 @@ function drawLevel(
   ctx.setLineDash([]);
   ctx.lineWidth = 1;
 
-  // Fish
-  for (let i = 0; i < gameInfo.redFish.length; i++) {
-    const fish = gameInfo.redFish[i];
-    xmin = fish.x * size1 + leftMargin;
-    xmax = xmin + size1 - 1;
-    ymin = fish.y * size1 + topMargin;
-    ymax = ymin + size1 - 1;
-    w1 = xmax - xmin + 1;
-    w2 = ymax - ymin + 1;
-    xc = Math.round((xmax + xmin) / 2);
-    yc = Math.round((ymax + ymin) / 2);
-    let mirror = 1;
-    if (fish.direction == 4) {
-      mirror = -1;
-    }
-    d1 = (w1 / 2.3) * mirror;
-    d2 = w1 / 2.3;
-    d3 = 0;
-    d4 = (w1 / 3.5) * mirror;
-    d5 = w1 / 3;
-    d6 = w1 / 12;
-    pt1.x = Math.round(xc - d1);
-    pt1.y = Math.round(yc - d2);
-    pt2.x = Math.round(xc - d3);
-    pt2.y = Math.round(yc - d6);
-    pt3.x = Math.round(xc - d1);
-    pt3.y = Math.round(yc + d5);
-    pt4.x = Math.round(xc - d4);
-    pt4.y = Math.round(yc);
-    ctx.fillStyle = "red";
-    ctx.strokeStyle = "red";
-    ctx.beginPath();
-    ctx.moveTo(pt1.x, pt1.y);
-    ctx.lineTo(pt2.x, pt2.y);
-    ctx.lineTo(pt3.x, pt3.y);
-    ctx.lineTo(pt4.x, pt4.y);
-    ctx.lineTo(pt1.x, pt1.y);
-    ctx.fill();
-    ctx.stroke();
-    if (mirror === 1) {
-      d1 = w1 / 7;
-    } else {
-      d1 = w1 / 2.5;
-    }
-    d2 = w1 / 3;
-    d3 = w1 / 3.2;
-    d4 = w1 / 3.8;
-    ctx.fillStyle = "red";
-    ctx.strokeStyle = "red";
-    ctx.beginPath();
-    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
-    ctx.ellipse(xc - d1 + d3, yc - d2 + d4, d3, d4, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-  }
+  drawAllRedFish();
 
   // Electricity
   if (gameInfo.electricityActive) {

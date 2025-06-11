@@ -3,6 +3,13 @@ export function drawBox(canvas, x, y, width, height, color) {
   canvas.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 }
 
+export function drawCircle(canvas, xc, yc, radius, color) {
+  canvas.strokeStyle = color;
+  canvas.beginPath();
+  canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius), 0, 2 * Math.PI, false);
+  canvas.stroke();
+}
+
 export function drawFilledBox(canvas, x, y, width, height, color) {
   canvas.fillStyle = color;
   canvas.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
