@@ -546,13 +546,12 @@ function BalPage() {
         if (info.update) {
           update = true;
         }
-        if (info.sound === 1) {
-          playSound("splash1");
+        if (info.sound !== "") {
+          playSound(info.sound);
         }
-        if (info.sound === 2) {
+        if (info.sound === "pain") {
           gameVars.gameOver = true;
           updateScreen();
-          playSound("pain");
         }
       } else {
         gameVars.skipFalling--;
@@ -850,13 +849,8 @@ function BalPage() {
   function handleKeyDown(e) {
     let info = {};
     info.player = false;
-    info.breaking = false;
-    info.divingGlasses = false;
     info.eating = false;
-    info.takingKey = false;
-    info.takingLadder = false;
-    info.takingLightBulb = false;
-    info.takingPickaxe = false;
+    info.sound = "";
     info.rotate = false;
     let rotate = false;
 
@@ -1019,9 +1013,6 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
     }
-    if (!Object.prototype.hasOwnProperty.call(info, "divingGlasses")) {
-      info.divingGlasses = false;
-    }
     if (info.eating) {
       gameInfo.greenBalls--;
       setGreen(gameInfo.greenBalls);
@@ -1043,31 +1034,8 @@ function BalPage() {
         saveProgress();
       }
     }
-    if (info.divingGlasses) {
-      gameInfo.hasDivingGlasses = true;
-      playSound("take");
-    }
-    if (info.takingKey) {
-      gameInfo.hasKey = true;
-      playSound("take");
-    }
-    if (info.takingLadder) {
-      gameInfo.hasLadder = true;
-      playSound("take");
-    }
-    if (info.takingLightBulb) {
-      playSound("take");
-    }
-    if (info.takingPickaxe) {
-      gameInfo.hasPickaxe = true;
-      playSound("take");
-    }
-    if (info.takingWeakStone) {
-      gameInfo.hasWeakStone = true;
-      playSound("take");
-    }
-    if (info.breaking) {
-      playSound("pickaxe");
+    if (info.sound !== "") {
+      playSound(info.sound);
     }
 
     if (!e.altKey && !e.ctrlKey) {
@@ -1162,7 +1130,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 741;
+        gameVars.currentLevel = 742;
       }
       initLevel(gameVars.currentLevel);
     }

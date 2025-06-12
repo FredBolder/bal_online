@@ -26,6 +26,7 @@ export function initGameInfo(info) {
   info.hasLadder = false;
   info.hasMirror = false;
   info.hasPickaxe = false;
+  info.hasPropeller = false;
   info.hasWater = false;
   info.hasWeakStone = false;
   info.horizontalElevators = [];
@@ -133,7 +134,7 @@ function isTeleport(x, y, teleports) {
   return result;
 }
 
-function notInAir(x, y, backData, gameData, gameInfo) {
+function notFalling(x, y, backData, gameData, gameInfo, isBlue = true) {
   let forceDown = hasForceDown(gameData, gameInfo, x, y);
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   return (
@@ -141,6 +142,7 @@ function notInAir(x, y, backData, gameData, gameInfo) {
     isLadder(x, y, backData) ||
     isLadder(x, y + 1, backData) ||
     inWater(x, y, backData) ||
+    (isBlue && gameInfo.hasPropeller) ||
     ((gameData[y - 1][x] !== 0) && forceUp) ||
     (forceUp && forceDown)
   );
@@ -261,6 +263,9 @@ function charToNumber(c) {
       break;
     case "O":
       result = 40;
+      break;
+    case "X":
+      result = 81;
       break;
     case "o":
       result = 82;
@@ -494,6 +499,9 @@ function numberToChar(n) {
       break;
     case 40:
       result = "O";
+      break;
+    case 81:
+      result = "X";
       break;
     case 82:
       result = "o";
@@ -908,7 +916,7 @@ export function checkFalling(backData, gameData, gameInfo) {
   result.update = false;
   result.ballX = -1;
   result.ballY = -1;
-  result.sound = 0;
+  result.sound = "";
 
   for (let i = gameData.length - 2; i >= 0; i--) {
     for (let j = 0; j < gameData[i].length; j++) {
@@ -919,9 +927,9 @@ export function checkFalling(backData, gameData, gameInfo) {
         // lava
         result.update = true;
         if (element1 === 2) {
-          result.sound = 2;
+          result.sound = "pain";
         } else {
-          result.sound = 1;
+          result.sound = "splash1";
         }
         gameData[i][j] = 0;
         switch (element1) {
@@ -954,7 +962,8 @@ export function checkFalling(backData, gameData, gameInfo) {
         if (
           // wall |\
           element2 === 15 && [2, 4, 8, 40, 93, 94].includes(element1) &&
-          gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData)
+          gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData) &&
+          (!gameInfo.hasPropeller || (element1 !== 2))
         ) {
           result.update = true;
           if (element1 === 2) {
@@ -976,7 +985,8 @@ export function checkFalling(backData, gameData, gameInfo) {
         if (
           // wall /|
           element2 === 16 && [2, 4, 8, 40, 93, 94].includes(element1) &&
-          gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData)
+          gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData) &&
+          (!gameInfo.hasPropeller || (element1 !== 2))
         ) {
           result.update = true;
           if (element1 === 2) {
@@ -1009,6 +1019,7 @@ export function checkFalling(backData, gameData, gameInfo) {
           !isLadder(j, i, backData) &&
           !isLadder(j, i + 1, backData) &&
           !inWater(j, i, backData) &&
+          ((element1 !== 2) || !gameInfo.hasPropeller) &&
           !forceUp
         ) ||
           (((element1 === 4) || (element1 === 40)) && !forceUp))
@@ -1025,7 +1036,7 @@ export function checkFalling(backData, gameData, gameInfo) {
           moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
         }
         if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
-          result.sound = 1;
+          result.sound = "splash1";
         }
         gameData[i + 1][j] = gameData[i][j];
         gameData[i][j] = 0;
@@ -1045,51 +1056,49 @@ export function moveLeft(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   let row = gameData[y];
-  result.breaking = false;
   result.eating = false;
-  result.takingKey = false;
-  result.takingLadder = false;
-  result.takingLightBulb = false;
-  result.takingPickaxe = false;
-  result.takingWeakStone = false;
   result.player = false;
   result.moveOneMore = false;
   result.teleporting = false;
   result.rotate = false;
-  result.divingGlasses = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (gameData.length > 0) {
-    if (notInAir(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
+    if (notFalling(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x - 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(row[x - 1]) ||
           (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
+          result.sound = "take";
           switch (row[x - 1]) {
+            case 0:
+              result.sound = "";
+              break;
             case 3:
               result.eating = true;
               break;
             case 26:
-              result.divingGlasses = true;
+              gameInfo.hasDivingGlasses = true;
               break;
             case 29:
-              result.takingKey = true;
+              gameInfo.hasKey = true;
               break;
             case 34:
-              result.takingPickaxe = true;
+              gameInfo.hasPickaxe = true;
               break;
             case 12:
             case 35:
-              result.breaking = true;
+              result.sound = "pickaxe";
+              break;
+            case 81:
+              gameInfo.hasPropeller = true;
               break;
             case 99:
-              result.takingWeakStone = true;
-              break;
-            case 105:
-              result.takingLightBulb = true;
+              gameInfo.hasWeakStone = true;
               break;
             case 108:
-              result.takingLadder = true;
+              gameInfo.hasLadder = true;
               break;
             default:
               break;
@@ -1204,52 +1213,50 @@ export function moveRight(backData, gameData, gameInfo) {
   let result = {};
   let row = gameData[y];
   let maxX = 0;
-  result.breaking = false;
   result.eating = false;
-  result.takingKey = false;
-  result.takingLadder = false;
-  result.takingLightBulb = false;
-  result.takingPickaxe = false;
-  result.takingWeakStone = false;
   result.player = false;
   result.moveOneMore = false;
   result.teleporting = false;
   result.rotate = false;
-  result.divingGlasses = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (gameData.length > 0) {
-    if (notInAir(x, y, backData, gameData, gameInfo) && !hasForceLeft(gameData, gameInfo, x, y)) {
+    if (notFalling(x, y, backData, gameData, gameInfo) && !hasForceLeft(gameData, gameInfo, x, y)) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(row[x + 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(row[x + 1]) ||
           (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
+          result.sound = "take";
           switch (row[x + 1]) {
+            case 0:
+              result.sound = "";
+              break;
             case 3:
               result.eating = true;
               break;
             case 26:
-              result.divingGlasses = true;
+              gameInfo.hasDivingGlasses = true;
               break;
             case 29:
-              result.takingKey = true;
+              gameInfo.hasKey = true;
               break;
             case 34:
-              result.takingPickaxe = true;
+              gameInfo.hasPickaxe = true;
               break;
             case 12:
             case 35:
-              result.breaking = true;
+              result.sound = "pickaxe";
+              break;
+            case 81:
+              gameInfo.hasPropeller = true;
               break;
             case 99:
-              result.takingWeakStone = true;
-              break;
-            case 105:
-              result.takingLightBulb = true;
+              gameInfo.hasWeakStone = true;
               break;
             case 108:
-              result.takingLadder = true;
+              gameInfo.hasLadder = true;
               break;
             default:
               break;
@@ -1357,25 +1364,21 @@ export function jump(backData, gameData, gameInfo) {
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
-  result.breaking = false;
   result.eating = false;
-  result.takingKey = false;
-  result.takingLadder = false;
-  result.takingLightBulb = false;
-  result.takingPickaxe = false;
-  result.takingWeakStone = false;
   result.player = false;
   result.moveOneMore = false;
-  result.divingGlasses = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (!result.player && ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x]) ||
+      if (y > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(gameData[y - 1][x]) ||
           (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
+          result.sound = "take";
           switch (gameData[y - 1][x]) {
             case 0:
+              result.sound = "";
               if (!gameInfo.hasWeakStone && gameInfo.hasLadder) {
                 backData[y][x] = 25;
               }
@@ -1384,26 +1387,26 @@ export function jump(backData, gameData, gameInfo) {
               result.eating = true;
               break;
             case 26:
-              result.divingGlasses = true;
+              gameInfo.hasDivingGlasses = true;
               break;
             case 29:
-              result.takingKey = true;
+              gameInfo.hasKey = true;
               break;
             case 34:
-              result.takingPickaxe = true;
+              gameInfo.hasPickaxe = true;
               break;
             case 12:
             case 35:
-              result.breaking = true;
+              result.sound = "pickaxe";
+              break;
+            case 81:
+              gameInfo.hasPropeller = true;
               break;
             case 99:
-              result.takingWeakStone = true;
-              break;
-            case 105:
-              result.takingLightBulb = true;
+              gameInfo.hasWeakStone = true;
               break;
             case 108:
-              result.takingLadder = true;
+              gameInfo.hasLadder = true;
               break;
             default:
               break;
@@ -1413,7 +1416,7 @@ export function jump(backData, gameData, gameInfo) {
           result.player = true;
         }
       }
-      if (y > 1 && notInAir(x, y, backData, gameData, gameInfo)) {
+      if (y > 1 && notFalling(x, y, backData, gameData, gameInfo)) {
         if (!result.player && (canMoveAlone(gameData[y - 1][x]) && (gameData[y - 1][x] !== 110)) && gameData[y - 2][x] === 0 &&
           !hasForceDown(gameData, gameInfo, x, y - 1)) {
           gameData[y - 2][x] = gameData[y - 1][x];
@@ -1477,41 +1480,40 @@ export function jumpLeft(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
-  result.takingKey = false;
-  result.takingLadder = false;
-  result.takingLightBulb = false;
-  result.takingPickaxe = false;
-  result.takingWeakStone = false;
   result.player = false;
-  result.divingGlasses = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && x > 0 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+      if (y > 0 && x > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(gameData[y - 1][x - 1])) {
+            result.sound = "take";
             switch (gameData[y - 1][x - 1]) {
+              case 0:
+                result.sound = "";
+                break;
               case 3:
                 result.eating = true;
                 break;
               case 26:
-                result.divingGlasses = true;
+                gameInfo.hasDivingGlasses = true;
                 break;
               case 29:
-                result.takingKey = true;
+                gameInfo.hasKey = true;
                 break;
               case 34:
-                result.takingPickaxe = true;
+                gameInfo.hasPickaxe = true;
+                break;
+              case 81:
+                gameInfo.hasPropeller = true;
                 break;
               case 99:
-                result.takingWeakStone = true;
-                break;
-              case 105:
-                result.takingLightBulb = true;
+                gameInfo.hasWeakStone = true;
                 break;
               case 108:
-                result.takingLadder = true;
+                gameInfo.hasLadder = true;
                 break;
               default:
                 break;
@@ -1532,41 +1534,40 @@ export function jumpRight(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
-  result.takingKey = false;
-  result.takingLadder = false;
-  result.takingLightBulb = false;
-  result.takingPickaxe = false;
-  result.takingWeakStone = false;
   result.player = false;
-  result.divingGlasses = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && x < gameData[0].length - 1 && notInAir(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+      if (y > 0 && x < gameData[0].length - 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 99, 105, 108].includes(gameData[y - 1][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(gameData[y - 1][x + 1])) {
+            result.sound = "take";
             switch (gameData[y - 1][x + 1]) {
+              case 0:
+                result.sound = "";
+                break;
               case 3:
                 result.eating = true;
                 break;
               case 26:
-                result.divingGlasses = true;
+                gameInfo.hasDivingGlasses = true;
                 break;
               case 29:
-                result.takingKey = true;
+                gameInfo.hasKey = true;
                 break;
               case 34:
-                result.takingPickaxe = true;
+                gameInfo.hasPickaxe = true;
+                break;
+              case 81:
+                gameInfo.hasPropeller = true;
                 break;
               case 99:
-                result.takingWeakStone = true;
-                break;
-              case 105:
-                result.takingLightBulb = true;
+                gameInfo.hasWeakStone = true;
                 break;
               case 108:
-                result.takingLadder = true;
+                gameInfo.hasLadder = true;
                 break;
               default:
                 break;
@@ -1587,10 +1588,10 @@ export function pushDown(backData, gameData, gameInfo) {
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
-  result.breaking = false;
   result.player = false;
   result.playerAlreadyUpdated = false;
   result.moveOneMore = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
@@ -1645,7 +1646,8 @@ export function pushDown(backData, gameData, gameInfo) {
         gameData[y + 1][x] === 0 &&
         (isLadder(x, y, backData) ||
           isLadder(x, y + 1, backData) ||
-          inWater(x, y, backData))
+          inWater(x, y, backData) ||
+          gameInfo.hasPropeller)
       ) {
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
@@ -1655,7 +1657,7 @@ export function pushDown(backData, gameData, gameInfo) {
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
         result.player = true;
-        result.breaking = true;
+        result.sound = "pickaxe";
       }
       if (!result.player && ([100, 101, 102, 103].includes(gameData[y + 1][x]))) {
         if (movePurpleBar(gameData, gameInfo, 2)) {
@@ -1676,6 +1678,7 @@ export function moveDownLeft(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.player = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
@@ -1683,7 +1686,7 @@ export function moveDownLeft(backData, gameData, gameInfo) {
       if (
         gameData[y + 1][x - 1] === 0 &&
         gameData[y + 1][x] === 0 &&
-        inWater(x, y, backData)
+        (inWater(x, y, backData) || gameInfo.hasPropeller)
       ) {
         gameData[y + 1][x - 1] = 2;
         gameData[y][x] = element;
@@ -1699,6 +1702,7 @@ export function moveDownRight(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.player = false;
+  result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
@@ -1706,7 +1710,7 @@ export function moveDownRight(backData, gameData, gameInfo) {
       if (
         gameData[y + 1][x + 1] === 0 &&
         gameData[y + 1][x] === 0 &&
-        inWater(x, y, backData)
+        (inWater(x, y, backData) || gameInfo.hasPropeller)
       ) {
         gameData[y + 1][x + 1] = 2;
         gameData[y][x] = element;
@@ -2290,7 +2294,7 @@ export function moveRedBalls(
       const red = gameInfo.redBalls[i];
       prevX = red.x;
 
-      if ((red.smart > 0) && notInAir(red.x, red.y, backData, gameData, gameInfo)) {
+      if ((red.smart > 0) && notFalling(red.x, red.y, backData, gameData, gameInfo, false)) {
         changeDirection = false;
 
         waitLeft = false;

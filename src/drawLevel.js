@@ -180,42 +180,46 @@ function drawLevel(
     let d2 = 0;
     let d3 = 0;
     let eye = 0;
+    let scaleFactor = gameInfo.hasPropeller ? 0.9: 1;
     if (nicerGraphics) {
       if (gameInfo.hasDivingGlasses) {
-        ctx.drawImage(elements.elementDiving, xmin, ymin, w1, w2);
+        ctx.drawImage(elements.elementDiving, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
       } else {
         if (status.gameOver) {
-          ctx.drawImage(elements.elementSad, xmin, ymin, w1, w2);
+          ctx.drawImage(elements.elementSad, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
         } else {
-          ctx.drawImage(elements.elementHappy, xmin, ymin, w1, w2);
+          ctx.drawImage(elements.elementHappy, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
         }
       }
     } else {
-      drawBall("blue");
+      drawFilledCircle(ctx, xc, yc + ((1 - scaleFactor) * w2 * 0.5), w1 * scaleFactor * 0.5, "blue");
 
-      eye = Math.round(w1 / 20);
+      eye = Math.round(w1 * scaleFactor / 20);
       if (eye < 1) {
         eye = 1;
       }
       d1 = size1 / 3.25;
-      d2 = Math.round(w1 / 12);
-      drawFilledCircle(ctx, xmin + d1, yc - d2, eye, "white");
-      drawFilledCircle(ctx, xmax - d1, yc - d2, eye, "white");
+      d2 = Math.round(w1 * scaleFactor / 12);
+      drawFilledCircle(ctx, xmin + d1, yc - d2 + ((1 - scaleFactor) * w2 * 0.5), eye, "white");
+      drawFilledCircle(ctx, xmax - d1, yc - d2 + ((1 - scaleFactor) * w2 * 0.5), eye, "white");
 
-      d1 = w1 / 3.5;
-      d2 = w1 / 3;
-      d3 = w1 / 2;
+      d1 = w1 * scaleFactor / 3.5;
+      d2 = w1 * scaleFactor / 3;
+      d3 = w1 * scaleFactor / 2;
       ctx.strokeStyle = "white";
       ctx.beginPath();
       if (status.gameOver) {
-        ctx.arc(xc, yc + d3, w1 - 2 * d1, 1.25 * Math.PI, 1.75 * Math.PI, false);
+        ctx.arc(xc, yc + d3 + ((1 - scaleFactor) * w2 * 0.5), (w1 * scaleFactor) - (2 * d1), 1.25 * Math.PI, 1.75 * Math.PI, false);
       } else {
-        ctx.arc(xc, ymin + d2, w1 - 2 * d1, 0.25 * Math.PI, 0.75 * Math.PI, false);
+        ctx.arc(xc, ymin + d2 + ((1 - scaleFactor) * w2 * 0.5), (w1 * scaleFactor) - (2 * d1), 0.25 * Math.PI, 0.75 * Math.PI, false);
       }
       ctx.stroke();
       if (gameInfo.hasDivingGlasses) {
-        drawDivingGlasses("gray");
+        drawDivingGlasses("gray", scaleFactor);
       }
+    }
+    if (gameInfo.hasPropeller) {
+      drawPropeller(-w2 * 0.17);
     }
   }
 
@@ -279,23 +283,25 @@ function drawLevel(
     drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
   }
 
-  function drawDivingGlasses(color) {
-    let d1 = w1 / 5;
-    let d2 = w1 / 4.5;
-    let d3 = w1 / 2.5;
-    let d4 = w1 / 10;
-    let d5 = w1 / 1.8;
-    let d6 = w1 / 10;
-    let d7 = w1 / 2.5;
-    drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2, color);
-    drawLine(ctx, xmin + d1, ymin + d2, xmin + d4, ymin + d3, color);
-    drawLine(ctx, xmax - d1, ymin + d2, xmax - d4, ymin + d3, color);
-    drawLine(ctx, xmin + d4, ymin + d3, xmin + d1, ymin + d5, color);
-    drawLine(ctx, xmax - d4, ymin + d3, xmax - d1, ymin + d5, color);
-    drawLine(ctx, xmin + d1, ymin + d5, xc - d6, ymin + d5, color);
-    drawLine(ctx, xmax - d1, ymin + d5, xc + d6, ymin + d5, color);
-    drawLine(ctx, xc - d6, ymin + d5, xc, ymin + d7, color);
-    drawLine(ctx, xc + d6, ymin + d5, xc, ymin + d7, color);
+  function drawDivingGlasses(color, scaleFactor = 1) {
+    let d1 = w1 * scaleFactor / 5;
+    let d2 = w1 * scaleFactor / 4.5;
+    let d3 = w1 * scaleFactor / 2.5;
+    let d4 = w1 * scaleFactor / 10;
+    let d5 = w1 * scaleFactor / 1.8;
+    let d6 = w1 * scaleFactor / 10;
+    let d7 = w1 * scaleFactor / 2.5;
+    let dx = (1 - scaleFactor) * w1 * 0.5;
+    let dy = (1 - scaleFactor) * w2;
+    drawLine(ctx, xmin + d1 + dx, ymin + d2 + dy, xmax - d1 - dx, ymin + d2 + dy, color);
+    drawLine(ctx, xmin + d1 + dx, ymin + d2 + dy, xmin + d4 + dx, ymin + d3 + dy, color);
+    drawLine(ctx, xmax - d1 - dx, ymin + d2 + dy, xmax - d4 - dx, ymin + d3 + dy, color);
+    drawLine(ctx, xmin + d4 + dx, ymin + d3 + dy, xmin + d1 + dx, ymin + d5 + dy, color);
+    drawLine(ctx, xmax - d4 - dx, ymin + d3 + dy, xmax - d1 - dx, ymin + d5 + dy, color);
+    drawLine(ctx, xmin + d1 + dx, ymin + d5 + dy, xc - d6, ymin + d5 + dy, color);
+    drawLine(ctx, xmax - d1 - dx, ymin + d5 + dy, xc + d6, ymin + d5 + dy, color);
+    drawLine(ctx, xc - d6, ymin + d5 + dy, xc, ymin + d7 + dy, color);
+    drawLine(ctx, xc + d6, ymin + d5 + dy, xc, ymin + d7 + dy, color);
   }
 
   function drawElectricity(x, y) {
@@ -690,6 +696,48 @@ function drawLevel(
     ctx.beginPath();
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.ellipse(xc + d3, yc + d3, w1 * 0.7, w2 * 0.7, 0, 1.1 * Math.PI, 1.4 * Math.PI, false);
+    ctx.stroke();
+  }
+
+  function drawPropeller(offsetY = 0) {
+    let d1 = w1 * 0.1;
+    let d2 = w1 * 0.05;
+    let d3 = w1 * 0.2;
+    let pt1 = { x: 0, y: 0 };
+    let pt2 = { x: 0, y: 0 };
+    let pt3 = { x: 0, y: 0 };
+    let pt4 = { x: 0, y: 0 };
+
+    drawLine(ctx, xc, Math.round(ymin + d3 + (d2 * 0.5) + offsetY), xc, Math.round(ymin + d3 + d1 + offsetY), "lightgray");
+    pt1.x = xmin;
+    pt1.y = Math.round(ymin + d3 + (d2 * 0.5) + offsetY);
+    pt2.x = Math.round(xc - d1);
+    pt2.y = Math.round(ymin + d3 + offsetY);
+    pt3.x = xc;
+    pt3.y = Math.round(ymin + d3 + (d2 * 0.5) + offsetY);
+    pt4.x = Math.round(xc - d1);
+    pt4.y = Math.round(ymin + d3 + d2) + offsetY;
+    ctx.beginPath();
+    ctx.moveTo(pt1.x, pt1.y);
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.lineTo(pt3.x, pt3.y);
+    ctx.lineTo(pt4.x, pt4.y);
+    ctx.lineTo(pt1.x, pt1.y);
+    ctx.fillStyle = "lightgray";
+    ctx.strokeStyle = "gray";
+    ctx.fill();
+    ctx.stroke();
+    pt1.x = xmax;
+    pt2.x = Math.round(xc + d1);
+    pt3.x = xc;
+    pt4.x = Math.round(xc + d1);
+    ctx.beginPath();
+    ctx.moveTo(pt1.x, pt1.y);
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.lineTo(pt3.x, pt3.y);
+    ctx.lineTo(pt4.x, pt4.y);
+    ctx.lineTo(pt1.x, pt1.y);
+    ctx.fill();
     ctx.stroke();
   }
 
@@ -1146,6 +1194,9 @@ function drawLevel(
           break;
         case 40:
           drawOrangeBall();
+          break;
+        case 81:
+          drawPropeller();
           break;
         case 82:
           drawGrayBall(1);
