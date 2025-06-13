@@ -1,5 +1,18 @@
-import { updateYellow } from "./balUtils.js";
+import { findElementByCoordinate, updateYellow } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
+
+function isNotMovingYellowBall(gameData, gameInfo, x, y) {
+    let idx = -1;
+    let result = false;
+
+    if (gameData[y][x] === 9) {
+        idx = findElementByCoordinate(x, y, gameInfo.yellowBalls);
+        if (idx >= 0) {
+            result = (gameInfo.yellowBalls[idx].direction === "none");
+        }
+    }
+    return result;
+}
 
 export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
     let result = { updated: false };
@@ -16,7 +29,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                     const x = yellowBallPusher.x;
                     const y = yellowBallPusher.y;
                     if (x < gameData[0].length - 2) {
-                        if ((gameData[y][x + 1] === 9) && (gameData[y][x + 2] === 0) && !hasForceLeft(gameData, gameInfo, x + 1, y)) {
+                        if (isNotMovingYellowBall(gameData, gameInfo, x + 1, y) && (gameData[y][x + 2] === 0) && !hasForceLeft(gameData, gameInfo, x + 1, y)) {
                             gameData[y][x + 2] = 9;
                             gameData[y][x + 1] = 0;
                             updateYellow(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
@@ -24,7 +37,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         }
                     }
                     if (x > 2) {
-                        if ((gameData[y][x - 1] === 9) && (gameData[y][x - 2] === 0) && !hasForceRight(gameData, gameInfo, x - 1, y)) {
+                        if (isNotMovingYellowBall(gameData, gameInfo, x - 1, y) && (gameData[y][x - 2] === 0) && !hasForceRight(gameData, gameInfo, x - 1, y)) {
                             gameData[y][x - 2] = 9;
                             gameData[y][x - 1] = 0;
                             updateYellow(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
@@ -32,7 +45,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         }
                     }
                     if (y < gameData.length - 2) {
-                        if ((gameData[y + 1][x] === 9) && (gameData[y + 2][x] === 0) && !hasForceUp(gameData, gameInfo, x, y + 1)) {
+                        if (isNotMovingYellowBall(gameData, gameInfo, x, y + 1) && (gameData[y + 2][x] === 0) && !hasForceUp(gameData, gameInfo, x, y + 1)) {
                             gameData[y + 2][x] = 9;
                             gameData[y + 1][x] = 0;
                             updateYellow(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
@@ -40,7 +53,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         }
                     }
                     if (y > 2) {
-                        if ((gameData[y - 1][x] === 9) && (gameData[y - 2][x] === 0) && !hasForceDown(gameData, gameInfo, x, y - 1)) {
+                        if (isNotMovingYellowBall(gameData, gameInfo, x, y - 1) && (gameData[y - 2][x] === 0) && !hasForceDown(gameData, gameInfo, x, y - 1)) {
                             gameData[y - 2][x] = 9;
                             gameData[y - 1][x] = 0;
                             updateYellow(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");

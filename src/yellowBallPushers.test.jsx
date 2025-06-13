@@ -115,6 +115,33 @@ describe("Yellow ball pushers", () => {
         expect(JSON.stringify(gameInfo01c.yellowBalls)).toBe(JSON.stringify([{ x: 3, y: 2, direction: "none" }, { x: 6, y: 2, direction: "right" }]));
     });
 
+    let gameInfo01d = {
+        ...defaultGameInfo,
+        yellowBallPushers: [{ x: 4, y: 2 }],
+        yellowBallPushersTrigger: { x: 7, y: 4 },
+        yellowBalls: [{ x: 3, y: 2, direction: "up" }, { x: 5, y: 2, direction: "down" }],
+    };
+
+    let input01d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 115, 9, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 2, 1],
+        [1, 0, 0, 0, 0, 0, 0, 116, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01d = input01d.map(row => [...row]);
+    let info01d = checkYellowBallPushersTrigger(input01d, gameInfo01d, { ...defaultGameVars });
+    it("checkYellowBallPushersTrigger D", () => {
+        expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
+    });
+    it("checkYellowBallPushersTrigger D info", () => {
+        expect(JSON.stringify(info01d)).toBe(JSON.stringify({ updated: false }));
+    });
+    it("checkYellowBallPushersTrigger D yellow balls", () => {
+        expect(JSON.stringify(gameInfo01d.yellowBalls)).toBe(JSON.stringify([{ x: 3, y: 2, direction: "up" }, { x: 5, y: 2, direction: "down" }]));
+    });
+
 
 
     // Insert new tests here
