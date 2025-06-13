@@ -21,6 +21,7 @@ export function initGameInfo(info) {
   info.elevators = [];
   info.forces = [];
   info.greenBalls = 0;
+  info.hasCoilSpring = false;
   info.hasDivingGlasses = false;
   info.hasKey = false;
   info.hasLadder = false;
@@ -375,6 +376,9 @@ function charToNumber(c) {
     case "Ξ":
       result = 117;
       break;
+    case "j":
+      result = 118;
+      break;
     case "|":
       result = 1000;
       break;
@@ -610,6 +614,9 @@ function numberToChar(n) {
       break;
     case 117:
       result = "Ξ";
+      break;
+    case 118:
+      result = "j";
       break;
     case 1000:
       // For manual only
@@ -1050,6 +1057,44 @@ function whiteOrBlue(n) {
   return n === 4 || n === 5;
 }
 
+function take(gameData, gameInfo, result, x, y) {
+  switch (gameData[y][x]) {
+    case 0:
+      result.sound = "";
+      break;
+    case 3:
+      result.eating = true;
+      break;
+    case 12:
+    case 35:
+      result.sound = "pickaxe";
+      break;
+    case 26:
+      gameInfo.hasDivingGlasses = true;
+      break;
+    case 29:
+      gameInfo.hasKey = true;
+      break;
+    case 34:
+      gameInfo.hasPickaxe = true;
+      break;
+    case 81:
+      gameInfo.hasPropeller = true;
+      break;
+    case 99:
+      gameInfo.hasWeakStone = true;
+      break;
+    case 108:
+      gameInfo.hasLadder = true;
+      break;
+    case 118:
+      gameInfo.hasCoilSpring = true;
+      break;
+    default:
+      break;
+  }
+}
+
 export function moveLeft(backData, gameData, gameInfo) {
   let idx = -1;
   let x = gameInfo.blueBall.x;
@@ -1058,7 +1103,6 @@ export function moveLeft(backData, gameData, gameInfo) {
   let row = gameData[y];
   result.eating = false;
   result.player = false;
-  result.moveOneMore = false;
   result.teleporting = false;
   result.rotate = false;
   result.sound = "";
@@ -1068,43 +1112,13 @@ export function moveLeft(backData, gameData, gameInfo) {
     if (notFalling(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(row[x - 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(row[x - 1]) ||
           (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
-          switch (row[x - 1]) {
-            case 0:
-              result.sound = "";
-              break;
-            case 3:
-              result.eating = true;
-              break;
-            case 26:
-              gameInfo.hasDivingGlasses = true;
-              break;
-            case 29:
-              gameInfo.hasKey = true;
-              break;
-            case 34:
-              gameInfo.hasPickaxe = true;
-              break;
-            case 12:
-            case 35:
-              result.sound = "pickaxe";
-              break;
-            case 81:
-              gameInfo.hasPropeller = true;
-              break;
-            case 99:
-              gameInfo.hasWeakStone = true;
-              break;
-            case 108:
-              gameInfo.hasLadder = true;
-              break;
-            default:
-              break;
-          }
+          take(gameData, gameInfo, result, x - 1, y);
           row[x] = element;
           row[x - 1] = 2;
+          gameInfo.blueBall.x = x - 1;
           result.player = true;
         }
       }
@@ -1115,6 +1129,7 @@ export function moveLeft(backData, gameData, gameInfo) {
           row[x - 2] = row[x - 1];
           row[x - 1] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x - 1;
           switch (row[x - 2]) {
             case 9:
               updateYellow(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
@@ -1151,12 +1166,13 @@ export function moveLeft(backData, gameData, gameInfo) {
         if (!result.player && ((row[x - 1] === 11) || ((row[x - 1] === 30) && gameInfo.hasKey)) && row[x - 2] === 0) {
           row[x - 2] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x - 2;
           result.player = true;
-          result.moveOneMore = true;
         }
         if (!result.player && row[x - 1] === 89 && row[x - 2] === 0) {
           row[x - 2] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x - 2;
           result.player = true;
           result.rotate = true;
         }
@@ -1173,6 +1189,7 @@ export function moveLeft(backData, gameData, gameInfo) {
           row[x - 2] = row[x - 1];
           row[x - 1] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x - 1;
           result.player = true;
         }
       }
@@ -1180,6 +1197,7 @@ export function moveLeft(backData, gameData, gameInfo) {
         if ((row[x - 1] === 31) || (row[x - 1] === 92)) {
           row[x - 1] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x - 1;
           result.player = true;
           result.teleporting = true;
         }
@@ -1199,6 +1217,7 @@ export function moveLeft(backData, gameData, gameInfo) {
           result.player = true;
           gameData[y][x - 1] = 2;
           gameData[y][x] = element;
+          gameInfo.blueBall.x = x - 1;
         }
       }
     }
@@ -1215,7 +1234,6 @@ export function moveRight(backData, gameData, gameInfo) {
   let maxX = 0;
   result.eating = false;
   result.player = false;
-  result.moveOneMore = false;
   result.teleporting = false;
   result.rotate = false;
   result.sound = "";
@@ -1226,43 +1244,13 @@ export function moveRight(backData, gameData, gameInfo) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(row[x + 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(row[x + 1]) ||
           (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
-          switch (row[x + 1]) {
-            case 0:
-              result.sound = "";
-              break;
-            case 3:
-              result.eating = true;
-              break;
-            case 26:
-              gameInfo.hasDivingGlasses = true;
-              break;
-            case 29:
-              gameInfo.hasKey = true;
-              break;
-            case 34:
-              gameInfo.hasPickaxe = true;
-              break;
-            case 12:
-            case 35:
-              result.sound = "pickaxe";
-              break;
-            case 81:
-              gameInfo.hasPropeller = true;
-              break;
-            case 99:
-              gameInfo.hasWeakStone = true;
-              break;
-            case 108:
-              gameInfo.hasLadder = true;
-              break;
-            default:
-              break;
-          }
+          take(gameData, gameInfo, result, x + 1, y);
           row[x] = element;
           row[x + 1] = 2;
+          gameInfo.blueBall.x = x + 1;
           result.player = true;
         }
       }
@@ -1273,6 +1261,7 @@ export function moveRight(backData, gameData, gameInfo) {
           row[x + 2] = row[x + 1];
           row[x + 1] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x + 1;
           switch (row[x + 2]) {
             case 9:
               updateYellow(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
@@ -1309,12 +1298,13 @@ export function moveRight(backData, gameData, gameInfo) {
         if (!result.player && ((row[x + 1] === 10) || ((row[x + 1] === 30) && gameInfo.hasKey)) && row[x + 2] === 0) {
           row[x + 2] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x + 2;
           result.player = true;
-          result.moveOneMore = true;
         }
         if (!result.player && row[x + 1] === 89 && row[x + 2] === 0) {
           row[x + 2] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x + 2;
           result.player = true;
           result.rotate = true;
         }
@@ -1325,6 +1315,7 @@ export function moveRight(backData, gameData, gameInfo) {
           row[x + 3] = row[x + 2];
           row[x + 2] = row[x + 1];
           row[x + 1] = 2;
+          gameInfo.blueBall.x = x + 1;
           row[x] = element;
           result.player = true;
         }
@@ -1333,6 +1324,7 @@ export function moveRight(backData, gameData, gameInfo) {
         if ((row[x + 1] === 31) || (row[x + 1] === 92)) {
           row[x + 1] = 2;
           row[x] = element;
+          gameInfo.blueBall.x = x + 1;
           result.player = true;
           result.teleporting = true;
         }
@@ -1351,6 +1343,7 @@ export function moveRight(backData, gameData, gameInfo) {
         if (movePurpleBar(gameData, gameInfo, 6)) {
           result.player = true;
           gameData[y][x + 1] = 2;
+          gameInfo.blueBall.x = x + 1;
           gameData[y][x] = element;
         }
       }
@@ -1366,62 +1359,45 @@ export function jump(backData, gameData, gameInfo) {
   let result = {};
   result.eating = false;
   result.player = false;
-  result.moveOneMore = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(gameData[y - 1][x]) ||
+      if (gameInfo.hasCoilSpring && y > 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if (gameData[y - 1][x] === 0) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 2][x])) {
+            result.sound = "take";
+            take(gameData, gameInfo, result, x, y - 2);
+            gameData[y - 2][x] = 2;
+            gameData[y][x] = element;
+            gameInfo.blueBall.x = x;
+            gameInfo.blueBall.y = y - 2;
+            result.player = true;
+          }
+        }
+      }
+      if (!result.player && y > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 1][x]) ||
           (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
-          switch (gameData[y - 1][x]) {
-            case 0:
-              result.sound = "";
-              if (!gameInfo.hasWeakStone && gameInfo.hasLadder) {
-                backData[y][x] = 25;
-              }
-              break;
-            case 3:
-              result.eating = true;
-              break;
-            case 26:
-              gameInfo.hasDivingGlasses = true;
-              break;
-            case 29:
-              gameInfo.hasKey = true;
-              break;
-            case 34:
-              gameInfo.hasPickaxe = true;
-              break;
-            case 12:
-            case 35:
-              result.sound = "pickaxe";
-              break;
-            case 81:
-              gameInfo.hasPropeller = true;
-              break;
-            case 99:
-              gameInfo.hasWeakStone = true;
-              break;
-            case 108:
-              gameInfo.hasLadder = true;
-              break;
-            default:
-              break;
+          take(gameData, gameInfo, result, x, y - 1);
+          if (!gameInfo.hasWeakStone && gameInfo.hasLadder && (gameData[y - 1][x] === 0)) {
+            backData[y][x] = 25;
           }
           gameData[y - 1][x] = 2;
           gameData[y][x] = element;
+          gameInfo.blueBall.y = y - 1;
           result.player = true;
         }
       }
-      if (y > 1 && notFalling(x, y, backData, gameData, gameInfo)) {
-        if (!result.player && (canMoveAlone(gameData[y - 1][x]) && (gameData[y - 1][x] !== 110)) && gameData[y - 2][x] === 0 &&
+      if (!result.player && y > 1 && notFalling(x, y, backData, gameData, gameInfo)) {
+        if ((canMoveAlone(gameData[y - 1][x]) && (gameData[y - 1][x] !== 110)) && gameData[y - 2][x] === 0 &&
           !hasForceDown(gameData, gameInfo, x, y - 1)) {
           gameData[y - 2][x] = gameData[y - 1][x];
           gameData[y - 1][x] = 2;
           gameData[y][x] = element;
+          gameInfo.blueBall.y = y - 1;
           switch (gameData[y - 2][x]) {
             case 9:
               updateYellow(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
@@ -1459,14 +1435,15 @@ export function jump(backData, gameData, gameInfo) {
         ) {
           gameData[y - 2][x] = 2;
           gameData[y][x] = element;
+          gameInfo.blueBall.y = y - 2;
           result.player = true;
-          result.moveOneMore = true;
         }
         if (!result.player && ([100, 101, 102, 104].includes(gameData[y - 1][x]))) {
           if (movePurpleBar(gameData, gameInfo, 8)) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
+            gameInfo.blueBall.y = y - 1;
           }
         }
       }
@@ -1486,40 +1463,28 @@ export function jumpLeft(backData, gameData, gameInfo) {
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && x > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(gameData[y - 1][x - 1])) {
+      if (gameInfo.hasCoilSpring && y > 1 && x > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0)) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 2][x - 1])) {
             result.sound = "take";
-            switch (gameData[y - 1][x - 1]) {
-              case 0:
-                result.sound = "";
-                break;
-              case 3:
-                result.eating = true;
-                break;
-              case 26:
-                gameInfo.hasDivingGlasses = true;
-                break;
-              case 29:
-                gameInfo.hasKey = true;
-                break;
-              case 34:
-                gameInfo.hasPickaxe = true;
-                break;
-              case 81:
-                gameInfo.hasPropeller = true;
-                break;
-              case 99:
-                gameInfo.hasWeakStone = true;
-                break;
-              case 108:
-                gameInfo.hasLadder = true;
-                break;
-              default:
-                break;
-            }
+            take(gameData, gameInfo, result, x - 1, y - 2);
+            gameData[y - 2][x - 1] = 2;
+            gameData[y][x] = element;
+            gameInfo.blueBall.x = x - 1;
+            gameInfo.blueBall.y = y - 2;
+            result.player = true;
+          }
+        }
+      }
+      if (!result.player && y > 0 && x > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if (gameData[y - 1][x] === 0) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 1][x - 1])) {
+            result.sound = "take";
+            take(gameData, gameInfo, result, x - 1, y - 1);
             gameData[y - 1][x - 1] = 2;
             gameData[y][x] = element;
+            gameInfo.blueBall.x = x - 1;
+            gameInfo.blueBall.y = y - 1;
             result.player = true;
           }
         }
@@ -1540,40 +1505,28 @@ export function jumpRight(backData, gameData, gameInfo) {
 
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
-      if (y > 0 && x < gameData[0].length - 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108].includes(gameData[y - 1][x + 1])) {
+      if (gameInfo.hasCoilSpring && y > 1 && x < gameData[0].length - 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0)) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 2][x + 1])) {
             result.sound = "take";
-            switch (gameData[y - 1][x + 1]) {
-              case 0:
-                result.sound = "";
-                break;
-              case 3:
-                result.eating = true;
-                break;
-              case 26:
-                gameInfo.hasDivingGlasses = true;
-                break;
-              case 29:
-                gameInfo.hasKey = true;
-                break;
-              case 34:
-                gameInfo.hasPickaxe = true;
-                break;
-              case 81:
-                gameInfo.hasPropeller = true;
-                break;
-              case 99:
-                gameInfo.hasWeakStone = true;
-                break;
-              case 108:
-                gameInfo.hasLadder = true;
-                break;
-              default:
-                break;
-            }
+            take(gameData, gameInfo, result, x + 1, y - 2);
+            gameData[y - 2][x + 1] = 2;
+            gameData[y][x] = element;
+            gameInfo.blueBall.x = x + 1;
+            gameInfo.blueBall.y = y - 2;
+            result.player = true;
+          }
+        }
+      }
+      if (!result.player && y > 0 && x < gameData[0].length - 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
+        if (gameData[y - 1][x] === 0) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 1][x + 1])) {
+            result.sound = "take";
+            take(gameData, gameInfo, result, x + 1, y - 1);
             gameData[y - 1][x + 1] = 2;
             gameData[y][x] = element;
+            gameInfo.blueBall.x = x + 1;
+            gameInfo.blueBall.y = y - 1;
             result.player = true;
           }
         }
@@ -1589,8 +1542,6 @@ export function pushDown(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.player = false;
-  result.playerAlreadyUpdated = false;
-  result.moveOneMore = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
@@ -1601,6 +1552,7 @@ export function pushDown(backData, gameData, gameInfo) {
         gameData[y + 2][x] = gameData[y + 1][x];
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
+        gameInfo.blueBall.y = y + 1;
         switch (gameData[y + 2][x]) {
           case 9:
             updateYellow(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
@@ -1638,8 +1590,8 @@ export function pushDown(backData, gameData, gameInfo) {
       ) {
         gameData[y + 2][x] = 2;
         gameData[y][x] = element;
+        gameInfo.blueBall.y = y + 2;
         result.player = true;
-        result.moveOneMore = true;
       }
       if (
         !result.player &&
@@ -1651,17 +1603,19 @@ export function pushDown(backData, gameData, gameInfo) {
       ) {
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
+        gameInfo.blueBall.y = y + 1;
         result.player = true;
       }
       if (!result.player && ((gameData[y + 1][x] === 12) || (gameData[y + 1][x] === 35)) && gameInfo.hasPickaxe) {
         gameData[y + 1][x] = 2;
         gameData[y][x] = element;
+        gameInfo.blueBall.y = y + 1;
         result.player = true;
         result.sound = "pickaxe";
       }
       if (!result.player && ([100, 101, 102, 103].includes(gameData[y + 1][x]))) {
         if (movePurpleBar(gameData, gameInfo, 2)) {
-          result.playerAlreadyUpdated = true;
+          // Blue ball is updated in movePurpleBar when moving down
           result.player = true;
           if (gameData[y][x] === 0) {
             gameData[y][x] = element;
@@ -1690,6 +1644,8 @@ export function moveDownLeft(backData, gameData, gameInfo) {
       ) {
         gameData[y + 1][x - 1] = 2;
         gameData[y][x] = element;
+        gameInfo.blueBall.x = x - 1;
+        gameInfo.blueBall.y = y + 1;
         result.player = true;
       }
     }
@@ -1714,6 +1670,8 @@ export function moveDownRight(backData, gameData, gameInfo) {
       ) {
         gameData[y + 1][x + 1] = 2;
         gameData[y][x] = element;
+        gameInfo.blueBall.x = x + 1;
+        gameInfo.blueBall.y = y + 1;
         result.player = true;
       }
     }

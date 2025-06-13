@@ -180,7 +180,7 @@ function drawLevel(
     let d2 = 0;
     let d3 = 0;
     let eye = 0;
-    let scaleFactor = gameInfo.hasPropeller ? 0.9: 1;
+    let scaleFactor = gameInfo.hasPropeller ? 0.9 : 1;
     if (nicerGraphics) {
       if (gameInfo.hasDivingGlasses) {
         ctx.drawImage(elements.elementDiving, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
@@ -236,6 +236,26 @@ function drawLevel(
     }
     drawLine(ctx, xc - d3, ymin + d2, xc - d3, ymin + d2 + (sticks * w2 * factor), "black");
     drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
+  }
+
+  function drawCoilSpring() {
+    let color = "white";
+    let d1 = w1 / 4;
+    let d2 = 0;
+    let d3 = w2 / 8;
+    const n = 3;
+
+    drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2, color);
+    for (let i = 0; i < n; i++) {
+      drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2 + d3, color);
+      if (i < n - 1) {
+        drawLine(ctx, xmin + d1, ymin + d2 + d3 + d3, xmax - d1, ymin + d2 + d3, color);
+        d2 += (d3 * 2);
+      } else {
+        d2 += d3;
+      }
+    }
+    drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2, color);
   }
 
   function drawCopier() {
@@ -1298,6 +1318,9 @@ function drawLevel(
           break;
         case 117:
           drawTimeBomb(col, row);
+          break;
+        case 118:
+          drawCoilSpring();
           break;
         case 1000:
           // For manual only (empty)

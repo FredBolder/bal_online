@@ -882,17 +882,9 @@ function BalPage() {
           break;
         case "ArrowLeft":
           info = jumpLeft(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.x--;
-            gameInfo.blueBall.y--;
-          }
           break;
         case "ArrowRight":
           info = jumpRight(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.x++;
-            gameInfo.blueBall.y--;
-          }
           break;
         default:
           break;
@@ -904,15 +896,8 @@ function BalPage() {
         case "A":
         case "4":
           info = moveLeft(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.x--;
-            if (info.moveOneMore) {
-              gameInfo.blueBall.x--;
-            }
-            if (info.rotate) {
-              gameInfo.blueBall.x--;
-              rotate = rotateGame(backData, gameData, gameInfo);
-            }
+          if (info.rotate) {
+            rotate = rotateGame(backData, gameData, gameInfo);
           }
           if (info.teleporting) {
             gameVars.teleporting = 1;
@@ -923,16 +908,9 @@ function BalPage() {
         case "D":
         case "6":
           info = moveRight(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.x++;
-            if (info.moveOneMore) {
-              gameInfo.blueBall.x++;
-            }
-            if (info.rotate) {
-              gameInfo.blueBall.x++;
-              // eslint-disable-next-line no-unused-vars
-              rotate = rotateGame(backData, gameData, gameInfo);
-            }
+          if (info.rotate) {
+            // eslint-disable-next-line no-unused-vars
+            rotate = rotateGame(backData, gameData, gameInfo);
           }
           if (info.teleporting) {
             gameVars.teleporting = 1;
@@ -944,10 +922,6 @@ function BalPage() {
         case "8":
           info = jump(backData, gameData, gameInfo);
           if (info.player) {
-            gameInfo.blueBall.y--;
-            if (info.moveOneMore) {
-              gameInfo.blueBall.y--;
-            }
             gameVars.elevatorCounter++; // To prevent that you fall from the elevator
           }
           break;
@@ -955,50 +929,28 @@ function BalPage() {
         case "Q":
         case "7":
           info = jumpLeft(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.x--;
-            gameInfo.blueBall.y--;
-          }
           break;
         case "e":
         case "E":
         case "9":
           info = jumpRight(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.x++;
-            gameInfo.blueBall.y--;
-          }
           break;
         case "ArrowDown":
         case "s":
         case "S":
         case "2":
           info = pushDown(backData, gameData, gameInfo);
-          if (info.player && !info.playerAlreadyUpdated) {
-            gameInfo.blueBall.y++;
-            if (info.moveOneMore) {
-              gameInfo.blueBall.y++;
-            }
-          }
           break;
         case "y":
         case "Y":
         case "1":
           info = moveDownLeft(backData, gameData, gameInfo);
-          if (info.player) {
-            gameInfo.blueBall.y++;
-            gameInfo.blueBall.x--;
-          }
           break;
         case "c":
         case "C":
         case "3":
           if (!kPressed || (e.key === "3")) {
             info = moveDownRight(backData, gameData, gameInfo);
-            if (info.player) {
-              gameInfo.blueBall.y++;
-              gameInfo.blueBall.x++;
-            }
           }
           break;
         default:
@@ -1130,7 +1082,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 743;
+        gameVars.currentLevel = 744;
       }
       initLevel(gameVars.currentLevel);
     }
