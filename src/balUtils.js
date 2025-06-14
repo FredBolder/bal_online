@@ -150,7 +150,7 @@ function notFalling(x, y, backData, gameData, gameInfo, isBlue = true) {
   );
 }
 
-function charToNumber(c) {
+export function charToNumber(c) {
   let result = 0;
 
   switch (c) {
@@ -393,7 +393,7 @@ function charToNumber(c) {
   return result;
 }
 
-function numberToChar(n) {
+export function numberToChar(n) {
   let result = " ";
 
   switch (n) {
@@ -1081,6 +1081,7 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 29:
       gameInfo.hasKey = true;
+      result.sound = "key";
       break;
     case 34:
       gameInfo.hasPickaxe = true;
@@ -1175,6 +1176,9 @@ export function moveLeft(backData, gameData, gameInfo) {
           row[x] = element;
           gameInfo.blueBall.x = x - 2;
           result.player = true;
+          if (row[x - 1] === 30) {
+            result.sound = "unlock";
+          }
         }
         if (!result.player && row[x - 1] === 89 && row[x - 2] === 0) {
           row[x - 2] = 2;
@@ -1307,6 +1311,9 @@ export function moveRight(backData, gameData, gameInfo) {
           row[x] = element;
           gameInfo.blueBall.x = x + 2;
           result.player = true;
+          if (row[x + 1] === 30) {
+            result.sound = "unlock";
+          }
         }
         if (!result.player && row[x + 1] === 89 && row[x + 2] === 0) {
           row[x + 2] = 2;

@@ -37,6 +37,7 @@ import {
   initGameVars,
   checkMagnets,
 } from "../balUtils.js";
+import { exportLevel, importLevel } from "../files";
 import { checkForces } from "../force";
 import { checkTimeBombs } from "../timeBombs";
 import { checkYellowBallPushersTrigger } from "../yellowBallPushers";
@@ -46,16 +47,16 @@ import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
 import { getLevel, getRandomLevel } from "../levels.js";
-//import sndCatapult from "../Sounds/catapult.wav";
 import sndBreaking1 from "../Sounds/breaking1.wav";
 import sndBreaking2 from "../Sounds/breaking2.wav";
+import sndCatapult from "../Sounds/catapult.wav";
 import sndEat1 from "../Sounds/eat1.wav";
 import sndEat2 from "../Sounds/eat2.wav";
 import sndEat3 from "../Sounds/eat3.wav";
 import sndEat4 from "../Sounds/eat4.wav";
 import sndElectricity from "../Sounds/electricity.wav";
 import sndExplosion from "../Sounds/explosion.wav";
-//import sndKey from "../Sounds/key.wav";
+import sndKey from "../Sounds/key.wav";
 import sndLaserGun from "../Sounds/laser_gun.wav";
 import sndMagnet from "../Sounds/magnet.wav";
 import sndPain from "../Sounds/pain.wav";
@@ -65,7 +66,7 @@ import sndSplash2 from "../Sounds/splash2.wav";
 import sndTake from "../Sounds/take.wav";
 import sndTeleport from "../Sounds/teleport.wav";
 import sndTrapDoor from "../Sounds/trap_door.wav";
-//import sndUnlock from "../Sounds/unlock.wav";
+import sndUnlock from "../Sounds/unlock.wav";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -193,6 +194,9 @@ function BalPage() {
         case "breaking2":
           snd = sndBreaking2;
           break;
+        case "catapult":
+          snd = sndCatapult;
+          break;
         case "eat":
           n = Math.trunc(Math.random() * 4) + 1;
           switch (n) {
@@ -217,6 +221,9 @@ function BalPage() {
           break;
         case "explosion":
           snd = sndExplosion;
+          break;
+        case "key":
+          snd = sndKey;
           break;
         case "laser":
           snd = sndLaserGun;
@@ -244,6 +251,9 @@ function BalPage() {
           break;
         case "trap":
           snd = sndTrapDoor;
+          break;
+        case "unlock":
+          snd = sndUnlock;
           break;
         default:
           break;
@@ -582,15 +592,52 @@ function BalPage() {
     elementHelp.current.style.display = "block";
   }
 
-  async function initLevel(n) {
+  function loadColors(gameVars, levelSettings) {
     let color = "";
-    let data = [];
-    let gd;
     let h = -1;
     let p1 = -1;
     let w = -1;
     let x = -1;
     let y = -1;
+
+    gameVars.bgcolor = null;
+    gameVars.bgcolor = [];
+    gameVars.fgcolor = null;
+    gameVars.fgcolor = [];
+    for (let i = 0; i < levelSettings.length; i++) {
+      const setting = levelSettings[i];
+      p1 = setting.indexOf(":");
+      if (p1 >= 0) {
+        const name = setting.slice(0, p1).toLowerCase().trim();
+        const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+        switch (name) {
+          case "$bgcolor":
+          case "$fgcolor":
+            if (values.length === 5) {
+              x = tryParseInt(values[0], -1);
+              y = tryParseInt(values[1], -1);
+              w = tryParseInt(values[2], -1);
+              h = tryParseInt(values[3], -1);
+              color = values[4];
+              if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
+                if (name === "$bgcolor") {
+                  gameVars.bgcolor.push({ x, y, w, h, color })
+                } else {
+                  gameVars.fgcolor.push({ x, y, w, h, color })
+                }
+              }
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  async function initLevel(n) {
+    let data = [];
+    let gd;
 
     try {
       gameVars.currentLevel = n;
@@ -598,48 +645,16 @@ function BalPage() {
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
       data = await getLevel(gameVars.currentLevel);
-
-      // Colors
-      gameVars.bgcolor = null;
-      gameVars.bgcolor = [];
-      gameVars.fgcolor = null;
-      gameVars.fgcolor = [];
-      for (let i = 0; i < data.levelSettings.length; i++) {
-        const setting = data.levelSettings[i];
-        p1 = setting.indexOf(":");
-        if (p1 >= 0) {
-          const name = setting.slice(0, p1).toLowerCase().trim();
-          const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
-          switch (name) {
-            case "$bgcolor":
-            case "$fgcolor":
-              if (values.length === 5) {
-                x = tryParseInt(values[0], -1);
-                y = tryParseInt(values[1], -1);
-                w = tryParseInt(values[2], -1);
-                h = tryParseInt(values[3], -1);
-                color = values[4];
-                if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
-                  if (name === "$bgcolor") {
-                    gameVars.bgcolor.push({ x, y, w, h, color })
-                  } else {
-                    gameVars.fgcolor.push({ x, y, w, h, color })
-                  }
-                }
-              }
-              break;
-            default:
-              break;
-          }
-        }
-      }
-
+      loadColors(gameVars, data.levelSettings);
       gd = stringArrayToNumberArray(data.levelData);
+      backData = null;
       backData = gd.backData;
+      gameData = null;
       gameData = gd.gameData;
       gameVars.laser = null;
       gameVars.gameOver = false;
       updateScreen();
+      gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       updateScreen();
       setGreen(gameInfo.greenBalls);
@@ -811,6 +826,29 @@ function BalPage() {
           },
         ],
       });
+    }
+  }
+
+  async function clickExportLevel() {
+    const ok = await exportLevel(backData, gameData, gameVars);
+    if (!ok) {
+      console.log("Error while exporting level");
+    }
+  }
+
+  async function clickImportLevel() {
+    const result = await importLevel();
+    if (result !== null) {
+      backData = null;
+      backData = result.backData;
+      gameData = null;
+      gameData = result.gameData;
+      gameVars.laser = null;
+      gameVars.gameOver = false;
+      updateScreen();
+      gameInfo = null;
+      gameInfo = getGameInfo(backData, gameData);
+      loadColors(gameVars, result.levelSettings);
     }
   }
 
@@ -1309,6 +1347,12 @@ function BalPage() {
                 </div>
                 <div onClick={clickLoadFromMemory}>
                   <label>Load from memory</label>
+                </div>
+                <div onClick={clickExportLevel}>
+                  <label>Export level</label>
+                </div>
+                <div onClick={clickImportLevel}>
+                  <label>Import level</label>
                 </div>
               </div>
             </div>
