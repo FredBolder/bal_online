@@ -31,6 +31,7 @@ export function initGameInfo(info) {
   info.hasWater = false;
   info.hasWeakStone = false;
   info.horizontalElevators = [];
+  info.magnets = [];
   info.orangeBalls = [];
   info.redBalls = [];
   info.redFish = [];
@@ -379,6 +380,9 @@ function charToNumber(c) {
     case "j":
       result = 118;
       break;
+    case "μ":
+      result = 119;
+      break;
     case "|":
       result = 1000;
       break;
@@ -617,6 +621,9 @@ function numberToChar(n) {
       break;
     case 118:
       result = "j";
+      break;
+    case 119:
+      result = "μ";
       break;
     case 1000:
       // For manual only
@@ -1845,6 +1852,11 @@ export function getGameInfo(backData, gameData) {
           result.timeBombs.push(timeBomb);
           break;
         }
+        case 119: {
+          let magnet = { x: j, y: i };
+          result.magnets.push(magnet);
+          break;
+        }
         default:
           break;
       }
@@ -1856,7 +1868,7 @@ export function getGameInfo(backData, gameData) {
   return result;
 }
 
-export function CheckDamagedStones(arr, gameInfo) {
+export function checkDamagedStones(arr, gameInfo) {
   let result = { update: false, sound: 0 };
   let data = 0;
 
@@ -1879,6 +1891,24 @@ export function CheckDamagedStones(arr, gameInfo) {
         }
       } else {
         damagedStone.status = 0;
+      }
+    }
+  }
+  return result;
+}
+
+export function checkMagnets(gameInfo) {
+  let result = false;
+  const x = gameInfo.blueBall.x;
+  const y = gameInfo.blueBall.y;
+  if (gameInfo.hasCoilSpring || gameInfo.hasKey) {
+    for (let i = 0; i < gameInfo.magnets.length; i++) {
+      const magnet = gameInfo.magnets[i];
+      if (((x === (magnet.x - 1)) && (y === magnet.y)) || ((x === (magnet.x + 1)) && (y === magnet.y)) ||
+        ((x === magnet.x) && (y === (magnet.y - 1))) || ((x === magnet.x) && (y === (magnet.y + 1)))) {
+        gameInfo.hasCoilSpring = false;
+        gameInfo.hasKey = false;
+        result = true;
       }
     }
   }

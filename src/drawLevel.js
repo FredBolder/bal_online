@@ -646,6 +646,40 @@ function drawLevel(
     drawLine(ctx, xc + d4, d6, xc + d4, yc, "silver");
   }
 
+  function drawMagnet(x, y, rectangular = false) {
+    let d1 = 0;
+    let d2 = 0;
+    let d3 = 0;
+    let d4 = 0;
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    if (rectangular) {
+      d1 = w1 / 3;
+      d2 = w2 / 2.3;
+      drawFilledBox(ctx, xc - (d1 * 0.5), yc - d2, d1, d2, getFgcolor(x, y, "blue"));
+      drawFilledBox(ctx, xc - (d1 * 0.5), yc, d1, d2, getFgcolor(x, y, "red"));
+      drawText(ctx, xc, yc - (d2 * 0.5), "S", "middle", "black", d2 * 0.7, d1 * 0.9, "black", 1);
+      drawText(ctx, xc, yc + (d2 * 0.5), "N", "middle", "black", d2 * 0.7, d1 * 0.9, "black", 1);
+    } else {
+      d1 = w1 * 0.4; // Outer radius
+      d2 = w1 * 0.1; // Inner radius
+      d3 = w2 * 0.2; // Height of red part from center
+      d4 = w2 * 0.2; // Height of silver color
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
+      ctx.beginPath();
+      ctx.arc(Math.round(xc), Math.round(yc), Math.round(d1), 1 * Math.PI, 0 * Math.PI, false);
+      ctx.lineTo(Math.round(xc + d2), Math.round(yc));
+      ctx.arc(Math.round(xc), Math.round(yc), Math.round(d2), 0 * Math.PI, 1 * Math.PI, true);
+      ctx.lineTo(Math.round(xc - d1), Math.round(yc));
+      ctx.fill();
+      drawFilledBox(ctx, xc - d1, yc, d1 - d2 - 0.5, d3, "red");
+      drawFilledBox(ctx, xc + d2, yc, d1 - d2 - 0.5, d3, "red");
+      drawFilledBox(ctx, xc - d1, yc + d3, d1 - d2 - 0.5, d4, "silver");
+      drawFilledBox(ctx, xc + d2, yc + d3, d1 - d2 - 0.5, d4, "silver");
+    }
+  }
+
   function drawMirror(bottomLeftToUpperRight = true) {
     ctx.lineWidth = 3;
     if (bottomLeftToUpperRight) {
@@ -1321,6 +1355,9 @@ function drawLevel(
           break;
         case 118:
           drawCoilSpring();
+          break;
+        case 119:
+          drawMagnet();
           break;
         case 1000:
           // For manual only (empty)

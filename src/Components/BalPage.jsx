@@ -30,11 +30,12 @@ import {
   electricityTarget,
   inWater,
   checkTrapDoors,
-  CheckDamagedStones,
+  checkDamagedStones,
   checkCopiers,
   findElementByCoordinate,
   initGameInfo,
   initGameVars,
+  checkMagnets,
 } from "../balUtils.js";
 import { checkForces } from "../force";
 import { checkTimeBombs } from "../timeBombs";
@@ -56,6 +57,7 @@ import sndElectricity from "../Sounds/electricity.wav";
 import sndExplosion from "../Sounds/explosion.wav";
 //import sndKey from "../Sounds/key.wav";
 import sndLaserGun from "../Sounds/laser_gun.wav";
+import sndMagnet from "../Sounds/magnet.wav";
 import sndPain from "../Sounds/pain.wav";
 import sndPickaxe from "../Sounds/pickaxe.wav";
 import sndSplash1 from "../Sounds/splash1.wav";
@@ -219,6 +221,9 @@ function BalPage() {
         case "laser":
           snd = sndLaserGun;
           break;
+        case "magnet":
+          snd = sndMagnet;
+          break;
         case "pain":
           snd = sndPain;
           break;
@@ -321,6 +326,10 @@ function BalPage() {
     let update = false;
 
     if (!gameVars.gameOver && gameData && backData) {
+      if (checkMagnets(gameInfo)) {
+        playSound("magnet");
+      }
+
       info = checkTrapDoors(gameData, gameInfo);
       if (info.sound) {
         playSound("trap");
@@ -328,7 +337,7 @@ function BalPage() {
       if (info.updated) {
         update = true;
       }
-      info = CheckDamagedStones(gameData, gameInfo);
+      info = checkDamagedStones(gameData, gameInfo);
       if (info.sound === 1) {
         playSound("breaking1");
       }
@@ -824,6 +833,46 @@ function BalPage() {
     });
   }
 
+  function showWhatBlueBallHas() {
+    let msg = "";
+
+    function addItem(item) {
+      if (msg !== "") {
+        msg += ", ";
+      }
+      msg += item;
+    }
+
+    if (gameInfo.hasCoilSpring) {
+      addItem("coil spring");
+    }
+    if (gameInfo.hasDivingGlasses) {
+      addItem("diving glasses");
+    }
+    if (gameInfo.hasKey) {
+      addItem("key");
+    }
+    if (gameInfo.hasLadder) {
+      addItem("ladder");
+    }
+    if (gameInfo.hasPickaxe) {
+      addItem("pickaxe");
+    }
+    if (gameInfo.hasPropeller) {
+      addItem("propeller");
+    }
+    if (gameInfo.hasWeakStone) {
+      addItem("weak stone");
+    }
+
+    if (msg === "") {
+      msg = "You have nothing!";
+    } else {
+      msg = "You have the following: " + msg;
+    }
+    alert(msg);
+  }
+
   function handleChangeSettings() {
     settings.arrowButtons = cbArrowButtons.current.checked;
     settings.lessQuestions = cbQuestions.current.checked;
@@ -994,6 +1043,9 @@ function BalPage() {
       if (kPressed) {
         if (!e.shiftKey) {
           switch (e.key) {
+            case "h":
+              showWhatBlueBallHas();
+              break;
             case "l":
               // Move a 2-step stairs to the left
               pressKeysSequentially("qaeda");
@@ -1036,6 +1088,11 @@ function BalPage() {
       kPressed = ((e.key === "k") || (e.key === "K"));
     } else {
       kPressed = false;
+    }
+
+    // Extra check
+    if (checkMagnets(gameInfo)) {
+      playSound("magnet");
     }
   }
 
