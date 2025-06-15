@@ -1,5 +1,6 @@
-import { findElementByCoordinate, updateYellow } from "./balUtils.js";
+import { findElementByCoordinate } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
+import { updateYellowBall } from "./yellowBalls.js";
 
 function isNotMovingYellowBall(gameData, gameInfo, x, y) {
     let idx = -1;
@@ -32,7 +33,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         if (isNotMovingYellowBall(gameData, gameInfo, x + 1, y) && (gameData[y][x + 2] === 0) && !hasForceLeft(gameData, gameInfo, x + 1, y)) {
                             gameData[y][x + 2] = 9;
                             gameData[y][x + 1] = 0;
-                            updateYellow(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
+                            updateYellowBall(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
                             result.updated = true;
                         }
                     }
@@ -40,7 +41,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         if (isNotMovingYellowBall(gameData, gameInfo, x - 1, y) && (gameData[y][x - 2] === 0) && !hasForceRight(gameData, gameInfo, x - 1, y)) {
                             gameData[y][x - 2] = 9;
                             gameData[y][x - 1] = 0;
-                            updateYellow(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
+                            updateYellowBall(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
                             result.updated = true;
                         }
                     }
@@ -48,7 +49,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         if (isNotMovingYellowBall(gameData, gameInfo, x, y + 1) && (gameData[y + 2][x] === 0) && !hasForceUp(gameData, gameInfo, x, y + 1)) {
                             gameData[y + 2][x] = 9;
                             gameData[y + 1][x] = 0;
-                            updateYellow(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
+                            updateYellowBall(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
                             result.updated = true;
                         }
                     }
@@ -56,7 +57,7 @@ export function checkYellowBallPushersTrigger(gameData, gameInfo, gameVars) {
                         if (isNotMovingYellowBall(gameData, gameInfo, x, y - 1) && (gameData[y - 2][x] === 0) && !hasForceDown(gameData, gameInfo, x, y - 1)) {
                             gameData[y - 2][x] = 9;
                             gameData[y - 1][x] = 0;
-                            updateYellow(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
+                            updateYellowBall(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
                             result.updated = true;
                         }
                     }

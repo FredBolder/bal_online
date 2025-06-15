@@ -5,68 +5,46 @@ import Footer from "./Footer";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import MessageBox from './MessageBox';
-import { loadFromMemory, saveToMemory } from '../memory.js'
+
 import {
-  stringArrayToNumberArray,
-  checkElevatorInOuts,
   checkFalling,
-  moveLeft,
-  moveRight,
+  findElementByCoordinate,
+  inWater,
   jump,
   jumpLeft,
   jumpRight,
-  getGameInfo,
-  checkRedBalls,
-  moveElevators,
-  moveHorizontalElevators,
-  moveRedBalls,
-  moveYellowBalls,
-  pushDown,
   moveDownLeft,
   moveDownRight,
-  checkDetonator,
-  rotateGame,
-  moveFish,
-  electricityTarget,
-  inWater,
-  checkTrapDoors,
-  checkDamagedStones,
-  checkCopiers,
-  findElementByCoordinate,
-  initGameInfo,
-  initGameVars,
-  checkMagnets,
+  moveLeft,
+  moveRight,
+  pushDown,
+  stringArrayToNumberArray,
 } from "../balUtils.js";
-import { exportLevel, importLevel } from "../files";
-import { checkForces } from "../force";
-import { checkTimeBombs } from "../timeBombs";
-import { checkYellowBallPushersTrigger } from "../yellowBallPushers";
-import { moveOrangeBalls } from "../orangeBalls";
-
-import { booleanToString, stringToBoolean, tryParseInt } from "../utils.js";
-import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { codeToNumber, numberToCode } from "../codes.js";
+import { checkCopiers } from "../copiers.js";
+import { checkDamagedStones } from "../damagedStones.js";
+import { checkDetonator } from "../detonator.js";
+import { electricityTarget } from "../electricity.js";
+import { checkForces } from "../force.js";
+import { checkYellowBallPushersTrigger } from "../yellowBallPushers.js";
+import { clearBitMapLava, drawLevel } from "../drawLevel.js";
+import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../elevators.js";
+import { exportLevel, importLevel } from "../files.js";
+import { moveFish } from "../fish.js";
+import { getGameInfo, initGameInfo, initGameVars } from "../gameInfo.js";
 import { getLevel, getRandomLevel } from "../levels.js";
-import sndBreaking1 from "../Sounds/breaking1.wav";
-import sndBreaking2 from "../Sounds/breaking2.wav";
-import sndCatapult from "../Sounds/catapult.wav";
-import sndEat1 from "../Sounds/eat1.wav";
-import sndEat2 from "../Sounds/eat2.wav";
-import sndEat3 from "../Sounds/eat3.wav";
-import sndEat4 from "../Sounds/eat4.wav";
-import sndElectricity from "../Sounds/electricity.wav";
-import sndExplosion from "../Sounds/explosion.wav";
-import sndKey from "../Sounds/key.wav";
-import sndLaserGun from "../Sounds/laser_gun.wav";
-import sndMagnet from "../Sounds/magnet.wav";
-import sndPain from "../Sounds/pain.wav";
-import sndPickaxe from "../Sounds/pickaxe.wav";
-import sndSplash1 from "../Sounds/splash1.wav";
-import sndSplash2 from "../Sounds/splash2.wav";
-import sndTake from "../Sounds/take.wav";
-import sndTeleport from "../Sounds/teleport.wav";
-import sndTrapDoor from "../Sounds/trap_door.wav";
-import sndUnlock from "../Sounds/unlock.wav";
+import { checkMagnets } from "../magnets.js";
+import { loadFromMemory, saveToMemory } from '../memory.js'
+import { moveOrangeBalls } from "../orangeBalls.js";
+import { checkRedBalls, moveRedBalls } from "../redBalls.js";
+import { rotateGame } from "../rotateGame.js";
+import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
+import { playSound } from "../sound.js";
+import { checkTimeBombs } from "../timeBombs.js";
+import { checkTrapDoors } from "../trapDoors.js";
+import { tryParseInt } from "../utils.js";
+import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
+
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -90,13 +68,6 @@ let ctx;
 let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
-
-let settings = {
-  sound: true,
-  nicerGraphics: true,
-  lessQuestions: false,
-  arrowButtons: true,
-};
 
 let gameData = [];
 let backData = [];
@@ -154,119 +125,6 @@ function BalPage() {
 
   function saveProgress() {
     localStorage.setItem("lastSolvedLevel", gameVars.currentLevel.toString());
-  }
-
-  function loadSettings() {
-    const arrowButtons = localStorage.getItem("arrowButtons")
-    if (arrowButtons !== null) {
-      settings.arrowButtons = stringToBoolean(arrowButtons);
-    }
-    const lessQuestions = localStorage.getItem("lessQuestions")
-    if (lessQuestions !== null) {
-      settings.lessQuestions = stringToBoolean(lessQuestions);
-    }
-    const nicerGraphics = localStorage.getItem("nicerGraphics")
-    if (nicerGraphics !== null) {
-      settings.nicerGraphics = stringToBoolean(nicerGraphics);
-    }
-    const sound = localStorage.getItem("sound")
-    if (sound !== null) {
-      settings.sound = stringToBoolean(sound);
-    }
-  }
-
-  function saveSettings() {
-    localStorage.setItem("arrowButtons", booleanToString(settings.arrowButtons));
-    localStorage.setItem("lessQuestions", booleanToString(settings.lessQuestions));
-    localStorage.setItem("nicerGraphics", booleanToString(settings.nicerGraphics));
-    localStorage.setItem("sound", booleanToString(settings.sound));
-  }
-
-  function playSound(sound) {
-    let snd = null;
-    let n = 0;
-
-    if (settings.sound) {
-      switch (sound) {
-        case "breaking1":
-          snd = sndBreaking1;
-          break;
-        case "breaking2":
-          snd = sndBreaking2;
-          break;
-        case "catapult":
-          snd = sndCatapult;
-          break;
-        case "eat":
-          n = Math.trunc(Math.random() * 4) + 1;
-          switch (n) {
-            case 1:
-              snd = sndEat1;
-              break;
-            case 2:
-              snd = sndEat2;
-              break;
-            case 3:
-              snd = sndEat3;
-              break;
-            case 4:
-              snd = sndEat4;
-              break;
-            default:
-              break;
-          }
-          break;
-        case "electricity":
-          snd = sndElectricity;
-          break;
-        case "explosion":
-          snd = sndExplosion;
-          break;
-        case "key":
-          snd = sndKey;
-          break;
-        case "laser":
-          snd = sndLaserGun;
-          break;
-        case "magnet":
-          snd = sndMagnet;
-          break;
-        case "pain":
-          snd = sndPain;
-          break;
-        case "pickaxe":
-          snd = sndPickaxe;
-          break;
-        case "splash1":
-          snd = sndSplash1;
-          break;
-        case "splash2":
-          snd = sndSplash2;
-          break;
-        case "take":
-          snd = sndTake;
-          break;
-        case "teleport":
-          snd = sndTeleport;
-          break;
-        case "trap":
-          snd = sndTrapDoor;
-          break;
-        case "unlock":
-          snd = sndUnlock;
-          break;
-        default:
-          break;
-      }
-      if (snd !== sound) {
-        try {
-          const audio = new Audio(snd);
-          audio.play();
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
   }
 
   function checkGameOver() {
@@ -451,6 +309,9 @@ function BalPage() {
       }
 
       if (gameVars.yellowCounter > 0) {
+        if (gameVars.yellowCounter === 1) {
+          stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
+        }
         gameVars.yellowCounter--;
       } else {
         gameVars.yellowCounter = 1;
@@ -674,7 +535,7 @@ function BalPage() {
   }
 
   function clickSeries1() {
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       initLevel(200);
     } else {
       confirmAlert({
@@ -697,7 +558,7 @@ function BalPage() {
   }
 
   function clickSeries2() {
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       initLevel(700);
     } else {
       confirmAlert({
@@ -720,7 +581,7 @@ function BalPage() {
   }
 
   function clickSeriesSmall() {
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       initLevel(750);
     } else {
       confirmAlert({
@@ -743,7 +604,7 @@ function BalPage() {
   }
 
   function clickSeriesExtreme() {
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       initLevel(901);
     } else {
       confirmAlert({
@@ -766,7 +627,7 @@ function BalPage() {
   }
 
   function clickSaveToMemory() {
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       saveToMemory(gameData, backData, gameInfo, gameVars);
     } else {
       confirmAlert({
@@ -807,7 +668,7 @@ function BalPage() {
       }
     }
 
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       load();
     } else {
       confirmAlert({
@@ -912,10 +773,12 @@ function BalPage() {
   }
 
   function handleChangeSettings() {
-    settings.arrowButtons = cbArrowButtons.current.checked;
-    settings.lessQuestions = cbQuestions.current.checked;
-    settings.nicerGraphics = cbGraphics.current.checked;
-    settings.sound = cbSound.current.checked;
+    setSettings(
+      cbArrowButtons.current.checked,
+      cbQuestions.current.checked,
+      cbGraphics.current.checked,
+      cbSound.current.checked
+    );
     saveSettings();
     updateMoveButtons();
     updateScreen();
@@ -1139,7 +1002,7 @@ function BalPage() {
   }
 
   function tryAgain() {
-    if (settings.lessQuestions) {
+    if (getSettings().lessQuestions) {
       initLevel(gameVars.currentLevel);
     } else {
       confirmAlert({
@@ -1169,15 +1032,15 @@ function BalPage() {
     if (!initialized) {
       initialized = true;
       loadSettings();
-      cbArrowButtons.current.checked = settings.arrowButtons;
-      cbQuestions.current.checked = settings.lessQuestions;
-      cbGraphics.current.checked = settings.nicerGraphics;
-      cbSound.current.checked = settings.sound;
+      cbArrowButtons.current.checked = getSettings().arrowButtons;
+      cbQuestions.current.checked = getSettings().lessQuestions;
+      cbGraphics.current.checked = getSettings().nicerGraphics;
+      cbSound.current.checked = getSettings().sound;
       updateMoveButtons();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 744;
+        gameVars.currentLevel = 901;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1198,7 +1061,7 @@ function BalPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateMoveButtons() {
-    elementMoveButtons.current.style.display = settings.arrowButtons ? "block" : "none";
+    elementMoveButtons.current.style.display = getSettings().arrowButtons ? "block" : "none";
   }
 
   function updateScreen() {
@@ -1239,7 +1102,7 @@ function BalPage() {
       ctx,
       backData,
       gameData,
-      settings.nicerGraphics,
+      getSettings().nicerGraphics,
       elements,
       status,
       gameInfo,

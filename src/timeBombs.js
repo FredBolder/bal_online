@@ -1,4 +1,4 @@
-import { findElementByCoordinate } from "./balUtils";
+import { findElementByCoordinate } from "./balUtils.js";
 
 export function checkTimeBombs(gameData, backData, gameInfo) {
     let idx = -1;

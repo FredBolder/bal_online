@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo } from "./balUtils.js";
-import { movePurpleBar } from "./purpleBar";
+import { initGameInfo } from "./gameInfo.js";
+import { movePurpleBar } from "./purpleBar.js";
 
 describe("Purple bar", () => {
     const defaultGameInfo = {};

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo } from "./balUtils.js";
-import { checkForces, hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force";
+import { initGameInfo } from "./gameInfo.js";
+import { checkForces, hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 describe("Force", () => {
     const defaultGameInfo = {};

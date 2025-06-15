@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { codeToNumber, numberToCode } from "./codes";
+import { codeToNumber, numberToCode } from "./codes.js";
 
 describe("codes", () => {
 

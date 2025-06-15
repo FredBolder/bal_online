@@ -1,4 +1,4 @@
-import { randomInt } from "./utils";
+import { randomInt } from "./utils.js";
 
 const series1Start = 200;
 const series1End = 220;

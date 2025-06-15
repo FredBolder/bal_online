@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo, initGameVars } from "./balUtils.js";
-import { checkYellowBallPushersTrigger } from "./yellowBallPushers";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { checkYellowBallPushersTrigger } from "./yellowBallPushers.js";
 
 describe("Yellow ball pushers", () => {
     const defaultGameInfo = {};

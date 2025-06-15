@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { polar, randomInt } from "./utils";
+import { polar, randomInt } from "./utils.js";
 
 describe("utils", () => {
   const input2 = { x: 100, y: 50 };

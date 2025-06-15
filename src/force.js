@@ -1,5 +1,5 @@
-import { updateObject } from "./balUtils";
-import { moveOrangeBallInDirection } from "./orangeBalls";
+import { updateObject } from "./balUtils.js";
+import { moveOrangeBallInDirection } from "./orangeBalls.js";
 
 export function checkForces(gameData, gameInfo) {
     let empty = -1

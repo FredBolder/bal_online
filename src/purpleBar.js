@@ -1,5 +1,5 @@
-import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force";
-import { updateObject } from "./balUtils";
+import { updateObject } from "./balUtils.js";
+import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 export function movePurpleBar(arr, gameInfo, direction) {
     let x = gameInfo.blueBall.x;

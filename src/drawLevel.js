@@ -5,10 +5,9 @@ import {
   drawFilledCircle,
   drawLine,
   drawText,
-} from "./drawUtils";
-
-import { booleanToInt, polar, randomInt } from "./utils";
-import { electricityTarget } from "./balUtils";
+} from "./drawUtils.js";
+import { electricityTarget } from "./electricity.js";
+import { booleanToInt, polar, randomInt } from "./utils.js";
 
 let bitmapLava = null;
 let bitmapWeakStone = null;
