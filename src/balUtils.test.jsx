@@ -371,6 +371,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info5b)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         teleporting: false,
         rotate: false,
@@ -756,6 +757,38 @@ describe("balUtils", () => {
   });
   it("jump E blueBall", () => {
     expect(JSON.stringify(gameInfo6e.blueBall)).toBe(JSON.stringify({ x: 2, y: 1 }));
+  });
+
+  let gameInfo6f = { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, hasCoilSpring: true };
+  let input6f = [
+    [1, 1, 1, 1, 1],
+    [1, 0, 120, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 2, 0, 1],
+    [1, 1, 1, 1, 1],
+  ];
+  let expectedOutput6f = [
+    [1, 1, 1, 1, 1],
+    [1, 0, 2, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1],
+  ];
+  let info6f = jump(inputBack6_5_5, input6f, gameInfo6f);
+  it("jump F", () => {
+    expect(JSON.stringify(input6f)).toBe(JSON.stringify(expectedOutput6f));
+  });
+  it("jump F eating", () => {
+    expect(info6f.eating).toBe(false);
+  });
+  it("jump F player", () => {
+    expect(info6f.player).toBe(true);
+  });
+  it("jump F time freezer", () => {
+    expect(info6f.freezeTime).greaterThan(0);
+  });
+  it("jump F blueBall", () => {
+    expect(JSON.stringify(gameInfo6f.blueBall)).toBe(JSON.stringify({ x: 2, y: 1 }));
   });
 
   let gameInfo7a = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
@@ -1225,6 +1258,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info15a)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         teleporting: false,
         rotate: false,
@@ -1321,6 +1355,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info15e)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         sound: "",
       })
@@ -1354,6 +1389,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info15f)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: false,
         sound: "",
       })
@@ -1463,6 +1499,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info15j)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: false,
         sound: "",
       })
@@ -1756,6 +1793,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info17d)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         sound: "",
       })
@@ -1786,6 +1824,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info19a)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         teleporting: false,
         rotate: false,
@@ -1815,6 +1854,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info19b)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: false,
         teleporting: false,
         rotate: false,
@@ -1844,6 +1884,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info19c)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         teleporting: false,
         rotate: false,
@@ -1873,6 +1914,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info19d)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: false,
         teleporting: false,
         rotate: false,
@@ -1905,6 +1947,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info20a)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: true,
         teleporting: false,
         rotate: false,
@@ -1934,6 +1977,7 @@ describe("balUtils", () => {
     expect(JSON.stringify(info20b)).toBe(
       JSON.stringify({
         eating: false,
+        freezeTime: -1,
         player: false,
         teleporting: false,
         rotate: false,

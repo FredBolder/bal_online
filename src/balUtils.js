@@ -244,6 +244,9 @@ export function charToNumber(c) {
     case "μ":
       result = 119;
       break;
+    case "u":
+      result = 120;
+      break;
     case "|":
       result = 1000;
       break;
@@ -723,6 +726,9 @@ export function numberToChar(n) {
     case 119:
       result = "μ";
       break;
+    case 120:
+      result = "u";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -809,6 +815,9 @@ function take(gameData, gameInfo, result, x, y) {
     case 118:
       gameInfo.hasCoilSpring = true;
       break;
+    case 120:
+      result.freezeTime = 250;
+      break;
     default:
       break;
   }
@@ -847,6 +856,7 @@ export function moveLeft(backData, gameData, gameInfo) {
   let result = {};
   let row = gameData[y];
   result.eating = false;
+  result.freezeTime = -1;
   result.player = false;
   result.teleporting = false;
   result.rotate = false;
@@ -856,8 +866,8 @@ export function moveLeft(backData, gameData, gameInfo) {
   if (gameData.length > 0) {
     if (notFalling(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
-        // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(row[x - 1]) ||
+        // empty space, green ball, diving glasses, key etc.
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(row[x - 1]) ||
           (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x - 1, y);
@@ -981,6 +991,7 @@ export function moveRight(backData, gameData, gameInfo) {
   let row = gameData[y];
   let maxX = 0;
   result.eating = false;
+  result.freezeTime = -1;
   result.player = false;
   result.teleporting = false;
   result.rotate = false;
@@ -991,8 +1002,8 @@ export function moveRight(backData, gameData, gameInfo) {
     if (notFalling(x, y, backData, gameData, gameInfo) && !hasForceLeft(gameData, gameInfo, x, y)) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
-        // empty space, green ball, diving glasses, key or pickaxe
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(row[x + 1]) ||
+        // empty space, green ball, diving glasses, key etc.
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(row[x + 1]) ||
           (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x + 1, y);
@@ -1109,6 +1120,7 @@ export function jump(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
+  result.freezeTime = -1;
   result.player = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
@@ -1116,8 +1128,8 @@ export function jump(backData, gameData, gameInfo) {
   if (!isTeleport(x, y, gameInfo.teleports)) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 2][x])) {
+        if ((gameData[y - 1][x] === 0) && !isLadder(x, y, backData) && !isLadder(x, y - 1, backData)) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(gameData[y - 2][x])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y - 2);
             gameData[y - 2][x] = 2;
@@ -1129,7 +1141,7 @@ export function jump(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && y > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 1][x]) ||
+        if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(gameData[y - 1][x]) ||
           (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x, y - 1);
@@ -1208,6 +1220,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
+  result.freezeTime = -1;
   result.player = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
@@ -1216,7 +1229,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && x > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0)) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 2][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(gameData[y - 2][x - 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x - 1, y - 2);
             gameData[y - 2][x - 1] = 2;
@@ -1229,7 +1242,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
       }
       if (!result.player && y > 0 && x > 0 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 1][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(gameData[y - 1][x - 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x - 1, y - 1);
             gameData[y - 1][x - 1] = 2;
@@ -1250,6 +1263,7 @@ export function jumpRight(backData, gameData, gameInfo) {
   let y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
+  result.freezeTime = -1;
   result.player = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
@@ -1258,7 +1272,7 @@ export function jumpRight(backData, gameData, gameInfo) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && x < gameData[0].length - 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0)) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 2][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(gameData[y - 2][x + 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + 1, y - 2);
             gameData[y - 2][x + 1] = 2;
@@ -1271,7 +1285,7 @@ export function jumpRight(backData, gameData, gameInfo) {
       }
       if (!result.player && y > 0 && x < gameData[0].length - 1 && notFalling(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (gameData[y - 1][x] === 0) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118].includes(gameData[y - 1][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120].includes(gameData[y - 1][x + 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + 1, y - 1);
             gameData[y - 1][x + 1] = 2;

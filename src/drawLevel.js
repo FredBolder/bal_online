@@ -237,8 +237,8 @@ function drawLevel(
     drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
   }
 
-  function drawCoilSpring() {
-    let color = "white";
+  function drawCoilSpring(x, y) {
+    let color = getFgcolor(x, y, "white");
     let d1 = w1 / 4;
     let d2 = 0;
     let d3 = w2 / 8;
@@ -509,14 +509,16 @@ function drawLevel(
     }
   }
 
-  function drawHorizontalLadder() {
+  function drawHorizontalLadder(x, y) {
     // Code: 90, h
-    drawLine(ctx, xmin - 0.5, ymin, xmax + 0.5, ymin, "white");
-    drawLine(ctx, xmin - 0.5, ymax, xmax + 0.5, ymax, "white");
-    drawLine(ctx, xc, ymin, xc, ymax, "white");
+    let color = getFgcolor(x, y, "white");
+    drawLine(ctx, xmin - 0.5, ymin, xmax + 0.5, ymin, color);
+    drawLine(ctx, xmin - 0.5, ymax, xmax + 0.5, ymax, color);
+    drawLine(ctx, xc, ymin, xc, ymax, color);
   }
 
-  function drawKey() {
+  function drawKey(x, y) {
+    let color = getFgcolor(x, y, "silver");
     let d1 = w1 / 4;
     let d2 = w1 / 7;
     let d3 = w1 / 15; // Radius X
@@ -524,21 +526,22 @@ function drawLevel(
     let d5 = w1 / 5;
     let d6 = w1 / 4;
     let d7 = w1 / 7;
-    ctx.strokeStyle = "silver";
+    ctx.strokeStyle = color;
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.beginPath();
     ctx.ellipse(Math.round(xmin + d1), Math.round(yc), Math.round(d3), Math.round(d4), 0, 0, 2 * Math.PI, false);
     ctx.stroke();
-    drawLine(ctx, xmin + d1 + d3, yc, xmax - d2, yc, "silver");
-    drawLine(ctx, xmax - d2, yc, xmax - d2, yc + d5, "silver");
-    drawLine(ctx, xmax - d6, yc, xmax - d6, yc + d7, "silver");
+    drawLine(ctx, xmin + d1 + d3, yc, xmax - d2, yc, color);
+    drawLine(ctx, xmax - d2, yc, xmax - d2, yc + d5, color);
+    drawLine(ctx, xmax - d6, yc, xmax - d6, yc + d7, color);
   }
 
-  function drawLadder() {
+  function drawLadder(x, y) {
     // Code: 25, =
-    drawLine(ctx, xmin, ymin - 0.5, xmin, ymax + 0.5, "white");
-    drawLine(ctx, xmax, ymin - 0.5, xmax, ymax + 0.5, "white");
-    drawLine(ctx, xmin, yc, xmax, yc, "white");
+    let color = getFgcolor(x, y, "white");
+    drawLine(ctx, xmin, ymin - 0.5, xmin, ymax + 0.5, color);
+    drawLine(ctx, xmax, ymin - 0.5, xmax, ymax + 0.5, color);
+    drawLine(ctx, xmin, yc, xmax, yc, color);
   }
 
   function drawLaser(laser) {
@@ -946,6 +949,25 @@ function drawLevel(
     drawLine(ctx, xc, ymin + d2 + (sticks * 0.5 * w2 * factor), xc + (w1 * 0.08), ymin + d2 + (sticks * 0.5 * w2 * factor), "black");
   }
 
+  function drawTimeFreezer(x, y) {
+    let color = getFgcolor(x, y, "white");
+    let radius = w1 * 0.25;
+    let xCenter = xc;
+    let yCenter = (ymin + yc) / 2;
+    // clock
+    drawCircle(ctx, xCenter, yCenter, radius, color);
+    drawLine(ctx, xCenter, yCenter, xCenter, yCenter - (radius * 0.8), color);
+    drawLine(ctx, xCenter, yCenter, xCenter + (radius * 0.7), yCenter, color);
+    // cross
+    radius = w1 * 0.2
+    xCenter = xmax - (w1 * 0.3); 
+    yCenter = ymax - (w2 * 0.5);    
+    ctx.lineWidth = 2;
+    drawLine(ctx, xCenter - radius, yCenter + radius, xCenter + radius, yCenter - radius, "red");
+    drawLine(ctx, xCenter - radius, yCenter - radius, xCenter + radius, yCenter + radius, "red");
+    ctx.lineWidth = 1;
+  }
+
   function drawTrapDoor() {
     ctx.lineWidth = 3;
     drawLine(ctx, xmin, ymin + 1, xmax - 2, ymin + 1, "rgb(70, 70, 70)");
@@ -1131,10 +1153,10 @@ function drawLevel(
           drawWater();
           break;
         case 25:
-          drawLadder();
+          drawLadder(col, row);
           break;
         case 90:
-          drawHorizontalLadder();
+          drawHorizontalLadder(col, row);
           break;
         default:
           // empty
@@ -1219,7 +1241,7 @@ function drawLevel(
           drawPurpleBall();
           break;
         case 29:
-          drawKey();
+          drawKey(col, row);
           break;
         case 30:
           drawLock(col, row);
@@ -1353,10 +1375,13 @@ function drawLevel(
           drawTimeBomb(col, row);
           break;
         case 118:
-          drawCoilSpring();
+          drawCoilSpring(col, row);
           break;
         case 119:
           drawMagnet();
+          break;
+        case 120:
+          drawTimeFreezer(col, row);
           break;
         case 1000:
           // For manual only (empty)

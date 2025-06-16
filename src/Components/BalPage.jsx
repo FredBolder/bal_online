@@ -68,6 +68,7 @@ let ctx;
 let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
+let loading = true;
 
 let gameData = [];
 let backData = [];
@@ -130,11 +131,7 @@ function BalPage() {
   function checkGameOver() {
     let target = -1;
 
-    if (
-      !gameVars.gameOver &&
-      gameInfo.electricity.length > 0 &&
-      gameInfo.electricityActive
-    ) {
+    if (!loading && !gameVars.gameOver && gameInfo.electricity.length > 0 && gameInfo.electricityActive) {
       for (let i = 0; i < gameInfo.electricity.length; i++) {
         const elec = gameInfo.electricity[i];
         target = electricityTarget(backData, gameData, elec.x, elec.y);
@@ -157,7 +154,7 @@ function BalPage() {
         }
       }
     }
-    if (!gameVars.gameOver) {
+    if ((gameVars.timeFreezer === 0) && (!gameVars.gameOver)) {
       let redInfo = checkRedBalls(gameData, gameInfo.redBalls);
       if (redInfo.length > 0) {
         gameVars.laser = redInfo;
@@ -172,7 +169,7 @@ function BalPage() {
         gameVars.gameOver = true;
       }
     }
-    if (!gameVars.gameOver && gameInfo.redFish.length > 0) {
+    if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && (gameInfo.redFish.length > 0)) {
       for (let i = 0; i < gameInfo.redFish.length && !gameVars.gameOver; i++) {
         const fish = gameInfo.redFish[i];
         if (
@@ -193,11 +190,16 @@ function BalPage() {
     let info = {};
     let update = false;
 
-    if (!gameData || !backData || !gameVars || !gameInfo) {
+    if (loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
-    if (gameVars.gameOver || (gameData.length < 2) || (backData.length < 2)) {
+    if (gameVars.gameOver || (gameData.length < 2) || (backData.length < 2) ||
+      (gameInfo.blueBall.x === -1) || (gameInfo.blueBall.y === -1)) {
       return;
+    }
+
+    if (gameVars.timeFreezer > 0) {
+      gameVars.timeFreezer--;
     }
 
     if (checkMagnets(gameInfo)) {
@@ -243,7 +245,7 @@ function BalPage() {
       update = true;
     }
 
-    if (gameInfo.redFish.length > 0) {
+    if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
       gameVars.fishCounter++;
       if (gameVars.fishCounter >= gameVars.fishCountTo) {
         gameVars.fishCounter = 0;
@@ -264,53 +266,55 @@ function BalPage() {
       }
     }
 
-    if (gameVars.elevatorCounter > 0) {
-      gameVars.elevatorCounter--;
-    } else {
-      gameVars.elevatorCounter = 5;
-      info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls, gameInfo.orangeBalls);
-      if (info.playerX !== -1 && info.playerY !== -1) {
+    if (gameVars.timeFreezer === 0) {
+      if (gameVars.elevatorCounter > 0) {
+        gameVars.elevatorCounter--;
+      } else {
+        gameVars.elevatorCounter = 5;
+        info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls, gameInfo.orangeBalls);
+        if (info.playerX !== -1 && info.playerY !== -1) {
+          gameInfo.blueBall.x = info.playerX;
+          gameInfo.blueBall.y = info.playerY;
+        }
+        if (gameInfo.elevators.length > 0) {
+          update = true;
+        }
+
+        info = moveHorizontalElevators(
+          gameData,
+          gameInfo.horizontalElevators,
+          gameInfo.redBalls,
+          gameInfo.orangeBalls
+        );
+        if (info.playerX !== -1 && info.playerY !== -1) {
+          gameInfo.blueBall.x = info.playerX;
+          gameInfo.blueBall.y = info.playerY;
+        }
+        if (gameInfo.horizontalElevators.length > 0) {
+          update = true;
+        }
+      }
+
+      info = checkElevatorInOuts(gameData, gameInfo);
+      if (info.playerX !== -1) {
         gameInfo.blueBall.x = info.playerX;
         gameInfo.blueBall.y = info.playerY;
       }
-      if (gameInfo.elevators.length > 0) {
+      if (info.update) {
         update = true;
       }
 
-      info = moveHorizontalElevators(
-        gameData,
-        gameInfo.horizontalElevators,
-        gameInfo.redBalls,
-        gameInfo.orangeBalls
-      );
-      if (info.playerX !== -1 && info.playerY !== -1) {
-        gameInfo.blueBall.x = info.playerX;
-        gameInfo.blueBall.y = info.playerY;
-      }
-      if (gameInfo.horizontalElevators.length > 0) {
-        update = true;
-      }
-    }
-
-    info = checkElevatorInOuts(gameData, gameInfo);
-    if (info.playerX !== -1) {
-      gameInfo.blueBall.x = info.playerX;
-      gameInfo.blueBall.y = info.playerY;
-    }
-    if (info.update) {
-      update = true;
-    }
-
-    if (gameVars.redCounter > 0) {
-      gameVars.redCounter--;
-    } else {
-      gameVars.redCounter = 2;
-      info = moveRedBalls(backData, gameData, gameInfo);
-      if (info.updated) {
-        update = true;
-      }
-      if (info.eating) {
-        playSound("eat");
+      if (gameVars.redCounter > 0) {
+        gameVars.redCounter--;
+      } else {
+        gameVars.redCounter = 2;
+        info = moveRedBalls(backData, gameData, gameInfo);
+        if (info.updated) {
+          update = true;
+        }
+        if (info.eating) {
+          playSound("eat");
+        }
       }
     }
 
@@ -347,16 +351,18 @@ function BalPage() {
       }
     }
 
-    info = checkTimeBombs(gameData, backData, gameInfo);
-    if (info.explosion) {
-      playSound("explosion");
-    }
-    if (info.updated) {
-      update = true;
-    }
-    if (info.gameOver) {
-      gameVars.gameOver = true;
-      updateScreen();
+    if (gameVars.freezeTime === 0) {
+      info = checkTimeBombs(gameData, backData, gameInfo);
+      if (info.explosion) {
+        playSound("explosion");
+      }
+      if (info.updated) {
+        update = true;
+      }
+      if (info.gameOver) {
+        gameVars.gameOver = true;
+        updateScreen();
+      }
     }
 
     info = checkYellowBallPushersTrigger(gameData, gameInfo, gameVars);
@@ -399,7 +405,7 @@ function BalPage() {
       }
     }
 
-    if (gameInfo.electricity.length > 0) {
+    if ((gameVars.timeFreezer === 0) && (gameInfo.electricity.length > 0)) {
       if (gameVars.electricityCounter > 110) {
         gameVars.electricityCounter = 0;
       }
@@ -506,6 +512,8 @@ function BalPage() {
     let gd;
 
     try {
+      loading = true;
+      initGameVars(gameVars);
       gameVars.currentLevel = n;
       setLevelNumber(n);
       gameInfo.blueBall.x = -1;
@@ -524,6 +532,7 @@ function BalPage() {
       gameInfo = getGameInfo(backData, gameData);
       updateScreen();
       setGreen(gameInfo.greenBalls);
+      loading = false;
     } catch (err) {
       console.log(err);
     }
@@ -705,6 +714,8 @@ function BalPage() {
   async function clickImportLevel() {
     const result = await importLevel();
     if (result !== null) {
+      loading = true;
+      initGameVars(gameVars);
       backData = null;
       backData = result.backData;
       gameData = null;
@@ -715,6 +726,7 @@ function BalPage() {
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       loadColors(gameVars, result.levelSettings);
+      loading = false;
     }
   }
 
@@ -814,7 +826,7 @@ function BalPage() {
       return;
     }
 
-    if (gameVars.gameOver || gameVars.teleporting > 0) {
+    if (loading || gameVars.gameOver || gameVars.teleporting > 0) {
       return false;
     }
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
@@ -916,6 +928,9 @@ function BalPage() {
       gameVars.skipFalling = 1;
       updateScreen();
       checkGameOver();
+    }
+    if (info.freezeTime > 0) {
+      gameVars.timeFreezer = info.freezeTime;
     }
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
@@ -1045,7 +1060,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 901;
+        gameVars.currentLevel = 746;
       }
       initLevel(gameVars.currentLevel);
     }

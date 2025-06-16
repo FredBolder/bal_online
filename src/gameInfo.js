@@ -214,13 +214,13 @@ export function initGameInfo(info) {
 }
 
 export function initGameVars(vars) {
-    vars.bgcolor;
+    vars.bgcolor = [];
     vars.currentLevel = 200;
     vars.elecActiveSaved = false;
     vars.electricityCounter = 0;
     vars.elevatorCounter = 0;
     vars.explosionCounter = 0;
-    vars.fgcolor;
+    vars.fgcolor = [];
     vars.fishCounter = 0;
     vars.fishCountTo = 12;
     vars.gameOver = false;
@@ -231,6 +231,7 @@ export function initGameVars(vars) {
     vars.refreshCountTo = 12;
     vars.skipFalling = 0;
     vars.teleporting = 0;
+    vars.timeFreezer = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;
     vars.ballPushersActive = false;
