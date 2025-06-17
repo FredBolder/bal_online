@@ -3,6 +3,7 @@ import { moveOrangeBallInDirection } from "./orangeBalls.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { isRedBall } from "./redBalls.js";
 import { updateYellowBall } from "./yellowBalls.js";
+import { moveYellowBar } from "./yellowBars.js";
 
 const timeBombsTime = 100;
 
@@ -246,6 +247,21 @@ export function charToNumber(c) {
       break;
     case "u":
       result = 120;
+      break;
+    case "ó":
+      result = 121;
+      break;
+    case "ò":
+      result = 122;
+      break;
+    case "ö":
+      result = 123;
+      break;
+    case "Ó":
+      result = 124;
+      break;
+    case "Ò":
+      result = 125;
       break;
     case "|":
       result = 1000;
@@ -729,6 +745,21 @@ export function numberToChar(n) {
     case 120:
       result = "u";
       break;
+    case 121:
+      result = "ó";
+      break;
+    case 122:
+      result = "ò";
+      break;
+    case 123:
+      result = "ö";
+      break;
+    case 124:
+      result = "Ó";
+      break;
+    case 125:
+      result = "Ò";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -978,6 +1009,14 @@ export function moveLeft(backData, gameData, gameInfo) {
           gameInfo.blueBall.x = x - 1;
         }
       }
+      if (!result.player && ([122, 123, 124, 125].includes(gameData[y][x - 1]))) {
+        if (moveYellowBar(gameData, gameInfo, "left")) {
+          result.player = true;
+          gameData[y][x - 1] = 2;
+          gameData[y][x] = element;
+          gameInfo.blueBall.x = x - 1;
+        }
+      }
     }
   }
   return result;
@@ -1109,6 +1148,14 @@ export function moveRight(backData, gameData, gameInfo) {
           gameData[y][x] = element;
         }
       }
+      if (!result.player && ([121, 123, 124, 125].includes(gameData[y][x + 1]))) {
+        if (moveYellowBar(gameData, gameInfo, "right")) {
+          result.player = true;
+          gameData[y][x + 1] = 2;
+          gameInfo.blueBall.x = x + 1;
+          gameData[y][x] = element;
+        }
+      }
     }
   }
   return result;
@@ -1203,6 +1250,14 @@ export function jump(backData, gameData, gameInfo) {
         }
         if (!result.player && ([100, 101, 102, 104].includes(gameData[y - 1][x]))) {
           if (movePurpleBar(gameData, gameInfo, 8)) {
+            result.player = true;
+            gameData[y - 1][x] = 2;
+            gameData[y][x] = element;
+            gameInfo.blueBall.y = y - 1;
+          }
+        }
+        if (!result.player && ([121, 122, 123, 125].includes(gameData[y - 1][x]))) {
+          if (moveYellowBar(gameData, gameInfo, "up")) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
@@ -1381,6 +1436,15 @@ export function pushDown(backData, gameData, gameInfo) {
       if (!result.player && ([100, 101, 102, 103].includes(gameData[y + 1][x]))) {
         if (movePurpleBar(gameData, gameInfo, 2)) {
           // Blue ball is updated in movePurpleBar when moving down
+          result.player = true;
+          if (gameData[y][x] === 0) {
+            gameData[y][x] = element;
+          }
+        }
+      }
+      if (!result.player && ([121, 122, 123, 124].includes(gameData[y + 1][x]))) {
+        if (moveYellowBar(gameData, gameInfo, "down")) {
+          // Blue ball is updated in moveYellowBar when moving down
           result.player = true;
           if (gameData[y][x] === 0) {
             gameData[y][x] = element;

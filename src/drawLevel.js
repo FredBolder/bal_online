@@ -174,6 +174,30 @@ function drawLevel(
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
   }
 
+  function drawBarBottom(color) {
+    drawBall(color);
+    drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
+  }
+
+  function drawBarLeft(color) {
+    drawBall(color);
+    drawFilledBox(ctx, xc, ymin, w1 / 2, w2, color);
+  }
+
+  function drawBarMiddle(color) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, color);
+  }
+
+  function drawBarRight(color) {
+    drawBall(color);
+    drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
+  }
+
+  function drawBarTop(color) {
+    drawBall(color);
+    drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
+  }
+  
   function drawBlueBall() {
     let d1 = 0;
     let d2 = 0;
@@ -805,30 +829,6 @@ function drawLevel(
     }
   }
 
-  function drawPurpleBarBottom() {
-    drawBall("darkmagenta");
-    drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, "darkmagenta");
-  }
-
-  function drawPurpleBarLeft() {
-    drawBall("darkmagenta");
-    drawFilledBox(ctx, xc, ymin, w1 / 2, w2, "darkmagenta");
-  }
-
-  function drawPurpleBarMiddle() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "darkmagenta");
-  }
-
-  function drawPurpleBarRight() {
-    drawBall("darkmagenta");
-    drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, "darkmagenta");
-  }
-
-  function drawPurpleBarTop() {
-    drawBall("darkmagenta");
-    drawFilledBox(ctx, xmin, yc, w1, w2 / 2, "darkmagenta");
-  }
-
   function drawRedBall() {
     let d1 = 0;
     let d2 = 0;
@@ -1327,19 +1327,19 @@ function drawLevel(
           drawSmallWeakStone();
           break;
         case 100:
-          drawPurpleBarLeft();
+          drawBarLeft("darkmagenta");
           break;
         case 101:
-          drawPurpleBarRight();
+          drawBarRight("darkmagenta");
           break;
         case 102:
-          drawPurpleBarMiddle();
+          drawBarMiddle("darkmagenta");
           break;
         case 103:
-          drawPurpleBarTop();
+          drawBarTop("darkmagenta");
           break;
         case 104:
-          drawPurpleBarBottom();
+          drawBarBottom("darkmagenta");
           break;
         case 105:
           drawLightBulb();
@@ -1382,6 +1382,21 @@ function drawLevel(
           break;
         case 120:
           drawTimeFreezer(col, row);
+          break;
+        case 121:
+          drawBarLeft("yellow");
+          break;
+        case 122:
+          drawBarRight("yellow");
+          break;
+        case 123:
+          drawBarMiddle("yellow");
+          break;
+        case 124:
+          drawBarTop("yellow");
+          break;
+        case 125:
+          drawBarBottom("yellow");
           break;
         case 1000:
           // For manual only (empty)

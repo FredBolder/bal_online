@@ -18,7 +18,7 @@ export function drawFilledBox(canvas, x, y, width, height, color) {
 export function drawFilledCircle(canvas, xc, yc, radius, color) {
   canvas.fillStyle = color;
   canvas.beginPath();
-  canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius), 0, 2 * Math.PI, false);
+  canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius - 0.5), 0, 2 * Math.PI, false);
   canvas.fill();
 }
 

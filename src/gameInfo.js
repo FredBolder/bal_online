@@ -169,6 +169,16 @@ export function getGameInfo(backData, gameData) {
                     result.magnets.push(magnet);
                     break;
                 }
+                case 121: 
+                case 124: {
+                    let yellowBar = {
+                        x: j,
+                        y: i,
+                        direction: "none"
+                    };
+                    result.yellowBars.push(yellowBar);
+                    break;
+                }
                 default:
                     break;
             }
@@ -211,6 +221,7 @@ export function initGameInfo(info) {
     info.yellowBalls = [];
     info.yellowBallPushers = [];
     info.yellowBallPushersTrigger = { x: -1, y: -1 };
+    info.yellowBars = [];
 }
 
 export function initGameVars(vars) {

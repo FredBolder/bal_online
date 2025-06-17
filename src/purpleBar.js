@@ -102,7 +102,7 @@ export function movePurpleBar(arr, gameInfo, direction) {
                             if ((y < arr.length - 1) && (arr[y][x - 1] !== 104)) {
                                 stop = false;
                                 for (let i = y + 1; (i < arr.length - 1) && !stop; i++) {
-                                    const el = arr[y][i - 1];
+                                    const el = arr[i][x - 1];
                                     if ((el === 104) || (el === 102)) {
                                         ymax++;
                                     } else {
@@ -159,7 +159,7 @@ export function movePurpleBar(arr, gameInfo, direction) {
                             if ((y < arr.length - 1) && (arr[y][x + 1] !== 104)) {
                                 stop = false;
                                 for (let i = y + 1; (i < arr.length - 1) && !stop; i++) {
-                                    const el = arr[y][i + 1];
+                                    const el = arr[i][x + 1];
                                     if ((el === 104) || (el === 102)) {
                                         ymax++;
                                     } else {

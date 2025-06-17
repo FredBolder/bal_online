@@ -27,20 +27,14 @@ describe("Rotate game", () => {
         [1, 1, 1, 1, 1, 1],
     ];
     let gameInfo01a = {
+        ...defaultGameInfo,
         blueBall: { x: 2, y: 4 },
-        elevatorInOuts: [],
-        elevators: [],
-        forces: [],
         greenBalls: 1,
-        horizontalElevators: [],
         redBalls: [
             { x: 3, y: 1 },
             { x: 3, y: 2 },
         ],
         yellowBalls: [{ x: 1, y: 3, direction: "down" }],
-        orangeBalls: [],
-        detonator: { x: -1, y: -1 },
-        teleports: [],
     };
     let info01a = rotateGame(inputBack01a, input01a, gameInfo01a);
     it("rotateGame A rotated", () => {
@@ -88,17 +82,10 @@ describe("Rotate game", () => {
         [1, 1, 1, 1, 1, 1, 1],
     ];
     let gameInfo01b = {
+        ...defaultGameInfo,
         blueBall: { x: 5, y: 5 },
-        elevatorInOuts: [],
         elevators: [{ x: 1, y: 4, up: true }],
-        forces: [],
         greenBalls: 1,
-        horizontalElevators: [],
-        redBalls: [],
-        yellowBalls: [],
-        orangeBalls: [],
-        detonator: { x: -1, y: -1 },
-        teleports: [],
     };
     let info01b = rotateGame(inputBack01b, input01b, gameInfo01b);
     it("rotateGame B rotated", () => {

@@ -44,6 +44,7 @@ import { checkTimeBombs } from "../timeBombs.js";
 import { checkTrapDoors } from "../trapDoors.js";
 import { tryParseInt } from "../utils.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
+import { moveYellowBars } from "../yellowBars.js";
 
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
@@ -326,6 +327,9 @@ function BalPage() {
     } else {
       gameVars.yellowCounter = 1;
       if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
+        update = true;
+      }
+      if (moveYellowBars(gameData, gameInfo)) {
         update = true;
       }
     }
@@ -1060,7 +1064,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 746;
+        gameVars.currentLevel = 748;
       }
       initLevel(gameVars.currentLevel);
     }

@@ -90,6 +90,18 @@ export function rotateGame(backData, gameData, gameInfo) {
             case 112:
               gd = 109;
               break;
+            case 121:
+              gd = 124;
+              break;
+            case 122:
+              gd = 125;
+              break;
+            case 124:
+              gd = 122;
+              break;
+            case 125:
+              gd = 121;
+              break;
             default:
               break;
           }
@@ -167,6 +179,32 @@ export function rotateGame(backData, gameData, gameInfo) {
             break;
         }
         gameInfo.yellowBalls[i].direction = data;
+      }
+
+      // Yellow bars
+      for (let i = 0; i < gameInfo.yellowBars.length; i++) {
+        x = gameInfo.yellowBars[i].x;
+        y = gameInfo.yellowBars[i].y;
+        gameInfo.yellowBars[i].y = x;
+        gameInfo.yellowBars[i].x = rows - (y + 1);
+        let data = gameInfo.yellowBars[i].direction;
+        switch (data) {
+          case "down":
+            data = "left";
+            break;
+          case "left":
+            data = "up";
+            break;
+          case "up":
+            data = "right";
+            break;
+          case "right":
+            data = "down";
+            break;
+          default:
+            break;
+        }
+        gameInfo.yellowBars[i].direction = data;
       }
 
       // Elevators
