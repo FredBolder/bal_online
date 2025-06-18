@@ -1,10 +1,11 @@
-import { updateObject } from "./balUtils.js";
+import { hasWeight, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
-export function moveLightBlueBar(arr, gameInfo, direction) {
+export function moveLightBlueBar(backData, gameData, gameInfo, direction) {
     let x = gameInfo.blueBall.x;
     let y = gameInfo.blueBall.y;
     let error = false;
+    let weight = false;
     let maxCol = 0;
     let stop = false;
     let xmin = -1;
@@ -14,22 +15,22 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
     let update = false;
     let vertical = false;
 
-    if (arr.length > 2) {
+    if (gameData.length > 2) {
         error = false;
-        maxCol = arr[0].length - 1;
+        maxCol = gameData[0].length - 1;
         switch (direction) {
             case "down":
-                if (y < arr.length - 2) {
-                    if ([126, 127, 128, 129].includes(arr[y + 1][x])) {
+                if (y < gameData.length - 2) {
+                    if ([126, 127, 128, 129].includes(gameData[y + 1][x])) {
                         xmin = x;
                         xmax = x;
                         ymin = y + 1;
                         ymax = y + 1;
-                        vertical = (arr[y + 1][x] === 129);
+                        vertical = (gameData[y + 1][x] === 129);
                         if (vertical) {
                             stop = false;
-                            for (let i = y + 2; (i < arr.length) && !stop; i++) {
-                                const el = arr[i][x];
+                            for (let i = y + 2; (i < gameData.length) && !stop; i++) {
+                                const el = gameData[i][x];
                                 if ((el === 130) || (el === 128)) {
                                     ymax++;
                                 } else {
@@ -41,10 +42,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                                 }
                             }
                         } else {
-                            if ((x > 0) && (arr[y + 1][x] !== 126)) {
+                            if ((x > 0) && (gameData[y + 1][x] !== 126)) {
                                 stop = false;
                                 for (let i = x - 1; (i >= 0) && !stop; i--) {
-                                    const el = arr[y + 1][i];
+                                    const el = gameData[y + 1][i];
                                     if ((el === 126) || (el === 128)) {
                                         xmin--;
                                     } else {
@@ -56,10 +57,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                                     }
                                 }
                             }
-                            if ((x < maxCol) && (arr[y + 1][x] !== 127)) {
+                            if ((x < maxCol) && (gameData[y + 1][x] !== 127)) {
                                 stop = false;
                                 for (let i = x + 1; (i < maxCol) && !stop; i++) {
-                                    const el = arr[y + 1][i];
+                                    const el = gameData[y + 1][i];
                                     if ((el === 127) || (el === 128)) {
                                         xmax++;
                                     } else {
@@ -77,17 +78,17 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                 break;
             case "left":
                 if (x > 1) {
-                    if ([127, 128, 129, 130].includes(arr[y][x - 1])) {
+                    if ([127, 128, 129, 130].includes(gameData[y][x - 1])) {
                         xmin = x - 1;
                         xmax = x - 1;
                         ymin = y;
                         ymax = y;
-                        vertical = !(arr[y][x - 1] === 127);
+                        vertical = !(gameData[y][x - 1] === 127);
                         if (vertical) {
-                            if ((y > 0) && (arr[y][x - 1] !== 129)) {
+                            if ((y > 0) && (gameData[y][x - 1] !== 129)) {
                                 stop = false;
                                 for (let i = y - 1; (i >= 0) && !stop; i--) {
-                                    const el = arr[i][x - 1];
+                                    const el = gameData[i][x - 1];
                                     if ((el === 129) || (el === 128)) {
                                         ymin--;
                                     } else {
@@ -99,10 +100,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                                     }
                                 }
                             }
-                            if ((y < arr.length - 1) && (arr[y][x - 1] !== 130)) {
+                            if ((y < gameData.length - 1) && (gameData[y][x - 1] !== 130)) {
                                 stop = false;
-                                for (let i = y + 1; (i < arr.length - 1) && !stop; i++) {
-                                    const el = arr[i][x - 1];
+                                for (let i = y + 1; (i < gameData.length - 1) && !stop; i++) {
+                                    const el = gameData[i][x - 1];
                                     if ((el === 130) || (el === 128)) {
                                         ymax++;
                                     } else {
@@ -117,7 +118,7 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                         } else {
                             stop = false;
                             for (let i = x - 2; (i >= 0) && !stop; i--) {
-                                const el = arr[y][i];
+                                const el = gameData[y][i];
                                 if ((el === 126) || (el === 128)) {
                                     xmin--;
                                 } else {
@@ -134,17 +135,17 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                 break;
             case "right":
                 if (x < maxCol - 1) {
-                    if ([126, 128, 129, 130].includes(arr[y][x + 1])) {
+                    if ([126, 128, 129, 130].includes(gameData[y][x + 1])) {
                         xmin = x + 1;
                         xmax = x + 1;
                         ymin = y;
                         ymax = y;
-                        vertical = !(arr[y][x + 1] === 126);
+                        vertical = !(gameData[y][x + 1] === 126);
                         if (vertical) {
-                            if ((y > 0) && (arr[y][x + 1] !== 129)) {
+                            if ((y > 0) && (gameData[y][x + 1] !== 129)) {
                                 stop = false;
                                 for (let i = y - 1; (i >= 0) && !stop; i--) {
-                                    const el = arr[i][x + 1];
+                                    const el = gameData[i][x + 1];
                                     if ((el === 129) || (el === 128)) {
                                         ymin--;
                                     } else {
@@ -156,10 +157,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                                     }
                                 }
                             }
-                            if ((y < arr.length - 1) && (arr[y][x + 1] !== 130)) {
+                            if ((y < gameData.length - 1) && (gameData[y][x + 1] !== 130)) {
                                 stop = false;
-                                for (let i = y + 1; (i < arr.length - 1) && !stop; i++) {
-                                    const el = arr[i][x + 1];
+                                for (let i = y + 1; (i < gameData.length - 1) && !stop; i++) {
+                                    const el = gameData[i][x + 1];
                                     if ((el === 130) || (el === 128)) {
                                         ymax++;
                                     } else {
@@ -174,7 +175,7 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                         } else {
                             stop = false;
                             for (let i = x + 2; (i < maxCol) && !stop; i++) {
-                                const el = arr[y][i];
+                                const el = gameData[y][i];
                                 if ((el === 127) || (el === 128)) {
                                     xmax++;
                                 } else {
@@ -191,16 +192,16 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                 break;
             case "up":
                 if (y > 1) {
-                    if ([126, 127, 128, 130].includes(arr[y - 1][x])) {
+                    if ([126, 127, 128, 130].includes(gameData[y - 1][x])) {
                         xmin = x;
                         xmax = x;
                         ymin = y - 1;
                         ymax = y - 1;
-                        vertical = (arr[y - 1][x] === 130);
+                        vertical = (gameData[y - 1][x] === 130);
                         if (vertical) {
                             stop = false;
                             for (let i = y - 2; (i >= 0) && !stop; i--) {
-                                const el = arr[i][x];
+                                const el = gameData[i][x];
                                 if ((el === 129) || (el === 128)) {
                                     ymin--;
                                 } else {
@@ -212,10 +213,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                                 }
                             }
                         } else {
-                            if ((x > 0) && (arr[y - 1][x] !== 126)) {
+                            if ((x > 0) && (gameData[y - 1][x] !== 126)) {
                                 stop = false;
                                 for (let i = x - 1; (i >= 0) && !stop; i--) {
-                                    const el = arr[y - 1][i];
+                                    const el = gameData[y - 1][i];
                                     if ((el === 126) || (el === 128)) {
                                         xmin--;
                                     } else {
@@ -227,10 +228,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                                     }
                                 }
                             }
-                            if ((x < maxCol) && (arr[y - 1][x] !== 127)) {
+                            if ((x < maxCol) && (gameData[y - 1][x] !== 127)) {
                                 stop = false;
                                 for (let i = x + 1; (i < maxCol) && !stop; i++) {
-                                    const el = arr[y - 1][i];
+                                    const el = gameData[y - 1][i];
                                     if ((el === 127) || (el === 128)) {
                                         xmax++;
                                     } else {
@@ -252,16 +253,17 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
 
         update = false;
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
+            weight = hasWeight(backData, gameData, xmin, xmax, ymin);
             switch (direction) {
                 case "down":
                     if (vertical) {
-                        if (ymax < arr.length - 1) {
-                            if ((arr[ymax + 1][xmin] === 0) && !hasForceUp(arr, gameInfo, xmin, ymax + 1)) {
+                        if (ymax < gameData.length - 1) {
+                            if ((gameData[ymax + 1][xmin] === 0) && !hasForceUp(gameData, gameInfo, xmin, ymax + 1)) {
                                 update = true;
                                 for (let i = ymax; i >= ymin; i--) {
-                                    arr[i + 1][xmin] = arr[i][xmin];
+                                    gameData[i + 1][xmin] = gameData[i][xmin];
                                 }
-                                arr[ymin][xmin] = 0;
+                                gameData[ymin][xmin] = 0;
                             }
                         }
                     }
@@ -269,10 +271,10 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                         for (let i = xmin; i <= xmax; i++) {
                             stop = false;
                             for (let j = ymin; (j > 0) && !stop; j--) {
-                                const el = arr[j - 1][i];
+                                const el = gameData[j - 1][i];
                                 if ([2, 4, 8, 40, 93, 94].includes(el)) {
-                                    arr[j][i] = arr[j - 1][i];
-                                    arr[j - 1][i] = 0;
+                                    gameData[j][i] = gameData[j - 1][i];
+                                    gameData[j - 1][i] = 0;
                                     switch (el) {
                                         case 2:
                                             gameInfo.blueBall.x = i;
@@ -297,60 +299,46 @@ export function moveLightBlueBar(arr, gameInfo, direction) {
                     }
                     break;
                 case "left":
-                    if (!vertical) {
-                        if (xmin > 0) {
-                            if ((arr[ymin][xmin - 1] === 0) && !hasForceRight(arr, gameInfo, xmin - 1, ymin)) {
-                                update = true;
-
-                                // Do not move when there is an object with weight on top
-                                for (let i = xmin; i <= xmax; i++) {
-                                    if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
-                                        update = false;
-                                    }
-                                }
-
-                                if (update) {
+                    if (!weight) {
+                        if (!vertical) {
+                            if (xmin > 0) {
+                                if ((gameData[ymin][xmin - 1] === 0) && !hasForceRight(gameData, gameInfo, xmin - 1, ymin)) {
+                                    update = true;
                                     for (let i = xmin - 1; i < xmax; i++) {
-                                        arr[ymin][i] = arr[ymin][i + 1];
+                                        gameData[ymin][i] = gameData[ymin][i + 1];
                                     }
-                                    arr[ymin][xmax] = 0;
+                                    gameData[ymin][xmax] = 0;
                                 }
                             }
                         }
                     }
                     break;
                 case "right":
-                    if (!vertical) {
-                        if (xmin > 0) {
-                            if ((arr[ymin][xmax + 1] === 0) && !hasForceLeft(arr, gameInfo, xmax + 1, ymin)) {
-                                update = true;
-
-                                // Do not move when there is an object with weight on top
-                                for (let i = xmin; i <= xmax; i++) {
-                                    if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
-                                        update = false;
-                                    }
-                                }
-
-                                if (update) {
+                    if (!weight) {
+                        if (!vertical) {
+                            if (xmin > 0) {
+                                if ((gameData[ymin][xmax + 1] === 0) && !hasForceLeft(gameData, gameInfo, xmax + 1, ymin)) {
+                                    update = true;
                                     for (let i = xmax; i >= xmin; i--) {
-                                        arr[ymin][i + 1] = arr[ymin][i];
+                                        gameData[ymin][i + 1] = gameData[ymin][i];
                                     }
-                                    arr[ymin][xmin] = 0;
+                                    gameData[ymin][xmin] = 0;
                                 }
                             }
                         }
                     }
                     break;
                 case "up":
-                    if (vertical) {
-                        if (ymin > 0) {
-                            if ((arr[ymin - 1][xmin] === 0) && !hasForceDown(arr, gameInfo, xmin, ymin - 1)) {
-                                update = true;
-                                for (let i = ymin - 1; i < ymax; i++) {
-                                    arr[i][xmin] = arr[i + 1][xmin];
+                    if (!weight) {
+                        if (vertical) {
+                            if (ymin > 0) {
+                                if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
+                                    update = true;
+                                    for (let i = ymin - 1; i < ymax; i++) {
+                                        gameData[i][xmin] = gameData[i + 1][xmin];
+                                    }
+                                    gameData[ymax][xmin] = 0;
                                 }
-                                arr[ymax][xmin] = 0;
                             }
                         }
                     }

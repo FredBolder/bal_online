@@ -330,7 +330,7 @@ function BalPage() {
       if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
         update = true;
       }
-      if (moveYellowBars(gameData, gameInfo)) {
+      if (moveYellowBars(backData, gameData, gameInfo)) {
         update = true;
       }
     }
@@ -356,7 +356,7 @@ function BalPage() {
       }
     }
 
-    if (gameVars.freezeTime === 0) {
+    if (gameVars.timeFreezer === 0) {
       info = checkTimeBombs(gameData, backData, gameInfo);
       if (info.explosion) {
         playSound("explosion");
@@ -1066,7 +1066,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 748;
+        gameVars.currentLevel = 749;
       }
       initLevel(gameVars.currentLevel);
     }

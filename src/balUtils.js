@@ -461,6 +461,20 @@ export function freeToSwim(x1, x2, y, gameData) {
   return !found;
 }
 
+export function hasWeight(backData, gameData, xmin, xmax, y) {
+  let result = false;
+
+  if (y > 0) {
+    for (let i = xmin; i <= xmax; i++) {
+      const el = gameData[y - 1][i];
+      if (([2, 8, 93, 94].includes(el) && !isLadder(i, y - 1, backData)) || [4, 40].includes(el)) {
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+
 export function inWater(x, y, backData) {
   let result = [20, 23].includes(backData[y][x]);
   return result;
@@ -1039,7 +1053,7 @@ export function moveLeft(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([101, 102, 103, 104].includes(gameData[y][x - 1]))) {
-        if (movePurpleBar(gameData, gameInfo, "left")) {
+        if (movePurpleBar(backData, gameData, gameInfo, "left")) {
           result.player = true;
           gameData[y][x - 1] = 2;
           gameData[y][x] = element;
@@ -1047,7 +1061,7 @@ export function moveLeft(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([122, 123, 124, 125].includes(gameData[y][x - 1]))) {
-        if (moveYellowBar(gameData, gameInfo, "left")) {
+        if (moveYellowBar(backData, gameData, gameInfo, "left")) {
           result.player = true;
           gameData[y][x - 1] = 2;
           gameData[y][x] = element;
@@ -1055,7 +1069,7 @@ export function moveLeft(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([127, 128, 129, 130].includes(gameData[y][x - 1]))) {
-        if (moveLightBlueBar(gameData, gameInfo, "left")) {
+        if (moveLightBlueBar(backData, gameData, gameInfo, "left")) {
           result.player = true;
           gameData[y][x - 1] = 2;
           gameData[y][x] = element;
@@ -1186,7 +1200,7 @@ export function moveRight(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([100, 102, 103, 104].includes(gameData[y][x + 1]))) {
-        if (movePurpleBar(gameData, gameInfo, "right")) {
+        if (movePurpleBar(backData, gameData, gameInfo, "right")) {
           result.player = true;
           gameData[y][x + 1] = 2;
           gameInfo.blueBall.x = x + 1;
@@ -1194,7 +1208,7 @@ export function moveRight(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([121, 123, 124, 125].includes(gameData[y][x + 1]))) {
-        if (moveYellowBar(gameData, gameInfo, "right")) {
+        if (moveYellowBar(backData, gameData, gameInfo, "right")) {
           result.player = true;
           gameData[y][x + 1] = 2;
           gameInfo.blueBall.x = x + 1;
@@ -1202,7 +1216,7 @@ export function moveRight(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([126, 128, 129, 130].includes(gameData[y][x + 1]))) {
-        if (moveLightBlueBar(gameData, gameInfo, "right")) {
+        if (moveLightBlueBar(backData, gameData, gameInfo, "right")) {
           result.player = true;
           gameData[y][x + 1] = 2;
           gameInfo.blueBall.x = x + 1;
@@ -1302,7 +1316,7 @@ export function jump(backData, gameData, gameInfo) {
           result.player = true;
         }
         if (!result.player && ([100, 101, 102, 104].includes(gameData[y - 1][x]))) {
-          if (movePurpleBar(gameData, gameInfo, "up")) {
+          if (movePurpleBar(backData, gameData, gameInfo, "up")) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
@@ -1310,7 +1324,7 @@ export function jump(backData, gameData, gameInfo) {
           }
         }
         if (!result.player && ([121, 122, 123, 125].includes(gameData[y - 1][x]))) {
-          if (moveYellowBar(gameData, gameInfo, "up")) {
+          if (moveYellowBar(backData, gameData, gameInfo, "up")) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
@@ -1318,7 +1332,7 @@ export function jump(backData, gameData, gameInfo) {
           }
         }
         if (!result.player && ([126, 127, 128, 130].includes(gameData[y - 1][x]))) {
-          if (moveLightBlueBar(gameData, gameInfo, "up")) {
+          if (moveLightBlueBar(backData, gameData, gameInfo, "up")) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
@@ -1495,7 +1509,7 @@ export function pushDown(backData, gameData, gameInfo) {
         result.sound = "pickaxe";
       }
       if (!result.player && ([100, 101, 102, 103].includes(gameData[y + 1][x]))) {
-        if (movePurpleBar(gameData, gameInfo, "down")) {
+        if (movePurpleBar(backData, gameData, gameInfo, "down")) {
           // Blue ball is updated in movePurpleBar when moving down
           result.player = true;
           if (gameData[y][x] === 0) {
@@ -1504,7 +1518,7 @@ export function pushDown(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([121, 122, 123, 124].includes(gameData[y + 1][x]))) {
-        if (moveYellowBar(gameData, gameInfo, "down")) {
+        if (moveYellowBar(backData, gameData, gameInfo, "down")) {
           // Blue ball is updated in moveYellowBar when moving down
           result.player = true;
           if (gameData[y][x] === 0) {
@@ -1513,7 +1527,7 @@ export function pushDown(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([126, 127, 128, 129].includes(gameData[y + 1][x]))) {
-        if (moveLightBlueBar(gameData, gameInfo, "down")) {
+        if (moveLightBlueBar(backData, gameData, gameInfo, "down")) {
           // Blue ball is updated in moveLightBlueBar when moving down
           result.player = true;
           if (gameData[y][x] === 0) {
