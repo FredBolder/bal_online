@@ -1398,6 +1398,21 @@ function drawLevel(
         case 125:
           drawBarBottom("yellow");
           break;
+        case 126:
+          drawBarLeft("deepskyblue");
+          break;
+        case 127:
+          drawBarRight("deepskyblue");
+          break;
+        case 128:
+          drawBarMiddle("deepskyblue");
+          break;
+        case 129:
+          drawBarTop("deepskyblue");
+          break;
+        case 130:
+          drawBarBottom("deepskyblue");
+          break;
         case 1000:
           // For manual only (empty)
           break;

@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {
+  charToNumber,
   isEmpty,
   numberArrayToStringArray,
+  numberToChar,
   stringArrayToNumberArray,
 } from "./balUtils.js";
 import { initGameInfo } from "./gameInfo.js";
@@ -129,6 +131,20 @@ describe("balUtils", () => {
   it("isEmpty E", () => {
     expect(result03e).toBe(true);
   });
+
+  // Increase 150 when there are objects with a higher number
+  for (let i = 0; i < 150; i++) {
+    let input04a = i;
+    let expectedOutput04a = input04a;
+    let ch = numberToChar(input04a);
+    let output4a = charToNumber(ch);
+    if (ch !== "?") {
+      it(`charToNumber and numberToChar Number: ${input04a} `, () => {
+        expect(output4a).toBe(expectedOutput04a);
+      });
+    }
+  }
+
 
   // Insert new tests here
 });

@@ -1,51 +1,44 @@
 import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
-import { movePurpleBar } from "./purpleBar.js";
+import { moveLightBlueBar } from "./lightBlueBar.js";
 
-describe("Purple bar", () => {
+describe("Light blue bar", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
 
-    // ***** Horizontal purple bar *****
+    // ***** Horizontal light blue bar *****
 
     let input01a = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
+        [1, 0, 0, 126, 128, 128, 127, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01a = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01a = movePurpleBar(input01a, { ...defaultGameInfo, blueBall: { x: 4, y: 4 } }, "up");
-    it("Horizontal purple bar A", () => {
+    let expectedOutput01a = input01a.map(row => [...row]);
+    let info01a = moveLightBlueBar(input01a, { ...defaultGameInfo, blueBall: { x: 4, y: 4 } }, "up");
+    it("Horizontal light blue bar A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
-    it("Horizontal purple bar A info", () => {
-        expect(info01a).toBe(true);
+    it("Horizontal light blue bar A info", () => {
+        expect(info01a).toBe(false);
     });
 
     let input01b = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 4, 0, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
+        [1, 0, 0, 126, 128, 128, 127, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01b = input01b.map(row => [...row]);
-    let info01b = movePurpleBar(input01b, { ...defaultGameInfo, blueBall: { x: 4, y: 4 } }, "up");
-    it("Horizontal purple bar B", () => {
+    let info01b = moveLightBlueBar(input01b, { ...defaultGameInfo, blueBall: { x: 4, y: 4 } }, "up");
+    it("Horizontal light blue bar B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
-    it("Horizontal purple bar B info", () => {
+    it("Horizontal light blue bar B info", () => {
         expect(info01b).toBe(false);
     });
 
@@ -54,43 +47,36 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
+        [1, 0, 0, 126, 128, 128, 127, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01c = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01c = movePurpleBar(input01c, gameInfo01c, "down");
-    it("Horizontal purple bar C", () => {
+    let expectedOutput01c = input01c.map(row => [...row]);
+    let info01c = moveLightBlueBar(input01c, gameInfo01c, "down");
+    it("Horizontal light blue bar C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
-    it("Horizontal purple bar C info", () => {
-        expect(info01c).toBe(true);
+    it("Horizontal light blue bar C info", () => {
+        expect(info01c).toBe(false);
     });
-    it("Horizontal purple bar C blue ball", () => {
-        expect(JSON.stringify(gameInfo01c.blueBall)).toBe(JSON.stringify({ x: 4, y: 3 }));
+    it("Horizontal light blue bar C blue ball", () => {
+        expect(JSON.stringify(gameInfo01c.blueBall)).toBe(JSON.stringify({ x: 4, y: 2 }));
     });
 
     let input01d = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
+        [1, 0, 0, 126, 128, 128, 127, 0, 1],
         [1, 0, 0, 0, 0, 0, 4, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01d = input01d.map(row => [...row]);
-    let info01d = movePurpleBar(input01d, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, "down");
-    it("Horizontal purple bar D", () => {
+    let info01d = moveLightBlueBar(input01d, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, "down");
+    it("Horizontal light blue bar D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
-    it("Horizontal purple bar D info", () => {
+    it("Horizontal light blue bar D info", () => {
         expect(info01d).toBe(false);
     });
 
@@ -98,21 +84,21 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 2, 1],
+        [1, 0, 0, 126, 128, 128, 127, 2, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01e = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 100, 102, 102, 101, 0, 2, 1],
+        [1, 0, 126, 128, 128, 127, 0, 2, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01e = movePurpleBar(input01e, { ...defaultGameInfo, blueBall: { x: 7, y: 3 } }, "left");
-    it("Horizontal purple bar E", () => {
+    let info01e = moveLightBlueBar(input01e, { ...defaultGameInfo, blueBall: { x: 7, y: 3 } }, "left");
+    it("Horizontal light blue bar E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
-    it("Horizontal purple bar E info", () => {
+    it("Horizontal light blue bar E info", () => {
         expect(info01e).toBe(true);
     });
 
@@ -120,15 +106,15 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 4, 100, 102, 102, 101, 2, 1],
+        [1, 0, 4, 126, 128, 128, 127, 2, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01f = input01f.map(row => [...row]);
-    let info01f = movePurpleBar(input01f, { ...defaultGameInfo, blueBall: { x: 7, y: 3 } }, "left");
-    it("Horizontal purple bar F", () => {
+    let info01f = moveLightBlueBar(input01f, { ...defaultGameInfo, blueBall: { x: 7, y: 3 } }, "left");
+    it("Horizontal light blue bar F", () => {
         expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
     });
-    it("Horizontal purple bar F info", () => {
+    it("Horizontal light blue bar F info", () => {
         expect(info01f).toBe(false);
     });
 
@@ -136,15 +122,15 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 4, 0, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 2, 1],
+        [1, 0, 0, 126, 128, 128, 127, 2, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01g = input01g.map(row => [...row]);
-    let info01g = movePurpleBar(input01g, { ...defaultGameInfo, blueBall: { x: 7, y: 3 } }, "left");
-    it("Horizontal purple bar G", () => {
+    let info01g = moveLightBlueBar(input01g, { ...defaultGameInfo, blueBall: { x: 7, y: 3 } }, "left");
+    it("Horizontal light blue bar G", () => {
         expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
     });
-    it("Horizontal purple bar G info", () => {
+    it("Horizontal light blue bar G info", () => {
         expect(info01g).toBe(false);
     });
 
@@ -152,21 +138,21 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 2, 100, 102, 102, 101, 0, 1],
+        [1, 0, 2, 126, 128, 128, 127, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01h = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 2, 0, 100, 102, 102, 101, 1],
+        [1, 0, 2, 0, 126, 128, 128, 127, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01h = movePurpleBar(input01h, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, "right");
-    it("Horizontal purple bar H", () => {
+    let info01h = moveLightBlueBar(input01h, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, "right");
+    it("Horizontal light blue bar H", () => {
         expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
     });
-    it("Horizontal purple bar H info", () => {
+    it("Horizontal light blue bar H info", () => {
         expect(info01h).toBe(true);
     });
 
@@ -174,15 +160,15 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 2, 100, 102, 102, 101, 4, 1],
+        [1, 0, 2, 126, 128, 128, 127, 4, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01i = input01i.map(row => [...row]);
-    let info01i = movePurpleBar(input01i, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, "right");
-    it("Horizontal purple bar I", () => {
+    let info01i = moveLightBlueBar(input01i, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, "right");
+    it("Horizontal light blue bar I", () => {
         expect(JSON.stringify(input01i)).toBe(JSON.stringify(expectedOutput01i));
     });
-    it("Horizontal purple bar I info", () => {
+    it("Horizontal light blue bar I info", () => {
         expect(info01i).toBe(false);
     });
 
@@ -190,15 +176,15 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 93, 0, 0, 1],
-        [1, 0, 2, 100, 102, 102, 101, 0, 1],
+        [1, 0, 2, 126, 128, 128, 127, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01j = input01j.map(row => [...row]);
-    let info01j = movePurpleBar(input01j, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, "right");
-    it("Horizontal purple bar J", () => {
+    let info01j = moveLightBlueBar(input01j, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, "right");
+    it("Horizontal light blue bar J", () => {
         expect(JSON.stringify(input01j)).toBe(JSON.stringify(expectedOutput01j));
     });
-    it("Horizontal purple bar J info", () => {
+    it("Horizontal light blue bar J info", () => {
         expect(info01j).toBe(false);
     });
 
@@ -206,33 +192,33 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 110, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
+        [1, 0, 0, 126, 128, 128, 127, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01k = input01k.map(row => [...row]);
-    let info01k = movePurpleBar(input01k, { ...defaultGameInfo, blueBall: { x: 4, y: 4 }, forces: [{ x: 4, y: 1, direction: 2 }] }, "up");
-    it("Horizontal purple bar K", () => {
+    let info01k = moveLightBlueBar(input01k, { ...defaultGameInfo, blueBall: { x: 4, y: 4 }, forces: [{ x: 4, y: 1, direction: 2 }] }, "up");
+    it("Horizontal light blue bar K", () => {
         expect(JSON.stringify(input01k)).toBe(JSON.stringify(expectedOutput01k));
     });
-    it("Horizontal purple bar K info", () => {
+    it("Horizontal light blue bar K info", () => {
         expect(info01k).toBe(false);
     });
 
     let input01l = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 100, 102, 102, 101, 0, 1],
+        [1, 0, 0, 126, 128, 128, 127, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 109, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01l = input01l.map(row => [...row]);
-    let info01l = movePurpleBar(input01l, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 4, direction: 8 }] }, "down");
-    it("Horizontal purple bar L", () => {
+    let info01l = moveLightBlueBar(input01l, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 4, direction: 8 }] }, "down");
+    it("Horizontal light blue bar L", () => {
         expect(JSON.stringify(input01l)).toBe(JSON.stringify(expectedOutput01l));
     });
-    it("Horizontal purple bar L info", () => {
+    it("Horizontal light blue bar L info", () => {
         expect(info01l).toBe(false);
     });
 
@@ -240,15 +226,15 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [111, 0, 0, 100, 102, 102, 101, 2, 1],
+        [111, 0, 0, 126, 128, 128, 127, 2, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01m = input01m.map(row => [...row]);
-    let info01m = movePurpleBar(input01m, { ...defaultGameInfo, blueBall: { x: 7, y: 3 }, forces: [{ x: 0, y: 3, direction: 6 }] }, "left");
-    it("Horizontal purple bar M", () => {
+    let info01m = moveLightBlueBar(input01m, { ...defaultGameInfo, blueBall: { x: 7, y: 3 }, forces: [{ x: 0, y: 3, direction: 6 }] }, "left");
+    it("Horizontal light blue bar M", () => {
         expect(JSON.stringify(input01m)).toBe(JSON.stringify(expectedOutput01m));
     });
-    it("Horizontal purple bar M info", () => {
+    it("Horizontal light blue bar M info", () => {
         expect(info01m).toBe(false);
     });
 
@@ -256,42 +242,42 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 2, 100, 102, 102, 101, 0, 112],
+        [1, 0, 2, 126, 128, 128, 127, 0, 112],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01n = input01n.map(row => [...row]);
-    let info01n = movePurpleBar(input01n, { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, forces: [{ x: 8, y: 3, direction: 4 }] }, "right");
-    it("Horizontal purple bar N", () => {
+    let info01n = moveLightBlueBar(input01n, { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, forces: [{ x: 8, y: 3, direction: 4 }] }, "right");
+    it("Horizontal light blue bar N", () => {
         expect(JSON.stringify(input01n)).toBe(JSON.stringify(expectedOutput01n));
     });
-    it("Horizontal purple bar N info", () => {
+    it("Horizontal light blue bar N info", () => {
         expect(info01n).toBe(false);
     });
 
 
-    // ***** Vertical purple bar *****
+    // ***** Vertical light blue bar *****
 
     let input02a = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02a = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 3, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02a = movePurpleBar(input02a, { ...defaultGameInfo, blueBall: { x: 4, y: 4 } }, "up");
-    it("Vertical purple bar A", () => {
+    let info02a = moveLightBlueBar(input02a, { ...defaultGameInfo, blueBall: { x: 4, y: 4 } }, "up");
+    it("Vertical light blue bar A", () => {
         expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
     });
-    it("Vertical purple bar A info", () => {
+    it("Vertical light blue bar A info", () => {
         expect(info02a).toBe(true);
     });
 
@@ -299,17 +285,17 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 4, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02b = input02b.map(row => [...row]);
-    let info02b = movePurpleBar(input02b, { ...defaultGameInfo, blueBall: { x: 4, y: 5 } }, "up");
-    it("Vertical purple bar B", () => {
+    let info02b = moveLightBlueBar(input02b, { ...defaultGameInfo, blueBall: { x: 4, y: 5 } }, "up");
+    it("Vertical light blue bar B", () => {
         expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
     });
-    it("Vertical purple bar B info", () => {
+    it("Vertical light blue bar B info", () => {
         expect(info02b).toBe(false);
     });
 
@@ -317,9 +303,9 @@ describe("Purple bar", () => {
     let input02c = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
@@ -327,120 +313,106 @@ describe("Purple bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02c = movePurpleBar(input02c, gameInfo02c, "down");
-    it("Vertical purple bar C", () => {
+    let info02c = moveLightBlueBar(input02c, gameInfo02c, "down");
+    it("Vertical light blue bar C", () => {
         expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
     });
-    it("Vertical purple bar C info", () => {
+    it("Vertical light blue bar C info", () => {
         expect(info02c).toBe(true);
     });
-    it("Vertical purple bar C blue ball", () => {
+    it("Vertical light blue bar C blue ball", () => {
         expect(JSON.stringify(gameInfo02c.blueBall)).toBe(JSON.stringify({ x: 4, y: 2 }));
     });
 
     let input02d = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 4, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02d = input02d.map(row => [...row]);
-    let info02d = movePurpleBar(input02d, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, "down");
-    it("Vertical purple bar D", () => {
+    let info02d = moveLightBlueBar(input02d, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, "down");
+    it("Vertical light blue bar D", () => {
         expect(JSON.stringify(input02d)).toBe(JSON.stringify(expectedOutput02d));
     });
-    it("Vertical purple bar D info", () => {
+    it("Vertical light blue bar D info", () => {
         expect(info02d).toBe(false);
     });
 
     let input02e = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 2, 0, 0, 1],
+        [1, 3, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 2, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02e = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 103, 0, 0, 0, 0, 1],
-        [1, 0, 0, 102, 0, 0, 0, 0, 1],
-        [1, 0, 0, 102, 0, 0, 0, 0, 1],
-        [1, 0, 0, 104, 0, 2, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info02e = movePurpleBar(input02e, { ...defaultGameInfo, blueBall: { x: 5, y: 4 } }, "left");
-    it("Vertical purple bar E", () => {
+    let expectedOutput02e = input02e.map(row => [...row]);
+    let info02e = moveLightBlueBar(input02e, { ...defaultGameInfo, blueBall: { x: 5, y: 4 } }, "left");
+    it("Vertical light blue bar E", () => {
         expect(JSON.stringify(input02e)).toBe(JSON.stringify(expectedOutput02e));
     });
-    it("Vertical purple bar E info", () => {
-        expect(info02e).toBe(true);
+    it("Vertical light blue bar E info", () => {
+        expect(info02e).toBe(false);
     });
 
     let input02f = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 4, 104, 2, 0, 0, 1],
+        [1, 3, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 4, 130, 2, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02f = input02f.map(row => [...row]);
-    let info02f = movePurpleBar(input02f, { ...defaultGameInfo, blueBall: { x: 5, y: 4 } }, "left");
-    it("Vertical purple bar F", () => {
+    let info02f = moveLightBlueBar(input02f, { ...defaultGameInfo, blueBall: { x: 5, y: 4 } }, "left");
+    it("Vertical light blue bar F", () => {
         expect(JSON.stringify(input02f)).toBe(JSON.stringify(expectedOutput02f));
     });
-    it("Vertical purple bar F info", () => {
+    it("Vertical light blue bar F info", () => {
         expect(info02f).toBe(false);
     });
 
     let input02g = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 4, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 2, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 2, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02g = input02g.map(row => [...row]);
-    let info02g = movePurpleBar(input02g, { ...defaultGameInfo, blueBall: { x: 5, y: 4 } }, "left");
-    it("Vertical purple bar G", () => {
+    let info02g = moveLightBlueBar(input02g, { ...defaultGameInfo, blueBall: { x: 5, y: 4 } }, "left");
+    it("Vertical light blue bar G", () => {
         expect(JSON.stringify(input02g)).toBe(JSON.stringify(expectedOutput02g));
     });
-    it("Vertical purple bar G info", () => {
+    it("Vertical light blue bar G info", () => {
         expect(info02g).toBe(false);
     });
 
     let input02h = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 2, 104, 0, 0, 0, 1],
+        [1, 3, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 2, 130, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02h = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 103, 0, 0, 1],
-        [1, 0, 0, 0, 0, 102, 0, 0, 1],
-        [1, 0, 0, 0, 0, 102, 0, 0, 1],
-        [1, 0, 0, 2, 0, 104, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info02h = movePurpleBar(input02h, { ...defaultGameInfo, blueBall: { x: 3, y: 4 } }, "right");
-    it("Vertical purple bar H", () => {
+    let expectedOutput02h = input02h.map(row => [...row]);
+    let info02h = moveLightBlueBar(input02h, { ...defaultGameInfo, blueBall: { x: 3, y: 4 } }, "right");
+    it("Vertical light blue bar H", () => {
         expect(JSON.stringify(input02h)).toBe(JSON.stringify(expectedOutput02h));
     });
-    it("Vertical purple bar H info", () => {
-        expect(info02h).toBe(true);
+    it("Vertical light blue bar H info", () => {
+        expect(info02h).toBe(false);
     });
 
     let input02i = [
@@ -448,72 +420,72 @@ describe("Purple bar", () => {
         [1, 0, 0, 0, 110, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02i = input02i.map(row => [...row]);
-    let info02i = movePurpleBar(input02i, { ...defaultGameInfo, blueBall: { x: 4, y: 7 }, forces: [{ x: 4, y: 1, direction: 2 }] }, "up");
-    it("Vertical purple bar I", () => {
+    let info02i = moveLightBlueBar(input02i, { ...defaultGameInfo, blueBall: { x: 4, y: 7 }, forces: [{ x: 4, y: 1, direction: 2 }] }, "up");
+    it("Vertical light blue bar I", () => {
         expect(JSON.stringify(input02i)).toBe(JSON.stringify(expectedOutput02i));
     });
-    it("Vertical purple bar I info", () => {
+    it("Vertical light blue bar I info", () => {
         expect(info02i).toBe(false);
     });
 
     let input02j = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 130, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 109, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02j = input02j.map(row => [...row]);
-    let info02j = movePurpleBar(input02j, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 7, direction: 8 }] }, "down");
-    it("Vertical purple bar J", () => {
+    let info02j = moveLightBlueBar(input02j, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 7, direction: 8 }] }, "down");
+    it("Vertical light blue bar J", () => {
         expect(JSON.stringify(input02j)).toBe(JSON.stringify(expectedOutput02j));
     });
-    it("Vertical purple bar J info", () => {
+    it("Vertical light blue bar J info", () => {
         expect(info02j).toBe(false);
     });
 
     let input02k = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 111, 0, 0, 104, 2, 0, 0, 1],
+        [1, 3, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 111, 0, 0, 130, 2, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02k = input02k.map(row => [...row]);
-    let info02k = movePurpleBar(input02k, { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, forces: [{ x: 1, y: 4, direction: 6 }] }, "left");
-    it("Vertical purple bar K", () => {
+    let info02k = moveLightBlueBar(input02k, { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, forces: [{ x: 1, y: 4, direction: 6 }] }, "left");
+    it("Vertical light blue bar K", () => {
         expect(JSON.stringify(input02k)).toBe(JSON.stringify(expectedOutput02k));
     });
-    it("Vertical purple bar K info", () => {
+    it("Vertical light blue bar K info", () => {
         expect(info02k).toBe(false);
     });
 
     let input02l = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 2, 104, 0, 0, 112, 1],
+        [1, 3, 0, 0, 129, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 0, 128, 0, 0, 0, 1],
+        [1, 0, 0, 2, 130, 0, 0, 112, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02l = input02l.map(row => [...row]);
-    let info02l = movePurpleBar(input02l, { ...defaultGameInfo, blueBall: { x: 3, y: 4 }, forces: [{ x: 7, y: 4, direction: 4 }] }, "right");
-    it("Vertical purple bar L", () => {
+    let info02l = moveLightBlueBar(input02l, { ...defaultGameInfo, blueBall: { x: 3, y: 4 }, forces: [{ x: 7, y: 4, direction: 4 }] }, "right");
+    it("Vertical light blue bar L", () => {
         expect(JSON.stringify(input02l)).toBe(JSON.stringify(expectedOutput02l));
     });
-    it("Vertical purple bar L info", () => {
+    it("Vertical light blue bar L info", () => {
         expect(info02l).toBe(false);
     });
 
