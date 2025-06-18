@@ -1,7 +1,7 @@
 import { randomInt } from "./utils.js";
 
 const series1Start = 200;
-const series1End = 220;
+const series1End = 222;
 const series2Start = 700;
 const series2End = 749;
 const seriesSmallStart = 750;

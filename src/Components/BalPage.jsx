@@ -470,7 +470,17 @@ function BalPage() {
     elementHelp.current.style.display = "block";
   }
 
-  function loadColors(gameVars, levelSettings) {
+  function hint(gameVars) {
+    let msg = "";
+
+    msg = gameVars.hint;
+    if (msg === "") {
+      msg = "There is no hint available for this level."
+    }
+    alert(msg);
+  }
+
+  function loadLevelSettings(gameVars, levelSettings) {
     let color = "";
     let h = -1;
     let p1 = -1;
@@ -487,6 +497,7 @@ function BalPage() {
       p1 = setting.indexOf(":");
       if (p1 >= 0) {
         const name = setting.slice(0, p1).toLowerCase().trim();
+        const value = setting.slice(p1 + 1).trim();
         const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
         switch (name) {
           case "$bgcolor":
@@ -505,6 +516,9 @@ function BalPage() {
                 }
               }
             }
+            break;
+          case "$hint":
+            gameVars.hint = value;
             break;
           default:
             break;
@@ -525,7 +539,7 @@ function BalPage() {
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
       data = await getLevel(gameVars.currentLevel);
-      loadColors(gameVars, data.levelSettings);
+      loadLevelSettings(gameVars, data.levelSettings);
       gd = stringArrayToNumberArray(data.levelData);
       backData = null;
       backData = gd.backData;
@@ -731,7 +745,7 @@ function BalPage() {
       updateScreen();
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
-      loadColors(gameVars, result.levelSettings);
+      loadLevelSettings(gameVars, result.levelSettings);
       loading = false;
     }
   }
@@ -990,6 +1004,9 @@ function BalPage() {
               if (fred) {
                 alert(numberToCode(gameVars.currentLevel));
               }
+              break;
+            case "H":
+              hint(gameVars);
               break;
             case "L":
               // Move a 3-step stairs to the left
@@ -1255,14 +1272,17 @@ function BalPage() {
               Green: <span className="balPanelTextSpan">{green}</span>
             </div>
 
-            <button
-              className="balButton"
-              onClick={() => {
-                help();
-              }}
-            >
-              ?
-            </button>
+            <div className="menu">
+              <button className="balButton">?</button>
+              <div className="menu-content">
+                <div onClick={() => { help() }}>
+                  <label>Help</label>
+                </div>
+                <div onClick={() => { hint(gameVars) }}>
+                  <label>Hint</label>
+                </div>
+              </div>
+            </div>
 
             <div className="menu">
               <button className="balButton">Settings</button>

@@ -241,6 +241,7 @@ export function initGameVars(vars) {
     vars.fishCounter = 0;
     vars.fishCountTo = 12;
     vars.gameOver = false;
+    vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;
     vars.redCounter = 0;
