@@ -4,9 +4,11 @@ import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.j
 export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
     let x = gameInfo.blueBall.x;
     let y = gameInfo.blueBall.y;
+    let changeDirection = false;
     let direction = "none";
     let element = 0;
     let error = false;
+    let hasWeight = false;
     let idx = -1;
     let maxCol = 0;
     let stop = false;
@@ -352,11 +354,22 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
         findAndSetIndex(xmin, ymax);
         findAndSetIndex(xmax, ymax);
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
+            hasWeight = false;
+            for (let i = xmin; i <= xmax; i++) {
+                if ([2, 4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
+                    hasWeight = true;
+                }
+            }
+
             switch (direction) {
                 case "down":
                     if (vertical) {
                         update = false;
                         if (ymax < arr.length - 1) {
+                            if ((arr[ymax + 1][xmin] === 86)) {
+                                changeDirection = true;
+                                direction = "up";
+                            }
                             if ((arr[ymax + 1][xmin] === 0) && !hasForceUp(arr, gameInfo, xmin, ymax + 1)) {
                                 update = true;
                                 for (let i = ymax; i >= ymin; i--) {
@@ -412,9 +425,8 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
                     }
                     break;
                 case "left":
-                    if (vertical) {
-                        // Do not move when there is an object with weight on top
-                        if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][xmin]) === false) {
+                    if (!hasWeight) {
+                        if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
                                 const el = arr[i][xmin - 1];
@@ -428,21 +440,15 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
                                     arr[i][xmin] = 0;
                                 }
                             }
-                        }
-                    } else {
-                        update = false;
-                        if (xmin > 0) {
-                            if ((arr[ymin][xmin - 1] === 0) && !hasForceRight(arr, gameInfo, xmin - 1, ymin)) {
-                                update = true;
-
-                                // Do not move when there is an object with weight on top
-                                for (let i = xmin; i <= xmax; i++) {
-                                    if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
-                                        update = false;
-                                    }
+                        } else {
+                            update = false;
+                            if (xmin > 0) {
+                                if ((arr[ymin][xmin - 1] === 86)) {
+                                    changeDirection = true;
+                                    direction = "right";
                                 }
-
-                                if (update) {
+                                if ((arr[ymin][xmin - 1] === 0) && !hasForceRight(arr, gameInfo, xmin - 1, ymin)) {
+                                    update = true;
                                     for (let i = xmin - 1; i < xmax; i++) {
                                         arr[ymin][i] = arr[ymin][i + 1];
                                     }
@@ -453,9 +459,8 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
                     }
                     break;
                 case "right":
-                    if (vertical) {
-                        // Do not move when there is an object with weight on top
-                        if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][xmin]) === false) {
+                    if (!hasWeight) {
+                        if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
                                 const el = arr[i][xmax + 1];
@@ -469,21 +474,15 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
                                     arr[i][xmax] = 0;
                                 }
                             }
-                        }
-                    } else {
-                        update = false;
-                        if (xmin > 0) {
-                            if ((arr[ymin][xmax + 1] === 0) && !hasForceLeft(arr, gameInfo, xmax + 1, ymin)) {
-                                update = true;
-
-                                // Do not move when there is an object with weight on top
-                                for (let i = xmin; i <= xmax; i++) {
-                                    if ([4, 8, 40, 93, 94].includes(arr[ymin - 1][i])) {
-                                        update = false;
-                                    }
+                        } else {
+                            update = false;
+                            if (xmin > 0) {
+                                if ((arr[ymin][xmax + 1] === 86)) {
+                                    changeDirection = true;
+                                    direction = "left";
                                 }
-
-                                if (update) {
+                                if ((arr[ymin][xmax + 1] === 0) && !hasForceLeft(arr, gameInfo, xmax + 1, ymin)) {
+                                    update = true;
                                     for (let i = xmax; i >= xmin; i--) {
                                         arr[ymin][i + 1] = arr[ymin][i];
                                     }
@@ -494,28 +493,34 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
                     }
                     break;
                 case "up":
-                    if (ymin > 0) {
-                        if (vertical) {
-                            update = false;
-                            if ((arr[ymin - 1][xmin] === 0) && !hasForceDown(arr, gameInfo, xmin, ymin - 1)) {
+                    if (!hasWeight) {
+                        if (ymin > 0) {
+                            if (vertical) {
+                                update = false;
+                                if ((arr[ymin - 1][xmin] === 86)) {
+                                    changeDirection = true;
+                                    direction = "down";
+                                }
+                                if ((arr[ymin - 1][xmin] === 0) && !hasForceDown(arr, gameInfo, xmin, ymin - 1)) {
+                                    update = true;
+                                    for (let i = ymin - 1; i < ymax; i++) {
+                                        arr[i][xmin] = arr[i + 1][xmin];
+                                    }
+                                    arr[ymax][xmin] = 0;
+                                }
+                            } else {
                                 update = true;
-                                for (let i = ymin - 1; i < ymax; i++) {
-                                    arr[i][xmin] = arr[i + 1][xmin];
-                                }
-                                arr[ymax][xmin] = 0;
-                            }
-                        } else {
-                            update = true;
-                            for (let i = xmin; i <= xmax; i++) {
-                                const el = arr[ymin - 1][i];
-                                if ((el !== 0) || hasForceDown(arr, gameInfo, i, ymin - 1)) {
-                                    update = false;
-                                }
-                            }
-                            if (update) {
                                 for (let i = xmin; i <= xmax; i++) {
-                                    arr[ymin - 1][i] = arr[ymin][i];
-                                    arr[ymin][i] = 0;
+                                    const el = arr[ymin - 1][i];
+                                    if ((el !== 0) || hasForceDown(arr, gameInfo, i, ymin - 1)) {
+                                        update = false;
+                                    }
+                                }
+                                if (update) {
+                                    for (let i = xmin; i <= xmax; i++) {
+                                        arr[ymin - 1][i] = arr[ymin][i];
+                                        arr[ymin][i] = 0;
+                                    }
                                 }
                             }
                         }
@@ -549,7 +554,11 @@ export function moveYellowBar(arr, gameInfo, dir, index = - 1) {
                     break;
             }
         } else {
-            gameInfo.yellowBars[idx].direction = "none";
+            if (changeDirection) {
+                gameInfo.yellowBars[idx].direction = direction;
+            } else {
+                gameInfo.yellowBars[idx].direction = "none";
+            }
         }
     }
     return update;

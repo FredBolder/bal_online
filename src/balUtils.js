@@ -270,7 +270,7 @@ export function charToNumber(c) {
     case "è":
       result = 127;
       break;
-    case "e": // without 2 dots
+    case "e": // without two dots
       result = 128;
       break;
     case "É":
@@ -278,6 +278,9 @@ export function charToNumber(c) {
       break;
     case "È":
       result = 130;
+      break;
+    case "Σ":
+      result = 131;
       break;
     case "|":
       result = 1000;
@@ -783,13 +786,16 @@ export function numberToChar(n) {
       result = "è";
       break;
     case 128:
-      result = "e";
+      result = "e"; // without two dots
       break;
     case 129:
       result = "É";
       break;
     case 130:
       result = "È";
+      break;
+    case 131:
+      result = "Σ";
       break;
     case 1000:
       // For manual only

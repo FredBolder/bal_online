@@ -1085,6 +1085,12 @@ function drawLevel(
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, "rgb(220,220,220)");
   }
 
+  function drawYellowStopper() {
+    let d1 = w1 /4 ;
+    drawYellowBallPushersTrigger();
+    drawBox(ctx, xc - (d1 * 0.5), yc + (d1 * 0.5), d1, d1, "black");
+  }
+
   if (
     !gameData ||
     gameData.length < 1 ||
@@ -1412,6 +1418,9 @@ function drawLevel(
           break;
         case 130:
           drawBarBottom("deepskyblue");
+          break;
+        case 131:
+          drawYellowStopper();
           break;
         case 1000:
           // For manual only (empty)

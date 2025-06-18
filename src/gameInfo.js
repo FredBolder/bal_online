@@ -179,6 +179,10 @@ export function getGameInfo(backData, gameData) {
                     result.yellowBars.push(yellowBar);
                     break;
                 }
+                case 131:
+                    result.yellowStopper.x = j;
+                    result.yellowStopper.y = i;
+                    break;
                 default:
                     break;
             }
@@ -222,9 +226,11 @@ export function initGameInfo(info) {
     info.yellowBallPushers = [];
     info.yellowBallPushersTrigger = { x: -1, y: -1 };
     info.yellowBars = [];
+    info.yellowStopper = { x: -1, y: -1 };
 }
 
 export function initGameVars(vars) {
+    vars.ballPushersActive = false;
     vars.bgcolor = [];
     vars.currentLevel = 200;
     vars.elecActiveSaved = false;
@@ -245,7 +251,7 @@ export function initGameVars(vars) {
     vars.timeFreezer = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;
-    vars.ballPushersActive = false;
     vars.yellowCounter = 0;
+    vars.yellowStopperActive = false;
 }
 
