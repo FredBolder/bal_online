@@ -1061,7 +1061,7 @@ export function moveLeft(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([122, 123, 124, 125].includes(gameData[y][x - 1]))) {
-        if (moveYellowBar(backData, gameData, gameInfo, "left")) {
+        if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "left", -1)) {
           result.player = true;
           gameData[y][x - 1] = 2;
           gameData[y][x] = element;
@@ -1208,7 +1208,7 @@ export function moveRight(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([121, 123, 124, 125].includes(gameData[y][x + 1]))) {
-        if (moveYellowBar(backData, gameData, gameInfo, "right")) {
+        if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "right", -1)) {
           result.player = true;
           gameData[y][x + 1] = 2;
           gameInfo.blueBall.x = x + 1;
@@ -1324,7 +1324,7 @@ export function jump(backData, gameData, gameInfo) {
           }
         }
         if (!result.player && ([121, 122, 123, 125].includes(gameData[y - 1][x]))) {
-          if (moveYellowBar(backData, gameData, gameInfo, "up")) {
+          if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "up", -1)) {
             result.player = true;
             gameData[y - 1][x] = 2;
             gameData[y][x] = element;
@@ -1518,7 +1518,7 @@ export function pushDown(backData, gameData, gameInfo) {
         }
       }
       if (!result.player && ([121, 122, 123, 124].includes(gameData[y + 1][x]))) {
-        if (moveYellowBar(backData, gameData, gameInfo, "down")) {
+        if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "down", -1)) {
           // Blue ball is updated in moveYellowBar when moving down
           result.player = true;
           if (gameData[y][x] === 0) {

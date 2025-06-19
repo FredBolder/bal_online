@@ -1,9 +1,7 @@
 import { findElementByCoordinate, hasWeight, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
-export function moveYellowBar(backData, gameData, gameInfo, dir, index = - 1) {
-    let x = gameInfo.blueBall.x;
-    let y = gameInfo.blueBall.y;
+export function moveYellowBar(x, y, backData, gameData, gameInfo, dir, index, pusher = false) {
     let changeDirection = false;
     let direction = "none";
     let element = 0;
@@ -25,7 +23,6 @@ export function moveYellowBar(backData, gameData, gameInfo, dir, index = - 1) {
             idx = findElementByCoordinate(xIdx, yIdx, gameInfo.yellowBars);
         }
     }
-
 
     if (gameData.length > 2) {
         error = false;
@@ -347,14 +344,16 @@ export function moveYellowBar(backData, gameData, gameInfo, dir, index = - 1) {
             }
         }
 
-
         update = false;
         findAndSetIndex(xmin, ymin);
         findAndSetIndex(xmax, ymin);
         findAndSetIndex(xmin, ymax);
         findAndSetIndex(xmax, ymax);
-        if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
+        if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0) && (idx >= 0)) {
             weight = hasWeight(backData, gameData, xmin, xmax, ymin);
+            if (pusher && (gameInfo.yellowBars[idx].direction !== "none")) {
+                return false;
+            }
             switch (direction) {
                 case "down":
                     if (vertical) {
@@ -524,34 +523,34 @@ export function moveYellowBar(backData, gameData, gameInfo, dir, index = - 1) {
                     break;
             }
         }
-    }
-    if (idx >= 0) {
-        if (update) {
-            switch (direction) {
-                case "left":
-                    gameInfo.yellowBars[idx].direction = "left";
-                    gameInfo.yellowBars[idx].x--;
-                    break;
-                case "right":
-                    gameInfo.yellowBars[idx].direction = "right";
-                    gameInfo.yellowBars[idx].x++;
-                    break;
-                case "up":
-                    gameInfo.yellowBars[idx].direction = "up";
-                    gameInfo.yellowBars[idx].y--;
-                    break;
-                case "down":
-                    gameInfo.yellowBars[idx].direction = "down";
-                    gameInfo.yellowBars[idx].y++;
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            if (changeDirection) {
-                gameInfo.yellowBars[idx].direction = direction;
+        if (idx >= 0) {
+            if (update) {
+                switch (direction) {
+                    case "left":
+                        gameInfo.yellowBars[idx].direction = "left";
+                        gameInfo.yellowBars[idx].x--;
+                        break;
+                    case "right":
+                        gameInfo.yellowBars[idx].direction = "right";
+                        gameInfo.yellowBars[idx].x++;
+                        break;
+                    case "up":
+                        gameInfo.yellowBars[idx].direction = "up";
+                        gameInfo.yellowBars[idx].y--;
+                        break;
+                    case "down":
+                        gameInfo.yellowBars[idx].direction = "down";
+                        gameInfo.yellowBars[idx].y++;
+                        break;
+                    default:
+                        break;
+                }
             } else {
-                gameInfo.yellowBars[idx].direction = "none";
+                if (changeDirection) {
+                    gameInfo.yellowBars[idx].direction = direction;
+                } else {
+                    gameInfo.yellowBars[idx].direction = "none";
+                }
             }
         }
     }
@@ -562,7 +561,7 @@ export function moveYellowBars(backData, gameData, gameInfo) {
     let update = false;
 
     for (let i = 0; i < gameInfo.yellowBars.length; i++) {
-        if (moveYellowBar(backData, gameData, gameInfo, "none", i)) {
+        if (moveYellowBar(-1, -1, backData, gameData, gameInfo, "none", i)) {
             update = true;
         }
     }

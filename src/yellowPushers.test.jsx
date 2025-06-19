@@ -1,12 +1,15 @@
 import { describe, it, expect } from "vitest";
+import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { checkYellowBallPushersTrigger } from "./yellowBallPushers.js";
+import { checkYellowPushersTrigger } from "./yellowPushers.js";
 
 describe("Yellow ball pushers", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
     const defaultGameVars = {};
     initGameVars(defaultGameVars);
+
+    const backData = zeroArray(20, 20); // bigger array, so it can be used for all
 
     // ***** checkYellowBallPushersTrigger *****
 
@@ -33,7 +36,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 0, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkYellowBallPushersTrigger(input01a, gameInfo01a, { ...defaultGameVars });
+    let info01a = checkYellowPushersTrigger(backData, input01a, gameInfo01a, { ...defaultGameVars });
     it("checkYellowBallPushersTrigger A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -69,7 +72,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 9, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkYellowBallPushersTrigger(input01b, gameInfo01b, { ...defaultGameVars });
+    let info01b = checkYellowPushersTrigger(backData, input01b, gameInfo01b, { ...defaultGameVars });
     it("checkYellowBallPushersTrigger B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -104,7 +107,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 0, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = checkYellowBallPushersTrigger(input01c, gameInfo01c, { ...defaultGameVars });
+    let info01c = checkYellowPushersTrigger(backData, input01c, gameInfo01c, { ...defaultGameVars });
     it("checkYellowBallPushersTrigger C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
@@ -131,7 +134,7 @@ describe("Yellow ball pushers", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01d = input01d.map(row => [...row]);
-    let info01d = checkYellowBallPushersTrigger(input01d, gameInfo01d, { ...defaultGameVars });
+    let info01d = checkYellowPushersTrigger(backData, input01d, gameInfo01d, { ...defaultGameVars });
     it("checkYellowBallPushersTrigger D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });

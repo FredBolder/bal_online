@@ -26,7 +26,7 @@ import { checkDamagedStones } from "../damagedStones.js";
 import { checkDetonator } from "../detonator.js";
 import { electricityTarget } from "../electricity.js";
 import { checkForces } from "../force.js";
-import { checkYellowBallPushersTrigger } from "../yellowBallPushers.js";
+import { checkYellowPushersTrigger } from "../yellowPushers.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../elevators.js";
 import { exportLevel, importLevel } from "../files.js";
@@ -370,7 +370,7 @@ function BalPage() {
       }
     }
 
-    info = checkYellowBallPushersTrigger(gameData, gameInfo, gameVars);
+    info = checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars);
     if (info.updated) {
       update = true;
     }

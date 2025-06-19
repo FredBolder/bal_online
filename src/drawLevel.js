@@ -1058,7 +1058,7 @@ function drawLevel(
     }
   }
 
-  function drawYellowBallPusher() {
+  function drawYellowPusher() {
     let d1 = w1 / 2.5;
     let d2 = w1 / 10;
     let d3 = w1 / 4;
@@ -1075,7 +1075,7 @@ function drawLevel(
     drawLine(ctx, xc, yc + d1, xc + d2, yc + d3), "black";
   }
 
-  function drawYellowBallPushersTrigger() {
+  function drawYellowPushersTrigger() {
     let d1 = w1 / 7;
     let d2 = w1 / 2;
     let d3 = w1 / 8;
@@ -1087,7 +1087,7 @@ function drawLevel(
 
   function drawYellowStopper() {
     let d1 = w1 /4 ;
-    drawYellowBallPushersTrigger();
+    drawYellowPushersTrigger();
     drawBox(ctx, xc - (d1 * 0.5), yc + (d1 * 0.5), d1, d1, "black");
   }
 
@@ -1372,10 +1372,10 @@ function drawLevel(
           drawWaterSurfaceLeftOrRight(col, row, true);
           break;
         case 115:
-          drawYellowBallPusher();
+          drawYellowPusher();
           break;
         case 116:
-          drawYellowBallPushersTrigger();
+          drawYellowPushersTrigger();
           break;
         case 117:
           drawTimeBomb(col, row);
