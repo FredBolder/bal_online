@@ -295,6 +295,9 @@ export function charToNumber(c) {
     case "ξ":
       result = 135;
       break;
+    case "ρ":
+      result = 136;
+      break;
     case "|":
       result = 1000;
       break;
@@ -839,6 +842,9 @@ export function numberToChar(n) {
       break;
     case 135:
       result = "ξ";
+      break;
+    case 136:
+      result = "ρ";
       break;
     case 1000:
       // For manual only

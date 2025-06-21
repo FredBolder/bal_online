@@ -9,7 +9,7 @@ const seriesSmallEnd = 762;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2000;
+const seriesSecretEnd = 2001;
 
 async function loadFromFile(n, gateTravelling = false) {
   let levelData = [];

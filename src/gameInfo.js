@@ -188,6 +188,10 @@ export function getGameInfo(backData, gameData) {
                     result.travelGate.y = i;
                     result.hasTravelGate = true;
                     break;
+                case 136:
+                    result.yellowPauser.x = j;
+                    result.yellowPauser.y = i;
+                    break;
                 default:
                     break;
             }
@@ -233,6 +237,7 @@ export function initGameInfo(info) {
     info.yellowBallPushers = [];
     info.yellowBallPushersTrigger = { x: -1, y: -1 };
     info.yellowBars = [];
+    info.yellowPauser = { x: -1, y: -1 };
     info.yellowStopper = { x: -1, y: -1 };
 }
 
@@ -261,6 +266,8 @@ export function initGameVars(vars) {
     vars.wave1 = 0;
     vars.wave2 = 0;
     vars.yellowCounter = 0;
+    vars.yellowPaused = false;
+    vars.yellowPauserActive = false;
     vars.yellowStopperActive = false;
 }
 

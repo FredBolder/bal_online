@@ -15,6 +15,7 @@ export function checkYellowStopper(gameData, gameInfo, gameVars) {
                     const yellowBar = gameInfo.yellowBars[i];
                     yellowBar.direction = "none";
                 }
+                gameVars.yellowPaused = false;
             }
         }
     }

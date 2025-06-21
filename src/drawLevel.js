@@ -1125,6 +1125,15 @@ function drawLevel(
     }
   }
 
+  function drawYellowPauser(x, y) {
+    let d1 = w1 / 4;
+    let d2 = w2 / 1.9;
+    let d3 = w2 / 12;
+    drawYellowPushersTrigger(x, y);
+    drawBox(ctx, xmin + d2, yc + (d1 * 0.5), d3, d1, "black");
+    drawBox(ctx, xmax - (d2 + d3), yc + (d1 * 0.5), d3, d1, "black");
+  }
+
   function drawYellowPusher() {
     let d1 = w1 / 2.5;
     let d2 = w1 / 10;
@@ -1501,6 +1510,9 @@ function drawLevel(
           break;
         case 135:
           drawDiamant("red");
+          break;
+        case 136:
+          drawYellowPauser(col, row);
           break;
         case 1000:
           // For manual only (empty)

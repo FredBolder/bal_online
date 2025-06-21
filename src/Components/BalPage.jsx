@@ -45,6 +45,7 @@ import { checkTrapDoors } from "../trapDoors.js";
 import { tryParseInt } from "../utils.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
 import { moveYellowBars } from "../yellowBars.js";
+import { checkYellowPauser } from "../yellowPauser.js";
 import { checkYellowStopper } from "../yellowStopper.js";
 
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -350,18 +351,20 @@ function BalPage() {
       }
     }
 
-    if (gameVars.yellowCounter > 0) {
-      if (gameVars.yellowCounter === 1) {
-        stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
-      }
-      gameVars.yellowCounter--;
-    } else {
-      gameVars.yellowCounter = 1;
-      if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
-        update = true;
-      }
-      if (moveYellowBars(backData, gameData, gameInfo)) {
-        update = true;
+    if (!gameVars.yellowPaused) {
+      if (gameVars.yellowCounter > 0) {
+        if (gameVars.yellowCounter === 1) {
+          stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
+        }
+        gameVars.yellowCounter--;
+      } else {
+        gameVars.yellowCounter = 1;
+        if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
+          update = true;
+        }
+        if (moveYellowBars(backData, gameData, gameInfo)) {
+          update = true;
+        }
       }
     }
     if (gameVars.orangeCounter > 0) {
@@ -404,6 +407,7 @@ function BalPage() {
     if (info.updated) {
       update = true;
     }
+    checkYellowPauser(gameData, gameInfo, gameVars);
     checkYellowStopper(gameData, gameInfo, gameVars);
 
     if (gameInfo.teleports.length > 0) {
@@ -633,13 +637,12 @@ function BalPage() {
     let code = prompt("Enter the code");
     if (code !== null) {
       code = code.trim();
-      if (code.length === 4) {
+      if (code.length === 5) {
         level = codeToNumber(code);
       } else {
         if (code === (secretSeriesCodePart(1) + secretSeriesCodePart(2) + secretSeriesCodePart(3))) {
           level = 2000;
         }
-
       }
       if (level > 0) {
         initLevel(level);
@@ -833,6 +836,8 @@ function BalPage() {
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       loadLevelSettings(gameVars, result.levelSettings);
+      gameVars.currentLevel = 200;
+      setLevelNumber(gameVars.currentLevel);
       loading = false;
     }
   }
