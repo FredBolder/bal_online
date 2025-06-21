@@ -20,7 +20,7 @@ import {
   pushDown,
   stringArrayToNumberArray,
 } from "../balUtils.js";
-import { codeToNumber, numberToCode } from "../codes.js";
+import { codeToNumber, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { checkCopiers } from "../copiers.js";
 import { checkDamagedStones } from "../damagedStones.js";
 import { checkDetonator } from "../detonator.js";
@@ -629,9 +629,18 @@ function BalPage() {
   }
 
   function clickCode() {
+    let level = 0;
     let code = prompt("Enter the code");
     if (code !== null) {
-      const level = codeToNumber(code);
+      code = code.trim();
+      if (code.length === 4) {
+        level = codeToNumber(code);
+      } else {
+        if (code === (secretSeriesCodePart(1) + secretSeriesCodePart(2) + secretSeriesCodePart(3))) {
+          level = 2000;
+        }
+
+      }
       if (level > 0) {
         initLevel(level);
       }
@@ -1169,7 +1178,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 736;
+        gameVars.currentLevel = 2000;
       }
       initLevel(gameVars.currentLevel);
     }

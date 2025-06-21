@@ -100,7 +100,7 @@ export async function importLevel() {
             throw new Error("Level is empty");
         }
 
-        const gd = stringArrayToNumberArray(levelData);
+        const gd = stringArrayToNumberArray(levelData, true);
 
         result.backData = gd.backData;
         result.gameData = gd.gameData;

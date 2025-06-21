@@ -298,15 +298,16 @@ function drawLevel(
     drawLine(ctx, xmin + (w1 * 0.1), ymin + (w2 * 0.7), xmin, ymax, bgcolor);
   }
 
-  function drawDetonator() {
+  function drawDetonator(x, y) {
+    let color = getFgcolor(x, y, "rgb(220,220,220)");
     let d1 = w1 / 7;
     let d2 = w2 / 2;
     let d3 = w2 / 8;
     let d4 = w1 / 6;
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red");
-    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, "rgb(220,220,220)");
-    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, "rgb(220,220,220)");
-    drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.45, w1 * 0.65, "white", 1);
+    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
+    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
+    drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.4, w1 * 0.54, "white", 1);
   }
 
   function drawDiamant(color) {
@@ -1332,7 +1333,7 @@ function drawLevel(
           drawBomb(col, row);
           break;
         case 37:
-          drawDetonator();
+          drawDetonator(col, row);
           break;
         case 38:
           drawExplosion();

@@ -1,18 +1,24 @@
 import { randomInt } from "./utils.js";
 
 const series1Start = 200;
-const series1End = 224;
+const series1End = 223;
 const series2Start = 700;
 const series2End = 749;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 762;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
+const seriesSecretStart = 2000;
+const seriesSecretEnd = 2000;
 
 async function loadFromFile(n, gateTravelling = false) {
   let levelData = [];
   let levelSettings = [];
-  let fn = `/Levels/${n}`;
+  let fn = n.toString();
+  while (fn.length < 4) {
+    fn = "0" + fn;
+  }
+  fn = `/Levels/` + fn;
   if (gateTravelling) {
     fn += "g";
   }
@@ -67,7 +73,7 @@ async function getLevel(n, gateTravelling = false) {
 
   if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) ||
     (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) || 
-    (n >= 990 && n <= 991)) {
+    (n >= seriesSecretStart && n <= seriesSecretEnd) || (n >= 990 && n <= 991)) {
     result = await loadFromFile(n, gateTravelling);
   } else {
     result = await loadFromFile(1000, false);

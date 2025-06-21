@@ -864,7 +864,7 @@ export function numberArrayToStringArray(arr) {
   return result;
 }
 
-export function stringArrayToNumberArray(arr) {
+export function stringArrayToNumberArray(arr, importing = false) {
   let result = { backData: [], gameData: [] };
   let data = 0;
 
@@ -873,6 +873,11 @@ export function stringArrayToNumberArray(arr) {
     const rowGameData = [];
     for (let j = 0; j < arr[i].length; j++) {
       data = charToNumber(arr[i][j]);
+      if (importing) {
+        if ([133, 134, 135].includes(data)) {
+          data = 0;
+        }
+      }
       if ([20, 23, 25, 90].includes(data)) {
         rowBackData.push(data);
         rowGameData.push(0);
@@ -948,13 +953,13 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 133:
       showCodePart(1);
-      break;  
+      break;
     case 134:
       showCodePart(2);
-      break;  
+      break;
     case 135:
       showCodePart(3);
-      break;  
+      break;
     default:
       break;
   }
