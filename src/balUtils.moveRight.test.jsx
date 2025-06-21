@@ -55,6 +55,7 @@ describe("balUtils moveRight", () => {
       JSON.stringify({
         eating: false,
         freezeTime: -1,
+        gateTravelling : false,
         player: true,
         teleporting: false,
         rotate: false,

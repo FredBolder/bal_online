@@ -1,13 +1,17 @@
-let memoryString = "";
+let memoryStrings = ["", "", "", "", ""];
 
-export function loadFromMemory() {
-    if (memoryString === "") {
+export function clearMemory(idx) {
+    memoryStrings[idx] = "";
+}
+
+export function loadFromMemory(idx) {
+    if (memoryStrings[idx] === "") {
         return null;
     } else {
-        return JSON.parse(memoryString);
+        return JSON.parse(memoryStrings[idx]);
     }
 }
 
-export function saveToMemory(gameData, backData, gameInfo, gameVars) {
-    memoryString = JSON.stringify({ gameData, backData, gameInfo, gameVars });
+export function saveToMemory(gameData, backData, gameInfo, gameVars, idx) {
+    memoryStrings[idx] = JSON.stringify({ gameData, backData, gameInfo, gameVars });
 }

@@ -34,7 +34,7 @@ import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars } from "../gameInfo.js";
 import { getLevel, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
-import { loadFromMemory, saveToMemory } from '../memory.js'
+import { clearMemory, loadFromMemory, saveToMemory } from '../memory.js'
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
@@ -70,7 +70,10 @@ let ctx;
 let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
+let isInOtherWorld = false;
 let loading = true;
+let otherWorldGreen = -1;
+let thisWorldGreen = -1;
 
 let gameData = [];
 let backData = [];
@@ -188,9 +191,36 @@ function BalPage() {
     }
   }
 
-  function gameScheduler() {
+  async function gameScheduler() {
     let info = {};
+    let saveCoilSpring = false;
+    let saveDivingGlasses = false;
+    let saveKey = false;
+    let saveLadder = false;
+    let savePickaxe = false;
+    let savePropeller = false;
+    let saveWeakStone = false;
     let update = false;
+
+    function loadItems() {
+      gameInfo.hasCoilSpring = saveCoilSpring;
+      gameInfo.hasDivingGlasses = saveDivingGlasses;
+      gameInfo.hasKey = saveKey;
+      gameInfo.hasLadder = saveLadder;
+      gameInfo.hasPickaxe = savePickaxe;
+      gameInfo.hasPropeller = savePropeller;
+      gameInfo.hasWeakStone = saveWeakStone;
+    }
+
+    function saveItems() {
+      saveCoilSpring = gameInfo.hasCoilSpring;
+      saveDivingGlasses = gameInfo.hasDivingGlasses;
+      saveKey = gameInfo.hasKey;
+      saveLadder = gameInfo.hasLadder;
+      savePickaxe = gameInfo.hasPickaxe;
+      savePropeller = gameInfo.hasPropeller;
+      saveWeakStone = gameInfo.hasWeakStone;
+    }
 
     if (loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
@@ -411,6 +441,40 @@ function BalPage() {
       }
     }
 
+    if (gameInfo.hasTravelGate) {
+      switch (gameVars.gateTravelling) {
+        case 1:
+          playSound("teleport");
+          gameVars.gateTravelling = 2;
+          break;
+        case 2:
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 132;
+          clearMemory(0); // Prevent conflicts between two worlds          
+          if (isInOtherWorld) {
+            isInOtherWorld = false;
+            saveToMemory(gameData, backData, gameInfo, gameVars, 2);
+            saveItems();
+            await clickLoadFromMemory(1);
+            loadItems();
+          } else {
+            isInOtherWorld = true;
+            saveToMemory(gameData, backData, gameInfo, gameVars, 1);
+            saveItems();
+            await clickLoadFromMemory(2);
+            loadItems();
+          }
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+          gameInfo.blueBall.x = gameInfo.travelGate.x;
+          gameInfo.blueBall.y = gameInfo.travelGate.y;
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
+          gameVars.gateTravelling = 0;
+          updateScreen();
+          break;
+        default:
+          break;
+      }
+    }
+
     if ((gameVars.timeFreezer === 0) && (gameInfo.electricity.length > 0)) {
       if (gameVars.electricityCounter > 110) {
         gameVars.electricityCounter = 0;
@@ -527,18 +591,24 @@ function BalPage() {
     }
   }
 
-  async function initLevel(n) {
+  async function initLevel(n, gateTravelling = false) {
     let data = [];
     let gd;
 
     try {
+      if (!gateTravelling) {
+        isInOtherWorld = false;
+        otherWorldGreen = -1;
+        clearMemory(1);
+        clearMemory(2);
+      }
       loading = true;
       initGameVars(gameVars);
       gameVars.currentLevel = n;
       setLevelNumber(n);
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
-      data = await getLevel(gameVars.currentLevel);
+      data = await getLevel(gameVars.currentLevel, gateTravelling);
       loadLevelSettings(gameVars, data.levelSettings);
       gd = stringArrayToNumberArray(data.levelData);
       backData = null;
@@ -551,7 +621,7 @@ function BalPage() {
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       updateScreen();
-      setGreen(gameInfo.greenBalls);
+      updateGreen();
       loading = false;
     } catch (err) {
       console.log(err);
@@ -662,7 +732,7 @@ function BalPage() {
 
   function clickSaveToMemory() {
     if (getSettings().lessQuestions) {
-      saveToMemory(gameData, backData, gameInfo, gameVars);
+      saveToMemory(gameData, backData, gameInfo, gameVars, 0);
     } else {
       confirmAlert({
         title: "Question",
@@ -671,7 +741,7 @@ function BalPage() {
           {
             label: "Yes",
             onClick: () => {
-              saveToMemory(gameData, backData, gameInfo, gameVars);
+              saveToMemory(gameData, backData, gameInfo, gameVars, 0);
             },
           },
           {
@@ -683,11 +753,15 @@ function BalPage() {
     }
   }
 
-  function clickLoadFromMemory() {
-    function load() {
-      const data = loadFromMemory();
+  async function clickLoadFromMemory(idx) {
+    async function load() {
+      const data = loadFromMemory(idx);
       if (data === null) {
-        alert("No level in memory!");
+        if (idx > 0) {
+          await initLevel(gameVars.currentLevel, true);
+        } else {
+          alert("No level in memory!");
+        }
       } else {
         gameData = null;
         gameData = data.gameData;
@@ -698,12 +772,12 @@ function BalPage() {
         gameVars = null;
         gameVars = data.gameVars;
         setLevelNumber(gameVars.currentLevel);
-        setGreen(gameInfo.greenBalls);
+        updateGreen();
       }
     }
 
-    if (getSettings().lessQuestions) {
-      load();
+    if (getSettings().lessQuestions || (idx > 0)) {
+      await load();
     } else {
       confirmAlert({
         title: "Question",
@@ -711,8 +785,8 @@ function BalPage() {
         buttons: [
           {
             label: "Yes",
-            onClick: () => {
-              load();
+            onClick: async () => {
+              await load();
             },
           },
           {
@@ -734,6 +808,10 @@ function BalPage() {
   async function clickImportLevel() {
     const result = await importLevel();
     if (result !== null) {
+      clearMemory(1);
+      clearMemory(2);
+      isInOtherWorld = false;
+      otherWorldGreen = -1;
       loading = true;
       initGameVars(gameVars);
       backData = null;
@@ -846,7 +924,7 @@ function BalPage() {
       return;
     }
 
-    if (loading || gameVars.gameOver || gameVars.teleporting > 0) {
+    if (loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
       return false;
     }
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
@@ -889,6 +967,9 @@ function BalPage() {
           if (info.teleporting) {
             gameVars.teleporting = 1;
           }
+          if (info.gateTravelling) {
+            gameVars.gateTravelling = 1;
+          }
           break;
         case "ArrowRight":
         case "d":
@@ -901,6 +982,9 @@ function BalPage() {
           }
           if (info.teleporting) {
             gameVars.teleporting = 1;
+          }
+          if (info.gateTravelling) {
+            gameVars.gateTravelling = 1;
           }
           break;
         case "ArrowUp":
@@ -957,10 +1041,12 @@ function BalPage() {
     }
     if (info.eating) {
       gameInfo.greenBalls--;
-      setGreen(gameInfo.greenBalls);
+      updateGreen();
       playSound("eat");
       checkGameOver();
-      if (!gameVars.gameOver && gameInfo.greenBalls <= 0) {
+      if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
+        ((thisWorldGreen === 0) && (otherWorldGreen === 0)))
+      ) {
         confirmAlert({
           title: "Congratulations!",
           message: `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`,
@@ -1083,14 +1169,14 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 749;
+        gameVars.currentLevel = 736;
       }
       initLevel(gameVars.currentLevel);
     }
 
     updateScreen();
     setLevelNumber(gameVars.currentLevel);
-    setGreen(gameInfo.greenBalls);
+    updateGreen();
 
     const el = myRef.current;
     el.addEventListener("keydown", handleKeyDown);
@@ -1102,6 +1188,15 @@ function BalPage() {
       clearInterval(gameInterval);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function updateGreen() {
+    setGreen(gameInfo.greenBalls);
+    if (isInOtherWorld) {
+      otherWorldGreen = gameInfo.greenBalls;
+    } else {
+      thisWorldGreen = gameInfo.greenBalls;
+    }
+  }
 
   function updateMoveButtons() {
     elementMoveButtons.current.style.display = getSettings().arrowButtons ? "block" : "none";
@@ -1251,7 +1346,7 @@ function BalPage() {
                 <div onClick={clickSaveToMemory}>
                   <label>Save to memory</label>
                 </div>
-                <div onClick={clickLoadFromMemory}>
+                <div onClick={() => { clickLoadFromMemory(0) }}>
                   <label>Load from memory</label>
                 </div>
                 <div onClick={clickExportLevel}>

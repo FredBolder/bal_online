@@ -32,6 +32,7 @@ describe("balUtils Pickaxe", () => {
       JSON.stringify({
         eating: false,
         freezeTime: -1,
+        gateTravelling : false,
         player: true,
         teleporting: false,
         rotate: false,
@@ -62,6 +63,7 @@ describe("balUtils Pickaxe", () => {
       JSON.stringify({
         eating: false,
         freezeTime: -1,
+        gateTravelling : false,
         player: false,
         teleporting: false,
         rotate: false,

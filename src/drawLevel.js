@@ -197,7 +197,7 @@ function drawLevel(
     drawBall(color);
     drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
   }
-  
+
   function drawBlueBall() {
     let d1 = 0;
     let d2 = 0;
@@ -307,6 +307,65 @@ function drawLevel(
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, "rgb(220,220,220)");
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, "rgb(220,220,220)");
     drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.45, w1 * 0.65, "white", 1);
+  }
+
+  function drawDiamant(color) {
+    let fillColor = "white";
+    let lineColor = "gray";
+
+    switch (color.toLowerCase()) {
+      case "blue":
+        fillColor = "#0000FF";
+        lineColor = "#000077";
+        break;
+      case "green":
+        fillColor = "#00FF00";
+        lineColor = "#007700";
+        break;
+      case "red":
+        fillColor = "#FF0000";
+        lineColor = "#770000";
+        break;
+      case "white":
+        fillColor = "#FFFFFF";
+        lineColor = "#777777";
+        break;
+      case "yellow":
+        fillColor = "#FFFF00";
+        lineColor = "#777700";
+        break;
+      default:
+        break;
+    }
+    let d1 = Math.round(w1 / 3); // first distance from side
+    let d2 = Math.round(w2 / 12); // first distance from top
+    let d3 = Math.round(w1 / 5); // second distance from side
+    let d4 = Math.round(w2 / 4.5); // second distance from top
+    let d5 = Math.round(w1 / 2.7); // third distance from side
+    let d6 = Math.round(w1 / 1.7); // third distance from top
+    let pt1 = { x: xmin + d1, y: ymin + d2 };
+    let pt2 = { x: xmax - d1, y: ymin + d2 };
+    let pt3 = { x: xmax - d3, y: ymin + d4 };
+    let pt4 = { x: xc, y: ymin + d6 };
+    let pt5 = { x: xmin + d3, y: ymin + d4 };
+    let pt6 = { x: xmax - d5, y: ymin + d4 };
+    let pt7 = { x: xmin + d5, y: ymin + d4 };
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = lineColor;
+    ctx.beginPath();
+    ctx.moveTo(pt1.x, pt1.y);
+    ctx.lineTo(pt2.x, pt2.y);
+    ctx.lineTo(pt3.x, pt3.y);
+    ctx.lineTo(pt4.x, pt4.y);
+    ctx.lineTo(pt5.x, pt5.y);
+    ctx.lineTo(pt1.x, pt1.y);
+    ctx.fill();
+    ctx.stroke();
+    drawLine(ctx, pt3.x, pt3.y, pt5.x, pt5.y, lineColor);
+    drawLine(ctx, pt6.x, pt6.y, pt4.x, pt4.y, lineColor);
+    drawLine(ctx, pt7.x, pt7.y, pt4.x, pt4.y, lineColor);
+    drawLine(ctx, pt6.x, pt6.y, pt4.x, pt1.y, lineColor);
+    drawLine(ctx, pt7.x, pt7.y, pt4.x, pt1.y, lineColor);
   }
 
   function drawDirectionChanger1() {
@@ -960,8 +1019,8 @@ function drawLevel(
     drawLine(ctx, xCenter, yCenter, xCenter + (radius * 0.7), yCenter, color);
     // cross
     radius = w1 * 0.2
-    xCenter = xmax - (w1 * 0.3); 
-    yCenter = ymax - (w2 * 0.5);    
+    xCenter = xmax - (w1 * 0.3);
+    yCenter = ymax - (w2 * 0.5);
     ctx.lineWidth = 2;
     drawLine(ctx, xCenter - radius, yCenter + radius, xCenter + radius, yCenter - radius, "red");
     drawLine(ctx, xCenter - radius, yCenter - radius, xCenter + radius, yCenter + radius, "red");
@@ -978,6 +1037,13 @@ function drawLevel(
     let d1 = Math.round(w1 / Math.sqrt(2));
     ctx.lineWidth = 3;
     drawLine(ctx, xmin - 1, ymin + 1, xmin + d1, ymin + d1, "rgb(70, 70, 70)");
+    ctx.lineWidth = 1;
+  }
+
+  function drawTravelGate(x, y) {
+    let color = getFgcolor(x, y, "white");
+    ctx.lineWidth = 3;
+    drawCircle(ctx, xc, yc, (w1 * 0.5) - 1, color);
     ctx.lineWidth = 1;
   }
 
@@ -1075,19 +1141,20 @@ function drawLevel(
     drawLine(ctx, xc, yc + d1, xc + d2, yc + d3), "black";
   }
 
-  function drawYellowPushersTrigger() {
+  function drawYellowPushersTrigger(x, y) {
+    let color = getFgcolor(x, y, "rgb(220,220,220)");
     let d1 = w1 / 7;
     let d2 = w1 / 2;
     let d3 = w1 / 8;
     let d4 = w1 / 6;
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "yellow");
-    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, "rgb(220,220,220)");
-    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, "rgb(220,220,220)");
+    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
+    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
   }
 
-  function drawYellowStopper() {
-    let d1 = w1 /4 ;
-    drawYellowPushersTrigger();
+  function drawYellowStopper(x, y) {
+    let d1 = w1 / 4;
+    drawYellowPushersTrigger(x, y);
     drawBox(ctx, xc - (d1 * 0.5), yc + (d1 * 0.5), d1, d1, "black");
   }
 
@@ -1375,7 +1442,7 @@ function drawLevel(
           drawYellowPusher();
           break;
         case 116:
-          drawYellowPushersTrigger();
+          drawYellowPushersTrigger(col, row);
           break;
         case 117:
           drawTimeBomb(col, row);
@@ -1420,7 +1487,19 @@ function drawLevel(
           drawBarBottom("deepskyblue");
           break;
         case 131:
-          drawYellowStopper();
+          drawYellowStopper(col, row);
+          break;
+        case 132:
+          // Travel gate - will be drawn later
+          break;
+        case 133:
+          drawDiamant("yellow");
+          break;
+        case 134:
+          drawDiamant("blue");
+          break;
+        case 135:
+          drawDiamant("red");
           break;
         case 1000:
           // For manual only (empty)
@@ -1429,6 +1508,12 @@ function drawLevel(
           drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
           break;
       }
+
+      // Foreground
+      if ((gameInfo.travelGate.x === col) && (gameInfo.travelGate.y === row)) {
+        drawTravelGate(col, row);
+      }
+
       xmin += size1;
     }
     ymin += size1;

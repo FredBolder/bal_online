@@ -1,7 +1,7 @@
 import { randomInt } from "./utils.js";
 
 const series1Start = 200;
-const series1End = 222;
+const series1End = 224;
 const series2Start = 700;
 const series2End = 749;
 const seriesSmallStart = 750;
@@ -9,10 +9,14 @@ const seriesSmallEnd = 762;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 
-async function loadFromFile(n) {
+async function loadFromFile(n, gateTravelling = false) {
   let levelData = [];
   let levelSettings = [];
-  const fn = `/Levels/${n}.dat`;
+  let fn = `/Levels/${n}`;
+  if (gateTravelling) {
+    fn += "g";
+  }
+  fn += ".dat";
   try {
     const response = await fetch(fn);
     if (!response.ok) throw new Error(`Failed to load file: ${fn}`);
@@ -58,15 +62,15 @@ async function loadFromFile(n) {
   return { levelSettings, levelData };
 }
 
-async function getLevel(n) {
+async function getLevel(n, gateTravelling = false) {
   let result = [];
 
   if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) ||
     (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) || 
     (n >= 990 && n <= 991)) {
-    result = await loadFromFile(n);
+    result = await loadFromFile(n, gateTravelling);
   } else {
-    result = await loadFromFile(1000);
+    result = await loadFromFile(1000, false);
   }
   return result;
 }
@@ -83,6 +87,15 @@ function getRandomLevel(currentLevel) {
   }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
     levels.push(i);
+  }
+  // Exclude levels
+  const exclude = [ 220, 221, 222, 734, 735, 736, 738 ];
+  for (let i = 0; i < exclude.length; i++) {
+    const level = exclude[i];
+    const idx = levels.indexOf(level);
+    if (idx >= 0) {
+      levels.splice(idx);
+    }
   }
   while (result === currentLevel) {
     result = levels[randomInt(0, levels.length - 1)];

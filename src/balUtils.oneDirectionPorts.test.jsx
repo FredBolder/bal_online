@@ -35,6 +35,7 @@ describe("balUtils One direction ports", () => {
             JSON.stringify({
                 eating: false,
                 freezeTime: -1,
+                gateTravelling: false,
                 player: true,
                 teleporting: false,
                 rotate: false,

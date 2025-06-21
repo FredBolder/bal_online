@@ -183,6 +183,11 @@ export function getGameInfo(backData, gameData) {
                     result.yellowStopper.x = j;
                     result.yellowStopper.y = i;
                     break;
+                case 132:
+                    result.travelGate.x = j;
+                    result.travelGate.y = i;
+                    result.hasTravelGate = true;
+                    break;
                 default:
                     break;
             }
@@ -212,6 +217,7 @@ export function initGameInfo(info) {
     info.hasMirror = false;
     info.hasPickaxe = false;
     info.hasPropeller = false;
+    info.hasTravelGate = false;
     info.hasWater = false;
     info.hasWeakStone = false;
     info.horizontalElevators = [];
@@ -222,6 +228,7 @@ export function initGameInfo(info) {
     info.teleports = [];
     info.timeBombs = [];
     info.trapDoors = [];
+    info.travelGate = { x: -1, y: -1 };
     info.yellowBalls = [];
     info.yellowBallPushers = [];
     info.yellowBallPushersTrigger = { x: -1, y: -1 };
@@ -241,6 +248,7 @@ export function initGameVars(vars) {
     vars.fishCounter = 0;
     vars.fishCountTo = 12;
     vars.gameOver = false;
+    vars.gateTravelling = 0;
     vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;
