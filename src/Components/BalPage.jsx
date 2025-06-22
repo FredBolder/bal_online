@@ -20,7 +20,7 @@ import {
   pushDown,
   stringArrayToNumberArray,
 } from "../balUtils.js";
-import { codeToNumber, numberToCode, secretSeriesCodePart } from "../codes.js";
+import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { checkCopiers } from "../copiers.js";
 import { checkDamagedStones } from "../damagedStones.js";
 import { checkDetonator } from "../detonator.js";
@@ -32,7 +32,7 @@ import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../
 import { exportLevel, importLevel } from "../files.js";
 import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars } from "../gameInfo.js";
-import { getLevel, getRandomLevel } from "../levels.js";
+import { getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, saveToMemory } from '../memory.js'
 import { moveOrangeBalls } from "../orangeBalls.js";
@@ -641,11 +641,17 @@ function BalPage() {
         level = codeToNumber(code);
       } else {
         if (code === (secretSeriesCodePart(1) + secretSeriesCodePart(2) + secretSeriesCodePart(3))) {
-          level = 2000;
+          level = getSecretStart();
         }
       }
       if (level > 0) {
         initLevel(level);
+      }
+      if (code === getFredCode()) {
+        fred = true;
+      }
+      if ((code === "") || (code.toLowerCase === "logout")) {
+        fred = false;
       }
     }
   }
@@ -1114,11 +1120,15 @@ function BalPage() {
               break;
             case "N":
               // Next level
-              initLevel(gameVars.currentLevel + 1);
+              if (fred) {
+                initLevel(gameVars.currentLevel + 1);
+              }
               break;
             case "P":
               // Previous level
-              initLevel(gameVars.currentLevel - 1);
+              if (fred) {
+                initLevel(gameVars.currentLevel - 1);
+              }
               break;
             case "R":
               // Move a 3-step stairs to the right

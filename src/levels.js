@@ -11,6 +11,10 @@ const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2001;
 
+export function getSecretStart() {
+  return seriesSecretStart;
+}
+
 async function loadFromFile(n, gateTravelling = false) {
   let levelData = [];
   let levelSettings = [];
@@ -68,7 +72,7 @@ async function loadFromFile(n, gateTravelling = false) {
   return { levelSettings, levelData };
 }
 
-async function getLevel(n, gateTravelling = false) {
+export async function getLevel(n, gateTravelling = false) {
   let result = [];
 
   if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) ||
@@ -81,7 +85,7 @@ async function getLevel(n, gateTravelling = false) {
   return result;
 }
 
-function getRandomLevel(currentLevel) {
+export function getRandomLevel(currentLevel) {
   let levels = [];
   let result = currentLevel;
 
@@ -109,4 +113,4 @@ function getRandomLevel(currentLevel) {
   return result;
 }
 
-export { getLevel, getRandomLevel };
+

@@ -1,12 +1,19 @@
 import { describe, it, expect } from "vitest";
-import { polar, randomInt } from "./utils.js";
+import { polar, randomInt, reverseString } from "./utils.js";
 
 describe("utils", () => {
-  const input2 = { x: 100, y: 50 };
-  const expectedOutput2 = { x: 150, y: 50 };
-  const output2 = polar(input2.x, input2.y, 0, 50);
+  const input1a = "Hello";
+  const expectedOutput1a = "olleH";
+  const output1a = reverseString(input1a);
+  it("reverseString", () => {
+    expect(output1a).toBe(expectedOutput1a);
+  });
+
+  const input2a = { x: 100, y: 50 };
+  const expectedOutput2a = { x: 150, y: 50 };
+  const output2a = polar(input2a.x, input2a.y, 0, 50);
   it("polar", () => {
-    expect(JSON.stringify(output2)).toBe(JSON.stringify(expectedOutput2));
+    expect(JSON.stringify(output2a)).toBe(JSON.stringify(expectedOutput2a));
   });
 
   const input3aMin = 1;

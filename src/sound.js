@@ -19,89 +19,93 @@ import sndTeleport from "./Sounds/teleport.wav";
 import sndTrapDoor from "./Sounds/trap_door.wav";
 import sndUnlock from "./Sounds/unlock.wav";
 
+import { getSettings } from "./settings.js";
+
 export function playSound(sound) {
     let snd = null;
     let n = 0;
+    const settings = getSettings();
 
-    switch (sound) {
-        case "breaking1":
-            snd = sndBreaking1;
-            break;
-        case "breaking2":
-            snd = sndBreaking2;
-            break;
-        case "catapult":
-            snd = sndCatapult;
-            break;
-        case "eat":
-            n = Math.trunc(Math.random() * 4) + 1;
-            switch (n) {
-                case 1:
-                    snd = sndEat1;
-                    break;
-                case 2:
-                    snd = sndEat2;
-                    break;
-                case 3:
-                    snd = sndEat3;
-                    break;
-                case 4:
-                    snd = sndEat4;
-                    break;
-                default:
-                    break;
+    if (settings.sound) {
+        switch (sound) {
+            case "breaking1":
+                snd = sndBreaking1;
+                break;
+            case "breaking2":
+                snd = sndBreaking2;
+                break;
+            case "catapult":
+                snd = sndCatapult;
+                break;
+            case "eat":
+                n = Math.trunc(Math.random() * 4) + 1;
+                switch (n) {
+                    case 1:
+                        snd = sndEat1;
+                        break;
+                    case 2:
+                        snd = sndEat2;
+                        break;
+                    case 3:
+                        snd = sndEat3;
+                        break;
+                    case 4:
+                        snd = sndEat4;
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "electricity":
+                snd = sndElectricity;
+                break;
+            case "explosion":
+                snd = sndExplosion;
+                break;
+            case "key":
+                snd = sndKey;
+                break;
+            case "laser":
+                snd = sndLaserGun;
+                break;
+            case "magnet":
+                snd = sndMagnet;
+                break;
+            case "pain":
+                snd = sndPain;
+                break;
+            case "pickaxe":
+                snd = sndPickaxe;
+                break;
+            case "splash1":
+                snd = sndSplash1;
+                break;
+            case "splash2":
+                snd = sndSplash2;
+                break;
+            case "take":
+                snd = sndTake;
+                break;
+            case "teleport":
+                snd = sndTeleport;
+                break;
+            case "trap":
+                snd = sndTrapDoor;
+                break;
+            case "unlock":
+                snd = sndUnlock;
+                break;
+            default:
+                break;
+        }
+        if (snd !== sound) {
+            try {
+                const audio = new Audio(snd);
+                audio.play();
+            } catch (error) {
+                console.error(error);
             }
-            break;
-        case "electricity":
-            snd = sndElectricity;
-            break;
-        case "explosion":
-            snd = sndExplosion;
-            break;
-        case "key":
-            snd = sndKey;
-            break;
-        case "laser":
-            snd = sndLaserGun;
-            break;
-        case "magnet":
-            snd = sndMagnet;
-            break;
-        case "pain":
-            snd = sndPain;
-            break;
-        case "pickaxe":
-            snd = sndPickaxe;
-            break;
-        case "splash1":
-            snd = sndSplash1;
-            break;
-        case "splash2":
-            snd = sndSplash2;
-            break;
-        case "take":
-            snd = sndTake;
-            break;
-        case "teleport":
-            snd = sndTeleport;
-            break;
-        case "trap":
-            snd = sndTrapDoor;
-            break;
-        case "unlock":
-            snd = sndUnlock;
-            break;
-        default:
-            break;
-    }
-    if (snd !== sound) {
-        try {
-            const audio = new Audio(snd);
-            audio.play();
-        } catch (error) {
-            console.error(error);
         }
     }
-
 }
 

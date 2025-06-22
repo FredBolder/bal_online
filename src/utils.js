@@ -58,6 +58,14 @@ export function randomInt(min, max) {
   return Math.trunc(Math.random() * (max - min + 1)) + min;
 }
 
+export function reverseString(s) {
+  let result = "";
+  for (let i = 0; i < s.length; i++) {
+    result = s[i] + result;
+  }
+  return result;
+}
+
 export function stringToBoolean(value) {
   return value === "1" ? true: false;
 }
