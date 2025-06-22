@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-    pushDown,
-    zeroArray,
-} from "./balUtils.js";
+import { pushDown, zeroArray } from "./balUtils.js";
 import { initGameInfo } from "./gameInfo.js";
 
 describe("balUtils pushDown", () => {

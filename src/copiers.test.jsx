@@ -7,10 +7,7 @@ describe("Copiers", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
 
-    let gameInfo01a = {};
-    gameInfo01a = {};
-    initGameInfo(gameInfo01a);
-    gameInfo01a.copiers.push({ x: 5, y: 3 });
+    let gameInfo01a = { ...defaultGameInfo, blueBall: { x: 1, y: 3 }, copiers: [{ x: 5, y: 3 }] };
     let input01a = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],
@@ -33,10 +30,7 @@ describe("Copiers", () => {
         expect(JSON.stringify(info01a)).toBe(JSON.stringify({ updated: true }));
     });
 
-    let gameInfo01b = {};
-    gameInfo01b = {};
-    initGameInfo(gameInfo01b);
-    gameInfo01b.copiers.push({ x: 5, y: 3 });
+    let gameInfo01b = { ...defaultGameInfo, blueBall: { x: 1, y: 3 }, copiers: [{ x: 5, y: 3 }] };
     gameInfo01b.redBalls.push({ smart: 1, x: 5, y: 2, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 });
 
     let input01b = [
@@ -64,10 +58,7 @@ describe("Copiers", () => {
         expect(gameInfo01b.redBalls.length).toBe(2);
     });
 
-    let gameInfo01c = {};
-    gameInfo01c = {};
-    initGameInfo(gameInfo01c);
-    gameInfo01c.copiers.push({ x: 5, y: 3 });
+    let gameInfo01c = { ...defaultGameInfo, blueBall: { x: 1, y: 3 }, copiers: [{ x: 5, y: 3 }] };
     let input01c = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 3, 0, 0, 0, 0, 0, 0, 1],

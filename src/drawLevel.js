@@ -601,6 +601,20 @@ function drawLevel(
     drawLine(ctx, xc, ymin, xc, ymax, color);
   }
 
+  function drawHorizontalRope() {
+    let d1 = w2 * 0.15;
+    let d2 = w1 / 3;
+    let y1 = yc - d1;
+    let y2 = yc + d1;
+    drawFilledBox(ctx, xmin, y1, w1, 2 * d1, "#B9A379");
+    x1 = xmin;
+    for (let i = 0; i < 3; i++) {
+      x2 = x1 + d2;
+      drawLine(ctx, x1, y1, x2, y2, "#201B11");
+      x1 = x1 + d2;
+    }
+  }
+
   function drawKey(x, y) {
     let color = getFgcolor(x, y, "silver");
     let d1 = w1 / 4;
@@ -1237,6 +1251,9 @@ function drawLevel(
           break;
         case 25:
           drawLadder(col, row);
+          break;
+        case 80:
+          drawHorizontalRope()
           break;
         case 90:
           drawHorizontalLadder(col, row);

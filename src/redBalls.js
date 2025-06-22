@@ -1,4 +1,4 @@
-import { isEmpty, notFalling } from "./balUtils.js";
+import { isEmpty, falling } from "./balUtils.js";
 import { randomInt } from "./utils.js";
 
 export function checkRedBalls(arr, redBalls) {
@@ -143,7 +143,7 @@ export function moveRedBalls(
       const red = gameInfo.redBalls[i];
       prevX = red.x;
 
-      if ((red.smart > 0) && notFalling(red.x, red.y, backData, gameData, gameInfo, false)) {
+      if ((red.smart > 0) && !falling(red.x, red.y, backData, gameData, gameInfo, false)) {
         changeDirection = false;
 
         waitLeft = false;
