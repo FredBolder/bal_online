@@ -1,4 +1,5 @@
 import { secretSeriesCodePart } from "./codes.js";
+import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
 import { moveOrangeBallInDirection } from "./orangeBalls.js";
@@ -527,6 +528,16 @@ function isLadder(x, y, backData) {
   if (y < backData.length) {
     if (x < backData[0].length) {
       result = [25, 90].includes(backData[y][x]);
+    }
+  }
+  return result;
+}
+
+export function isHorizontalRope(x, y, backData) {
+  let result = false;
+  if (y < backData.length) {
+    if (x < backData[0].length) {
+      result = (backData[y][x] === 80);
     }
   }
   return result;
@@ -1574,6 +1585,7 @@ export function jumpRight(backData, gameData, gameInfo) {
 
 export function pushDown(backData, gameData, gameInfo) {
   let idx = -1;
+  let info = null;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1688,6 +1700,21 @@ export function pushDown(backData, gameData, gameInfo) {
           result.player = true;
           if (gameData[y][x] === 0) {
             gameData[y][x] = element;
+          }
+        }
+      }
+      if (!result.player && [37].includes(gameData[y + 1][x])) {
+        if ((gameInfo.hasPropeller || [25, 90, 137].includes(backData[y][x]) || isHorizontalRope(x, y - 1, backData)) && !hasForceDown(gameData, gameInfo, x, y)) {
+          switch (gameData[y + 1][x]) {
+            case 37:
+              result.player = true;
+              info = checkDetonator(backData, gameData, gameInfo, true);
+              if (info.explosion) {
+                result.sound = "explosion";
+              }
+              break;
+            default:
+              break;
           }
         }
       }

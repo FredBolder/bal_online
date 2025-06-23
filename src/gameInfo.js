@@ -261,6 +261,7 @@ export function initGameVars(vars) {
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
     vars.skipFalling = 0;
+    vars.startlevelmessage = "";
     vars.teleporting = 0;
     vars.timeFreezer = 0;
     vars.wave1 = 0;

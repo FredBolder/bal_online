@@ -380,7 +380,7 @@ function BalPage() {
       gameVars.explosionCounter--;
     } else {
       gameVars.explosionCounter = 2;
-      info = checkDetonator(gameData, gameInfo.detonator.x, gameInfo.detonator.y);
+      info = checkDetonator(backData, gameData, gameInfo, false);
       if (info.explosion) {
         playSound("explosion");
       }
@@ -588,6 +588,9 @@ function BalPage() {
           case "$hint":
             gameVars.hint = value;
             break;
+          case "$startlevelmessage":
+            gameVars.startlevelmessage = value;
+            break;
           default:
             break;
         }
@@ -626,6 +629,9 @@ function BalPage() {
       gameInfo = getGameInfo(backData, gameData);
       updateScreen();
       updateGreen();
+      if (gameVars.startlevelmessage !== "") {
+        alert(gameVars.startlevelmessage);
+      }
       loading = false;
     } catch (err) {
       console.log(err);
@@ -797,6 +803,9 @@ function BalPage() {
       loadLevelSettings(gameVars, result.levelSettings);
       gameVars.currentLevel = 200;
       setLevelNumber(gameVars.currentLevel);
+      if (gameVars.startlevelmessage !== "") {
+        alert(gameVars.startlevelmessage);
+      }
       loading = false;
     }
   }
@@ -1146,7 +1155,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2001;
+        gameVars.currentLevel = 2002;
       }
       initLevel(gameVars.currentLevel);
     }
