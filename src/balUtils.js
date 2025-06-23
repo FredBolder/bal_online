@@ -301,6 +301,9 @@ export function charToNumber(c) {
     case "ρ":
       result = 136;
       break;
+    case "ι":
+      result = 137;
+      break;
     case "|":
       result = 1000;
       break;
@@ -559,7 +562,8 @@ export function falling(x, y, backData, gameData, gameInfo, element = 2) {
       result = false;
     }
     // Rope
-    if ([2].includes(element) && ((backData[y + 1][x] === 80) || (backData[y - 1][x] === 80))) {
+    if ([2].includes(element) && ((backData[y + 1][x] === 80) || (backData[y - 1][x] === 80) ||
+      (backData[y][x] === 137))) {
       result = false;
     }
     // Propeller
@@ -875,6 +879,9 @@ export function numberToChar(n) {
     case 136:
       result = "ρ";
       break;
+    case 137:
+      result = "ι";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -913,7 +920,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
           data = 0;
         }
       }
-      if ([20, 23, 25, 80, 90].includes(data)) {
+      if ([20, 23, 25, 80, 90, 137].includes(data)) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
@@ -1367,7 +1374,7 @@ export function jump(backData, gameData, gameInfo) {
   if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && (y > 1) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if ((gameData[y - 1][x] === 0) && (![25, 90].includes(backData[y - 1][x])) && (![25, 90].includes(backData[y][x])) && (![80].includes(backData[y - 2][x]))) {
+        if ((gameData[y - 1][x] === 0) && (![25, 137, 90].includes(backData[y - 1][x])) && (![25, 137, 90].includes(backData[y][x])) && (![80].includes(backData[y - 2][x]))) {
           if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 2][x])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y - 2);
@@ -1640,9 +1647,9 @@ export function pushDown(backData, gameData, gameInfo) {
       if (
         !result.player &&
         gameData[y + 1][x] === 0 &&
-        (isLadder(x, y, backData) ||
-          isLadder(x, y + 1, backData) ||
-          inWater(x, y, backData) ||
+        (inWater(x, y, backData) ||
+          [25, 90, 137].includes(backData[y][x]) ||
+          [25, 90].includes(backData[y + 1][x]) ||
           gameInfo.hasPropeller)
       ) {
         gameData[y + 1][x] = 2;

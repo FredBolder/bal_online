@@ -2,8 +2,10 @@ import { randomInt } from "./utils.js";
 
 const series1Start = 200;
 const series1End = 223;
-const series2Start = 700;
-const series2End = 749;
+const series2Start = 300;
+const series2End = 305;
+const series3Start = 700;
+const series3End = 749;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 762;
 const seriesExtremeStart = 901;
@@ -75,7 +77,7 @@ async function loadFromFile(n, gateTravelling = false) {
 export async function getLevel(n, gateTravelling = false) {
   let result = [];
 
-  if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) ||
+  if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) || (n >= series3Start && n <= series3End) ||
     (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) || 
     (n >= seriesSecretStart && n <= seriesSecretEnd) || (n >= 990 && n <= 991)) {
     result = await loadFromFile(n, gateTravelling);
@@ -95,11 +97,14 @@ export function getRandomLevel(currentLevel) {
   for (let i = series2Start + 1; i <= series2End; i++) {
     levels.push(i);
   }
+  for (let i = series3Start + 1; i <= series3End; i++) {
+    levels.push(i);
+  }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
     levels.push(i);
   }
   // Exclude levels
-  const exclude = [ 220, 221, 222, 734, 735, 736, 738 ];
+  const exclude = [ 220, 221, 222, 734, 735, 736, 737, 738 ];
   for (let i = 0; i < exclude.length; i++) {
     const level = exclude[i];
     const idx = levels.indexOf(level);

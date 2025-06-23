@@ -656,87 +656,40 @@ function BalPage() {
     }
   }
 
-  function clickSeries1() {
-    if (getSettings().lessQuestions) {
-      initLevel(200);
-    } else {
-      confirmAlert({
-        title: "Question",
-        message: "Load the first level of series 1?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              initLevel(200);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
-    }
-  }
+  function clickSeries(s) {
+    let level = 200;
 
-  function clickSeries2() {
-    if (getSettings().lessQuestions) {
-      initLevel(700);
-    } else {
-      confirmAlert({
-        title: "Question",
-        message: "Load the first level of series 2?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              initLevel(700);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
+    switch (s) {
+      case "1":
+        level = 200;
+        break;
+      case "2":
+        level = 300;
+        break;
+      case "3":
+        level = 700;
+        break;
+      case "Small":
+        level = 750;
+        break;
+      case "Extreme":
+        level = 901;
+        break;
+      default:
+        level = 200;
+        break;
     }
-  }
-
-  function clickSeriesSmall() {
     if (getSettings().lessQuestions) {
-      initLevel(750);
+      initLevel(level);
     } else {
       confirmAlert({
         title: "Question",
-        message: "Load the first level of series Small?",
+        message: `Load the first level of series ${s}?`,
         buttons: [
           {
             label: "Yes",
             onClick: () => {
-              initLevel(750);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
-    }
-  }
-
-  function clickSeriesExtreme() {
-    if (getSettings().lessQuestions) {
-      initLevel(901);
-    } else {
-      confirmAlert({
-        title: "Question",
-        message: "Load the first level of series Extreme?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              initLevel(901);
+              initLevel(level);
             },
           },
           {
@@ -1352,16 +1305,19 @@ function BalPage() {
             <div className="menu">
               <button className="balButton">Level: {levelNumber}</button>
               <div className="menu-content">
-                <div onClick={clickSeries1}>
+                <div onClick={() => { clickSeries("1") }}>
                   <label>Series 1</label>
                 </div>
-                <div onClick={clickSeries2}>
+                <div onClick={() => { clickSeries("2") }}>
                   <label>Series 2</label>
                 </div>
-                <div onClick={clickSeriesSmall}>
+                <div onClick={() => { clickSeries("3") }}>
+                  <label>Series 3</label>
+                </div>
+                <div onClick={() => { clickSeries("Small") }}>
                   <label>Series Small</label>
                 </div>
-                <div onClick={clickSeriesExtreme}>
+                <div onClick={() => { clickSeries("Extreme") }}>
                   <label>Extreme</label>
                 </div>
                 <div onClick={randomLevel}>

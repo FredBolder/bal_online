@@ -170,6 +170,27 @@ function drawLevel(
     }
   }
 
+  function drawAllTeleports() {
+    ctx.lineWidth = 3;
+    for (let i = 0; i < gameInfo.teleports.length; i++) {
+      if (gameInfo.teleports[i].selfDestructing) {
+        ctx.setLineDash([2, 2]);
+      } else {
+        ctx.setLineDash([]);
+      }
+      drawBox(
+        ctx,
+        gameInfo.teleports[i].x * size1 + leftMargin + 1,
+        gameInfo.teleports[i].y * size1 + topMargin + 1,
+        size1 - 2,
+        size1 - 2,
+        "white"
+      );
+    }
+    ctx.setLineDash([]);
+    ctx.lineWidth = 1;
+  }
+
   function drawBall(color) {
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
   }
@@ -434,6 +455,34 @@ function drawLevel(
     ctx.fill();
   }
 
+  function drawElectricityActive() {
+    let elecTarget = 0;
+    let x1 = 0;
+    let x2 = 0;
+    let y = 0;
+
+    for (let i = 0; i < gameInfo.electricity.length; i++) {
+      const elec = gameInfo.electricity[i];
+      elecTarget = electricityTarget(backData, gameData, elec.x, elec.y);
+      if (elecTarget > 0 && Math.abs(elec.y - elecTarget) > 1) {
+        x1 = Math.round(leftMargin + elec.x * size1 + 0.5 * size1);
+        y = (elec.y + 1) * size1 + topMargin;
+        ctx.strokeStyle = "rgb(207, 159, 255)";
+        ctx.beginPath();
+        ctx.moveTo(x1, y);
+        for (let j = elec.y + 1; j < elecTarget; j++) {
+          x2 = x1;
+          if (j < elecTarget - 1) {
+            x2 += Math.round(size1 * 0.8 * (Math.random() - 0.5));
+          }
+          y += size1;
+          ctx.lineTo(x2, y);
+        }
+        ctx.stroke();
+      }
+    }
+  }
+
   function drawElevatorEntranceAndExit(x, y) {
     const color = getFgcolor(x, y, "white");
     let d1 = w1 / 3;
@@ -551,6 +600,27 @@ function drawLevel(
     }
   }
 
+  function drawGameOver() {
+    let x = leftMargin + gameWidth / 2;
+    let y = gameHeight / 2 + topMargin;
+    drawText(
+      ctx,
+      x,
+      y,
+      "GAME OVER!",
+      "middle",
+      "white",
+      Math.round(gameHeight * 0.6),
+      Math.round(gameWidth * 0.9),
+      "red",
+      5
+    );
+
+    if (status.laser !== null) {
+      drawLaser(status.laser);
+    }
+  }
+
   function drawGameRotator() {
     let d1 = w1 * 0.3;
     let d2 = w1 * 0.15;
@@ -604,6 +674,8 @@ function drawLevel(
   function drawHorizontalRope() {
     let d1 = w2 * 0.15;
     let d2 = w1 / 3;
+    let x1 = 0;
+    let x2 = 0;
     let y1 = yc - d1;
     let y2 = yc + d1;
     drawFilledBox(ctx, xmin, y1, w1, 2 * d1, "#B9A379");
@@ -1062,6 +1134,22 @@ function drawLevel(
     ctx.lineWidth = 1;
   }
 
+  function drawVerticalRope() {
+    let d1 = w2 / 3;
+    let d2 = w1 * 0.15;
+    let x1 = xc - d2;
+    let x2 = xc + d2;
+    let y1 = 0;
+    let y2 = 0;
+    drawFilledBox(ctx, x1, ymin, 2 * d2, w2, "#B9A379");
+    y1 = ymin;
+    for (let i = 0; i < 3; i++) {
+      y2 = y1 + d1;
+      drawLine(ctx, x1, y1, x2, y2, "#201B11");
+      y1 = y1 + d1;
+    }
+  }
+
   function drawWater() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(0, 0, 90)");
   }
@@ -1215,9 +1303,6 @@ function drawLevel(
   let yc = 0;
   let w1 = 0;
   let w2 = 0;
-  let x1 = 0;
-  let y1 = 0;
-  let x2 = 0;
 
   ctx.lineWidth = 1;
   ctx.shadowBlur = 0;
@@ -1254,6 +1339,9 @@ function drawLevel(
           break;
         case 80:
           drawHorizontalRope()
+          break;
+        case 137:
+          drawVerticalRope()
           break;
         case 90:
           drawHorizontalLadder(col, row);
@@ -1548,71 +1636,17 @@ function drawLevel(
     }
     ymin += size1;
   }
-  ctx.lineWidth = 3;
-  for (let i = 0; i < gameInfo.teleports.length; i++) {
-    if (gameInfo.teleports[i].selfDestructing) {
-      ctx.setLineDash([2, 2]);
-    } else {
-      ctx.setLineDash([]);
-    }
-    drawBox(
-      ctx,
-      gameInfo.teleports[i].x * size1 + leftMargin + 1,
-      gameInfo.teleports[i].y * size1 + topMargin + 1,
-      size1 - 2,
-      size1 - 2,
-      "white"
-    );
-  }
-  ctx.setLineDash([]);
-  ctx.lineWidth = 1;
 
+  drawAllTeleports();
   drawAllRedFish();
 
   // Electricity
   if (gameInfo.electricityActive) {
-    for (let i = 0; i < gameInfo.electricity.length; i++) {
-      const elec = gameInfo.electricity[i];
-      let elecTarget = electricityTarget(backData, gameData, elec.x, elec.y);
-      if (elecTarget > 0 && Math.abs(elec.y - elecTarget) > 1) {
-        x1 = Math.round(leftMargin + elec.x * size1 + 0.5 * size1);
-        y1 = (elec.y + 1) * size1 + topMargin;
-        ctx.strokeStyle = "rgb(207, 159, 255)";
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        for (let j = elec.y + 1; j < elecTarget; j++) {
-          x2 = x1;
-          if (j < elecTarget - 1) {
-            x2 += Math.round(size1 * 0.8 * (Math.random() - 0.5));
-          }
-          y1 += size1;
-          ctx.lineTo(x2, y1);
-        }
-        ctx.stroke();
-      }
-    }
+    drawElectricityActive();
   }
 
-  // Game Over
   if (status.gameOver) {
-    x1 = leftMargin + gameWidth / 2;
-    y1 = gameHeight / 2 + topMargin;
-    drawText(
-      ctx,
-      x1,
-      y1,
-      "GAME OVER!",
-      "middle",
-      "white",
-      Math.round(gameHeight * 0.6),
-      Math.round(gameWidth * 0.9),
-      "red",
-      5
-    );
-
-    if (status.laser !== null) {
-      drawLaser(status.laser);
-    }
+    drawGameOver();
   }
 }
 
