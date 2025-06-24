@@ -1,11 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { pushDown, zeroArray } from "./balUtils.js";
 import { checkDetonator } from "./detonator.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("detonator", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     let backData01 = zeroArray(7, 7);
 
@@ -74,7 +76,7 @@ describe("detonator", () => {
         [1, 0, 0, 0, 0, 37, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = pushDown(backData01, input01c, gameInfo01c);
+    let info01c = pushDown(backData01, input01c, gameInfo01c, { ...defaultGameVars });
     it("checkDetonator C (via pushDown)", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });

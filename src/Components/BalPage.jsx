@@ -407,8 +407,8 @@ function BalPage() {
     if (info.updated) {
       update = true;
     }
-    checkYellowPauser(gameData, gameInfo, gameVars);
-    checkYellowStopper(gameData, gameInfo, gameVars);
+    checkYellowPauser(backData, gameData, gameInfo, gameVars, false);
+    checkYellowStopper(backData, gameData, gameInfo, gameVars, false);
 
     if (gameInfo.teleports.length > 0) {
       let teleport = -1;
@@ -992,7 +992,7 @@ function BalPage() {
         case "s":
         case "S":
         case "2":
-          info = pushDown(backData, gameData, gameInfo);
+          info = pushDown(backData, gameData, gameInfo, gameVars);
           break;
         case "y":
         case "Y":

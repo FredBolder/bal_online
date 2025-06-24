@@ -1,11 +1,18 @@
-export function checkYellowPauser(gameData, gameInfo, gameVars) {
-    if ((gameInfo.yellowPauser.x >= 0) && (gameInfo.yellowPauser.y >= 0)) {
+import { hasWeight } from "./balUtils.js";
+
+export function checkYellowPauser(backData, gameData, gameInfo, gameVars, pushingDown) {
+    let weight = false;
+    let xTrigger = gameInfo.yellowPauser.x;
+    let yTrigger = gameInfo.yellowPauser.y;
+
+    if ((xTrigger >= 0) && (yTrigger >= 0)) {
+        weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
         if (gameVars.yellowPauserActive) {
-            if (![2, 4, 8, 40, 93, 94].includes(gameData[gameInfo.yellowPauser.y - 1][gameInfo.yellowPauser.x])) {
+            if (!weight) {
                 gameVars.yellowPauserActive = false;
             }
         } else {
-            if ([2, 4, 8, 40, 93, 94].includes(gameData[gameInfo.yellowPauser.y - 1][gameInfo.yellowPauser.x])) {
+            if (weight) {
                 gameVars.yellowPauserActive = true;
                 gameVars.yellowPaused = !gameVars.yellowPaused;
             }

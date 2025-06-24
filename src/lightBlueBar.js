@@ -253,7 +253,7 @@ export function moveLightBlueBar(backData, gameData, gameInfo, direction) {
 
         update = false;
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
-            weight = hasWeight(backData, gameData, xmin, xmax, ymin);
+            weight = hasWeight(backData, gameData, gameInfo, xmin, xmax, ymin, false);
             switch (direction) {
                 case "down":
                     if (vertical) {

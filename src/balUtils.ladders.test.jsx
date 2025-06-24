@@ -4,11 +4,13 @@ import {
   jump,
   pushDown,
 } from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils Ladders", () => {
   const defaultGameInfo = {};
   initGameInfo(defaultGameInfo);
+  const defaultGameVars = {};
+  initGameVars(defaultGameVars);
 
   let inputBack01abcd = [
     [0, 0, 0, 0, 0, 0, 0],
@@ -70,7 +72,7 @@ describe("balUtils Ladders", () => {
     [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info01b = pushDown(inputBack01abcd, input01b, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } });
+  let info01b = pushDown(inputBack01abcd, input01b, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } }, { ...defaultGameVars });
   it("Ladders B", () => {
     expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
   });

@@ -7,6 +7,9 @@ import { movePurpleBar } from "./purpleBar.js";
 import { isRedBall } from "./redBalls.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
+import { checkYellowPauser } from "./yellowPauser.js";
+import { checkYellowPushersTrigger } from "./yellowPushers.js";
+import { checkYellowStopper } from "./yellowStopper.js";
 
 const timeBombsTime = 100;
 
@@ -476,13 +479,22 @@ export function freeToSwim(x1, x2, y, gameData) {
   return !found;
 }
 
-export function hasWeight(backData, gameData, xmin, xmax, y) {
+export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDown) {
+  let weight = false;
   let result = false;
 
   if (y > 0) {
     for (let i = xmin; i <= xmax; i++) {
       const el = gameData[y - 1][i];
-      if (([2, 8, 93, 94].includes(el) && !isLadder(i, y - 1, backData)) || [4, 40].includes(el)) {
+      weight = [2, 4, 8, 40, 93, 94].includes(el);
+      if (!pushingDown) {
+            if ((el === 2) && !hasForceDown(gameData, gameInfo, i, y - 1)) {
+                if (gameInfo.hasPropeller || [25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
+                    weight = false;
+                }
+            }        
+      }
+      if (weight) {
         result = true;
       }
     }
@@ -1583,7 +1595,7 @@ export function jumpRight(backData, gameData, gameInfo) {
   return result;
 }
 
-export function pushDown(backData, gameData, gameInfo) {
+export function pushDown(backData, gameData, gameInfo, gameVars) {
   let idx = -1;
   let info = null;
   let x = gameInfo.blueBall.x;
@@ -1593,6 +1605,9 @@ export function pushDown(backData, gameData, gameInfo) {
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
+  if (!gameVars) {
+    return null;
+  }
   if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2 && !hasForceUp(gameData, gameInfo, x, y)) {
       if (!result.player && (canMoveAlone(gameData[y + 1][x]) && (gameData[y + 1][x] !== 109)) && gameData[y + 2][x] === 0 &&
@@ -1703,8 +1718,8 @@ export function pushDown(backData, gameData, gameInfo) {
           }
         }
       }
-      if (!result.player && [37].includes(gameData[y + 1][x])) {
-        if ((gameInfo.hasPropeller || [25, 90, 137].includes(backData[y][x]) || isHorizontalRope(x, y - 1, backData)) && !hasForceDown(gameData, gameInfo, x, y)) {
+      if (!result.player && [37, 116, 131, 136].includes(gameData[y + 1][x])) {
+        if (!hasWeight(backData, gameData, gameInfo, x, x, y + 1, false)) {
           switch (gameData[y + 1][x]) {
             case 37:
               result.player = true;
@@ -1712,6 +1727,15 @@ export function pushDown(backData, gameData, gameInfo) {
               if (info.explosion) {
                 result.sound = "explosion";
               }
+              break;
+            case 116:  
+              checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, true);
+              break;
+            case 131:  
+              checkYellowStopper(backData, gameData, gameInfo, gameVars, true);
+              break;
+            case 136:  
+              checkYellowPauser(backData, gameData, gameInfo, gameVars, true);
               break;
             default:
               break;

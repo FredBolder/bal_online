@@ -6,11 +6,13 @@ import {
     pushDown,
     zeroArray,
 } from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils One direction ports", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     let inputBack01abcd = zeroArray(4, 7);
     let input01a = [
@@ -188,7 +190,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 2, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01g = pushDown(inputBack01ej, input01g, gameInfo01g);
+    let info01g = pushDown(inputBack01ej, input01g, gameInfo01g, { ...defaultGameVars });
     it("One direction ports G", () => {
         expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
     });
@@ -217,7 +219,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 4, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01h = pushDown(inputBack01ej, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } });
+    let info01h = pushDown(inputBack01ej, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
     it("One direction ports H", () => {
         expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
     });
@@ -242,7 +244,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01i = pushDown(inputBack01ej, input01i, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } });
+    let info01i = pushDown(inputBack01ej, input01i, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
     it("One direction ports I", () => {
         expect(JSON.stringify(input01i)).toBe(JSON.stringify(expectedOutput01i));
     });

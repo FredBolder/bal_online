@@ -1,4 +1,4 @@
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinate, hasWeight } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
@@ -16,15 +16,19 @@ function isNotMovingYellowBall(gameData, gameInfo, x, y) {
     return result;
 }
 
-export function checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars) {
+export function checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, pushingDown) {
     let result = { updated: false };
-    if ((gameInfo.yellowBallPushersTrigger.x >= 0) && (gameInfo.yellowBallPushersTrigger.y > 0)) {
+    let weight = false;
+    let xTrigger = gameInfo.yellowBallPushersTrigger.x;
+    let yTrigger = gameInfo.yellowBallPushersTrigger.y;
+    if ((xTrigger >= 0) && (yTrigger > 0)) {
+        weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
         if (gameVars.ballPushersActive) {
-            if (![2, 4, 8, 40, 93, 94].includes(gameData[gameInfo.yellowBallPushersTrigger.y - 1][gameInfo.yellowBallPushersTrigger.x])) {
+            if (!weight) {
                 gameVars.ballPushersActive = false;
             }
         } else {
-            if ([2, 4, 8, 40, 93, 94].includes(gameData[gameInfo.yellowBallPushersTrigger.y - 1][gameInfo.yellowBallPushersTrigger.x])) {
+            if (weight) {
                 gameVars.ballPushersActive = true;
                 for (let i = 0; i < gameInfo.yellowBallPushers.length; i++) {
                     const yellowBallPusher = gameInfo.yellowBallPushers[i];

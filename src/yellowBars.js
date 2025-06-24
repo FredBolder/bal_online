@@ -350,7 +350,7 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, dir, index, pu
         findAndSetIndex(xmin, ymax);
         findAndSetIndex(xmax, ymax);
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0) && (idx >= 0)) {
-            weight = hasWeight(backData, gameData, xmin, xmax, ymin);
+            weight = hasWeight(backData, gameData, gameInfo, xmin, xmax, ymin, false);
             if (pusher && (gameInfo.yellowBars[idx].direction !== "none")) {
                 return false;
             }

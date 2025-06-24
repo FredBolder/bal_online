@@ -157,6 +157,7 @@ describe("balUtils", () => {
 
   // hasWeight
 
+  let gameInfo05a = { ...defaultGameInfo, blueBall: { x: 1, y: 5 }, yellowBars: [{ x: 2, y: 3, direction: "none" }] };
   let input05a = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 3, 0, 0, 0, 0, 1],
@@ -167,11 +168,12 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1],
   ];
   let inputBack05_7_7 = zeroArray(7, 7);
-  let info05a = hasWeight(inputBack05_7_7, input05a, 2, 4, 3);
+  let info05a = hasWeight(inputBack05_7_7, input05a, gameInfo05a, 2, 4, 3, false);
   it("hasWeight A", () => {
     expect(info05a).toBe(true);
   });
 
+  let gameInfo05b = { ...defaultGameInfo, blueBall: { x: 1, y: 5 }, yellowBars: [{ x: 2, y: 3, direction: "none" }] };
   let input05b = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 3, 0, 0, 0, 0, 1],
@@ -181,11 +183,12 @@ describe("balUtils", () => {
     [1, 2, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info05b = hasWeight(inputBack05_7_7, input05b, 2, 4, 3);
+  let info05b = hasWeight(inputBack05_7_7, input05b, gameInfo05b, 2, 4, 3, false);
   it("hasWeight B", () => {
     expect(info05b).toBe(false);
   });
 
+  let gameInfo05c = { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, yellowBars: [{ x: 2, y: 3, direction: "none" }] };
   let input05c = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 3, 0, 0, 0, 0, 1],
@@ -204,11 +207,12 @@ describe("balUtils", () => {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
   ];
-  let info05c = hasWeight(inputBack05c, input05c, 2, 4, 3);
+  let info05c = hasWeight(inputBack05c, input05c, gameInfo05c, 2, 4, 3, false);
   it("hasWeight C", () => {
     expect(info05c).toBe(false);
   });
 
+  let gameInfo05d = { ...defaultGameInfo, blueBall: { x: 1, y: 5 }, yellowBars: [{ x: 2, y: 3, direction: "none" }] };
   let input05d = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 3, 0, 0, 0, 0, 1],
@@ -227,11 +231,12 @@ describe("balUtils", () => {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
   ];
-  let info05d = hasWeight(inputBack05d, input05d, 2, 4, 3);
+  let info05d = hasWeight(inputBack05d, input05d, gameInfo05d, 2, 4, 3, false);
   it("hasWeight D", () => {
     expect(info05d).toBe(true);
   });
 
+  let gameInfo05e = { ...defaultGameInfo, blueBall: { x: 4, y: 2 }, yellowBars: [{ x: 2, y: 3, direction: "none" }] };
   let input05e = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 3, 0, 0, 0, 0, 1],
@@ -241,11 +246,16 @@ describe("balUtils", () => {
     [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info05e = hasWeight(inputBack05_7_7, input05e, 2, 4, 3);
+  let info05e = hasWeight(inputBack05_7_7, input05e, gameInfo05e, 2, 4, 3, false);
   it("hasWeight E", () => {
     expect(info05e).toBe(true);
   });
 
+  let gameInfo05f = {
+    ...defaultGameInfo,
+    blueBall: { x: 1, y: 5 },
+    redBalls: [{ x: 2, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }]
+  };
   let input05f = [
     [1, 1, 1, 1, 1, 1, 1],
     [1, 3, 0, 0, 0, 0, 1],
@@ -255,7 +265,7 @@ describe("balUtils", () => {
     [1, 2, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info05f = hasWeight(inputBack05_7_7, input05f, 2, 2, 3);
+  let info05f = hasWeight(inputBack05_7_7, input05f, gameInfo05f, 2, 2, 3, false);
   it("hasWeight F", () => {
     expect(info05f).toBe(true);
   });
