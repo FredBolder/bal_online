@@ -548,8 +548,9 @@ function BalPage() {
     alert(msg);
   }
 
-  function loadLevelSettings(gameVars, levelSettings) {
+  function loadLevelSettings(backData, gameVars, levelSettings) {
     let color = "";
+    let element = 0;
     let h = -1;
     let p1 = -1;
     let w = -1;
@@ -568,6 +569,18 @@ function BalPage() {
         const value = setting.slice(p1 + 1).trim();
         const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
         switch (name) {
+          case "$background":
+            if (values.length === 3) {
+              x = tryParseInt(values[0], -1);
+              y = tryParseInt(values[1], -1);
+              element = tryParseInt(values[2], -1);
+              if ((x >= 0) && (y >= 0) && (x < backData[0].length) && (y < backData.length)) {
+                if ([20, 23, 25, 80, 90, 137].includes(element)) {
+                  backData[y][x] = element;
+                }
+              }
+            }
+            break;
           case "$bgcolor":
           case "$fgcolor":
             if (values.length === 5) {
@@ -616,12 +629,12 @@ function BalPage() {
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
       data = await getLevel(gameVars.currentLevel, gateTravelling);
-      loadLevelSettings(gameVars, data.levelSettings);
       gd = stringArrayToNumberArray(data.levelData);
       backData = null;
       backData = gd.backData;
       gameData = null;
       gameData = gd.gameData;
+      loadLevelSettings(backData, gameVars, data.levelSettings);
       gameVars.laser = null;
       gameVars.gameOver = false;
       updateScreen();
@@ -795,12 +808,12 @@ function BalPage() {
       backData = result.backData;
       gameData = null;
       gameData = result.gameData;
+      loadLevelSettings(backData, gameVars, result.levelSettings);
       gameVars.laser = null;
       gameVars.gameOver = false;
       updateScreen();
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
-      loadLevelSettings(gameVars, result.levelSettings);
       gameVars.currentLevel = 200;
       setLevelNumber(gameVars.currentLevel);
       if (gameVars.startlevelmessage !== "") {
@@ -1586,7 +1599,9 @@ function BalPage() {
               to the next level whenever you want by pressing the Code button, so
               it is important to write down the code.
               Some levels are very difficult. If you can&apos;t solve a certain
-              level, you can start with another series or load a random level.
+              level, you can press the ? button and choose Hint, start with another 
+              series or load a random level.
+              You can not get all existing levels by loading a random level.
             </p>
             <p>
               Download the <a className="link" target="_blank" rel="noopener noreferrer" href="./bal_online_manual.pdf">manual</a> for more information.

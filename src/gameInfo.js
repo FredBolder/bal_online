@@ -169,7 +169,7 @@ export function getGameInfo(backData, gameData) {
                     result.magnets.push(magnet);
                     break;
                 }
-                case 121: 
+                case 121:
                 case 124: {
                     let yellowBar = {
                         x: j,

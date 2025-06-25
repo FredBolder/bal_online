@@ -407,6 +407,24 @@ function drawLevel(
     drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
   }
 
+  function drawDirectionChanger4() {
+    // Direction: /, code: 138, â
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawLine(ctx, xmin, ymax, xmax, ymin, "black");
+    ctx.setLineDash([2, 4]);
+    drawLine(ctx, xmin, ymin, xmax, ymax, "black");
+    ctx.setLineDash([]);
+  }
+
+  function drawDirectionChanger5() {
+    // Direction: \, code: 139, Â
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawLine(ctx, xmin, ymin, xmax, ymax, "black");
+    ctx.setLineDash([2, 4]);
+    drawLine(ctx, xmin, ymax, xmax, ymin, "black");
+    ctx.setLineDash([]);
+  }
+
   function drawDivingGlasses(color, scaleFactor = 1) {
     let d1 = w1 * scaleFactor / 5;
     let d2 = w1 * scaleFactor / 4.5;
@@ -1618,6 +1636,12 @@ function drawLevel(
           break;
         case 136:
           drawYellowPauser(col, row);
+          break;
+        case 138:
+          drawDirectionChanger4();
+          break;
+        case 139:
+          drawDirectionChanger5();
           break;
         case 1000:
           // For manual only (empty)

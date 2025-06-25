@@ -248,7 +248,71 @@ describe("Yellow ball", () => {
         );
     });
 
+    let input01i = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 3, 0, 0, 0, 1],
+        [1, 9, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 138, 9, 0, 1],
+        [1, 0, 2, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01i = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 9, 0, 3, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 139, 0, 0, 1],
+        [1, 0, 2, 0, 9, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let yellow01i = [
+        { x: 1, y: 2, direction: "up" },
+        { x: 5, y: 3, direction: "left" },
+    ];
+    moveYellowBalls(input01i, yellow01i);
+    it("moveYellowBalls I", () => {
+        expect(JSON.stringify(input01i)).toBe(JSON.stringify(expectedOutput01i));
+    });
+    it("moveYellowBalls I yellow", () => {
+        expect(JSON.stringify(yellow01i)).toBe(
+            JSON.stringify([
+                { x: 1, y: 1, direction: "up" },
+                { x: 4, y: 4, direction: "down" },
+            ])
+        );
+    });
 
+    let input01j = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 3, 0, 0, 0, 1],
+        [1, 9, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 139, 9, 0, 1],
+        [1, 0, 2, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01j = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 9, 0, 3, 0, 0, 0, 1],
+        [1, 0, 0, 0, 9, 0, 0, 1],
+        [1, 0, 0, 0, 138, 0, 0, 1],
+        [1, 0, 2, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let yellow01j = [
+        { x: 1, y: 2, direction: "up" },
+        { x: 5, y: 3, direction: "left" },
+    ];
+    moveYellowBalls(input01j, yellow01j);
+    it("moveYellowBalls J", () => {
+        expect(JSON.stringify(input01j)).toBe(JSON.stringify(expectedOutput01j));
+    });
+    it("moveYellowBalls J yellow", () => {
+        expect(JSON.stringify(yellow01j)).toBe(
+            JSON.stringify([
+                { x: 1, y: 1, direction: "up" },
+                { x: 4, y: 2, direction: "up" },
+            ])
+        );
+    });
 
     // Insert new tests here
 });
