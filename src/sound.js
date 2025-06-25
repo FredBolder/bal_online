@@ -21,91 +21,63 @@ import sndUnlock from "./Sounds/unlock.wav";
 
 import { getSettings } from "./settings.js";
 
-export function playSound(sound) {
-    let snd = null;
-    let n = 0;
-    const settings = getSettings();
+const SOUND_FILES = {
+  breaking1: sndBreaking1,
+  breaking2: sndBreaking2,
+  catapult: sndCatapult,
+  electricity: sndElectricity,
+  explosion: sndExplosion,
+  key: sndKey,
+  laser: sndLaserGun,
+  magnet: sndMagnet,
+  pain: sndPain,
+  pickaxe: sndPickaxe,
+  splash1: sndSplash1,
+  splash2: sndSplash2,
+  take: sndTake,
+  teleport: sndTeleport,
+  trap: sndTrapDoor,
+  unlock: sndUnlock,
+};
 
-    if (settings.sound) {
-        switch (sound) {
-            case "breaking1":
-                snd = sndBreaking1;
-                break;
-            case "breaking2":
-                snd = sndBreaking2;
-                break;
-            case "catapult":
-                snd = sndCatapult;
-                break;
-            case "eat":
-                n = Math.trunc(Math.random() * 4) + 1;
-                switch (n) {
-                    case 1:
-                        snd = sndEat1;
-                        break;
-                    case 2:
-                        snd = sndEat2;
-                        break;
-                    case 3:
-                        snd = sndEat3;
-                        break;
-                    case 4:
-                        snd = sndEat4;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case "electricity":
-                snd = sndElectricity;
-                break;
-            case "explosion":
-                snd = sndExplosion;
-                break;
-            case "key":
-                snd = sndKey;
-                break;
-            case "laser":
-                snd = sndLaserGun;
-                break;
-            case "magnet":
-                snd = sndMagnet;
-                break;
-            case "pain":
-                snd = sndPain;
-                break;
-            case "pickaxe":
-                snd = sndPickaxe;
-                break;
-            case "splash1":
-                snd = sndSplash1;
-                break;
-            case "splash2":
-                snd = sndSplash2;
-                break;
-            case "take":
-                snd = sndTake;
-                break;
-            case "teleport":
-                snd = sndTeleport;
-                break;
-            case "trap":
-                snd = sndTrapDoor;
-                break;
-            case "unlock":
-                snd = sndUnlock;
-                break;
-            default:
-                break;
-        }
-        if (snd !== sound) {
-            try {
-                const audio = new Audio(snd);
-                audio.play();
-            } catch (error) {
-                console.error(error);
-            }
-        }
-    }
+const EAT_SOUNDS = [sndEat1, sndEat2, sndEat3, sndEat4];
+
+const audioCache = {};
+
+function preloadSounds() {
+  Object.entries(SOUND_FILES).forEach(([key, src]) => {
+    const audio = new Audio(src);
+    audio.load();
+    audioCache[key] = audio;
+  });
+  EAT_SOUNDS.forEach((src, idx) => {
+    const key = `eat${idx + 1}`;
+    const audio = new Audio(src);
+    audio.load();
+    audioCache[key] = audio;
+  });
 }
 
+preloadSounds();
+
+export function playSound(sound) {
+  const settings = getSettings();
+  if (!settings.sound) return;
+
+  let key = sound;
+
+  if (sound === 'eat') {
+    const idx = Math.floor(Math.random() * EAT_SOUNDS.length) + 1;
+    key = `eat${idx}`;
+  }
+
+  const audio = audioCache[key];
+  if (audio) {
+    try {
+      audio.currentTime = 0;
+      audio.play();
+    } catch (err) {
+      console.error(`Failed to play sound ${key}:`, err);
+    }
+  }
+}
