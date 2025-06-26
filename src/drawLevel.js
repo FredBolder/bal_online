@@ -1031,7 +1031,7 @@ function drawLevel(
   }
 
   function drawSilverBall() {
-      drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#C0C0C0");
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#C0C0C0");
   }
 
   function drawSmallLadder() {
@@ -1052,6 +1052,69 @@ function drawLevel(
 
   function drawStone(x, y) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+  }
+
+  function drawStoneHalf(x, y, location) {
+    const color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    switch (location) {
+      case "left":
+        drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
+        break;
+      case "right":
+        drawFilledBox(ctx, xc, ymin, w1 / 2, w2, color);
+        break;
+      case "top":
+        drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
+        break;
+      case "bottom":
+        drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
+        break;
+      default:
+        break;
+    }
+  }
+
+  function drawStoneQuarterCircle90BottomLeft(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+    ctx.arc(Math.round(xmin - 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 2 * Math.PI, 1.5 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawStoneQuarterCircle90BottomRight(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+    ctx.arc(Math.round(xmax + 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 1.5 * Math.PI, 1 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawStoneQuarterCircle90TopLeft(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+    ctx.arc(Math.round(xmin - 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 0.5 * Math.PI, 0 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawStoneQuarterCircle90TopRight(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.arc(Math.round(xmax + 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 1 * Math.PI, 0.5 * Math.PI, true);
+    ctx.fill();
   }
 
   function drawStoneTriangle90BottomLeft(x, y) {
@@ -1649,6 +1712,30 @@ function drawLevel(
           break;
         case 140:
           drawSilverBall();
+          break;
+        case 141:
+          drawStoneQuarterCircle90BottomLeft(col, row);
+          break;
+        case 142:
+          drawStoneQuarterCircle90BottomRight(col, row);
+          break;
+        case 143:
+          drawStoneQuarterCircle90TopLeft(col, row);
+          break;
+        case 144:
+          drawStoneQuarterCircle90TopRight(col, row);
+          break;
+        case 145:
+          drawStoneHalf(col, row, "left");
+          break;
+        case 146:
+          drawStoneHalf(col, row, "right");
+          break;
+        case 147:
+          drawStoneHalf(col, row, "top");
+          break;
+        case 148:
+          drawStoneHalf(col, row, "bottom");
           break;
         case 1000:
           // For manual only (empty)

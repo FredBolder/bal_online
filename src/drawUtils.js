@@ -12,7 +12,7 @@ export function drawCircle(canvas, xc, yc, radius, color) {
 
 export function drawFilledBox(canvas, x, y, width, height, color) {
   canvas.fillStyle = color;
-  canvas.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+  canvas.fillRect(Math.round(x - 0.5), Math.round(y), Math.round(width), Math.round(height));
 }
 
 export function drawFilledCircle(canvas, xc, yc, radius, color) {

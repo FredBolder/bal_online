@@ -120,6 +120,30 @@ export function rotateGame(backData, gameData, gameInfo) {
             case 139:
               gd = 138;
               break;
+            case 141:
+              gd = 143;
+              break;
+            case 142:
+              gd = 141;
+              break;
+            case 143:
+              gd = 144;
+              break;
+            case 144:
+              gd = 142;
+              break;
+            case 145:
+              gd = 147;
+              break;
+            case 146:
+              gd = 148;
+              break;
+            case 147:
+              gd = 146;
+              break;
+            case 148:
+              gd = 145;
+              break;
             default:
               break;
           }

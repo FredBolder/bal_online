@@ -317,6 +317,30 @@ export function charToNumber(c) {
     case "°":
       result = 140;
       break;
+    case "i":
+      result = 141;
+      break;
+    case "í":
+      result = 142;
+      break;
+    case "ì":
+      result = 143;
+      break;
+    case "î":
+      result = 144;
+      break;
+    case "ü":
+      result = 145;
+      break;
+    case "ú":
+      result = 146;
+      break;
+    case "ù":
+      result = 147;
+      break;
+    case "û":
+      result = 148;
+      break;
     case "|":
       result = 1000;
       break;
@@ -922,6 +946,30 @@ export function numberToChar(n) {
       break;
     case 140:
       result = "°";
+      break;
+    case 141:
+      result = "i";
+      break;
+    case 142:
+      result = "í";
+      break;
+    case 143:
+      result = "ì";
+      break;
+    case 144:
+      result = "î";
+      break;
+    case 145:
+      result = "ü";
+      break;
+    case 146:
+      result = "ú";
+      break;
+    case 147:
+      result = "ù";
+      break;
+    case 148:
+      result = "û";
       break;
     case 1000:
       // For manual only
