@@ -314,6 +314,9 @@ export function charToNumber(c) {
     case "â":
       result = 139;
       break;
+    case "°":
+      result = 140;
+      break;
     case "|":
       result = 1000;
       break;
@@ -494,11 +497,11 @@ export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDo
       const el = gameData[y - 1][i];
       weight = [2, 4, 8, 40, 93, 94].includes(el);
       if (!pushingDown) {
-            if ((el === 2) && !hasForceDown(gameData, gameInfo, i, y - 1)) {
-                if (gameInfo.hasPropeller || [25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
-                    weight = false;
-                }
-            }        
+        if ((el === 2) && !hasForceDown(gameData, gameInfo, i, y - 1)) {
+          if (gameInfo.hasPropeller || [25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
+            weight = false;
+          }
+        }
       }
       if (weight) {
         result = true;
@@ -917,6 +920,9 @@ export function numberToChar(n) {
     case 139:
       result = "â";
       break;
+    case 140:
+      result = "°";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -974,21 +980,23 @@ export function stringArrayToNumberArray(arr, importing = false) {
   return result;
 }
 
-function showCodePart(n) {
+function getCodePartMessage(n) {
   const codePart = secretSeriesCodePart(n);
+  let msg = "";
   switch (n) {
     case 1:
-      alert(`The first code part to enter the secret series is: ${codePart}`);
+      msg = `The first code part to enter the secret series is: ${codePart}`;
       break;
     case 2:
-      alert(`The second code part to enter the secret series is: ${codePart}`);
+      msg = `The second code part to enter the secret series is: ${codePart}`;
       break;
     case 3:
-      alert(`The third and last code part to enter the secret series is: ${codePart}`);
+      msg = `The third and last code part to enter the secret series is: ${codePart}`;
       break;
     default:
       break;
   }
+  return msg;
 }
 
 function take(gameData, gameInfo, result, x, y) {
@@ -997,6 +1005,7 @@ function take(gameData, gameInfo, result, x, y) {
       result.sound = "";
       break;
     case 3:
+      result.sound = "";
       result.eating = true;
       break;
     case 12:
@@ -1029,13 +1038,19 @@ function take(gameData, gameInfo, result, x, y) {
       result.freezeTime = 250;
       break;
     case 133:
-      showCodePart(1);
+      result.message = getCodePartMessage(1);
       break;
     case 134:
-      showCodePart(2);
+      result.message = getCodePartMessage(2);
       break;
     case 135:
-      showCodePart(3);
+      result.message = getCodePartMessage(3);
+      break;
+    case 140:
+      gameInfo.hasTelekineticPower = true;
+      result.message = "You have now telekinetic power! By pressing the space bar or the ! button you can move the "; 
+      result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
+      result.message += "purple ball, moveable gray ball, orange ball, direction changer";
       break;
     default:
       break;
@@ -1087,7 +1102,7 @@ export function moveLeft(backData, gameData, gameInfo) {
     if (!fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key etc.
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(row[x - 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(row[x - 1]) ||
           (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x - 1, y);
@@ -1254,7 +1269,7 @@ export function moveRight(backData, gameData, gameInfo) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key etc.
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(row[x + 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(row[x + 1]) ||
           (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x + 1, y);
@@ -1410,7 +1425,7 @@ export function jump(backData, gameData, gameInfo) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && (y > 1) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![25, 137, 90].includes(backData[y - 1][x])) && (![25, 137, 90].includes(backData[y][x])) && (![80].includes(backData[y - 2][x]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 2][x])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(gameData[y - 2][x])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y - 2);
             gameData[y - 2][x] = 2;
@@ -1423,7 +1438,7 @@ export function jump(backData, gameData, gameInfo) {
       }
       if (!result.player && (y > 0) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (![80].includes(backData[y - 1][x])) {
-          if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 1][x]) ||
+          if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(gameData[y - 1][x]) ||
             (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y - 1);
@@ -1535,7 +1550,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x - 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 2][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(gameData[y - 2][x - 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x - 1, y - 2);
             gameData[y - 2][x - 1] = 2;
@@ -1548,7 +1563,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
       }
       if (!result.player && y > 0 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![80].includes(backData[y - 1][x - 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 1][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(gameData[y - 1][x - 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x - 1, y - 1);
             gameData[y - 1][x - 1] = 2;
@@ -1578,7 +1593,7 @@ export function jumpRight(backData, gameData, gameInfo) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x + 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 2][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(gameData[y - 2][x + 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + 1, y - 2);
             gameData[y - 2][x + 1] = 2;
@@ -1591,7 +1606,7 @@ export function jumpRight(backData, gameData, gameInfo) {
       }
       if (!result.player && y > 0 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![80].includes(backData[y - 1][x + 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135].includes(gameData[y - 1][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140].includes(gameData[y - 1][x + 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + 1, y - 1);
             gameData[y - 1][x + 1] = 2;
@@ -1740,13 +1755,13 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
                 result.sound = "explosion";
               }
               break;
-            case 116:  
+            case 116:
               checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, true);
               break;
-            case 131:  
+            case 131:
               checkYellowStopper(backData, gameData, gameInfo, gameVars, true);
               break;
-            case 136:  
+            case 136:
               checkYellowPauser(backData, gameData, gameInfo, gameVars, true);
               break;
             default:

@@ -40,6 +40,7 @@ import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { playSound } from "../sound.js";
+import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { checkTimeBombs } from "../timeBombs.js";
 import { checkTrapDoors } from "../trapDoors.js";
 import { tryParseInt } from "../utils.js";
@@ -59,6 +60,7 @@ import imgOrange from "../Images/orange_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
 import imgWhite from "../Images/white_ball.svg";
 import imgYellow from "../Images/yellow_ball.svg";
+import actionButton from "../Images/action_button.png";
 import arrowJumpLeft from "../Images/arrow_topLeft.svg";
 import arrowJumpRight from "../Images/arrow_topRight.svg";
 import arrowDown from "../Images/arrow_down.svg";
@@ -906,7 +908,7 @@ function BalPage() {
     }
   }
 
-  function handleKeyDown(e) {
+  async function handleKeyDown(e) {
     let info = {};
     info.player = false;
     info.eating = false;
@@ -951,6 +953,12 @@ function BalPage() {
       }
     } else {
       switch (e.key) {
+        case " ": {
+          if (gameInfo.hasTelekineticPower) {
+            info = moveObjectWithTelekineticPower(gameData, gameInfo);
+          }
+          break;
+        }
         case "ArrowLeft":
         case "a":
         case "A":
@@ -1058,7 +1066,13 @@ function BalPage() {
       }
     }
     if (info.sound !== "") {
-      playSound(info.sound);
+      await playSound(info.sound);
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "message")) {
+      info.message = "";
+    }
+    if (info.message !== "")  {
+      alert(info.message);
     }
 
     if (!e.altKey && !e.ctrlKey) {
@@ -1168,7 +1182,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2002;
+        gameVars.currentLevel = 763;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1245,6 +1259,10 @@ function BalPage() {
       gameInfo,
       gameVars
     );
+  }
+
+  function buttonAction() {
+    handleKeyDown({ key: " ", shiftKey: false });
   }
 
   function buttonJumpLeft() {
@@ -1457,6 +1475,9 @@ function BalPage() {
                 <button className="moveButton" onClick={buttonJumpRight}>
                   <img src={arrowJumpRight} alt="ArrowJumpRight" />
                 </button>
+                <button className="moveButton" onClick={buttonAction}>
+                  <img src={actionButton} alt="actionButton" />
+                </button>
               </div>
             </div>
           </div>
@@ -1599,7 +1620,7 @@ function BalPage() {
               to the next level whenever you want by pressing the Code button, so
               it is important to write down the code.
               Some levels are very difficult. If you can&apos;t solve a certain
-              level, you can press the ? button and choose Hint, start with another 
+              level, you can press the ? button and choose Hint, start with another
               series or load a random level.
               You can not get all existing levels by loading a random level.
             </p>

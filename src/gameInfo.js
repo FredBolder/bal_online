@@ -221,6 +221,7 @@ export function initGameInfo(info) {
     info.hasMirror = false;
     info.hasPickaxe = false;
     info.hasPropeller = false;
+    info.hasTelekineticPower = false;
     info.hasTravelGate = false;
     info.hasWater = false;
     info.hasWeakStone = false;

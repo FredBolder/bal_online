@@ -1030,6 +1030,10 @@ function drawLevel(
     }
   }
 
+  function drawSilverBall() {
+      drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#C0C0C0");
+  }
+
   function drawSmallLadder() {
     let d1 = w1 / 8;
     let d2 = w2 / 8;
@@ -1642,6 +1646,9 @@ function drawLevel(
           break;
         case 139:
           drawDirectionChanger5();
+          break;
+        case 140:
+          drawSilverBall();
           break;
         case 1000:
           // For manual only (empty)
