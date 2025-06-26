@@ -866,6 +866,9 @@ function BalPage() {
     if (gameInfo.hasLadder) {
       addItem("ladder");
     }
+    if (gameInfo.hasTelekineticPower) {
+      addItem("telekinetic power");
+    }
     if (gameInfo.hasPickaxe) {
       addItem("pickaxe");
     }
@@ -1186,7 +1189,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 763;
+        gameVars.currentLevel = 2003;
       }
       initLevel(gameVars.currentLevel);
     }
