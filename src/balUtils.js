@@ -1048,7 +1048,7 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 140:
       gameInfo.hasTelekineticPower = true;
-      result.message = "You have now telekinetic power! By pressing the space bar or the ! button you can move the "; 
+      result.message = "You have now telekinetic power! By pressing the ! key or the ! button you can move the "; 
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
       result.message += "purple ball, moveable gray ball, orange ball, direction changer";
       break;

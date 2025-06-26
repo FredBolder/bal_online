@@ -935,6 +935,16 @@ function BalPage() {
     ) {
       e.preventDefault();
     }
+    switch (e.key) {
+      case "!": {
+        if (gameInfo.hasTelekineticPower) {
+          info = moveObjectWithTelekineticPower(gameData, gameInfo);
+        }
+        break;
+      }
+      default:
+        break;
+    }
     if (e.shiftKey) {
       switch (e.key) {
         case "R":
@@ -953,12 +963,6 @@ function BalPage() {
       }
     } else {
       switch (e.key) {
-        case " ": {
-          if (gameInfo.hasTelekineticPower) {
-            info = moveObjectWithTelekineticPower(gameData, gameInfo);
-          }
-          break;
-        }
         case "ArrowLeft":
         case "a":
         case "A":
@@ -1071,7 +1075,7 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "message")) {
       info.message = "";
     }
-    if (info.message !== "")  {
+    if (info.message !== "") {
       alert(info.message);
     }
 
@@ -1262,7 +1266,7 @@ function BalPage() {
   }
 
   function buttonAction() {
-    handleKeyDown({ key: " ", shiftKey: false });
+    handleKeyDown({ key: "!", shiftKey: false });
   }
 
   function buttonJumpLeft() {
