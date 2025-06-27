@@ -681,6 +681,26 @@ function drawLevel(
     }
   }
 
+  function drawHalfStone(x, y, location) {
+    const color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    switch (location) {
+      case "left":
+        drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
+        break;
+      case "right":
+        drawFilledBox(ctx, xc, ymin, w1 / 2, w2, color);
+        break;
+      case "top":
+        drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
+        break;
+      case "bottom":
+        drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
+        break;
+      default:
+        break;
+    }
+  }
+
   function drawHorizontalLadder(x, y) {
     // Code: 90, h
     let color = getFgcolor(x, y, "white");
@@ -993,6 +1013,69 @@ function drawLevel(
     }
   }
 
+  function drawQuarterCircleStoneBottomLeft(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+    ctx.arc(Math.round(xmin - 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 2 * Math.PI, 1.5 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawQuarterCircleStoneBottomRight(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+    ctx.arc(Math.round(xmax + 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 1.5 * Math.PI, 1 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawQuarterCircleStoneTopLeft(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+    ctx.arc(Math.round(xmin - 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 0.5 * Math.PI, 0 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawQuarterCircleStoneTopRight(x, y) {
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.arc(Math.round(xmax + 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 1 * Math.PI, 0.5 * Math.PI, true);
+    ctx.fill();
+  }
+
+  function drawQuarterStone(x, y, location) {
+    const color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    switch (location) {
+      case "bottomLeft":
+        drawFilledBox(ctx, xmin, yc, w1 / 2, w2 / 2, color);
+        break;
+      case "bottomRight":
+        drawFilledBox(ctx, xc, yc, w1 / 2, w2 / 2, color);
+        break;
+      case "topLeft":
+        drawFilledBox(ctx, xmin, ymin, w1 / 2, w2 / 2, color);
+        break;
+      case "topRight":
+        drawFilledBox(ctx, xc, ymin, w1 / 2, w2 / 2, color);
+        break;
+      default:
+        break;
+    }
+  }
+
   function drawRedBall() {
     let d1 = 0;
     let d2 = 0;
@@ -1054,111 +1137,20 @@ function drawLevel(
     drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
   }
 
-  function drawStoneHalf(x, y, location) {
-    const color = getFgcolor(x, y, "rgb(70, 70, 70)");
-    switch (location) {
-      case "left":
-        drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
+  function drawStonePattern(x, y, n) {
+    let d1 = (w1 * 0.25) + 1;
+    switch (n) {
+      case 1:
+        drawFilledBox(ctx, ((xmin + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
+        drawFilledBox(ctx, ((xmax + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
         break;
-      case "right":
-        drawFilledBox(ctx, xc, ymin, w1 / 2, w2, color);
-        break;
-      case "top":
-        drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
-        break;
-      case "bottom":
-        drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
+      case 2:
+        drawFilledBox(ctx, xmin - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
+        drawFilledBox(ctx, xc - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
         break;
       default:
         break;
     }
-  }
-
-  function drawStoneQuarterCircle90BottomLeft(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
-    ctx.arc(Math.round(xmin - 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 2 * Math.PI, 1.5 * Math.PI, true);
-    ctx.fill();
-  }
-
-  function drawStoneQuarterCircle90BottomRight(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
-    ctx.arc(Math.round(xmax + 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 1.5 * Math.PI, 1 * Math.PI, true);
-    ctx.fill();
-  }
-
-  function drawStoneQuarterCircle90TopLeft(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
-    ctx.arc(Math.round(xmin - 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 0.5 * Math.PI, 0 * Math.PI, true);
-    ctx.fill();
-  }
-
-  function drawStoneQuarterCircle90TopRight(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.arc(Math.round(xmax + 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 1 * Math.PI, 0.5 * Math.PI, true);
-    ctx.fill();
-  }
-
-  function drawStoneTriangle90BottomLeft(x, y) {
-    // Shape: |\, code: 15, G 
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.fill();
-  }
-
-  function drawStoneTriangle90BottomRight(x, y) {
-    // Shape: /|, code: 16, H 
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.fill();
-  }
-
-  function drawStoneTriangle90TopLeft(x, y) {
-    // Shape: |/, code: 17, I
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.fill();
-  }
-
-  function drawStoneTriangle90TopRight(x, y) {
-    // Shape: \|, code: 18, J
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
-    ctx.beginPath();
-    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.fill();
   }
 
   function drawTimeBomb(x, y) {
@@ -1217,6 +1209,50 @@ function drawLevel(
     ctx.lineWidth = 3;
     drawCircle(ctx, xc, yc, (w1 * 0.5) - 1, color);
     ctx.lineWidth = 1;
+  }
+
+  function drawTriangleStoneBottomLeft(x, y) {
+    // Shape: |\, code: 15, G 
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.fill();
+  }
+
+  function drawTriangleStoneBottomRight(x, y) {
+    // Shape: /|, code: 16, H 
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.fill();
+  }
+
+  function drawTriangleStoneTopLeft(x, y) {
+    // Shape: |/, code: 17, I
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+    ctx.fill();
+  }
+
+  function drawTriangleStoneTopRight(x, y) {
+    // Shape: \|, code: 18, J
+    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.beginPath();
+    ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+    ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+    ctx.fill();
   }
 
   function drawVerticalRope() {
@@ -1283,9 +1319,9 @@ function drawLevel(
   function drawWaterSurfaceLeftOrRight(x, y, left) {
     drawWaterSurface();
     if (left) {
-      drawStoneTriangle90BottomRight(x, y);
+      drawTriangleStoneBottomRight(x, y);
     } else {
-      drawStoneTriangle90BottomLeft(x, y);
+      drawTriangleStoneBottomLeft(x, y);
     }
   }
 
@@ -1484,16 +1520,16 @@ function drawLevel(
           drawTrapDoorHalfOpen();
           break;
         case 15:
-          drawStoneTriangle90BottomLeft(col, row);
+          drawTriangleStoneBottomLeft(col, row);
           break;
         case 16:
-          drawStoneTriangle90BottomRight(col, row);
+          drawTriangleStoneBottomRight(col, row);
           break;
         case 17:
-          drawStoneTriangle90TopLeft(col, row);
+          drawTriangleStoneTopLeft(col, row);
           break;
         case 18:
-          drawStoneTriangle90TopRight(col, row);
+          drawTriangleStoneTopRight(col, row);
           break;
         case 21:
           drawPalmTreeTrunkPart();
@@ -1714,28 +1750,46 @@ function drawLevel(
           drawSilverBall();
           break;
         case 141:
-          drawStoneQuarterCircle90BottomLeft(col, row);
+          drawQuarterCircleStoneBottomLeft(col, row);
           break;
         case 142:
-          drawStoneQuarterCircle90BottomRight(col, row);
+          drawQuarterCircleStoneBottomRight(col, row);
           break;
         case 143:
-          drawStoneQuarterCircle90TopLeft(col, row);
+          drawQuarterCircleStoneTopLeft(col, row);
           break;
         case 144:
-          drawStoneQuarterCircle90TopRight(col, row);
+          drawQuarterCircleStoneTopRight(col, row);
           break;
         case 145:
-          drawStoneHalf(col, row, "left");
+          drawHalfStone(col, row, "left");
           break;
         case 146:
-          drawStoneHalf(col, row, "right");
+          drawHalfStone(col, row, "right");
           break;
         case 147:
-          drawStoneHalf(col, row, "top");
+          drawHalfStone(col, row, "top");
           break;
         case 148:
-          drawStoneHalf(col, row, "bottom");
+          drawHalfStone(col, row, "bottom");
+          break;
+        case 149:
+          drawQuarterStone(col, row, "bottomLeft");
+          break;
+        case 150:
+          drawQuarterStone(col, row, "bottomRight");
+          break;
+        case 151:
+          drawQuarterStone(col, row, "topLeft");
+          break;
+        case 152:
+          drawQuarterStone(col, row, "topRight");
+          break;
+        case 153:
+          drawStonePattern(col, row, 1);
+          break;
+        case 154:
+          drawStonePattern(col, row, 2);
           break;
         case 1000:
           // For manual only (empty)

@@ -1,7 +1,7 @@
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinate, getTimeBombsTime } from "./balUtils.js";
 
 function isMoveableObject(gameData, x, y) {
-    return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 138, 139].includes(gameData[y][x]);
+    return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139].includes(gameData[y][x]);
 }
 
 function moveObject(gameData, gameInfo, x, y, direction) {
@@ -49,6 +49,14 @@ function moveObject(gameData, gameInfo, x, y, direction) {
             break;    
         case 98:
             gameData[newY][newX] = 82;
+            break;    
+        case 117:
+            idx = findElementByCoordinate(x, y, gameInfo.timeBombs);
+            if (idx >= 0) {
+              gameInfo.timeBombs[idx].x = newX;
+              gameInfo.timeBombs[idx].y = newY;
+              gameInfo.timeBombs[idx].status = getTimeBombsTime();
+            }            
             break;    
         default:
             break;

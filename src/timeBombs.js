@@ -144,6 +144,10 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                                     gameInfo.timeBombs[idx].status = -1;
                                 }
                                 break;
+                            case 132:
+                                gameInfo.travelGate.x = -1;
+                                gameInfo.travelGate.y = -1;
+                                break;
                             default:
                                 break;
                         }

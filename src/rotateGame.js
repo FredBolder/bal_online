@@ -144,6 +144,18 @@ export function rotateGame(backData, gameData, gameInfo) {
             case 148:
               gd = 145;
               break;
+            case 149:
+              gd = 151;
+              break;
+            case 150:
+              gd = 149;
+              break;
+            case 151:
+              gd = 152;
+              break;
+            case 152:
+              gd = 150;
+              break;
             default:
               break;
           }
@@ -313,6 +325,15 @@ export function rotateGame(backData, gameData, gameInfo) {
             break;
         }
         gameInfo.forces[i].direction = data;
+      }
+
+      // Time bombs
+      for (let i = 0; i < gameInfo.timeBombs.length; i++) {
+        const timeBomb = gameInfo.timeBombs[i];
+        x = timeBomb.x;
+        y = timeBomb.y;
+        timeBomb.y = x;
+        timeBomb.x = rows - (y + 1);        
       }
     }
   }

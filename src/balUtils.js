@@ -341,6 +341,24 @@ export function charToNumber(c) {
     case "û":
       result = 148;
       break;
+    case "ά":
+      result = 149;
+      break;
+    case "έ":
+      result = 150;
+      break;
+    case "ί":
+      result = 151;
+      break;
+    case "ό":
+      result = 152;
+      break;
+    case "ή":
+      result = 153;
+      break;
+    case "ώ":
+      result = 154;
+      break;
     case "|":
       result = 1000;
       break;
@@ -510,6 +528,10 @@ export function freeToSwim(x1, x2, y, gameData) {
     }
   }
   return !found;
+}
+
+export function getTimeBombsTime() {
+  return timeBombsTime;
 }
 
 export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDown) {
@@ -971,6 +993,24 @@ export function numberToChar(n) {
     case 148:
       result = "û";
       break;
+    case 149:
+      result = "ά";
+      break;
+    case 150:
+      result = "έ";
+      break;
+    case 151:
+      result = "ί";
+      break;
+    case 152:
+      result = "ό";
+      break;
+    case 153:
+      result = "ή";
+      break;
+    case 154:
+      result = "ώ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1098,7 +1138,7 @@ function take(gameData, gameInfo, result, x, y) {
       gameInfo.hasTelekineticPower = true;
       result.message = "You have now telekinetic power! By pressing the ! key or the ! button you can move the "; 
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
-      result.message += "purple ball, moveable gray ball, orange ball, direction changer";
+      result.message += "purple ball, moveable gray ball, orange ball, direction changer, time bomb";
       break;
     default:
       break;

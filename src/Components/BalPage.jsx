@@ -202,6 +202,7 @@ function BalPage() {
     let saveLadder = false;
     let savePickaxe = false;
     let savePropeller = false;
+    let saveTelekineticPower = false;
     let saveWeakStone = false;
     let update = false;
 
@@ -212,6 +213,7 @@ function BalPage() {
       gameInfo.hasLadder = saveLadder;
       gameInfo.hasPickaxe = savePickaxe;
       gameInfo.hasPropeller = savePropeller;
+      gameInfo.hasTelekineticPower = saveTelekineticPower;
       gameInfo.hasWeakStone = saveWeakStone;
     }
 
@@ -222,6 +224,7 @@ function BalPage() {
       saveLadder = gameInfo.hasLadder;
       savePickaxe = gameInfo.hasPickaxe;
       savePropeller = gameInfo.hasPropeller;
+      saveTelekineticPower = gameInfo.hasTelekineticPower;
       saveWeakStone = gameInfo.hasWeakStone;
     }
 
@@ -572,13 +575,18 @@ function BalPage() {
         const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
         switch (name) {
           case "$background":
-            if (values.length === 3) {
+            if (values.length === 5) {
               x = tryParseInt(values[0], -1);
               y = tryParseInt(values[1], -1);
-              element = tryParseInt(values[2], -1);
-              if ((x >= 0) && (y >= 0) && (x < backData[0].length) && (y < backData.length)) {
-                if ([20, 23, 25, 80, 90, 137].includes(element)) {
-                  backData[y][x] = element;
+              w = tryParseInt(values[2], -1);
+              h = tryParseInt(values[3], -1);
+              element = tryParseInt(values[4], -1);
+              if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
+                ([20, 23, 25, 80, 90, 137].includes(element))) {
+                for (let posY = y; posY < (y + h); posY++) {
+                  for (let posX = x; posX < (x + w); posX++) {
+                    backData[posY][posX] = element;
+                  }
                 }
               }
             }
