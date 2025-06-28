@@ -1348,6 +1348,11 @@ function drawLevel(
     }
   }
 
+  function drawYellowBallSynchroniser() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawText(ctx, xc, yc, "&", "middle", "black", w2 * 0.8, w1 * 0.8, "black", 1);
+  }
+
   function drawYellowPauser(x, y) {
     let d1 = w1 / 4;
     let d2 = w2 / 1.9;
@@ -1383,6 +1388,10 @@ function drawLevel(
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "yellow");
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
+  }
+
+  function drawYellowSlowdowner() {
+      ctx.drawImage(elements.elementSlowDownYellow, xmin + (0.1 * w1), ymin, w1 * 0.8, w2 * 0.8);
   }
 
   function drawYellowStopper(x, y) {
@@ -1790,6 +1799,12 @@ function drawLevel(
           break;
         case 154:
           drawStonePattern(col, row, 2);
+          break;
+        case 155:
+          drawYellowBallSynchroniser();
+          break;
+        case 156:
+          drawYellowSlowdowner();
           break;
         case 1000:
           // For manual only (empty)

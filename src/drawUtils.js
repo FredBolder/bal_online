@@ -51,15 +51,15 @@ export function drawText(
       break;
     case "left":
       canvas.textAlign = "left";
-      canvas.textAlign = "alphabetic";
+      canvas.textBaseline = "alphabetic";
       break;
     case "right":
       canvas.textAlign = "right";
-      canvas.textAlign = "alphabetic";
+      canvas.textBaseline = "alphabetic";
       break;
     case "center":
       canvas.textAlign = "center";
-      canvas.textAlign = "alphabetic";
+      canvas.textBaseline = "alphabetic";
       break;
     default:
       break;

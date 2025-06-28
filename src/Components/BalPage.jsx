@@ -58,6 +58,7 @@ import imgGray from "../Images/gray_ball.svg";
 import imgGreen from "../Images/green_ball.svg";
 import imgOrange from "../Images/orange_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
+import imgSlowDownYellow from "../Images/slow_down_yellow.png";
 import imgWhite from "../Images/white_ball.svg";
 import imgYellow from "../Images/yellow_ball.svg";
 import actionButton from "../Images/action_button.png";
@@ -101,6 +102,7 @@ function BalPage() {
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
   const elementSad = useRef(null);
+  const elementSlowDownYellow = useRef(null);
   const elementWhite = useRef(null);
   const elementYellow = useRef(null);
   const elementHelp = useRef(null);
@@ -357,13 +359,20 @@ function BalPage() {
     }
 
     if (!gameVars.yellowPaused) {
+      if (gameVars.yellowSlowCounter > 0) {
+        gameVars.yellowSlowCounter--;
+      }
       if (gameVars.yellowCounter > 0) {
         if (gameVars.yellowCounter === 1) {
           stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
         }
         gameVars.yellowCounter--;
       } else {
-        gameVars.yellowCounter = 1;
+        if (gameVars.yellowSlowCounter > 0) {
+          gameVars.yellowCounter = 5;
+        } else {
+          gameVars.yellowCounter = 1;
+        }
         if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
           update = true;
         }
@@ -1057,6 +1066,12 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "slowDownYellow")) {
+      info.slowDownYellow = 0;
+    }
+    if (info.slowDownYellow > 0) {
+      gameVars.yellowSlowCounter = info.slowDownYellow;
+    }
     if (info.eating) {
       gameInfo.greenBalls--;
       updateGreen();
@@ -1197,7 +1212,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2004;
+        gameVars.currentLevel = 2005;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1255,6 +1270,7 @@ function BalPage() {
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
       elementSad: elementSad.current,
+      elementSlowDownYellow: elementSlowDownYellow.current,
       elementWhite: elementWhite.current,
       elementYellow: elementYellow.current,
     };
@@ -1522,6 +1538,9 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementPurple} src={imgPurple} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementSlowDownYellow} src={imgSlowDownYellow} />
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementWhite} src={imgWhite} />

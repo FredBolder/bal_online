@@ -271,5 +271,6 @@ export function initGameVars(vars) {
     vars.yellowPaused = false;
     vars.yellowPauserActive = false;
     vars.yellowStopperActive = false;
+    vars.yellowSlowCounter = 0;
 }
 
