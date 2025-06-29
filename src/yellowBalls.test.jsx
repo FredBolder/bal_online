@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
-import { moveYellowBalls } from "./yellowBalls.js";
+import { checkSynchroniser, moveYellowBalls } from "./yellowBalls.js";
 
 describe("Yellow ball", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+
+    // *** moveYellowBalls ***
 
     let input01a = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -313,6 +315,257 @@ describe("Yellow ball", () => {
             ])
         );
     });
+
+    // *** checkSynchroniser ***
+
+    let input02a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 9, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 2, 0, 9, 155, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 9, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 2, 0, 0, 155, 9, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let yellow02a = [{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 3, y: 5, direction: "right" }];
+    let result02a = checkSynchroniser(input02a, yellow02a, 4, 3, "right");
+    it("checkSynchroniser A", () => {
+        expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
+    });
+    it("checkSynchroniser A yellow", () => {
+        expect(JSON.stringify(yellow02a)).toBe(
+            JSON.stringify([{ x: 2, y: 1, direction: "none" }, { x: 5, y: 3, direction: "right" }, { x: 5, y: 4, direction: "right" }, { x: 5, y: 5, direction: "right" }])
+        );
+    });
+    it("checkSynchroniser A result", () => {
+        expect(JSON.stringify(result02a)).toBe(JSON.stringify([1, 2, 3]));
+    });
+
+    let input02b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 9, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 2, 9, 0, 155, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02b = input02b.map(row => [...row]);
+    let yellow02b = [{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 2, y: 5, direction: "right" }];
+    let result02b = checkSynchroniser(input02b, yellow02b, 4, 3, "right");
+    it("checkSynchroniser B", () => {
+        expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
+    });
+    it("checkSynchroniser B yellow", () => {
+        expect(JSON.stringify(yellow02b)).toBe(
+            JSON.stringify([{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 2, y: 5, direction: "right" }])
+        );
+    });
+    it("checkSynchroniser B result", () => {
+        expect(JSON.stringify(result02b)).toBe(JSON.stringify([]));
+    });
+
+    let input02c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 9, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 2, 0, 9, 155, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02c = input02c.map(row => [...row]);
+    let yellow02c = [{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 3, y: 5, direction: "up" }];
+    let result02c = checkSynchroniser(input02c, yellow02c, 4, 3, "right");
+    it("checkSynchroniser C", () => {
+        expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
+    });
+    it("checkSynchroniser C yellow", () => {
+        expect(JSON.stringify(yellow02c)).toBe(
+            JSON.stringify([{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 3, y: 5, direction: "up" }])
+        );
+    });
+    it("checkSynchroniser C result", () => {
+        expect(JSON.stringify(result02c)).toBe(JSON.stringify([]));
+    });
+
+    let input02d = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 155, 155, 0, 0, 1],
+        [1, 0, 0, 9, 9, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02d = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 9, 0, 0, 1],
+        [1, 0, 0, 155, 155, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let yellow02d = [{ x: 3, y: 4, direction: "up" }, { x: 4, y: 4, direction: "up" }];
+    let result02d = checkSynchroniser(input02d, yellow02d, 3, 3, "up");
+    it("checkSynchroniser D", () => {
+        expect(JSON.stringify(input02d)).toBe(JSON.stringify(expectedOutput02d));
+    });
+    it("checkSynchroniser D yellow", () => {
+        expect(JSON.stringify(yellow02d)).toBe(
+            JSON.stringify([{ x: 3, y: 2, direction: "up" }, { x: 4, y: 2, direction: "up" }])
+        );
+    });
+    it("checkSynchroniser D result", () => {
+        expect(JSON.stringify(result02d)).toBe(JSON.stringify([0, 1]));
+    });
+
+    let input02e = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 5, 0, 0, 1],
+        [1, 0, 0, 155, 155, 0, 0, 1],
+        [1, 0, 0, 9, 9, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02e = input02e.map(row => [...row]);
+    let yellow02e = [{ x: 3, y: 4, direction: "up" }, { x: 4, y: 4, direction: "up" }];
+    let result02e = checkSynchroniser(input02e, yellow02e, 3, 3, "up");
+    it("checkSynchroniser E", () => {
+        expect(JSON.stringify(input02e)).toBe(JSON.stringify(expectedOutput02e));
+    });
+    it("checkSynchroniser E yellow", () => {
+        expect(JSON.stringify(yellow02e)).toBe(
+            JSON.stringify([{ x: 3, y: 4, direction: "up" }, { x: 4, y: 4, direction: "up" }])
+        );
+    });
+    it("checkSynchroniser E result", () => {
+        expect(JSON.stringify(result02e)).toBe(JSON.stringify([]));
+    });
+
+    let input02f = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 9, 0, 0, 1],
+        [1, 0, 0, 155, 155, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02f = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 155, 155, 0, 0, 1],
+        [1, 0, 0, 9, 9, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let yellow02f = [{ x: 3, y: 2, direction: "down" }, { x: 4, y: 2, direction: "down" }];
+    let result02f = checkSynchroniser(input02f, yellow02f, 3, 3, "down");
+    it("checkSynchroniser F", () => {
+        expect(JSON.stringify(input02f)).toBe(JSON.stringify(expectedOutput02f));
+    });
+    it("checkSynchroniser F yellow", () => {
+        expect(JSON.stringify(yellow02f)).toBe(
+            JSON.stringify([{ x: 3, y: 4, direction: "down" }, { x: 4, y: 4, direction: "down" }])
+        );
+    });
+    it("checkSynchroniser F result", () => {
+        expect(JSON.stringify(result02f)).toBe(JSON.stringify([0, 1]));
+    });
+
+    let input02g = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 9, 0, 0, 1],
+        [1, 0, 0, 155, 155, 0, 0, 1],
+        [1, 0, 0, 28, 0, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02g = input02g.map(row => [...row]);
+    let yellow02g = [{ x: 3, y: 2, direction: "down" }, { x: 4, y: 2, direction: "down" }];
+    let result02g = checkSynchroniser(input02g, yellow02g, 3, 3, "down");
+    it("checkSynchroniser G", () => {
+        expect(JSON.stringify(input02g)).toBe(JSON.stringify(expectedOutput02g));
+    });
+    it("checkSynchroniser G yellow", () => {
+        expect(JSON.stringify(yellow02g)).toBe(
+            JSON.stringify([{ x: 3, y: 2, direction: "down" }, { x: 4, y: 2, direction: "down" }])
+        );
+    });
+    it("checkSynchroniser G result", () => {
+        expect(JSON.stringify(result02g)).toBe(JSON.stringify([]));
+    });
+
+    let input02h = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 2, 0, 0, 155, 9, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02h = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 0, 0, 9, 155, 0, 0, 1],
+        [1, 2, 0, 9, 155, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let yellow02h = [{ x: 5, y: 2, direction: "left" }, { x: 5, y: 3, direction: "left" }, { x: 5, y: 4, direction: "left" }, { x: 5, y: 5, direction: "left" }];
+    let result02h = checkSynchroniser(input02h, yellow02h, 4, 2, "left");
+    it("checkSynchroniser H", () => {
+        expect(JSON.stringify(input02h)).toBe(JSON.stringify(expectedOutput02h));
+    });
+    it("checkSynchroniser H yellow", () => {
+        expect(JSON.stringify(yellow02h)).toBe(
+            JSON.stringify([{ x: 3, y: 2, direction: "left" }, { x: 3, y: 3, direction: "left" }, { x: 3, y: 4, direction: "left" }, { x: 3, y: 5, direction: "left" }])
+        );
+    });
+    it("checkSynchroniser H result", () => {
+        expect(JSON.stringify(result02h)).toBe(JSON.stringify([0, 1, 2, 3]));
+    });
+
+    let input02i = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 0, 0, 5, 155, 9, 0, 1],
+        [1, 0, 0, 0, 155, 9, 0, 1],
+        [1, 2, 0, 0, 155, 9, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02i = input02i.map(row => [...row]);
+    let yellow02i = [{ x: 5, y: 2, direction: "left" }, { x: 5, y: 3, direction: "left" }, { x: 5, y: 4, direction: "left" }, { x: 5, y: 5, direction: "left" }];
+    let result02i = checkSynchroniser(input02i, yellow02i, 4, 2, "left");
+    it("checkSynchroniser I", () => {
+        expect(JSON.stringify(input02i)).toBe(JSON.stringify(expectedOutput02i));
+    });
+    it("checkSynchroniser I yellow", () => {
+        expect(JSON.stringify(yellow02i)).toBe(
+            JSON.stringify([{ x: 5, y: 2, direction: "left" }, { x: 5, y: 3, direction: "left" }, { x: 5, y: 4, direction: "left" }, { x: 5, y: 5, direction: "left" }])
+        );
+    });
+    it("checkSynchroniser I result", () => {
+        expect(JSON.stringify(result02i)).toBe(JSON.stringify([]));
+    });
+
 
     // Insert new tests here
 });

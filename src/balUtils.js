@@ -15,7 +15,7 @@ const timeBombsTime = 100;
 
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139].includes(n);
+  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155].includes(n);
 }
 
 export function charToNumber(c) {
@@ -359,7 +359,7 @@ export function charToNumber(c) {
     case "ώ":
       result = 154;
       break;
-    case "%":
+    case "&":
       result = 155;
       break;
     case "~":
@@ -1018,7 +1018,7 @@ export function numberToChar(n) {
       result = "ώ";
       break;
     case 155:
-      result = "%";
+      result = "&";
       break;
     case 156:
       result = "~";

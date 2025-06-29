@@ -26,7 +26,7 @@ function checkDirectionChanger(gameData, x, y) {
     return result;
 }
 
-function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
+export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
     let blocked = false;
     let complete = false;
     let found = false;
