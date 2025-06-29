@@ -1,7 +1,7 @@
 import { randomInt } from "./utils.js";
 
 const series1Start = 200;
-const series1End = 223;
+const series1End = 224;
 const series2Start = 300;
 const series2End = 305;
 const series3Start = 700;
@@ -104,7 +104,7 @@ export function getRandomLevel(currentLevel) {
     levels.push(i);
   }
   // Exclude levels
-  const exclude = [ 220, 221, 222, 734, 735, 736, 737, 738 ];
+  const exclude = [ 220, 221, 222, 223, 734, 735, 736, 737, 738 ];
   for (let i = 0; i < exclude.length; i++) {
     const level = exclude[i];
     const idx = levels.indexOf(level);
