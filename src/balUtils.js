@@ -3,6 +3,7 @@ import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
 import { moveOrangeBallInDirection } from "./orangeBalls.js";
+import { checkPistonsTrigger } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { isRedBall } from "./redBalls.js";
 import { updateYellowBall } from "./yellowBalls.js";
@@ -365,6 +366,18 @@ export function charToNumber(c) {
     case "~":
       result = 156;
       break;
+    case "M":
+      result = 157;
+      break;
+    case "m":
+      result = 158;
+      break;
+    case "Ù":
+      result = 159;
+      break;
+    case "Û":
+      result = 160;
+      break;
     case "|":
       result = 1000;
       break;
@@ -375,7 +388,7 @@ export function charToNumber(c) {
   return result;
 }
 
-export function checkFalling(backData, gameData, gameInfo) {
+export function checkFalling(backData, gameData, gameInfo, gameVars) {
   let forceUp = false;
   let idx = -1;
   let result = {};
@@ -392,10 +405,14 @@ export function checkFalling(backData, gameData, gameInfo) {
       if ((element2 === 22) && ([2, 4, 8, 9, 40, 93, 94].includes(element1))) {
         // lava
         result.update = true;
-        if (element1 === 2) {
-          result.sound = "pain";
-        } else {
-          result.sound = "splash1";
+        if (gameVars.soundLava !== "never") {
+          if (element1 === 2) {
+            result.sound = "pain";
+          } else {
+            if (gameVars.soundLava !== "player") {
+              result.sound = "splash1";
+            }
+          }
         }
         gameData[i][j] = 0;
         switch (element1) {
@@ -1023,6 +1040,18 @@ export function numberToChar(n) {
     case 156:
       result = "~";
       break;
+    case 157:
+      result = "M";
+      break;
+    case 158:
+      result = "m";
+      break;
+    case 159:
+      result = "Ù";
+      break;
+    case 160:
+      result = "Û";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1099,6 +1128,58 @@ function getCodePartMessage(n) {
   return msg;
 }
 
+export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
+  const element = gameData[oldY][oldX];
+
+  gameData[newY][newX] = element;
+  gameData[oldY][oldX] = 0;
+  switch (element) {
+    case 2:
+      gameInfo.blueBall.x = newX;
+      gameInfo.blueBall.y = newY;
+      break;
+    case 8:
+    case 93:
+    case 94:
+      updateObject(gameInfo.redBalls, oldX, oldY, newX, newY);
+      break;
+    case 9:
+      updateYellowBall(gameInfo.yellowBalls, oldX, oldY, newX, newY, "none");
+      break;  
+    case 40:
+      for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
+        const orangeBall = gameInfo.orangeBalls[i];
+        if ((orangeBall.x === oldX) && (orangeBall.y === oldY)) {
+          orangeBall.x = newX;
+          orangeBall.y = newY;
+          orangeBall.direction = "none";
+        }
+      }
+      break;
+    case 82:
+      gameData[newY][newX] = 83;
+      break;
+    case 98:
+      gameData[newY][newX] = 82;
+      break;
+    case 97:
+      updateObject(gameInfo.copiers, oldX, oldY, newX, newY);
+      break;  
+    case 109:
+    case 110:
+    case 111:
+    case 112:
+      updateObject(gameInfo.forces, oldX, oldY, newX, newY);
+      break;
+    case 117:
+      updateObject(gameInfo.timeBombs, oldX, oldY, newX, newY);
+      break;
+    default:
+      break;
+  }
+
+}
+
 function take(gameData, gameInfo, result, x, y) {
   switch (gameData[y][x]) {
     case 0:
@@ -1148,13 +1229,13 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 140:
       gameInfo.hasTelekineticPower = true;
-      result.message = "You have now telekinetic power! By pressing the ! key or the ! button you can move the "; 
+      result.message = "You have now telekinetic power! By pressing the ! key or the ! button you can move the ";
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
       result.message += "purple ball, moveable gray ball, orange ball, direction changer, time bomb";
       break;
     case 156:
       result.slowDownYellow = 250;
-      break;  
+      break;
     default:
       break;
   }
@@ -1848,7 +1929,7 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
           }
         }
       }
-      if (!result.player && [37, 116, 131, 136].includes(gameData[y + 1][x])) {
+      if (!result.player && [37, 116, 131, 136, 158].includes(gameData[y + 1][x])) {
         if (!hasWeight(backData, gameData, gameInfo, x, x, y + 1, false)) {
           switch (gameData[y + 1][x]) {
             case 37:
@@ -1866,6 +1947,9 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
               break;
             case 136:
               checkYellowPauser(backData, gameData, gameInfo, gameVars, true);
+              break;
+            case 158:
+              checkPistonsTrigger(backData, gameData, gameInfo, gameVars, true);
               break;
             default:
               break;

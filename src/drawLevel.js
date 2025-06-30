@@ -1,3 +1,4 @@
+import { findElementByCoordinate } from "./balUtils.js";
 import {
   drawBox,
   drawCircle,
@@ -900,6 +901,16 @@ function drawLevel(
     ctx.lineWidth = 1;
   }
 
+  function drawMusicBox() {
+    const ratio = 241 / 450;
+    const margin = 0.1;
+    const height = w2 * (1 - margin - margin);
+    const width = height * ratio;
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
+    drawBox(ctx, xmin, ymin, w1, w2, "black");
+    ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - width)), ymin + (margin * w2), width, height);
+  }
+
   function drawOneDirectionDown() {
     drawBox(ctx, xmin, ymin, w1, w2, "white");
     drawLine(ctx, xmin, ymin, xc, ymax, "white");
@@ -961,6 +972,43 @@ function drawLevel(
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.ellipse(xc + d3, yc + d3, w1 * 0.7, w2 * 0.7, 0, 1.1 * Math.PI, 1.4 * Math.PI, false);
     ctx.stroke();
+  }
+
+  function drawPistonsTrigger(x, y) {
+    let color = getFgcolor(x, y, "rgb(220,220,220)");
+    let d1 = w1 / 7;
+    let d2 = w1 / 2;
+    let d3 = w1 / 8;
+    let d4 = w1 / 6;
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "gray");
+    drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
+    drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
+  }
+
+  function drawPistonUp(x, y) {
+    let d1 = w1 * 0.1;
+    let d2 = w2 * 0.8;
+    let idx = -1;
+    let activated = false;
+
+    idx = findElementByCoordinate(x, y, gameInfo.pistons);
+    if (idx >= 0) {
+      if (gameInfo.pistons[idx].activated) {
+        activated = true;
+      }
+    }
+    drawFilledBox(ctx, xmin + d1, ymax - d2, w1 - d1 - d1, d2, "gray");
+    if (!activated) {
+      drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, (w2 * 0.1), "brown");
+    }
+    drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2 - 1, "brown");
+  }
+
+  function drawPistonUpUpperPart() {
+    let d1 = w1 * 0.1;
+
+    drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, (w2 * 0.1), "brown");
+    drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2, "brown");
   }
 
   function drawPropeller(offsetY = 0) {
@@ -1391,7 +1439,7 @@ function drawLevel(
   }
 
   function drawYellowSlowdowner() {
-      ctx.drawImage(elements.elementSlowDownYellow, xmin + (0.1 * w1), ymin, w1 * 0.8, w2 * 0.8);
+    ctx.drawImage(elements.elementSlowDownYellow, xmin + (0.1 * w1), ymin, w1 * 0.8, w2 * 0.8);
   }
 
   function drawYellowStopper(x, y) {
@@ -1805,6 +1853,18 @@ function drawLevel(
           break;
         case 156:
           drawYellowSlowdowner();
+          break;
+        case 157:
+          drawMusicBox();
+          break;
+        case 158:
+          drawPistonsTrigger(col, row);
+          break;
+        case 159:
+          drawPistonUp(col, row);
+          break;
+        case 160:
+          drawPistonUpUpperPart();
           break;
         case 1000:
           // For manual only (empty)

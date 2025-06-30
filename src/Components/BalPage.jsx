@@ -26,7 +26,6 @@ import { checkDamagedStones } from "../damagedStones.js";
 import { checkDetonator } from "../detonator.js";
 import { electricityTarget } from "../electricity.js";
 import { checkForces } from "../force.js";
-import { checkYellowPushersTrigger } from "../yellowPushers.js";
 import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../elevators.js";
 import { exportLevel, importLevel } from "../files.js";
@@ -34,8 +33,10 @@ import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars } from "../gameInfo.js";
 import { getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
-import { clearMemory, loadFromMemory, saveToMemory } from '../memory.js'
+import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
+import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
+import { checkPistonsTrigger } from "../pistons.js";
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -47,17 +48,19 @@ import { tryParseInt } from "../utils.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
 import { moveYellowBars } from "../yellowBars.js";
 import { checkYellowPauser } from "../yellowPauser.js";
+import { checkYellowPushersTrigger } from "../yellowPushers.js";
 import { checkYellowStopper } from "../yellowStopper.js";
 
+import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
-import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
-import imgLightBlue from "../Images/light_blue_ball.svg";
-import imgRed from "../Images/red_ball.svg";
 import imgGray from "../Images/gray_ball.svg";
 import imgGreen from "../Images/green_ball.svg";
+import imgLightBlue from "../Images/light_blue_ball.svg";
+import imgMusicNote from "../Images/music_note.svg";
 import imgOrange from "../Images/orange_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
+import imgRed from "../Images/red_ball.svg";
 import imgSlowDownYellow from "../Images/slow_down_yellow.png";
 import imgWhite from "../Images/white_ball.svg";
 import imgYellow from "../Images/yellow_ball.svg";
@@ -98,6 +101,7 @@ function BalPage() {
   const elementHappy = useRef(null);
   const elementLightBlue = useRef(null);
   const elementMoveButtons = useRef(null);
+  const elementMusicNote = useRef(null);
   const elementOrange = useRef(null);
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
@@ -244,6 +248,10 @@ function BalPage() {
 
     if (checkMagnets(gameInfo)) {
       playSound("magnet");
+    }
+
+    if (checkMusicBoxes(gameData, gameInfo)) {
+      update = true;
     }
 
     info = checkTrapDoors(gameData, gameInfo);
@@ -417,7 +425,12 @@ function BalPage() {
       }
     }
 
-    info = checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars);
+    info = checkPistonsTrigger(backData, gameData, gameInfo, gameVars, false);
+    if (info.updated) {
+      update = true;
+    }
+
+    info = checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, false);
     if (info.updated) {
       update = true;
     }
@@ -518,7 +531,7 @@ function BalPage() {
     }
 
     if (gameVars.skipFalling <= 0) {
-      info = checkFalling(backData, gameData, gameInfo);
+      info = checkFalling(backData, gameData, gameInfo, gameVars);
       if (info.ballX !== -1) {
         gameInfo.blueBall.x = info.ballX;
         gameInfo.blueBall.y = info.ballY;
@@ -562,11 +575,13 @@ function BalPage() {
     alert(msg);
   }
 
-  function loadLevelSettings(backData, gameVars, levelSettings) {
+  function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings) {
     let color = "";
     let element = 0;
     let h = -1;
+    let idx = -1;
     let p1 = -1;
+    let sound = "";
     let w = -1;
     let x = -1;
     let y = -1;
@@ -620,6 +635,37 @@ function BalPage() {
           case "$hint":
             gameVars.hint = value;
             break;
+          case "$notes":
+            if (values.length >= 3) {
+              x = tryParseInt(values[0], -1);
+              y = tryParseInt(values[1], -1);
+              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
+                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+                if (idx >= 0) {
+                  gameInfo.musicBoxes[idx].notes = [];
+                  gameInfo.musicBoxes[idx].noteIndex = 0;
+                  for (let note = 2; note < values.length; note++) {
+                    gameInfo.musicBoxes[idx].notes.push(values[note]);
+                  }
+                }
+              }
+            }
+            break;
+          case "$sound":
+            if (values.length === 2) {
+              element = tryParseInt(values[0], -1);
+              sound = values[1];
+              if (["default", "never", "player"].includes(sound)) {
+                switch (element) {
+                  case 22:
+                    gameVars.soundLava = sound;
+                    break;
+                  default:
+                    break;
+                }
+              }
+            }
+            break;
           case "$startlevelmessage":
             gameVars.startlevelmessage = value;
             break;
@@ -653,12 +699,11 @@ function BalPage() {
       backData = gd.backData;
       gameData = null;
       gameData = gd.gameData;
-      loadLevelSettings(backData, gameVars, data.levelSettings);
-      gameVars.laser = null;
-      gameVars.gameOver = false;
-      updateScreen();
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
+      loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
+      gameVars.laser = null;
+      gameVars.gameOver = false;
       updateScreen();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
@@ -827,13 +872,14 @@ function BalPage() {
       backData = result.backData;
       gameData = null;
       gameData = result.gameData;
-      loadLevelSettings(backData, gameVars, result.levelSettings);
-      gameVars.laser = null;
-      gameVars.gameOver = false;
-      updateScreen();
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
+      loadLevelSettings(backData, gameData, gameInfo, gameVars, result.levelSettings);
+      gameVars.laser = null;
+      gameVars.gameOver = false;
       gameVars.currentLevel = 200;
+      updateScreen();
+      updateGreen();
       setLevelNumber(gameVars.currentLevel);
       if (gameVars.startlevelmessage !== "") {
         alert(gameVars.startlevelmessage);
@@ -1212,7 +1258,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 222;
+        gameVars.currentLevel = 991;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1266,6 +1312,7 @@ function BalPage() {
       elementGreen: elementGreen.current,
       elementHappy: elementHappy.current,
       elementLightBlue: elementLightBlue.current,
+      elementMusicNote: elementMusicNote.current,
       elementOrange: elementOrange.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
@@ -1523,6 +1570,9 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementLightBlue} src={imgLightBlue} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementMusicNote} src={imgMusicNote} />
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementRed} src={imgRed} />

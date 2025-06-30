@@ -11,7 +11,7 @@ const seriesSmallEnd = 763;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2006;
+const seriesSecretEnd = 2007;
 
 export function getSecretStart() {
   return seriesSecretStart;

@@ -192,6 +192,20 @@ export function getGameInfo(backData, gameData) {
                     result.yellowPauser.x = j;
                     result.yellowPauser.y = i;
                     break;
+                case 157: {
+                    let musicBox = { x: j, y: i, notes: ["C4"], noteIndex: 0 };
+                    result.musicBoxes.push(musicBox);
+                    break;
+                }
+                case 158:
+                    result.pistonsTrigger.x = j;
+                    result.pistonsTrigger.y = i;
+                    break;
+                case 159: {
+                    let piston = { x: j, y: i, activated: false };
+                    result.pistons.push(piston);
+                    break;
+                }
                 default:
                     break;
             }
@@ -227,9 +241,13 @@ export function initGameInfo(info) {
     info.hasWeakStone = false;
     info.horizontalElevators = [];
     info.magnets = [];
+    info.musicBoxes = [];
     info.orangeBalls = [];
+    info.pistons = [];
+    info.pistonsTrigger = { x: -1, y: -1 };
     info.redBalls = [];
     info.redFish = [];
+    info.soundLava = "default";
     info.teleports = [];
     info.timeBombs = [];
     info.trapDoors = [];
@@ -258,6 +276,8 @@ export function initGameVars(vars) {
     vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;
+    vars.pistonsActivated = false;
+    vars.pistonsTriggerActive = false;
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
