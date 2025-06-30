@@ -29,31 +29,48 @@ export function checkPistonsTrigger(backData, gameData, gameInfo, gameVars, push
                     if (piston.y > 0) {
                         if (gameVars.pistonsActivated) {
                             if (!piston.activated) {
-                                stop = false;
-                                for (let j = piston.y - 1; (j >= 0) && !stop; j--) {
-                                    const element = gameData[j][piston.x];
-                                    if (element === 0) {
-                                        zeroPos = j;
-                                        stop = true;
-                                    } else {
-                                        if (!canMove(element)) {
-                                            stop = true;
+                                switch (piston.direction) {
+                                    case "up":
+                                        stop = false;
+                                        for (let j = piston.y - 1; (j >= 0) && !stop; j--) {
+                                            const element = gameData[j][piston.x];
+                                            if (element === 0) {
+                                                zeroPos = j;
+                                                stop = true;
+                                            } else {
+                                                if (!canMove(element)) {
+                                                    stop = true;
+                                                }
+                                            }
                                         }
-                                    }
-                                }
-                                if (zeroPos >= 0) {
-                                    piston.activated = true;
-                                    result.updated = true;
-                                    for (let j = zeroPos; j < piston.y - 1; j++) {
-                                        moveObject(gameData, gameInfo, piston.x, j + 1, piston.x, j);
-                                    }
-                                    gameData[piston.y - 1][piston.x] = 160;
+                                        if (zeroPos >= 0) {
+                                            piston.activated = true;
+                                            result.updated = true;
+                                            for (let j = zeroPos; j < piston.y - 1; j++) {
+                                                moveObject(gameData, gameInfo, piston.x, j + 1, piston.x, j);
+                                            }
+                                            gameData[piston.y - 1][piston.x] = 160;
+                                        }
+                                        break;
+                                    default:
+                                        break;
                                 }
                             }
                         } else {
                             if (piston.activated) {
                                 piston.activated = false;
-                                gameData[piston.y - 1][piston.x] = 0;
+                                switch (piston.direction) {
+                                    case "up":
+                                        gameData[piston.y - 1][piston.x] = 0;
+                                        if (piston.sticky) {
+                                            if (canMove(gameData[piston.y - 2][piston.x])) {
+                                                moveObject(gameData, gameInfo, piston.x, piston.y - 2, piston.x, piston.y - 1);
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 result.updated = true;
                             }
                         }

@@ -202,7 +202,7 @@ export function getGameInfo(backData, gameData) {
                     result.pistonsTrigger.y = i;
                     break;
                 case 159: {
-                    let piston = { x: j, y: i, activated: false };
+                    let piston = { x: j, y: i, activated: false, sticky: false, direction: "up" };
                     result.pistons.push(piston);
                     break;
                 }

@@ -669,6 +669,27 @@ function BalPage() {
           case "$startlevelmessage":
             gameVars.startlevelmessage = value;
             break;
+          case "$sticky":
+            if (values.length === 3) {
+              x = tryParseInt(values[0], -1);
+              y = tryParseInt(values[1], -1);
+              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
+                idx = findElementByCoordinate(x, y, gameInfo.pistons);
+                if (idx >= 0) {
+                  switch (values[2]) {
+                    case "no":
+                      gameInfo.pistons[idx].sticky = false;
+                      break;
+                    case "yes":
+                      gameInfo.pistons[idx].sticky = true;
+                      break;
+                    default:
+                      break;
+                  }
+                }
+              }
+            }
+            break;
           default:
             break;
         }
