@@ -1,3 +1,12 @@
+function rotateXY(obj, rows) {
+  let x = obj.x;
+  let y = obj.y;
+  if ((x >= 0) && (y >= 0)) {
+    obj.y = x;
+    obj.x = rows - (y + 1);
+  }
+}
+
 export function rotateGame(backData, gameData, gameInfo) {
   let rotated = false;
   let newBackData = [];
@@ -156,6 +165,30 @@ export function rotateGame(backData, gameData, gameInfo) {
             case 152:
               gd = 150;
               break;
+            case 159:
+              gd = 165;
+              break;
+            case 161:
+              gd = 163;
+              break;
+            case 163:
+              gd = 159;
+              break;
+            case 165:
+              gd = 161;
+              break;
+            case 160:
+              gd = 166;
+              break;
+            case 162:
+              gd = 164;
+              break;
+            case 164:
+              gd = 160;
+              break;
+            case 166:
+              gd = 162;
+              break;
             default:
               break;
           }
@@ -194,77 +227,21 @@ export function rotateGame(backData, gameData, gameInfo) {
       }
 
       // Blue ball
-      x = gameInfo.blueBall.x;
-      y = gameInfo.blueBall.y;
-      gameInfo.blueBall.y = x;
-      gameInfo.blueBall.x = rows - (y + 1);
+      rotateXY(gameInfo.blueBall, rows);
 
-      // Red balls
-      for (let i = 0; i < gameInfo.redBalls.length; i++) {
-        x = gameInfo.redBalls[i].x;
-        y = gameInfo.redBalls[i].y;
-        gameInfo.redBalls[i].y = x;
-        gameInfo.redBalls[i].x = rows - (y + 1);
+      // Copiers
+      for (let i = 0; i < gameInfo.copiers.length; i++) {
+        rotateXY(gameInfo.copiers[i], rows);
       }
 
-      // Teleports
-      for (let i = 0; i < gameInfo.teleports.length; i++) {
-        x = gameInfo.teleports[i].x;
-        y = gameInfo.teleports[i].y;
-        gameInfo.teleports[i].y = x;
-        gameInfo.teleports[i].x = rows - (y + 1);
+      // Damaged stones
+      for (let i = 0; i < gameInfo.damagedStones.length; i++) {
+        rotateXY(gameInfo.damagedStones[i], rows);
       }
 
-      // Yellow balls
-      for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
-        x = gameInfo.yellowBalls[i].x;
-        y = gameInfo.yellowBalls[i].y;
-        gameInfo.yellowBalls[i].y = x;
-        gameInfo.yellowBalls[i].x = rows - (y + 1);
-        let data = gameInfo.yellowBalls[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          default:
-            break;
-        }
-        gameInfo.yellowBalls[i].direction = data;
-      }
-
-      // Yellow bars
-      for (let i = 0; i < gameInfo.yellowBars.length; i++) {
-        x = gameInfo.yellowBars[i].x;
-        y = gameInfo.yellowBars[i].y;
-        gameInfo.yellowBars[i].y = x;
-        gameInfo.yellowBars[i].x = rows - (y + 1);
-        let data = gameInfo.yellowBars[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          default:
-            break;
-        }
-        gameInfo.yellowBars[i].direction = data;
+      // Electricity
+      for (let i = 0; i < gameInfo.electricity.length; i++) {
+        rotateXY(gameInfo.electricity[i], rows);
       }
 
       // Elevators
@@ -301,12 +278,14 @@ export function rotateGame(backData, gameData, gameInfo) {
         gameInfo.elevators.push(newVerElevators[i]);
       }
 
+      // Elevator entrances and exits
+      for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
+        rotateXY(gameInfo.elevatorInOuts[i], rows);
+      }
+
       // Forces
       for (let i = 0; i < gameInfo.forces.length; i++) {
-        x = gameInfo.forces[i].x;
-        y = gameInfo.forces[i].y;
-        gameInfo.forces[i].y = x;
-        gameInfo.forces[i].x = rows - (y + 1);
+        rotateXY(gameInfo.forces[i], rows);
         let data = gameInfo.forces[i].direction;
         switch (data) {
           case 2:
@@ -327,14 +306,152 @@ export function rotateGame(backData, gameData, gameInfo) {
         gameInfo.forces[i].direction = data;
       }
 
+      // Magnets
+      for (let i = 0; i < gameInfo.magnets.length; i++) {
+        rotateXY(gameInfo.magnets[i], rows);
+      }
+
+      // Music boxes
+      for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+        rotateXY(gameInfo.musicBoxes[i], rows);
+      }
+
+      // Orange balls
+      for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
+        rotateXY(gameInfo.orangeBalls[i], rows);
+        let data = gameInfo.orangeBalls[i].direction;
+        switch (data) {
+          case "down":
+            data = "left";
+            break;
+          case "left":
+            data = "up";
+            break;
+          case "up":
+            data = "right";
+            break;
+          case "right":
+            data = "down";
+            break;
+          case "leftDown":
+            data = "leftUp";
+            break;
+          case "leftUp":
+            data = "rightUp";
+            break;
+          case "rightDown":
+            data = "leftDown";
+            break;
+          case "rightUp":
+            data = "rightDown";
+            break;
+          default:
+            break;
+        }
+        gameInfo.orangeBalls[i].direction = data;
+      }
+
+      // Pistons
+      for (let i = 0; i < gameInfo.pistons.length; i++) {
+        rotateXY(gameInfo.pistons[i], rows);
+        let data = gameInfo.pistons[i].direction;
+        switch (data) {
+          case "down":
+            data = "left";
+            break;
+          case "left":
+            data = "up";
+            break;
+          case "up":
+            data = "right";
+            break;
+          case "right":
+            data = "down";
+            break;
+          default:
+            break;
+        }
+        gameInfo.pistons[i].direction = data;
+      }
+
+      // Red balls
+      for (let i = 0; i < gameInfo.redBalls.length; i++) {
+        rotateXY(gameInfo.redBalls[i], rows);
+      }
+
+      // Red fish
+      for (let i = 0; i < gameInfo.redFish.length; i++) {
+        rotateXY(gameInfo.redFish[i], rows);
+      }
+
+      // Teleports
+      for (let i = 0; i < gameInfo.teleports.length; i++) {
+        rotateXY(gameInfo.teleports[i], rows);
+      }
+
       // Time bombs
       for (let i = 0; i < gameInfo.timeBombs.length; i++) {
-        const timeBomb = gameInfo.timeBombs[i];
-        x = timeBomb.x;
-        y = timeBomb.y;
-        timeBomb.y = x;
-        timeBomb.x = rows - (y + 1);        
+        rotateXY(gameInfo.timeBombs[i], rows);
       }
+
+      // Trap doors
+      for (let i = 0; i < gameInfo.trapDoors.length; i++) {
+        rotateXY(gameInfo.trapDoors[i], rows);
+      }
+
+      // Yellow balls
+      for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
+        rotateXY(gameInfo.yellowBalls[i], rows);
+        let data = gameInfo.yellowBalls[i].direction;
+        switch (data) {
+          case "down":
+            data = "left";
+            break;
+          case "left":
+            data = "up";
+            break;
+          case "up":
+            data = "right";
+            break;
+          case "right":
+            data = "down";
+            break;
+          default:
+            break;
+        }
+        gameInfo.yellowBalls[i].direction = data;
+      }
+
+      // Yellow bars
+      for (let i = 0; i < gameInfo.yellowBars.length; i++) {
+        rotateXY(gameInfo.yellowBars[i], rows);
+        let data = gameInfo.yellowBars[i].direction;
+        switch (data) {
+          case "down":
+            data = "left";
+            break;
+          case "left":
+            data = "up";
+            break;
+          case "up":
+            data = "right";
+            break;
+          case "right":
+            data = "down";
+            break;
+          default:
+            break;
+        }
+        gameInfo.yellowBars[i].direction = data;
+      }
+
+      // Triggers, detonators etc
+      rotateXY(gameInfo.pistonsTrigger, rows);
+      rotateXY(gameInfo.detonator, rows);
+      rotateXY(gameInfo.travelGate, rows);
+      rotateXY(gameInfo.yellowBallPushersTrigger, rows);
+      rotateXY(gameInfo.yellowStopper, rows);
+      rotateXY(gameInfo.yellowPauser, rows);
     }
   }
   return rotated;

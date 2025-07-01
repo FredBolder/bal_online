@@ -201,8 +201,28 @@ export function getGameInfo(backData, gameData) {
                     result.pistonsTrigger.x = j;
                     result.pistonsTrigger.y = i;
                     break;
-                case 159: {
-                    let piston = { x: j, y: i, activated: false, sticky: false, direction: "up" };
+                case 159:
+                case 161:
+                case 163:
+                case 165: {
+                    let direction = "up";
+                    switch (gameData[i][j]) {
+                        case 159:
+                            direction = "up";
+                            break;
+                        case 161:
+                            direction = "down";
+                            break;
+                        case 163:
+                            direction = "left";
+                            break;
+                        case 165:
+                            direction = "right";
+                            break;
+                        default:
+                            break;
+                    }
+                    let piston = { x: j, y: i, activated: false, sticky: false, direction: direction };
                     result.pistons.push(piston);
                     break;
                 }

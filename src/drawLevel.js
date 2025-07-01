@@ -974,29 +974,60 @@ function drawLevel(
     ctx.stroke();
   }
 
-  function drawPiston(x, y) {
+  function drawPiston(x, y, direction) {
     let d1 = w1 * 0.1;
     let d2 = w2 * 0.8;
+    let d3 = w2 * 0.1;
     let idx = -1;
     let activated = false;
-    let direction = "up";
     let sticky = false;
+    const textHeight = w2 * 0.7;
+    const textMaxWidth = w1 * 0.7;
 
     idx = findElementByCoordinate(x, y, gameInfo.pistons);
     if (idx >= 0) {
       activated = gameInfo.pistons[idx].activated;
-      direction = gameInfo.pistons[idx].direction;
       sticky = gameInfo.pistons[idx].sticky;
     }
     switch (direction) {
-      case "up":
-        drawFilledBox(ctx, xmin + d1, ymax - d2, w1 - d1 - d1, d2, "gray");
+      case "down":
+        drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d2, "gray");
         if (!activated) {
-          drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, (w2 * 0.1), "brown");
+          drawFilledBox(ctx, xmin + d1, ymax - d3 + 0.5, w1 - d1 - d1, d3 + 0.5, "brown");
         }
-        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2 - 1, "brown");
+        drawFilledBox(ctx, xc - d1, ymin + d2, d1 + d1, w2 - d2, "brown");
         if (sticky) {
-          drawText(ctx, xc, yc + (w2 * 0.1), "S", "middle", "black", w2 * 0.7, w1 * 0.7, "black", 1);
+          drawText(ctx, xc, yc - d3, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
+        break;
+      case "left":
+        drawFilledBox(ctx, xmax - d2 + 1, ymin, d2, w2, "gray");
+        if (!activated) {
+          drawFilledBox(ctx, xmin, ymin + d1, d3, w2 - d1 - d1, "brown");
+        }
+        drawFilledBox(ctx, xmin, yc - d1, w1 - d2 - 0.5, d1 + d1, "brown");
+        if (sticky) {
+          drawText(ctx, xc + d3, yc, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
+        break;
+      case "right":
+        drawFilledBox(ctx, xmin, ymin, d2, w2, "gray");
+        if (!activated) {
+          drawFilledBox(ctx, xmax - d3 + 1, ymin + d1, d3 + 0.5, w2 - d1 - d1, "brown");
+        }
+        drawFilledBox(ctx, xmin + d2 + 0.5, yc - d1, w1 - d2, d1 + d1, "brown");
+        if (sticky) {
+          drawText(ctx, xc - d3, yc, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
+        break;
+      case "up":
+        drawFilledBox(ctx, xmin + d1, ymax - d2 + 1, w1 - d1 - d1, d2, "gray");
+        if (!activated) {
+          drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3, "brown");
+        }
+        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2, "brown");
+        if (sticky) {
+          drawText(ctx, xc, yc + d3, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
       default:
@@ -1004,18 +1035,25 @@ function drawLevel(
     }
   }
 
-  function drawPistonExtendedPart(x, y) {
+  function drawPistonExtendedPart(direction) {
     let d1 = w1 * 0.1;
-    let direction = "up";
-    let idx = -1;
+    let d2 = w2 * 0.1;
 
-    idx = findElementByCoordinate(x, y, gameInfo.pistons);
-    if (idx >= 0) {
-      direction = gameInfo.pistons[idx].direction;
-    }
     switch (direction) {
+      case "down":
+        drawFilledBox(ctx, xmin + d1, ymax - d2 + 0.5, w1 - d1 - d1, d2 + 0.5, "brown");
+        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2, "brown");
+        break;
+      case "left":
+        drawFilledBox(ctx, xmin, ymin + d1, d2, w2 - d1 - d1, "brown");
+        drawFilledBox(ctx, xmin, yc - d1, w1, d1 + d1, "brown");
+        break;
+      case "right":
+        drawFilledBox(ctx, xmax - d2 + 1, ymin + d1, d2 + 0.5, w2 - d1 - d1, "brown");
+        drawFilledBox(ctx, xmin, yc - d1, w1, d1 + d1, "brown");
+        break;
       case "up":
-        drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, (w2 * 0.1), "brown");
+        drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d2, "brown");
         drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2, "brown");
         break;
       default:
@@ -1884,10 +1922,28 @@ function drawLevel(
           drawPistonsTrigger(col, row);
           break;
         case 159:
-          drawPiston(col, row);
+          drawPiston(col, row, "up");
           break;
         case 160:
-          drawPistonExtendedPart(col, row);
+          drawPistonExtendedPart("up");
+          break;
+        case 161:
+          drawPiston(col, row, "down");
+          break;
+        case 162:
+          drawPistonExtendedPart("down");
+          break;
+        case 163:
+          drawPiston(col, row, "left");
+          break;
+        case 164:
+          drawPistonExtendedPart("left");
+          break;
+        case 165:
+          drawPiston(col, row, "right");
+          break;
+        case 166:
+          drawPistonExtendedPart("right");
           break;
         case 1000:
           // For manual only (empty)

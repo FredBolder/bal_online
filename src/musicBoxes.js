@@ -1,11 +1,13 @@
 import { moveObject } from "./balUtils.js";
 import { playNote } from "./music.js";
+import { getSettings } from "./settings.js";
 
 export function checkMusicBoxes(gameData, gameInfo) {
     let element1 = -1;
     let element2 = -1;
     let note = "";
     let update = false;
+    const music = getSettings().music;
 
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
@@ -24,8 +26,8 @@ export function checkMusicBoxes(gameData, gameInfo) {
                 }
                 note = musicBox.notes[musicBox.noteIndex];
                 musicBox.noteIndex++;
-                if ((note !== "") && (note !== "-")) {
-                    playNote(note, 5, 700);
+                if (music && (note !== "") && (note !== "-")) {
+                    playNote(note, 5, 1000);
                 }
             }
         }

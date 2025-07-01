@@ -93,6 +93,7 @@ function BalPage() {
   const canvas = useRef(null);
   const cbArrowButtons = useRef(null);
   const cbGraphics = useRef(null);
+  const cbMusic = useRef(null);
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
   const elementDiving = useRef(null);
@@ -632,6 +633,18 @@ function BalPage() {
               }
             }
             break;
+          case "$direction":
+            if (values.length === 3) {
+              x = tryParseInt(values[0], -1);
+              y = tryParseInt(values[1], -1);
+              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length) && (["down", "left", "right", "up"].includes(values[2]))) {
+                idx = findElementByCoordinate(x, y, gameInfo.pistons);
+                if (idx >= 0) {
+                  gameInfo.pistons[idx].direction = values[2];
+                }
+              }
+            }
+            break;
           case "$hint":
             gameVars.hint = value;
             break;
@@ -975,6 +988,7 @@ function BalPage() {
     setSettings(
       cbArrowButtons.current.checked,
       cbQuestions.current.checked,
+      cbMusic.current.checked,
       cbGraphics.current.checked,
       cbSound.current.checked
     );
@@ -1273,13 +1287,14 @@ function BalPage() {
       loadSettings();
       cbArrowButtons.current.checked = getSettings().arrowButtons;
       cbQuestions.current.checked = getSettings().lessQuestions;
+      cbMusic.current.checked = getSettings().music;
       cbGraphics.current.checked = getSettings().nicerGraphics;
       cbSound.current.checked = getSettings().sound;
       updateMoveButtons();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 991;
+        gameVars.currentLevel = 2007;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1511,6 +1526,17 @@ function BalPage() {
                     onChange={handleChangeSettings}
                   />
                   <label htmlFor="sound">Sound</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    id="music"
+                    ref={cbMusic}
+                    name="music"
+                    value="music"
+                    onChange={handleChangeSettings}
+                  />
+                  <label htmlFor="music">Music</label>
                 </div>
                 <div>
                   <input

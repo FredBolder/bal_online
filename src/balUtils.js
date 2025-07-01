@@ -378,6 +378,24 @@ export function charToNumber(c) {
     case "Û":
       result = 160;
       break;
+    case "Ì":
+      result = 161;
+      break;
+    case "Î":
+      result = 162;
+      break;
+    case "Ö":
+      result = 163;
+      break;
+    case "Ô":
+      result = 164;
+      break;
+    case "Ë":
+      result = 165;
+      break;
+    case "Ê":
+      result = 166;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1051,6 +1069,24 @@ export function numberToChar(n) {
       break;
     case 160:
       result = "Û";
+      break;
+    case 161:
+      result = "Ì";
+      break;
+    case 162:
+      result = "Î";
+      break;
+    case 163:
+      result = "Ö";
+      break;
+    case 164:
+      result = "Ô";
+      break;
+    case 165:
+      result = "Ë";
+      break;
+    case 166:
+      result = "Ê";
       break;
     case 1000:
       // For manual only
