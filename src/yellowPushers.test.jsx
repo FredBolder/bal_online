@@ -15,6 +15,7 @@ describe("Yellow ball pushers", () => {
 
     let gameInfo01a = {
         ...defaultGameInfo,
+        blueBall: { x: 7, y: 3 },
         yellowBallPushers: [{ x: 4, y: 2 }],
         yellowBallPushersTrigger: { x: 7, y: 4 },
         yellowBalls: [{ x: 3, y: 2, direction: "none" }, { x: 5, y: 2, direction: "none" }],
@@ -49,6 +50,7 @@ describe("Yellow ball pushers", () => {
 
     let gameInfo01b = {
         ...defaultGameInfo,
+        blueBall: { x: 7, y: 4 },
         yellowBallPushers: [{ x: 4, y: 3 }],
         yellowBallPushersTrigger: { x: 7, y: 5 },
         yellowBalls: [{ x: 4, y: 2, direction: "none" }, { x: 4, y: 4, direction: "none" }],
@@ -85,6 +87,7 @@ describe("Yellow ball pushers", () => {
 
     let gameInfo01c = {
         ...defaultGameInfo,
+        blueBall: { x: 7, y: 3 },
         forces: [{ x: 1, y: 2, direction: 6 }],
         yellowBallPushers: [{ x: 4, y: 2 }],
         yellowBallPushersTrigger: { x: 7, y: 4 },
@@ -120,6 +123,7 @@ describe("Yellow ball pushers", () => {
 
     let gameInfo01d = {
         ...defaultGameInfo,
+        blueBall: { x: 7, y: 3 },
         yellowBallPushers: [{ x: 4, y: 2 }],
         yellowBallPushersTrigger: { x: 7, y: 4 },
         yellowBalls: [{ x: 3, y: 2, direction: "up" }, { x: 5, y: 2, direction: "down" }],

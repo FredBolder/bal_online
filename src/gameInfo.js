@@ -222,8 +222,9 @@ export function getGameInfo(backData, gameData) {
                         default:
                             break;
                     }
-                    let piston = { x: j, y: i, activated: false, sticky: false, direction: direction };
+                    let piston = { x: j, y: i, activated: false, sticky: false, direction: direction, mode: "normal" };
                     result.pistons.push(piston);
+                    result.hasPiston = true;
                     break;
                 }
                 default:
@@ -254,6 +255,7 @@ export function initGameInfo(info) {
     info.hasLadder = false;
     info.hasMirror = false;
     info.hasPickaxe = false;
+    info.hasPiston = false;
     info.hasPropeller = false;
     info.hasTelekineticPower = false;
     info.hasTravelGate = false;
@@ -297,6 +299,12 @@ export function initGameVars(vars) {
     vars.laser = null;
     vars.orangeCounter = 0;
     vars.pistonsActivated = false;
+    vars.pistonsRepeatFastModeActive = false;
+    vars.pistonsRepeatFastModeCounter = 0;
+    vars.pistonsRepeatFastModeCountTo = 15;
+    vars.pistonsRepeatSlowModeActive = false;
+    vars.pistonsRepeatSlowModeCounter = 0;
+    vars.pistonsRepeatSlowModeCountTo = 1;
     vars.pistonsTriggerActive = false;
     vars.redCounter = 0;
     vars.refreshCounter = 0;

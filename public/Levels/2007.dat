@@ -1,4 +1,6 @@
 $sticky: 3, 6, yes
+$pistonmode: 3, 6, repeatfast
+$pistonmode: 6, 6, repeatslow
 1111111111
 1       31
 1        1

@@ -36,7 +36,7 @@ import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
-import { checkPistonsTrigger } from "../pistons.js";
+import { checkPistonsTrigger, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -426,9 +426,27 @@ function BalPage() {
       }
     }
 
-    info = checkPistonsTrigger(backData, gameData, gameInfo, gameVars, false);
-    if (info.updated) {
-      update = true;
+    if (gameInfo.hasPiston) {
+      info = checkPistonsTrigger(backData, gameData, gameInfo, gameVars, false);
+      if (info.updated) {
+        update = true;
+      }
+      if (gameVars.pistonsRepeatFastModeCounter > 0) {
+        gameVars.pistonsRepeatFastModeCounter--;
+      } else {
+        gameVars.pistonsRepeatFastModeCounter = gameVars.pistonsRepeatFastModeCountTo;
+        if (pistonsRepeatFast(gameData, gameInfo, gameVars)) {
+          update = true;
+        }
+        if (gameVars.pistonsRepeatSlowModeCounter > 0) {
+          gameVars.pistonsRepeatSlowModeCounter--;
+        } else {
+          gameVars.pistonsRepeatSlowModeCounter = gameVars.pistonsRepeatSlowModeCountTo;
+          if (pistonsRepeatSlow(gameData, gameInfo, gameVars)) {
+            update = true;
+          }
+        }
+      }
     }
 
     info = checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, false);
@@ -633,14 +651,14 @@ function BalPage() {
               }
             }
             break;
-          case "$direction":
+          case "$pistonmode":
             if (values.length === 3) {
               x = tryParseInt(values[0], -1);
               y = tryParseInt(values[1], -1);
-              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length) && (["down", "left", "right", "up"].includes(values[2]))) {
+              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length) && (["normal", "repeatfast", "repeatslow"].includes(values[2]))) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
-                  gameInfo.pistons[idx].direction = values[2];
+                  gameInfo.pistons[idx].mode = values[2];
                 }
               }
             }
@@ -1177,7 +1195,11 @@ function BalPage() {
       }
     }
     if (info.sound !== "") {
-      await playSound(info.sound);
+      if (info.message === "") {
+        playSound(info.sound);
+      } else {
+        await playSound(info.sound);
+      }
     }
     if (!Object.prototype.hasOwnProperty.call(info, "message")) {
       info.message = "";
@@ -1294,7 +1316,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2007;
+        gameVars.currentLevel = 991;
       }
       initLevel(gameVars.currentLevel);
     }
