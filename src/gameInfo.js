@@ -193,7 +193,7 @@ export function getGameInfo(backData, gameData) {
                     result.yellowPauser.y = i;
                     break;
                 case 157: {
-                    let musicBox = { x: j, y: i, notes: ["C4"], noteIndex: 0 };
+                    let musicBox = { x: j, y: i, notes: ["C4"], noteIndex: 0, instrument: "", volume: 90 };
                     result.musicBoxes.push(musicBox);
                     break;
                 }

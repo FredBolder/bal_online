@@ -57,6 +57,10 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
                 }
                 await writable.write(`${line}\n`);
             }
+            if ((musicBox.instrument !== "") || (musicBox.volume !== 90)) {
+                line = `$instrument: ${musicBox.x}, ${musicBox.y}, ${musicBox.instrument}, ${musicBox.volume}`;
+                await writable.write(`${line}\n`);
+            }
         }
 
         for (let i = 0; i < gameInfo.pistons.length; i++) {

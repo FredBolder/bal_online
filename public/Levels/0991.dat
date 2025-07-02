@@ -1,4 +1,6 @@
+$instrument: 88, 21, kalimba, 90
 $notes: 88, 21, D4, G4, G4, A4, B4, G4, D4, A4, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -, D4, G4, G4, A4, B4, G4, D4, A4, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -  
+$instrument: 88, 8, , 50
 $notes: 88, 8, -, G2, -, -, D3, -, -, A2, -, -, E3, -, -, A2, -, -, E3, -, -, D3, -, -, G2, -, -, G2, -, -, D3, -, -, A2, -, -, E3, -, -, A2, -, -, E3, -, -, D3, E3, F#3, G3, -
 $sound: 22, player
 $sticky: 86, 6, yes

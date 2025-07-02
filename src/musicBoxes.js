@@ -27,7 +27,7 @@ export function checkMusicBoxes(gameData, gameInfo) {
                 note = musicBox.notes[musicBox.noteIndex];
                 musicBox.noteIndex++;
                 if (music && (note !== "") && (note !== "-")) {
-                    playNote(note, 5, 1000);
+                    playNote(musicBox.instrument, musicBox.volume / 100, note);
                 }
             }
         }

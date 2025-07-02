@@ -593,10 +593,13 @@ function BalPage() {
     let color = "";
     let element = 0;
     let group = -1;
+    let instrument = "kalimba";
     let h = -1;
     let idx = -1;
     let p1 = -1;
     let sound = "";
+    let validXY = false;
+    let volume = 90;
     let w = -1;
     let x = -1;
     let y = -1;
@@ -612,11 +615,14 @@ function BalPage() {
         const name = setting.slice(0, p1).toLowerCase().trim();
         const value = setting.slice(p1 + 1).trim();
         const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+        if (values.length >= 2) {
+          x = tryParseInt(values[0], -1);
+          y = tryParseInt(values[1], -1);
+          validXY = ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length));
+        }
         switch (name) {
           case "$background":
             if (values.length === 5) {
-              x = tryParseInt(values[0], -1);
-              y = tryParseInt(values[1], -1);
               w = tryParseInt(values[2], -1);
               h = tryParseInt(values[3], -1);
               element = tryParseInt(values[4], -1);
@@ -633,8 +639,6 @@ function BalPage() {
           case "$bgcolor":
           case "$fgcolor":
             if (values.length === 5) {
-              x = tryParseInt(values[0], -1);
-              y = tryParseInt(values[1], -1);
               w = tryParseInt(values[2], -1);
               h = tryParseInt(values[3], -1);
               color = values[4];
@@ -649,10 +653,8 @@ function BalPage() {
             break;
           case "$group":
             if (values.length === 3) {
-              x = tryParseInt(values[0], -1);
-              y = tryParseInt(values[1], -1);
               group = tryParseInt(values[2], -1);
-              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length) && (group >= 1) && (group <= 10)) {
+              if (validXY && (group >= 1) && (group <= 10)) {
                 element = gameData[y][x];
                 switch (element) {
                   case 158:
@@ -678,9 +680,7 @@ function BalPage() {
             break;
           case "$pistonmode":
             if (values.length === 3) {
-              x = tryParseInt(values[0], -1);
-              y = tryParseInt(values[1], -1);
-              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length) && (["normal", "repeatfast", "repeatslow"].includes(values[2]))) {
+              if (validXY && (["normal", "repeatfast", "repeatslow"].includes(values[2]))) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
                   gameInfo.pistons[idx].mode = values[2];
@@ -691,11 +691,22 @@ function BalPage() {
           case "$hint":
             gameVars.hint = value;
             break;
+          case "$instrument":
+            if (values.length >= 4) {
+              instrument = values[2];
+              volume = tryParseInt(values[3], -1);
+              if (validXY && (volume >= 0) && (volume <= 100)) {
+                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+                if (idx >= 0) {
+                  gameInfo.musicBoxes[idx].instrument = instrument;
+                  gameInfo.musicBoxes[idx].volume = volume;
+                }
+              }
+            }
+            break;
           case "$notes":
             if (values.length >= 3) {
-              x = tryParseInt(values[0], -1);
-              y = tryParseInt(values[1], -1);
-              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
+              if (validXY) {
                 idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
                 if (idx >= 0) {
                   gameInfo.musicBoxes[idx].notes = [];
@@ -727,9 +738,7 @@ function BalPage() {
             break;
           case "$sticky":
             if (values.length === 3) {
-              x = tryParseInt(values[0], -1);
-              y = tryParseInt(values[1], -1);
-              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
+              if (validXY) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
                   switch (values[2]) {
@@ -1341,7 +1350,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2007;
+        gameVars.currentLevel = 991;
       }
       initLevel(gameVars.currentLevel);
     }
