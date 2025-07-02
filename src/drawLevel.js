@@ -998,7 +998,7 @@ function drawLevel(
     }
     switch (direction) {
       case "down":
-        drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d2, "gray");
+        drawFilledBox(ctx, xmin, ymin, w1, d2, "gray");
         if (!activated) {
           drawFilledBox(ctx, xmin + d1, ymax - d3 + 0.5, w1 - d1 - d1, d3 + 0.5, "brown");
         }
@@ -1022,7 +1022,7 @@ function drawLevel(
         drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         break;
       case "up":
-        drawFilledBox(ctx, xmin + d1, ymax - d2 + 1, w1 - d1 - d1, d2, "gray");
+        drawFilledBox(ctx, xmin, ymax - d2 + 1, w1, d2, "gray");
         if (!activated) {
           drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3, "brown");
         }

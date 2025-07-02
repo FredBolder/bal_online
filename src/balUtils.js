@@ -1973,9 +1973,9 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
       }
       if (!result.player && [37, 116, 131, 136, 158].includes(gameData[y + 1][x])) {
         if (!hasWeight(backData, gameData, gameInfo, x, x, y + 1, false)) {
+          result.player = true;
           switch (gameData[y + 1][x]) {
             case 37:
-              result.player = true;
               info = checkDetonator(backData, gameData, gameInfo, true);
               if (info.explosion) {
                 result.sound = "explosion";
