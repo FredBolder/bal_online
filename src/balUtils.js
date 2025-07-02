@@ -3,7 +3,7 @@ import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
 import { moveOrangeBallInDirection } from "./orangeBalls.js";
-import { checkPistonsTrigger } from "./pistons.js";
+import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { isRedBall } from "./redBalls.js";
 import { updateYellowBall } from "./yellowBalls.js";
@@ -409,6 +409,7 @@ export function charToNumber(c) {
 export function checkFalling(backData, gameData, gameInfo, gameVars) {
   let forceUp = false;
   let idx = -1;
+  let skip = false;
   let result = {};
   result.update = false;
   result.ballX = -1;
@@ -517,22 +518,27 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
       if (element2 === 0 &&
         (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, element1)) ||
           (((element1 === 4) || (element1 === 40)) && !forceUp))) {
-        result.update = true;
-        if (element1 === 2) {
-          result.ballX = j;
-          result.ballY = i + 1;
+        skip = ((element1 === 2) && (gameVars.skipFalling > 0));
+        if (skip) {
+          gameVars.skipFalling--;
+        } else {
+          result.update = true;
+          if (element1 === 2) {
+            result.ballX = j;
+            result.ballY = i + 1;
+          }
+          if (isRedBall(element1)) {
+            updateObject(gameInfo.redBalls, j, i, j, i + 1);
+          }
+          if (element1 === 40) {
+            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
+          }
+          if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
+            result.sound = "splash1";
+          }
+          gameData[i + 1][j] = gameData[i][j];
+          gameData[i][j] = 0;
         }
-        if (isRedBall(element1)) {
-          updateObject(gameInfo.redBalls, j, i, j, i + 1);
-        }
-        if (element1 === 40) {
-          moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
-        }
-        if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
-          result.sound = "splash1";
-        }
-        gameData[i + 1][j] = gameData[i][j];
-        gameData[i][j] = 0;
       }
     }
   }
@@ -1181,7 +1187,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       break;
     case 9:
       updateYellowBall(gameInfo.yellowBalls, oldX, oldY, newX, newY, "none");
-      break;  
+      break;
     case 40:
       for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
         const orangeBall = gameInfo.orangeBalls[i];
@@ -1200,7 +1206,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       break;
     case 97:
       updateObject(gameInfo.copiers, oldX, oldY, newX, newY);
-      break;  
+      break;
     case 109:
     case 110:
     case 111:
@@ -1985,7 +1991,7 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
               checkYellowPauser(backData, gameData, gameInfo, gameVars, true);
               break;
             case 158:
-              checkPistonsTrigger(backData, gameData, gameInfo, gameVars, true);
+              checkPistonsTriggers(backData, gameData, gameInfo, gameVars, true);
               break;
             default:
               break;

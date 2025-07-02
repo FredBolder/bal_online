@@ -980,14 +980,21 @@ function drawLevel(
     let d3 = w2 * 0.1;
     let idx = -1;
     let activated = false;
+    let group = 0;
     let sticky = false;
-    const textHeight = w2 * 0.7;
-    const textMaxWidth = w1 * 0.7;
+    let text = "";
+    const textHeight = w2 * 0.6;
+    const textMaxWidth = w1 * 0.6;
 
     idx = findElementByCoordinate(x, y, gameInfo.pistons);
     if (idx >= 0) {
       activated = gameInfo.pistons[idx].activated;
+      group = gameInfo.pistons[idx].group;
       sticky = gameInfo.pistons[idx].sticky;
+    }
+    text = group.toString();
+    if (sticky) {
+      text += "S";
     }
     switch (direction) {
       case "down":
@@ -996,9 +1003,7 @@ function drawLevel(
           drawFilledBox(ctx, xmin + d1, ymax - d3 + 0.5, w1 - d1 - d1, d3 + 0.5, "brown");
         }
         drawFilledBox(ctx, xc - d1, ymin + d2, d1 + d1, w2 - d2, "brown");
-        if (sticky) {
-          drawText(ctx, xc, yc - d3, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
-        }
+        drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         break;
       case "left":
         drawFilledBox(ctx, xmax - d2 + 1, ymin, d2, w2, "gray");
@@ -1006,9 +1011,7 @@ function drawLevel(
           drawFilledBox(ctx, xmin, ymin + d1, d3, w2 - d1 - d1, "brown");
         }
         drawFilledBox(ctx, xmin, yc - d1, w1 - d2 - 0.5, d1 + d1, "brown");
-        if (sticky) {
-          drawText(ctx, xc + d3, yc, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
-        }
+        drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         break;
       case "right":
         drawFilledBox(ctx, xmin, ymin, d2, w2, "gray");
@@ -1016,9 +1019,7 @@ function drawLevel(
           drawFilledBox(ctx, xmax - d3 + 1, ymin + d1, d3 + 0.5, w2 - d1 - d1, "brown");
         }
         drawFilledBox(ctx, xmin + d2 + 0.5, yc - d1, w1 - d2, d1 + d1, "brown");
-        if (sticky) {
-          drawText(ctx, xc - d3, yc, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
-        }
+        drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         break;
       case "up":
         drawFilledBox(ctx, xmin + d1, ymax - d2 + 1, w1 - d1 - d1, d2, "gray");
@@ -1026,9 +1027,7 @@ function drawLevel(
           drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3, "brown");
         }
         drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2, "brown");
-        if (sticky) {
-          drawText(ctx, xc, yc + d3, "S", "middle", "black", textHeight, textMaxWidth, "black", 1);
-        }
+        drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         break;
       default:
         break;
@@ -1067,9 +1066,17 @@ function drawLevel(
     let d2 = w1 / 2;
     let d3 = w1 / 8;
     let d4 = w1 / 6;
+    let group = 0;
+    let idx = 0;
+
+    idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+    if (idx >= 0) {
+      group = gameInfo.pistonsTriggers[idx].group;
+    }
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "gray");
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
+    drawText(ctx, xc, ymin + w2 * 0.8, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54, "black", 1);
   }
 
   function drawPropeller(offsetY = 0) {

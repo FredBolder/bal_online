@@ -42,7 +42,7 @@ describe("balUtils Ladders", () => {
     [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info01a = checkFalling(inputBack01abcd, input01a, { ...defaultGameInfo });
+  let info01a = checkFalling(inputBack01abcd, input01a, { ...defaultGameInfo }, { ...defaultGameVars });
   it("Ladders A", () => {
     expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
   });
@@ -102,7 +102,7 @@ describe("balUtils Ladders", () => {
     [1, 0, 2, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info01c = checkFalling(inputBack01abcd, input01c, { ...defaultGameInfo });
+  let info01c = checkFalling(inputBack01abcd, input01c, { ...defaultGameInfo }, { ...defaultGameVars });
   it("Ladders C", () => {
     expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
   });

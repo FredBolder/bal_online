@@ -446,8 +446,10 @@ export function rotateGame(backData, gameData, gameInfo) {
       }
 
       // Triggers, detonators etc
-      rotateXY(gameInfo.pistonsTrigger, rows);
       rotateXY(gameInfo.detonator, rows);
+      for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+        rotateXY(gameInfo.pistonsTriggers[i], rows);
+      }
       rotateXY(gameInfo.travelGate, rows);
       rotateXY(gameInfo.yellowBallPushersTrigger, rows);
       rotateXY(gameInfo.yellowStopper, rows);

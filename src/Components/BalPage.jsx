@@ -36,7 +36,7 @@ import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
-import { checkPistonsTrigger, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
+import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -427,7 +427,7 @@ function BalPage() {
     }
 
     if (gameInfo.hasPiston) {
-      info = checkPistonsTrigger(backData, gameData, gameInfo, gameVars, false);
+      info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, false);
       if (info.updated) {
         update = true;
       }
@@ -549,26 +549,21 @@ function BalPage() {
       gameVars.electricityCounter++;
     }
 
-    if (gameVars.skipFalling <= 0) {
-      info = checkFalling(backData, gameData, gameInfo, gameVars);
-      if (info.ballX !== -1) {
-        gameInfo.blueBall.x = info.ballX;
-        gameInfo.blueBall.y = info.ballY;
-      }
-      if (info.update) {
-        update = true;
-      }
-      if (info.sound !== "") {
-        playSound(info.sound);
-      }
-      if (info.sound === "pain") {
-        gameVars.gameOver = true;
-        updateScreen();
-      }
-    } else {
-      gameVars.skipFalling--;
+    info = checkFalling(backData, gameData, gameInfo, gameVars);
+    if (info.ballX !== -1) {
+      gameInfo.blueBall.x = info.ballX;
+      gameInfo.blueBall.y = info.ballY;
     }
-
+    if (info.update) {
+      update = true;
+    }
+    if (info.sound !== "") {
+      playSound(info.sound);
+    }
+    if (info.sound === "pain") {
+      gameVars.gameOver = true;
+      updateScreen();
+    }
 
     if (update) {
       updateScreen();
@@ -597,6 +592,7 @@ function BalPage() {
   function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings) {
     let color = "";
     let element = 0;
+    let group = -1;
     let h = -1;
     let idx = -1;
     let p1 = -1;
@@ -647,6 +643,35 @@ function BalPage() {
                   gameVars.bgcolor.push({ x, y, w, h, color })
                 } else {
                   gameVars.fgcolor.push({ x, y, w, h, color })
+                }
+              }
+            }
+            break;
+          case "$group":
+            if (values.length === 3) {
+              x = tryParseInt(values[0], -1);
+              y = tryParseInt(values[1], -1);
+              group = tryParseInt(values[2], -1);
+              if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length) && (group >= 1) && (group <= 10)) {
+                element = gameData[y][x];
+                switch (element) {
+                  case 158:
+                    idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+                    if (idx >= 0) {
+                      gameInfo.pistonsTriggers[idx].group = group;
+                    }
+                    break;
+                  case 159:
+                  case 161:
+                  case 163:
+                  case 165:
+                    idx = findElementByCoordinate(x, y, gameInfo.pistons);
+                    if (idx >= 0) {
+                      gameInfo.pistons[idx].group = group;
+                    }
+                    break;
+                  default:
+                    break;
                 }
               }
             }
@@ -905,7 +930,7 @@ function BalPage() {
   }
 
   async function clickExportLevel() {
-    const ok = await exportLevel(backData, gameData, gameVars);
+    const ok = await exportLevel(backData, gameData, gameInfo, gameVars);
     if (!ok) {
       console.log("Error while exporting level");
     }

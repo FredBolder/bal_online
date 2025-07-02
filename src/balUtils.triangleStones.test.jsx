@@ -1,13 +1,12 @@
 import { describe, it, expect } from "vitest";
-import {
-    checkFalling,
-    zeroArray,
-} from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { checkFalling, zeroArray } from "./balUtils.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils Triangle stones", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     let input01a = [
         [1, 1, 1, 1, 1, 1, 1],
@@ -24,7 +23,7 @@ describe("balUtils Triangle stones", () => {
         [1, 1, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkFalling(inputBack01abcde, input01a, { ...defaultGameInfo });
+    let info01a = checkFalling(inputBack01abcde, input01a, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -48,7 +47,7 @@ describe("balUtils Triangle stones", () => {
         [1, 0, 0, 0, 0, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkFalling(inputBack01abcde, input01b, { ...defaultGameInfo });
+    let info01b = checkFalling(inputBack01abcde, input01b, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -72,7 +71,7 @@ describe("balUtils Triangle stones", () => {
         [1, 1, 0, 0, 2, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = checkFalling(inputBack01abcde, input01c, { ...defaultGameInfo });
+    let info01c = checkFalling(inputBack01abcde, input01c, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
@@ -96,7 +95,7 @@ describe("balUtils Triangle stones", () => {
         [1, 1, 0, 0, 2, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01d = checkFalling(inputBack01abcde, input01d, { ...defaultGameInfo });
+    let info01d = checkFalling(inputBack01abcde, input01d, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
@@ -120,7 +119,7 @@ describe("balUtils Triangle stones", () => {
         [1, 1, 0, 0, 2, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01e = checkFalling(inputBack01abcde, input01e, { ...defaultGameInfo });
+    let info01e = checkFalling(inputBack01abcde, input01e, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
@@ -153,7 +152,7 @@ describe("balUtils Triangle stones", () => {
     ];
     let info01f;
     for (let i = 0; i < 5; i++) {
-        info01f = checkFalling(inputBack01f, input01f, { ...defaultGameInfo });
+        info01f = checkFalling(inputBack01f, input01f, { ...defaultGameInfo }, { ...defaultGameVars });
     }
     it("Triangled Walls F", () => {
         expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));

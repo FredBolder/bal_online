@@ -197,10 +197,11 @@ export function getGameInfo(backData, gameData) {
                     result.musicBoxes.push(musicBox);
                     break;
                 }
-                case 158:
-                    result.pistonsTrigger.x = j;
-                    result.pistonsTrigger.y = i;
+                case 158: {
+                    let pistonTrigger = { x: j, y: i, pressed: false, group: 1 };
+                    result.pistonsTriggers.push(pistonTrigger);
                     break;
+                }
                 case 159:
                 case 161:
                 case 163:
@@ -222,7 +223,7 @@ export function getGameInfo(backData, gameData) {
                         default:
                             break;
                     }
-                    let piston = { x: j, y: i, activated: false, sticky: false, direction: direction, mode: "normal" };
+                    let piston = { x: j, y: i, activated: false, sticky: false, direction: direction, mode: "normal", group: 1 };
                     result.pistons.push(piston);
                     result.hasPiston = true;
                     break;
@@ -266,10 +267,9 @@ export function initGameInfo(info) {
     info.musicBoxes = [];
     info.orangeBalls = [];
     info.pistons = [];
-    info.pistonsTrigger = { x: -1, y: -1 };
+    info.pistonsTriggers = [];
     info.redBalls = [];
     info.redFish = [];
-    info.soundLava = "default";
     info.teleports = [];
     info.timeBombs = [];
     info.trapDoors = [];
@@ -298,18 +298,21 @@ export function initGameVars(vars) {
     vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;
-    vars.pistonsActivated = false;
+    vars.pistonsActivated = [];
+    for (let i = 0; i < 10; i++) {
+        vars.pistonsActivated.push(false);
+    }
     vars.pistonsRepeatFastModeActive = false;
     vars.pistonsRepeatFastModeCounter = 0;
     vars.pistonsRepeatFastModeCountTo = 15;
     vars.pistonsRepeatSlowModeActive = false;
     vars.pistonsRepeatSlowModeCounter = 0;
     vars.pistonsRepeatSlowModeCountTo = 1;
-    vars.pistonsTriggerActive = false;
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
     vars.skipFalling = 0;
+    vars.soundLava = "default";
     vars.startlevelmessage = "";
     vars.teleporting = 0;
     vars.timeFreezer = 0;

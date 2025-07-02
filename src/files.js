@@ -3,7 +3,7 @@ import {
     stringArrayToNumberArray,
 } from "./balUtils.js";
 
-export async function exportLevel(backData, gameData, gameVars) {
+export async function exportLevel(backData, gameData, gameInfo, gameVars) {
     let code = "";
     let line = "";
     try {
@@ -29,6 +29,48 @@ export async function exportLevel(backData, gameData, gameVars) {
             for (let i = 0; i < gameVars.fgcolor.length; i++) {
                 const fg = gameVars.fgcolor[i];
                 line = `$fgcolor: ${fg.x}, ${fg.y}, ${fg.w}, ${fg.h}, ${fg.color}`;
+                await writable.write(`${line}\n`);
+            }
+        }
+
+        if (gameVars.hint !== "") {
+            line = `$hint: ${gameVars.hint}`;
+            await writable.write(`${line}\n`);
+        }
+
+        if (gameVars.soundLava !== "default") {
+            line = `$sound: 22, ${gameVars.soundLava}`;
+            await writable.write(`${line}\n`);
+        }
+
+        if (gameVars.startlevelmessage !== "") {
+            line = `$startlevelmessage: ${gameVars.startlevelmessage}`;
+            await writable.write(`${line}\n`);
+        }
+
+        for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+            const musicBox = gameInfo.musicBoxes[i];
+            if (JSON.stringify(musicBox.notes) !== JSON.stringify(["C4"])) {
+                line = `$notes: ${musicBox.x}, ${musicBox.y}`;
+                for (let j = 0; j < musicBox.notes.length; j++) {
+                    line += ", " + musicBox.notes[j];
+                }
+                await writable.write(`${line}\n`);
+            }
+        }
+
+        for (let i = 0; i < gameInfo.pistons.length; i++) {
+            const piston = gameInfo.pistons[i];
+            if (piston.group > 1) {
+                line = `$group: ${piston.x}, ${piston.y}, ${piston.group}`;
+                await writable.write(`${line}\n`);
+            }
+            if (piston.mode !== "normal") {
+                line = `$pistonmode: ${piston.x}, ${piston.y}, ${piston.mode}`;
+                await writable.write(`${line}\n`);
+            }
+            if (piston.sticky) {
+                line = `$sticky: ${piston.x}, ${piston.y}, yes`;
                 await writable.write(`${line}\n`);
             }
         }

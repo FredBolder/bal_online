@@ -1,21 +1,25 @@
 import { describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { checkPistonsTrigger } from "./pistons.js";
+import { checkPistonsTriggers } from "./pistons.js";
 
 describe("Pistons", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
     const defaultGameVars = {};
     initGameVars(defaultGameVars);
+    const pistonsActivated = [];
+    for (let i = 0; i < 10; i++) {
+        pistonsActivated.push(false);
+    }
 
     const backData = zeroArray(20, 20); // bigger array, so it can be used for all
 
     let gameInfo01a = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
-        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal" }],
-        pistonsTrigger: { x: 1, y: 4 },
+        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01a = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -33,11 +37,11 @@ describe("Pistons", () => {
         [1, 158, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkPistonsTrigger(backData, input01a, gameInfo01a, { ...defaultGameVars }, false);
-    it("checkPistonsTrigger A", () => {
+    let info01a = checkPistonsTriggers(backData, input01a, gameInfo01a, { ...defaultGameVars, pistonsActivated: [...pistonsActivated] }, false);
+    it("checkPistonsTriggers A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
-    it("checkPistonsTrigger A info", () => {
+    it("checkPistonsTriggers A info", () => {
         expect(JSON.stringify(info01a)).toBe(JSON.stringify({ updated: true }));
     });
 
@@ -45,8 +49,8 @@ describe("Pistons", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
         yellowBalls: [{ x: 4, y: 3, direction: "none" }],
-        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal" }],
-        pistonsTrigger: { x: 1, y: 4 },
+        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01b = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -64,14 +68,14 @@ describe("Pistons", () => {
         [1, 158, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkPistonsTrigger(backData, input01b, gameInfo01b, { ...defaultGameVars }, false);
-    it("checkPistonsTrigger B", () => {
+    let info01b = checkPistonsTriggers(backData, input01b, gameInfo01b, { ...defaultGameVars, pistonsActivated: [...pistonsActivated] }, false);
+    it("checkPistonsTriggers B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
-    it("checkPistonsTrigger B info", () => {
+    it("checkPistonsTriggers B info", () => {
         expect(JSON.stringify(info01b)).toBe(JSON.stringify({ updated: true }));
     });
-    it("checkPistonsTrigger B yellow", () => {
+    it("checkPistonsTriggers B yellow", () => {
         expect(JSON.stringify(gameInfo01b.yellowBalls)).toBe(JSON.stringify([{ x: 5, y: 3, direction: "none" }]));
     });
 
@@ -79,8 +83,8 @@ describe("Pistons", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
         yellowBalls: [{ x: 5, y: 2, direction: "none" }],
-        pistons: [{ x: 7, y: 2, activated: false, sticky: false, direction: "left", mode: "normal" }],
-        pistonsTrigger: { x: 1, y: 4 },
+        pistons: [{ x: 7, y: 2, activated: false, sticky: false, direction: "left", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01c = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -98,14 +102,14 @@ describe("Pistons", () => {
         [1, 158, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = checkPistonsTrigger(backData, input01c, gameInfo01c, { ...defaultGameVars }, false);
-    it("checkPistonsTrigger C", () => {
+    let info01c = checkPistonsTriggers(backData, input01c, gameInfo01c, { ...defaultGameVars, pistonsActivated: [...pistonsActivated] }, false);
+    it("checkPistonsTriggers C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
-    it("checkPistonsTrigger C info", () => {
+    it("checkPistonsTriggers C info", () => {
         expect(JSON.stringify(info01c)).toBe(JSON.stringify({ updated: true }));
     });
-    it("checkPistonsTrigger C yellow", () => {
+    it("checkPistonsTriggers C yellow", () => {
         expect(JSON.stringify(gameInfo01c.yellowBalls)).toBe(JSON.stringify([{ x: 4, y: 2, direction: "none" }]));
     });
 
@@ -113,8 +117,9 @@ describe("Pistons", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 5 },
         yellowBalls: [{ x: 6, y: 2, direction: "none" }],
-        pistons: [{ x: 6, y: 1, activated: false, sticky: false, direction: "down", mode: "normal" }, { x: 3, y: 6, activated: false, sticky: false, direction: "up", mode: "normal" }],
-        pistonsTrigger: { x: 1, y: 6 },
+        pistons: [{ x: 6, y: 1, activated: false, sticky: false, direction: "down", mode: "normal", group: 1 }, 
+            { x: 3, y: 6, activated: false, sticky: false, direction: "up", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }],
     }
     let input01d = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -136,22 +141,22 @@ describe("Pistons", () => {
         [1, 158, 0, 159, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01d = checkPistonsTrigger(backData, input01d, gameInfo01d, { ...defaultGameVars }, false);
-    it("checkPistonsTrigger D", () => {
+    let info01d = checkPistonsTriggers(backData, input01d, gameInfo01d, { ...defaultGameVars, pistonsActivated: [...pistonsActivated] }, false);
+    it("checkPistonsTriggers D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
-    it("checkPistonsTrigger D info", () => {
+    it("checkPistonsTriggers D info", () => {
         expect(JSON.stringify(info01d)).toBe(JSON.stringify({ updated: true }));
     });
-    it("checkPistonsTrigger D yellow", () => {
+    it("checkPistonsTriggers D yellow", () => {
         expect(JSON.stringify(gameInfo01d.yellowBalls)).toBe(JSON.stringify([{ x: 6, y: 3, direction: "none" }]));
     });
 
     let gameInfo01e = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
-        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal" }],
-        pistonsTrigger: { x: 1, y: 4 },
+        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01e = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -162,13 +167,113 @@ describe("Pistons", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01e = input01e.map(row => [...row]);
-    let info01e = checkPistonsTrigger(backData, input01e, gameInfo01e, { ...defaultGameVars }, false);
-    it("checkPistonsTrigger E", () => {
+    let info01e = checkPistonsTriggers(backData, input01e, gameInfo01e, { ...defaultGameVars, pistonsActivated: [...pistonsActivated] }, false);
+    it("checkPistonsTriggers E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
-    it("checkPistonsTrigger E info", () => {
+    it("checkPistonsTriggers E info", () => {
         expect(JSON.stringify(info01e)).toBe(JSON.stringify({ updated: false }));
     });
+
+    let gameInfo01f = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 5 },
+        pistons: [{ x: 6, y: 1, activated: false, sticky: false, direction: "down", mode: "normal", group: 2 }, 
+            { x: 3, y: 6, activated: false, sticky: false, direction: "up", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }, { x: 7, y: 6, pressed: false, group: 2 }],
+    }
+    let input01f = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 161, 0, 1],
+        [1, 0, 0, 0, 0, 0, 5, 0, 1],
+        [1, 0, 0, 97, 0, 0, 5, 0, 1],
+        [1, 0, 0, 84, 0, 0, 0, 0, 1],
+        [1, 2, 0, 138, 0, 0, 0, 0, 1],
+        [1, 158, 0, 159, 0, 0, 0, 158, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01f = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 161, 0, 1],
+        [1, 0, 0, 97, 0, 0, 5, 0, 1],
+        [1, 0, 0, 84, 0, 0, 5, 0, 1],
+        [1, 0, 0, 138, 0, 0, 0, 0, 1],
+        [1, 2, 0, 160, 0, 0, 0, 0, 1],
+        [1, 158, 0, 159, 0, 0, 0, 158, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01f = checkPistonsTriggers(backData, input01f, gameInfo01f, { ...defaultGameVars, pistonsActivated: [...pistonsActivated] }, false);
+    it("checkPistonsTriggers F", () => {
+        expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
+    });
+    it("checkPistonsTriggers F info", () => {
+        expect(JSON.stringify(info01f)).toBe(JSON.stringify({ updated: true }));
+    });
+
+    let gameInfo01g = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 3 },
+        pistons: [{ x: 3, y: 3, activated: true, sticky: true, direction: "right", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
+    }
+    let pistonsActivated01g = [...pistonsActivated];
+    pistonsActivated01g[0] = true;
+    let input01g = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 165, 166, 5, 28, 5, 1],
+        [1, 158, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01g = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 165, 5, 0, 28, 5, 1],
+        [1, 158, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01g = checkPistonsTriggers(backData, input01g, gameInfo01g, { ...defaultGameVars, pistonsActivated: pistonsActivated01g }, false);
+    it("checkPistonsTriggers G", () => {
+        expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
+    });
+    it("checkPistonsTriggers G info", () => {
+        expect(JSON.stringify(info01g)).toBe(JSON.stringify({ updated: true }));
+    });
+
+    let gameInfo01h = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 3 },
+        pistons: [{ x: 3, y: 3, activated: true, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
+    }
+    let pistonsActivated01h = [...pistonsActivated];
+    pistonsActivated01h[0] = true;
+    let input01h = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 165, 166, 5, 28, 5, 1],
+        [1, 158, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01h = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 165, 0, 5, 28, 5, 1],
+        [1, 158, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01h = checkPistonsTriggers(backData, input01h, gameInfo01h, { ...defaultGameVars, pistonsActivated: pistonsActivated01h }, false);
+    it("checkPistonsTriggers H", () => {
+        expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
+    });
+    it("checkPistonsTriggers H info", () => {
+        expect(JSON.stringify(info01h)).toBe(JSON.stringify({ updated: true }));
+    });
+
 
     // Insert new tests here
 });

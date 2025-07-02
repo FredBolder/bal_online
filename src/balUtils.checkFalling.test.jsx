@@ -23,7 +23,7 @@ describe("balUtils checkFalling", () => {
         [1, 2, 0, 0, 4, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkFalling(inputBack01a, input01a, { ...defaultGameInfo, redBalls: [{ x: 3, y: 1 }] }, defaultGameVars);
+    let info01a = checkFalling(inputBack01a, input01a, { ...defaultGameInfo, redBalls: [{ x: 3, y: 1 }] }, { ...defaultGameVars });
     it("checkFalling A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -48,7 +48,7 @@ describe("balUtils checkFalling", () => {
         [1, 4, 4, 2, 8, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkFalling(inputBack01b, input01b, { ...defaultGameInfo, redBalls: [{ x: 4, y: 3 }] }, defaultGameVars);
+    let info01b = checkFalling(inputBack01b, input01b, { ...defaultGameInfo, redBalls: [{ x: 4, y: 3 }] }, { ...defaultGameVars });
     it("checkFalling B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -71,7 +71,7 @@ describe("balUtils checkFalling", () => {
         [1, 4, 2, 0, 1],
         [1, 1, 1, 1, 1],
     ];
-    let info01c = checkFalling(inputBack01c, input01c, { ...defaultGameInfo }, defaultGameVars);
+    let info01c = checkFalling(inputBack01c, input01c, { ...defaultGameInfo }, { ...defaultGameVars });
     it("checkFalling C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });

@@ -5,31 +5,36 @@ function canMove(element) {
     return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155].includes(element);
 }
 
-export function checkPistonsTrigger(backData, gameData, gameInfo, gameVars, pushingDown) {
+export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pushingDown) {
     let result = { updated: false };
     let weight = false;
-    let xTrigger = gameInfo.pistonsTrigger.x;
-    let yTrigger = gameInfo.pistonsTrigger.y;
+    let xTrigger = -1;
+    let yTrigger = -1;
 
-    if ((xTrigger >= 0) && (yTrigger > 0)) {
+    for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+        const pistonsTrigger = gameInfo.pistonsTriggers[i];
+        xTrigger = pistonsTrigger.x;
+        yTrigger = pistonsTrigger.y;
         weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
-        if (gameVars.pistonsTriggerActive) {
+        if (pistonsTrigger.pressed) {
             if (!weight) {
-                gameVars.pistonsTriggerActive = false;
+                pistonsTrigger.pressed = false;
             }
         } else {
             if (weight) {
-                gameVars.pistonsTriggerActive = true;
-                gameVars.pistonsActivated = !gameVars.pistonsActivated;
-                for (let i = 0; i < gameInfo.pistons.length; i++) {
-                    const piston = gameInfo.pistons[i];
-                    if (gameVars.pistonsActivated) {
-                        if (activatePiston(gameData, gameInfo, piston, "normal")) {
-                            result.updated = true;
-                        }
-                    } else {
-                        if (deactivatePiston(gameData, gameInfo, piston, "normal")) {
-                            result.updated = true;
+                pistonsTrigger.pressed = true;
+                gameVars.pistonsActivated[pistonsTrigger.group - 1] = !gameVars.pistonsActivated[pistonsTrigger.group - 1];
+                for (let j = 0; j < gameInfo.pistons.length; j++) {
+                    const piston = gameInfo.pistons[j];
+                    if (piston.group === pistonsTrigger.group) {
+                        if (gameVars.pistonsActivated[pistonsTrigger.group - 1]) {
+                            if (activatePiston(gameData, gameInfo, piston, "normal")) {
+                                result.updated = true;
+                            }
+                        } else {
+                            if (deactivatePiston(gameData, gameInfo, piston, "normal")) {
+                                result.updated = true;
+                            }
                         }
                     }
                 }
