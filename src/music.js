@@ -1,3 +1,4 @@
+import { Operator } from "./operator.js";
 import { Reverb } from "./reverb.js";
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const reverb = new Reverb(audioCtx, "src/Sounds/reverb.wav");
@@ -27,89 +28,70 @@ export function noteToFreq(note) {
 }
 
 export async function playNote(instrument, volume, note) {
+  let frequency = noteToFreq(note);
+  let maxVolume = (volume / 100) * 0.5;
+  let operators = [];
   let totalTime = 0;
-
-  // Oscillator 1
-  let attack1 = 5;
-  let attackSec1 = 0;
-  let decay1 = 1000;
-  let decaySec1 = 0;
-  let frequency1 = noteToFreq(note);
-  let maxVol1 = 0.5 * volume;
-  let totalTime1 = 0;
-  const oscillator1 = audioCtx.createOscillator();
-  const gainNode1 = audioCtx.createGain();
-
-  // Oscillator 2
-  let attack2 = 5;
-  let attackSec2 = 0;
-  let decay2 = 1000;
-  let decaySec2 = 0;
-  let frequency2 = frequency1;
-  let maxVol2 = maxVol1;
-  let totalTime2 = 0;
-  let useOscillator2 = false;
-  const oscillator2 = audioCtx.createOscillator();
-  const gainNode2 = audioCtx.createGain();
-  const now = audioCtx.currentTime;
 
   const convolver = reverb.getConvolver();
   if (convolver) {
-
     switch (instrument) {
       case "kalimba":
-        oscillator1.frequency.value = frequency1;
-        oscillator1.type = 'sine';
-        decay1 = 1000;
-        totalTime1 = attack1 + decay1;
-        useOscillator2 = true;
-        frequency2 = frequency1 * 6.6;
-        oscillator2.frequency.value = frequency2
-        oscillator2.type = 'sine';
-        decay2 = decay1 * 0.25;
-        totalTime2 = attack2 + decay2;
-        maxVol2 = maxVol1 * 0.5;
+        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume, 5, 1000));
+        operators.push(new Operator(audioCtx, "sine", frequency * 6.6, maxVolume * 0.5, 5, 250));
+        break;
+      case "vibraphone":
+        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.4, 5, 1000));
+        operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.3, 5, 750));
+        operators.push(new Operator(audioCtx, "sine", frequency * 10, maxVolume * 0.3, 5, 400));
+        for (let i = 0; i < 3; i++) {
+          operators[i].setLfo("volume", "sine", 4, 0.5);
+        }
         break;
       default:
-        oscillator1.frequency.value = frequency1;
-        oscillator1.type = 'triangle';
-        decay1 = 1000;
-        totalTime1 = attack1 + decay1;
+        operators.push(new Operator(audioCtx, "triangle", frequency, maxVolume, 5, 1000));
         break;
     }
 
-    oscillator1.connect(gainNode1);
-    reverb.connectSource(gainNode1);
-    attackSec1 = attack1 / 1000;
-    decaySec1 = decay1 / 1000;
-    gainNode1.gain.setValueAtTime(0, now);
-    gainNode1.gain.linearRampToValueAtTime(maxVol1, now + attackSec1);
-    gainNode1.gain.exponentialRampToValueAtTime(0.001, now + attackSec1 + decaySec1);
-    oscillator1.start(now);
-    oscillator1.stop(now + attackSec1 + decaySec1);
-    if (useOscillator2) {
-      oscillator2.connect(gainNode2);
-      reverb.connectSource(gainNode2);
-      attackSec2 = attack2 / 1000;
-      decaySec2 = decay2 / 1000;
-      gainNode2.gain.setValueAtTime(0, now);
-      gainNode2.gain.linearRampToValueAtTime(maxVol2, now + attackSec2);
-      gainNode2.gain.exponentialRampToValueAtTime(0.001, now + attackSec2 + decaySec2);
-      oscillator2.start(now);
-      oscillator2.stop(now + attackSec2 + decaySec2);
-    }
+    totalTime = 0;
+    for (let i = 0; i < operators.length; i++) {
+      const now = audioCtx.currentTime;
+      const operator = operators[i];
 
-    if (totalTime1 > totalTime2) {
-      totalTime = totalTime1;
-    } else {
-      totalTime = totalTime2;
+      reverb.connectSource(operator.amp);
+      //operator.amp.connect(audioCtx.destination); // Without reverb
+      const at = operator.dcaSettings.attack / 1000;
+      const dt = operator.dcaSettings.decay / 1000;
+      if (operator.lfoSettings.destination === "volume") {
+        operator.tremoloOffset.start(now);
+      }
+      if (operator.lfoSettings.destination !== "none") {
+        operator.lfo.start(now);
+      }
+      operator.amp.gain.setValueAtTime(0, now);
+      operator.amp.gain.linearRampToValueAtTime(operator.dcaSettings.volume, now + at);
+      operator.amp.gain.exponentialRampToValueAtTime(0.001, now + at + dt);
+      operator.osc.start(now);
+      const stopTime = now + at + dt + 0.02;
+      operator.osc.stop(stopTime);
+      if (operator.lfoSettings.destination !== "none") {
+        operator.lfo.stop(stopTime);
+      }
+      if (operator.lfoSettings.destination === "volume") {
+        operator.tremoloOffset.stop(stopTime);
+      }
+
+      const time = operator.dcaSettings.attack + operator.dcaSettings.decay;
+      if (time > totalTime) {
+        totalTime = time;
+      }
     }
+    totalTime += 0.02;
     await new Promise(resolve => setTimeout(resolve, totalTime));
-    oscillator1.disconnect();
-    gainNode1.disconnect();
-    if (useOscillator2) {
-      oscillator2.disconnect();
-      gainNode2.disconnect();
+    for (let i = 0; i < operators.length; i++) {
+      const operator = operators[i];
+      operator.osc.disconnect();
+      operator.amp.disconnect();
     }
   }
 }
