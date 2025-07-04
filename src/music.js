@@ -36,16 +36,21 @@ export async function playNote(instrument, volume, note) {
   const convolver = reverb.getConvolver();
   if (convolver) {
     switch (instrument) {
+      case "bass": {
+        operators.push(new Operator(audioCtx, "pulse45", frequency * 0.5, maxVolume, 3, 1700));
+        operators[0].setFilter("lowpass", 500, 90, 0, 5, 1000);
+        break;
+      }
       case "kalimba":
-        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume, 5, 1000));
-        operators.push(new Operator(audioCtx, "sine", frequency * 6.6, maxVolume * 0.5, 5, 250));
+        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.8, 5, 1000));
+        operators.push(new Operator(audioCtx, "sine", frequency * 6.3, maxVolume * 0.2, 5, 250));
         break;
       case "vibraphone":
-        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.4, 5, 1000));
+        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.5, 5, 1000));
         operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.3, 5, 750));
-        operators.push(new Operator(audioCtx, "sine", frequency * 10, maxVolume * 0.3, 5, 400));
+        operators.push(new Operator(audioCtx, "sine", frequency * 10, maxVolume * 0.2, 5, 400));
         for (let i = 0; i < 3; i++) {
-          operators[i].setLfo("volume", "sine", 4, 0.5);
+          operators[i].setLfo("dca", "sine", 4, 0.5);
         }
         break;
       default:
@@ -58,11 +63,11 @@ export async function playNote(instrument, volume, note) {
       const now = audioCtx.currentTime;
       const operator = operators[i];
 
-      reverb.connectSource(operator.amp);
+      reverb.connectSource(operator.amp); // With reverb
       //operator.amp.connect(audioCtx.destination); // Without reverb
       const at = operator.dcaSettings.attack / 1000;
       const dt = operator.dcaSettings.decay / 1000;
-      if (operator.lfoSettings.destination === "volume") {
+      if (operator.lfoSettings.destination === "dca") {
         operator.tremoloOffset.start(now);
       }
       if (operator.lfoSettings.destination !== "none") {
@@ -71,13 +76,22 @@ export async function playNote(instrument, volume, note) {
       operator.amp.gain.setValueAtTime(0, now);
       operator.amp.gain.linearRampToValueAtTime(operator.dcaSettings.volume, now + at);
       operator.amp.gain.exponentialRampToValueAtTime(0.001, now + at + dt);
+
+      const fat = operator.filterSettings.attack / 1000;
+      const fdt = operator.filterSettings.decay / 1000;
+      if (operator.filterSettings.type !== "none") {
+        operator.filter.frequency.setValueAtTime(0, now);
+        operator.filter.frequency.linearRampToValueAtTime(operator.filterSettings.startFrequency, now + fat);
+        operator.filter.frequency.exponentialRampToValueAtTime(operator.filterSettings.endFrequency, now + fat + fdt);
+      }
+
       operator.osc.start(now);
       const stopTime = now + at + dt + 0.02;
       operator.osc.stop(stopTime);
       if (operator.lfoSettings.destination !== "none") {
         operator.lfo.stop(stopTime);
       }
-      if (operator.lfoSettings.destination === "volume") {
+      if (operator.lfoSettings.destination === "dca") {
         operator.tremoloOffset.stop(stopTime);
       }
 

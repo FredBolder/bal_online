@@ -1,6 +1,6 @@
 class Reverb {
     constructor(audioContext, impulseResponseUrl) {
-        const wetLevel = 0.2;
+        const wetLevel = 0.15;
         this.audioContext = audioContext;
         this.dryGain = audioContext.createGain();
         this.wetGain = audioContext.createGain();
