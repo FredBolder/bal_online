@@ -320,6 +320,11 @@ function drawLevel(
     drawLine(ctx, xmin + (w1 * 0.1), ymin + (w2 * 0.7), xmin, ymax, bgcolor);
   }
 
+  function drawDelay() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
+    drawText(ctx, xc, yc, "t", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+  }
+
   function drawDetonator(x, y) {
     let color = getFgcolor(x, y, "rgb(220,220,220)");
     let d1 = w1 / 7;
@@ -1951,6 +1956,9 @@ function drawLevel(
           break;
         case 166:
           drawPistonExtendedPart("right");
+          break;
+        case 167:
+          drawDelay();
           break;
         case 1000:
           // For manual only (empty)

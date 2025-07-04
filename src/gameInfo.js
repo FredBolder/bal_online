@@ -228,6 +228,11 @@ export function getGameInfo(backData, gameData) {
                     result.hasPiston = true;
                     break;
                 }
+                case 167: {
+                    let delay = { x: j, y: i, count: 0};
+                    result.delays.push(delay);
+                    break;
+                }
                 default:
                     break;
             }
@@ -243,6 +248,7 @@ export function initGameInfo(info) {
     info.blueBall = { x: -1, y: -1 };
     info.copiers = [];
     info.damagedStones = [];
+    info.delays = [];
     info.detonator = { x: -1, y: -1 };
     info.electricity = [];
     info.electricityActive = false;

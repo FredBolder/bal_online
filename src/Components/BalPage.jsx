@@ -23,6 +23,7 @@ import {
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { checkCopiers } from "../copiers.js";
 import { checkDamagedStones } from "../damagedStones.js";
+import { checkDelays } from "../delays.js";
 import { checkDetonator } from "../detonator.js";
 import { electricityTarget } from "../electricity.js";
 import { checkForces } from "../force.js";
@@ -249,6 +250,10 @@ function BalPage() {
 
     if (checkMagnets(gameInfo)) {
       playSound("magnet");
+    }
+
+    if (checkDelays(gameData, gameInfo)) {
+      update = true;
     }
 
     if (checkMusicBoxes(gameData, gameInfo)) {
@@ -1350,7 +1355,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 991;
+        gameVars.currentLevel = 2004;
       }
       initLevel(gameVars.currentLevel);
     }

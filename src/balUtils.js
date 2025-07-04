@@ -396,6 +396,9 @@ export function charToNumber(c) {
     case "Ê":
       result = 166;
       break;
+    case ")":
+      result = 167;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1093,6 +1096,9 @@ export function numberToChar(n) {
       break;
     case 166:
       result = "Ê";
+      break;
+    case 167:
+      result = ")";
       break;
     case 1000:
       // For manual only
