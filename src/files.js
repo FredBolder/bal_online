@@ -5,6 +5,7 @@ import {
 
 export async function exportLevel(backData, gameData, gameInfo, gameVars) {
     let code = "";
+    let count = 0;
     let line = "";
     try {
         const fileHandle = await window.showSaveFilePicker({
@@ -58,7 +59,14 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
             const musicBox = gameInfo.musicBoxes[i];
             if (JSON.stringify(musicBox.notes) !== JSON.stringify(["C4"])) {
                 line = `$notes: ${musicBox.x}, ${musicBox.y}`;
+                count = 0;
                 for (let j = 0; j < musicBox.notes.length; j++) {
+                    count++;
+                    if (count > 32) {
+                        await writable.write(`${line}\n`);
+                        line = `$addnotes: ${musicBox.x}, ${musicBox.y}`;
+                        count = 0;
+                    }
                     line += ", " + musicBox.notes[j];
                 }
                 await writable.write(`${line}\n`);

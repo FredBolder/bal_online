@@ -627,6 +627,19 @@ function BalPage() {
           validXY = ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length));
         }
         switch (name) {
+          case "$addnotes":
+            if (values.length >= 3) {
+              if (validXY) {
+                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+                if (idx >= 0) {
+                  gameInfo.musicBoxes[idx].noteIndex = 0;
+                  for (let note = 2; note < values.length; note++) {
+                    gameInfo.musicBoxes[idx].notes.push(values[note]);
+                  }
+                }
+              }
+            }
+            break;
           case "$background":
             if (values.length === 5) {
               w = tryParseInt(values[2], -1);
