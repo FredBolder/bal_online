@@ -597,6 +597,7 @@ function BalPage() {
   function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings) {
     let color = "";
     let element = 0;
+    let gameTicks = 0;
     let group = -1;
     let instrument = "kalimba";
     let h = -1;
@@ -652,6 +653,17 @@ function BalPage() {
                   gameVars.bgcolor.push({ x, y, w, h, color })
                 } else {
                   gameVars.fgcolor.push({ x, y, w, h, color })
+                }
+              }
+            }
+            break;
+          case "$gameticks":
+            if (values.length === 3) {
+              gameTicks = tryParseInt(values[2], -1);
+              if (validXY && (gameTicks >= 0)) {
+                idx = findElementByCoordinate(x, y, gameInfo.delays);
+                if (idx >= 0) {
+                  gameInfo.delays[idx].gameTicks = gameTicks;
                 }
               }
             }

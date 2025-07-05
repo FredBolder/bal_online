@@ -229,7 +229,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 167: {
-                    let delay = { x: j, y: i, count: 0};
+                    let delay = { x: j, y: i, count: 0, gameTicks: 3 };
                     result.delays.push(delay);
                     break;
                 }

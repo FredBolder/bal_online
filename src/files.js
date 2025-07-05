@@ -48,6 +48,12 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
             await writable.write(`${line}\n`);
         }
 
+        for (let i = 0; i < gameInfo.delays.length; i++) {
+            const delay = gameInfo.delays[i];
+            line = `$gameticks: ${delay.x}, ${delay.y}, ${delay.gameTicks}`;
+            await writable.write(`${line}\n`);
+        }
+
         for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
             const musicBox = gameInfo.musicBoxes[i];
             if (JSON.stringify(musicBox.notes) !== JSON.stringify(["C4"])) {
@@ -75,6 +81,14 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
             }
             if (piston.sticky) {
                 line = `$sticky: ${piston.x}, ${piston.y}, yes`;
+                await writable.write(`${line}\n`);
+            }
+        }
+
+        for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+            const pistonTriggers = gameInfo.pistonsTriggers[i];
+            if (pistonTriggers.group > 1) {
+                line = `$group: ${pistonTriggers.x}, ${pistonTriggers.y}, ${pistonTriggers.group}`;
                 await writable.write(`${line}\n`);
             }
         }

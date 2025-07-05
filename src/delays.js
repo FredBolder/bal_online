@@ -7,7 +7,7 @@ export function checkDelays(gameData, gameInfo) {
         const element1 = gameData[delay.y - 1][delay.x];
         const element2 = gameData[delay.y + 1][delay.x];
         if ([2, 4, 8, 40, 93, 94].includes(element1)) {
-            if (delay.count < 3) {
+            if (delay.count < delay.gameTicks) {
                 delay.count++;
             } else {
                 if (element2 === 0) {
