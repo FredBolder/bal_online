@@ -65,6 +65,16 @@ export async function playNote(instrument, volume, note) {
         operators.push(new Operator(audioCtx, "cosine", 55, maxVolume * 1, 0, 400, 0, 100));
         operators[0].setPitchEnv(1, 100, 0);
         break;
+      case "bell":
+        decay = 2000;
+        f1 = 0.5;
+        operators.push(new Operator(audioCtx, "sine", frequency * 2, maxVolume * 1 * f1, 5, decay, 0, 500));
+        operators.push(new Operator(audioCtx, "sine", frequency * 3.0102, maxVolume * 0.8 * f1, 5, decay * 0.8, 0, 500 * 0.8));
+        operators.push(new Operator(audioCtx, "sine", frequency * 4.1658, maxVolume * 0.8 * f1, 5, decay * 0.7, 0, 500 * 0.7));
+        operators.push(new Operator(audioCtx, "sine", frequency * 5.4317, maxVolume * 0.7 * f1, 5, decay * 0.6, 0, 500 * 0.6));
+        operators.push(new Operator(audioCtx, "sine", frequency * 6.7974, maxVolume * 0.65 * f1, 5, decay * 0.5, 0, 500 * 0.5));
+        operators.push(new Operator(audioCtx, "sine", frequency * 8.2159, maxVolume * 0.55 * f1, 5, decay * 0.4, 0, 500 * 0.4));
+        break;
       case "clarinet":
         attack = 7;
         decay = 250;
@@ -126,12 +136,19 @@ export async function playNote(instrument, volume, note) {
         operators[1].setPitchEnv(0.1, 50, 0);
         break;
       case "vibraphone":
-        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.5, 5, 1000, 0, 250));
-        operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.3, 5, 750, 0, 187));
-        operators.push(new Operator(audioCtx, "sine", frequency * 10, maxVolume * 0.2, 5, 400, 0, 100));
+        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.5, 5, 1000, 0, 500));
+        operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.3, 5, 750, 0, 375));
+        operators.push(new Operator(audioCtx, "sine", frequency * 10, maxVolume * 0.2, 5, 400, 0, 200));
         for (let i = 0; i < operators.length; i++) {
           operators[i].setLfo("dca", "sine", 4, 0.5);
         }
+        break;
+      case "xylophone":
+        decay = 1000;
+        f1 = 0.6;
+        operators.push(new Operator(audioCtx, "sine", frequency * 2, maxVolume * 1 * f1, 4, decay, 0, decay));
+        operators.push(new Operator(audioCtx, "sine", frequency * 5.512, maxVolume * 0.15 * f1, 4, decay * 0.5, 0, decay * 0.5));
+        operators.push(new Operator(audioCtx, "sine", frequency * 10.808, maxVolume * 0.5 * f1, 4, decay * 0.3, 0, decay * 0.3));
         break;
       default:
         operators.push(new Operator(audioCtx, "triangle", frequency, maxVolume, 5, 1000, 0, 250));
