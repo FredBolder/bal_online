@@ -1,7 +1,7 @@
 import { Operator } from "./operator.js";
 import { Reverb } from "./reverb.js";
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const reverb = new Reverb(audioCtx, "src/Sounds/reverb.wav");
+const reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
 
 let operatorsList = [];
 
