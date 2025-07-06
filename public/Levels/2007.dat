@@ -1,3 +1,7 @@
+$instrument: 1, 7, harp, 100
+$instrument: 2, 7, guitar, 100
+$instrument: 3, 7, snaredrum, 100
+$instrument: 4, 7, harpsichord, 100
 1111111111
 1       31
 1        1
@@ -5,6 +9,6 @@
 1        1
 1        1
 1        1
-1      ) 1
-1   2  | 1
+1MMMM    1
+1   2    1
 1111111111

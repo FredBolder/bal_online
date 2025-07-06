@@ -11,6 +11,19 @@ function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 3) {
     return audioCtx.createPeriodicWave(real, imag, { disableNormalization: true });
 }
 
+function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
+    const sampleRate = audioCtx.sampleRate;
+    const bufferSize = durationInSeconds * sampleRate;
+    const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1; // range: -1 to +1
+    }
+
+    return buffer;
+}
+
 function resonancePercentToQ(percent) {
     const minQ = 0.7;
     const maxQ = 20;
@@ -35,6 +48,7 @@ class Operator {
         this.dcoSettings = { waveform, frequency };
         this.dcaSettings = { volume, attack, decay, sustain, release };
         this.filterSettings = { type: "none", freq1: 10, freq2: 10, freq3: 10, freq4: 10, resonance: 0, attack: 5, decay: 1000, release: 500 };
+        this.pitchEnvSettings = { start: 0, time: 500, end: 0 };
 
         this.tremolo = audioContext.createGain();
         this.tremoloOffset = audioContext.createConstantSource();
@@ -49,19 +63,30 @@ class Operator {
         this.filter.frequency.value = this.filterSettings.freq1;
         this.filter.Q.value = resonancePercentToQ(this.filterSettings.resonance);
         this.amp = audioContext.createGain();
-        this.osc = audioContext.createOscillator();
-        if (this.dcoSettings.waveform.startsWith("pulse")) {
-            if (this.dcoSettings.waveform.length > 5) {
-                pulseWidth = tryParseInt(this.dcoSettings.waveform.slice(5), -1);
-                if (pulseWidth < 1) {
-                    pulseWidth = 25;
-                }
-            }
-            this.osc.setPeriodicWave(createPulseWave(audioContext, pulseWidth / 100, 20));
+        if (this.dcoSettings.waveform === "noise") {
+            this.osc = audioContext.createBufferSource();
+            this.osc.buffer = createWhiteNoiseBuffer(audioContext, 1);
         } else {
-            this.osc.type = this.dcoSettings.waveform;
+            this.osc = audioContext.createOscillator();
+            if (this.dcoSettings.waveform.startsWith("pulse")) {
+                if (this.dcoSettings.waveform.length > 5) {
+                    pulseWidth = tryParseInt(this.dcoSettings.waveform.slice(5), -1);
+                    if (pulseWidth < 1) {
+                        pulseWidth = 25;
+                    }
+                }
+                this.osc.setPeriodicWave(createPulseWave(audioContext, pulseWidth / 100, 20));
+            } else if (this.dcoSettings.waveform === "cosine") {
+                const real = new Float32Array([0, 0]); // cosine terms
+                const imag = new Float32Array([0, 1]); // sine terms
+                const wave = audioContext.createPeriodicWave(real, imag, { disableNormalization: true });
+                this.osc.setPeriodicWave(wave);
+            } else {
+                this.osc.type = this.dcoSettings.waveform;
+            }
+            this.osc.frequency.value = this.dcoSettings.frequency;
+
         }
-        this.osc.frequency.value = this.dcoSettings.frequency;
         this.osc.connect(this.filter);
         this.filter.connect(this.amp);
     }
@@ -122,6 +147,12 @@ class Operator {
         }
     }
 
+    setPitchEnv(start, time, end) {
+        this.pitchEnvSettings.start = start;
+        this.pitchEnvSettings.time = time;
+        this.pitchEnvSettings.end = end;
+    }
+
     async start() {
         const startTime = this.audioContext.currentTime;
         if (this.startScheduled) return;
@@ -139,6 +170,9 @@ class Operator {
             this.filter.frequency.linearRampToValueAtTime(safeTarget(this.filterSettings.freq2), startTime + fat);
             this.filter.frequency.exponentialRampToValueAtTime(safeTarget(this.filterSettings.freq3), startTime + fat + fdt);
         }
+
+        this.osc.detune.setValueAtTime(this.pitchEnvSettings.start * 1200, startTime);
+        this.osc.detune.linearRampToValueAtTime(this.pitchEnvSettings.end * 1200, startTime + (this.pitchEnvSettings.time / 1000));
 
         this.osc.start(startTime);
         if (this.lfoSettings.destination === "dca") {
