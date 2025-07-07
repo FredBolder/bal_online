@@ -31,7 +31,7 @@ import { clearBitMapLava, drawLevel } from "../drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../elevators.js";
 import { exportLevel, importLevel } from "../files.js";
 import { moveFish } from "../fish.js";
-import { getGameInfo, initGameInfo, initGameVars } from "../gameInfo.js";
+import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
@@ -155,11 +155,10 @@ function BalPage() {
           if (gameData[target][elec.x] === 2) {
             gameVars.gameOver = true;
           }
-          if (
-            backData[target][elec.x] === 20 ||
-            backData[target][elec.x] === 23
-          ) {
-            if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+          if (backData[target][elec.x] === 20 || backData[target][elec.x] === 23) {
+            if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData) || 
+            inWater(gameInfo.blueBall1.x, gameInfo.blueBall1.y, backData) || 
+            (gameInfo.twoBlue && inWater(gameInfo.blueBall2.x, gameInfo.blueBall2.y, backData))) {
               gameVars.gameOver = true;
             }
             for (let j = 0; j < gameInfo.redFish.length; j++) {
@@ -181,17 +180,20 @@ function BalPage() {
       }
     }
     if (!gameVars.gameOver && gameInfo.hasWater && !gameInfo.hasDivingGlasses) {
-      if (backData[gameInfo.blueBall.y][gameInfo.blueBall.x] === 20 || backData[gameInfo.blueBall.y][gameInfo.blueBall.x] === 23) {
+      if ([20, 23].includes(backData[gameInfo.blueBall1.y][gameInfo.blueBall1.x])) {
+        gameVars.gameOver = true;
+      }
+      if (gameInfo.twoBlue && [20, 23].includes(backData[gameInfo.blueBall2.y][gameInfo.blueBall2.x])) {
         gameVars.gameOver = true;
       }
     }
     if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && (gameInfo.redFish.length > 0)) {
       for (let i = 0; i < gameInfo.redFish.length && !gameVars.gameOver; i++) {
         const fish = gameInfo.redFish[i];
-        if (
-          !fish.isDead &&
-          Math.abs(gameInfo.blueBall.x - fish.x) < 2 &&
-          Math.abs(gameInfo.blueBall.y - fish.y) < 2
+        if (!fish.isDead && 
+          (((Math.abs(gameInfo.blueBall.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall.y - fish.y) < 2)) ||
+          ((Math.abs(gameInfo.blueBall1.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall1.y - fish.y) < 2)) ||
+          (gameInfo.twoBlue && (Math.abs(gameInfo.blueBall2.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall2.y - fish.y) < 2)))
         ) {
           gameVars.gameOver = true;
         }
@@ -325,36 +327,15 @@ function BalPage() {
         gameVars.elevatorCounter--;
       } else {
         gameVars.elevatorCounter = 5;
-        info = moveElevators(gameData, gameInfo.elevators, gameInfo.redBalls, gameInfo.orangeBalls);
-        if (info.playerX !== -1 && info.playerY !== -1) {
-          gameInfo.blueBall.x = info.playerX;
-          gameInfo.blueBall.y = info.playerY;
-        }
-        if (gameInfo.elevators.length > 0) {
+        if (moveElevators(gameData, gameInfo)) {
           update = true;
         }
-
-        info = moveHorizontalElevators(
-          gameData,
-          gameInfo.horizontalElevators,
-          gameInfo.redBalls,
-          gameInfo.orangeBalls
-        );
-        if (info.playerX !== -1 && info.playerY !== -1) {
-          gameInfo.blueBall.x = info.playerX;
-          gameInfo.blueBall.y = info.playerY;
-        }
-        if (gameInfo.horizontalElevators.length > 0) {
+        if (moveHorizontalElevators(gameData, gameInfo)) {
           update = true;
         }
       }
 
-      info = checkElevatorInOuts(gameData, gameInfo);
-      if (info.playerX !== -1) {
-        gameInfo.blueBall.x = info.playerX;
-        gameInfo.blueBall.y = info.playerY;
-      }
-      if (info.update) {
+      if (checkElevatorInOuts(gameData, gameInfo)) {
         update = true;
       }
 
@@ -555,10 +536,6 @@ function BalPage() {
     }
 
     info = checkFalling(backData, gameData, gameInfo, gameVars);
-    if (info.ballX !== -1) {
-      gameInfo.blueBall.x = info.ballX;
-      gameInfo.blueBall.y = info.ballY;
-    }
     if (info.update) {
       update = true;
     }
@@ -1120,8 +1097,11 @@ function BalPage() {
     }
     switch (e.key) {
       case "!": {
-        if (gameInfo.hasTelekineticPower) {
+        if (gameInfo.hasTelekineticPower && !gameInfo.twoBlue) {
           info = moveObjectWithTelekineticPower(gameData, gameInfo);
+        }
+        if (gameInfo.twoBlue) {
+          switchPlayer(gameInfo);
         }
         break;
       }
@@ -1745,7 +1725,7 @@ function BalPage() {
           <div className="help-main">
             <p>
               In every level you control the blue ball with the happy face. You
-              have to eat all the little green balls. You can push the white
+              have to eat all the small green balls. You can push the white
               balls and the light blue balls, but not more than 2 at the same
               time. The light blue balls are floating balls and they will always
               stay at the same height. Red balls and red fish are very

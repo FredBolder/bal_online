@@ -17,6 +17,7 @@ describe("Game info", () => {
     let expectedOutput01a = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 3 },
+        blueBall1: { x: 3, y: 3 },
         greenBalls: 2,
         redBalls: [
             { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
@@ -40,6 +41,7 @@ describe("Game info", () => {
     let expectedOutput01b = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 3 },
+        blueBall1: { x: 3, y: 3 },
         greenBalls: 4,
         redBalls: [
             { x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
@@ -63,6 +65,7 @@ describe("Game info", () => {
     let expectedOutput01c = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 3 },
+        blueBall1: { x: 3, y: 3 },
         greenBalls: 8,
     };
     it("getGameInfo C", () => {
@@ -84,6 +87,7 @@ describe("Game info", () => {
     let expectedOutput01d = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 5 },
+        blueBall1: { x: 4, y: 5 },
         elevators: [
             { x: 8, y: 2, up: false },
             { x: 2, y: 5, up: true },
@@ -109,6 +113,7 @@ describe("Game info", () => {
     let expectedOutput01e = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 3 },
+        blueBall1: { x: 3, y: 3 },
         greenBalls: 2,
         redBalls: [
             { x: 1, y: 2, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },

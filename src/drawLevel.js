@@ -679,14 +679,6 @@ function drawLevel(
     }
   }
 
-  function drawGreenBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementGreen, xmin + w1 * 0.25, ymin, w1 * 0.5, w2 * 0.5);
-    } else {
-      drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "green");
-    }
-  }
-
   function drawHalfStone(x, y, location) {
     const color = getFgcolor(x, y, "rgb(70, 70, 70)");
     switch (location) {
@@ -1234,8 +1226,16 @@ function drawLevel(
     }
   }
 
-  function drawSilverBall() {
-    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#C0C0C0");
+  function drawSmallBlueBall() {
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "blue");
+  }
+
+  function drawSmallGreenBall() {
+    if (nicerGraphics) {
+      ctx.drawImage(elements.elementGreen, xmin + w1 * 0.25, ymin, w1 * 0.5, w2 * 0.5);
+    } else {
+      drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "green");
+    }
   }
 
   function drawSmallLadder() {
@@ -1245,6 +1245,10 @@ function drawLevel(
     drawLine(ctx, xc + d1, ymin, xc + d1, yc, "white");
     drawLine(ctx, xc - d1, ymin + d2, xc + d1, ymin + d2, "white");
     drawLine(ctx, xc - d1, yc - d2, xc + d1, yc - d2, "white");
+  }
+
+  function drawSmallSilverBall() {
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#C0C0C0");
   }
 
   function drawSmallWeakStone() {
@@ -1612,7 +1616,7 @@ function drawLevel(
           drawBlueBall();
           break;
         case 3:
-          drawGreenBall();
+          drawSmallGreenBall();
           break;
         case 4:
           drawWhiteBall();
@@ -1877,7 +1881,7 @@ function drawLevel(
           drawDirectionChanger5();
           break;
         case 140:
-          drawSilverBall();
+          drawSmallSilverBall();
           break;
         case 141:
           drawQuarterCircleStoneBottomLeft(col, row);
@@ -1959,6 +1963,9 @@ function drawLevel(
           break;
         case 167:
           drawDelay();
+          break;
+        case 168:
+          drawSmallBlueBall();
           break;
         case 1000:
           // For manual only (empty)

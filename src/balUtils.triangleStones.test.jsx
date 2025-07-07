@@ -29,7 +29,7 @@ describe("balUtils Triangle stones", () => {
     });
     it("Triangled Walls A info", () => {
         expect(JSON.stringify(info01a)).toBe(
-            JSON.stringify({ update: true, ballX: 2, ballY: 2, sound: "" })
+            JSON.stringify({ update: true, sound: "" })
         );
     });
 
@@ -53,7 +53,7 @@ describe("balUtils Triangle stones", () => {
     });
     it("Triangled Walls B info", () => {
         expect(JSON.stringify(info01b)).toBe(
-            JSON.stringify({ update: true, ballX: 4, ballY: 2, sound: "" })
+            JSON.stringify({ update: true, sound: "" })
         );
     });
 
@@ -77,7 +77,7 @@ describe("balUtils Triangle stones", () => {
     });
     it("Triangled Walls C info", () => {
         expect(JSON.stringify(info01c)).toBe(
-            JSON.stringify({ update: false, ballX: -1, ballY: -1, sound: "" })
+            JSON.stringify({ update: false, sound: "" })
         );
     });
 
@@ -101,7 +101,7 @@ describe("balUtils Triangle stones", () => {
     });
     it("Triangled Walls D info", () => {
         expect(JSON.stringify(info01d)).toBe(
-            JSON.stringify({ update: true, ballX: -1, ballY: -1, sound: "" })
+            JSON.stringify({ update: true, sound: "" })
         );
     });
 
@@ -125,7 +125,7 @@ describe("balUtils Triangle stones", () => {
     });
     it("Triangled Walls E info", () => {
         expect(JSON.stringify(info01e)).toBe(
-            JSON.stringify({ update: false, ballX: -1, ballY: -1, sound: "" })
+            JSON.stringify({ update: false, sound: "" })
         );
     });
 
@@ -159,7 +159,7 @@ describe("balUtils Triangle stones", () => {
     });
     it("Triangled Walls F info", () => {
         expect(JSON.stringify(info01f)).toBe(
-            JSON.stringify({ update: true, ballX: 5, ballY: 6, sound: "" })
+            JSON.stringify({ update: true, sound: "" })
         );
     });
 

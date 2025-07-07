@@ -48,7 +48,7 @@ describe("balUtils Ladders", () => {
   });
   it("Ladders A info", () => {
     expect(JSON.stringify(info01a)).toBe(
-      JSON.stringify({ update: false, ballX: -1, ballY: -1, sound: "" })
+      JSON.stringify({ update: false, sound: "" })
     );
   });
 
@@ -108,7 +108,7 @@ describe("balUtils Ladders", () => {
   });
   it("Ladders C info", () => {
     expect(JSON.stringify(info01c)).toBe(
-      JSON.stringify({ update: true, ballX: 2, ballY: 6, sound: "" })
+      JSON.stringify({ update: true, sound: "" })
     );
   });
 

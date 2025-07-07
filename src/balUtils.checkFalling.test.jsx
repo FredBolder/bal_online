@@ -29,7 +29,7 @@ describe("balUtils checkFalling", () => {
     });
     it("checkFalling A info", () => {
         expect(JSON.stringify(info01a)).toBe(
-            JSON.stringify({ update: true, ballX: -1, ballY: -1, sound: "" })
+            JSON.stringify({ update: true, sound: "" })
         );
     });
 
@@ -54,7 +54,7 @@ describe("balUtils checkFalling", () => {
     });
     it("checkFalling B info", () => {
         expect(JSON.stringify(info01b)).toBe(
-            JSON.stringify({ update: true, ballX: 3, ballY: 3, sound: "" })
+            JSON.stringify({ update: true, sound: "" })
         );
     });
 
@@ -77,7 +77,7 @@ describe("balUtils checkFalling", () => {
     });
     it("checkFalling C info", () => {
         expect(JSON.stringify(info01c)).toBe(
-            JSON.stringify({ update: false, ballX: -1, ballY: -1, sound: "" })
+            JSON.stringify({ update: false, sound: "" })
         );
     });
 

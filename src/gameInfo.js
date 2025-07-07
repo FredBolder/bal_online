@@ -245,7 +245,9 @@ export function getGameInfo(backData, gameData) {
 }
 
 export function initGameInfo(info) {
-    info.blueBall = { x: -1, y: -1 };
+    info.blueBall1 = { x: -1, y: -1 };
+    info.blueBall2 = { x: -1, y: -1 };
+    info.blueBall = info.blueBall1;
     info.copiers = [];
     info.damagedStones = [];
     info.delays = [];
@@ -274,12 +276,14 @@ export function initGameInfo(info) {
     info.orangeBalls = [];
     info.pistons = [];
     info.pistonsTriggers = [];
+    info.player = 1;
     info.redBalls = [];
     info.redFish = [];
     info.teleports = [];
     info.timeBombs = [];
     info.trapDoors = [];
     info.travelGate = { x: -1, y: -1 };
+    info.twoBlue = false;
     info.yellowBalls = [];
     info.yellowBallPushers = [];
     info.yellowBallPushersTrigger = { x: -1, y: -1 };
@@ -329,5 +333,22 @@ export function initGameVars(vars) {
     vars.yellowPauserActive = false;
     vars.yellowStopperActive = false;
     vars.yellowSlowCounter = 0;
+}
+
+export function switchPlayer(gameInfo) {
+    if (gameInfo.twoBlue) {
+        if (gameInfo.player === 2) {
+            gameInfo.player = 1;
+        } else {
+            gameInfo.player = 2;
+        }
+    } else {
+        gameInfo.player = 1;
+    }
+    if (gameInfo.player === 2) {
+        gameInfo.blueBall = gameInfo.blueBall2;
+    } else {
+        gameInfo.blueBall = gameInfo.blueBall1;
+    }
 }
 
