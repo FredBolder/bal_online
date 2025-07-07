@@ -1,14 +1,10 @@
-import { updateObject } from "./balUtils.js";
-import { moveOrangeBallInDirection } from "./orangeBalls.js";
+import { moveObject } from "./balUtils.js";
 
 export function checkForces(gameData, gameInfo) {
     let empty = -1
     let maxX = 0;
-    let result = {};
-    result.update = false;
-    result.playerX = -1;
-    result.playerY = -1;
     let possible = false;
+    let updated = false;
 
     if (gameData.length > 0) {
         maxX = gameData[0].length - 1;
@@ -35,25 +31,8 @@ export function checkForces(gameData, gameInfo) {
                     // Move down
                     if (possible) {
                         for (let j = empty; j > force.y + 1; j--) {
-                            result.update = true;
-                            gameData[j][force.x] = gameData[j - 1][force.x];
-                            gameData[j - 1][force.x] = 0;
-                            switch (gameData[j][force.x]) {
-                                case 2:
-                                    result.playerX = force.x;
-                                    result.playerY = j;
-                                    break;
-                                case 8:
-                                case 93:
-                                case 94:
-                                    updateObject(gameInfo.redBalls, force.x, j - 1, force.x, j);
-                                    break;
-                                case 40:
-                                    moveOrangeBallInDirection(gameInfo.orangeBalls, force.x, j - 1, "down", false);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            updated = true;
+                            moveObject(gameData, gameInfo, force.x, j - 1, force.x, j);
                         }
                     }
                     break;
@@ -75,25 +54,8 @@ export function checkForces(gameData, gameInfo) {
                     // Move left
                     if (possible) {
                         for (let j = empty; j < force.x - 1; j++) {
-                            result.update = true;
-                            gameData[force.y][j] = gameData[force.y][j + 1];
-                            gameData[force.y][j + 1] = 0;
-                            switch (gameData[force.y][j]) {
-                                case 2:
-                                    result.playerX = j;
-                                    result.playerY = force.y;
-                                    break;
-                                case 8:
-                                case 93:
-                                case 94:
-                                    updateObject(gameInfo.redBalls, j + 1, force.y, j, force.y);
-                                    break;
-                                case 40:
-                                    moveOrangeBallInDirection(gameInfo.orangeBalls, j + 1, force.y, "left", false);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            updated = true;
+                            moveObject(gameData, gameInfo, j + 1, force.y, j, force.y);
                         }
                     }
                     break;
@@ -115,25 +77,8 @@ export function checkForces(gameData, gameInfo) {
                     // Move right
                     if (possible) {
                         for (let j = empty; j > force.x + 1; j--) {
-                            result.update = true;
-                            gameData[force.y][j] = gameData[force.y][j - 1];
-                            gameData[force.y][j - 1] = 0;
-                            switch (gameData[force.y][j]) {
-                                case 2:
-                                    result.playerX = j;
-                                    result.playerY = force.y;
-                                    break;
-                                case 8:
-                                case 93:
-                                case 94:
-                                    updateObject(gameInfo.redBalls, j - 1, force.y, j, force.y);
-                                    break;
-                                case 40:
-                                    moveOrangeBallInDirection(gameInfo.orangeBalls, j - 1, force.y, "right", false);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            updated = true;
+                            moveObject(gameData, gameInfo, j - 1, force.y, j, force.y);
                         }
                     }
                     break;
@@ -155,25 +100,8 @@ export function checkForces(gameData, gameInfo) {
                     // Move up
                     if (possible) {
                         for (let j = empty; j < force.y - 1; j++) {
-                            result.update = true;
-                            gameData[j][force.x] = gameData[j + 1][force.x];
-                            gameData[j + 1][force.x] = 0;
-                            switch (gameData[j][force.x]) {
-                                case 2:
-                                    result.playerX = force.x;
-                                    result.playerY = j;
-                                    break;
-                                case 8:
-                                case 93:
-                                case 94:
-                                    updateObject(gameInfo.redBalls, force.x, j + 1, force.x, j);
-                                    break;
-                                case 40:
-                                    moveOrangeBallInDirection(gameInfo.orangeBalls, force.x, j + 1, "up", false);
-                                    break;
-                                default:
-                                    break;
-                            }
+                            updated = true;
+                            moveObject(gameData, gameInfo, force.x, j + 1, force.x, j);
                         }
                     }
                     break;
@@ -182,7 +110,7 @@ export function checkForces(gameData, gameInfo) {
             }
         }
     }
-    return result;
+    return updated;
 }
 
 export function hasForceDown(gameData, gameInfo, x, y) {

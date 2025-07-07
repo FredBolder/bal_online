@@ -280,12 +280,7 @@ function BalPage() {
       update = true;
     }
 
-    info = checkForces(gameData, gameInfo);
-    if (info.playerX !== -1) {
-      gameInfo.blueBall.x = info.playerX;
-      gameInfo.blueBall.y = info.playerY;
-    }
-    if (info.update) {
+    if (checkForces(gameData, gameInfo)) {
       update = true;
     }
 

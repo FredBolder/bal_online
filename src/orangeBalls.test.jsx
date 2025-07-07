@@ -135,7 +135,7 @@ describe("Orange ball", () => {
         expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
     });
     it("Force orange ball up A info", () => {
-        expect(JSON.stringify(info03a)).toBe(JSON.stringify({ update: true, playerX: -1, playerY: -1 }));
+        expect(info03a).toBe(true);
     });
     it("Force orange ball up A orangeBalls", () => {
         expect(JSON.stringify(orangeBalls03a)).toBe(JSON.stringify([{ x: 5, y: 2, direction: "none" }]));

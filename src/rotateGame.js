@@ -228,6 +228,10 @@ export function rotateGame(backData, gameData, gameInfo) {
 
       // Blue ball
       rotateXY(gameInfo.blueBall, rows);
+      rotateXY(gameInfo.blueBall1, rows);
+      if (gameInfo.twoBlue) {
+        rotateXY(gameInfo.blueBall2, rows);
+      }
 
       // Copiers
       for (let i = 0; i < gameInfo.copiers.length; i++) {

@@ -29,7 +29,7 @@ describe("Force", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
     it("Force up A info", () => {
-        expect(JSON.stringify(info01a)).toBe(JSON.stringify({ update: true, playerX: 4, playerY: 2 }));
+        expect(info01a).toBe(true);
     });
 
     let input01b = [
@@ -53,7 +53,7 @@ describe("Force", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
     it("Force up B info", () => {
-        expect(JSON.stringify(info01b)).toBe(JSON.stringify({ update: true, playerX: 4, playerY: 1 }));
+        expect(info01b).toBe(true);
     });
 
     let input01c = [
@@ -77,7 +77,7 @@ describe("Force", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
     it("Force up C info", () => {
-        expect(JSON.stringify(info01c)).toBe(JSON.stringify({ update: true, playerX: -1, playerY: -1 }));
+        expect(info01c).toBe(true);
     });
 
     // ***** Force right *****
@@ -103,7 +103,7 @@ describe("Force", () => {
         expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
     });
     it("Force right A info", () => {
-        expect(JSON.stringify(info02a)).toBe(JSON.stringify({ update: true, playerX: 5, playerY: 4 }));
+        expect(info02a).toBe(true);
     });
 
     let input02b = [
@@ -127,7 +127,7 @@ describe("Force", () => {
         expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
     });
     it("Force right B info", () => {
-        expect(JSON.stringify(info02b)).toBe(JSON.stringify({ update: true, playerX: 5, playerY: 4 }));
+        expect(info02b).toBe(true);
     });
 
     let input02c = [
@@ -144,7 +144,7 @@ describe("Force", () => {
         expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
     });
     it("Force right C info", () => {
-        expect(JSON.stringify(info02c)).toBe(JSON.stringify({ update: false, playerX: -1, playerY: -1 }));
+        expect(info02c).toBe(false);
     });
 
     let input02d = [
@@ -170,7 +170,7 @@ describe("Force", () => {
         expect(JSON.stringify(input02d)).toBe(JSON.stringify(expectedOutput02d));
     });
     it("Force right D info", () => {
-        expect(JSON.stringify(info02d)).toBe(JSON.stringify({ update: true, playerX: -1, playerY: -1 }));
+        expect(info02d).toBe(true);
     });
     it("Force right D orangeBalls", () => {
         expect(JSON.stringify(gameInfo02d.orangeBalls)).toBe(JSON.stringify([{ x: 5, y: 4, direction: "none" }]));
@@ -197,7 +197,7 @@ describe("Force", () => {
         expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
     });
     it("Force left A info", () => {
-        expect(JSON.stringify(info03a)).toBe(JSON.stringify({ update: true, playerX: 1, playerY: 3 }));
+        expect(info03a).toBe(true);
     });
 
     let input03b = [
@@ -219,7 +219,7 @@ describe("Force", () => {
         expect(JSON.stringify(input03b)).toBe(JSON.stringify(expectedOutput03b));
     });
     it("Force left B info", () => {
-        expect(JSON.stringify(info03b)).toBe(JSON.stringify({ update: true, playerX: 1, playerY: 3 }));
+        expect(info03b).toBe(true);
     });
 
     let input03c = [
@@ -235,7 +235,7 @@ describe("Force", () => {
         expect(JSON.stringify(input03c)).toBe(JSON.stringify(expectedOutput03c));
     });
     it("Force left C info", () => {
-        expect(JSON.stringify(info03c)).toBe(JSON.stringify({ update: false, playerX: -1, playerY: -1 }));
+        expect(info03c).toBe(false);
     });
 
 
@@ -264,7 +264,7 @@ describe("Force", () => {
         expect(JSON.stringify(input04a)).toBe(JSON.stringify(expectedOutput04a));
     });
     it("Force down A info", () => {
-        expect(JSON.stringify(info04a)).toBe(JSON.stringify({ update: true, playerX: 4, playerY: 4 }));
+        expect(info04a).toBe(true);
     });
 
 
