@@ -1,7 +1,7 @@
 $instrument: 1, 7, vibraphone, 100
 $instrument: 2, 7, xylophone, 100
 $instrument: 3, 7, bell, 100
-$instrument: 4, 7, harpsichord, 100
+$instrument: 4, 7, strings, 100
 $notes: 1, 7, C4, E4, G4, C5, C3, G3
 $notes: 2, 7, C4, E4, G4, C5, C3, G3
 $notes: 3, 7, C4, E4, G4, C5, C3, G3

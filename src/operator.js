@@ -44,7 +44,7 @@ class Operator {
         this.stopped = false;
         this.stopScheduled = false;
         let pulseWidth = 25;
-        this.lfoSettings = { destination: "none", waveform: "sine", frequency: 4, depth: 0.1 };
+        this.lfoSettings = { destination: "none", waveform: "sine", frequency: 4, delay: 0, depth: 0.1 };
         this.dcoSettings = { waveform, frequency };
         this.dcaSettings = { volume, attack, decay, sustain, release };
         this.filterSettings = { type: "none", freq1: 10, freq2: 10, freq3: 10, freq4: 10, resonance: 0, attack: 5, decay: 1000, release: 500 };
@@ -109,7 +109,7 @@ class Operator {
         this.filter.Q.value = resonancePercentToQ(this.filterSettings.resonance);
     }
 
-    setLfo(destination, waveform, frequency, depth) {
+    setLfo(destination, waveform, frequency, depth, delay) {
         this.filter.disconnect();
         this.lfo.disconnect();
         this.lfoGain.disconnect();
@@ -121,6 +121,7 @@ class Operator {
         this.lfoSettings.waveform = waveform;
         this.lfoSettings.frequency = frequency;
         this.lfoSettings.depth = depth;
+        this.lfoSettings.delay = delay;
 
         this.lfo.type = this.lfoSettings.waveform;
         this.lfo.frequency.value = this.lfoSettings.frequency;
@@ -179,7 +180,7 @@ class Operator {
             this.tremoloOffset.start(startTime);
         }
         if (this.lfoSettings.destination !== "none") {
-            this.lfo.start(startTime);
+            this.lfo.start(startTime + (this.lfoSettings.delay / 1000));
         }
         this.started = true;
         await new Promise(resolve => setTimeout(resolve, (startTime + 2 - this.audioContext.currentTime) * 1000));

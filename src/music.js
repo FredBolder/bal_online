@@ -135,12 +135,28 @@ export async function playNote(instrument, volume, note) {
         operators.push(new Operator(audioCtx, "sine", 250, maxVolume * 0.6, 0, 400, 0, 100));
         operators[1].setPitchEnv(0.1, 50, 0);
         break;
+      case "strings":
+        attack = 100;
+        decay = 500;
+        release = 100;
+        f1 = 1 / 3;
+        f2 = 0.7;
+        operators.push(new Operator(audioCtx, "sawtooth", frequency, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sawtooth", frequency, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sawtooth", frequency, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators[0].setPitchEnv(0.01, 50, 0.01);
+        operators[2].setPitchEnv(-0.01, 50, -0.01);
+        for (let i = 0; i < operators.length; i++) {
+          operators[i].setFilter("lowpass", 2000, 2500, 2000, 2000, 0, attack, decay, release);
+          operators[i].setLfo("dco", "sine", 4, 0.01, 250);
+        }
+        break;
       case "vibraphone":
         operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.5, 5, 1000, 0, 500));
         operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.3, 5, 750, 0, 375));
         operators.push(new Operator(audioCtx, "sine", frequency * 10, maxVolume * 0.2, 5, 400, 0, 200));
         for (let i = 0; i < operators.length; i++) {
-          operators[i].setLfo("dca", "sine", 4, 0.5);
+          operators[i].setLfo("dca", "sine", 4, 0.5, 0);
         }
         break;
       case "xylophone":
