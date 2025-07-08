@@ -75,7 +75,7 @@ import arrowRight from "../Images/arrow_right.svg";
 
 let kPressed = false;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -930,6 +930,11 @@ function BalPage() {
         backData = data.backData;
         gameInfo = null;
         gameInfo = data.gameInfo;
+        if (gameInfo.player === 2) {
+          gameInfo.blueBall = gameInfo.blueBall2;
+        } else {
+          gameInfo.blueBall = gameInfo.blueBall1;
+        }
         gameVars = null;
         gameVars = data.gameVars;
         setLevelNumber(gameVars.currentLevel);
@@ -1522,7 +1527,7 @@ function BalPage() {
             idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
             if (idx >= 0) {
               obj = gameInfo.musicBoxes[idx];
-              info = `Object: Music box, Instrument: ${obj.instrument}, Position: ${obj.x}, ${obj.y}`;
+              info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Position: ${obj.x}, ${obj.y}`;
             }
             break;  
           case 158:
@@ -1540,6 +1545,13 @@ function BalPage() {
             if (idx >= 0) {
               obj = gameInfo.pistons[idx];
               info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;  
+          case 167:
+            idx = findElementByCoordinate(column, row, gameInfo.delays);
+            if (idx >= 0) {
+              obj = gameInfo.delays[idx];
+              info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
             }
             break;  
           default:

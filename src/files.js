@@ -1,7 +1,5 @@
-import {
-    numberToChar,
-    stringArrayToNumberArray,
-} from "./balUtils.js";
+import { numberToChar, stringArrayToNumberArray } from "./balUtils.js";
+import { checkLevel } from "./levels.js";
 
 export async function exportLevel(backData, gameData, gameInfo, gameVars) {
     let code = "";
@@ -83,7 +81,11 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
                 line = `$group: ${piston.x}, ${piston.y}, ${piston.group}`;
                 await writable.write(`${line}\n`);
             }
-            if (piston.mode !== "normal") {
+            if (piston.inverted) {
+                line = `$inverted: ${piston.x}, ${piston.y}, yes`;
+                await writable.write(`${line}\n`);
+            }
+            if (piston.mode !== "toggle") {
                 line = `$pistonmode: ${piston.x}, ${piston.y}, ${piston.mode}`;
                 await writable.write(`${line}\n`);
             }
@@ -107,6 +109,9 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
                 const gd = gameData[i][j];
                 const bd = backData[i][j];
                 let data = gd;
+                if ([38, 160, 162, 164, 166].includes(data)) {
+                    data = 0;
+                }
                 if ((data === 0) && (bd !== 0)) {
                     data = bd;
                 }
@@ -131,6 +136,7 @@ export async function importLevel() {
     let result = {};
     let levelData = [];
     let levelSettings = [];
+    let msg = "";
     try {
         const [fileHandle] = await window.showOpenFilePicker({
             types: [
@@ -159,13 +165,9 @@ export async function importLevel() {
             }
         }
 
-        if (levelData.length > 0) {
-            const lineLength = levelData[0].length;
-            if (!levelData.every(line => line.length === lineLength)) {
-                throw new Error("Inconsistent line lengths");
-            }
-        } else {
-            throw new Error("Level is empty");
+        msg = checkLevel(levelData);
+        if (msg !== "") {
+            throw new Error(msg);
         }
 
         const gd = stringArrayToNumberArray(levelData, true);
@@ -175,7 +177,7 @@ export async function importLevel() {
         result.levelSettings = levelSettings;
         return result;
     } catch (err) {
-        console.error("Error opening file:", err);
+        alert(err.message);
         return null;
     }
 }

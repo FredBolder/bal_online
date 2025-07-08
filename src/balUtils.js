@@ -670,6 +670,10 @@ export function falling(x, y, backData, gameData, gameInfo, element = 2) {
     if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y + 1, backData))) {
       result = false;
     }
+    // teleport
+    if ([2].includes(element) && isTeleport(x, y, gameInfo.teleports)) {
+      result = false;
+    }
     // Water
     if ([2].includes(element) && inWater(x, y, backData)) {
       result = false;
