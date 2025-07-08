@@ -28,7 +28,7 @@ describe("Rotate game", () => {
     ];
     let gameInfo01a = {
         ...defaultGameInfo,
-        blueBall: { x: 2, y: 4 },
+        blueBall1: { x: 2, y: 4 },
         greenBalls: 1,
         redBalls: [
             { x: 3, y: 1 },
@@ -36,6 +36,7 @@ describe("Rotate game", () => {
         ],
         yellowBalls: [{ x: 1, y: 3, direction: "down" }],
     };
+    gameInfo01a.blueBall = gameInfo01a.blueBall1;
     let info01a = rotateGame(inputBack01a, input01a, gameInfo01a);
     it("rotateGame A rotated", () => {
         expect(info01a).toBe(true);

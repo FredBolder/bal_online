@@ -18,7 +18,7 @@ describe("Pistons", () => {
     let gameInfo01a = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
-        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01a = [
@@ -49,7 +49,7 @@ describe("Pistons", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
         yellowBalls: [{ x: 4, y: 3, direction: "none" }],
-        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01b = [
@@ -83,7 +83,7 @@ describe("Pistons", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
         yellowBalls: [{ x: 5, y: 2, direction: "none" }],
-        pistons: [{ x: 7, y: 2, activated: false, sticky: false, direction: "left", mode: "normal", group: 1 }],
+        pistons: [{ x: 7, y: 2, activated: false, sticky: false, inverted: false, direction: "left", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01c = [
@@ -117,8 +117,8 @@ describe("Pistons", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 5 },
         yellowBalls: [{ x: 6, y: 2, direction: "none" }],
-        pistons: [{ x: 6, y: 1, activated: false, sticky: false, direction: "down", mode: "normal", group: 1 }, 
-            { x: 3, y: 6, activated: false, sticky: false, direction: "up", mode: "normal", group: 1 }],
+        pistons: [{ x: 6, y: 1, activated: false, sticky: false, inverted: false, direction: "down", mode: "toggle", group: 1 }, 
+            { x: 3, y: 6, activated: false, sticky: false, inverted: false, direction: "up", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }],
     }
     let input01d = [
@@ -155,7 +155,7 @@ describe("Pistons", () => {
     let gameInfo01e = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
-        pistons: [{ x: 3, y: 3, activated: false, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let input01e = [
@@ -178,8 +178,8 @@ describe("Pistons", () => {
     let gameInfo01f = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 5 },
-        pistons: [{ x: 6, y: 1, activated: false, sticky: false, direction: "down", mode: "normal", group: 2 }, 
-            { x: 3, y: 6, activated: false, sticky: false, direction: "up", mode: "normal", group: 1 }],
+        pistons: [{ x: 6, y: 1, activated: false, sticky: false, inverted: false, direction: "down", mode: "toggle", group: 2 }, 
+            { x: 3, y: 6, activated: false, sticky: false, inverted: false, direction: "up", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }, { x: 7, y: 6, pressed: false, group: 2 }],
     }
     let input01f = [
@@ -213,7 +213,7 @@ describe("Pistons", () => {
     let gameInfo01g = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
-        pistons: [{ x: 3, y: 3, activated: true, sticky: true, direction: "right", mode: "normal", group: 1 }],
+        pistons: [{ x: 3, y: 3, activated: true, sticky: true, inverted: false, direction: "right", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let pistonsActivated01g = [...pistonsActivated];
@@ -245,7 +245,7 @@ describe("Pistons", () => {
     let gameInfo01h = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 3 },
-        pistons: [{ x: 3, y: 3, activated: true, sticky: false, direction: "right", mode: "normal", group: 1 }],
+        pistons: [{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
         pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
     }
     let pistonsActivated01h = [...pistonsActivated];

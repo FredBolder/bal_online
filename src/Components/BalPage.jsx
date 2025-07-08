@@ -75,7 +75,7 @@ import arrowRight from "../Images/arrow_right.svg";
 
 let kPressed = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -682,7 +682,7 @@ function BalPage() {
             break;
           case "$pistonmode":
             if (values.length === 3) {
-              if (validXY && (["normal", "repeatfast", "repeatslow"].includes(values[2]))) {
+              if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(values[2]))) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
                   gameInfo.pistons[idx].mode = values[2];
@@ -702,6 +702,25 @@ function BalPage() {
                 if (idx >= 0) {
                   gameInfo.musicBoxes[idx].instrument = instrument;
                   gameInfo.musicBoxes[idx].volume = volume;
+                }
+              }
+            }
+            break;
+          case "$inverted":
+            if (values.length === 3) {
+              if (validXY) {
+                idx = findElementByCoordinate(x, y, gameInfo.pistons);
+                if (idx >= 0) {
+                  switch (values[2]) {
+                    case "no":
+                      gameInfo.pistons[idx].inverted = false;
+                      break;
+                    case "yes":
+                      gameInfo.pistons[idx].inverted = true;
+                      break;
+                    default:
+                      break;
+                  }
                 }
               }
             }
@@ -1355,7 +1374,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2007;
+        gameVars.currentLevel = 2008;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1464,7 +1483,11 @@ function BalPage() {
     handleKeyDown({ key: "2", shiftKey: false });
   }
 
-  function putBallPosition(e) {
+  function handleCanvasClick(e) {
+    let idx = -1;
+    let info = "";
+    let obj = null;
+
     if (!gameData || gameData.length < 1) {
       return false;
     }
@@ -1488,20 +1511,62 @@ function BalPage() {
     let x = e.clientX - rect.left - leftMargin;
     let y = e.clientY - rect.top - topMargin;
 
-    let squareX = Math.floor(x / size1);
-    let squareY = Math.floor(y / size1);
+    let column = Math.floor(x / size1);
+    let row = Math.floor(y / size1);
 
-    if (squareX >= 0 && squareX < columns && squareY >= 0 && squareY < rows) {
+    if (column >= 0 && column < columns && row >= 0 && row < rows) {
+      if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
+        info = "";
+        switch (gameData[row][column]) {
+          case 157:
+            idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
+            if (idx >= 0) {
+              obj = gameInfo.musicBoxes[idx];
+              info = `Object: Music box, Instrument: ${obj.instrument}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;  
+          case 158:
+            idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
+            if (idx >= 0) {
+              obj = gameInfo.pistonsTriggers[idx];
+              info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;  
+          case 159:
+          case 161:
+          case 163:
+          case 165:
+            idx = findElementByCoordinate(column, row, gameInfo.pistons);
+            if (idx >= 0) {
+              obj = gameInfo.pistons[idx];
+              info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;  
+          default:
+            break;
+        }
+        if (info !== "") {
+          alert(info);
+        }
+      }
       if (!e.altKey && e.shiftKey && e.ctrlKey) {
-        if (gameData[squareY][squareX] === 24) {
-          alert("No, this is not The Net! The π indicates that this level is made by Panagiotis.");
+        info = "";
+        switch (gameData[row][column]) {
+          case 24:
+            info = "No, this is not The Net! The π indicates that this level is made by Panagiotis.";
+            break;
+          default:
+            break;
+        }
+        if (info !== "") {
+          alert(info);
         }
       }
       if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
-        if (gameData[squareY][squareX] === 0) {
+        if (gameData[row][column] === 0) {
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-          gameInfo.blueBall.x = squareX;
-          gameInfo.blueBall.y = squareY;
+          gameInfo.blueBall.x = column;
+          gameInfo.blueBall.y = row;
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
           updateScreen();
         }
@@ -1639,7 +1704,7 @@ function BalPage() {
             <canvas
               className="gameCanvas"
               ref={canvas}
-              onClick={putBallPosition}
+              onClick={handleCanvasClick}
             />
             <div className="moveButtons">
               <div ref={elementMoveButtons}>

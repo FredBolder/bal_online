@@ -223,7 +223,7 @@ export function getGameInfo(backData, gameData) {
                         default:
                             break;
                     }
-                    let piston = { x: j, y: i, activated: false, sticky: false, direction: direction, mode: "normal", group: 1 };
+                    let piston = { x: j, y: i, activated: false, sticky: false, inverted: false, direction: direction, mode: "toggle", group: 1 };
                     result.pistons.push(piston);
                     result.hasPiston = true;
                     break;

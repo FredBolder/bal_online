@@ -16,7 +16,6 @@ describe("Game info", () => {
     ];
     let expectedOutput01a = {
         ...defaultGameInfo,
-        blueBall: { x: 3, y: 3 },
         blueBall1: { x: 3, y: 3 },
         greenBalls: 2,
         redBalls: [
@@ -24,6 +23,7 @@ describe("Game info", () => {
             { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
         ],
     };
+    expectedOutput01a.blueBall = expectedOutput01a.blueBall1;
     it("getGameInfo A", () => {
         expect(JSON.stringify(getGameInfo(inputBack01a, input01a))).toBe(
             JSON.stringify(expectedOutput01a)
@@ -40,7 +40,6 @@ describe("Game info", () => {
     ];
     let expectedOutput01b = {
         ...defaultGameInfo,
-        blueBall: { x: 3, y: 3 },
         blueBall1: { x: 3, y: 3 },
         greenBalls: 4,
         redBalls: [
@@ -48,6 +47,7 @@ describe("Game info", () => {
             { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
         ],
     };
+    expectedOutput01b.blueBall = expectedOutput01b.blueBall1;
     it("getGameInfo B", () => {
         expect(JSON.stringify(getGameInfo(inputBack01b, input01b))).toBe(
             JSON.stringify(expectedOutput01b)
@@ -64,10 +64,10 @@ describe("Game info", () => {
     ];
     let expectedOutput01c = {
         ...defaultGameInfo,
-        blueBall: { x: 3, y: 3 },
         blueBall1: { x: 3, y: 3 },
         greenBalls: 8,
     };
+    expectedOutput01c.blueBall = expectedOutput01c.blueBall1;
     it("getGameInfo C", () => {
         expect(JSON.stringify(getGameInfo(inputBack01c, input01c))).toBe(
             JSON.stringify(expectedOutput01c)
@@ -86,7 +86,6 @@ describe("Game info", () => {
     ];
     let expectedOutput01d = {
         ...defaultGameInfo,
-        blueBall: { x: 4, y: 5 },
         blueBall1: { x: 4, y: 5 },
         elevators: [
             { x: 8, y: 2, up: false },
@@ -96,6 +95,7 @@ describe("Game info", () => {
         yellowBalls: [{ x: 1, y: 4, direction: "none" }],
         detonator: { x: 8, y: 5 },
     };
+    expectedOutput01d.blueBall = expectedOutput01d.blueBall1;
     it("getGameInfo D", () => {
         expect(JSON.stringify(getGameInfo(inputBack01d, input01d))).toBe(
             JSON.stringify(expectedOutput01d)
@@ -112,7 +112,6 @@ describe("Game info", () => {
     ];
     let expectedOutput01e = {
         ...defaultGameInfo,
-        blueBall: { x: 3, y: 3 },
         blueBall1: { x: 3, y: 3 },
         greenBalls: 2,
         redBalls: [
@@ -120,6 +119,7 @@ describe("Game info", () => {
             { x: 1, y: 3, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 },
         ],
     };
+    expectedOutput01e.blueBall = expectedOutput01e.blueBall1;
     it("getGameInfo E", () => {
         expect(JSON.stringify(getGameInfo(inputBack01e, input01e))).toBe(
             JSON.stringify(expectedOutput01e)

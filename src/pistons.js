@@ -6,6 +6,7 @@ function canMove(element) {
 }
 
 export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pushingDown) {
+    let groupsWithWeight = [];
     let result = { updated: false };
     let weight = false;
     let xTrigger = -1;
@@ -16,6 +17,11 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         xTrigger = pistonsTrigger.x;
         yTrigger = pistonsTrigger.y;
         weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
+        if (weight) {
+            if (!groupsWithWeight.includes(pistonsTrigger.group)) {
+                groupsWithWeight.push(pistonsTrigger.group);
+            }
+        }
         if (pistonsTrigger.pressed) {
             if (!weight) {
                 pistonsTrigger.pressed = false;
@@ -24,19 +30,34 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             if (weight) {
                 pistonsTrigger.pressed = true;
                 gameVars.pistonsActivated[pistonsTrigger.group - 1] = !gameVars.pistonsActivated[pistonsTrigger.group - 1];
-                for (let j = 0; j < gameInfo.pistons.length; j++) {
-                    const piston = gameInfo.pistons[j];
-                    if (piston.group === pistonsTrigger.group) {
-                        if (gameVars.pistonsActivated[pistonsTrigger.group - 1]) {
-                            if (activatePiston(gameData, gameInfo, piston, "normal")) {
-                                result.updated = true;
-                            }
-                        } else {
-                            if (deactivatePiston(gameData, gameInfo, piston, "normal")) {
-                                result.updated = true;
-                            }
-                        }
+            }
+        }
+        for (let j = 0; j < gameInfo.pistons.length; j++) {
+            const piston = gameInfo.pistons[j];
+            if (piston.group === pistonsTrigger.group) {
+                if (gameVars.pistonsActivated[pistonsTrigger.group - 1] !== piston.inverted) {
+                    if (activatePiston(gameData, gameInfo, piston, "toggle")) {
+                        result.updated = true;
                     }
+                } else {
+                    if (deactivatePiston(gameData, gameInfo, piston, "toggle")) {
+                        result.updated = true;
+                    }
+                }
+            }
+        }
+    }
+    for (let j = 0; j < gameInfo.pistons.length; j++) {
+        const piston = gameInfo.pistons[j];
+        if (piston.mode === "momentary") {
+            // xor
+            if (groupsWithWeight.includes(piston.group) !== piston.inverted) {
+                if (activatePiston(gameData, gameInfo, piston, "momentary")) {
+                    result.updated = true;
+                }
+            } else {
+                if (deactivatePiston(gameData, gameInfo, piston, "momentary")) {
+                    result.updated = true;
                 }
             }
         }
@@ -51,7 +72,7 @@ export function pistonsRepeatFast(gameData, gameInfo, gameVars) {
     for (let i = 0; i < gameInfo.pistons.length; i++) {
         const piston = gameInfo.pistons[i];
         if (piston.mode === "repeatfast") {
-            if (gameVars.pistonsRepeatFastModeActive) {
+            if (gameVars.pistonsRepeatFastModeActive !== piston.inverted) {
                 if (activatePiston(gameData, gameInfo, piston, "repeatfast")) {
                     update = true;
                 }
@@ -72,7 +93,7 @@ export function pistonsRepeatSlow(gameData, gameInfo, gameVars) {
     for (let i = 0; i < gameInfo.pistons.length; i++) {
         const piston = gameInfo.pistons[i];
         if (piston.mode === "repeatslow") {
-            if (gameVars.pistonsRepeatSlowModeActive) {
+            if (gameVars.pistonsRepeatSlowModeActive !== piston.inverted) {
                 if (activatePiston(gameData, gameInfo, piston, "repeatslow")) {
                     update = true;
                 }
