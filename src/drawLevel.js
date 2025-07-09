@@ -452,6 +452,11 @@ function drawLevel(
     drawLine(ctx, xc + d6, ymin + d5 + dy, xc, ymin + d7 + dy, color);
   }
 
+  function drawDoor() {
+    let d1 = w1 / 6;
+    drawFilledBox(ctx, xc - d1, ymin, 2 * d1, w2, "brown");
+  }
+
   function drawElectricity(x, y) {
     let d1 = Math.round(w1 * 0.06);
     let d2 = Math.round(w1 * 0.28);
@@ -1966,6 +1971,9 @@ function drawLevel(
           break;
         case 168:
           drawSmallBlueBall();
+          break;
+        case 169:
+          drawDoor();
           break;
         case 1000:
           // For manual only (empty)

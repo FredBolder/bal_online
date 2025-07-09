@@ -454,7 +454,9 @@ export function rotateGame(backData, gameData, gameInfo) {
         rotateXY(gameInfo.pistonsTriggers[i], rows);
       }
       rotateXY(gameInfo.travelGate, rows);
-      rotateXY(gameInfo.yellowBallPushersTrigger, rows);
+      for (let i = 0; i < gameInfo.yellowBallPushersTriggers.length; i++) {
+        rotateXY(gameInfo.yellowBallPushersTriggers[i], rows);
+      }
       rotateXY(gameInfo.yellowStopper, rows);
       rotateXY(gameInfo.yellowPauser, rows);
     }

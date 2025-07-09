@@ -155,10 +155,11 @@ export function getGameInfo(backData, gameData) {
                     result.yellowBallPushers.push(yellowBallPusher);
                     break;
                 }
-                case 116:
-                    result.yellowBallPushersTrigger.x = j;
-                    result.yellowBallPushersTrigger.y = i;
+                case 116: {
+                    let yellowBallPushersTrigger = { x: j, y: i, pressed: false }; 
+                    result.yellowBallPushersTriggers.push(yellowBallPushersTrigger);
                     break;
+                }    
                 case 117: {
                     let timeBomb = { x: j, y: i, status: -1 };
                     result.timeBombs.push(timeBomb);
@@ -286,7 +287,7 @@ export function initGameInfo(info) {
     info.twoBlue = false;
     info.yellowBalls = [];
     info.yellowBallPushers = [];
-    info.yellowBallPushersTrigger = { x: -1, y: -1 };
+    info.yellowBallPushersTriggers = [];
     info.yellowBars = [];
     info.yellowPauser = { x: -1, y: -1 };
     info.yellowStopper = { x: -1, y: -1 };

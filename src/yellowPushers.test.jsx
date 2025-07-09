@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { checkYellowPushersTrigger } from "./yellowPushers.js";
+import { checkYellowPushersTriggers } from "./yellowPushers.js";
 
 describe("Yellow ball pushers", () => {
     const defaultGameInfo = {};
@@ -11,13 +11,13 @@ describe("Yellow ball pushers", () => {
 
     const backData = zeroArray(20, 20); // bigger array, so it can be used for all
 
-    // ***** checkYellowBallPushersTrigger *****
+    // ***** checkYellowBallPushersTriggers *****
 
     let gameInfo01a = {
         ...defaultGameInfo,
         blueBall: { x: 7, y: 3 },
         yellowBallPushers: [{ x: 4, y: 2 }],
-        yellowBallPushersTrigger: { x: 7, y: 4 },
+        yellowBallPushersTriggers: [{ x: 7, y: 4 }],
         yellowBalls: [{ x: 3, y: 2, direction: "none" }, { x: 5, y: 2, direction: "none" }],
     };
 
@@ -37,7 +37,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 0, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkYellowPushersTrigger(backData, input01a, gameInfo01a, { ...defaultGameVars }, false);
+    let info01a = checkYellowPushersTriggers(backData, input01a, gameInfo01a, { ...defaultGameVars }, false);
     it("checkYellowBallPushersTrigger A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -52,7 +52,7 @@ describe("Yellow ball pushers", () => {
         ...defaultGameInfo,
         blueBall: { x: 7, y: 4 },
         yellowBallPushers: [{ x: 4, y: 3 }],
-        yellowBallPushersTrigger: { x: 7, y: 5 },
+        yellowBallPushersTriggers: [{ x: 7, y: 5 }],
         yellowBalls: [{ x: 4, y: 2, direction: "none" }, { x: 4, y: 4, direction: "none" }],
     };
 
@@ -74,7 +74,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 9, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkYellowPushersTrigger(backData, input01b, gameInfo01b, { ...defaultGameVars }, false);
+    let info01b = checkYellowPushersTriggers(backData, input01b, gameInfo01b, { ...defaultGameVars }, false);
     it("checkYellowBallPushersTrigger B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -90,7 +90,7 @@ describe("Yellow ball pushers", () => {
         blueBall: { x: 7, y: 3 },
         forces: [{ x: 1, y: 2, direction: 6 }],
         yellowBallPushers: [{ x: 4, y: 2 }],
-        yellowBallPushersTrigger: { x: 7, y: 4 },
+        yellowBallPushersTriggers: [{ x: 7, y: 4 }],
         yellowBalls: [{ x: 3, y: 2, direction: "none" }, { x: 5, y: 2, direction: "none" }],
     };
 
@@ -110,7 +110,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 0, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = checkYellowPushersTrigger(backData, input01c, gameInfo01c, { ...defaultGameVars }, false);
+    let info01c = checkYellowPushersTriggers(backData, input01c, gameInfo01c, { ...defaultGameVars }, false);
     it("checkYellowBallPushersTrigger C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
@@ -125,7 +125,7 @@ describe("Yellow ball pushers", () => {
         ...defaultGameInfo,
         blueBall: { x: 7, y: 3 },
         yellowBallPushers: [{ x: 4, y: 2 }],
-        yellowBallPushersTrigger: { x: 7, y: 4 },
+        yellowBallPushersTriggers: [{ x: 7, y: 4 }],
         yellowBalls: [{ x: 3, y: 2, direction: "up" }, { x: 5, y: 2, direction: "down" }],
     };
 
@@ -138,7 +138,7 @@ describe("Yellow ball pushers", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01d = input01d.map(row => [...row]);
-    let info01d = checkYellowPushersTrigger(backData, input01d, gameInfo01d, { ...defaultGameVars }, false);
+    let info01d = checkYellowPushersTriggers(backData, input01d, gameInfo01d, { ...defaultGameVars }, false);
     it("checkYellowBallPushersTrigger D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });

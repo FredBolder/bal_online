@@ -49,7 +49,7 @@ import { tryParseInt } from "../utils.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
 import { moveYellowBars } from "../yellowBars.js";
 import { checkYellowPauser } from "../yellowPauser.js";
-import { checkYellowPushersTrigger } from "../yellowPushers.js";
+import { checkYellowPushersTriggers } from "../yellowPushers.js";
 import { checkYellowStopper } from "../yellowStopper.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -430,7 +430,7 @@ function BalPage() {
       }
     }
 
-    info = checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, false);
+    info = checkYellowPushersTriggers(backData, gameData, gameInfo, gameVars, false);
     if (info.updated) {
       update = true;
     }

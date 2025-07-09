@@ -8,7 +8,7 @@ import { movePurpleBar } from "./purpleBar.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPauser } from "./yellowPauser.js";
-import { checkYellowPushersTrigger } from "./yellowPushers.js";
+import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStopper } from "./yellowStopper.js";
 
 const timeBombsTime = 100;
@@ -401,11 +401,14 @@ export function charToNumber(c) {
     case "%":
       result = 168;
       break;
+    case "ß":
+      result = 169;
+      break;
     case "|":
       result = 1000;
       break;
     default:
-      result = 0;
+      result = -1;
       break;
   }
   return result;
@@ -1091,6 +1094,9 @@ export function numberToChar(n) {
       break;
     case 168:
       result = "%";
+      break;
+    case 169:
+      result = "ß";
       break;
     case 1000:
       // For manual only
@@ -2042,7 +2048,7 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
               }
               break;
             case 116:
-              checkYellowPushersTrigger(backData, gameData, gameInfo, gameVars, true);
+              checkYellowPushersTriggers(backData, gameData, gameInfo, gameVars, true);
               break;
             case 131:
               checkYellowStopper(backData, gameData, gameInfo, gameVars, true);

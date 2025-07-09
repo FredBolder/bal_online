@@ -1,3 +1,4 @@
+import { charToNumber } from "./balUtils.js";
 import { randomInt } from "./utils.js";
 
 const series1Start = 200;
@@ -17,11 +18,14 @@ export function checkLevel(data) {
   let differentLength = false;
   let msg = "";
   let nBlueBalls = 0;
+  let nDetonators = 0;
+  let nGameRotator = 0;
   let nSmallBlueBalls = 0;
   let nSmallGreenBalls = 0;
   let nSmallSilverBalls = 0;
   let nSelfDestructingTeleports = 0;
   let nTeleports = 0;
+  let nTravelgates = 0;
 
   if (data.length > 0) {
     for (let i = 0; i < data.length; i++) {
@@ -31,9 +35,15 @@ export function checkLevel(data) {
       }
       for (let j = 0; j < line.length; j++) {
         const ch = line[j];
+        if (charToNumber(ch) === -1) {
+          msg += `There is an invalid character (${ch}) in the data.\n`;
+        }
         switch (ch) {
           case "2":
             nBlueBalls++;
+            break;
+          case "b":
+            nDetonators++;
             break;
           case "%":
             nSmallBlueBalls++;
@@ -50,6 +60,9 @@ export function checkLevel(data) {
           case "T":
             nTeleports++;
             break;
+          case "g":
+            nTravelgates++;
+            break;
           default:
             break;
         }
@@ -61,23 +74,35 @@ export function checkLevel(data) {
     if (nBlueBalls < 1) {
       msg += "There is no blue ball (player).\n";
     }
+    if (nBlueBalls > 1) {
+      msg += "There can be only one blue ball (player).\n";
+    }
+    if (nDetonators > 1) {
+      msg += "There can be only one detonator.\n";
+    }
+    if ((nGameRotator > 0) && (data.length !== data[0].length)) {
+      msg += "There can only be a game rotator when the number of columns is the same as the number of rows.\n";
+    }
     if (nSmallBlueBalls > 1) {
       msg += "There can be only one small blue ball.\n";
     }
     if ((nSmallBlueBalls > 0) && (nSmallSilverBalls > 0)) {
       msg += "When there is a small silver ball, there can not be a small blue ball.\n";
     }
+    if ((nSmallBlueBalls > 0) && (nTravelgates > 0)) {
+      msg += "When there is a travel gate, there can not be a small blue ball.\n";
+    }
     if (nSmallGreenBalls < 1) {
       msg += "There is no small green ball.\n";
-    }
-    if (nBlueBalls > 1) {
-      msg += "There can be only one blue ball (player).\n";
     }
     if ((nTeleports !== 0) && (nTeleports !== 2)) {
       msg += "There can be only 0 or 2 normal teleports.\n";
     }
     if ((nSelfDestructingTeleports !== 0) && (nSelfDestructingTeleports !== 2)) {
       msg += "There can be only 0 or 2 self-destructing teleports.\n";
+    }
+    if (nTravelgates > 1) {
+      msg += "There can be only one travel gate.\n";
     }
   } else {
     msg += "The level is empty.\n";
