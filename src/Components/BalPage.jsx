@@ -48,9 +48,9 @@ import { checkTrapDoors } from "../trapDoors.js";
 import { tryParseInt } from "../utils.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
 import { moveYellowBars } from "../yellowBars.js";
-import { checkYellowPauser } from "../yellowPauser.js";
+import { checkYellowPausers } from "../yellowPausers.js";
 import { checkYellowPushersTriggers } from "../yellowPushers.js";
-import { checkYellowStopper } from "../yellowStopper.js";
+import { checkYellowStoppers } from "../yellowStoppers.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -434,8 +434,8 @@ function BalPage() {
     if (info.updated) {
       update = true;
     }
-    checkYellowPauser(backData, gameData, gameInfo, gameVars, false);
-    checkYellowStopper(backData, gameData, gameInfo, gameVars, false);
+    checkYellowPausers(backData, gameData, gameInfo, gameVars, false);
+    checkYellowStoppers(backData, gameData, gameInfo, gameVars, false);
 
     if (gameInfo.teleports.length > 0) {
       let teleport = -1;

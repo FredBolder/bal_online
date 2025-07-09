@@ -7,9 +7,9 @@ import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
-import { checkYellowPauser } from "./yellowPauser.js";
+import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
-import { checkYellowStopper } from "./yellowStopper.js";
+import { checkYellowStoppers } from "./yellowStoppers.js";
 
 const timeBombsTime = 100;
 
@@ -580,7 +580,7 @@ export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDo
     for (let i = xmin; i <= xmax; i++) {
       const el = gameData[y - 1][i];
       weight = [2, 4, 8, 40, 93, 94].includes(el);
-      if (!pushingDown) {
+      if (!pushingDown || (i !== gameInfo.blueBall.x) || ((y - 1) !== gameInfo.blueBall.y)) {
         if ((el === 2) && !hasForceDown(gameData, gameInfo, i, y - 1)) {
           if (gameInfo.hasPropeller || [25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
             weight = false;
@@ -2051,10 +2051,10 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
               checkYellowPushersTriggers(backData, gameData, gameInfo, gameVars, true);
               break;
             case 131:
-              checkYellowStopper(backData, gameData, gameInfo, gameVars, true);
+              checkYellowStoppers(backData, gameData, gameInfo, gameVars, true);
               break;
             case 136:
-              checkYellowPauser(backData, gameData, gameInfo, gameVars, true);
+              checkYellowPausers(backData, gameData, gameInfo, gameVars, true);
               break;
             case 158:
               checkPistonsTriggers(backData, gameData, gameInfo, gameVars, true);

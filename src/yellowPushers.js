@@ -40,8 +40,8 @@ export function checkYellowPushersTriggers(backData, gameData, gameInfo, gameVar
         }
     }
     if (trigger) {
-        for (let j = 0; j < gameInfo.yellowBallPushers.length; j++) {
-            const yellowBallPusher = gameInfo.yellowBallPushers[j];
+        for (let i = 0; i < gameInfo.yellowBallPushers.length; i++) {
+            const yellowBallPusher = gameInfo.yellowBallPushers[i];
             const x = yellowBallPusher.x;
             const y = yellowBallPusher.y;
             if (x < gameData[0].length - 2) {

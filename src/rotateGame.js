@@ -457,8 +457,12 @@ export function rotateGame(backData, gameData, gameInfo) {
       for (let i = 0; i < gameInfo.yellowBallPushersTriggers.length; i++) {
         rotateXY(gameInfo.yellowBallPushersTriggers[i], rows);
       }
-      rotateXY(gameInfo.yellowStopper, rows);
-      rotateXY(gameInfo.yellowPauser, rows);
+      for (let i = 0; i < gameInfo.yellowStoppers.length; i++) {
+        rotateXY(gameInfo.yellowStoppers[i], rows);
+      }
+      for (let i = 0; i < gameInfo.yellowPausers.length; i++) {
+        rotateXY(gameInfo.yellowPausers[i], rows);
+      }
     }
   }
   return rotated;

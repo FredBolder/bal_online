@@ -156,10 +156,10 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 116: {
-                    let yellowBallPushersTrigger = { x: j, y: i, pressed: false }; 
+                    let yellowBallPushersTrigger = { x: j, y: i, pressed: false };
                     result.yellowBallPushersTriggers.push(yellowBallPushersTrigger);
                     break;
-                }    
+                }
                 case 117: {
                     let timeBomb = { x: j, y: i, status: -1 };
                     result.timeBombs.push(timeBomb);
@@ -180,19 +180,21 @@ export function getGameInfo(backData, gameData) {
                     result.yellowBars.push(yellowBar);
                     break;
                 }
-                case 131:
-                    result.yellowStopper.x = j;
-                    result.yellowStopper.y = i;
+                case 131: {
+                    let yellowStopper = { x: j, y: i, pressed: false };
+                    result.yellowStoppers.push(yellowStopper);
                     break;
+                }
                 case 132:
                     result.travelGate.x = j;
                     result.travelGate.y = i;
                     result.hasTravelGate = true;
                     break;
-                case 136:
-                    result.yellowPauser.x = j;
-                    result.yellowPauser.y = i;
+                case 136: {
+                    let yellowPauser = { x: j, y: i, pressed: false };
+                    result.yellowPausers.push(yellowPauser);
                     break;
+                }
                 case 157: {
                     let musicBox = { x: j, y: i, notes: ["C4"], noteIndex: 0, instrument: "", volume: 90 };
                     result.musicBoxes.push(musicBox);
@@ -289,8 +291,8 @@ export function initGameInfo(info) {
     info.yellowBallPushers = [];
     info.yellowBallPushersTriggers = [];
     info.yellowBars = [];
-    info.yellowPauser = { x: -1, y: -1 };
-    info.yellowStopper = { x: -1, y: -1 };
+    info.yellowPausers = [];
+    info.yellowStoppers = [];
 }
 
 export function initGameVars(vars) {
@@ -331,8 +333,6 @@ export function initGameVars(vars) {
     vars.wave2 = 0;
     vars.yellowCounter = 0;
     vars.yellowPaused = false;
-    vars.yellowPauserActive = false;
-    vars.yellowStopperActive = false;
     vars.yellowSlowCounter = 0;
 }
 
