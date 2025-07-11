@@ -65,12 +65,7 @@ describe("balUtils checkFalling", () => {
         [1, 1, 1, 1, 1],
     ];
     let inputBack01c = zeroArray(4, 5);
-    let expectedOutput01c = [
-        [1, 1, 1, 1, 1],
-        [1, 0, 0, 3, 1],
-        [1, 4, 2, 0, 1],
-        [1, 1, 1, 1, 1],
-    ];
+    let expectedOutput01c = input01c.map(row => [...row]);
     let info01c = checkFalling(inputBack01c, input01c, { ...defaultGameInfo }, { ...defaultGameVars });
     it("checkFalling C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));

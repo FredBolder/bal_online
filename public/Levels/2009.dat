@@ -1,0 +1,27 @@
+$hint: Make sure that the yellow balls are not too close to each other. You can stop a yellow ball also by jumping, but be careful not to push it up.
+$sticky: 10, 5, yes
+$sticky: 8, 6, yes
+$sticky: 6, 7, yes
+$sticky: 6, 12, yes
+$sticky: 8, 13, yes
+$sticky: 10, 14, yes
+11111111111111111111111111111111
+13                             1
+1                              1
+1                              1
+1      11111111    111         1
+11111111  Ì 8 β1  1α 8         1
+1       Ì + 1  1  1  1         1
+1     Ì +Ψ9                   +1
+1     +Ψ9                     +1
+1    Ψ9                       +1
+1    Ψ9                       +1
+1     +Ψ9                     +1
+1     Ù +Ψ9                   +1
+1       Ù +     ==       1111111
+111       Ù     ==       1     1
+1%j             ==       1     1
+1      2  1 8 α    β 8   1ψ    1
+1111^v1111111111^1111111111=   1
+1                          =  m1
+11111111111111111111111111111111

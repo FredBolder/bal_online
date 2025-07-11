@@ -512,7 +512,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
       forceUp = hasForceUp(gameData, gameInfo, j, i);
 
       if (element2 === 0 &&
-        (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, element1)) ||
+        (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo)) ||
           (((element1 === 4) || (element1 === 40)) && !forceUp))) {
         skip = ((element1 === 2) && (gameVars.skipFalling > 0));
         if (skip) {
@@ -663,11 +663,19 @@ function isTravelGate(x, y, travelGate) {
   return ((x === travelGate.x) && (y === travelGate.y));
 }
 
-export function falling(x, y, backData, gameData, gameInfo, element = 2) {
+export function falling(x, y, backData, gameData, gameInfo) {
+  const element = gameData[y][x];
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
 
-  if (gameData[y + 1][x] === 0) {
+  if (y >= gameData.length - 1) {
+    return false;
+  }
+
+  if ((gameData[y + 1][x] === 0) ||
+    ((gameData[y + 1][x] === 15) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+    ((gameData[y + 1][x] === 16) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+  ) {
     result = true;
     // ladder
     if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y + 1, backData))) {
@@ -682,9 +690,15 @@ export function falling(x, y, backData, gameData, gameInfo, element = 2) {
       result = false;
     }
     // Rope
-    if ([2].includes(element) && ((backData[y + 1][x] === 80) || (backData[y - 1][x] === 80) ||
-      (backData[y][x] === 137))) {
-      result = false;
+    if ([2].includes(element)) {
+      if ((backData[y + 1][x] === 80) || (backData[y][x] === 137)) {
+        result = false;
+      }
+      if (y > 0) {
+        if (backData[y - 1][x] === 80) {
+          result = false;
+        }
+      }
     }
     // Propeller
     if ([2].includes(element) && gameInfo.hasPropeller) {
@@ -698,14 +712,18 @@ export function falling(x, y, backData, gameData, gameInfo, element = 2) {
   return result;
 }
 
-export function fallingOrRising(x, y, backData, gameData, gameInfo, element = 2) {
-  return (falling(x, y, backData, gameData, gameInfo, element) || rising(x, y, gameData, gameInfo));
+export function fallingOrRising(x, y, backData, gameData, gameInfo) {
+  return (falling(x, y, backData, gameData, gameInfo) || rising(x, y, gameData, gameInfo));
 }
 
 export function rising(x, y, gameData, gameInfo) {
   let forceDown = hasForceDown(gameData, gameInfo, x, y);
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
+
+  if (y <= 0) {
+    return false;
+  }
 
   if ((gameData[y - 1][x] === 0) && forceUp && !forceDown) {
     result = true;
@@ -1983,11 +2001,13 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
         gameInfo.blueBall.y = y + 2;
         result.player = true;
       }
-      if (!result.player && (gameData[y + 1][x] === 0) && (backData[y - 1][x] === 80)) {
-        gameData[y + 1][x] = 2;
-        gameData[y][x] = element;
-        gameInfo.blueBall.y = y + 1;
-        result.player = true;
+      if (y > 0) {
+        if (!result.player && (gameData[y + 1][x] === 0) && (backData[y - 1][x] === 80)) {
+          gameData[y + 1][x] = 2;
+          gameData[y][x] = element;
+          gameInfo.blueBall.y = y + 1;
+          result.player = true;
+        }
       }
 
       if (

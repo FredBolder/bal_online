@@ -4,7 +4,7 @@ import { randomInt } from "./utils.js";
 const series1Start = 200;
 const series1End = 224;
 const series2Start = 300;
-const series2End = 305;
+const series2End = 309;
 const series3Start = 700;
 const series3End = 749;
 const seriesSmallStart = 750;
@@ -12,7 +12,7 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2008;
+const seriesSecretEnd = 2010;
 
 export function checkLevel(data) {
   let differentLength = false;
@@ -203,7 +203,7 @@ export function getRandomLevel(currentLevel) {
     const level = exclude[i];
     const idx = levels.indexOf(level);
     if (idx >= 0) {
-      levels.splice(idx);
+      levels.splice(idx, 1);
     }
   }
   while (result === currentLevel) {

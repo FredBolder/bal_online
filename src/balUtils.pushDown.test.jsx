@@ -131,5 +131,44 @@ describe("balUtils pushDown", () => {
         );
     });
 
+    let yellow01e = [{ x: 3, y: 1, direction: "none" }];
+    let gameInfo01e = { ...defaultGameInfo, blueBall: { x: 3, y: 0 }, yellowBalls: yellow01e };
+    let input01e = [
+        [1, 0, 0, 2, 0, 0, 1],
+        [1, 0, 0, 9, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01e = [
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 2, 0, 0, 1],
+        [1, 0, 0, 9, 0, 0, 1],
+        [1, 1, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    let inputBack01e = zeroArray(7, 7);
+    let info01e = pushDown(inputBack01e, input01e, gameInfo01e, { ...defaultGameVars });
+    it("pushDown E", () => {
+        expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
+    });
+    it("pushDown E info", () => {
+        expect(JSON.stringify(info01e)).toBe(
+            JSON.stringify({ player: true, sound: "" })
+        );
+    });
+    it("pushDown E blueBall", () => {
+        expect(JSON.stringify(gameInfo01e.blueBall)).toBe(JSON.stringify({ x: 3, y: 1 }));
+    });
+    it("pushDown E yellow", () => {
+        expect(JSON.stringify(yellow01e)).toBe(
+            JSON.stringify([{ x: 3, y: 2, direction: "down" }])
+        );
+    });
+
     // Insert new tests here
 });

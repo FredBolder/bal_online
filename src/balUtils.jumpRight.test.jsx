@@ -1,13 +1,13 @@
 import { describe, it, expect } from "vitest";
 import {
-    jumpRight,
-    zeroArray,
+  jumpRight,
+  zeroArray,
 } from "./balUtils.js";
 import { initGameInfo } from "./gameInfo.js";
 
 describe("balUtils jumpRight", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
+  const defaultGameInfo = {};
+  initGameInfo(defaultGameInfo);
 
   let gameInfo01a = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
   let inputBack01_5_5 = zeroArray(5, 5);
@@ -168,6 +168,28 @@ describe("balUtils jumpRight", () => {
     expect(JSON.stringify(gameInfo01f.blueBall)).toBe(JSON.stringify({ x: 3, y: 1 }));
   });
 
+  let gameInfo01g = { ...defaultGameInfo, blueBall: { x: 2, y: 2 } };
+  let input01g = [
+    [1, 1, 1, 1, 1],
+    [1, 3, 0, 0, 1],
+    [1, 0, 2, 0, 1],
+    [1, 0, 16, 1, 1],
+    [1, 1, 1, 1, 1],
+  ];
+  let expectedOutput01g = input01g.map(row => [...row]);
+  let info01g = jumpRight(inputBack01_5_5, input01g, gameInfo01g);
+  it("jumpLeft G", () => {
+    expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
+  });
+  it("jumpLeft G eating", () => {
+    expect(info01g.eating).toBe(false);
+  });
+  it("jumpLeft G player", () => {
+    expect(info01g.player).toBe(false);
+  });
+  it("jumpLeft G blueBall", () => {
+    expect(JSON.stringify(gameInfo01g.blueBall)).toBe(JSON.stringify({ x: 2, y: 2 }));
+  });
 
-    // Insert new tests here
+  // Insert new tests here
 });
