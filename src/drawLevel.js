@@ -8,6 +8,7 @@ import {
   drawText,
 } from "./drawUtils.js";
 import { electricityTarget } from "./electricity.js";
+import { getObjectCoordinates } from "./telekinesis.js";
 import { booleanToInt, polar, randomInt } from "./utils.js";
 
 let bitmapLava = null;
@@ -1530,6 +1531,26 @@ function drawLevel(
     drawBox(ctx, xc - (d1 * 0.5), yc + (d1 * 0.5), d1, d1, "black");
   }
 
+  function highlightTelekinesisObject(x, y) {
+    const blueX = gameInfo.blueBall.x;
+    const blueY = gameInfo.blueBall.y;
+    let info = null;
+                  
+    if (!gameInfo.hasTelekineticPower || (Math.abs(blueX - x) > 3) || (Math.abs(blueY - y) > 3)) {
+      return;
+    }
+
+    info = getObjectCoordinates(gameData, gameInfo);
+    if ((info.x === x) && (info.y === y)) {
+      drawBox(ctx, xmin, ymin, w1, w2, "white");
+      ctx.setLineDash([2, 2]);
+      ctx.strokeStyle = "blue";
+      ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
+      ctx.setLineDash([]);
+    }
+  }
+
+
   if (
     !gameData ||
     gameData.length < 1 ||
@@ -1987,6 +2008,8 @@ function drawLevel(
       if ((gameInfo.travelGate.x === col) && (gameInfo.travelGate.y === row)) {
         drawTravelGate(col, row);
       }
+
+      highlightTelekinesisObject(col, row);
 
       xmin += size1;
     }

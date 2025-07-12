@@ -165,7 +165,7 @@ export async function importLevel() {
             }
         }
 
-        msg = checkLevel(levelData);
+        msg = checkLevel(levelData, levelSettings);
         if (msg !== "") {
             throw new Error(msg);
         }

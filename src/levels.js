@@ -1,5 +1,5 @@
 import { charToNumber } from "./balUtils.js";
-import { randomInt } from "./utils.js";
+import { randomInt, tryParseInt } from "./utils.js";
 
 const series1Start = 200;
 const series1End = 224;
@@ -14,8 +14,42 @@ const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2010;
 
-export function checkLevel(data) {
+function getSettingInfo(name, settingsInfo) {
+  let info = null;
+
+  for (let i = 0; i < settingsInfo.length; i++) {
+    if (name === settingsInfo[i].name) {
+      info = settingsInfo[i];
+    }
+  }
+  return info;
+}
+
+function settingNr(index) {
+  return `Setting ${index + 1}: `;
+}
+
+export function checkLevel(data, settings) {
+  // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable
+  // number of parameters.
+  const settingsInfo = [
+    { name: "$addnotes", params: 0, xy: true },
+    { name: "$background", params: 5, xy: true },
+    { name: "$bgcolor", params: 5, xy: true },
+    { name: "$fgcolor", params: 5, xy: true },
+    { name: "$gameticks", params: 3, xy: true },
+    { name: "$group", params: 3, xy: true },
+    { name: "$hint", params: 0, xy: false },
+    { name: "$instrument", params: 4, xy: true },
+    { name: "$inverted", params: 3, xy: true },
+    { name: "$notes", params: 0, xy: true },
+    { name: "$pistonmode", params: 3, xy: true },
+    { name: "$sound", params: 2, xy: false },
+    { name: "$startlevelmessage", params: 0, xy: false },
+    { name: "$sticky", params: 3, xy: true }
+  ];
   let differentLength = false;
+  let info = null;
   let msg = "";
   let nBlueBalls = 0;
   let nDetonators = 0;
@@ -26,7 +60,12 @@ export function checkLevel(data) {
   let nSelfDestructingTeleports = 0;
   let nTeleports = 0;
   let nTravelgates = 0;
+  let p1 = -1;
+  let validXY = false;
+  let x = -1;
+  let y = -1;
 
+  // Check Data
   if (data.length > 0) {
     for (let i = 0; i < data.length; i++) {
       const line = data[i];
@@ -107,6 +146,59 @@ export function checkLevel(data) {
   } else {
     msg += "The level is empty.\n";
   }
+
+  // Check Settings
+  for (let i = 0; i < settings.length; i++) {
+    const setting = settings[i];
+    p1 = setting.indexOf(":");
+    if (p1 >= 0) {
+      const name = setting.slice(0, p1).toLowerCase().trim();
+      const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+      console.log(values);
+      const valuesLowerCase = values.map(value => value.toLowerCase());
+      if (values.length >= 2) {
+        x = tryParseInt(values[0], -1);
+        y = tryParseInt(values[1], -1);
+        validXY = ((x >= 0) && (y >= 0) && (x < data[0].length) && (y < data.length));
+      }
+      info = getSettingInfo(name, settingsInfo);
+      if (info !== null) {
+        if (info.xy && !validXY) {
+          msg += `${settingNr(i)}Invalid or missing coordinate.\n`;
+        }
+        if ((info.params === 0) || (values.length === info.params)) {
+          switch (name) {
+            case "$pistonmode":
+              if (!["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid piston mode ${values[2]}.\n`;
+              }
+              break;
+            case "$sound":
+              if (!["default", "never", "player"].includes(valuesLowerCase[1])) {
+                msg += `${settingNr(i)}Invalid sound mode ${values[1]}.\n`;
+              }
+              break;
+            case "$inverted":
+            case "$sticky":
+              if (!["yes", "no"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
+              }
+              break;
+            default:
+              break;
+          }
+        } else {  
+          msg += `${settingNr(i)}The setting ${name} has ${info.params} parameters.\n`;
+        }
+      } else {
+        msg += `${settingNr(i)}Invalid setting name ${name}.\n`;
+      }
+
+    } else {
+      msg += `${settingNr(i)}Colon (:) expected.\n`;
+    }
+  }
+
   return msg;
 }
 
@@ -144,7 +236,7 @@ async function loadFromFile(n, gateTravelling = false) {
       }
     }
 
-    msg = checkLevel(levelData);
+    msg = checkLevel(levelData, levelSettings);
     if (msg !== "") {
       throw new Error(msg);
     }

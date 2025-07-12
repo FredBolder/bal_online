@@ -82,6 +82,10 @@ p {
     display: none;
 }
 
+.rightmargin {
+    margin-right: 1rem;
+}
+
 .topmargin {
     margin-top: 1rem;
 }

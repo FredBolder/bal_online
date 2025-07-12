@@ -62,7 +62,7 @@ preloadSounds();
 
 export async function playSound(sound) {
   const settings = getSettings();
-  if (!settings.sound) return;
+  if (settings.sound === 0) return;
 
   let key = sound;
 
@@ -75,6 +75,7 @@ export async function playSound(sound) {
   if (audio) {
     try {
       audio.currentTime = 0;
+      audio.volume = settings.sound * 0.01;
       await audio.play();
     } catch (err) {
       console.error(`Failed to play sound ${key}:`, err);

@@ -1,5 +1,62 @@
 import { findElementByCoordinate, getTimeBombsTime } from "./balUtils.js";
 
+export function getObjectCoordinates(gameData, gameInfo) {
+    let result = {};
+    result.x = -1;
+    result.y = -1;
+    let found = false;
+    let x = gameInfo.blueBall.x;
+    let y = gameInfo.blueBall.y;
+    let maxX = gameData[0].length - 1;
+
+    if (!gameInfo.hasTelekineticPower) {
+        return;
+    }
+    if (!found && (x > 0) && (y > 0)) {
+        if (isMoveableObject(gameData, x - 1, y) && (gameData[y - 1][x - 1] === 0)) {
+            result.x = x - 1;
+            result.y = y;
+            found = true;
+        }
+    }
+    if (!found && (x <= maxX) && (y > 0)) {
+        if (isMoveableObject(gameData, x + 1, y) && (gameData[y - 1][x + 1] === 0)) {
+            result.x = x + 1;
+            result.y = y;
+            found = true;
+        }
+    }
+    if (!found && (x > 1)) {
+        if (isMoveableObject(gameData, x - 2, y) && (gameData[y][x - 1] === 0)) {
+            result.x = x - 2;
+            result.y = y;
+            found = true;
+        }
+    }
+    if (!found && (x < maxX)) {
+        if (isMoveableObject(gameData, x + 2, y) && (gameData[y][x + 1] === 0)) {
+            result.x = x + 2;
+            result.y = y;
+            found = true;
+        }
+    }
+    if (!found && (x > 0) && (y > 0)) {
+        if (isMoveableObject(gameData, x - 1, y - 1) && (gameData[y][x - 1] === 0)) {
+            result.x = x - 1;
+            result.y = y - 1;
+            found = true;
+        }
+    }
+    if (!found && (x <= maxX) && (y > 0)) {
+        if (isMoveableObject(gameData, x + 1, y - 1) && (gameData[y][x + 1] === 0)) {
+            result.x = x + 1;
+            result.y = y - 1;
+            found = true;
+        }
+    }
+    return result;
+}
+
 function isMoveableObject(gameData, x, y) {
     return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139].includes(gameData[y][x]);
 }

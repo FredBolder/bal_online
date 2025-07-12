@@ -1,11 +1,11 @@
-import { booleanToString, stringToBoolean } from "./utils.js"
+import { booleanToString, stringToBoolean, tryParseInt } from "./utils.js"
 
 let settings = {
     arrowButtons: true,
     lessQuestions: false,
-    music: true,
+    music: 50,
     nicerGraphics: true,
-    sound: true,
+    sound: 50,
 };
 
 export function getSettings() {
@@ -23,7 +23,7 @@ export function loadSettings() {
     }
     const music = localStorage.getItem("music")
     if (music !== null) {
-        settings.music = stringToBoolean(music);
+        settings.music = tryParseInt(music, 50);
     }
     const nicerGraphics = localStorage.getItem("nicerGraphics")
     if (nicerGraphics !== null) {
@@ -31,16 +31,16 @@ export function loadSettings() {
     }
     const sound = localStorage.getItem("sound")
     if (sound !== null) {
-        settings.sound = stringToBoolean(sound);
+        settings.sound = tryParseInt(sound, 50);
     }
 }
 
 export function saveSettings() {
     localStorage.setItem("arrowButtons", booleanToString(settings.arrowButtons));
     localStorage.setItem("lessQuestions", booleanToString(settings.lessQuestions));
-    localStorage.setItem("music", booleanToString(settings.music));
+    localStorage.setItem("music", settings.music.toString());
     localStorage.setItem("nicerGraphics", booleanToString(settings.nicerGraphics));
-    localStorage.setItem("sound", booleanToString(settings.sound));
+    localStorage.setItem("sound", settings.sound.toString());
 }
 
 export function setSettings(arrowButtons, lessQuestions, music, nicerGraphics, sound) {

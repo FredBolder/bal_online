@@ -156,9 +156,9 @@ function BalPage() {
             gameVars.gameOver = true;
           }
           if (backData[target][elec.x] === 20 || backData[target][elec.x] === 23) {
-            if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData) || 
-            inWater(gameInfo.blueBall1.x, gameInfo.blueBall1.y, backData) || 
-            (gameInfo.twoBlue && inWater(gameInfo.blueBall2.x, gameInfo.blueBall2.y, backData))) {
+            if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData) ||
+              inWater(gameInfo.blueBall1.x, gameInfo.blueBall1.y, backData) ||
+              (gameInfo.twoBlue && inWater(gameInfo.blueBall2.x, gameInfo.blueBall2.y, backData))) {
               gameVars.gameOver = true;
             }
             for (let j = 0; j < gameInfo.redFish.length; j++) {
@@ -190,10 +190,10 @@ function BalPage() {
     if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && (gameInfo.redFish.length > 0)) {
       for (let i = 0; i < gameInfo.redFish.length && !gameVars.gameOver; i++) {
         const fish = gameInfo.redFish[i];
-        if (!fish.isDead && 
+        if (!fish.isDead &&
           (((Math.abs(gameInfo.blueBall.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall.y - fish.y) < 2)) ||
-          ((Math.abs(gameInfo.blueBall1.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall1.y - fish.y) < 2)) ||
-          (gameInfo.twoBlue && (Math.abs(gameInfo.blueBall2.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall2.y - fish.y) < 2)))
+            ((Math.abs(gameInfo.blueBall1.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall1.y - fish.y) < 2)) ||
+            (gameInfo.twoBlue && (Math.abs(gameInfo.blueBall2.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall2.y - fish.y) < 2)))
         ) {
           gameVars.gameOver = true;
         }
@@ -593,6 +593,7 @@ function BalPage() {
         const name = setting.slice(0, p1).toLowerCase().trim();
         const value = setting.slice(p1 + 1).trim();
         const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+        const valuesLowerCase = values.map(value => value.toLowerCase());
         if (values.length >= 2) {
           x = tryParseInt(values[0], -1);
           y = tryParseInt(values[1], -1);
@@ -682,10 +683,10 @@ function BalPage() {
             break;
           case "$pistonmode":
             if (values.length === 3) {
-              if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(values[2]))) {
+              if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
-                  gameInfo.pistons[idx].mode = values[2];
+                  gameInfo.pistons[idx].mode = valuesLowerCase[2];
                 }
               }
             }
@@ -695,7 +696,7 @@ function BalPage() {
             break;
           case "$instrument":
             if (values.length >= 4) {
-              instrument = values[2];
+              instrument = valuesLowerCase[2];
               volume = tryParseInt(values[3], -1);
               if (validXY && (volume >= 0) && (volume <= 100)) {
                 idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
@@ -711,7 +712,7 @@ function BalPage() {
               if (validXY) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
-                  switch (values[2]) {
+                  switch (valuesLowerCase[2]) {
                     case "no":
                       gameInfo.pistons[idx].inverted = false;
                       break;
@@ -742,7 +743,7 @@ function BalPage() {
           case "$sound":
             if (values.length === 2) {
               element = tryParseInt(values[0], -1);
-              sound = values[1];
+              sound = valuesLowerCase[1];
               if (["default", "never", "player"].includes(sound)) {
                 switch (element) {
                   case 22:
@@ -762,7 +763,7 @@ function BalPage() {
               if (validXY) {
                 idx = findElementByCoordinate(x, y, gameInfo.pistons);
                 if (idx >= 0) {
-                  switch (values[2]) {
+                  switch (valuesLowerCase[2]) {
                     case "no":
                       gameInfo.pistons[idx].sticky = false;
                       break;
@@ -1066,9 +1067,9 @@ function BalPage() {
     setSettings(
       cbArrowButtons.current.checked,
       cbQuestions.current.checked,
-      cbMusic.current.checked,
+      tryParseInt(cbMusic.current.value, 50),
       cbGraphics.current.checked,
-      cbSound.current.checked
+      tryParseInt(cbSound.current.value, 50)
     );
     saveSettings();
     updateMoveButtons();
@@ -1372,14 +1373,14 @@ function BalPage() {
       loadSettings();
       cbArrowButtons.current.checked = getSettings().arrowButtons;
       cbQuestions.current.checked = getSettings().lessQuestions;
-      cbMusic.current.checked = getSettings().music;
+      cbMusic.current.value = getSettings().music.toString();
       cbGraphics.current.checked = getSettings().nicerGraphics;
-      cbSound.current.checked = getSettings().sound;
+      cbSound.current.value = getSettings().sound.toString();
       updateMoveButtons();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 309;
+        gameVars.currentLevel = 2010;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1529,14 +1530,14 @@ function BalPage() {
               obj = gameInfo.musicBoxes[idx];
               info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Position: ${obj.x}, ${obj.y}`;
             }
-            break;  
+            break;
           case 158:
             idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
             if (idx >= 0) {
               obj = gameInfo.pistonsTriggers[idx];
               info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
             }
-            break;  
+            break;
           case 159:
           case 161:
           case 163:
@@ -1546,14 +1547,14 @@ function BalPage() {
               obj = gameInfo.pistons[idx];
               info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
             }
-            break;  
+            break;
           case 167:
             idx = findElementByCoordinate(column, row, gameInfo.delays);
             if (idx >= 0) {
               obj = gameInfo.delays[idx];
               info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
             }
-            break;  
+            break;
           default:
             break;
         }
@@ -1655,26 +1656,36 @@ function BalPage() {
               <button className="balButton">Settings</button>
               <div className="menu-content">
                 <div>
-                  <input
-                    type="checkbox"
-                    id="sound"
-                    ref={cbSound}
-                    name="sound"
-                    value="sound"
-                    onChange={handleChangeSettings}
-                  />
-                  <label htmlFor="sound">Sound</label>
+                  <label className="rightmargin" htmlFor="sound">Sound volume</label>
+                  <select name="sound" id="sound" ref={cbSound} onChange={handleChangeSettings}>
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
+                    <option value="70">70</option>
+                    <option value="80">80</option>
+                    <option value="90">90</option>
+                    <option value="100">100</option>
+                  </select>
                 </div>
                 <div>
-                  <input
-                    type="checkbox"
-                    id="music"
-                    ref={cbMusic}
-                    name="music"
-                    value="music"
-                    onChange={handleChangeSettings}
-                  />
-                  <label htmlFor="music">Music</label>
+                  <label className="rightmargin" htmlFor="music">Music volume</label>
+                  <select name="music" id="music" ref={cbMusic} onChange={handleChangeSettings}>
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="60">60</option>
+                    <option value="70">70</option>
+                    <option value="80">80</option>
+                    <option value="90">90</option>
+                    <option value="100">100</option>
+                  </select>
                 </div>
                 <div>
                   <input
