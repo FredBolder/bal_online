@@ -14,6 +14,30 @@ const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2010;
 
+export function getAllLevels() {
+  let levels = [];
+
+  for (let i = series1Start; i <= series1End; i++) {
+    levels.push(i);
+  }
+  for (let i = series2Start; i <= series2End; i++) {
+    levels.push(i);
+  }
+  for (let i = series3Start; i <= series3End; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesSmallStart; i <= seriesSmallEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesExtremeStart; i <= seriesExtremeEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
+    levels.push(i);
+  }
+  return levels;
+}
+
 function getSettingInfo(name, settingsInfo) {
   let info = null;
 
@@ -49,6 +73,7 @@ export function checkLevel(data, settings) {
     { name: "$sticky", params: 3, xy: true }
   ];
   let differentLength = false;
+  let gameTicks = 0;
   let info = null;
   let msg = "";
   let nBlueBalls = 0;
@@ -62,6 +87,9 @@ export function checkLevel(data, settings) {
   let nTravelgates = 0;
   let p1 = -1;
   let validXY = false;
+  let volume = 0;
+  let h = -1;
+  let w = -1;
   let x = -1;
   let y = -1;
 
@@ -154,7 +182,6 @@ export function checkLevel(data, settings) {
     if (p1 >= 0) {
       const name = setting.slice(0, p1).toLowerCase().trim();
       const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
-      console.log(values);
       const valuesLowerCase = values.map(value => value.toLowerCase());
       if (values.length >= 2) {
         x = tryParseInt(values[0], -1);
@@ -168,9 +195,46 @@ export function checkLevel(data, settings) {
         }
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
+            case "$background":
+            case "$bgcolor":
+            case "$fgcolor":
+              w = tryParseInt(values[2], -1);
+              h = tryParseInt(values[3], -1);
+              if (w < 1) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for width.\n`;
+              }
+              if (h < 1) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for height.\n`;
+              }
+              if (((x + w - 1) >= data[0].length) || ((y + h - 1) >= data.length)) {
+                msg += `${settingNr(i)}The area exceeds the game raster.\n`;
+              }
+              break;
+            case "$gameticks":
+              if (validXY && ![")"].includes(data[y][x])) {
+                msg += `${settingNr(i)}No delay found at the coordinate ${x}, ${y}.\n`;
+              }
+              gameTicks = tryParseInt(values[2], -1);
+              if (gameTicks < 0) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for game ticks.\n`;
+              }
+              break;  
+            case "$instrument":
+              if (!["bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
+                "snaredrum", "strings", "vibraphone", "xylophone"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid instrument ${values[2]}.\n`;
+              }
+              volume = tryParseInt(values[3], -1);
+              if ((volume < 0) || (volume > 100)) {
+                msg += `${settingNr(i)}Invalid value ${values[3]} for volume.\n`;
+              }
+              break;
             case "$pistonmode":
               if (!["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid piston mode ${values[2]}.\n`;
+              }
+              if (validXY && !["Ù", "Ì", "Ö", "Ë"].includes(data[y][x])) {
+                msg += `${settingNr(i)}No piston found at the coordinate ${x}, ${y}.\n`;
               }
               break;
             case "$sound":
@@ -183,12 +247,24 @@ export function checkLevel(data, settings) {
               if (!["yes", "no"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}yes or no expected.\n`;
               }
+              if (validXY && !["Ù", "Ì", "Ö", "Ë"].includes(data[y][x])) {
+                msg += `${settingNr(i)}No piston found at the coordinate ${x}, ${y}.\n`;
+              }
+              break;
+            case "$addnotes":
+            case "$notes":
+              if (values.length < 3) {
+                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
+              }
+              if (validXY && !["M"].includes(data[y][x])) {
+                msg += `${settingNr(i)}No music box found at the coordinate ${x}, ${y}.\n`;
+              }
               break;
             default:
               break;
           }
-        } else {  
-          msg += `${settingNr(i)}The setting ${name} has ${info.params} parameters.\n`;
+        } else {
+          msg += `${settingNr(i)}${info.params} arguments expected for ${name}.\n`;
         }
       } else {
         msg += `${settingNr(i)}Invalid setting name ${name}.\n`;
@@ -227,7 +303,7 @@ async function loadFromFile(n, gateTravelling = false) {
     const data = d.split("\n");
     for (let i = 0; i < data.length; i++) {
       const line = data[i].trim();
-      if (line !== "") {
+      if ((line !== "") && !line.startsWith("//")) {
         if (line.startsWith("$")) {
           levelSettings.push(line);
         } else {

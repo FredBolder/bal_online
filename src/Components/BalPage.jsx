@@ -32,7 +32,7 @@ import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../
 import { exportLevel, importLevel } from "../files.js";
 import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
-import { getLevel, getSecretStart, getRandomLevel } from "../levels.js";
+import { getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
@@ -1094,6 +1094,7 @@ function BalPage() {
     info.eating = false;
     info.sound = "";
     info.rotate = false;
+    let codes = "";
     let rotate = false;
 
     // Ignore 
@@ -1274,6 +1275,19 @@ function BalPage() {
 
     if (!e.altKey && !e.ctrlKey) {
       if (kPressed) {
+        if ((fred) && (e.key === "%")) {
+          codes = "";
+          const allLevels = getAllLevels();
+          for (let i = 0; i < allLevels.length; i++) {
+            const level = allLevels[i];
+            if (i > 0) {
+              codes += ", ";
+            }
+            codes += `${level} = ${numberToCode(level)}`;
+          }
+          alert(codes);
+        }
+
         if (!e.shiftKey) {
           switch (e.key) {
             case "h":

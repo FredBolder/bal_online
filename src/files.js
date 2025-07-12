@@ -156,7 +156,7 @@ export async function importLevel() {
         const data = text.split("\n");
         for (let i = 0; i < data.length; i++) {
             const line = data[i].trim();
-            if (line !== "") {
+            if ((line !== "") && !line.startsWith("//")) {
                 if (line.startsWith("$")) {
                     levelSettings.push(line);
                 } else {
