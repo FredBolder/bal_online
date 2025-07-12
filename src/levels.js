@@ -191,7 +191,7 @@ export function checkLevel(data, settings) {
       info = getSettingInfo(name, settingsInfo);
       if (info !== null) {
         if (info.xy && !validXY) {
-          msg += `${settingNr(i)}Invalid or missing coordinate.\n`;
+          msg += `${settingNr(i)}Invalid or missing coordinates.\n`;
         }
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
@@ -212,7 +212,7 @@ export function checkLevel(data, settings) {
               break;
             case "$gameticks":
               if (validXY && ![")"].includes(data[y][x])) {
-                msg += `${settingNr(i)}No delay found at the coordinate ${x}, ${y}.\n`;
+                msg += `${settingNr(i)}No delay found at the coordinates ${x}, ${y}.\n`;
               }
               gameTicks = tryParseInt(values[2], -1);
               if (gameTicks < 0) {
@@ -234,7 +234,7 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}Invalid piston mode ${values[2]}.\n`;
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë"].includes(data[y][x])) {
-                msg += `${settingNr(i)}No piston found at the coordinate ${x}, ${y}.\n`;
+                msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$sound":
@@ -248,7 +248,7 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}yes or no expected.\n`;
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë"].includes(data[y][x])) {
-                msg += `${settingNr(i)}No piston found at the coordinate ${x}, ${y}.\n`;
+                msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$addnotes":
@@ -257,7 +257,7 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
               }
               if (validXY && !["M"].includes(data[y][x])) {
-                msg += `${settingNr(i)}No music box found at the coordinate ${x}, ${y}.\n`;
+                msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             default:
