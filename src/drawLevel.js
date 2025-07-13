@@ -870,8 +870,8 @@ function drawLevel(
     if (rectangular) {
       d1 = w1 / 3;
       d2 = w2 / 2.3;
-      drawFilledBox(ctx, xc - (d1 * 0.5), yc - d2, d1, d2, getFgcolor(x, y, "blue"));
-      drawFilledBox(ctx, xc - (d1 * 0.5), yc, d1, d2, getFgcolor(x, y, "red"));
+      drawFilledBox(ctx, xc - (d1 * 0.5), yc - d2, d1, d2, "blue");
+      drawFilledBox(ctx, xc - (d1 * 0.5), yc, d1, d2, "red");
       drawText(ctx, xc, yc - (d2 * 0.5), "S", "middle", "black", d2 * 0.7, d1 * 0.9, "black", 1);
       drawText(ctx, xc, yc + (d2 * 0.5), "N", "middle", "black", d2 * 0.7, d1 * 0.9, "black", 1);
     } else {
@@ -914,28 +914,32 @@ function drawLevel(
     ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - width)), ymin + (margin * w2), width, height);
   }
 
-  function drawOneDirectionDown() {
-    drawBox(ctx, xmin, ymin, w1, w2, "white");
-    drawLine(ctx, xmin, ymin, xc, ymax, "white");
-    drawLine(ctx, xmax, ymin, xc, ymax, "white");
+  function drawOneDirectionDown(x, y) {
+    let color = getFgcolor(x, y, "white");
+    drawBox(ctx, xmin, ymin, w1, w2, color);
+    drawLine(ctx, xmin, ymin, xc, ymax, color);
+    drawLine(ctx, xmax, ymin, xc, ymax, color);
   }
 
-  function drawOneDirectionLeft() {
-    drawBox(ctx, xmin, ymin, w1, w2, "white");
-    drawLine(ctx, xmax, ymin, xmin, ymin + w2 / 2, "white");
-    drawLine(ctx, xmax, ymax, xmin, ymin + w2 / 2, "white");
+  function drawOneDirectionLeft(x, y) {
+    let color = getFgcolor(x, y, "white");
+    drawBox(ctx, xmin, ymin, w1, w2, color);
+    drawLine(ctx, xmax, ymin, xmin, ymin + w2 / 2, color);
+    drawLine(ctx, xmax, ymax, xmin, ymin + w2 / 2, color);
   }
 
-  function drawOneDirectionRight() {
-    drawBox(ctx, xmin, ymin, w1, w2, "white");
-    drawLine(ctx, xmin, ymin, xmax, ymin + w2 / 2, "white");
-    drawLine(ctx, xmin, ymax, xmax, ymin + w2 / 2, "white");
+  function drawOneDirectionRight(x, y) {
+    let color = getFgcolor(x, y, "white");
+    drawBox(ctx, xmin, ymin, w1, w2, color);
+    drawLine(ctx, xmin, ymin, xmax, ymin + w2 / 2, color);
+    drawLine(ctx, xmin, ymax, xmax, ymin + w2 / 2, color);
   }
 
-  function drawOneDirectionUp() {
-    drawBox(ctx, xmin, ymin, w1, w2, "white");
-    drawLine(ctx, xmin, ymax, xc, ymin, "white");
-    drawLine(ctx, xmax, ymax, xc, ymin, "white");
+  function drawOneDirectionUp(x, y) {
+    let color = getFgcolor(x, y, "white");
+    drawBox(ctx, xmin, ymin, w1, w2, color);
+    drawLine(ctx, xmin, ymax, xc, ymin, color);
+    drawLine(ctx, xmax, ymax, xc, ymin, color);
   }
 
   function drawOrangeBall() {
@@ -1665,10 +1669,10 @@ function drawLevel(
           drawYellowBall();
           break;
         case 10:
-          drawOneDirectionRight();
+          drawOneDirectionRight(col, row);
           break;
         case 11:
-          drawOneDirectionLeft();
+          drawOneDirectionLeft(col, row);
           break;
         case 12:
           drawDamagedStone(col, row);
@@ -1758,10 +1762,10 @@ function drawLevel(
           drawDirectionChanger3();
           break;
         case 87:
-          drawOneDirectionUp();
+          drawOneDirectionUp(col, row);
           break;
         case 88:
-          drawOneDirectionDown();
+          drawOneDirectionDown(col, row);
           break;
         case 89:
           drawGameRotator();
