@@ -29,13 +29,13 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         } else {
             if (weight) {
                 pistonsTrigger.pressed = true;
-                gameVars.pistonsActivated[pistonsTrigger.group - 1] = !gameVars.pistonsActivated[pistonsTrigger.group - 1];
+                gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] = !gameVars.pistonGroupsActivated[pistonsTrigger.group - 1];
             }
         }
         for (let j = 0; j < gameInfo.pistons.length; j++) {
             const piston = gameInfo.pistons[j];
             if (piston.group === pistonsTrigger.group) {
-                if (gameVars.pistonsActivated[pistonsTrigger.group - 1] !== piston.inverted) {
+                if (gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] !== piston.inverted) {
                     if (activatePiston(gameData, gameInfo, piston, "toggle")) {
                         result.updated = true;
                     }

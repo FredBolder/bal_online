@@ -311,9 +311,9 @@ export function initGameVars(vars) {
     vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;
-    vars.pistonsActivated = [];
-    for (let i = 0; i < 10; i++) {
-        vars.pistonsActivated.push(false);
+    vars.pistonGroupsActivated = [];
+    for (let i = 0; i < 32; i++) {
+        vars.pistonGroupsActivated.push(false);
     }
     vars.pistonsRepeatFastModeActive = false;
     vars.pistonsRepeatFastModeCounter = 0;

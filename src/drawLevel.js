@@ -988,7 +988,11 @@ function drawLevel(
     let idx = -1;
     let activated = false;
     let group = 0;
+    let inverted = false;
+    let mode = "toggle";
     let sticky = false;
+    let triesToActivate = false;
+    let triggerPressed = false;
     let text = "";
     const textHeight = w2 * 0.6;
     const textMaxWidth = w1 * 0.6;
@@ -997,11 +1001,31 @@ function drawLevel(
     if (idx >= 0) {
       activated = gameInfo.pistons[idx].activated;
       group = gameInfo.pistons[idx].group;
+      inverted = gameInfo.pistons[idx].inverted;
+      mode = gameInfo.pistons[idx].mode;
       sticky = gameInfo.pistons[idx].sticky;
+    }
+    if ((mode === "toggle") && (gameVars.pistonGroupsActivated[group - 1] !== inverted)) {
+      triesToActivate = true;
+    }
+    if (mode === "momentary") {
+      triggerPressed = false;
+      for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+        const pistonsTrigger = gameInfo.pistonsTriggers[i];
+        if (pistonsTrigger.pressed && (pistonsTrigger.group === group)) {
+          triggerPressed = true;
+        }
+      }
+      if (triggerPressed !== inverted) {
+        triesToActivate = true;
+      }
     }
     text = group.toString();
     if (sticky) {
       text += "S";
+    }
+    if (triesToActivate && !activated) {
+      text += "!";
     }
     switch (direction) {
       case "down":
@@ -1539,7 +1563,7 @@ function drawLevel(
     const blueX = gameInfo.blueBall.x;
     const blueY = gameInfo.blueBall.y;
     let info = null;
-                  
+
     if (!gameInfo.hasTelekineticPower || (Math.abs(blueX - x) > 3) || (Math.abs(blueY - y) > 3)) {
       return;
     }

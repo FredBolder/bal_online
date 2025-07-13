@@ -74,6 +74,7 @@ export function checkLevel(data, settings) {
   ];
   let differentLength = false;
   let gameTicks = 0;
+  let group = 0;
   let info = null;
   let msg = "";
   let nBlueBalls = 0;
@@ -218,7 +219,13 @@ export function checkLevel(data, settings) {
               if (gameTicks < 0) {
                 msg += `${settingNr(i)}Invalid value ${values[2]} for game ticks.\n`;
               }
-              break;  
+              break;
+            case "$group":
+              group = tryParseInt(values[2], -1);
+              if ((group < 1) || (group > 32)) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for group.\n`;
+              }
+              break;
             case "$instrument":
               if (!["bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
                 "snaredrum", "strings", "vibraphone", "xylophone"].includes(valuesLowerCase[2])) {

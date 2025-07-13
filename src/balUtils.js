@@ -582,7 +582,7 @@ export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDo
       weight = [2, 4, 8, 40, 93, 94].includes(el);
       if (!pushingDown || (i !== gameInfo.blueBall.x) || ((y - 1) !== gameInfo.blueBall.y)) {
         if ((el === 2) && !hasForceDown(gameData, gameInfo, i, y - 1)) {
-          if (gameInfo.hasPropeller || [25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
+          if (gameInfo.hasPropeller || [20, 23, 25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
             weight = false;
           }
         }

@@ -657,7 +657,7 @@ function BalPage() {
           case "$group":
             if (values.length === 3) {
               group = tryParseInt(values[2], -1);
-              if (validXY && (group >= 1) && (group <= 10)) {
+              if (validXY && (group >= 1) && (group <= 32)) {
                 element = gameData[y][x];
                 switch (element) {
                   case 158:
@@ -1394,7 +1394,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 310;
+        gameVars.currentLevel = 2010;
       }
       initLevel(gameVars.currentLevel);
     }
