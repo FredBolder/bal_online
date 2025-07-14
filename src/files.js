@@ -55,6 +55,10 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
 
         for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
             const musicBox = gameInfo.musicBoxes[i];
+            if (musicBox.mode !== "note") {
+                line = `$musicbox: ${musicBox.x}, ${musicBox.y}, ${musicBox.mode}, ${musicBox.delay}`;
+                await writable.write(`${line}\n`);
+            }
             if (JSON.stringify(musicBox.notes) !== JSON.stringify(["C4"])) {
                 line = `$notes: ${musicBox.x}, ${musicBox.y}`;
                 count = 0;
@@ -69,8 +73,12 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
                 }
                 await writable.write(`${line}\n`);
             }
-            if ((musicBox.instrument !== "") || (musicBox.volume !== 90)) {
+            if ((musicBox.instrument !== "xylophone") || (musicBox.volume !== 90)) {
                 line = `$instrument: ${musicBox.x}, ${musicBox.y}, ${musicBox.instrument}, ${musicBox.volume}`;
+                await writable.write(`${line}\n`);
+            }
+            if (musicBox.group > 1) {
+                line = `$group: ${musicBox.x}, ${musicBox.y}, ${musicBox.group}`;
                 await writable.write(`${line}\n`);
             }
         }

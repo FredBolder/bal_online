@@ -196,7 +196,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 157: {
-                    let musicBox = { x: j, y: i, notes: ["C4"], noteIndex: 0, instrument: "", volume: 90 };
+                    let musicBox = { x: j, y: i, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, group: 1};
                     result.musicBoxes.push(musicBox);
                     break;
                 }

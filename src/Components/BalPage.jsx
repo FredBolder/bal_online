@@ -574,6 +574,7 @@ function BalPage() {
     let instrument = "kalimba";
     let h = -1;
     let idx = -1;
+    let mode = "";
     let p1 = -1;
     let sound = "";
     let validXY = false;
@@ -660,6 +661,12 @@ function BalPage() {
               if (validXY && (group >= 1) && (group <= 32)) {
                 element = gameData[y][x];
                 switch (element) {
+                  case 157:
+                    idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+                    if (idx >= 0) {
+                      gameInfo.musicBoxes[idx].group = group;
+                    }
+                    break;
                   case 158:
                     idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
                     if (idx >= 0) {
@@ -677,16 +684,6 @@ function BalPage() {
                     break;
                   default:
                     break;
-                }
-              }
-            }
-            break;
-          case "$pistonmode":
-            if (values.length === 3) {
-              if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
-                idx = findElementByCoordinate(x, y, gameInfo.pistons);
-                if (idx >= 0) {
-                  gameInfo.pistons[idx].mode = valuesLowerCase[2];
                 }
               }
             }
@@ -726,6 +723,19 @@ function BalPage() {
               }
             }
             break;
+          case "$musicbox":
+            if (values.length === 4) {
+              mode = valuesLowerCase[2];
+              gameTicks = tryParseInt(values[3], -1);
+              if (validXY && ["note", "song"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
+                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+                if (idx >= 0) {
+                  gameInfo.musicBoxes[idx].mode = mode;
+                  gameInfo.musicBoxes[idx].delay = gameTicks;
+                }
+              }
+            }
+            break;
           case "$notes":
             if (values.length >= 3) {
               if (validXY) {
@@ -736,6 +746,16 @@ function BalPage() {
                   for (let note = 2; note < values.length; note++) {
                     gameInfo.musicBoxes[idx].notes.push(values[note]);
                   }
+                }
+              }
+            }
+            break;
+          case "$pistonmode":
+            if (values.length === 3) {
+              if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
+                idx = findElementByCoordinate(x, y, gameInfo.pistons);
+                if (idx >= 0) {
+                  gameInfo.pistons[idx].mode = valuesLowerCase[2];
                 }
               }
             }
@@ -1542,7 +1562,7 @@ function BalPage() {
             idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
             if (idx >= 0) {
               obj = gameInfo.musicBoxes[idx];
-              info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Position: ${obj.x}, ${obj.y}`;
+              info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
             }
             break;
           case 158:

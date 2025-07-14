@@ -66,6 +66,7 @@ export function checkLevel(data, settings) {
     { name: "$hint", params: 0, xy: false },
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
+    { name: "$musicbox", params: 4, xy: true },
     { name: "$notes", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
@@ -234,6 +235,21 @@ export function checkLevel(data, settings) {
               volume = tryParseInt(values[3], -1);
               if ((volume < 0) || (volume > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[3]} for volume.\n`;
+              }
+              if (validXY && !["M"].includes(data[y][x])) {
+                msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$musicbox":
+              if (!["note", "song"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid music box mode ${values[2]}.\n`;
+              }
+              gameTicks = tryParseInt(values[3], -1);
+              if ((gameTicks < 1) || (gameTicks > 100)) {
+                msg += `${settingNr(i)}Invalid value ${values[3]} for delay.\n`;
+              }
+              if (validXY && !["M"].includes(data[y][x])) {
+                msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$pistonmode":

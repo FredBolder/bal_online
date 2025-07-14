@@ -137,10 +137,10 @@ export async function playNote(instrument, volume, note) {
         break;
       case "strings":
         attack = 100;
-        decay = 500;
+        decay = 1000;
         release = 100;
         f1 = 1 / 3;
-        f2 = 0.7;
+        f2 = 0.8;
         operators.push(new Operator(audioCtx, "sawtooth", frequency, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sawtooth", frequency, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sawtooth", frequency, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
@@ -148,7 +148,7 @@ export async function playNote(instrument, volume, note) {
         operators[2].setPitchEnv(-0.01, 50, -0.01);
         for (let i = 0; i < operators.length; i++) {
           operators[i].setFilter("lowpass", 2000, 2500, 2000, 2000, 0, attack, decay, release);
-          operators[i].setLfo("dco", "sine", 4, 0.01, 250);
+          operators[i].setLfo("dco", "sine", 4, 0.005, 250);
         }
         break;
       case "vibraphone":
