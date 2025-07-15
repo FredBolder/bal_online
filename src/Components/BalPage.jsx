@@ -38,6 +38,7 @@ import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
+import { checkPurpleTeleports } from "../purpleTeleports.js"; 
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -262,6 +263,11 @@ function BalPage() {
       update = true;
     }
 
+    if (checkPurpleTeleports(backData, gameData, gameInfo)) {
+      update = true;
+      playSound("teleport");
+    }
+
     info = checkTrapDoors(gameData, gameInfo);
     if (info.sound) {
       playSound("trap");
@@ -453,14 +459,16 @@ function BalPage() {
               gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 31;
             }
             for (let i = 0; i < gameInfo.teleports.length; i++) {
-              if ((i !== teleport) && (gameInfo.teleports[i].selfDestructing === gameInfo.teleports[teleport].selfDestructing)) {
+              if ((i !== teleport) && (gameInfo.teleports[i].selfDestructing === gameInfo.teleports[teleport].selfDestructing) &&
+              (gameInfo.teleports[i].color === gameInfo.teleports[teleport].color)) {
                 gameInfo.blueBall.x = gameInfo.teleports[i].x;
                 gameInfo.blueBall.y = gameInfo.teleports[i].y;
               }
             }
             if (gameInfo.teleports[teleport].selfDestructing) {
-              // Delete all self-destructing teleports
-              gameInfo.teleports = gameInfo.teleports.filter((teleport) => teleport.selfDestructing === false);
+              gameInfo.teleports = gameInfo.teleports.filter((teleport) => {
+                return ((teleport.selfDestructing === false) || (teleport.color !== "white"));
+              });
             }
           }
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
@@ -1414,7 +1422,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2010;
+        gameVars.currentLevel = 2011;
       }
       initLevel(gameVars.currentLevel);
     }

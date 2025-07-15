@@ -4,7 +4,13 @@ import { checkLevel } from "./levels.js";
 export async function exportLevel(backData, gameData, gameInfo, gameVars) {
     let code = "";
     let count = 0;
+    let first = true;
+    let h = 1;
     let line = "";
+    let w = 1;
+    let x = -1;
+    let y = -1;
+
     try {
         const fileHandle = await window.showSaveFilePicker({
             suggestedName: "level.txt", // Default filename
@@ -108,6 +114,38 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
             if (pistonTriggers.group > 1) {
                 line = `$group: ${pistonTriggers.x}, ${pistonTriggers.y}, ${pistonTriggers.group}`;
                 await writable.write(`${line}\n`);
+            }
+        }
+
+        first = true;
+        h = 1;
+        w = 1;
+        for (let i = 0; i < gameData.length; i++) {
+            for (let j = 0; j < gameData[i].length; j++) {
+                const gd = gameData[i][j];
+                const bd = backData[i][j];
+                let gdNext = 0;
+                let bdNext = 0;
+                if (j < (gameData[i].length - 1)) {
+                    gdNext = gameData[i][j + 1];
+                    bdNext = backData[i][j + 1];
+                }
+                if ((gd !== 0) && (bd !== 0)) {
+                    if (first) {
+                        x = j;
+                        y = i;
+                    }
+                    first = false;
+                    if ((bd === bdNext) && (gdNext !== 0)) {
+                        w++;
+                    } else {
+                        line = `$background: ${x}, ${y}, ${w}, ${h}, ${bd}`;
+                        await writable.write(`${line}\n`);
+                        first = true;
+                        h = 1;
+                        w = 1;
+                    }
+                }
             }
         }
 

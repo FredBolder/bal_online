@@ -80,10 +80,12 @@ export function getGameInfo(backData, gameData) {
                 }
                 case 31:
                 case 92: {
+                    // Purple teleports (170) are in backData
                     let teleport = {
                         x: j,
                         y: i,
-                        selfDestructing: gameData[i][j] === 92
+                        selfDestructing: gameData[i][j] === 92,
+                        color: "white"
                     };
                     result.teleports.push(teleport);
                     break;
@@ -196,7 +198,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 157: {
-                    let musicBox = { x: j, y: i, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, group: 1};
+                    let musicBox = { x: j, y: i, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, group: 1 };
                     result.musicBoxes.push(musicBox);
                     break;
                 }
@@ -239,8 +241,26 @@ export function getGameInfo(backData, gameData) {
                 default:
                     break;
             }
-            if (backData[i][j] === 20 || backData[i][j] === 23 || gameData[i][j] === 113 || gameData[i][j] === 114) {
-                result.hasWater = true;
+            switch (backData[i][j]) {
+                case 20:
+                case 23:
+                case 113:
+                case 114:
+                    result.hasWater = true;
+                    break;
+                case 170: {
+                    // The other teleports (31 and 92) are in gameData
+                    let teleport = {
+                        x: j,
+                        y: i,
+                        selfDestructing: true,
+                        color: "#FF80FF"
+                    };
+                    result.teleports.push(teleport);
+                    break;
+                }
+                default:
+                    break;
             }
         }
     }

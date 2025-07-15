@@ -186,7 +186,7 @@ function drawLevel(
         gameInfo.teleports[i].y * size1 + topMargin + 1,
         size1 - 2,
         size1 - 2,
-        "white"
+        gameInfo.teleports[i].color
       );
     }
     ctx.setLineDash([]);
@@ -1654,6 +1654,9 @@ function drawLevel(
           break;
         case 90:
           drawHorizontalLadder(col, row);
+          break;
+        case 170:
+          // Teleport - will be drawn later
           break;
         default:
           // empty

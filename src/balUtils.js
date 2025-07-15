@@ -404,6 +404,9 @@ export function charToNumber(c) {
     case "ß":
       result = 169;
       break;
+    case "Π":
+      result = 170;
+      break;
     case "|":
       result = 1000;
       break;
@@ -648,19 +651,19 @@ export function isHorizontalRope(x, y, backData) {
   return result;
 }
 
-function isTeleport(x, y, teleports) {
+function isTravelGate(x, y, travelGate) {
+  return ((x === travelGate.x) && (y === travelGate.y));
+}
+
+function isWhiteTeleport(x, y, teleports) {
   let result = false;
 
   for (let i = 0; i < teleports.length; i++) {
-    if (teleports[i].x === x && teleports[i].y === y) {
+    if ((teleports[i].x === x) && (teleports[i].y === y) && (teleports[i].color === "white")) {
       result = true;
     }
   }
   return result;
-}
-
-function isTravelGate(x, y, travelGate) {
-  return ((x === travelGate.x) && (y === travelGate.y));
 }
 
 export function falling(x, y, backData, gameData, gameInfo) {
@@ -682,7 +685,7 @@ export function falling(x, y, backData, gameData, gameInfo) {
       result = false;
     }
     // teleport
-    if ([2].includes(element) && isTeleport(x, y, gameInfo.teleports)) {
+    if ([2].includes(element) && isWhiteTeleport(x, y, gameInfo.teleports)) {
       result = false;
     }
     // Water
@@ -1116,6 +1119,9 @@ export function numberToChar(n) {
     case 169:
       result = "ß";
       break;
+    case 170:
+      result = "Π";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1154,7 +1160,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
           data = 0;
         }
       }
-      if ([20, 23, 25, 80, 90, 137].includes(data)) {
+      if ([20, 23, 25, 80, 90, 137, 170].includes(data)) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
@@ -1695,7 +1701,7 @@ export function jump(backData, gameData, gameInfo) {
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
-  if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
+  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && (y > 1) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![25, 137, 90].includes(backData[y - 1][x])) && (![25, 137, 90].includes(backData[y][x])) && (![80].includes(backData[y - 2][x]))) {
@@ -1832,7 +1838,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
-  if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
+  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x - 1]))) {
@@ -1887,7 +1893,7 @@ export function jumpRight(backData, gameData, gameInfo) {
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
-  if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
+  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
       if (gameInfo.hasCoilSpring && y > 1 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x + 1]))) {
@@ -1945,7 +1951,7 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
   if (!gameVars) {
     return null;
   }
-  if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
+  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2 && !hasForceUp(gameData, gameInfo, x, y)) {
       if (!result.player && (canMoveAlone(gameData[y + 1][x]) && (gameData[y + 1][x] !== 109)) && gameData[y + 2][x] === 0 &&
         !hasForceUp(gameData, gameInfo, x, y + 1)) {
@@ -2097,7 +2103,7 @@ export function moveDownLeft(backData, gameData, gameInfo) {
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
-  if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
+  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2) {
       if (
         gameData[y + 1][x - 1] === 0 &&
@@ -2123,7 +2129,7 @@ export function moveDownRight(backData, gameData, gameInfo) {
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
-  if (!isTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
+  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2) {
       if (
         gameData[y + 1][x + 1] === 0 &&

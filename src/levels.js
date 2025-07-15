@@ -12,7 +12,7 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2010;
+const seriesSecretEnd = 2011;
 
 export function getAllLevels() {
   let levels = [];
@@ -81,6 +81,7 @@ export function checkLevel(data, settings) {
   let nBlueBalls = 0;
   let nDetonators = 0;
   let nGameRotator = 0;
+  let nPurpleSelfDestructingTeleports = 0;
   let nSmallBlueBalls = 0;
   let nSmallGreenBalls = 0;
   let nSmallSilverBalls = 0;
@@ -113,6 +114,9 @@ export function checkLevel(data, settings) {
             break;
           case "b":
             nDetonators++;
+            break;
+          case "Π":
+            nPurpleSelfDestructingTeleports++;
             break;
           case "%":
             nSmallBlueBalls++;
@@ -169,6 +173,9 @@ export function checkLevel(data, settings) {
     }
     if ((nSelfDestructingTeleports !== 0) && (nSelfDestructingTeleports !== 2)) {
       msg += "There can be only 0 or 2 self-destructing teleports.\n";
+    }
+    if ((nPurpleSelfDestructingTeleports !== 0) && (nPurpleSelfDestructingTeleports !== 2)) {
+      msg += "There can be only 0 or 2 purple self-destructing teleports.\n";
     }
     if (nTravelgates > 1) {
       msg += "There can be only one travel gate.\n";
