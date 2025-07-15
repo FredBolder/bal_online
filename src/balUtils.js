@@ -1472,10 +1472,12 @@ export function moveLeft(backData, gameData, gameInfo) {
       if (result.player) {
         const teleport = findElementByCoordinate(x, y, gameInfo.teleports);
         if (teleport >= 0) {
-          if (gameInfo.teleports[teleport].selfDestructing) {
-            row[x] = 0;
-          } else {
-            row[x] = 31;
+          if (gameInfo.teleports[teleport].color === "white") {
+            if (gameInfo.teleports[teleport].selfDestructing) {
+              row[x] = 0;
+            } else {
+              row[x] = 31;
+            }
           }
         }
       }
@@ -1640,10 +1642,12 @@ export function moveRight(backData, gameData, gameInfo) {
       if (result.player) {
         const teleport = findElementByCoordinate(x, y, gameInfo.teleports);
         if (teleport >= 0) {
-          if (gameInfo.teleports[teleport].selfDestructing) {
-            row[x] = 0;
-          } else {
-            row[x] = 31;
+          if (gameInfo.teleports[teleport].color === "white") {
+            if (gameInfo.teleports[teleport].selfDestructing) {
+              row[x] = 0;
+            } else {
+              row[x] = 31;
+            }
           }
         }
       }
