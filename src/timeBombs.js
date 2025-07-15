@@ -135,8 +135,10 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                                 }
                                 break;
                             case 116:
-                                gameInfo.yellowBallPushersTrigger.x = -1;
-                                gameInfo.yellowBallPushersTrigger.y = -1;
+                                idx = findElementByCoordinate(x, y, gameInfo.yellowBallPushersTriggers);
+                                if (idx >= 0) {
+                                    gameInfo.yellowBallPushersTriggers.splice(idx, 1);
+                                }
                                 break;
                             case 117:
                                 idx = findElementByCoordinate(x, y, gameInfo.timeBombs);
@@ -144,9 +146,68 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                                     gameInfo.timeBombs[idx].status = -1;
                                 }
                                 break;
+                            case 131:
+                                idx = findElementByCoordinate(x, y, gameInfo.yellowStoppers);
+                                if (idx >= 0) {
+                                    gameInfo.yellowStoppers.splice(idx, 1);
+                                }
+                                break;
                             case 132:
                                 gameInfo.travelGate.x = -1;
                                 gameInfo.travelGate.y = -1;
+                                break;
+                            case 136:
+                                idx = findElementByCoordinate(x, y, gameInfo.yellowPausers);
+                                if (idx >= 0) {
+                                    gameInfo.yellowPausers.splice(idx, 1);
+                                }
+                                break;
+                            case 158:
+                                idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+                                if (idx >= 0) {
+                                    gameInfo.pistonsTriggers.splice(idx, 1);
+                                }
+                                break;
+                            case 159:
+                            case 161:
+                            case 163:
+                            case 165:
+                                idx = findElementByCoordinate(x, y, gameInfo.pistons);
+                                if (idx >= 0) {
+                                    gameInfo.pistons.splice(idx, 1);
+                                }
+                                switch (el) {
+                                    case 159:
+                                        if (y > 0) {
+                                            if (gameData[y - 1][x] === 160) {
+                                                gameData[y - 1][x] = 0;
+                                            }
+                                        }
+                                        break;
+                                    case 161:
+                                        if (y < (gameData.length - 1)) {
+                                            if (gameData[y + 1][x] === 162) {
+                                                gameData[y + 1][x] = 0;
+                                            }
+                                        }
+                                        break;
+                                    case 163:
+                                        if (x > 0) {
+                                            if (gameData[y][x - 1] === 164) {
+                                                gameData[y][x - 1] = 0;
+                                            }
+                                        }
+                                        break;
+                                    case 165:
+                                        if (x < (gameData[0].length - 1)) {
+                                            if (gameData[y][x + 1] === 166) {
+                                                gameData[y][x + 1] = 0;
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 break;
                             default:
                                 break;
