@@ -1,3 +1,5 @@
+import { getPurpleTeleportColor } from "./teleports.js";
+
 export function getGameInfo(backData, gameData) {
     let result = {};
     initGameInfo(result);
@@ -254,7 +256,7 @@ export function getGameInfo(backData, gameData) {
                         x: j,
                         y: i,
                         selfDestructing: true,
-                        color: "#FF80FF"
+                        color: getPurpleTeleportColor()
                     };
                     result.teleports.push(teleport);
                     break;

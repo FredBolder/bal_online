@@ -5,6 +5,7 @@ import { moveLightBlueBar } from "./lightBlueBar.js";
 import { moveOrangeBallInDirection } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
+import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -653,17 +654,6 @@ export function isHorizontalRope(x, y, backData) {
 
 function isTravelGate(x, y, travelGate) {
   return ((x === travelGate.x) && (y === travelGate.y));
-}
-
-function isWhiteTeleport(x, y, teleports) {
-  let result = false;
-
-  for (let i = 0; i < teleports.length; i++) {
-    if ((teleports[i].x === x) && (teleports[i].y === y) && (teleports[i].color === "white")) {
-      result = true;
-    }
-  }
-  return result;
 }
 
 export function falling(x, y, backData, gameData, gameInfo) {
@@ -1352,7 +1342,8 @@ export function zeroArray(rows, columns) {
 }
 
 export function moveLeft(backData, gameData, gameInfo) {
-  let idx = -1;
+  let idx1 = -1;
+  let idx2 = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1416,10 +1407,10 @@ export function moveLeft(backData, gameData, gameInfo) {
               updateObject(gameInfo.yellowBallPushers, x - 1, y, x - 2, y);
               break;
             case 117:
-              idx = findElementByCoordinate(x - 1, y, gameInfo.timeBombs);
-              if (idx >= 0) {
-                gameInfo.timeBombs[idx].x = x - 2;
-                gameInfo.timeBombs[idx].status = timeBombsTime;
+              idx1 = findElementByCoordinate(x - 1, y, gameInfo.timeBombs);
+              if (idx1 >= 0) {
+                gameInfo.timeBombs[idx1].x = x - 2;
+                gameInfo.timeBombs[idx1].status = timeBombsTime;
               }
               break;
             default:
@@ -1462,11 +1453,19 @@ export function moveLeft(backData, gameData, gameInfo) {
       }
       if (!result.player && x > 0) {
         if ((row[x - 1] === 31) || (row[x - 1] === 92)) {
-          row[x - 1] = 2;
-          row[x] = element;
-          gameInfo.blueBall.x = x - 1;
-          result.player = true;
-          result.teleporting = true;
+          idx1 = findElementByCoordinate(x - 1, y, gameInfo.teleports);
+          if (idx1 === -1) {
+            idx2 = -1;
+          } else {
+            idx2 = findTheOtherTeleport(idx1, gameInfo.teleports);
+          }
+          if (idx2 !== -1) {
+            row[x - 1] = 2;
+            row[x] = element;
+            gameInfo.blueBall.x = x - 1;
+            result.player = true;
+            result.teleporting = true;
+          }
         }
       }
       if (result.player) {
@@ -1525,7 +1524,8 @@ export function moveLeft(backData, gameData, gameInfo) {
 }
 
 export function moveRight(backData, gameData, gameInfo) {
-  let idx = -1;
+  let idx1 = -1;
+  let idx2 = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
@@ -1591,10 +1591,10 @@ export function moveRight(backData, gameData, gameInfo) {
               updateObject(gameInfo.yellowBallPushers, x + 1, y, x + 2, y);
               break;
             case 117:
-              idx = findElementByCoordinate(x + 1, y, gameInfo.timeBombs);
-              if (idx >= 0) {
-                gameInfo.timeBombs[idx].x = x + 2;
-                gameInfo.timeBombs[idx].status = timeBombsTime;
+              idx1 = findElementByCoordinate(x + 1, y, gameInfo.timeBombs);
+              if (idx1 >= 0) {
+                gameInfo.timeBombs[idx1].x = x + 2;
+                gameInfo.timeBombs[idx1].status = timeBombsTime;
               }
               break;
             default:
@@ -1632,11 +1632,19 @@ export function moveRight(backData, gameData, gameInfo) {
       }
       if (!result.player && x < gameData[0].length - 1) {
         if ((row[x + 1] === 31) || (row[x + 1] === 92)) {
-          row[x + 1] = 2;
-          row[x] = element;
-          gameInfo.blueBall.x = x + 1;
-          result.player = true;
-          result.teleporting = true;
+          idx1 = findElementByCoordinate(x + 1, y, gameInfo.teleports);
+          if (idx1 === -1) {
+            idx2 = -1;
+          } else {
+            idx2 = findTheOtherTeleport(idx1, gameInfo.teleports);
+          }
+          if (idx2 !== -1) {
+            row[x + 1] = 2;
+            row[x] = element;
+            gameInfo.blueBall.x = x + 1;
+            result.player = true;
+            result.teleporting = true;
+          }
         }
       }
       if (result.player) {

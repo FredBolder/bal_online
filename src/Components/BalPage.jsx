@@ -38,7 +38,7 @@ import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
-import { checkPurpleTeleports } from "../purpleTeleports.js"; 
+import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "../teleports.js"; 
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -444,31 +444,28 @@ function BalPage() {
     checkYellowStoppers(backData, gameData, gameInfo, gameVars, false);
 
     if (gameInfo.teleports.length > 0) {
-      let teleport = -1;
+      let teleport1 = -1;
+      let teleport2 = -1;
       switch (gameVars.teleporting) {
         case 1:
           playSound("teleport");
           gameVars.teleporting = 2;
           break;
         case 2:
-          teleport = findElementByCoordinate(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
-          if (teleport >= 0) {
-            if (gameInfo.teleports[teleport].selfDestructing) {
+          teleport1 = findElementByCoordinate(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
+          if (teleport1 >= 0) {
+            if (gameInfo.teleports[teleport1].selfDestructing) {
               gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
             } else {
               gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 31;
             }
-            for (let i = 0; i < gameInfo.teleports.length; i++) {
-              if ((i !== teleport) && (gameInfo.teleports[i].selfDestructing === gameInfo.teleports[teleport].selfDestructing) &&
-              (gameInfo.teleports[i].color === gameInfo.teleports[teleport].color)) {
-                gameInfo.blueBall.x = gameInfo.teleports[i].x;
-                gameInfo.blueBall.y = gameInfo.teleports[i].y;
-              }
+            teleport2 = findTheOtherTeleport(teleport1, gameInfo.teleports);
+            if (teleport2 >= 0) {
+                gameInfo.blueBall.x = gameInfo.teleports[teleport2].x;
+                gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
             }
-            if (gameInfo.teleports[teleport].selfDestructing) {
-              gameInfo.teleports = gameInfo.teleports.filter((teleport) => {
-                return ((teleport.selfDestructing === false) || (teleport.color !== "white"));
-              });
+            if (gameInfo.teleports[teleport1].selfDestructing) {
+              deleteTeleports("white", true, gameInfo);
             }
           }
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
@@ -1422,7 +1419,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2011;
+        gameVars.currentLevel = 2012;
       }
       initLevel(gameVars.currentLevel);
     }

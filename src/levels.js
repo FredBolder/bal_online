@@ -12,7 +12,7 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2011;
+const seriesSecretEnd = 2012;
 
 export function getAllLevels() {
   let levels = [];

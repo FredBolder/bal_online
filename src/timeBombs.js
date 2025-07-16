@@ -1,7 +1,7 @@
 import { findElementByCoordinate } from "./balUtils.js";
 
 export function checkTimeBombs(gameData, backData, gameInfo) {
-    let idx = -1;
+    let idx1 = -1;
     let el = 0;
     let xmin = 0;
     let ymin = 0;
@@ -40,55 +40,55 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                                 break;
                             case 6:
                             case 106:
-                                idx = findElementByCoordinate(x, y, gameInfo.elevators);
-                                if (idx >= 0) {
-                                    gameInfo.elevators.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.elevators);
+                                if (idx1 >= 0) {
+                                    gameInfo.elevators.splice(idx1, 1);
                                 }
                                 break;
                             case 7:
                             case 107:
-                                idx = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
-                                if (idx >= 0) {
-                                    gameInfo.horizontalElevators.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
+                                if (idx1 >= 0) {
+                                    gameInfo.horizontalElevators.splice(idx1, 1);
                                 }
                                 break;
                             case 8:
                             case 93:
                             case 94:
-                                idx = findElementByCoordinate(x, y, gameInfo.redBalls);
-                                if (idx >= 0) {
-                                    gameInfo.redBalls.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.redBalls);
+                                if (idx1 >= 0) {
+                                    gameInfo.redBalls.splice(idx1, 1);
                                 }
                                 break;
                             case 9:
-                                idx = findElementByCoordinate(x, y, gameInfo.yellowBalls);
-                                if (idx >= 0) {
-                                    gameInfo.yellowBalls.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.yellowBalls);
+                                if (idx1 >= 0) {
+                                    gameInfo.yellowBalls.splice(idx1, 1);
                                 }
                                 break;
                             case 12:
-                                idx = findElementByCoordinate(x, y, gameInfo.damagedStones);
-                                if (idx >= 0) {
-                                    gameInfo.damagedStones.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.damagedStones);
+                                if (idx1 >= 0) {
+                                    gameInfo.damagedStones.splice(idx1, 1);
                                 }
                                 break;
                             case 13:
-                                idx = findElementByCoordinate(x, y, gameInfo.trapDoors);
-                                if (idx >= 0) {
-                                    gameInfo.trapDoors.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.trapDoors);
+                                if (idx1 >= 0) {
+                                    gameInfo.trapDoors.splice(idx1, 1);
                                 }
                                 break;
                             case 27:
-                                idx = findElementByCoordinate(x, y, gameInfo.redFish);
-                                if (idx >= 0) {
-                                    gameInfo.redFish.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.redFish);
+                                if (idx1 >= 0) {
+                                    gameInfo.redFish.splice(idx1, 1);
                                 }
                                 break;
                             case 31:
                             case 92:
-                                idx = findElementByCoordinate(x, y, gameInfo.teleports);
-                                if (idx >= 0) {
-                                    gameInfo.teleports.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.teleports);
+                                if (idx1 >= 0) {
+                                    gameInfo.teleports.splice(idx1, 1);
                                 }
                                 break;
                             case 37:
@@ -96,60 +96,60 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                                 gameInfo.detonator.y = -1;
                                 break;
                             case 39:
-                                idx = findElementByCoordinate(x, y, gameInfo.elevatorInOuts);
-                                if (idx >= 0) {
-                                    gameInfo.elevatorInOuts.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.elevatorInOuts);
+                                if (idx1 >= 0) {
+                                    gameInfo.elevatorInOuts.splice(idx1, 1);
                                 }
                                 break;
                             case 40:
-                                idx = findElementByCoordinate(x, y, gameInfo.orangeBalls);
-                                if (idx >= 0) {
-                                    gameInfo.orangeBalls.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.orangeBalls);
+                                if (idx1 >= 0) {
+                                    gameInfo.orangeBalls.splice(idx1, 1);
                                 }
                                 break;
                             case 91:
-                                idx = findElementByCoordinate(x, y, gameInfo.electricity);
-                                if (idx >= 0) {
-                                    gameInfo.electricity.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.electricity);
+                                if (idx1 >= 0) {
+                                    gameInfo.electricity.splice(idx1, 1);
                                 }
                                 break;
                             case 97:
-                                idx = findElementByCoordinate(x, y, gameInfo.copiers);
-                                if (idx >= 0) {
-                                    gameInfo.copiers.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.copiers);
+                                if (idx1 >= 0) {
+                                    gameInfo.copiers.splice(idx1, 1);
                                 }
                                 break;
                             case 109:
                             case 110:
                             case 111:
                             case 112:
-                                idx = findElementByCoordinate(x, y, gameInfo.forces);
-                                if (idx >= 0) {
-                                    gameInfo.forces.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.forces);
+                                if (idx1 >= 0) {
+                                    gameInfo.forces.splice(idx1, 1);
                                 }
                                 break;
                             case 115:
-                                idx = findElementByCoordinate(x, y, gameInfo.yellowBallPushers);
-                                if (idx >= 0) {
-                                    gameInfo.yellowBallPushers.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.yellowBallPushers);
+                                if (idx1 >= 0) {
+                                    gameInfo.yellowBallPushers.splice(idx1, 1);
                                 }
                                 break;
                             case 116:
-                                idx = findElementByCoordinate(x, y, gameInfo.yellowBallPushersTriggers);
-                                if (idx >= 0) {
-                                    gameInfo.yellowBallPushersTriggers.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.yellowBallPushersTriggers);
+                                if (idx1 >= 0) {
+                                    gameInfo.yellowBallPushersTriggers.splice(idx1, 1);
                                 }
                                 break;
                             case 117:
-                                idx = findElementByCoordinate(x, y, gameInfo.timeBombs);
-                                if (idx >= 0) {
-                                    gameInfo.timeBombs[idx].status = -1;
+                                idx1 = findElementByCoordinate(x, y, gameInfo.timeBombs);
+                                if (idx1 >= 0) {
+                                    gameInfo.timeBombs[idx1].status = -1;
                                 }
                                 break;
                             case 131:
-                                idx = findElementByCoordinate(x, y, gameInfo.yellowStoppers);
-                                if (idx >= 0) {
-                                    gameInfo.yellowStoppers.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.yellowStoppers);
+                                if (idx1 >= 0) {
+                                    gameInfo.yellowStoppers.splice(idx1, 1);
                                 }
                                 break;
                             case 132:
@@ -157,24 +157,24 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                                 gameInfo.travelGate.y = -1;
                                 break;
                             case 136:
-                                idx = findElementByCoordinate(x, y, gameInfo.yellowPausers);
-                                if (idx >= 0) {
-                                    gameInfo.yellowPausers.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.yellowPausers);
+                                if (idx1 >= 0) {
+                                    gameInfo.yellowPausers.splice(idx1, 1);
                                 }
                                 break;
                             case 158:
-                                idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
-                                if (idx >= 0) {
-                                    gameInfo.pistonsTriggers.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+                                if (idx1 >= 0) {
+                                    gameInfo.pistonsTriggers.splice(idx1, 1);
                                 }
                                 break;
                             case 159:
                             case 161:
                             case 163:
                             case 165:
-                                idx = findElementByCoordinate(x, y, gameInfo.pistons);
-                                if (idx >= 0) {
-                                    gameInfo.pistons.splice(idx, 1);
+                                idx1 = findElementByCoordinate(x, y, gameInfo.pistons);
+                                if (idx1 >= 0) {
+                                    gameInfo.pistons.splice(idx1, 1);
                                 }
                                 switch (el) {
                                     case 159:
