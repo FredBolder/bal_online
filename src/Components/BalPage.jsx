@@ -888,6 +888,9 @@ function BalPage() {
       case "Small":
         level = 750;
         break;
+      case "Easy":
+        level = 3000;
+        break;
       case "Extreme":
         level = 901;
         break;
@@ -1648,6 +1651,9 @@ function BalPage() {
                 </div>
                 <div onClick={() => { clickSeries("Small") }}>
                   <label>Series Small</label>
+                </div>
+                <div onClick={() => { clickSeries("Easy") }}>
+                  <label>Easy</label>
                 </div>
                 <div onClick={() => { clickSeries("Extreme") }}>
                   <label>Extreme</label>

@@ -13,6 +13,8 @@ const seriesExtremeStart = 901;
 const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2012;
+const seriesEasyStart = 3000;
+const seriesEasyEnd = 3005;
 
 export function getAllLevels() {
   let levels = [];
@@ -33,6 +35,9 @@ export function getAllLevels() {
     levels.push(i);
   }
   for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
     levels.push(i);
   }
   return levels;
@@ -78,6 +83,7 @@ export function checkLevel(data, settings) {
   let group = 0;
   let info = null;
   let msg = "";
+  let msgExtra = "";
   let nBlueBalls = 0;
   let nDetonators = 0;
   let nGameRotator = 0;
@@ -297,7 +303,60 @@ export function checkLevel(data, settings) {
           msg += `${settingNr(i)}${info.params} arguments expected for ${name}.\n`;
         }
       } else {
-        msg += `${settingNr(i)}Invalid setting name ${name}.\n`;
+        msg += `${settingNr(i)}Invalid setting name ${name}.`;
+        switch (name) {
+          case "$addnote":
+            msgExtra = "$addnotes";
+            break;
+          case "$backcolor":
+          case "$backcolour":
+          case "$backgroundcolor":
+          case "$backgroundcolour":
+          case "$bgcolour":
+            msgExtra = "$bgcolor";
+            break;
+          case "$delay":
+          case "$ticks":
+          case "$time":
+            msgExtra = "$gameticks";
+            break;
+          case "$color":
+          case "$colour":
+          case "$fgcolour":
+          case "$foregroundcolor":
+          case "$foregroundcolour":
+          case "$frontcolor":
+          case "$frontcolour":
+            msgExtra = "$fgcolor";
+            break;
+          case "$help":
+            msgExtra = "$hint";
+            break;
+          case "$invert":
+          case "$reverse":
+            msgExtra = "$inverted";
+            break;
+          case "$note":
+            msgExtra = "$notes";
+            break;
+          case "$jukebox":
+          case "$musicblock":
+          case "$noteblock":
+          case "$notebox":
+            msgExtra = "$musicbox";
+            break;
+          case "$startmessage":
+          case "$startupmessage":
+            msgExtra = "$startlevelmessage";
+            break;
+          default:
+            msgExtra = "";
+            break;
+        }
+        if (msgExtra !== "") {
+          msg += ` Perhaps you mean ${msgExtra}.`;
+        }
+        msg += "\n";
       }
 
     } else {
@@ -370,7 +429,7 @@ export async function getLevel(n, gateTravelling = false) {
   let result = [];
 
   if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) || (n >= series3Start && n <= series3End) ||
-    (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
+    (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesEasyStart && n <= seriesEasyEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
     (n >= seriesSecretStart && n <= seriesSecretEnd) || (n >= 990 && n <= 991)) {
     result = await loadFromFile(n, gateTravelling);
   } else {
@@ -393,6 +452,9 @@ export function getRandomLevel(currentLevel) {
     levels.push(i);
   }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
     levels.push(i);
   }
   // Exclude levels
