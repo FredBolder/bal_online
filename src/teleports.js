@@ -25,12 +25,14 @@ export function checkPurpleTeleports(backData, gameData, gameInfo) {
         }
     }
     if ((x1 !== -1) && (y1 !== -1) && (x2 !== -1) && (y2 !== -1)) {
-        update = true;
-        gameData[y1][x1] = 0;
-        gameData[y2][x2] = 28;
-        backData[y1][x1] = 0;
-        backData[y2][x2] = 0;
-        deleteTeleports(getPurpleTeleportColor(), true, gameInfo);
+        if (gameData[y2][x2] === 0) {
+            update = true;
+            gameData[y1][x1] = 0;
+            gameData[y2][x2] = 28;
+            backData[y1][x1] = 0;
+            backData[y2][x2] = 0;
+            deleteTeleports(getPurpleTeleportColor(), true, gameInfo);
+        }
     }
     return update;
 }

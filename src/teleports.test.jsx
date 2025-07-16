@@ -212,5 +212,44 @@ describe("Teleports", () => {
         expect(JSON.stringify(backData04b)).toBe(JSON.stringify(expectedBackData04b));
     });
 
+    let gameInfo04c = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 4 },
+        teleports: [
+            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor() },
+            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor() },
+        ]
+    }
+    let input04c = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 4, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 28, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let backData04c = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 170, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 170, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    let expectedOutput04c = input04c.map(row => [...row]);
+    let expectedBackData04c = backData04c.map(row => [...row]);
+    let info04c = checkPurpleTeleports(backData04c, input04c, gameInfo04c, { ...defaultGameVars });
+    it("checkPurpleTeleports C", () => {
+        expect(JSON.stringify(input04c)).toBe(JSON.stringify(expectedOutput04c));
+    });
+    it("checkPurpleTeleports C info", () => {
+        expect(info04c).toBe(false);
+    });
+    it("checkPurpleTeleports C backData", () => {
+        expect(JSON.stringify(backData04c)).toBe(JSON.stringify(expectedBackData04c));
+    });
+
+
+
     // Insert new tests here
 });
