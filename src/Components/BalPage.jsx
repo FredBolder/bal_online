@@ -324,10 +324,8 @@ function BalPage() {
     }
 
     if (gameVars.timeFreezer === 0) {
-      if (gameVars.elevatorCounter > 0) {
-        gameVars.elevatorCounter--;
-      } else {
-        gameVars.elevatorCounter = 5;
+      if (gameVars.elevatorCounter >= gameVars.elevatorCountTo) {
+        gameVars.elevatorCounter = 0;
         if (moveElevators(gameData, gameInfo)) {
           update = true;
         }
@@ -335,6 +333,7 @@ function BalPage() {
           update = true;
         }
       }
+      gameVars.elevatorCounter++;
 
       if (checkElevatorInOuts(gameData, gameInfo)) {
         update = true;
@@ -649,18 +648,27 @@ function BalPage() {
               }
             }
             break;
-          case "$fishdelay":
-            if (values.length === 1) {
-              gameTicks = tryParseInt(values[0], -1);
-              if (gameTicks >= 0) {
-                gameVars.fishCountTo = gameTicks;
+          case "$gameticks":
+            if (values.length === 2) {
+              gameTicks = tryParseInt(values[1], -1);
+              if (gameTicks >= 1) {
+                switch (valuesLowerCase[0]) {
+                  case "elevator":
+                    gameVars.elevatorCountTo = gameTicks;
+                    break;
+                  case "fish":
+                    gameVars.fishCountTo = gameTicks;
+                    break;
+                  default:
+                    break;
+                }
               }
             }
             break;
-          case "$gameticks":
+          case "$gameticksxy":
             if (values.length === 3) {
               gameTicks = tryParseInt(values[2], -1);
-              if (validXY && (gameTicks >= 0)) {
+              if (validXY && (gameTicks >= 1)) {
                 idx = findElementByCoordinate(x, y, gameInfo.delays);
                 if (idx >= 0) {
                   gameInfo.delays[idx].gameTicks = gameTicks;
@@ -1430,7 +1438,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 318;
+        gameVars.currentLevel = 200;
       }
       initLevel(gameVars.currentLevel);
     }

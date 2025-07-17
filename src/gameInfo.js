@@ -324,6 +324,7 @@ export function initGameVars(vars) {
     vars.elecActiveSaved = false;
     vars.electricityCounter = 0;
     vars.elevatorCounter = 0;
+    vars.elevatorCountTo = 5;
     vars.explosionCounter = 0;
     vars.fgcolor = [];
     vars.fishCounter = 0;

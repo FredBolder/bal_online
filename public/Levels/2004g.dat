@@ -36,7 +36,7 @@ $instrument: 21, 26, bass, 60
 $group: 4, 16, 2
 $sticky: 17, 23, yes
 $group: 17, 23, 2
-$gameticks: 19, 22, 4
+$gameticksxy: 19, 22, 4
 90000000000000000000000000000000000000
 0                                    0
 0                                    0

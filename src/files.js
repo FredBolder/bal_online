@@ -38,6 +38,16 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
             }
         }
 
+        if (gameVars.elevatorCountTo !== 5) {
+            line = `$gameticks: elevator, ${gameVars.elevatorCountTo}`;
+            await writable.write(`${line}\n`);
+        }
+
+        if (gameVars.fishCountTo !== 12) {
+            line = `$gameticks: fish, ${gameVars.fishCountTo}`;
+            await writable.write(`${line}\n`);
+        }
+
         if (gameVars.hint !== "") {
             line = `$hint: ${gameVars.hint}`;
             await writable.write(`${line}\n`);
@@ -55,7 +65,7 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
 
         for (let i = 0; i < gameInfo.delays.length; i++) {
             const delay = gameInfo.delays[i];
-            line = `$gameticks: ${delay.x}, ${delay.y}, ${delay.gameTicks}`;
+            line = `$gameticksxy: ${delay.x}, ${delay.y}, ${delay.gameTicks}`;
             await writable.write(`${line}\n`);
         }
 

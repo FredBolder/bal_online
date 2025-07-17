@@ -66,8 +66,8 @@ export function checkLevel(data, settings) {
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$fgcolor", params: 5, xy: true },
-    { name: "$fishdelay", params: 1, xy: false },
-    { name: "$gameticks", params: 3, xy: true },
+    { name: "$gameticks", params: 2, xy: false },
+    { name: "$gameticksxy", params: 3, xy: true },
     { name: "$group", params: 3, xy: true },
     { name: "$hint", params: 0, xy: false },
     { name: "$instrument", params: 4, xy: true },
@@ -226,19 +226,22 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}The area exceeds the game raster.\n`;
               }
               break;
-            case "$fishdelay":
-              gameTicks = tryParseInt(values[0], -1);
-              if (gameTicks < 0) {
-                msg += `${settingNr(i)}Invalid value ${values[0]} for delay.\n`;
+            case "$gameticks":
+              if (!["fish", "elevator"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
+              }
+              gameTicks = tryParseInt(values[1], -1);
+              if (gameTicks < 1) {
+                msg += `${settingNr(i)}Invalid value ${values[1]} for ticks.\n`;
               }
               break;
-            case "$gameticks":
+            case "$gameticksxy":
               if (validXY && ![")"].includes(data[y][x])) {
                 msg += `${settingNr(i)}No delay found at the coordinates ${x}, ${y}.\n`;
               }
               gameTicks = tryParseInt(values[2], -1);
-              if (gameTicks < 0) {
-                msg += `${settingNr(i)}Invalid value ${values[2]} for game ticks.\n`;
+              if (gameTicks < 1) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for ticks.\n`;
               }
               break;
             case "$group":
@@ -322,15 +325,15 @@ export function checkLevel(data, settings) {
           case "$bgcolour":
             msgExtra = "$bgcolor";
             break;
-          case "$fish":
-          case "$fishgameticks":
-          case "$fishticks":
-            msgExtra = "$fishdelay";
-            break;
           case "$delay":
           case "$ticks":
           case "$time":
             msgExtra = "$gameticks";
+            break;
+          case "$delayxy":
+          case "$ticksxy":
+          case "$timexy":
+            msgExtra = "$gameticksxy";
             break;
           case "$color":
           case "$colour":
