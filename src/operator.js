@@ -24,6 +24,10 @@ function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
     return buffer;
 }
 
+export function getPreDelay() {
+    return 20/1000;
+}
+
 function resonancePercentToQ(percent) {
     const minQ = 0.7;
     const maxQ = 20;
@@ -154,8 +158,8 @@ class Operator {
         this.pitchEnvSettings.end = end;
     }
 
-    async start() {
-        const startTime = this.audioContext.currentTime;
+    async start(preDelay = 0) {
+        const startTime = this.audioContext.currentTime + preDelay;
         if (this.startScheduled) return;
         this.startScheduled = true;
         const at = this.dcaSettings.attack / 1000;
@@ -182,13 +186,14 @@ class Operator {
         if (this.lfoSettings.destination !== "none") {
             this.lfo.start(startTime + (this.lfoSettings.delay / 1000));
         }
+        await new Promise(resolve => setTimeout(resolve, preDelay * 1000));
         this.started = true;
-        await new Promise(resolve => setTimeout(resolve, (startTime + 2 - this.audioContext.currentTime) * 1000));
+        await new Promise(resolve => setTimeout(resolve, 2 * 1000));
         this.stop();
     }
 
-    async stop() {
-        const stopTime = this.audioContext.currentTime;
+    async stop(preDelay = 0) {
+        const stopTime = this.audioContext.currentTime + preDelay;
         if (this.stopScheduled) return;
         this.stopScheduled = true;
         const rt = this.dcaSettings.release / 1000;
@@ -211,7 +216,7 @@ class Operator {
         if (this.lfoSettings.destination === "dca") {
             this.tremoloOffset.stop(stopTime + rt + 0.02);
         }
-        await new Promise(resolve => setTimeout(resolve, (stopTime + rt + 0.02 - this.audioContext.currentTime) * 1000));
+        await new Promise(resolve => setTimeout(resolve, (rt + preDelay + 0.02) * 1000));
         this.stopped = true;
     }
 }

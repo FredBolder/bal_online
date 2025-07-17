@@ -4,7 +4,7 @@ import { randomInt, tryParseInt } from "./utils.js";
 const series1Start = 200;
 const series1End = 224;
 const series2Start = 300;
-const series2End = 311;
+const series2End = 318;
 const series3Start = 700;
 const series3End = 749;
 const seriesSmallStart = 750;
@@ -14,7 +14,7 @@ const seriesExtremeEnd = 902;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2012;
 const seriesEasyStart = 3000;
-const seriesEasyEnd = 3008;
+const seriesEasyEnd = 3014;
 
 export function getAllLevels() {
   let levels = [];
@@ -66,6 +66,7 @@ export function checkLevel(data, settings) {
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$fgcolor", params: 5, xy: true },
+    { name: "$fishdelay", params: 1, xy: false },
     { name: "$gameticks", params: 3, xy: true },
     { name: "$group", params: 3, xy: true },
     { name: "$hint", params: 0, xy: false },
@@ -225,6 +226,12 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}The area exceeds the game raster.\n`;
               }
               break;
+            case "$fishdelay":
+              gameTicks = tryParseInt(values[0], -1);
+              if (gameTicks < 0) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for delay.\n`;
+              }
+              break;
             case "$gameticks":
               if (validXY && ![")"].includes(data[y][x])) {
                 msg += `${settingNr(i)}No delay found at the coordinates ${x}, ${y}.\n`;
@@ -314,6 +321,11 @@ export function checkLevel(data, settings) {
           case "$backgroundcolour":
           case "$bgcolour":
             msgExtra = "$bgcolor";
+            break;
+          case "$fish":
+          case "$fishgameticks":
+          case "$fishticks":
+            msgExtra = "$fishdelay";
             break;
           case "$delay":
           case "$ticks":
@@ -452,9 +464,6 @@ export function getRandomLevel(currentLevel) {
     levels.push(i);
   }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
     levels.push(i);
   }
   // Exclude levels

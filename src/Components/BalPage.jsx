@@ -303,12 +303,12 @@ function BalPage() {
     }
 
     if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
-      gameVars.fishCounter++;
       if (gameVars.fishCounter >= gameVars.fishCountTo) {
         gameVars.fishCounter = 0;
         moveFish(backData, gameData, gameInfo, gameInfo.blueBall.x, gameInfo.blueBall.y);
         update = true;
       }
+      gameVars.fishCounter++;
     }
 
     if (gameInfo.hasWater) {
@@ -646,6 +646,14 @@ function BalPage() {
                 } else {
                   gameVars.fgcolor.push({ x, y, w, h, color })
                 }
+              }
+            }
+            break;
+          case "$fishdelay":
+            if (values.length === 1) {
+              gameTicks = tryParseInt(values[0], -1);
+              if (gameTicks >= 0) {
+                gameVars.fishCountTo = gameTicks;
               }
             }
             break;
@@ -1422,7 +1430,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3008;
+        gameVars.currentLevel = 318;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1653,10 +1661,10 @@ function BalPage() {
                   <label>Series Small</label>
                 </div>
                 <div onClick={() => { clickSeries("Easy") }}>
-                  <label>Easy</label>
+                  <label>Series Easy</label>
                 </div>
                 <div onClick={() => { clickSeries("Extreme") }}>
-                  <label>Extreme</label>
+                  <label>Series Extreme</label>
                 </div>
                 <div onClick={randomLevel}>
                   <label>Random level</label>

@@ -1,4 +1,4 @@
-import { Operator } from "./operator.js";
+import { getPreDelay, Operator } from "./operator.js";
 import { Reverb } from "./reverb.js";
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
@@ -180,7 +180,7 @@ export async function playNote(instrument, volume, note) {
       reverb.connectSource(operator.amp); // With reverb
       //operator.amp.connect(audioCtx.destination); // Without reverb
 
-      operator.start();
+      operator.start(getPreDelay());
     }
   }
 }
