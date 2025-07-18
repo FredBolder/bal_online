@@ -25,7 +25,7 @@ function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
 }
 
 export function getPreDelay() {
-    return 20/1000;
+    return 20 / 1000;
 }
 
 function resonancePercentToQ(percent) {
@@ -192,14 +192,14 @@ class Operator {
         this.stop();
     }
 
-    async stop(preDelay = 0) {
-        const stopTime = this.audioContext.currentTime + preDelay;
+    async stop() {
+        const stopTime = this.audioContext.currentTime;
         if (this.stopScheduled) return;
         this.stopScheduled = true;
         const rt = this.dcaSettings.release / 1000;
         const frt = this.filterSettings.release / 1000;
 
-        // The next two lines are needed, because exponentialRampToValueAtTime does not keep track of the current value
+        // exponentialRampToValueAtTime does not keep track of the current value
         this.amp.gain.cancelScheduledValues(stopTime);
         this.amp.gain.setValueAtTime(this.amp.gain.value, stopTime);
         this.amp.gain.exponentialRampToValueAtTime(safeTarget(0), stopTime + rt);
@@ -216,7 +216,7 @@ class Operator {
         if (this.lfoSettings.destination === "dca") {
             this.tremoloOffset.stop(stopTime + rt + 0.02);
         }
-        await new Promise(resolve => setTimeout(resolve, (rt + preDelay + 0.02) * 1000));
+        await new Promise(resolve => setTimeout(resolve, (rt + 0.02) * 1000));
         this.stopped = true;
     }
 }

@@ -4,7 +4,7 @@ import { randomInt, tryParseInt } from "./utils.js";
 const series1Start = 200;
 const series1End = 224;
 const series2Start = 300;
-const series2End = 318;
+const series2End = 327;
 const series3Start = 700;
 const series3End = 749;
 const seriesSmallStart = 750;

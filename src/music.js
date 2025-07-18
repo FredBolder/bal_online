@@ -45,7 +45,7 @@ export async function playNote(instrument, volume, note) {
 
     for (let i = 0; i < operatorsList.length; i++) {
       if ((operatorsList[i].instrument === instrument)) {
-        operatorsList[i].operator.stop();
+        operatorsList[i].operator.stop(); 
       }
       if (operatorsList[i].operator.stopped) {
         operatorsList[i].operator.osc.disconnect();
