@@ -35,6 +35,7 @@ export async function playNote(instrument, volume, note) {
   let release = 100;
   let f1 = 1;
   let f2 = 1;
+  let f3 = 1;
   let frequency = noteToFreq(note);
   let maxVolume = (volume / 100) * 0.5;
   const newOperatorsList = [];
@@ -151,6 +152,22 @@ export async function playNote(instrument, volume, note) {
           operators[i].setLfo("dco", "sine", 4, 0.005, 250);
         }
         break;
+      case "trumpet":
+        f1 = 1 / 3.35;
+        f2 = 0.9;
+        f3  = 0.05;
+        operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.95 * f1, 10, 1000, maxVolume * 0.95 * f1 * f2, 1000 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 2, maxVolume * 0.75 * f1, 20, 800, maxVolume * 0.75 * f1 * f2, 800 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 3, maxVolume * 0.55 * f1, 30, 700, maxVolume * 0.55 * f1 * f2, 700 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.45 * f1, 30, 600, maxVolume * 0.45 * f1 * f2, 600 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 5, maxVolume * 0.3 * f1, 40, 500, maxVolume * 0.3 * f1 * f2, 500 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 6, maxVolume * 0.2 * f1, 40, 400, maxVolume * 0.2 * f1 * f2, 400 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 7, maxVolume * 0.1 * f1, 40, 300, maxVolume * 0.1 * f1 * f2, 300 * f3));
+        operators.push(new Operator(audioCtx, "sine", frequency * 8, maxVolume * 0.05 * f1, 50, 200, maxVolume * 0.05 * f1 * f2, 200 * f3));
+        for (let i = 0; i < operators.length; i++) {
+          operators[i].setPitchEnv(10 / 1200, 20, 0);
+        }
+        break;  
       case "vibraphone":
         operators.push(new Operator(audioCtx, "sine", frequency, maxVolume * 0.5, 5, 1000, 0, 500));
         operators.push(new Operator(audioCtx, "sine", frequency * 4, maxVolume * 0.3, 5, 750, 0, 375));
