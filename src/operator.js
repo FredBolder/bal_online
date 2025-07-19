@@ -1,3 +1,4 @@
+import { resonancePercentToQ } from "./filter.js";
 import { tryParseInt } from "./utils.js";
 
 function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 3) {
@@ -34,8 +35,9 @@ function safeTarget(v) {
 
 
 class Operator {
-    constructor(audioContext, waveform, frequency, volume, attack, decay, sustain, release) {
+    constructor(audioContext, waveform, frequency, detuneOrResonance, volume, attack, decay, sustain, release) {
         this.audioContext = audioContext;
+        this.filter = null;
         this.started = false;
         this.startScheduled = false;
         this.stopped = false;
@@ -55,9 +57,19 @@ class Operator {
         this.lfoGain = audioContext.createGain();
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
-        if (this.dcoSettings.waveform === "noise") {
+        if (["noise", "noiseAndHPF"].includes(this.dcoSettings.waveform)) {
             this.osc = audioContext.createBufferSource();
             this.osc.buffer = createWhiteNoiseBuffer(audioContext, 1);
+            switch (this.dcoSettings.waveform) {
+                case "noiseAndHPF":
+                    this.filter = audioContext.createBiquadFilter();
+                    this.filter.type = "highpass";
+                    this.filter.frequency.value = frequency;
+                    this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
+                    break;
+                default:
+                    break;
+            }
         } else {
             this.osc = audioContext.createOscillator();
             if (this.dcoSettings.waveform.startsWith("pulse")) {
@@ -79,7 +91,12 @@ class Operator {
             this.osc.frequency.value = this.dcoSettings.frequency;
 
         }
-        this.osc.connect(this.amp);
+        if (this.filter !== null) {
+            this.osc.connect(this.filter);
+            this.filter.connect(this.amp);
+        } else {
+            this.osc.connect(this.amp);
+        }
     }
 
     setLfo(destination, waveform, frequency, depth, delay) {
@@ -126,9 +143,10 @@ class Operator {
     }
 
     async start(preDelay) {
-        const startTime = this.audioContext.currentTime + preDelay;
         if (this.startScheduled) return;
+
         this.startScheduled = true;
+        const startTime = this.audioContext.currentTime + preDelay;
         const at = this.dcaSettings.attack / 1000;
         const dt = this.dcaSettings.decay / 1000;
         this.amp.gain.setValueAtTime(safeTarget(0), startTime);
@@ -150,9 +168,10 @@ class Operator {
     }
 
     async stop() {
-        const stopTime = this.audioContext.currentTime;
         if (this.stopScheduled) return;
+
         this.stopScheduled = true;
+        const stopTime = this.audioContext.currentTime;
         const rt = this.dcaSettings.release / 1000;
 
         // exponentialRampToValueAtTime does not keep track of the current value
