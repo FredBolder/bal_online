@@ -38,10 +38,13 @@ class Operator {
     constructor(audioContext, waveform, frequency, detuneOrResonance, volume, attack, decay, sustain, release) {
         this.audioContext = audioContext;
         this.filter = null;
+        this.oscList = [];
         this.started = false;
         this.startScheduled = false;
         this.stopped = false;
         this.stopScheduled = false;
+        let freq = 440;
+        let nOscillators = 1;
         let pulseWidth = 25;
         this.lfoSettings = { destination: "none", waveform: "sine", frequency: 4, delay: 0, depth: 0.1 };
         this.dcoSettings = { waveform, frequency };
@@ -57,52 +60,76 @@ class Operator {
         this.lfoGain = audioContext.createGain();
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
-        if (["noise", "noiseAndHPF"].includes(this.dcoSettings.waveform)) {
-            this.osc = audioContext.createBufferSource();
-            this.osc.buffer = createWhiteNoiseBuffer(audioContext, 1);
-            switch (this.dcoSettings.waveform) {
-                case "noiseAndHPF":
-                    this.filter = audioContext.createBiquadFilter();
-                    this.filter.type = "highpass";
-                    this.filter.frequency.value = frequency;
-                    this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            this.osc = audioContext.createOscillator();
-            if (this.dcoSettings.waveform.startsWith("pulse")) {
-                if (this.dcoSettings.waveform.length > 5) {
-                    pulseWidth = tryParseInt(this.dcoSettings.waveform.slice(5), -1);
-                    if (pulseWidth < 1) {
-                        pulseWidth = 25;
-                    }
-                }
-                this.osc.setPeriodicWave(createPulseWave(audioContext, pulseWidth / 100, 20));
-            } else if (this.dcoSettings.waveform === "cosine") {
-                const real = new Float32Array([0, 0]); // cosine terms
-                const imag = new Float32Array([0, 1]); // sine terms
-                const wave = audioContext.createPeriodicWave(real, imag, { disableNormalization: true });
-                this.osc.setPeriodicWave(wave);
-            } else {
-                this.osc.type = this.dcoSettings.waveform;
-            }
-            this.osc.frequency.value = this.dcoSettings.frequency;
 
-        }
-        if (this.filter !== null) {
-            this.osc.connect(this.filter);
-            this.filter.connect(this.amp);
+        let oscillator = null;
+
+        if (!["noise", "noiseAndHPF"].includes(this.dcoSettings.waveform) && (detuneOrResonance !== 0)) {
+            nOscillators = 3;
         } else {
-            this.osc.connect(this.amp);
+            nOscillators = 1;
+        }
+        for (let i = 0; i < nOscillators; i++) {
+            if (["noise", "noiseAndHPF"].includes(this.dcoSettings.waveform)) {
+                oscillator = audioContext.createBufferSource();
+                oscillator.buffer = createWhiteNoiseBuffer(audioContext, 1);
+                switch (this.dcoSettings.waveform) {
+                    case "noiseAndHPF":
+                        this.filter = audioContext.createBiquadFilter();
+                        this.filter.type = "highpass";
+                        this.filter.frequency.value = frequency;
+                        this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                oscillator = audioContext.createOscillator();
+                if (this.dcoSettings.waveform.startsWith("pulse")) {
+                    if (this.dcoSettings.waveform.length > 5) {
+                        pulseWidth = tryParseInt(this.dcoSettings.waveform.slice(5), -1);
+                        if (pulseWidth < 1) {
+                            pulseWidth = 25;
+                        }
+                    }
+                    oscillator.setPeriodicWave(createPulseWave(audioContext, pulseWidth / 100, 20));
+                } else if (this.dcoSettings.waveform === "cosine") {
+                    const real = new Float32Array([0, 0]); // cosine terms
+                    const imag = new Float32Array([0, 1]); // sine terms
+                    const wave = audioContext.createPeriodicWave(real, imag, { disableNormalization: true });
+                    oscillator.setPeriodicWave(wave);
+                } else {
+                    oscillator.type = this.dcoSettings.waveform;
+                }
+                switch (i) {
+                    case 1:
+                        freq = this.dcoSettings.frequency * Math.pow(2, -detuneOrResonance / 1200);
+                        break;
+                    case 2:
+                        freq = this.dcoSettings.frequency * Math.pow(2, detuneOrResonance / 1200);
+                        break;
+                    default:
+                        freq = this.dcoSettings.frequency;
+                        break;
+                }
+                oscillator.frequency.value = freq;
+
+            }
+            if (this.filter !== null) {
+                oscillator.connect(this.filter);
+                this.filter.connect(this.amp);
+            } else {
+                oscillator.connect(this.amp);
+            }
+            this.oscList.push(oscillator);
         }
     }
 
     setLfo(destination, waveform, frequency, depth, delay) {
         this.lfo.disconnect();
         this.lfoGain.disconnect();
-        this.osc.disconnect();
+        for (let i = 0; i < this.oscList.length; i++) {
+            this.oscList[i].disconnect();
+        }
         this.tremolo.disconnect();
         this.tremoloOffset.disconnect();
 
@@ -120,18 +147,24 @@ class Operator {
         switch (this.lfoSettings.destination) {
             case "dco":
                 this.lfoGain.gain.value = this.lfoSettings.depth * 1200;
-                this.lfoGain.connect(this.osc.detune);
-                this.osc.connect(this.amp);
+                for (let i = 0; i < this.oscList.length; i++) {
+                    this.lfoGain.connect(this.oscList[i].detune);
+                    this.oscList[i].connect(this.amp);
+                }
                 break;
             case "dca":
                 this.lfoGain.gain.value = this.lfoSettings.depth;
                 this.tremoloOffset.offset.value = 1 - this.lfoSettings.depth;
                 this.lfoGain.connect(this.tremolo.gain);
                 this.tremoloOffset.connect(this.tremolo.gain);
-                this.osc.connect(this.tremolo).connect(this.amp);
+                for (let i = 0; i < this.oscList.length; i++) {
+                    this.oscList[i].connect(this.tremolo).connect(this.amp);
+                }
                 break;
             default:
-                this.osc.connect(this.amp);
+                for (let i = 0; i < this.oscList.length; i++) {
+                    this.oscList[i].connect(this.amp);
+                }
                 break;
         }
     }
@@ -150,11 +183,13 @@ class Operator {
         const at = this.dcaSettings.attack / 1000;
         const dt = this.dcaSettings.decay / 1000;
         this.amp.gain.setValueAtTime(safeTarget(0), startTime);
-        this.amp.gain.linearRampToValueAtTime(safeTarget(this.dcaSettings.volume), startTime + at);
-        this.amp.gain.exponentialRampToValueAtTime(safeTarget(this.dcaSettings.sustain), startTime + at + dt);
-        this.osc.detune.setValueAtTime(this.pitchEnvSettings.start * 1200, startTime);
-        this.osc.detune.linearRampToValueAtTime(this.pitchEnvSettings.end * 1200, startTime + (this.pitchEnvSettings.time / 1000));
-        this.osc.start(startTime);
+        this.amp.gain.linearRampToValueAtTime(safeTarget(this.dcaSettings.volume / this.oscList.length), startTime + at);
+        this.amp.gain.exponentialRampToValueAtTime(safeTarget(this.dcaSettings.sustain / this.oscList.length), startTime + at + dt);
+        for (let i = 0; i < this.oscList.length; i++) {
+            this.oscList[i].detune.setValueAtTime(this.pitchEnvSettings.start * 1200, startTime);
+            this.oscList[i].detune.linearRampToValueAtTime(this.pitchEnvSettings.end * 1200, startTime + (this.pitchEnvSettings.time / 1000));
+            this.oscList[i].start(startTime);
+        }
         if (this.lfoSettings.destination === "dca") {
             this.tremoloOffset.start(startTime);
         }
@@ -178,7 +213,9 @@ class Operator {
         this.amp.gain.cancelScheduledValues(stopTime);
         this.amp.gain.setValueAtTime(this.amp.gain.value, stopTime);
         this.amp.gain.exponentialRampToValueAtTime(safeTarget(0), stopTime + rt);
-        this.osc.stop(stopTime + rt + 0.02);
+        for (let i = 0; i < this.oscList.length; i++) {
+            this.oscList[i].stop(stopTime + rt + 0.02);
+        }
         if (this.lfoSettings.destination !== "none") {
             this.lfo.stop(stopTime + rt + 0.02);
         }

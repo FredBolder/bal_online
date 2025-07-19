@@ -251,7 +251,7 @@ export function checkLevel(data, settings) {
               }
               break;
             case "$instrument":
-              if (!["altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
+              if (!["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
                 "piano", "snaredrum", "strings", "trombone", "trumpet", "vibraphone", "xylophone"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid instrument ${values[2]}.\n`;
               }

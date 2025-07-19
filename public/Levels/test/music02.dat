@@ -1,0 +1,58 @@
+$instrument: 4, 3, altsax, 100
+$notes: 4, 3, C3, C4, C5
+$instrument: 5, 3, bass, 100
+$notes: 5, 3, C3, C4, C5
+$instrument: 6, 3, bassdrum, 100
+$notes: 6, 3, C3, C4, C5
+$instrument: 7, 3, bell, 100
+$notes: 7, 3, C3, C4, C5
+$instrument: 8, 3, clarinet, 100
+$notes: 8, 3, C3, C4, C5
+$instrument: 9, 3, cowbell, 100
+$notes: 9, 3, C3, C4, C5
+$instrument: 10, 3, guitar, 100
+$notes: 10, 3, C3, C4, C5
+$instrument: 11, 3, harp, 100
+$notes: 11, 3, C3, C4, C5
+$instrument: 12, 3, harpsichord, 100
+$notes: 12, 3, C3, C4, C5
+$instrument: 13, 3, hihat, 100
+$notes: 13, 3, C3, C4, C5
+$instrument: 14, 3, kalimba, 100
+$notes: 14, 3, C3, C4, C5
+$instrument: 15, 3, piano, 100
+$notes: 15, 3, C3, C4, C5
+$instrument: 16, 3, snaredrum, 100
+$notes: 16, 3, C3, C4, C5
+$instrument: 17, 3, strings, 100
+$notes: 17, 3, C3, C4, C5
+$instrument: 18, 3, trombone, 100
+$notes: 18, 3, C3, C4, C5
+$instrument: 19, 3, trumpet, 100
+$notes: 19, 3, C3, C4, C5
+$instrument: 20, 3, vibraphone, 100
+$notes: 20, 3, C3, C4, C5
+$instrument: 21, 3, xylophone, 100
+$notes: 21, 3, C3, C4, C5
+$instrument: 22, 3, accordion, 100
+$notes: 22, 3, C3, C4, C5
+11111111111111111111111111111111
+13                             1
+1                              1
+1   MMMMMMMMMMMMMMMMMMM        1
+1                              1
+11111111111111111111111111111111
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1             2                1
+11111111111111111111111111111111
