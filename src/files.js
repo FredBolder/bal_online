@@ -189,51 +189,91 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
 }
 
 export async function importLevel() {
-    let result = {};
-    let levelData = [];
-    let levelSettings = [];
-    let msg = "";
     try {
-        const [fileHandle] = await window.showOpenFilePicker({
-            types: [
-                {
-                    description: "Text Files",
-                    accept: { "text/plain": [".txt"] },
-                },
-            ],
-            multiple: false,
-        });
-        const file = await fileHandle.getFile();
-        if (!file.name.toLowerCase().endsWith(".txt")) {
-            alert("Invalid file type. Please select a .txt file.");
-            return;
-        }
-        const text = await file.text();
-        const data = text.split("\n");
-        for (let i = 0; i < data.length; i++) {
-            const line = data[i].trim();
-            if ((line !== "") && !line.startsWith("//")) {
-                if (line.startsWith("$")) {
-                    levelSettings.push(line);
-                } else {
-                    levelData.push(line);
-                }
-            }
+        if (window.showOpenFilePicker) {
+            const [handle] = await window.showOpenFilePicker({
+                types: [{ description: "Text Files", accept: { "text/plain": [".txt"] } }],
+                multiple: false,
+            });
+            return await processHandle(handle);
         }
 
-        msg = checkLevel(levelData, levelSettings);
-        if (msg !== "") {
-            throw new Error(msg);
-        }
-
-        const gd = stringArrayToNumberArray(levelData, true);
-
-        result.backData = gd.backData;
-        result.gameData = gd.gameData;
-        result.levelSettings = levelSettings;
-        return result;
+        // For Firefox
+        return await fallbackFilePicker();
     } catch (err) {
         alert(err.message);
         return null;
     }
+}
+
+async function fallbackFilePicker() {
+    return new Promise((resolve, reject) => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".txt";
+        input.style.display = "none";
+        document.body.appendChild(input);
+
+        input.addEventListener("change", async () => {
+            if (!input.files || input.files.length === 0) {
+                cleanup();
+                return resolve(null);
+            }
+            const file = input.files[0];
+            // Reset, so there will be always a change event when there is a file selected
+            input.value = "";
+
+            try {
+                const txt = await file.text();
+                const result = parseLevelText(txt);
+                cleanup();
+                resolve(result);
+            } catch (e) {
+                cleanup();
+                reject(e);
+            }
+        });
+
+        // Dialog
+        input.click();
+
+        function cleanup() {
+            document.body.removeChild(input);
+        }
+    });
+}
+
+async function processHandle(handle) {
+    const file = await handle.getFile();
+    if (!file.name.toLowerCase().endsWith(".txt")) {
+        throw new Error("Invalid file type. Please select a .txt file.");
+    }
+    const text = await file.text();
+    return parseLevelText(text);
+}
+
+function parseLevelText(text) {
+    const lines = text.split("\n"),
+        levelData = [],
+        levelSettings = [];
+
+    for (let line of lines) {
+        line = line.trim();
+        if (!line || line.startsWith("//")) continue;
+        if (line.startsWith("$")) { 
+            levelSettings.push(line);
+        } else {
+            levelData.push(line);
+        }
+    }
+
+    const msg = checkLevel(levelData, levelSettings);
+    if (msg) throw new Error(msg);
+
+    const gd = stringArrayToNumberArray(levelData, true);
+    return {
+        backData: gd.backData,
+        gameData: gd.gameData,
+        levelSettings: levelSettings,
+    };
 }
