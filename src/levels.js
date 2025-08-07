@@ -166,9 +166,6 @@ export function checkLevel(data, settings) {
     if (nSmallBlueBalls > 1) {
       msg += "There can be only one small blue ball.\n";
     }
-    if ((nSmallBlueBalls > 0) && (nSmallSilverBalls > 0)) {
-      msg += "When there is a small silver ball, there can not be a small blue ball.\n";
-    }
     if ((nSmallBlueBalls > 0) && (nTravelgates > 0)) {
       msg += "When there is a travel gate, there can not be a small blue ball.\n";
     }

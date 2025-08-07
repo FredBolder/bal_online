@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import { Link } from "react-router-dom";
 // https://www.npmjs.com/package/react-confirm-alert
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
@@ -73,10 +72,11 @@ import arrowDown from "../Images/arrow_down.svg";
 import arrowUp from "../Images/arrow_up.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
+import selectButton from "../Images/select_button.png";
 
 let kPressed = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -103,7 +103,7 @@ function BalPage() {
   const elementGreen = useRef(null);
   const elementHappy = useRef(null);
   const elementLightBlue = useRef(null);
-  const elementMoveButtons = useRef(null);
+  const elementGameButtons = useRef(null);
   const elementMusicNote = useRef(null);
   const elementOrange = useRef(null);
   const elementPurple = useRef(null);
@@ -112,7 +112,6 @@ function BalPage() {
   const elementSlowDownYellow = useRef(null);
   const elementWhite = useRef(null);
   const elementYellow = useRef(null);
-  const elementHelp = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -552,14 +551,6 @@ function BalPage() {
     }
   }
 
-  function closeHelp() {
-    elementHelp.current.style.display = "none";
-  }
-
-  function help() {
-    elementHelp.current.style.display = "block";
-  }
-
   function hint(gameVars) {
     let msg = "";
 
@@ -567,7 +558,7 @@ function BalPage() {
     if (msg === "") {
       msg = "There is no hint available for this level."
     }
-    alert(msg);
+    showMessage("Info", msg);
   }
 
   function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings) {
@@ -856,7 +847,7 @@ function BalPage() {
       updateScreen();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
-        alert(gameVars.startlevelmessage);
+        showMessage("Message", gameVars.startlevelmessage);
       }
       loading = false;
     } catch (err) {
@@ -966,7 +957,7 @@ function BalPage() {
         if (idx > 0) {
           await initLevel(gameVars.currentLevel, true);
         } else {
-          alert("No level in memory!");
+          showMessage("Info", "No level in memory.");
         }
       } else {
         gameData = null;
@@ -1039,7 +1030,7 @@ function BalPage() {
       updateGreen();
       setLevelNumber(gameVars.currentLevel);
       if (gameVars.startlevelmessage !== "") {
-        alert(gameVars.startlevelmessage);
+        showMessage("Message", gameVars.startlevelmessage);
       }
       loading = false;
     }
@@ -1104,7 +1095,7 @@ function BalPage() {
     } else {
       msg = "You have the following: " + msg;
     }
-    alert(msg);
+    showMessage("Info", msg);
   }
 
   function handleChangeSettings() {
@@ -1116,7 +1107,7 @@ function BalPage() {
       tryParseInt(cbSound.current.value, 50)
     );
     saveSettings();
-    updateMoveButtons();
+    updateGameButtons();
     updateScreen();
   }
 
@@ -1138,6 +1129,7 @@ function BalPage() {
     info.eating = false;
     info.sound = "";
     info.rotate = false;
+    info.update = false;
     let codes = "";
     let rotate = false;
 
@@ -1161,12 +1153,17 @@ function BalPage() {
       e.preventDefault();
     }
     switch (e.key) {
-      case "!": {
-        if (gameInfo.hasTelekineticPower && !gameInfo.twoBlue) {
+      case " ": {
+        if (gameInfo.hasTelekineticPower) {
           info = moveObjectWithTelekineticPower(gameData, gameInfo);
         }
+        break;
+      }
+      case "b":
+      case "B": {
         if (gameInfo.twoBlue) {
           switchPlayer(gameInfo);
+          info.update = true;
         }
         break;
       }
@@ -1277,6 +1274,13 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "slowDownYellow")) {
       info.slowDownYellow = 0;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "update")) {
+      info.update = false;
+    }
+    if (info.update) {
+      updateScreen();
+      checkGameOver();
+    }
     if (info.slowDownYellow > 0) {
       gameVars.yellowSlowCounter = info.slowDownYellow;
     }
@@ -1314,7 +1318,7 @@ function BalPage() {
       info.message = "";
     }
     if (info.message !== "") {
-      alert(info.message);
+      showMessage("Message", info.message);
     }
 
     if (!e.altKey && !e.ctrlKey) {
@@ -1329,7 +1333,7 @@ function BalPage() {
             }
             codes += `${level} = ${numberToCode(level)}`;
           }
-          alert(codes);
+          showMessage("Info", codes);
         }
 
         if (!e.shiftKey) {
@@ -1352,7 +1356,7 @@ function BalPage() {
           switch (e.key) {
             case "C":
               if (fred) {
-                alert(numberToCode(gameVars.currentLevel));
+                showMessage("Info", numberToCode(gameVars.currentLevel));
               }
               break;
             case "H":
@@ -1434,11 +1438,11 @@ function BalPage() {
       cbMusic.current.value = getSettings().music.toString();
       cbGraphics.current.checked = getSettings().nicerGraphics;
       cbSound.current.value = getSettings().sound.toString();
-      updateMoveButtons();
+      updateGameButtons();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2004;
+        gameVars.currentLevel = 2012;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1458,6 +1462,10 @@ function BalPage() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  function updateGameButtons() {
+    elementGameButtons.current.style.display = getSettings().arrowButtons ? "block" : "none";
+  }
+
   function updateGreen() {
     setGreen(gameInfo.greenBalls);
     if (isInOtherWorld) {
@@ -1465,10 +1473,6 @@ function BalPage() {
     } else {
       thisWorldGreen = gameInfo.greenBalls;
     }
-  }
-
-  function updateMoveButtons() {
-    elementMoveButtons.current.style.display = getSettings().arrowButtons ? "block" : "none";
   }
 
   function updateScreen() {
@@ -1520,7 +1524,15 @@ function BalPage() {
   }
 
   function buttonAction() {
-    handleKeyDown({ key: "!", shiftKey: false });
+    handleKeyDown({ key: " ", shiftKey: false });
+  }
+
+  function buttonDown() {
+    handleKeyDown({ key: "2", shiftKey: false });
+  }
+
+  function buttonJump() {
+    handleKeyDown({ key: "8", shiftKey: false });
   }
 
   function buttonJumpLeft() {
@@ -1539,12 +1551,8 @@ function BalPage() {
     handleKeyDown({ key: "6", shiftKey: false });
   }
 
-  function buttonJump() {
-    handleKeyDown({ key: "8", shiftKey: false });
-  }
-
-  function buttonDown() {
-    handleKeyDown({ key: "2", shiftKey: false });
+  function buttonSelect() {
+    handleKeyDown({ key: "B", shiftKey: false });
   }
 
   function handleCanvasClick(e) {
@@ -1617,7 +1625,7 @@ function BalPage() {
             break;
         }
         if (info !== "") {
-          alert(info);
+          showMessage("Info", info);
         }
       }
       if (!e.altKey && e.shiftKey && e.ctrlKey) {
@@ -1630,7 +1638,7 @@ function BalPage() {
             break;
         }
         if (info !== "") {
-          alert(info);
+          showMessage("Info", info);
         }
       }
       if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
@@ -1648,13 +1656,11 @@ function BalPage() {
   return (
     <div>
       <div className="page">
-        <header>
-          <Navbar />
-        </header>
         <main>
           <div className="balPanel">
+            <Link className="menuButton" to="/">Back</Link>
             <div className="menu">
-              <button className="balButton">Level: {levelNumber}</button>
+              <button className="menuButton">Level: {levelNumber}</button>
               <div className="menu-content">
                 <div onClick={() => { clickSeries("1") }}>
                   <label>Series 1</label>
@@ -1691,30 +1697,21 @@ function BalPage() {
                 </div>
               </div>
             </div>
-            <button className="balButton" onClick={tryAgain}>
+            <button className="menuButton" onClick={tryAgain}>
               Try again
             </button>
-            <button className="balButton" onClick={clickCode}>
+            <button className="menuButton" onClick={clickCode}>
               Code
             </button>
             <div className="balPanelText">
               Green: <span className="balPanelTextSpan">{green}</span>
             </div>
+            <button className="menuButton" onClick={() => { hint(gameVars) }}>
+              ?
+            </button>
 
             <div className="menu">
-              <button className="balButton">?</button>
-              <div className="menu-content">
-                <div onClick={() => { help() }}>
-                  <label>Help</label>
-                </div>
-                <div onClick={() => { hint(gameVars) }}>
-                  <label>Hint</label>
-                </div>
-              </div>
-            </div>
-
-            <div className="menu">
-              <button className="balButton">Settings</button>
+              <button className="menuButton">Settings</button>
               <div className="menu-content">
                 <div>
                   <label className="rightmargin" htmlFor="sound">Sound volume</label>
@@ -1790,28 +1787,31 @@ function BalPage() {
               ref={canvas}
               onClick={handleCanvasClick}
             />
-            <div className="moveButtons">
-              <div ref={elementMoveButtons}>
-                <button className="moveButton" onClick={buttonJumpLeft}>
-                  <img src={arrowJumpLeft} alt="ArrowJumpLeft" />
+            <div className="gameButtons">
+              <div ref={elementGameButtons}>
+                <button className="gameButton" onClick={buttonJumpLeft}>
+                  <img src={arrowJumpLeft} alt="Arrow Up Left button" />
                 </button>
-                <button className="moveButton" onClick={buttonMoveLeft}>
-                  <img src={arrowLeft} alt="ArrowLeft" />
+                <button className="gameButton" onClick={buttonMoveLeft}>
+                  <img src={arrowLeft} alt="Arrow Left button" />
                 </button>
-                <button className="moveButton" onClick={buttonJump}>
-                  <img src={arrowUp} alt="ArrowUp" />
+                <button className="gameButton" onClick={buttonJump}>
+                  <img src={arrowUp} alt="Arrow Up button" />
                 </button>
-                <button className="moveButton" onClick={buttonDown}>
-                  <img src={arrowDown} alt="ArrowDown" />
+                <button className="gameButton" onClick={buttonDown}>
+                  <img src={arrowDown} alt="Arrow Down button" />
                 </button>
-                <button className="moveButton" onClick={buttonMoveRight}>
-                  <img src={arrowRight} alt="ArrowRight" />
+                <button className="gameButton" onClick={buttonMoveRight}>
+                  <img src={arrowRight} alt="Arrow Right button" />
                 </button>
-                <button className="moveButton" onClick={buttonJumpRight}>
-                  <img src={arrowJumpRight} alt="ArrowJumpRight" />
+                <button className="gameButton" onClick={buttonJumpRight}>
+                  <img src={arrowJumpRight} alt="Arrow Up Right button" />
                 </button>
-                <button className="moveButton" onClick={buttonAction}>
-                  <img src={actionButton} alt="actionButton" />
+                <button className="gameButton" onClick={buttonAction}>
+                  <img src={actionButton} alt="Action button" />
+                </button>
+                <button className="gameButton" onClick={buttonSelect}>
+                  <img src={selectButton} alt="Select button" />
                 </button>
               </div>
             </div>
@@ -1856,121 +1856,8 @@ function BalPage() {
             <img ref={elementYellow} src={imgYellow} />
           </div>
         </main>
-        <Footer />
       </div>
-      <div className="help" ref={elementHelp}>
-        <div className="help-content">
-          <div className="help-header">
-            <span className="help-close" onClick={closeHelp}>
-              &times;
-            </span>
-            <h2>Help</h2>
-          </div>
-          <div className="help-main">
-            <p>
-              In every level you control the blue ball with the happy face. You
-              have to eat all the small green balls. You can push the white
-              balls and the light blue balls, but not more than 2 at the same
-              time. The light blue balls are floating balls and they will always
-              stay at the same height. Red balls and red fish are very
-              dangerous. If you push a yellow ball, it will continue as far as
-              possible. You cannot push more yellow balls at the same time or
-              push a yellow ball together with another ball. You can push a
-              yellow ball in the directions left, right, up and down. A purple
-              ball is almost the same as a yellow ball, but when you push a
-              purple ball, it will go only one position further. You cannot push
-              a ball through a one direction, a teleport, a game rotator or a
-              door with a lock. You can control the blue ball with the letter
-              keys, the arrow keys, the number keys or the arrow buttons. In the
-              water you can swim in every direction.
-            </p>
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Action</th>
-                  <th scope="col">Letter key</th>
-                  <th scope="col">Arrow key</th>
-                  <th scope="col">Number key</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Walk left / Swim left</td>
-                  <td>A</td>
-                  <td>Arrow left</td>
-                  <td>4</td>
-                </tr>
-                <tr>
-                  <td>Walk right / Swim right</td>
-                  <td>D</td>
-                  <td>Arrow right</td>
-                  <td>6</td>
-                </tr>
-                <tr>
-                  <td>Jump / Push up / Swim up</td>
-                  <td>W</td>
-                  <td>Arrow up</td>
-                  <td>8</td>
-                </tr>
-                <tr>
-                  <td>Jump left / Swim up left</td>
-                  <td>Q</td>
-                  <td>Shift + Arrow left</td>
-                  <td>7</td>
-                </tr>
-                <tr>
-                  <td>Jump right / Swim up right</td>
-                  <td>E</td>
-                  <td>Shift + Arrow right</td>
-                  <td>9</td>
-                </tr>
-                <tr>
-                  <td>Push down / Swim down</td>
-                  <td>S</td>
-                  <td>Arrow down</td>
-                  <td>2</td>
-                </tr>
-                <tr>
-                  <td>Swim down left</td>
-                  <td>Y</td>
-                  <td>-</td>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <td>Swim down right</td>
-                  <td>C</td>
-                  <td>-</td>
-                  <td>3</td>
-                </tr>
-              </tbody>
-            </table>
-            <p>
-              If you see for example a
-              level number 750, it doesn&apos;t mean that there are 750 or even more
-              levels. The number depends also on the series and on the&nbsp;
-              <a
-                className="link"
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://fredbolder.github.io/bal/"
-              >
-                original Bal game
-              </a>
-              .
-              When you solve a level, you will get a code that gives you access
-              to the next level whenever you want by pressing the Code button, so
-              it is important to write down the code.
-              Some levels are very difficult. If you can&apos;t solve a certain
-              level, you can press the ? button and choose Hint, start with another
-              series or load a random level.
-              You can not get all existing levels by loading a random level.
-            </p>
-            <p>
-              Download the <a className="link" target="_blank" rel="noopener noreferrer" href="./bal_online_manual.pdf">manual</a> for more information.
-            </p>
-          </div>
-        </div>
-      </div>
+
       {showModal && (
         <MessageBox
           title={messageTitle}

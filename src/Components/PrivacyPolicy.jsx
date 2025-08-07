@@ -1,27 +1,34 @@
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import { Link } from "react-router-dom";
 
 function PrivacyPolicy() {
   return (
-    <div className="page">
+    <div>
       <header>
-        <Navbar />
+        <div className="center">
+          <div className="horizontalNavButtonGroup">
+            <Link className="navButton" to="/">Back</Link>
+            <Link className="navButton" to="/bal">Play</Link>
+          </div>
+        </div>
       </header>
       <main>
-        <h1 className="title">Privacy Policy</h1>
-        <div className="boxWithScroll">
-          This site does not collect or store any personal information.
-          For your convenience, only the last solved level and your preferences are saved in the local storage.
-          This site contains links to other websites, which may collect personal 
-          data according to their own privacy policies. We recommend reviewing those policies 
-          before interacting with their content.
-          If you have any questions or concerns, please feel free to contact me by sending a message to&nbsp;
-          <a className="link" href="mailto:fgh.bolder@gmail.com">
-            fgh.bolder@gmail.com
-          </a>
+        <div className="center">
+          <div className="pageTitle">
+            <h1>Bal - Privacy Policy</h1>
+          </div>
+          <div className="textBox">
+            This site does not collect or store any personal information.
+            For your convenience, only the last solved level and your preferences are saved in the local storage of your device.
+            This site contains links to other websites, which may collect personal
+            data according to their own privacy policies. We recommend reviewing those policies
+            before interacting with their content.
+            If you have any questions or concerns, please feel free to contact Fred Bolder by sending a message to&nbsp;
+            <a className="link" href="mailto:fgh.bolder@gmail.com">
+              fgh.bolder@gmail.com
+            </a>
+          </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

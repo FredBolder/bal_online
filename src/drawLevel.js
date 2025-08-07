@@ -1559,6 +1559,24 @@ function drawLevel(
     drawBox(ctx, xc - (d1 * 0.5), yc + (d1 * 0.5), d1, d1, "black");
   }
 
+  function highlightBlueBall(x, y) {
+    const blueX = gameInfo.blueBall.x;
+    const blueY = gameInfo.blueBall.y;
+    let info = null;
+
+    if (!gameInfo.twoBlue) {
+      return;
+    }
+
+    if ((blueX === x) && (blueY === y)) {
+      drawBox(ctx, xmin, ymin, w1, w2, "white");
+      ctx.setLineDash([2, 2]);
+      ctx.strokeStyle = "blue";
+      ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
+      ctx.setLineDash([]);
+    }
+  }
+
   function highlightTelekinesisObject(x, y) {
     const blueX = gameInfo.blueBall.x;
     const blueY = gameInfo.blueBall.y;
@@ -2040,6 +2058,7 @@ function drawLevel(
         drawTravelGate(col, row);
       }
 
+      highlightBlueBall(col, row);
       highlightTelekinesisObject(col, row);
 
       xmin += size1;
