@@ -1,0 +1,62 @@
+$gameticks: elevator, 8
+
+$group: 2, 16, 1
+
+$group: 12, 11, 1
+$pistonmode: 12, 11, momentary
+$sticky: 12, 11, yes
+
+$group: 14, 11, 1
+$pistonmode: 14, 11, momentary
+$sticky: 14, 11, yes
+
+$group: 12, 16, 1
+$pistonmode: 12, 16, momentary
+$sticky: 12, 16, yes
+
+$group: 14, 16, 1
+$pistonmode: 14, 16, momentary
+$sticky: 14, 16, yes
+
+$group: 1, 12, 2
+$pistonmode: 1, 12, repeatfast
+$sticky: 1, 12, no
+
+$group: 1, 13, 2
+$pistonmode: 1, 13, repeatfast
+$sticky: 1, 13, no
+
+$group: 1, 14, 2
+$pistonmode: 1, 14, repeatfast
+$sticky: 1, 14, no
+
+$group: 1, 15, 2
+$pistonmode: 1, 15, repeatfast
+$sticky: 1, 15, no
+
+$group: 1, 5, 3
+
+$group: 21, 12, 3
+$pistonmode: 21, 12, toggle
+$sticky: 21, 12, yes
+
+111111111111111111111111111111111111
+1                                 11
+1ψ                     δ          11
+111v^11111-11111111111 111111E    11
+1     1               C          111
+1m 11 9                          τ11
+1111111   B             .        111
+11        H             3         11
+1      L E1                    4  11
+1                         5    4  11
+1   2    1R              1111bU1y111
+11 111111111Ì Ì1o11111 111111111y111
+1Ë         1ß ß1   3ιË          9Ψ11
+1Ë         8   8    ι1    81111   11
+1Ë         8   8    ι     11°Y1   11
+1Ë         1ß ß1    ι             11
+11m        1Ù Ù1    ι   1111111   11
+111        11 11c   ι   yy    9 9 11
+11Φ                     yy      Ψ τ1
+111111111111111111111111111111111111

@@ -76,7 +76,7 @@ import selectButton from "../Images/select_button.png";
 
 let kPressed = false;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
