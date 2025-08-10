@@ -298,6 +298,15 @@ tr:nth-child(even) td {
     min-height: 0;
 }
 
+.createLevelCanvas {
+    margin-top: 0.5rem;
+    margin-bottom: 0rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    flex-shrink: 0;
+    height: 10vh;
+}
+
 .gameButtons {
     flex-shrink: 0;
     height: fit-content;

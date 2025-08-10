@@ -12,7 +12,7 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 903;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2013;
+const seriesSecretEnd = 2014;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
 
@@ -91,7 +91,6 @@ export function checkLevel(data, settings) {
   let nPurpleSelfDestructingTeleports = 0;
   let nSmallBlueBalls = 0;
   let nSmallGreenBalls = 0;
-  let nSmallSilverBalls = 0;
   let nSelfDestructingTeleports = 0;
   let nTeleports = 0;
   let nTravelgates = 0;
@@ -130,9 +129,6 @@ export function checkLevel(data, settings) {
             break;
           case "3":
             nSmallGreenBalls++;
-            break;
-          case "°":
-            nSmallSilverBalls++;
             break;
           case "τ":
             nSelfDestructingTeleports++;

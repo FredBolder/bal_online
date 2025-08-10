@@ -28,6 +28,7 @@ function drawLevel(
   status,
   gameInfo,
   gameVars,
+  raster
 ) {
   let wave = gameVars.wave2;
   let bgcolor = gameVars.bgcolor;
@@ -1560,13 +1561,12 @@ function drawLevel(
   }
 
   function highlightBlueBall(x, y) {
-    const blueX = gameInfo.blueBall.x;
-    const blueY = gameInfo.blueBall.y;
-    let info = null;
-
     if (!gameInfo.twoBlue) {
       return;
     }
+
+    const blueX = gameInfo.blueBall.x;
+    const blueY = gameInfo.blueBall.y;
 
     if ((blueX === x) && (blueY === y)) {
       drawBox(ctx, xmin, ymin, w1, w2, "white");
@@ -2056,6 +2056,9 @@ function drawLevel(
       // Foreground
       if ((gameInfo.travelGate.x === col) && (gameInfo.travelGate.y === row)) {
         drawTravelGate(col, row);
+      }
+      if (raster) {
+        drawBox(ctx, xmin, ymin, w1, w2, "white");
       }
 
       highlightBlueBall(col, row);

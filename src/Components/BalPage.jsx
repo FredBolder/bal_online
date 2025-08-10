@@ -18,6 +18,7 @@ import {
   moveRight,
   pushDown,
   stringArrayToNumberArray,
+  zeroArray,
 } from "../balUtils.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { checkCopiers } from "../copiers.js";
@@ -37,7 +38,7 @@ import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
-import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "../teleports.js"; 
+import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "../teleports.js";
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -75,8 +76,9 @@ import arrowRight from "../Images/arrow_right.svg";
 import selectButton from "../Images/select_button.png";
 
 let kPressed = false;
+let createLevel = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -91,13 +93,21 @@ initGameInfo(gameInfo);
 let gameVars = {};
 initGameVars(gameVars);
 
+let gameDataMenu = [];
+let backDataMenu = [];
+let gameInfoMenu = {};
+initGameInfo(gameInfoMenu);
+let gameVarsMenu = {};
+initGameVars(gameVarsMenu);
+
 function BalPage() {
-  const canvas = useRef(null);
   const cbArrowButtons = useRef(null);
+  const cbCreateLevel = useRef(null);
   const cbGraphics = useRef(null);
   const cbMusic = useRef(null);
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
+  const createLevelCanvas = useRef(null);
   const elementDiving = useRef(null);
   const elementGray = useRef(null);
   const elementGreen = useRef(null);
@@ -112,6 +122,7 @@ function BalPage() {
   const elementSlowDownYellow = useRef(null);
   const elementWhite = useRef(null);
   const elementYellow = useRef(null);
+  const gameCanvas = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -200,7 +211,7 @@ function BalPage() {
       }
     }
     if (gameVars.gameOver) {
-      updateScreen();
+      updateGameCanvas();
     }
   }
 
@@ -238,7 +249,7 @@ function BalPage() {
       saveWeakStone = gameInfo.hasWeakStone;
     }
 
-    if (loading || !gameData || !backData || !gameVars || !gameInfo) {
+    if (createLevel || loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
     if (gameVars.gameOver || (gameData.length < 2) || (backData.length < 2) ||
@@ -407,7 +418,7 @@ function BalPage() {
       }
       if (info.gameOver) {
         gameVars.gameOver = true;
-        updateScreen();
+        updateGameCanvas();
       }
     }
 
@@ -459,8 +470,8 @@ function BalPage() {
             }
             teleport2 = findTheOtherTeleport(teleport1, gameInfo.teleports);
             if (teleport2 >= 0) {
-                gameInfo.blueBall.x = gameInfo.teleports[teleport2].x;
-                gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
+              gameInfo.blueBall.x = gameInfo.teleports[teleport2].x;
+              gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
             }
             if (gameInfo.teleports[teleport1].selfDestructing) {
               deleteTeleports("white", true, gameInfo);
@@ -502,7 +513,7 @@ function BalPage() {
           gameInfo.blueBall.y = gameInfo.travelGate.y;
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
           gameVars.gateTravelling = 0;
-          updateScreen();
+          updateGameCanvas();
           break;
         default:
           break;
@@ -542,11 +553,11 @@ function BalPage() {
     }
     if (info.sound === "pain") {
       gameVars.gameOver = true;
-      updateScreen();
+      updateGameCanvas();
     }
 
     if (update) {
-      updateScreen();
+      updateGameCanvas();
       checkGameOver();
     }
   }
@@ -844,7 +855,7 @@ function BalPage() {
       loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
       gameVars.laser = null;
       gameVars.gameOver = false;
-      updateScreen();
+      updateGameCanvas();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
         showMessage("Message", gameVars.startlevelmessage);
@@ -1026,7 +1037,7 @@ function BalPage() {
       gameVars.laser = null;
       gameVars.gameOver = false;
       gameVars.currentLevel = 200;
-      updateScreen();
+      updateGameCanvas();
       updateGreen();
       setLevelNumber(gameVars.currentLevel);
       if (gameVars.startlevelmessage !== "") {
@@ -1107,8 +1118,58 @@ function BalPage() {
       tryParseInt(cbSound.current.value, 50)
     );
     saveSettings();
-    updateGameButtons();
-    updateScreen();
+    updateGameButtonsDisplay();
+    updateGameCanvas();
+  }
+
+  function handleCreateLevel() {
+    createLevel = cbCreateLevel.current.checked;
+    updateGameButtonsDisplay();
+    updateCreateLevelCanvasDisplay();
+    updateGameCanvas();
+    if (createLevel) {
+      fillMenu(1);
+      updateCreateLevelCanvas();
+    }
+  }
+
+  function fillMenu(n) {
+    let ok = false;
+    gameDataMenu = null;
+    gameDataMenu = [];
+    gameDataMenu.push([1, 2, 9, 159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    switch (n) {
+      case 1:
+        gameDataMenu.push([0, 1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150]);
+        gameDataMenu.push([151, 152, 153, 154, 35, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        break;
+      case 2:
+        gameDataMenu.push([0, 2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 95, 96, 105]);
+        gameDataMenu.push([28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 0, 0, 0, 0, 0, 0]);
+        break;
+      case 3:
+        gameDataMenu.push([9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124]);
+        gameDataMenu.push([125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        break;
+      case 4:
+        gameDataMenu.push([158, 159, 160, 161, 162, 163, 164, 165, 166, 0, 0, 0, 0, 0, 0, 0]);
+        gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        break;
+      default:
+        gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        break;
+    }
+    if (gameDataMenu.length === 3) {
+      if ((gameDataMenu[0].length === gameDataMenu[1].length) && (gameDataMenu[1].length === gameDataMenu[2].length)) {
+        ok = true;
+      }
+    }
+    if (ok) {
+      backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
+    } else {
+      alert("Invalid create level menu data!");
+    }
   }
 
   function sleep(ms) {
@@ -1144,14 +1205,23 @@ function BalPage() {
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
       return false;
     }
-    if (
-      e.key === "ArrowLeft" ||
-      e.key === "ArrowRight" ||
-      e.key === "ArrowUp" ||
-      e.key === "ArrowDown"
-    ) {
-      e.preventDefault();
+    if (e.preventDefault) {
+      if (
+        e.key === "ArrowLeft" ||
+        e.key === "ArrowRight" ||
+        e.key === "ArrowUp" ||
+        e.key === "ArrowDown" ||
+        e.key === " "
+      ) {
+        e.preventDefault();
+      }
     }
+
+    if (createLevel) {
+
+      return false;
+    }
+
     switch (e.key) {
       case " ": {
         if (gameInfo.hasTelekineticPower) {
@@ -1262,7 +1332,7 @@ function BalPage() {
     }
     if (info.player) {
       gameVars.skipFalling = 1;
-      updateScreen();
+      updateGameCanvas();
       checkGameOver();
     }
     if (info.freezeTime > 0) {
@@ -1278,7 +1348,7 @@ function BalPage() {
       info.update = false;
     }
     if (info.update) {
-      updateScreen();
+      updateGameCanvas();
       checkGameOver();
     }
     if (info.slowDownYellow > 0) {
@@ -1399,7 +1469,8 @@ function BalPage() {
   }
 
   function handleResize() {
-    updateScreen();
+    updateGameCanvas();
+    updateCreateLevelCanvas();
   }
 
   function tryAgain() {
@@ -1429,25 +1500,27 @@ function BalPage() {
 
 
   useEffect(() => {
-    if (!canvas.current) return;
+    if (!gameCanvas.current) return;
     if (!initialized) {
       initialized = true;
       loadSettings();
       cbArrowButtons.current.checked = getSettings().arrowButtons;
+      cbCreateLevel.current.checked = false;
       cbQuestions.current.checked = getSettings().lessQuestions;
       cbMusic.current.value = getSettings().music.toString();
       cbGraphics.current.checked = getSettings().nicerGraphics;
       cbSound.current.value = getSettings().sound.toString();
-      updateGameButtons();
+      updateGameButtonsDisplay();
+      updateCreateLevelCanvasDisplay();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2010;
+        gameVars.currentLevel = 2014;
       }
       initLevel(gameVars.currentLevel);
     }
 
-    updateScreen();
+    updateGameCanvas();
     setLevelNumber(gameVars.currentLevel);
     updateGreen();
 
@@ -1462,8 +1535,12 @@ function BalPage() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function updateGameButtons() {
-    elementGameButtons.current.style.display = getSettings().arrowButtons ? "block" : "none";
+  function updateCreateLevelCanvasDisplay() {
+    createLevelCanvas.current.style.display = createLevel ? "block" : "none";
+  }
+
+  function updateGameButtonsDisplay() {
+    elementGameButtons.current.style.display = (getSettings().arrowButtons && !createLevel) ? "block" : "none";
   }
 
   function updateGreen() {
@@ -1475,21 +1552,68 @@ function BalPage() {
     }
   }
 
-  function updateScreen() {
-    if (!canvas.current) return;
+  function updateCreateLevelCanvas() {
+    if (!createLevelCanvas.current) return;
 
-    const displayWidth = canvas.current.clientWidth;
-    const displayHeight = canvas.current.clientHeight;
+    const displayWidth = createLevelCanvas.current.clientWidth;
+    const displayHeight = createLevelCanvas.current.clientHeight;
     if (
-      canvas.current.width !== displayWidth ||
-      canvas.current.height !== displayHeight
+      createLevelCanvas.current.width !== displayWidth ||
+      createLevelCanvas.current.height !== displayHeight
     ) {
-      canvas.current.width = displayWidth;
-      canvas.current.height = displayHeight;
+      createLevelCanvas.current.width = displayWidth;
+      createLevelCanvas.current.height = displayHeight;
     }
 
-    ctx = canvas.current.getContext("2d");
-    //console.log("gameData: ", gameData);
+    ctx = createLevelCanvas.current.getContext("2d");
+    const elements = {
+      elementDiving: elementDiving.current,
+      elementGray: elementGray.current,
+      elementGreen: elementGreen.current,
+      elementHappy: elementHappy.current,
+      elementLightBlue: elementLightBlue.current,
+      elementMusicNote: elementMusicNote.current,
+      elementOrange: elementOrange.current,
+      elementPurple: elementPurple.current,
+      elementRed: elementRed.current,
+      elementSad: elementSad.current,
+      elementSlowDownYellow: elementSlowDownYellow.current,
+      elementWhite: elementWhite.current,
+      elementYellow: elementYellow.current,
+    };
+    const status = {
+      gameOver: false,
+      laser: null,
+    };
+    ctx.clearRect(0, 0, createLevelCanvas.current.width, createLevelCanvas.current.height);
+    drawLevel(
+      createLevelCanvas.current,
+      ctx,
+      backDataMenu,
+      gameDataMenu,
+      getSettings().nicerGraphics,
+      elements,
+      status,
+      gameInfoMenu,
+      gameVarsMenu,
+      true
+    );
+  }
+
+  function updateGameCanvas() {
+    if (!gameCanvas.current) return;
+
+    const displayWidth = gameCanvas.current.clientWidth;
+    const displayHeight = gameCanvas.current.clientHeight;
+    if (
+      gameCanvas.current.width !== displayWidth ||
+      gameCanvas.current.height !== displayHeight
+    ) {
+      gameCanvas.current.width = displayWidth;
+      gameCanvas.current.height = displayHeight;
+    }
+
+    ctx = gameCanvas.current.getContext("2d");
     const elements = {
       elementDiving: elementDiving.current,
       elementGray: elementGray.current,
@@ -1509,9 +1633,9 @@ function BalPage() {
       gameOver: gameVars.gameOver,
       laser: gameVars.laser,
     };
-    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    ctx.clearRect(0, 0, gameCanvas.current.width, gameCanvas.current.height);
     drawLevel(
-      canvas.current,
+      gameCanvas.current,
       ctx,
       backData,
       gameData,
@@ -1519,7 +1643,8 @@ function BalPage() {
       elements,
       status,
       gameInfo,
-      gameVars
+      gameVars,
+      false
     );
   }
 
@@ -1555,7 +1680,7 @@ function BalPage() {
     handleKeyDown({ key: "B", shiftKey: false });
   }
 
-  function handleCanvasClick(e) {
+  function handleGameCanvasClick(e) {
     let idx = -1;
     let info = "";
     let obj = null;
@@ -1567,8 +1692,8 @@ function BalPage() {
     const rows = gameData.length;
     const columns = gameData[0].length;
 
-    let size1 = canvas.current.width / columns;
-    let size2 = canvas.current.height / rows;
+    let size1 = gameCanvas.current.width / columns;
+    let size2 = gameCanvas.current.height / rows;
 
     if (size2 < size1) {
       size1 = size2;
@@ -1576,10 +1701,10 @@ function BalPage() {
     size1 = Math.trunc(size1);
     let gameWidth = columns * size1;
     let gameHeight = rows * size1;
-    let leftMargin = Math.trunc((canvas.current.width - gameWidth) / 2);
-    let topMargin = Math.trunc(canvas.current.height - gameHeight);
+    let leftMargin = Math.trunc((gameCanvas.current.width - gameWidth) / 2);
+    let topMargin = Math.trunc(gameCanvas.current.height - gameHeight);
 
-    let rect = canvas.current.getBoundingClientRect();
+    let rect = gameCanvas.current.getBoundingClientRect();
     let x = e.clientX - rect.left - leftMargin;
     let y = e.clientY - rect.top - topMargin;
 
@@ -1647,7 +1772,44 @@ function BalPage() {
           gameInfo.blueBall.x = column;
           gameInfo.blueBall.y = row;
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
-          updateScreen();
+          updateGameCanvas();
+        }
+      }
+    }
+  }
+
+  function handleCreateLevelCanvasClick(e) {
+    if (!gameDataMenu || gameDataMenu.length < 1) {
+      return false;
+    }
+
+    const rows = gameDataMenu.length;
+    const columns = gameDataMenu[0].length;
+
+    let size1 = createLevelCanvas.current.width / columns;
+    let size2 = createLevelCanvas.current.height / rows;
+
+    if (size2 < size1) {
+      size1 = size2;
+    }
+    size1 = Math.trunc(size1);
+    let gameWidth = columns * size1;
+    let gameHeight = rows * size1;
+    let leftMargin = Math.trunc((createLevelCanvas.current.width - gameWidth) / 2);
+    let topMargin = Math.trunc(createLevelCanvas.current.height - gameHeight);
+
+    let rect = createLevelCanvas.current.getBoundingClientRect();
+    let x = e.clientX - rect.left - leftMargin;
+    let y = e.clientY - rect.top - topMargin;
+
+    let column = Math.floor(x / size1);
+    let row = Math.floor(y / size1);
+
+    if (column >= 0 && column < columns && row >= 0 && row < rows) {
+      if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
+        if (row === 0) {
+          fillMenu(column + 1);
+          updateCreateLevelCanvas();
         }
       }
     }
@@ -1662,6 +1824,17 @@ function BalPage() {
             <div className="menu">
               <button className="menuButton">Level: {levelNumber}</button>
               <div className="menu-content">
+                <div>
+                  <input
+                    type="checkbox"
+                    id="createLevel"
+                    ref={cbCreateLevel}
+                    name="createLevel"
+                    value="createLevel"
+                    onChange={handleCreateLevel}
+                  />
+                  <label htmlFor="createLevel">Create level</label>
+                </div>
                 <div onClick={() => { clickSeries("1") }}>
                   <label>Series 1</label>
                 </div>
@@ -1784,8 +1957,13 @@ function BalPage() {
           <div className="canvasAndButtons">
             <canvas
               className="gameCanvas"
-              ref={canvas}
-              onClick={handleCanvasClick}
+              ref={gameCanvas}
+              onClick={handleGameCanvasClick}
+            />
+            <canvas
+              className="createLevelCanvas"
+              ref={createLevelCanvas}
+              onClick={handleCreateLevelCanvasClick}
             />
             <div className="gameButtons">
               <div ref={elementGameButtons}>
