@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  moveLeft,
-  zeroArray,
-} from "./balUtils.js";
+import { moveLeft, zeroArray } from "./balUtils.js";
 import { initGameInfo } from "./gameInfo.js";
 
 describe("balUtils moveLeft", () => {

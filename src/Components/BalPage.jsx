@@ -20,6 +20,7 @@ import {
   stringArrayToNumberArray,
   zeroArray,
 } from "../balUtils.js";
+import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { checkCopiers } from "../copiers.js";
 import { checkDamagedStones } from "../damagedStones.js";
@@ -77,6 +78,7 @@ import selectButton from "../Images/select_button.png";
 
 let kPressed = false;
 let createLevel = false;
+let createLevelObject = -1;
 let ctx;
 let fred = true; // TODO: Set to false when publishing
 let gameInterval;
@@ -1134,41 +1136,70 @@ function BalPage() {
   }
 
   function fillMenu(n) {
-    let ok = false;
+    let arr0 = null;
+    let arr1 = null;
+    let arr2 = null;
+
     gameDataMenu = null;
     gameDataMenu = [];
-    gameDataMenu.push([1, 2, 9, 159, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    switch (n) {
-      case 1:
-        gameDataMenu.push([0, 1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150]);
-        gameDataMenu.push([151, 152, 153, 154, 35, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        break;
-      case 2:
-        gameDataMenu.push([0, 2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 95, 96, 105]);
-        gameDataMenu.push([28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 0, 0, 0, 0, 0, 0]);
-        break;
-      case 3:
-        gameDataMenu.push([9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124]);
-        gameDataMenu.push([125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        break;
-      case 4:
-        gameDataMenu.push([158, 159, 160, 161, 162, 163, 164, 165, 166, 0, 0, 0, 0, 0, 0, 0]);
-        gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        break;
-      default:
-        gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-        break;
+    backDataMenu = null;
+    initGameInfo(gameInfoMenu);
+    initGameVars(gameVarsMenu);
+
+    for (let i = 0; i < 3; i++) {
+      gameDataMenu.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     }
-    if (gameDataMenu.length === 3) {
-      if ((gameDataMenu[0].length === gameDataMenu[1].length) && (gameDataMenu[1].length === gameDataMenu[2].length)) {
-        ok = true;
+    backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
+
+    arr0 = [0, 1, 4, 9, 159, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < arr0.length; i++) {
+      if (i < gameDataMenu[0].length) {
+        addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
       }
     }
-    if (ok) {
-      backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
-    } else {
-      alert("Invalid create level menu data!");
+    switch (n) {
+      case 1:
+        arr1 = [0];
+        arr2 = [0];
+        break;
+      case 2:
+        arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
+        arr2 = [152, 153, 154, 35, 12];
+        break;
+      case 3:
+        arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 95, 96, 105, 28];
+        arr2 = [100, 101, 102, 103, 104, 83, 82, 98, 40];
+        break;
+      case 4:
+        arr1 = [9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124];
+        arr2 = [125];
+        break;
+      case 5:
+        arr1 = [158, 159, 161, 163, 165];
+        arr2 = [0];
+        break;
+      case 6:
+        arr1 = [6, 7, 39, 25, 90, 80, 137, 109, 110, 111, 112, 31, 92, 170, 132];
+        arr2 = [0];
+        break;
+      default:
+        arr1 = [0];
+        arr2 = [0];
+        break;
+    }
+
+    if ((arr0.length > 16) || (arr1.length > 16) || (arr2.length > 16)) {
+      alert("Invalid Create level menu data!");
+    }
+    for (let i = 0; i < arr1.length; i++) {
+      if (i < gameDataMenu[1].length) {
+        addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 1, arr1[i]);
+      }
+    }
+    for (let i = 0; i < arr2.length; i++) {
+      if (i < gameDataMenu[2].length) {
+        addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 2, arr2[i]);
+      }
     }
   }
 
@@ -1712,74 +1743,85 @@ function BalPage() {
     let row = Math.floor(y / size1);
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
-      if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-        info = "";
-        switch (gameData[row][column]) {
-          case 157:
-            idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
-            if (idx >= 0) {
-              obj = gameInfo.musicBoxes[idx];
-              info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 158:
-            idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
-            if (idx >= 0) {
-              obj = gameInfo.pistonsTriggers[idx];
-              info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 159:
-          case 161:
-          case 163:
-          case 165:
-            idx = findElementByCoordinate(column, row, gameInfo.pistons);
-            if (idx >= 0) {
-              obj = gameInfo.pistons[idx];
-              info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 167:
-            idx = findElementByCoordinate(column, row, gameInfo.delays);
-            if (idx >= 0) {
-              obj = gameInfo.delays[idx];
-              info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          default:
-            break;
-        }
-        if (info !== "") {
-          showMessage("Info", info);
-        }
-      }
-      if (!e.altKey && e.shiftKey && e.ctrlKey) {
-        info = "";
-        switch (gameData[row][column]) {
-          case 24:
-            info = "No, this is not The Net! The π indicates that this level is made by Panagiotis.";
-            break;
-          default:
-            break;
-        }
-        if (info !== "") {
-          showMessage("Info", info);
-        }
-      }
-      if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
-        if (gameData[row][column] === 0) {
-          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-          gameInfo.blueBall.x = column;
-          gameInfo.blueBall.y = row;
-          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
+      if (createLevel) {
+        if (createLevelObject >= 0) {
+          if (createLevelObject >= 0) {
+            addObject(backData, gameData, gameInfo, column, row, createLevelObject);
+          } else {
+            removeObject(gameData, gameInfo, column, row);
+          }
           updateGameCanvas();
+        }
+      } else {
+        if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
+          info = "";
+          switch (gameData[row][column]) {
+            case 157:
+              idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
+              if (idx >= 0) {
+                obj = gameInfo.musicBoxes[idx];
+                info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+              }
+              break;
+            case 158:
+              idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
+              if (idx >= 0) {
+                obj = gameInfo.pistonsTriggers[idx];
+                info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+              }
+              break;
+            case 159:
+            case 161:
+            case 163:
+            case 165:
+              idx = findElementByCoordinate(column, row, gameInfo.pistons);
+              if (idx >= 0) {
+                obj = gameInfo.pistons[idx];
+                info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
+              }
+              break;
+            case 167:
+              idx = findElementByCoordinate(column, row, gameInfo.delays);
+              if (idx >= 0) {
+                obj = gameInfo.delays[idx];
+                info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
+              }
+              break;
+            default:
+              break;
+          }
+          if (info !== "") {
+            showMessage("Info", info);
+          }
+        }
+        if (!e.altKey && e.shiftKey && e.ctrlKey) {
+          info = "";
+          switch (gameData[row][column]) {
+            case 24:
+              info = "No, this is not The Net! The π indicates that this level is made by Panagiotis.";
+              break;
+            default:
+              break;
+          }
+          if (info !== "") {
+            showMessage("Info", info);
+          }
+        }
+        if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
+          if (gameData[row][column] === 0) {
+            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+            gameInfo.blueBall.x = column;
+            gameInfo.blueBall.y = row;
+            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
+            updateGameCanvas();
+          }
         }
       }
     }
   }
 
   function handleCreateLevelCanvasClick(e) {
-    if (!gameDataMenu || gameDataMenu.length < 1) {
+    if (!createLevel || !gameDataMenu || (gameDataMenu.length < 1)) {
       return false;
     }
 
@@ -1807,9 +1849,13 @@ function BalPage() {
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-        if (row === 0) {
+        if ((row === 0) && (column > 0)) {
           fillMenu(column + 1);
           updateCreateLevelCanvas();
+        }
+        createLevelObject = gameDataMenu[row][column];
+        if (createLevelObject === 0) {
+          createLevelObject = backDataMenu[row][column];
         }
       }
     }
