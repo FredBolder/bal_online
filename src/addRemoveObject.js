@@ -15,6 +15,9 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.blueBall.x = x;
             gameInfo.blueBall.y = y;
             break;
+        case 3:
+            gameInfo.greenBalls += 1;
+            break;  
         case 6:
         case 106: {
             let elevator = {
@@ -230,6 +233,8 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
     }
     switch (obj) {
+        case 20:
+        case 23:
         case 25:
         case 80:
         case 90:
@@ -239,6 +244,9 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         default:
             gameData[y][x] = obj;
+            if (obj === 27) {
+                backData[y][x] = 23;
+            }
             break;
     }
 }
@@ -256,6 +264,9 @@ export function removeObject(gameData, gameInfo, x, y) {
             gameInfo.blueBall.x = -1;
             gameInfo.blueBall.y = -1;
             break;
+        case 3:
+            gameInfo.greenBalls -= 1;
+            break;   
         case 6:
         case 106:
             idx = findElementByCoordinate(x, y, gameInfo.elevators);

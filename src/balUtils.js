@@ -1249,6 +1249,148 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
   }
 }
 
+export function moveObjects(gameInfo, mode, value1) {
+  const refs = [];
+
+  refs.push(gameInfo.blueBall1);
+
+  refs.push(gameInfo.blueBall2);
+
+  for (let i = 0; i < gameInfo.copiers.length; i++) {
+    refs.push(gameInfo.copiers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.damagedStones.length; i++) {
+    refs.push(gameInfo.damagedStones[i]);
+  }
+
+  for (let i = 0; i < gameInfo.delays.length; i++) {
+    refs.push(gameInfo.delays[i]);
+  }
+
+  refs.push(gameInfo.detonator);
+
+  for (let i = 0; i < gameInfo.electricity.length; i++) {
+    refs.push(gameInfo.electricity[i]);
+  }
+
+  for (let i = 0; i < gameInfo.electricityActive.length; i++) {
+    refs.push(gameInfo.electricityActive[i]);
+  }
+
+  for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
+    refs.push(gameInfo.elevatorInOuts[i]);
+  }
+
+  for (let i = 0; i < gameInfo.elevators.length; i++) {
+    refs.push(gameInfo.elevators[i]);
+  }
+
+  for (let i = 0; i < gameInfo.forces.length; i++) {
+    refs.push(gameInfo.forces[i]);
+  }
+
+  for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
+    refs.push(gameInfo.horizontalElevators[i]);
+  }
+
+  for (let i = 0; i < gameInfo.magnets.length; i++) {
+    refs.push(gameInfo.magnets[i]);
+  }
+
+  for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+    refs.push(gameInfo.musicBoxes[i]);
+  }
+
+  for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
+    refs.push(gameInfo.orangeBalls[i]);
+  }
+
+  for (let i = 0; i < gameInfo.pistons.length; i++) {
+    refs.push(gameInfo.pistons[i]);
+  }
+
+  for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+    refs.push(gameInfo.pistonsTriggers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.redBalls.length; i++) {
+    refs.push(gameInfo.redBalls[i]);
+  }
+
+  for (let i = 0; i < gameInfo.redFish.length; i++) {
+    refs.push(gameInfo.redFish[i]);
+  }
+
+  for (let i = 0; i < gameInfo.teleports.length; i++) {
+    refs.push(gameInfo.teleports[i]);
+  }
+
+  for (let i = 0; i < gameInfo.timeBombs.length; i++) {
+    refs.push(gameInfo.timeBombs[i]);
+  }
+
+  for (let i = 0; i < gameInfo.trapDoors.length; i++) {
+    refs.push(gameInfo.trapDoors[i]);
+  }
+
+  refs.push(gameInfo.travelGate);
+
+  for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
+    refs.push(gameInfo.yellowBalls[i]);
+  }
+
+  for (let i = 0; i < gameInfo.yellowBallPushers.length; i++) {
+    refs.push(gameInfo.yellowBallPushers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.yellowBallPushersTriggers.length; i++) {
+    refs.push(gameInfo.yellowBallPushersTriggers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.yellowBars.length; i++) {
+    refs.push(gameInfo.yellowBars[i]);
+  }
+
+  for (let i = 0; i < gameInfo.yellowPausers.length; i++) {
+    refs.push(gameInfo.yellowPausers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.yellowStoppers.length; i++) {
+    refs.push(gameInfo.yellowStoppers[i]);
+  }
+
+  for (let i = 0; i < refs.length; i++) {
+    const p = refs[i];
+    if ((p.x !== -1) && (p.y !== -1)) {
+      switch (mode) {
+        case "deleteColumn":
+          if (p.x >= value1) {
+            p.x = p.x - 1;
+          }
+          break;
+        case "deleteRow":
+          if (p.y >= value1) {
+            p.y = p.y - 1;
+          }
+          break;
+        case "insertColumn":
+          if (p.x >= value1) {
+            p.x = p.x + 1;
+          }
+          break;
+        case "insertRow":
+          if (p.y >= value1) {
+            p.y = p.y + 1;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+}
+
 function take(gameData, gameInfo, result, x, y) {
   switch (gameData[y][x]) {
     case 0:

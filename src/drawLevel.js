@@ -28,7 +28,8 @@ function drawLevel(
   status,
   gameInfo,
   gameVars,
-  raster
+  raster,
+  selectedCell,
 ) {
   let wave = gameVars.wave2;
   let bgcolor = gameVars.bgcolor;
@@ -1560,6 +1561,14 @@ function drawLevel(
     drawBox(ctx, xc - (d1 * 0.5), yc + (d1 * 0.5), d1, d1, "black");
   }
 
+  function highlight() {
+      drawBox(ctx, xmin, ymin, w1, w2, "white");
+      ctx.setLineDash([2, 2]);
+      ctx.strokeStyle = "blue";
+      ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
+      ctx.setLineDash([]);
+  }
+
   function highlightBlueBall(x, y) {
     if (!gameInfo.twoBlue) {
       return;
@@ -1569,11 +1578,17 @@ function drawLevel(
     const blueY = gameInfo.blueBall.y;
 
     if ((blueX === x) && (blueY === y)) {
-      drawBox(ctx, xmin, ymin, w1, w2, "white");
-      ctx.setLineDash([2, 2]);
-      ctx.strokeStyle = "blue";
-      ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
-      ctx.setLineDash([]);
+      highlight();
+    }
+  }
+
+  function highlightSelectedCell(x, y) {
+    if (selectedCell === null) {
+      return;
+    }
+
+    if ((selectedCell.x === x) && (selectedCell.y === y)) {
+      highlight();
     }
   }
 
@@ -1588,11 +1603,7 @@ function drawLevel(
 
     info = getObjectCoordinates(gameData, gameInfo);
     if ((info.x === x) && (info.y === y)) {
-      drawBox(ctx, xmin, ymin, w1, w2, "white");
-      ctx.setLineDash([2, 2]);
-      ctx.strokeStyle = "blue";
-      ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
-      ctx.setLineDash([]);
+      highlight();
     }
   }
 
@@ -2062,6 +2073,7 @@ function drawLevel(
       }
 
       highlightBlueBall(col, row);
+      highlightSelectedCell(col, row);
       highlightTelekinesisObject(col, row);
 
       xmin += size1;

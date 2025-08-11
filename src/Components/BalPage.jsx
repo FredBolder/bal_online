@@ -15,6 +15,7 @@ import {
   moveDownLeft,
   moveDownRight,
   moveLeft,
+  moveObjects,
   moveRight,
   pushDown,
   stringArrayToNumberArray,
@@ -39,7 +40,7 @@ import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
-import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "../teleports.js";
+import { checkPurpleTeleports, deleteIfPurpleTeleport, deleteTeleports, findTheOtherTeleport } from "../teleports.js";
 import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -76,11 +77,15 @@ import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
 import selectButton from "../Images/select_button.png";
 
+const msgAtLeastFiveColumns = "There must be at least 5 columns.";
+const msgAtLeastFiveRows = "There must be at least 5 rows.";
+const msgNoCellSelected = "There is no cell selected. Hold the Shift button and click on a cell to select a cell.";
 let kPressed = false;
 let createLevel = false;
+let createLevelSelectedCell = null;
 let createLevelObject = -1;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -110,6 +115,8 @@ function BalPage() {
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
   const createLevelCanvas = useRef(null);
+  const deleteColumn = useRef(null);
+  const deleteRow = useRef(null);
   const elementDiving = useRef(null);
   const elementGray = useRef(null);
   const elementGreen = useRef(null);
@@ -125,6 +132,17 @@ function BalPage() {
   const elementWhite = useRef(null);
   const elementYellow = useRef(null);
   const gameCanvas = useRef(null);
+  const insertColumn = useRef(null);
+  const insertRow = useRef(null);
+  const loadRandom = useRef(null);
+  const newLevel = useRef(null);
+  const series1 = useRef(null);
+  const series2 = useRef(null);
+  const series3 = useRef(null);
+  const seriesEasy = useRef(null);
+  const seriesExtreme = useRef(null);
+  const seriesSmall = useRef(null);
+  const tryAgainButton = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -192,7 +210,7 @@ function BalPage() {
         gameVars.laser = null;
       }
     }
-    if (!gameVars.gameOver && gameInfo.hasWater && !gameInfo.hasDivingGlasses) {
+    if (!gameVars.gameOver && !gameInfo.hasDivingGlasses) {
       if ([20, 23].includes(backData[gameInfo.blueBall1.y][gameInfo.blueBall1.x])) {
         gameVars.gameOver = true;
       }
@@ -323,16 +341,14 @@ function BalPage() {
       gameVars.fishCounter++;
     }
 
-    if (gameInfo.hasWater) {
-      gameVars.wave1++;
-      if (gameVars.wave1 > 5) {
-        gameVars.wave1 = 1;
-        gameVars.wave2++;
-        if (gameVars.wave2 > 3) {
-          gameVars.wave2 = 1;
-        }
-        update = true;
+    gameVars.wave1++;
+    if (gameVars.wave1 > 5) {
+      gameVars.wave1 = 1;
+      gameVars.wave2++;
+      if (gameVars.wave2 > 3) {
+        gameVars.wave2 = 1;
       }
+      update = true;
     }
 
     if (gameVars.timeFreezer === 0) {
@@ -892,6 +908,207 @@ function BalPage() {
     }
   }
 
+  function clickNewLevel() {
+    let level = 9999;
+
+    if (getSettings().lessQuestions) {
+      initLevel(level);
+      createLevelSelectedCell = null;
+    } else {
+      confirmAlert({
+        title: "Question",
+        message: `Start with a new level?`,
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => {
+              initLevel(level);
+              createLevelSelectedCell = null;
+            },
+          },
+          {
+            label: "No",
+            onClick: () => { },
+          },
+        ],
+      });
+    }
+  }
+
+  function clickDeleteColumn() {
+    function del() {
+      for (let i = 0; i < gameData.length; i++) {
+        removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
+        deleteIfPurpleTeleport(backData, gameInfo, createLevelSelectedCell.x, i);
+        gameData[i].splice(createLevelSelectedCell.x, 1);
+        backData[i].splice(createLevelSelectedCell.x, 1);
+      }
+      moveObjects(gameInfo, "deleteColumn", createLevelSelectedCell.x);
+      createLevelSelectedCell = null;
+      updateGameCanvas();
+      updateGreen();
+    }
+
+    if (createLevelSelectedCell === null) {
+      showMessage("Error", msgNoCellSelected);
+    } else if (gameData[0].length <= 5) {
+      showMessage("Error", msgAtLeastFiveColumns);
+    } else {
+      if (getSettings().lessQuestions) {
+        del();
+      } else {
+        confirmAlert({
+          title: "Question",
+          message: `Delete current column?`,
+          buttons: [
+            {
+              label: "Yes",
+              onClick: () => {
+                del();
+              },
+            },
+            {
+              label: "No",
+              onClick: () => { },
+            },
+          ],
+        });
+      }
+    }
+  }
+
+  function clickDeleteRow() {
+    function del() {
+      for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
+        removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
+        deleteIfPurpleTeleport(backData, gameInfo, i, createLevelSelectedCell.y);
+      }
+      gameData.splice(createLevelSelectedCell.y, 1);
+      backData.splice(createLevelSelectedCell.y, 1);
+      moveObjects(gameInfo, "deleteRow", createLevelSelectedCell.y);
+      createLevelSelectedCell = null;
+      updateGameCanvas();
+      updateGreen();
+    }
+
+    if (createLevelSelectedCell === null) {
+      showMessage("Error", msgNoCellSelected);
+    } else if (gameData.length <= 5) {
+      showMessage("Error", msgAtLeastFiveRows);
+    } else {
+      if (getSettings().lessQuestions) {
+        del();
+      } else {
+        confirmAlert({
+          title: "Question",
+          message: `Delete current row?`,
+          buttons: [
+            {
+              label: "Yes",
+              onClick: () => {
+                del();
+              },
+            },
+            {
+              label: "No",
+              onClick: () => { },
+            },
+          ],
+        });
+      }
+    }
+  }
+
+  function clickInsertColumn() {
+    function ins() {
+      let value = 0;
+      let n = gameData.length;
+      for (let i = 0; i < n; i++) {
+        if ((i === 0) || (i === (n - 1))) {
+          value = 1;
+        } else {
+          value = 0;
+        }
+        gameData[i].splice(createLevelSelectedCell.x, 0, value);
+        backData[i].splice(createLevelSelectedCell.x, 0, value);
+      }
+      moveObjects(gameInfo, "insertColumn", createLevelSelectedCell.y);
+      createLevelSelectedCell = null;
+      updateGameCanvas();
+      updateGreen();
+    }
+
+    if (createLevelSelectedCell === null) {
+      showMessage("Error", msgNoCellSelected);
+    } else {
+      if (getSettings().lessQuestions) {
+        ins();
+      } else {
+        confirmAlert({
+          title: "Question",
+          message: `Insert column before the current column?`,
+          buttons: [
+            {
+              label: "Yes",
+              onClick: () => {
+                ins();
+              },
+            },
+            {
+              label: "No",
+              onClick: () => { },
+            },
+          ],
+        });
+      }
+    }
+  }
+
+  function clickInsertRow() {
+    function ins() {
+      let n = gameData[0].length;
+      let newRow = [];
+      for (let i = 0; i < n; i++) {
+        if ((i === 0) || (i === (n - 1))) {
+          newRow.push(1);
+        } else {
+          newRow.push(0);
+        }
+      }
+      gameData.splice(createLevelSelectedCell.y, 0, newRow);
+      backData.splice(createLevelSelectedCell.y, 0, newRow);
+      moveObjects(gameInfo, "insertRow", createLevelSelectedCell.y);
+      createLevelSelectedCell = null;
+      updateGameCanvas();
+      updateGreen();
+    }
+
+    if (createLevelSelectedCell === null) {
+      showMessage("Error", msgNoCellSelected);
+    } else {
+      if (getSettings().lessQuestions) {
+        ins();
+      } else {
+        confirmAlert({
+          title: "Question",
+          message: `Insert row before the current row?`,
+          buttons: [
+            {
+              label: "Yes",
+              onClick: () => {
+                ins();
+              },
+            },
+            {
+              label: "No",
+              onClick: () => { },
+            },
+          ],
+        });
+      }
+    }
+  }
+
   function clickSeries(s) {
     let level = 200;
 
@@ -987,6 +1204,7 @@ function BalPage() {
         gameVars = null;
         gameVars = data.gameVars;
         setLevelNumber(gameVars.currentLevel);
+        updateGameCanvas();
         updateGreen();
       }
     }
@@ -1125,9 +1343,11 @@ function BalPage() {
   }
 
   function handleCreateLevel() {
+    createLevelSelectedCell = null;
     createLevel = cbCreateLevel.current.checked;
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
+    updateMenuItemsDisplay();
     updateGameCanvas();
     if (createLevel) {
       fillMenu(1);
@@ -1151,7 +1371,7 @@ function BalPage() {
     }
     backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
 
-    arr0 = [0, 1, 4, 9, 159, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    arr0 = [0, 1, 4, 9, 159, 6, 10, 20, 91, 0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < arr0.length; i++) {
       if (i < gameDataMenu[0].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
@@ -1164,7 +1384,7 @@ function BalPage() {
         break;
       case 2:
         arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-        arr2 = [152, 153, 154, 35, 12];
+        arr2 = [152, 153, 154, 35, 12, 34, 99, 22, 36, 37, 117];
         break;
       case 3:
         arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 95, 96, 105, 28];
@@ -1179,7 +1399,19 @@ function BalPage() {
         arr2 = [0];
         break;
       case 6:
-        arr1 = [6, 7, 39, 25, 90, 80, 137, 109, 110, 111, 112, 31, 92, 170, 132];
+        arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
+        arr2 = [31, 92, 170, 132];
+        break;
+      case 7:
+        arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
+        arr2 = [0];
+        break;
+      case 8:
+        arr1 = [23, 20, 113, 114, 26, 27];
+        arr2 = [0];
+        break;
+      case 9:
+        arr1 = [91, 119, 120, 97, 157, 167, 89];
         arr2 = [0];
         break;
       default:
@@ -1543,6 +1775,7 @@ function BalPage() {
       cbSound.current.value = getSettings().sound.toString();
       updateGameButtonsDisplay();
       updateCreateLevelCanvasDisplay();
+      updateMenuItemsDisplay();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
@@ -1572,6 +1805,23 @@ function BalPage() {
 
   function updateGameButtonsDisplay() {
     elementGameButtons.current.style.display = (getSettings().arrowButtons && !createLevel) ? "block" : "none";
+  }
+
+  function updateMenuItemsDisplay() {
+    newLevel.current.style.display = (createLevel) ? "block" : "none";
+    insertColumn.current.style.display = (createLevel) ? "block" : "none";
+    insertRow.current.style.display = (createLevel) ? "block" : "none";
+    deleteColumn.current.style.display = (createLevel) ? "block" : "none";
+    deleteRow.current.style.display = (createLevel) ? "block" : "none";
+
+    loadRandom.current.style.display = (!createLevel) ? "block" : "none";
+    series1.current.style.display = (!createLevel) ? "block" : "none";
+    series2.current.style.display = (!createLevel) ? "block" : "none";
+    series3.current.style.display = (!createLevel) ? "block" : "none";
+    seriesEasy.current.style.display = (!createLevel) ? "block" : "none";
+    seriesExtreme.current.style.display = (!createLevel) ? "block" : "none";
+    seriesSmall.current.style.display = (!createLevel) ? "block" : "none";
+    tryAgainButton.current.style.display = (!createLevel) ? "block" : "none";
   }
 
   function updateGreen() {
@@ -1627,7 +1877,8 @@ function BalPage() {
       status,
       gameInfoMenu,
       gameVarsMenu,
-      true
+      true,
+      null
     );
   }
 
@@ -1675,7 +1926,8 @@ function BalPage() {
       status,
       gameInfo,
       gameVars,
-      false
+      false,
+      createLevelSelectedCell
     );
   }
 
@@ -1716,7 +1968,10 @@ function BalPage() {
     let info = "";
     let obj = null;
 
-    if (!gameData || gameData.length < 1) {
+    if (!gameData || !backData) {
+      return false;
+    }
+    if ((gameData.length < 1) || (backData.length < 1)) {
       return false;
     }
 
@@ -1744,15 +1999,30 @@ function BalPage() {
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (createLevel) {
-        if (createLevelObject >= 0) {
-          if (createLevelObject >= 0) {
+        // CREATE
+        if (!e.altKey && !e.shiftKey && !e.ctrlKey && (createLevelObject >= 0)) {
+          if (createLevelObject > 0) {
+            deleteIfPurpleTeleport(backData, gameInfo, column, row);
             addObject(backData, gameData, gameInfo, column, row, createLevelObject);
           } else {
-            removeObject(gameData, gameInfo, column, row);
+            if (gameData[row][column] > 0) {
+              removeObject(gameData, gameInfo, column, row);
+            } else {
+              deleteIfPurpleTeleport(backData, gameInfo, column, row);
+              if ([20, 23, 25, 90].includes(backData[row][column])) {
+                backData[row][column] = 0;
+              }
+            }
           }
+          updateGameCanvas();
+          updateGreen();
+        }
+        if (!e.altKey && e.shiftKey && !e.ctrlKey) {
+          createLevelSelectedCell = { x: column, y: row };
           updateGameCanvas();
         }
       } else {
+        // PLAY
         if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
           info = "";
           switch (gameData[row][column]) {
@@ -1881,25 +2151,41 @@ function BalPage() {
                   />
                   <label htmlFor="createLevel">Create level</label>
                 </div>
-                <div onClick={() => { clickSeries("1") }}>
+                <div ref={newLevel} onClick={() => { clickNewLevel() }}>
+                  <label>New level</label>
+                </div>
+                <div ref={insertColumn} onClick={() => { clickInsertColumn() }}>
+                  <label>Insert column</label>
+                </div>
+                <div ref={insertRow} onClick={() => { clickInsertRow() }}>
+                  <label>Insert row</label>
+                </div>
+
+                <div ref={deleteColumn} onClick={() => { clickDeleteColumn() }}>
+                  <label>Delete column</label>
+                </div>
+                <div ref={deleteRow} onClick={() => { clickDeleteRow() }}>
+                  <label>Delete row</label>
+                </div>
+                <div ref={series1} onClick={() => { clickSeries("1") }}>
                   <label>Series 1</label>
                 </div>
-                <div onClick={() => { clickSeries("2") }}>
+                <div ref={series2} onClick={() => { clickSeries("2") }}>
                   <label>Series 2</label>
                 </div>
-                <div onClick={() => { clickSeries("3") }}>
+                <div ref={series3} onClick={() => { clickSeries("3") }}>
                   <label>Series 3</label>
                 </div>
-                <div onClick={() => { clickSeries("Small") }}>
+                <div ref={seriesSmall} onClick={() => { clickSeries("Small") }}>
                   <label>Series Small</label>
                 </div>
-                <div onClick={() => { clickSeries("Easy") }}>
+                <div ref={seriesEasy} onClick={() => { clickSeries("Easy") }}>
                   <label>Series Easy</label>
                 </div>
-                <div onClick={() => { clickSeries("Extreme") }}>
+                <div ref={seriesExtreme} onClick={() => { clickSeries("Extreme") }}>
                   <label>Series Extreme</label>
                 </div>
-                <div onClick={randomLevel}>
+                <div ref={loadRandom} onClick={randomLevel}>
                   <label>Random level</label>
                 </div>
                 <div onClick={clickSaveToMemory}>
@@ -1916,7 +2202,7 @@ function BalPage() {
                 </div>
               </div>
             </div>
-            <button className="menuButton" onClick={tryAgain}>
+            <button ref={tryAgainButton} className="menuButton" onClick={tryAgain}>
               Try again
             </button>
             <button className="menuButton" onClick={clickCode}>

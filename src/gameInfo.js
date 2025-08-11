@@ -92,10 +92,6 @@ export function getGameInfo(backData, gameData) {
                     result.teleports.push(teleport);
                     break;
                 }
-                case 95:
-                case 96:
-                    result.hasMirror = true;
-                    break;
                 case 27: {
                     let fish = {
                         x: j,
@@ -244,12 +240,6 @@ export function getGameInfo(backData, gameData) {
                     break;
             }
             switch (backData[i][j]) {
-                case 20:
-                case 23:
-                case 113:
-                case 114:
-                    result.hasWater = true;
-                    break;
                 case 170: {
                     // The other teleports (31 and 92) are in gameData
                     let teleport = {
@@ -287,13 +277,11 @@ export function initGameInfo(info) {
     info.hasDivingGlasses = false;
     info.hasKey = false;
     info.hasLadder = false;
-    info.hasMirror = false;
     info.hasPickaxe = false;
     info.hasPiston = false;
     info.hasPropeller = false;
     info.hasTelekineticPower = false;
     info.hasTravelGate = false;
-    info.hasWater = false;
     info.hasWeakStone = false;
     info.horizontalElevators = [];
     info.magnets = [];

@@ -438,7 +438,7 @@ export async function getLevel(n, gateTravelling = false) {
 
   if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) || (n >= series3Start && n <= series3End) ||
     (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesEasyStart && n <= seriesEasyEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
-    (n >= seriesSecretStart && n <= seriesSecretEnd) || (n >= 990 && n <= 991)) {
+    (n >= seriesSecretStart && n <= seriesSecretEnd) || (n >= 990 && n <= 991) || (n === 9999)) {
     result = await loadFromFile(n, gateTravelling);
   } else {
     result = await loadFromFile(1000, false);

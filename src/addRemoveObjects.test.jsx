@@ -68,13 +68,14 @@ describe("addRemoveObject", () => {
 
     // addObject
 
+    let inputBack02 = zeroArray(5, 8);
+
     let yellow02a = [{ x: 4, y: 3, direction: "none" }];
     let gameInfo02a = {
         ...defaultGameInfo,
         blueBall: { x: 2, y: 3 },
         yellowBalls: yellow02a,
     };
-    let inputBack02 = zeroArray(5, 8);
     let input02a = [
         [1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 0, 0, 0, 0, 0, 1],
