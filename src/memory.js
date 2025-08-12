@@ -4,6 +4,10 @@ export function clearMemory(idx) {
     memoryStrings[idx] = "";
 }
 
+export function memoryIsEmpty(idx) {
+    return (memoryStrings[idx] === "");
+}
+
 export function loadFromMemory(idx) {
     if (memoryStrings[idx] === "") {
         return null;

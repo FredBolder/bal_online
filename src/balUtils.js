@@ -19,6 +19,58 @@ function canMoveAlone(n) {
   return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155].includes(n);
 }
 
+export function changeGroup(gameInfo, x, y, group) {
+  let idx = -1;
+
+  idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+  if (idx >= 0) {
+    gameInfo.musicBoxes[idx].group = group;
+  }
+  if (idx === -1) {
+    idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+    if (idx >= 0) {
+      gameInfo.pistonsTriggers[idx].group = group;
+    }
+  }
+  if (idx === -1) {
+    idx = findElementByCoordinate(x, y, gameInfo.pistons);
+    if (idx >= 0) {
+      gameInfo.pistons[idx].group = group;
+    }
+  }
+  return idx;
+}
+
+export function changePistonInverted(gameInfo, x, y) {
+  let idx = -1;
+
+  idx = findElementByCoordinate(x, y, gameInfo.pistons);
+  if (idx >= 0) {
+    gameInfo.pistons[idx].inverted = !gameInfo.pistons[idx].inverted;
+  }
+  return idx;
+}
+
+export function changePistonMode(gameInfo, x, y, mode) {
+  let idx = -1;
+
+  idx = findElementByCoordinate(x, y, gameInfo.pistons);
+  if (idx >= 0) {
+    gameInfo.pistons[idx].mode = mode;
+  }
+  return idx;
+}
+
+export function changePistonSticky(gameInfo, x, y) {
+  let idx = -1;
+
+  idx = findElementByCoordinate(x, y, gameInfo.pistons);
+  if (idx >= 0) {
+    gameInfo.pistons[idx].sticky = !gameInfo.pistons[idx].sticky;
+  }
+  return idx;
+}
+
 export function charToNumber(c) {
   let result = 0;
 

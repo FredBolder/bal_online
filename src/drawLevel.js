@@ -106,6 +106,11 @@ function drawLevel(
     return result;
   }
 
+  function drawAbbreviation(s) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
+    drawText(ctx, xc, yc, s, "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+  }
+
   function drawAllRedFish() {
     let d1 = 0;
     let d2 = 0;
@@ -916,6 +921,11 @@ function drawLevel(
     ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - width)), ymin + (margin * w2), width, height);
   }
 
+  function drawNumber(n) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
+    drawText(ctx, xc, yc, n.toString(), "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+  }
+
   function drawOneDirectionDown(x, y) {
     let color = getFgcolor(x, y, "white");
     drawBox(ctx, xmin, ymin, w1, w2, color);
@@ -1562,11 +1572,11 @@ function drawLevel(
   }
 
   function highlight() {
-      drawBox(ctx, xmin, ymin, w1, w2, "white");
-      ctx.setLineDash([2, 2]);
-      ctx.strokeStyle = "blue";
-      ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
-      ctx.setLineDash([]);
+    drawBox(ctx, xmin, ymin, w1, w2, "white");
+    ctx.setLineDash([2, 2]);
+    ctx.strokeStyle = "blue";
+    ctx.strokeRect(Math.round(xmin), Math.round(ymin), Math.round(w1), Math.round(w2));
+    ctx.setLineDash([]);
   }
 
   function highlightBlueBall(x, y) {
@@ -2059,9 +2069,42 @@ function drawLevel(
         case 1000:
           // For manual only (empty)
           break;
-        default:
-          drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+        case 2033:
+          // Create level menu - Group  
+          drawAbbreviation("GR");
           break;
+        case 2034:
+          // Piston mode - toggle
+          drawAbbreviation("T");
+          break;
+        case 2035:
+          // Piston mode - momentary
+          drawAbbreviation("M");
+          break;
+        case 2036:
+          // Piston mode - repeatfast 
+          drawAbbreviation("RF");
+          break;
+        case 2037:
+          // Piston mode - repeatslow 
+          drawAbbreviation("RS");
+          break;
+        case 2038:
+          // Piston - sticky
+          drawAbbreviation("S");
+          break;
+        case 2039:
+          // Piston - inverted
+          drawAbbreviation("I");
+          break;
+        default:
+          if (gd < 2000) {
+            drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+          }
+          break;
+      }
+      if ((gd >= 2000) && (gd <= 2032)) {
+        drawNumber(gd - 2000);
       }
 
       // Foreground

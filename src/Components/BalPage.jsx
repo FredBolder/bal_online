@@ -6,6 +6,10 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import MessageBox from './MessageBox';
 
 import {
+  changeGroup,
+  changePistonInverted,
+  changePistonMode,
+  changePistonSticky,
   checkFalling,
   findElementByCoordinate,
   inWater,
@@ -36,7 +40,7 @@ import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
-import { clearMemory, loadFromMemory, saveToMemory } from "../memory.js";
+import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
@@ -83,6 +87,7 @@ const msgNoCellSelected = "There is no cell selected. Hold the Shift button and 
 let kPressed = false;
 let createLevel = false;
 let createLevelSelectedCell = null;
+let createLevelMenu = -1;
 let createLevelObject = -1;
 let ctx;
 let fred = false; // TODO: Set to false when publishing
@@ -700,32 +705,7 @@ function BalPage() {
             if (values.length === 3) {
               group = tryParseInt(values[2], -1);
               if (validXY && (group >= 1) && (group <= 32)) {
-                element = gameData[y][x];
-                switch (element) {
-                  case 157:
-                    idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
-                    if (idx >= 0) {
-                      gameInfo.musicBoxes[idx].group = group;
-                    }
-                    break;
-                  case 158:
-                    idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
-                    if (idx >= 0) {
-                      gameInfo.pistonsTriggers[idx].group = group;
-                    }
-                    break;
-                  case 159:
-                  case 161:
-                  case 163:
-                  case 165:
-                    idx = findElementByCoordinate(x, y, gameInfo.pistons);
-                    if (idx >= 0) {
-                      gameInfo.pistons[idx].group = group;
-                    }
-                    break;
-                  default:
-                    break;
-                }
+                changeGroup(gameInfo, x, y, group);
               }
             }
             break;
@@ -908,10 +888,10 @@ function BalPage() {
     }
   }
 
-  function clickNewLevel() {
+  function clickNewLevel(silent = false) {
     let level = 9999;
 
-    if (getSettings().lessQuestions) {
+    if (getSettings().lessQuestions || silent) {
       initLevel(level);
       createLevelSelectedCell = null;
     } else {
@@ -1342,17 +1322,24 @@ function BalPage() {
     updateGameCanvas();
   }
 
-  function handleCreateLevel() {
+  async function handleCreateLevel() {
     createLevelSelectedCell = null;
     createLevel = cbCreateLevel.current.checked;
+    if (createLevel) {
+      if (memoryIsEmpty(3)) {
+        clickNewLevel(true);
+      } else {
+        await clickLoadFromMemory(3);
+      }
+      fillMenu(1);
+    } else {
+      saveToMemory(gameData, backData, gameInfo, gameVars, 3);
+    }
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
     updateMenuItemsDisplay();
     updateGameCanvas();
-    if (createLevel) {
-      fillMenu(1);
-      updateCreateLevelCanvas();
-    }
+    updateCreateLevelCanvas();
   }
 
   function fillMenu(n) {
@@ -1360,6 +1347,7 @@ function BalPage() {
     let arr1 = null;
     let arr2 = null;
 
+    createLevelMenu = n;
     gameDataMenu = null;
     gameDataMenu = [];
     backDataMenu = null;
@@ -1371,7 +1359,7 @@ function BalPage() {
     }
     backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
 
-    arr0 = [0, 1, 4, 9, 159, 6, 10, 20, 91, 0, 0, 0, 0, 0, 0, 0];
+    arr0 = [0, 1, 4, 9, 159, 6, 10, 20, 91, 2033, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < arr0.length; i++) {
       if (i < gameDataMenu[0].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
@@ -1395,8 +1383,8 @@ function BalPage() {
         arr2 = [125];
         break;
       case 5:
-        arr1 = [158, 159, 161, 163, 165];
-        arr2 = [0];
+        arr1 = [158, 159, 161, 163, 165, 2034, 2035, 2036, 2037, 2038, 2039];
+        arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
         break;
       case 6:
         arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
@@ -1413,6 +1401,10 @@ function BalPage() {
       case 9:
         arr1 = [91, 119, 120, 97, 157, 167, 89];
         arr2 = [0];
+        break;
+      case 10:
+        arr1 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+        arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
         break;
       default:
         arr1 = [0];
@@ -1737,8 +1729,16 @@ function BalPage() {
   }
 
   function tryAgain() {
+    async function again() {
+      if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
+        await clickLoadFromMemory(3);
+      } else {
+        initLevel(gameVars.currentLevel);
+      }
+    }
+
     if (getSettings().lessQuestions) {
-      initLevel(gameVars.currentLevel);
+      again();
     } else {
       confirmAlert({
         title: "Question",
@@ -1747,7 +1747,7 @@ function BalPage() {
           {
             label: "Yes",
             onClick: () => {
-              initLevel(gameVars.currentLevel);
+              again();
             },
           },
           {
@@ -1964,6 +1964,8 @@ function BalPage() {
   }
 
   function handleGameCanvasClick(e) {
+    const menuPistons = 5;
+    const menuGroup = 10;
     let idx = -1;
     let info = "";
     let obj = null;
@@ -2001,7 +2003,31 @@ function BalPage() {
       if (createLevel) {
         // CREATE
         if (!e.altKey && !e.shiftKey && !e.ctrlKey && (createLevelObject >= 0)) {
-          if (createLevelObject > 0) {
+          if (createLevelObject >= 2000) {
+            if (createLevelMenu === menuPistons) {
+              if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
+                changeGroup(gameInfo, column, row, createLevelObject - 2000);
+              }
+              if ((createLevelObject >= 2034) && (createLevelObject <= 2037)) {
+                if (changePistonMode(gameInfo, column, row, ["toggle", "momentary", "repeatfast", "repeatslow"][createLevelObject - 2034]) === -1) {
+                  showMessage("Info", "Click on a piston to set the piston mode.");
+                }
+              }
+              if (createLevelObject === 2038) {
+                if (changePistonSticky(gameInfo, column, row) === -1) {
+                  showMessage("Info", "Click on a piston to toggle between sticky and not sticky.");
+                }
+              }
+              if (createLevelObject === 2039) {
+                if (changePistonInverted(gameInfo, column, row) === -1) {
+                  showMessage("Info", "Click on a piston to toggle between inverted and not inverted.");
+                }
+              }
+            }
+            if ((createLevelMenu === menuGroup) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
+              changeGroup(gameInfo, column, row, createLevelObject - 2000);
+            }
+          } else if (createLevelObject > 0) {
             deleteIfPurpleTeleport(backData, gameInfo, column, row);
             addObject(backData, gameData, gameInfo, column, row, createLevelObject);
           } else {

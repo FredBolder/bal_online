@@ -12,6 +12,9 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
     removeObject(gameData, gameInfo, x, y);
     switch (obj) {
         case 2:
+            if ((gameInfo.blueBall.x !== -1) && (gameInfo.blueBall.y !== -1)) {
+                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+            }
             gameInfo.blueBall.x = x;
             gameInfo.blueBall.y = y;
             break;
@@ -97,6 +100,9 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 37:
+            if ((gameInfo.detonator.x !== -1) && (gameInfo.detonator.y !== -1)) {
+                gameData[gameInfo.detonator.y][gameInfo.detonator.x] = 0;
+            }
             gameInfo.detonator.x = x;
             gameInfo.detonator.y = y;
             break;
@@ -170,6 +176,9 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 132:
+            if ((gameInfo.travelGate.x !== -1) && (gameInfo.travelGate.y !== -1)) {
+                gameData[gameInfo.travelGate.y][gameInfo.travelGate.x] = 0;
+            }
             gameInfo.travelGate.x = x;
             gameInfo.travelGate.y = y;
             break;
