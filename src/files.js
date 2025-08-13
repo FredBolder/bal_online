@@ -72,6 +72,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    if (gameVars.conveyorBeltCountTo !== 5) {
+        line = `$gameticks: conveyorbelt, ${gameVars.conveyorBeltCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.elevatorCountTo !== 5) {
         line = `$gameticks: elevator, ${gameVars.elevatorCountTo}`;
         lines.push(line);
@@ -95,6 +100,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     if (gameVars.startlevelmessage !== "") {
         line = `$startlevelmessage: ${gameVars.startlevelmessage}`;
         lines.push(line);
+    }
+
+    for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
+        const conveyorBelt = gameInfo.conveyorBelts[i];
+        if (conveyorBelt.direction !== "right") {
+            line = `$direction: ${conveyorBelt.x}, ${conveyorBelt.y}, ${conveyorBelt.direction}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.delays.length; i++) {

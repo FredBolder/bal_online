@@ -16,15 +16,61 @@ const timeBombsTime = 100;
 
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155].includes(n);
+  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173].includes(n);
+}
+
+export function changeDirection(gameData, gameInfo, x, y, direction) {
+  let idx = -1;
+
+  if ((direction === "left") || (direction === "right") || (direction === "none")) {
+    if (idx === -1) {
+      idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+      if (idx >= 0) {
+        gameInfo.conveyorBelts[idx].direction = direction;
+      }
+    }
+  }
+  if ((direction === "left") || (direction === "right")) {
+    if (idx === -1) {
+      idx = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
+      if (idx >= 0) {
+        gameInfo.horizontalElevators[idx].right = (direction === "right");
+        if (direction === "right") {
+          gameData[y][x] = 107;
+        } else {
+          gameData[y][x] = 7;
+        }
+      }
+    }
+  }
+  if ((direction === "up") || (direction === "down")) {
+    if (idx === -1) {
+      idx = findElementByCoordinate(x, y, gameInfo.elevators);
+      if (idx >= 0) {
+        gameInfo.elevators[idx].up = (direction === "up");
+        if (direction === "up") {
+          gameData[y][x] = 106;
+        } else {
+          gameData[y][x] = 6;
+        }
+      }
+    }
+  }
+  return idx;
 }
 
 export function changeGroup(gameInfo, x, y, group) {
   let idx = -1;
 
-  idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+  idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
   if (idx >= 0) {
-    gameInfo.musicBoxes[idx].group = group;
+    gameInfo.conveyorBelts[idx].group = group;
+  }
+  if (idx === -1) {
+    idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+    if (idx >= 0) {
+      gameInfo.musicBoxes[idx].group = group;
+    }
   }
   if (idx === -1) {
     idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
@@ -37,6 +83,17 @@ export function changeGroup(gameInfo, x, y, group) {
     if (idx >= 0) {
       gameInfo.pistons[idx].group = group;
     }
+  }
+  return idx;
+}
+
+export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
+  let idx = -1;
+
+  idx = findElementByCoordinate(x, y, gameInfo.redBalls);
+  if (idx >= 0) {
+    gameInfo.redBalls[idx].smart = intelligence;
+    gameData[y][x] = [8, 93, 94][intelligence];
   }
   return idx;
 }
@@ -459,6 +516,15 @@ export function charToNumber(c) {
       break;
     case "Π":
       result = 170;
+      break;
+    case "{":
+      result = 171;
+      break;
+    case "Ø":
+      result = 172;
+      break;
+    case "}":
+      result = 173;
       break;
     case "|":
       result = 1000;
@@ -1164,6 +1230,15 @@ export function numberToChar(n) {
     case 170:
       result = "Π";
       break;
+    case 171:
+      result = "{";
+      break;
+    case 172:
+      result = "Ø";
+      break;
+    case 173:
+      result = "}";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1296,17 +1371,32 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 117:
       updateObject(gameInfo.timeBombs, oldX, oldY, newX, newY);
       break;
+    case 171:
+      updateObject(gameInfo.conveyorBelts, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
 }
 
-export function moveObjects(gameInfo, mode, value1) {
+export function moveObjects(gameInfo, gameVars, mode, value1) {
   const refs = [];
+
+  for (let i = 0; i < gameVars.bgcolor.length; i++) {
+    refs.push(gameVars.bgcolor[i]);
+  }
+
+  for (let i = 0; i < gameVars.fgcolor.length; i++) {
+    refs.push(gameVars.fgcolor[i]);
+  }
 
   refs.push(gameInfo.blueBall1);
 
   refs.push(gameInfo.blueBall2);
+
+  for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
+    refs.push(gameInfo.conveyorBelts[i]);
+  }
 
   for (let i = 0; i < gameInfo.copiers.length; i++) {
     refs.push(gameInfo.copiers[i]);
@@ -1417,22 +1507,22 @@ export function moveObjects(gameInfo, mode, value1) {
     if ((p.x !== -1) && (p.y !== -1)) {
       switch (mode) {
         case "deleteColumn":
-          if (p.x >= value1) {
+          if (p.x > value1) {
             p.x = p.x - 1;
           }
           break;
         case "deleteRow":
-          if (p.y >= value1) {
+          if (p.y > value1) {
             p.y = p.y - 1;
           }
           break;
         case "insertColumn":
-          if (p.x >= value1) {
+          if (p.x > value1) {
             p.x = p.x + 1;
           }
           break;
         case "insertRow":
-          if (p.y >= value1) {
+          if (p.y > value1) {
             p.y = p.y + 1;
           }
           break;
@@ -1606,6 +1696,9 @@ export function moveLeft(backData, gameData, gameInfo) {
                 gameInfo.timeBombs[idx1].x = x - 2;
                 gameInfo.timeBombs[idx1].status = timeBombsTime;
               }
+              break;
+            case 171:
+              updateObject(gameInfo.conveyorBelts, x - 1, y, x - 2, y);
               break;
             default:
               break;
@@ -1790,6 +1883,9 @@ export function moveRight(backData, gameData, gameInfo) {
                 gameInfo.timeBombs[idx1].x = x + 2;
                 gameInfo.timeBombs[idx1].status = timeBombsTime;
               }
+              break;
+            case 171:
+              updateObject(gameInfo.conveyorBelts, x + 1, y, x + 2, y);
               break;
             default:
               break;
@@ -1981,6 +2077,9 @@ export function jump(backData, gameData, gameInfo) {
                 gameInfo.timeBombs[idx].y = y - 2;
                 gameInfo.timeBombs[idx].status = timeBombsTime;
               }
+              break;
+            case 171:
+              updateObject(gameInfo.conveyorBelts, x, y - 1, x, y - 2);
               break;
             default:
               break;
@@ -2189,6 +2288,9 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
               gameInfo.timeBombs[idx].y = y + 2;
               gameInfo.timeBombs[idx].status = timeBombsTime;
             }
+            break;
+          case 171:
+            updateObject(gameInfo.conveyorBelts, x, y + 1, x, y + 2);
             break;
           default:
             break;

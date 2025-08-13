@@ -236,6 +236,11 @@ export function getGameInfo(backData, gameData) {
                     result.delays.push(delay);
                     break;
                 }
+                case 171: {
+                    let conveyorBelt = { x: j, y: i, direction: "right", group: 1 };
+                    result.conveyorBelts.push(conveyorBelt);
+                    break;
+                }
                 default:
                     break;
             }
@@ -263,6 +268,7 @@ export function initGameInfo(info) {
     info.blueBall1 = { x: -1, y: -1 };
     info.blueBall2 = { x: -1, y: -1 };
     info.blueBall = info.blueBall1;
+    info.conveyorBelts = [];
     info.copiers = [];
     info.damagedStones = [];
     info.delays = [];
@@ -308,6 +314,8 @@ export function initGameInfo(info) {
 export function initGameVars(vars) {
     vars.ballPushersActive = false;
     vars.bgcolor = [];
+    vars.conveyorBeltCounter = 0;
+    vars.conveyorBeltCountTo = 5;
     vars.currentLevel = 200;
     vars.elecActiveSaved = false;
     vars.electricityCounter = 0;

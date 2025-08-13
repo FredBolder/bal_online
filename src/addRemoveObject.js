@@ -20,7 +20,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         case 3:
             gameInfo.greenBalls += 1;
-            break;  
+            break;
         case 6:
         case 106: {
             let elevator = {
@@ -36,7 +36,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             let elevator = {
                 x,
                 y,
-                up: obj === 107
+                right: obj === 107
             };
             gameInfo.horizontalElevators.push(elevator);
             break;
@@ -238,6 +238,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.teleports.push(teleport);
             break;
         }
+        case 171: {
+            let conveyorBelt = { x, y, direction: "right", group: 1 };
+            gameInfo.conveyorBelts.push(conveyorBelt);
+            break;
+        }
         default:
             break;
     }
@@ -275,7 +280,7 @@ export function removeObject(gameData, gameInfo, x, y) {
             break;
         case 3:
             gameInfo.greenBalls -= 1;
-            break;   
+            break;
         case 6:
         case 106:
             idx = findElementByCoordinate(x, y, gameInfo.elevators);
@@ -471,6 +476,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinate(x, y, gameInfo.delays);
             if (idx >= 0) {
                 gameInfo.delays.splice(idx, 1);
+            }
+            break;
+        case 171:
+            idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+            if (idx >= 0) {
+                gameInfo.conveyorBelts.splice(idx, 1);
             }
             break;
         default:

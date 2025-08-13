@@ -1,4 +1,4 @@
-import { findElementByCoordinate, getTimeBombsTime } from "./balUtils.js";
+import { findElementByCoordinate, getTimeBombsTime, updateObject } from "./balUtils.js";
 
 export function getObjectCoordinates(gameData, gameInfo) {
     let result = {};
@@ -58,7 +58,7 @@ export function getObjectCoordinates(gameData, gameInfo) {
 }
 
 function isMoveableObject(gameData, x, y) {
-    return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139].includes(gameData[y][x]);
+    return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139, 171, 172, 173].includes(gameData[y][x]);
 }
 
 function moveObject(gameData, gameInfo, x, y, direction) {
@@ -88,33 +88,36 @@ function moveObject(gameData, gameInfo, x, y, direction) {
         case 9:
             idx = findElementByCoordinate(x, y, gameInfo.yellowBalls);
             if (idx >= 0) {
-              gameInfo.yellowBalls[idx].x = newX;
-              gameInfo.yellowBalls[idx].y = newY;
-              gameInfo.yellowBalls[idx].direction = "none";
+                gameInfo.yellowBalls[idx].x = newX;
+                gameInfo.yellowBalls[idx].y = newY;
+                gameInfo.yellowBalls[idx].direction = "none";
             }
             break;
         case 40:
             idx = findElementByCoordinate(x, y, gameInfo.orangeBalls);
             if (idx >= 0) {
-              gameInfo.orangeBalls[idx].x = newX;
-              gameInfo.orangeBalls[idx].y = newY;
-              gameInfo.orangeBalls[idx].direction = "none";
+                gameInfo.orangeBalls[idx].x = newX;
+                gameInfo.orangeBalls[idx].y = newY;
+                gameInfo.orangeBalls[idx].direction = "none";
             }
             break;
         case 82:
             gameData[newY][newX] = 83;
-            break;    
+            break;
         case 98:
             gameData[newY][newX] = 82;
-            break;    
+            break;
         case 117:
             idx = findElementByCoordinate(x, y, gameInfo.timeBombs);
             if (idx >= 0) {
-              gameInfo.timeBombs[idx].x = newX;
-              gameInfo.timeBombs[idx].y = newY;
-              gameInfo.timeBombs[idx].status = getTimeBombsTime();
-            }            
-            break;    
+                gameInfo.timeBombs[idx].x = newX;
+                gameInfo.timeBombs[idx].y = newY;
+                gameInfo.timeBombs[idx].status = getTimeBombsTime();
+            }
+            break;
+        case 171:
+            updateObject(gameInfo.conveyorBelts, x, y, newX, newY);
+            break;
         default:
             break;
     }

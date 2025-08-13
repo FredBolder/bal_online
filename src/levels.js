@@ -65,6 +65,7 @@ export function checkLevel(data, settings) {
     { name: "$addnotes", params: 0, xy: true },
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
+    { name: "$direction", params: 3, xy: true },
     { name: "$fgcolor", params: 5, xy: true },
     { name: "$gameticks", params: 2, xy: false },
     { name: "$gameticksxy", params: 3, xy: true },
@@ -219,8 +220,13 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}The area exceeds the game raster.\n`;
               }
               break;
+            case "$direction":
+              if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+              }
+              break;
             case "$gameticks":
-              if (!["fish", "elevator"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "fish", "elevator"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -414,7 +420,6 @@ async function loadFromFile(n, gateTravelling = false) {
       throw new Error(msg);
     }
   } catch (err) {
-    alert(err.message);
     levelSettings = null;
     levelSettings = [];
     levelData = null;

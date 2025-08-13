@@ -182,7 +182,7 @@ describe("Elevators", () => {
         { x: 4, y: 6, right: false },
         { x: 6, y: 8, right: false },
     ];
-    let redInput02c = [{ x: 1, y: 2 }];
+    let redInput02c = [{ x: 1, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }];
     let gameInfo02c = {
         ...defaultGameInfo,
         blueBall: { x: 5, y: 4 },
@@ -228,7 +228,9 @@ describe("Elevators", () => {
         );
     });
     it("moveHorizontalElevators C red", () => {
-        expect(JSON.stringify(redInput02c)).toBe(JSON.stringify([{ x: 2, y: 2 }]));
+        expect(JSON.stringify(redInput02c)).toBe(JSON.stringify(
+            [{ x: 2, y: 2, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }]
+        ));
     });
     it("moveHorizontalElevators C blue ball", () => {
         expect(JSON.stringify(gameInfo02c.blueBall)).toBe(JSON.stringify({ x: 5, y: 4 }));

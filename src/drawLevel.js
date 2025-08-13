@@ -1,4 +1,5 @@
 import { findElementByCoordinate } from "./balUtils.js";
+import { indexToColor } from "./colorUtils.js";
 import {
   drawBox,
   drawCircle,
@@ -309,6 +310,66 @@ function drawLevel(
       }
     }
     drawLine(ctx, xmin + d1, ymin + d2, xmax - d1, ymin + d2, color);
+  }
+
+  function drawColor(n) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, indexToColor(n));
+  }
+
+  function drawConveyorBelt(x, y, part) {
+    let color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    let d1 = w2 * 0.35;
+    let d2 = w2 * 0.1;
+    let idx = -1;
+    let yBottom = Math.round(ymax - d2);
+    let yCenter = Math.round((ymin + yBottom) / 2);
+    let d3 = Math.round((yBottom - ymin) * 0.5) - 1;
+    if (d3 < 0) {
+      d3 = 0;
+    }
+    let txt = "";
+    drawFilledCircle(ctx, xc, yCenter, d1, color);
+    switch (part) {
+      case "left":
+        ctx.beginPath();
+        // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+        ctx.strokeStyle = color;
+        ctx.arc(xc, yCenter, d3, 0.5 * Math.PI, 1.5 * Math.PI, false);
+        ctx.stroke();
+        drawLine(ctx, xc, ymin, xmax + 0.5, ymin, color);
+        drawLine(ctx, xc, yBottom, xmax + 0.5, yBottom, color);
+        idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+        if (idx >= 0) {
+          switch (gameInfo.conveyorBelts[idx].direction) {
+            case "left":
+              txt = "L";
+              break;
+            case "right":
+              txt = "R";
+              break;
+            default:
+              break;
+          }
+          if (txt !== "") {
+            drawText(ctx, xc, yCenter, txt, "middle", "white", w2 * 0.4, w1 * 0.5, "white", 1);
+          }
+        }
+        break;
+      case "middle":
+        drawLine(ctx, xmin - 0.5, ymin, xmax + 0.5, ymin, color);
+        drawLine(ctx, xmin - 0.5, yBottom, xmax + 0.5, yBottom, color);
+        break;
+      case "right":
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.arc(xc, yCenter, d3, 0.5 * Math.PI, 1.5 * Math.PI, true);
+        ctx.stroke();
+        drawLine(ctx, xmin - 0.5, ymin, xc, ymin, color);
+        drawLine(ctx, xmin - 0.5, yBottom, xc, yBottom, color);
+        break;
+      default:
+        break;
+    }
   }
 
   function drawCopier() {
@@ -2066,6 +2127,15 @@ function drawLevel(
         case 169:
           drawDoor();
           break;
+        case 171:
+          drawConveyorBelt(col, row, "left");
+          break;
+        case 172:
+          drawConveyorBelt(col, row, "middle");
+          break;
+        case 173:
+          drawConveyorBelt(col, row, "right");
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -2097,6 +2167,47 @@ function drawLevel(
           // Piston - inverted
           drawAbbreviation("I");
           break;
+        case 2040:
+          // Left
+          drawAbbreviation("L");
+          break;
+        case 2041:
+          // Right
+          drawAbbreviation("R");
+          break;
+        case 2042:
+          // Up
+          drawAbbreviation("U");
+          break;
+        case 2043:
+          // Down
+          drawAbbreviation("D");
+          break;
+        case 2044:
+          // None
+          drawAbbreviation("N");
+          break;
+        case 2045:
+          // Not smart
+          drawAbbreviation("S0");
+          break;
+        case 2046:
+          // A little smart
+          drawAbbreviation("S1");
+          break;
+        case 2047:
+          // Smart
+          drawAbbreviation("S2");
+          break;
+        case 2050:
+          drawAbbreviation("FG");
+          break;
+        case 2051:
+          drawAbbreviation("BG");
+          break;
+        case 2083:
+          drawAbbreviation("X");
+          break;
         default:
           if (gd < 2000) {
             drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
@@ -2105,6 +2216,9 @@ function drawLevel(
       }
       if ((gd >= 2000) && (gd <= 2032)) {
         drawNumber(gd - 2000);
+      }
+      if ((gd >= 2052) && (gd <= 2082)) {
+        drawColor(gd - 2052);
       }
 
       // Foreground

@@ -237,9 +237,19 @@ export function rotateGame(backData, gameData, gameInfo) {
         rotateXY(gameInfo.copiers[i], rows);
       }
 
+      // ConveyorBelts
+      for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
+        rotateXY(gameInfo.conveyorBelts[i], rows);
+      }
+
       // Damaged stones
       for (let i = 0; i < gameInfo.damagedStones.length; i++) {
         rotateXY(gameInfo.damagedStones[i], rows);
+      }
+
+      // Delays
+      for (let i = 0; i < gameInfo.delays.length; i++) {
+        rotateXY(gameInfo.delay[i], rows);
       }
 
       // Electricity
