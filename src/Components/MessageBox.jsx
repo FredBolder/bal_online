@@ -1,5 +1,6 @@
 import './MessageBox.css';
 import PropTypes from 'prop-types';
+import React from 'react'
 
 const MessageBox = ({ title, message, onClose }) => {
   return (
@@ -11,7 +12,14 @@ const MessageBox = ({ title, message, onClose }) => {
             <button className="close-button" onClick={onClose}>×</button>
           </div>
           <div className="message-box-main">
-            <p>{message}</p>
+            <p>
+              {message.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
+            </p>
           </div>
         </div>
       </div>

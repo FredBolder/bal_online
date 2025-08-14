@@ -6,6 +6,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import MessageBox from './MessageBox';
 
 import {
+  fixLevel,
   changeGroup,
   changeDirection,
   changeIntelligence,
@@ -53,6 +54,7 @@ import { checkRedBalls, moveRedBalls } from "../redBalls.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { playSound } from "../sound.js";
+import { checkSpikes } from "../spikes.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { checkTimeBombs } from "../timeBombs.js";
 import { checkTrapDoors } from "../trapDoors.js";
@@ -238,6 +240,10 @@ function BalPage() {
           gameVars.gameOver = true;
         }
       }
+    }
+    if (checkSpikes(backData, gameData, gameInfo)) {
+      gameVars.gameOver = true;
+      playSound("pain");
     }
     if (gameVars.gameOver) {
       updateGameCanvas();
@@ -1044,7 +1050,7 @@ function BalPage() {
           value = 0;
         }
         gameData[i].splice(createLevelSelectedCell.x, 0, value);
-        backData[i].splice(createLevelSelectedCell.x, 0, value);
+        backData[i].splice(createLevelSelectedCell.x, 0, 0);
       }
       moveObjects(gameInfo, gameVars, "insertColumn", createLevelSelectedCell.y);
       createLevelSelectedCell = null;
@@ -1082,7 +1088,9 @@ function BalPage() {
     function ins() {
       let n = gameData[0].length;
       let newRow = [];
+      let newRowBackData = [];
       for (let i = 0; i < n; i++) {
+        newRowBackData.push(0);
         if ((i === 0) || (i === (n - 1))) {
           newRow.push(1);
         } else {
@@ -1090,7 +1098,7 @@ function BalPage() {
         }
       }
       gameData.splice(createLevelSelectedCell.y, 0, newRow);
-      backData.splice(createLevelSelectedCell.y, 0, newRow);
+      backData.splice(createLevelSelectedCell.y, 0, newRowBackData);
       moveObjects(gameInfo, gameVars, "insertRow", createLevelSelectedCell.y);
       createLevelSelectedCell = null;
       updateGameCanvas();
@@ -1270,7 +1278,7 @@ function BalPage() {
       loadLevelSettings(backData, gameData, gameInfo, gameVars, result.levelSettings);
       gameVars.laser = null;
       gameVars.gameOver = false;
-      gameVars.currentLevel = 200;
+      gameVars.currentLevel = 9999;
       updateGameCanvas();
       updateGreen();
       setLevelNumber(gameVars.currentLevel);
@@ -1357,6 +1365,8 @@ function BalPage() {
   }
 
   async function handleCreateLevel() {
+    let msg = "";
+
     createLevelSelectedCell = null;
     createLevel = cbCreateLevel.current.checked;
     if (createLevel) {
@@ -1367,6 +1377,10 @@ function BalPage() {
       }
       fillMenu(1);
     } else {
+      msg = fixLevel(gameData, gameInfo);
+      if (msg !== "") {
+        showMessage("Error", msg);
+      }
       saveToMemory(gameData, backData, gameInfo, gameVars, 3);
     }
     updateGameButtonsDisplay();
@@ -1406,7 +1420,7 @@ function BalPage() {
         break;
       case 2:
         arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-        arr2 = [152, 153, 154, 35, 12, 34, 99, 22, 36, 37, 117];
+        arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 22, 36, 37, 117];
         break;
       case 3:
         arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047, 105];
@@ -1656,19 +1670,24 @@ function BalPage() {
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
         ((thisWorldGreen === 0) && (otherWorldGreen === 0)))
       ) {
-        confirmAlert({
-          title: "Congratulations!",
-          message: `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`,
-          buttons: [
-            {
-              label: "OK",
-              onClick: () => {
+        if (gameVars.currentLevel === 9999) {
+          showMessage("Congratulations!", "You have solved the level!");
+          initLevel(gameVars.currentLevel);
+        } else {
+          confirmAlert({
+            title: "Congratulations!",
+            message: `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`,
+            buttons: [
+              {
+                label: "OK",
+                onClick: () => {
+                },
               },
-            },
-          ],
-        });
-        initLevel(gameVars.currentLevel + 1);
-        saveProgress();
+            ],
+          });
+          initLevel(gameVars.currentLevel + 1);
+          saveProgress();
+        }
       }
     }
     if (info.sound !== "") {
@@ -1818,7 +1837,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2014;
+        gameVars.currentLevel = 705;
       }
       initLevel(gameVars.currentLevel);
     }

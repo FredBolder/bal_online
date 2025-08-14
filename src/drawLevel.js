@@ -279,7 +279,7 @@ function drawLevel(
 
   function drawBomb(x, y) {
     const sticks = 3;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     let factor = 0.1;
     let d1 = w1 / 6;
     let d2 = w2 / 2;
@@ -317,7 +317,7 @@ function drawLevel(
   }
 
   function drawConveyorBelt(x, y, part) {
-    let color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    let color = getFgcolor(x, y, "#464646");
     let d1 = w2 * 0.35;
     let d2 = w2 * 0.1;
     let idx = -1;
@@ -379,7 +379,7 @@ function drawLevel(
 
   function drawDamagedStone(x, y) {
     let bgcolor = getBgcolor(x, y, "black");
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     drawLine(ctx, xmin + (w1 * 0.75), ymin, xmin + (w1 * 0.4), ymin + (w2 * 0.35), bgcolor);
     drawLine(ctx, xmin + (w1 * 0.4), ymin + (w2 * 0.35), xc, ymin + (w2 * 0.6), bgcolor);
     drawLine(ctx, xmin + (w1 * 0.7), yc, xmin + (w1 * 0.6), ymin + (w2 * 0.8), bgcolor);
@@ -395,7 +395,7 @@ function drawLevel(
   }
 
   function drawDetonator(x, y) {
-    let color = getFgcolor(x, y, "rgb(220,220,220)");
+    let color = getFgcolor(x, y, "#DCDCDC");
     let d1 = w1 / 7;
     let d2 = w2 / 2;
     let d3 = w2 / 8;
@@ -534,7 +534,7 @@ function drawLevel(
     let d5 = Math.round(w1 * 0.3);
     let d6 = Math.round(w1 * 0.07);
     let d7 = Math.round(w1 * 0.04);
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     ctx.fillStyle = "yellow";
     ctx.strokeStyle = "yellow";
     ctx.beginPath();
@@ -565,7 +565,7 @@ function drawLevel(
       if (elecTarget > 0 && Math.abs(elec.y - elecTarget) > 1) {
         x1 = Math.round(leftMargin + elec.x * size1 + 0.5 * size1);
         y = (elec.y + 1) * size1 + topMargin;
-        ctx.strokeStyle = "rgb(207, 159, 255)";
+        ctx.strokeStyle = "#CF9FFF";
         ctx.beginPath();
         ctx.moveTo(x1, y);
         for (let j = elec.y + 1; j < elecTarget; j++) {
@@ -603,7 +603,7 @@ function drawLevel(
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
     drawLine(ctx, xc - d1, yc, xc + d1, yc, "white");
     drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "white");
     drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "white");
@@ -615,7 +615,7 @@ function drawLevel(
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
     drawLine(ctx, xc, yc - d1, xc, yc + d1, "white");
     drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), "white";
     drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), "white";
@@ -644,7 +644,7 @@ function drawLevel(
     let d3 = w2 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
     for (let i = -1; i <= 1; i++) {
       d4 = (w1 / 3) * i;
       drawLine(ctx, xc + d4, ymin + d1, xc + d4, ymax - d1, "white");
@@ -659,7 +659,7 @@ function drawLevel(
     let d3 = w1 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
     for (let i = -1; i <= 1; i++) {
       d4 = (w2 / 3) * i;
       drawLine(ctx, xmin + d1, yc + d4, xmax - d1, yc + d4, "white");
@@ -674,7 +674,7 @@ function drawLevel(
     let d3 = w1 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
     for (let i = -1; i <= 1; i++) {
       d4 = (w2 / 3) * i;
       drawLine(ctx, xmin + d1, yc + d4, xmax - d1, yc + d4, "white");
@@ -689,7 +689,7 @@ function drawLevel(
     let d3 = w2 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
     for (let i = -1; i <= 1; i++) {
       d4 = (w1 / 3) * i;
       drawLine(ctx, xc + d4, ymin + d1, xc + d4, ymax - d1, "white");
@@ -746,7 +746,7 @@ function drawLevel(
         drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
       }
     } else {
-      drawBall("rgb(70, 70, 70)");
+      drawBall("#464646");
       if (moves > 0) {
         drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
       }
@@ -754,7 +754,7 @@ function drawLevel(
   }
 
   function drawHalfStone(x, y, location) {
-    const color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    const color = getFgcolor(x, y, "#464646");
     switch (location) {
       case "left":
         drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
@@ -911,7 +911,7 @@ function drawLevel(
   }
 
   function drawLock(x, y) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     let d1 = w1 / 4;
     let d2 = w1 / 12;
     let d3 = w1 / 10;
@@ -934,7 +934,7 @@ function drawLevel(
     let d3 = 0;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     if (rectangular) {
       d1 = w1 / 3;
       d2 = w2 / 2.3;
@@ -1165,7 +1165,7 @@ function drawLevel(
   }
 
   function drawPistonsTrigger(x, y) {
-    let color = getFgcolor(x, y, "rgb(220,220,220)");
+    let color = getFgcolor(x, y, "#DCDCDC");
     let d1 = w1 / 7;
     let d2 = w1 / 2;
     let d3 = w1 / 8;
@@ -1234,7 +1234,7 @@ function drawLevel(
   }
 
   function drawQuarterCircleStoneBottomLeft(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
@@ -1245,7 +1245,7 @@ function drawLevel(
   }
 
   function drawQuarterCircleStoneBottomRight(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
@@ -1256,7 +1256,7 @@ function drawLevel(
   }
 
   function drawQuarterCircleStoneTopLeft(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
@@ -1267,7 +1267,7 @@ function drawLevel(
   }
 
   function drawQuarterCircleStoneTopRight(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
@@ -1277,7 +1277,7 @@ function drawLevel(
   }
 
   function drawQuarterStone(x, y, location) {
-    const color = getFgcolor(x, y, "rgb(70, 70, 70)");
+    const color = getFgcolor(x, y, "#464646");
     switch (location) {
       case "bottomLeft":
         drawFilledBox(ctx, xmin, yc, w1 / 2, w2 / 2, color);
@@ -1365,20 +1365,53 @@ function drawLevel(
     ctx.drawImage(bitmapWeakStone, xmin + (w1 / 4), ymin, w1 / 2, w2 / 2);
   }
 
+  function drawSpike(x, y, direction) {
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.beginPath();
+    switch (direction) {
+      case "down":
+        ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+        ctx.lineTo(Math.round(xc), Math.round(ymax + 0.5));
+        ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+        ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+        break;
+      case "right":
+        ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+        ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
+        ctx.lineTo(Math.round(xmax + 0.5), Math.round(yc));
+        ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+        break;
+      case "left":
+        ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+        ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
+        ctx.lineTo(Math.round(xmin - 0.5), Math.round(yc));
+        ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+        break;
+      default:
+        // up
+        ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+        ctx.lineTo(Math.round(xc), Math.round(ymin - 0.5));
+        ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
+        ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
+        break;
+    }
+    ctx.fill();
+  }
+
   function drawStone(x, y) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
   }
 
   function drawStonePattern(x, y, n) {
     let d1 = (w1 * 0.25) + 1;
     switch (n) {
       case 1:
-        drawFilledBox(ctx, ((xmin + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
-        drawFilledBox(ctx, ((xmax + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
+        drawFilledBox(ctx, ((xmin + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
+        drawFilledBox(ctx, ((xmax + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
         break;
       case 2:
-        drawFilledBox(ctx, xmin - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
-        drawFilledBox(ctx, xc - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "rgb(70, 70, 70)"));
+        drawFilledBox(ctx, xmin - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
+        drawFilledBox(ctx, xc - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
         break;
       default:
         break;
@@ -1387,7 +1420,7 @@ function drawLevel(
 
   function drawTimeBomb(x, y) {
     const sticks = 4;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "rgb(70, 70, 70)"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     let factor = 0.1;
     let d1 = w1 / 6;
     let d2 = w2 / 2.5;
@@ -1425,14 +1458,14 @@ function drawLevel(
 
   function drawTrapDoor() {
     ctx.lineWidth = 3;
-    drawLine(ctx, xmin, ymin + 1, xmax - 2, ymin + 1, "rgb(70, 70, 70)");
+    drawLine(ctx, xmin, ymin + 1, xmax - 2, ymin + 1, "#464646");
     ctx.lineWidth = 1;
   }
 
   function drawTrapDoorHalfOpen() {
     let d1 = Math.round(w1 / Math.sqrt(2));
     ctx.lineWidth = 3;
-    drawLine(ctx, xmin - 1, ymin + 1, xmin + d1, ymin + d1, "rgb(70, 70, 70)");
+    drawLine(ctx, xmin - 1, ymin + 1, xmin + d1, ymin + d1, "#464646");
     ctx.lineWidth = 1;
   }
 
@@ -1445,7 +1478,7 @@ function drawLevel(
 
   function drawTriangleStoneBottomLeft(x, y) {
     // Shape: |\, code: 15, G 
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
@@ -1456,7 +1489,7 @@ function drawLevel(
 
   function drawTriangleStoneBottomRight(x, y) {
     // Shape: /|, code: 16, H 
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
@@ -1467,7 +1500,7 @@ function drawLevel(
 
   function drawTriangleStoneTopLeft(x, y) {
     // Shape: |/, code: 17, I
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
@@ -1478,7 +1511,7 @@ function drawLevel(
 
   function drawTriangleStoneTopRight(x, y) {
     // Shape: \|, code: 18, J
-    ctx.fillStyle = getFgcolor(x, y, "rgb(70, 70, 70)");
+    ctx.fillStyle = getFgcolor(x, y, "#464646");
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
@@ -1504,7 +1537,7 @@ function drawLevel(
   }
 
   function drawWater() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(0, 0, 90)");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#00005A");
   }
 
   function drawWaterSurface() {
@@ -1536,9 +1569,9 @@ function drawLevel(
     pt2.y = waterLevel1;
     pt3.x = xmax;
     pt3.y = waterLevel2;
-    drawFilledBox(ctx, xmin, waterLevel2, w1, ymax - waterLevel2 + 1, "rgb(0, 0, 90)");
-    ctx.fillStyle = "rgb(0, 0, 90)";
-    ctx.strokeStyle = "rgb(0, 0, 90)";
+    drawFilledBox(ctx, xmin, waterLevel2, w1, ymax - waterLevel2 + 1, "#00005A");
+    ctx.fillStyle = "#00005A";
+    ctx.strokeStyle = "#00005A";
     ctx.beginPath();
     ctx.moveTo(pt1.x, pt1.y);
     ctx.lineTo(pt2.x, pt2.y);
@@ -1612,7 +1645,7 @@ function drawLevel(
   }
 
   function drawYellowPushersTrigger(x, y) {
-    let color = getFgcolor(x, y, "rgb(220,220,220)");
+    let color = getFgcolor(x, y, "#DCDCDC");
     let d1 = w1 / 7;
     let d2 = w1 / 2;
     let d3 = w1 / 8;
@@ -2136,6 +2169,18 @@ function drawLevel(
         case 173:
           drawConveyorBelt(col, row, "right");
           break;
+        case 174:
+          drawSpike(col, row, "up");
+          break;
+        case 175:
+          drawSpike(col, row, "down");
+          break;
+        case 176:
+          drawSpike(col, row, "right");
+          break;
+        case 177:
+          drawSpike(col, row, "left");
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -2210,7 +2255,7 @@ function drawLevel(
           break;
         default:
           if (gd < 2000) {
-            drawFilledBox(ctx, xmin, ymin, w1, w2, "rgb(70, 70, 70)");
+            drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           }
           break;
       }
