@@ -25,7 +25,7 @@ export function fixLevel(gameData, gameInfo) {
   let foundBlue = false;
   let foundSmallblue = false;
   let foundSmallGreen = false;
-  let nSmallBlueBalls = 0;
+  let nSmallGreenBalls = 0;
   let used = 0;
   const xMax = gameData[0].length - 1;
   const yMax = gameData.length - 1;
@@ -43,7 +43,7 @@ export function fixLevel(gameData, gameInfo) {
           break;
         case 3:
           foundSmallGreen = true;
-          nSmallBlueBalls++;
+          nSmallGreenBalls++;
           break;
         case 2:
           if (foundBlue) {
@@ -110,9 +110,9 @@ export function fixLevel(gameData, gameInfo) {
       y = gameData.length - 2;
     }
     gameData[y][x] = 3;
-    nSmallBlueBalls = 1;
+    nSmallGreenBalls = 1;
   }
-  gameInfo.greenBalls = nSmallBlueBalls;
+  gameInfo.greenBalls = nSmallGreenBalls;
 
   if (result !== "") {
     result = "The folowing problems were fixed. Please review the level.\n" + result;
