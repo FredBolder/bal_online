@@ -317,6 +317,7 @@ function drawLevel(
   }
 
   function drawConveyorBelt(x, y, part) {
+    let angle = 0;
     let color = getFgcolor(x, y, "#464646");
     let d1 = w2 * 0.35;
     let d2 = w2 * 0.1;
@@ -343,15 +344,17 @@ function drawLevel(
           switch (gameInfo.conveyorBelts[idx].direction) {
             case "left":
               txt = "L";
+              angle = gameVars.conveyorBeltAngleLeft;
               break;
             case "right":
               txt = "R";
+              angle = gameVars.conveyorBeltAngleRight;
               break;
             default:
               break;
           }
           if (txt !== "") {
-            drawText(ctx, xc, yCenter, txt, "middle", "white", w2 * 0.4, w1 * 0.5, "white", 1);
+            drawText(ctx, xc, yCenter, txt, "middle", "white", w2 * 0.4, w1 * 0.5, "white", 1, angle);
           }
         }
         break;

@@ -14,7 +14,7 @@ export async function exportLevel(backData, gameData, gameInfo, gameVars) {
         // For Firefox
         return await fallbackFilePickerExport(backData, gameData, gameInfo, gameVars);
     } catch (err) {
-        alert(err.message);
+        console.log(err.message);
         return null;
     }
 }
@@ -243,7 +243,7 @@ export async function importLevel() {
         // For Firefox
         return await fallbackFilePickerImport();
     } catch (err) {
-        alert(err.message);
+        console.log(err.message);
         return null;
     }
 }

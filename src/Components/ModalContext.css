@@ -1,0 +1,12 @@
+.modal-input {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.modal-button {
+    min-width: 5rem;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+}

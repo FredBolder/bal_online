@@ -314,6 +314,8 @@ export function initGameInfo(info) {
 export function initGameVars(vars) {
     vars.ballPushersActive = false;
     vars.bgcolor = [];
+    vars.conveyorBeltAngleLeft = Math.PI * 2;
+    vars.conveyorBeltAngleRight = 0;
     vars.conveyorBeltCounter = 0;
     vars.conveyorBeltCountTo = 5;
     vars.currentLevel = 200;

@@ -1,18 +1,3 @@
-/* Reset */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-* {
-  margin: 0;
-}
-
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-/* End Reset */
-
 .modal {
   position: fixed;
   top: 0;
@@ -24,19 +9,22 @@ img, picture, video, canvas, svg {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
 .modal-content {
   background-color: black;
+  z-index: 10000;
 }
 
 .message-box {
+  max-width: 800px;
   background-color: darkgreen;
   border: 1px solid #ccc;
   padding: 0;
 }
 
-.message-box-header {
+.modal-header {
   background-color: rgb(84, 176, 84);
   color: white;
   display: flex;
@@ -64,7 +52,7 @@ img, picture, video, canvas, svg {
   cursor: pointer;
 }
 
-.message-box-main {
+.modal-body {
   background-color: darkgreen;
   color: whitesmoke;
   padding-top: 1rem;

@@ -1,9 +1,7 @@
-import { useRef, useEffect, useState } from "react";
+import { useContext, useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// https://www.npmjs.com/package/react-confirm-alert
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
-import MessageBox from './MessageBox';
+import { useModal } from "./useModal.js";
+import { ModalContext } from "./ModalContext";
 
 import {
   fixLevel,
@@ -119,6 +117,9 @@ let gameVarsMenu = {};
 initGameVars(gameVarsMenu);
 
 function BalPage() {
+  const { showMessage, showConfirm, showInput } = useModal();
+  const { modalState } = useContext(ModalContext);
+
   const cbArrowButtons = useRef(null);
   const cbCreateLevel = useRef(null);
   const cbGraphics = useRef(null);
@@ -156,20 +157,24 @@ function BalPage() {
   const tryAgainButton = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
-  const [showModal, setShowModal] = useState(false);
-  const [messageTitle, setMessageTitle] = useState("");
-  const [messageContent, setMessageContent] = useState("");
 
-  // eslint-disable-next-line no-unused-vars
-  const showMessage = (title, message) => {
-    setMessageTitle(title);
-    setMessageContent(message);
-    setShowModal(true);
-  };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  const modalStateRef = useRef(null);
+
+  useEffect(() => {
+    modalStateRef.current = modalState; // update ref whenever modal changes
+  }, [modalState]);
+
+  useEffect(() => {
+    const handleKeyDownEvent = (e) => {
+      if (modalStateRef.current) return; // Ignore when modal is open
+
+      handleKeyDown(e);
+    };
+
+    document.addEventListener("keydown", handleKeyDownEvent);
+    return () => document.removeEventListener("keydown", handleKeyDownEvent);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function loadProgress() {
     let level = -1;
@@ -382,10 +387,24 @@ function BalPage() {
         update = true;
       }
 
+      if ((gameVars.conveyorBeltCounter === gameVars.conveyorBeltCountTo) ||
+        (gameVars.conveyorBeltCounter === Math.round(gameVars.conveyorBeltCountTo * 0.5))) {
+        update = true;
+        gameVars.conveyorBeltAngleLeft -= Math.PI / 4;
+        if (gameVars.conveyorBeltAngleLeft <= 0) {
+          gameVars.conveyorBeltAngleLeft = Math.PI * 2;
+        }
+        gameVars.conveyorBeltAngleRight += Math.PI / 4;
+        if (gameVars.conveyorBeltAngleRight >= Math.PI * 2) {
+          gameVars.conveyorBeltAngleRight = 0;
+        }
+      }
+
       if (gameVars.conveyorBeltCounter >= gameVars.conveyorBeltCountTo) {
         gameVars.conveyorBeltCounter = 0;
         if (moveConveyorBelts(gameData, gameInfo)) {
           update = true;
+
         }
       }
       gameVars.conveyorBeltCounter++;
@@ -603,12 +622,12 @@ function BalPage() {
     }
   }
 
-  function hint(gameVars) {
+  async function hint(gameVars) {
     let msg = "";
     let value = "";
 
     if (createLevel) {
-      value = prompt("Enter the hint for this level.", gameVars.hint);
+      value = await showInput("Hint", "Enter the hint for this level.", gameVars.hint);
       if (value !== null) {
         gameVars.hint = value.trim();
       }
@@ -900,9 +919,11 @@ function BalPage() {
     }
   }
 
-  function clickCode() {
+  async function clickCode() {
+    let code = 0;
     let level = 0;
-    let code = prompt("Enter the code");
+
+    code = await showInput("Code", "Enter the code for the level that you want to play.");
     if (code !== null) {
       code = code.trim();
       if (code.length === 5) {
@@ -924,34 +945,22 @@ function BalPage() {
     }
   }
 
-  function clickNewLevel(silent = false) {
+  async function clickNewLevel(silent = false) {
     let level = 9999;
 
     if (getSettings().lessQuestions || silent) {
       initLevel(level);
       createLevelSelectedCell = null;
     } else {
-      confirmAlert({
-        title: "Question",
-        message: `Start with a new level?`,
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              initLevel(level);
-              createLevelSelectedCell = null;
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
+      const confirm = await showConfirm("Question", "Start with a new level?");
+      if (confirm === "YES") {
+        initLevel(level);
+        createLevelSelectedCell = null;
+      }
     }
   }
 
-  function clickDeleteColumn() {
+  async function clickDeleteColumn() {
     function del() {
       for (let i = 0; i < gameData.length; i++) {
         removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
@@ -975,27 +984,15 @@ function BalPage() {
       if (getSettings().lessQuestions) {
         del();
       } else {
-        confirmAlert({
-          title: "Question",
-          message: `Delete current column?`,
-          buttons: [
-            {
-              label: "Yes",
-              onClick: () => {
-                del();
-              },
-            },
-            {
-              label: "No",
-              onClick: () => { },
-            },
-          ],
-        });
+        const confirm = await showConfirm("Question", "Delete current column?");
+        if (confirm === "YES") {
+          del();
+        }
       }
     }
   }
 
-  function clickDeleteRow() {
+  async function clickDeleteRow() {
     function del() {
       for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
         removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
@@ -1019,27 +1016,15 @@ function BalPage() {
       if (getSettings().lessQuestions) {
         del();
       } else {
-        confirmAlert({
-          title: "Question",
-          message: `Delete current row?`,
-          buttons: [
-            {
-              label: "Yes",
-              onClick: () => {
-                del();
-              },
-            },
-            {
-              label: "No",
-              onClick: () => { },
-            },
-          ],
-        });
+        const confirm = await showConfirm("Question", "Delete current row?");
+        if (confirm === "YES") {
+          del();
+        }
       }
     }
   }
 
-  function clickInsertColumn() {
+  async function clickInsertColumn() {
     function ins() {
       let value = 0;
       let n = gameData.length;
@@ -1064,27 +1049,15 @@ function BalPage() {
       if (getSettings().lessQuestions) {
         ins();
       } else {
-        confirmAlert({
-          title: "Question",
-          message: `Insert column before the current column?`,
-          buttons: [
-            {
-              label: "Yes",
-              onClick: () => {
-                ins();
-              },
-            },
-            {
-              label: "No",
-              onClick: () => { },
-            },
-          ],
-        });
+        const confirm = await showConfirm("Question", "Insert column before the current column?");
+        if (confirm === "YES") {
+          ins();
+        }
       }
     }
   }
 
-  function clickInsertRow() {
+  async function clickInsertRow() {
     function ins() {
       let n = gameData[0].length;
       let newRow = [];
@@ -1111,27 +1084,15 @@ function BalPage() {
       if (getSettings().lessQuestions) {
         ins();
       } else {
-        confirmAlert({
-          title: "Question",
-          message: `Insert row before the current row?`,
-          buttons: [
-            {
-              label: "Yes",
-              onClick: () => {
-                ins();
-              },
-            },
-            {
-              label: "No",
-              onClick: () => { },
-            },
-          ],
-        });
+        const confirm = await showConfirm("Question", "Insert row before the current row?");
+        if (confirm === "YES") {
+          ins();
+        }
       }
     }
   }
 
-  function clickSeries(s) {
+  async function clickSeries(s) {
     let level = 200;
 
     switch (s) {
@@ -1160,45 +1121,21 @@ function BalPage() {
     if (getSettings().lessQuestions) {
       initLevel(level);
     } else {
-      confirmAlert({
-        title: "Question",
-        message: `Load the first level of series ${s}?`,
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              initLevel(level);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
+      const confirm = await showConfirm("Question", `Load the first level of series ${s}?`);
+      if (confirm === "YES") {
+        initLevel(level);
+      }
     }
   }
 
-  function clickSaveToMemory() {
+  async function clickSaveToMemory() {
     if (getSettings().lessQuestions) {
       saveToMemory(gameData, backData, gameInfo, gameVars, 0);
     } else {
-      confirmAlert({
-        title: "Question",
-        message: "Save level to memory?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              saveToMemory(gameData, backData, gameInfo, gameVars, 0);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
+      const confirm = await showConfirm("Question", "Save level to memory?");
+      if (confirm === "YES") {
+        saveToMemory(gameData, backData, gameInfo, gameVars, 0);
+      }
     }
   }
 
@@ -1234,22 +1171,10 @@ function BalPage() {
     if (getSettings().lessQuestions || (idx > 0)) {
       await load();
     } else {
-      confirmAlert({
-        title: "Question",
-        message: "Load level from memory?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: async () => {
-              await load();
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
+      const confirm = await showConfirm("Question", "Load level from memory?");
+      if (confirm === "YES") {
+        load();
+      }
     }
   }
 
@@ -1289,23 +1214,11 @@ function BalPage() {
     }
   }
 
-  function randomLevel() {
-    confirmAlert({
-      title: "Question",
-      message: "Load a random level?",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => {
-            initLevel(getRandomLevel(gameVars.currentLevel));
-          },
-        },
-        {
-          label: "No",
-          onClick: () => { },
-        },
-      ],
-    });
+  async function randomLevel() {
+    const confirm = await showConfirm("Question", "Load a random level?");
+    if (confirm === "YES") {
+      initLevel(getRandomLevel(gameVars.currentLevel));
+    }
   }
 
   function showWhatBlueBallHas() {
@@ -1503,15 +1416,21 @@ function BalPage() {
     let rotate = false;
 
     // Ignore 
+
+    console.log(modalState);
+    if (modalState !== null) {
+      return;
+    }
+
     if (["Alt", "Ctrl", "Shift"].includes(e.key)) {
       return;
     }
 
     if (loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
-      return false;
+      return;
     }
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
-      return false;
+      return;
     }
     if (e.preventDefault) {
       if (
@@ -1527,7 +1446,7 @@ function BalPage() {
 
     if (createLevel) {
 
-      return false;
+      return;
     }
 
     switch (e.key) {
@@ -1674,17 +1593,7 @@ function BalPage() {
           showMessage("Congratulations!", "You have solved the level!");
           initLevel(gameVars.currentLevel);
         } else {
-          confirmAlert({
-            title: "Congratulations!",
-            message: `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`,
-            buttons: [
-              {
-                label: "OK",
-                onClick: () => {
-                },
-              },
-            ],
-          });
+          showMessage("Congratulations!", `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`);
           initLevel(gameVars.currentLevel + 1);
           saveProgress();
         }
@@ -1786,7 +1695,7 @@ function BalPage() {
     updateCreateLevelCanvas();
   }
 
-  function tryAgain() {
+  async function tryAgain() {
     async function again() {
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
         await clickLoadFromMemory(3);
@@ -1798,26 +1707,14 @@ function BalPage() {
     if (getSettings().lessQuestions) {
       again();
     } else {
-      confirmAlert({
-        title: "Question",
-        message: "Initialize level?",
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              again();
-            },
-          },
-          {
-            label: "No",
-            onClick: () => { },
-          },
-        ],
-      });
+      const confirm = await showConfirm("Question", "Initialize level?");
+      if (confirm === "YES") {
+        again();
+      }
     }
   }
 
-  const myRef = useRef(document);
+  //const myRef = useRef(document);
 
 
   useEffect(() => {
@@ -1837,7 +1734,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 705;
+        gameVars.currentLevel = 2014;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1846,12 +1743,12 @@ function BalPage() {
     setLevelNumber(gameVars.currentLevel);
     updateGreen();
 
-    const el = myRef.current;
-    el.addEventListener("keydown", handleKeyDown);
+    //const el = myRef.current;
+    //el.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
     gameInterval = setInterval(gameScheduler, 50);
     return () => {
-      el.removeEventListener("keydown", handleKeyDown);
+      //el.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
       clearInterval(gameInterval);
     };
@@ -2487,13 +2384,6 @@ function BalPage() {
         </main>
       </div>
 
-      {showModal && (
-        <MessageBox
-          title={messageTitle}
-          message={messageContent}
-          onClose={closeModal}
-        />
-      )}
     </div>
   );
 }

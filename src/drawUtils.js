@@ -31,7 +31,7 @@ export function drawLine(canvas, x1, y1, x2, y2, color) {
 }
 
 export function drawText(
-  canvas,
+  ctx,
   x,
   y,
   text,
@@ -40,34 +40,48 @@ export function drawText(
   height,
   maxWidth,
   outline,
-  outlineWidth
+  outlineWidth,
+  angle = 0 // radians
 ) {
-  canvas.font = `${height}px sans-serif`;
-  canvas.fillStyle = color;
+  ctx.save();
+
+  ctx.font = `${height}px sans-serif`;
+  ctx.fillStyle = color;
+
+  // set alignment/baseline
   switch (align) {
     case "middle":
-      canvas.textAlign = "center";
-      canvas.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
       break;
     case "left":
-      canvas.textAlign = "left";
-      canvas.textBaseline = "alphabetic";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
       break;
     case "right":
-      canvas.textAlign = "right";
-      canvas.textBaseline = "alphabetic";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "alphabetic";
       break;
     case "center":
-      canvas.textAlign = "center";
-      canvas.textBaseline = "alphabetic";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
       break;
     default:
       break;
   }
 
-  canvas.fillText(text, Math.round(x), Math.round(y), Math.round(maxWidth));
-  canvas.strokeStyle = outline;
-  canvas.lineWidth = outlineWidth;
-  canvas.strokeText(text, Math.round(x), Math.round(y), Math.round(maxWidth));
-  canvas.lineWidth = 1;
+  // move the origin to (x,y) then rotate; draw at 0,0
+  ctx.translate(Math.round(x), Math.round(y));
+  if (angle !== 0) ctx.rotate(angle);
+
+  ctx.fillText(text, 0, 0, Math.round(maxWidth));
+
+  if (outline) {
+    ctx.strokeStyle = outline;
+    ctx.lineWidth = outlineWidth || 1;
+    ctx.strokeText(text, 0, 0, Math.round(maxWidth));
+    ctx.lineWidth = 1;
+  }
+
+  ctx.restore();
 }
