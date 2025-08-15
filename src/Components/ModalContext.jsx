@@ -1,5 +1,5 @@
 import './ModalContext.css';
-import { createContext, useState, useRef } from "react";
+import React, { createContext, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import GenericModal from "./GenericModal";
 
@@ -30,25 +30,29 @@ export const ModalProvider = ({ children }) => {
   const showMessage = (title, message) => {
     return showModal(title, ({ close }) => (
       <div tabIndex={0} autoFocus onKeyDown={(e) => e.key === "Enter" && close(true)}>
-        <p>{message}</p>
-        <button className="modal-button" onClick={() => close(true)}>OK</button>
+        <p>
+          {message.split('\n').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
+        </p>
+        <div className="modal-button-container">
+          <button className="modal-button" onClick={() => close(true)}>OK</button>
+        </div>
       </div>
     ));
   };
 
   const showConfirm = (title, message) => {
     return showModal(title, ({ close }) => (
-      <div
-        tabIndex={0}
-        autoFocus
-        onKeyDown={(e) => {
-          if (e.key.toLowerCase() === "y" || e.key === "Enter") close("YES");
-          if (e.key.toLowerCase() === "n") close("NO");
-        }}
-      >
+      <div>
         <p>{message}</p>
-        <button className="modal-button" onClick={() => close("YES")}>Yes</button>
-        <button className="modal-button" onClick={() => close("NO")}>No</button>
+        <div className="modal-button-container">
+          <button className="modal-button" onClick={() => close("YES")}>Yes</button>
+          <button className="modal-button" onClick={() => close("NO")}>No</button>
+        </div>
       </div>
     ));
   };
@@ -72,8 +76,10 @@ export const ModalProvider = ({ children }) => {
             }
           }}
         />
-        <button className="modal-button" onClick={() => close(inputValue)}>OK</button>
-        <button className="modal-button" onClick={() => close(null)}>Cancel</button>
+        <div className="modal-button-container">
+          <button className="modal-button" onClick={() => close(inputValue)}>OK</button>
+          <button className="modal-button" onClick={() => close(null)}>Cancel</button>
+        </div>
       </div>
     ));
   };

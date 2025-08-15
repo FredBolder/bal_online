@@ -4,7 +4,6 @@ import { useModal } from "./useModal.js";
 import { ModalContext } from "./ModalContext";
 
 import {
-  fixLevel,
   changeGroup,
   changeDirection,
   changeIntelligence,
@@ -41,7 +40,7 @@ import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../
 import { exportLevel, importLevel } from "../files.js";
 import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
-import { getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
+import { fixLevel, getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
@@ -1291,6 +1290,7 @@ function BalPage() {
       fillMenu(1);
     } else {
       msg = fixLevel(gameData, gameInfo);
+      updateGreen();
       if (msg !== "") {
         showMessage("Error", msg);
       }

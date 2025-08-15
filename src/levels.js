@@ -16,6 +16,110 @@ const seriesSecretEnd = 2014;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
 
+export function fixLevel(gameData, gameInfo) {
+  const empty = [];
+  let result = "";
+  let errorGameRotatorInNonSquareLevel = false;
+  let errorMoreThanOneBlueBall = false;
+  let errorMoreThanOneSmallBlueBall = false;
+  let foundBlue = false;
+  let foundSmallblue = false;
+  let foundSmallGreen = false;
+  let nSmallBlueBalls = 0;
+  let used = 0;
+  const xMax = gameData[0].length - 1;
+  const yMax = gameData.length - 1;
+  let x = -1;
+  let y = -1;
+
+  for (let i = gameData.length - 1; i >= 0; i--) {
+    for (let j = 0; j <= xMax; j++) {
+      const el = gameData[i][j];
+      switch (el) {
+        case 0:
+          if ((empty.length < 5) && (j > 0) && (i > 0) && (j < xMax) && (i < (gameData.length - 1))) {
+            empty.push({ x: j, y: i });
+          }
+          break;
+        case 3:
+          foundSmallGreen = true;
+          nSmallBlueBalls++;
+          break;
+        case 2:
+          if (foundBlue) {
+            errorMoreThanOneBlueBall = true;
+            gameData[i][j] = 0;
+          } else {
+            gameInfo.blueBall.x = j;
+            gameInfo.blueBall.y = i;
+          }
+          foundBlue = true;
+          break;
+        case 89:
+          if (xMax !== yMax) {
+            errorGameRotatorInNonSquareLevel = true;
+            gameData[i][j] = 0;
+          }
+          break;
+        case 168:
+          if (foundSmallblue) {
+            errorMoreThanOneSmallBlueBall = true;
+            gameData[i][j] = 0;
+          }
+          foundSmallblue = true;
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  if (errorGameRotatorInNonSquareLevel) {
+    result += "There was a game rotator in a non square level.\n";
+  }
+  if (errorMoreThanOneBlueBall) {
+    result += "There was more than one blue ball.\n";
+  }
+  if (errorMoreThanOneSmallBlueBall) {
+    result += "There was more than one small blue ball.\n";
+  }
+  
+  if (!foundBlue) {
+    result += "There was no blue ball.\n";
+    if (used < empty.length) {
+      x = empty[used].x;
+      y = empty[used].y;
+      used++;
+    } else {
+      x = 1;
+      y = gameData.length - 2;
+    }
+    gameData[y][x] = 2;
+    gameInfo.blueBall.x = x;
+    gameInfo.blueBall.y = y;
+  }
+
+  if (!foundSmallGreen) {
+    result += "There was no small green ball.\n";
+    if (used < empty.length) {
+      x = empty[used].x;
+      y = empty[used].y;
+      used++;
+    } else {
+      x = 2;
+      y = gameData.length - 2;
+    }
+    gameData[y][x] = 3;
+    nSmallBlueBalls = 1;
+  }
+  gameInfo.greenBalls = nSmallBlueBalls;
+
+  if (result !== "") {
+    result = "The folowing problems were fixed. Please review the level.\n" + result;
+  }
+  return result;
+}
+
 export function getAllLevels() {
   let levels = [];
 
