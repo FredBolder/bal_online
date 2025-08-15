@@ -12,7 +12,7 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 904;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2014;
+const seriesSecretEnd = 2015;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
 

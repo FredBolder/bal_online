@@ -1541,12 +1541,12 @@ export function moveObjects(gameInfo, gameVars, mode, value1) {
           }
           break;
         case "insertColumn":
-          if (p.x > value1) {
+          if (p.x >= value1) {
             p.x = p.x + 1;
           }
           break;
         case "insertRow":
-          if (p.y > value1) {
+          if (p.y >= value1) {
             p.y = p.y + 1;
           }
           break;

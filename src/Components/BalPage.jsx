@@ -93,11 +93,12 @@ let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelObject = -1;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
 let loading = true;
+let modalOpen = false;
 let otherWorldGreen = -1;
 let thisWorldGreen = -1;
 
@@ -145,6 +146,7 @@ function BalPage() {
   const gameCanvas = useRef(null);
   const insertColumn = useRef(null);
   const insertRow = useRef(null);
+  const levelSetting = useRef(null);
   const loadRandom = useRef(null);
   const newLevel = useRef(null);
   const series1 = useRef(null);
@@ -162,6 +164,7 @@ function BalPage() {
 
   useEffect(() => {
     modalStateRef.current = modalState; // update ref whenever modal changes
+    modalOpen = (modalStateRef.current !== null);
   }, [modalState]);
 
   useEffect(() => {
@@ -288,7 +291,7 @@ function BalPage() {
       saveWeakStone = gameInfo.hasWeakStone;
     }
 
-    if (createLevel || loading || !gameData || !backData || !gameVars || !gameInfo) {
+    if (modalOpen || createLevel || loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
     if (gameVars.gameOver || (gameData.length < 2) || (backData.length < 2) ||
@@ -639,7 +642,7 @@ function BalPage() {
     }
   }
 
-  function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings) {
+  function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings, initColors = true) {
     let color = "";
     let element = 0;
     let gameTicks = 0;
@@ -656,10 +659,12 @@ function BalPage() {
     let x = -1;
     let y = -1;
 
-    gameVars.bgcolor = null;
-    gameVars.bgcolor = [];
-    gameVars.fgcolor = null;
-    gameVars.fgcolor = [];
+    if (initColors) {
+      gameVars.bgcolor = null;
+      gameVars.bgcolor = [];
+      gameVars.fgcolor = null;
+      gameVars.fgcolor = [];
+    }
     for (let i = 0; i < levelSettings.length; i++) {
       const setting = levelSettings[i];
       p1 = setting.indexOf(":");
@@ -1036,7 +1041,7 @@ function BalPage() {
         gameData[i].splice(createLevelSelectedCell.x, 0, value);
         backData[i].splice(createLevelSelectedCell.x, 0, 0);
       }
-      moveObjects(gameInfo, gameVars, "insertColumn", createLevelSelectedCell.y);
+      moveObjects(gameInfo, gameVars, "insertColumn", createLevelSelectedCell.x);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -1088,6 +1093,16 @@ function BalPage() {
           ins();
         }
       }
+    }
+  }
+
+  async function clickLevelSetting() {
+    let setting = null;
+
+    setting = await showInput("Level setting", "Enter a setting (example: $gameticks: conveyorbelt, 10).");
+    if (setting !== null) {
+      loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
+      updateGameCanvas();
     }
   }
 
@@ -1320,7 +1335,7 @@ function BalPage() {
     }
     backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
 
-    arr0 = [0, 1, 4, 9, 159, 6, 10, 20, 91, 2033, 2050, 2051, 0, 0, 0, 0];
+    arr0 = [2083, 2038, 1, 4, 9, 159, 6, 10, 20, 91, 2033, 2050, 2051, 0, 0, 0];
     for (let i = 0; i < arr0.length; i++) {
       if (i < gameDataMenu[0].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
@@ -1332,43 +1347,47 @@ function BalPage() {
         arr2 = [0];
         break;
       case 2:
+        arr1 = [0];
+        arr2 = [0];
+        break;
+      case 3:
         arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
         arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 22, 36, 37, 117];
         break;
-      case 3:
+      case 4:
         arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047, 105];
         arr2 = [95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
         break;
-      case 4:
+      case 5:
         arr1 = [9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124];
         arr2 = [125];
         break;
-      case 5:
+      case 6:
         arr1 = [158, 159, 161, 163, 165, 2034, 2035, 2036, 2037, 2038, 2039];
         arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
         break;
-      case 6:
+      case 7:
         arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
         arr2 = [171, 172, 173, 31, 92, 170, 2040, 2041, 2042, 2043, 2044];
         break;
-      case 7:
+      case 8:
         arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
         arr2 = [0];
         break;
-      case 8:
+      case 9:
         arr1 = [23, 20, 113, 114, 26, 27];
         arr2 = [0];
         break;
-      case 9:
+      case 10:
         arr1 = [91, 119, 120, 97, 157, 167, 89];
         arr2 = [0];
         break;
-      case 10:
+      case 11:
         arr1 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
         arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
         break;
-      case 11:
       case 12:
+      case 13:
         arr1 = [2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067];
         arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083];
         break;
@@ -1414,6 +1433,10 @@ function BalPage() {
     info.update = false;
     let codes = "";
     let rotate = false;
+
+    if (modalOpen) {
+      return;
+    }
 
     // Ignore 
     if (["Alt", "Ctrl", "Shift"].includes(e.key)) {
@@ -1728,7 +1751,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2014;
+        gameVars.currentLevel = 2015;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1757,6 +1780,7 @@ function BalPage() {
   }
 
   function updateMenuItemsDisplay() {
+    levelSetting.current.style.display = (createLevel) ? "block" : "none";
     newLevel.current.style.display = (createLevel) ? "block" : "none";
     insertColumn.current.style.display = (createLevel) ? "block" : "none";
     insertRow.current.style.display = (createLevel) ? "block" : "none";
@@ -1913,12 +1937,12 @@ function BalPage() {
   }
 
   function handleGameCanvasClick(e) {
-    const menuBalls = 3;
-    const menuPistons = 5;
-    const menuElevators = 6;
-    const menuGroups = 10;
-    const menuForegroundColors = 11;
-    const menuBackgroundColors = 12;
+    const menuBalls = 4;
+    const menuPistons = 6;
+    const menuElevators = 7;
+    const menuGroups = 11;
+    const menuForegroundColors = 12;
+    const menuBackgroundColors = 13;
     let idx = -1;
     let info = "";
     let obj = null;
@@ -2014,20 +2038,27 @@ function BalPage() {
           } else if (createLevelObject > 0) {
             deleteIfPurpleTeleport(backData, gameInfo, column, row);
             addObject(backData, gameData, gameInfo, column, row, createLevelObject);
+          }
+          updateGameCanvas();
+          updateGreen();
+        }
+
+        // DELETE
+        if (!e.altKey && !e.shiftKey && !e.ctrlKey && (createLevelObject === -3)) {
+          if (gameData[row][column] > 0) {
+            removeObject(gameData, gameInfo, column, row);
           } else {
-            if (gameData[row][column] > 0) {
-              removeObject(gameData, gameInfo, column, row);
-            } else {
-              deleteIfPurpleTeleport(backData, gameInfo, column, row);
-              if ([20, 23, 25, 90].includes(backData[row][column])) {
-                backData[row][column] = 0;
-              }
+            deleteIfPurpleTeleport(backData, gameInfo, column, row);
+            if ([20, 23, 25, 90].includes(backData[row][column])) {
+              backData[row][column] = 0;
             }
           }
           updateGameCanvas();
           updateGreen();
         }
-        if (!e.altKey && e.shiftKey && !e.ctrlKey) {
+
+        // SELECT
+        if (!e.altKey && !e.ctrlKey && (e.shiftKey || (!e.shiftKey && (createLevelObject === -2)))) {
           createLevelSelectedCell = { x: column, y: row };
           updateGameCanvas();
         }
@@ -2065,6 +2096,13 @@ function BalPage() {
               if (idx >= 0) {
                 obj = gameInfo.delays[idx];
                 info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
+              }
+              break;
+            case 171:
+              idx = findElementByCoordinate(column, row, gameInfo.conveyorBelts);
+              if (idx >= 0) {
+                obj = gameInfo.conveyorBelts[idx];
+                info = `Object: Conveyor belt, Direction: ${obj.direction}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
               }
               break;
             default:
@@ -2134,8 +2172,24 @@ function BalPage() {
           updateCreateLevelCanvas();
         }
         createLevelObject = gameDataMenu[row][column];
-        if (createLevelObject === 0) {
-          createLevelObject = backDataMenu[row][column];
+        switch (createLevelObject) {
+          case 0:
+            createLevelObject = backDataMenu[row][column];
+            break;
+          case 2038:
+            if (row === 0) {
+              // Select
+              createLevelObject = -2;
+            }
+            break;
+          case 2083:
+            if (row === 0) {
+              // Delete
+              createLevelObject = -3;
+            }
+            break;
+          default:
+            break;
         }
       }
     }
@@ -2170,13 +2224,16 @@ function BalPage() {
                 <div ref={insertRow} onClick={() => { clickInsertRow() }}>
                   <label>Insert row</label>
                 </div>
-
                 <div ref={deleteColumn} onClick={() => { clickDeleteColumn() }}>
                   <label>Delete column</label>
                 </div>
                 <div ref={deleteRow} onClick={() => { clickDeleteRow() }}>
                   <label>Delete row</label>
                 </div>
+                <div ref={levelSetting} onClick={() => { clickLevelSetting() }}>
+                  <label>Level setting</label>
+                </div>
+
                 <div ref={series1} onClick={() => { clickSeries("1") }}>
                   <label>Series 1</label>
                 </div>

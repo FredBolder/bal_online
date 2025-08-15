@@ -269,7 +269,10 @@ export function removeObject(gameData, gameInfo, x, y) {
     let obj = 0;
     let idx = -1;
 
-    if (!gameData || !gameInfo || (x < 0) || (x >= gameData[0].length) || (y < 0) || (y >= gameData.length)) {
+    if (!gameData || !gameInfo) {
+        return;
+    }
+    if ((x < 0) || (x >= gameData[0].length) || (y < 0) || (y >= gameData.length)) {
         return;
     }
     obj = gameData[y][x];

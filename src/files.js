@@ -108,6 +108,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$direction: ${conveyorBelt.x}, ${conveyorBelt.y}, ${conveyorBelt.direction}`;
             lines.push(line);
         }
+        if (conveyorBelt.group > 1) {
+            line = `$group: ${conveyorBelt.x}, ${conveyorBelt.y}, ${conveyorBelt.group}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.delays.length; i++) {
