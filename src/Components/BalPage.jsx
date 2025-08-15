@@ -1416,12 +1416,6 @@ function BalPage() {
     let rotate = false;
 
     // Ignore 
-
-    console.log(modalState);
-    if (modalState !== null) {
-      return;
-    }
-
     if (["Alt", "Ctrl", "Shift"].includes(e.key)) {
       return;
     }
