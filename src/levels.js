@@ -1,4 +1,5 @@
 import { charToNumber } from "./balUtils.js";
+import { conveyorBeltModes } from "./conveyorBelts.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 const series1Start = 200;
@@ -12,7 +13,7 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 904;
 const seriesSecretStart = 2000;
-const seriesSecretEnd = 2015;
+const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
 
@@ -169,6 +170,7 @@ export function checkLevel(data, settings) {
     { name: "$addnotes", params: 0, xy: true },
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
+    { name: "$conveyorbeltmode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
     { name: "$fgcolor", params: 5, xy: true },
     { name: "$gameticks", params: 2, xy: false },
@@ -324,6 +326,15 @@ export function checkLevel(data, settings) {
                 msg += `${settingNr(i)}The area exceeds the game raster.\n`;
               }
               break;
+            case "$conveyorbeltmode":
+              if (!conveyorBeltModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid conveyor mode ${values[2]}.\n`;
+              }
+              if (validXY && (data[y][x] !== "{")) {
+                console.log(data[y][x]);
+                msg += `${settingNr(i)}No conveyor found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
             case "$direction":
               if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
@@ -427,6 +438,13 @@ export function checkLevel(data, settings) {
           case "$backgroundcolour":
           case "$bgcolour":
             msgExtra = "$bgcolor";
+            break;
+          case "$conveyerbeltmode":
+          case "$conveyorbandmode":
+          case "$conveyormode":
+          case "$conveyerbandmode":
+          case "$conveyermode":
+            msgExtra = "$conveyorbeltmode";
             break;
           case "$delay":
           case "$ticks":
@@ -539,7 +557,7 @@ async function loadFromFile(n, gateTravelling = false) {
       "11111111111111111111111111111111111111111"
     ];
   }
-  return { levelSettings, levelData };
+  return { levelSettings, levelData, error: msg };
 }
 
 export async function getLevel(n, gateTravelling = false) {

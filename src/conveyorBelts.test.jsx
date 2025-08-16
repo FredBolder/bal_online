@@ -13,7 +13,7 @@ describe("moveConveyorBelts", () => {
     let gameInfo01a = {
         ...defaultGameInfo,
         blueBall: { x: 2, y: 4 },
-        conveyorBelts: [{ x: 2, y: 5, direction: "right", group: 1 }],
+        conveyorBelts: [{ x: 2, y: 5, mode: "notrigger", direction: "right", group: 1 }],
     };
     let input01a = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -47,7 +47,7 @@ describe("moveConveyorBelts", () => {
     let gameInfo01b = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 3 },
-        conveyorBelts: [{ x: 2, y: 5, direction: "left", group: 1 }],
+        conveyorBelts: [{ x: 2, y: 5, mode: "notrigger", direction: "left", group: 1 }],
     };
     let input01b = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -81,7 +81,7 @@ describe("moveConveyorBelts", () => {
     let gameInfo01c = {
         ...defaultGameInfo,
         blueBall: { x: 2, y: 4 },
-        conveyorBelts: [{ x: 2, y: 5, direction: "right", group: 1 }],
+        conveyorBelts: [{ x: 2, y: 5, mode: "notrigger", direction: "right", group: 1 }],
     };
     let input01c = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -115,7 +115,7 @@ describe("moveConveyorBelts", () => {
     let gameInfo01d = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 4 },
-        conveyorBelts: [{ x: 2, y: 5, direction: "right", group: 1 }],
+        conveyorBelts: [{ x: 2, y: 5, mode: "notrigger", direction: "right", group: 1 }],
     };
     let input01d = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -142,7 +142,7 @@ describe("moveConveyorBelts", () => {
     let gameInfo01e = {
         ...defaultGameInfo,
         blueBall: { x: 2, y: 4 },
-        conveyorBelts: [{ x: 3, y: 2, direction: "none", group: 1 }, { x: 2, y: 5, direction: "right", group: 1 }],
+        conveyorBelts: [{ x: 3, y: 2, mode: "notrigger", direction: "none", group: 1 }, { x: 2, y: 5, direction: "right", group: 1 }],
         redBalls: [redBall01e],
     };
     let input01e = [

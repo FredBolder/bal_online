@@ -2256,6 +2256,38 @@ function drawLevel(
         case 2083:
           drawAbbreviation("X");
           break;
+        case 2084:
+          // Conveyor mode notrigger
+          drawAbbreviation("NT");
+          break;
+        case 2085:
+          // Conveyor mode rightleft
+          drawAbbreviation("RL");
+          break;
+        case 2086:
+          // Conveyor mode noneright
+          drawAbbreviation("NR");
+          break;
+        case 2087:
+          // Conveyor mode noneleft
+          drawAbbreviation("NL");
+          break;
+        case 2088:
+          // Conveyor mode nonerightleft
+          drawAbbreviation("NRL");
+          break;
+        case 2089:
+          // Conveyor mode none
+          drawAbbreviation("NO");
+          break;
+        case 2090:
+          // Conveyor mode right
+          drawAbbreviation("RI");
+          break;
+        case 2091:
+          // Conveyor mode left
+          drawAbbreviation("LE");
+          break;
         default:
           if (gd < 2000) {
             drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

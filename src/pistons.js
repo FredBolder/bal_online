@@ -1,8 +1,9 @@
 import { hasWeight, moveObject } from "./balUtils.js";
+import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
-    return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169].includes(element);
+    return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173].includes(element);
 }
 
 export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pushingDown) {
@@ -30,6 +31,12 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             if (weight) {
                 pistonsTrigger.pressed = true;
                 gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] = !gameVars.pistonGroupsActivated[pistonsTrigger.group - 1];
+                for (let j = 0; j < gameInfo.conveyorBelts.length; j++) {
+                    const conveyorBelt = gameInfo.conveyorBelts[j];
+                    if (conveyorBelt.group === pistonsTrigger.group) {
+                        nextConveyorBeltDirection(conveyorBelt);
+                    }
+                }
             }
         }
         for (let j = 0; j < gameInfo.pistons.length; j++) {

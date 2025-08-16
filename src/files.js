@@ -112,6 +112,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${conveyorBelt.x}, ${conveyorBelt.y}, ${conveyorBelt.group}`;
             lines.push(line);
         }
+        if (conveyorBelt.mode !== "notrigger") {
+            line = `$conveyorbeltmode: ${conveyorBelt.x}, ${conveyorBelt.y}, ${conveyorBelt.mode}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.delays.length; i++) {
@@ -314,7 +318,11 @@ function parseLevelText(text) {
     }
 
     const msg = checkLevel(levelData, levelSettings);
-    if (msg) throw new Error(msg);
+    if (msg !== "") {
+        return {
+            error: msg
+        };
+    }
 
     const gd = stringArrayToNumberArray(levelData, true);
     return {

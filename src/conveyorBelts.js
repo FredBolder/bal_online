@@ -1,4 +1,22 @@
-import { moveObject } from "./balUtils.js";
+import { findElementByCoordinate, moveObject } from "./balUtils.js";
+
+export function changeConveyorBeltMode(gameInfo, x, y, mode) {
+  let idx = -1;
+
+  if (conveyorBeltModes().includes(mode)) {
+    if (idx === -1) {
+      idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+      if (idx >= 0) {
+        gameInfo.conveyorBelts[idx].mode = mode;
+      }
+    }
+  }
+  return idx;
+}
+
+export function conveyorBeltModes() {
+    return ["notrigger", "nonerightleft", "rightleft", "noneright", "noneleft", "none", "right", "left"];
+}
 
 export function moveConveyorBelts(gameData, gameInfo) {
     let updated = false;
@@ -67,3 +85,80 @@ export function moveConveyorBelts(gameData, gameInfo) {
     }
     return updated;
 }
+
+export function nextConveyorBeltDirection(conveyorBelt) {
+    switch (conveyorBelt.mode) {
+        case "nonerightleft":
+            switch (conveyorBelt.direction) {
+                case "none":
+                    conveyorBelt.direction = "right";
+                    break;
+                case "right":
+                    conveyorBelt.direction = "left";
+                    break;
+                case "left":
+                    conveyorBelt.direction = "none";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case "rightleft":
+            switch (conveyorBelt.direction) {
+                case "none":
+                    conveyorBelt.direction = "right";
+                    break;
+                case "right":
+                    conveyorBelt.direction = "left";
+                    break;
+                case "left":
+                    conveyorBelt.direction = "right";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case "noneright":
+            switch (conveyorBelt.direction) {
+                case "none":
+                    conveyorBelt.direction = "right";
+                    break;
+                case "right":
+                    conveyorBelt.direction = "none";
+                    break;
+                case "left":
+                    conveyorBelt.direction = "none";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case "noneleft":
+            switch (conveyorBelt.direction) {
+                case "none":
+                    conveyorBelt.direction = "left";
+                    break;
+                case "right":
+                    conveyorBelt.direction = "none";
+                    break;
+                case "left":
+                    conveyorBelt.direction = "none";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case "none":
+            conveyorBelt.direction = "none";
+            break;
+        case "right":
+            conveyorBelt.direction = "right";
+            break;
+        case "left":
+            conveyorBelt.direction = "left";
+            break;
+        default:
+            break;
+    }
+}
+

@@ -220,7 +220,6 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             }
             let piston = { x, y, activated: false, sticky: false, inverted: false, direction: direction, mode: "toggle", group: 1 };
             gameInfo.pistons.push(piston);
-            gameInfo.hasPiston = true;
             break;
         }
         case 167: {
@@ -239,7 +238,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 171: {
-            let conveyorBelt = { x, y, direction: "right", group: 1 };
+            let conveyorBelt = { x, y, mode: "notrigger", direction: "right", group: 1 };
             gameInfo.conveyorBelts.push(conveyorBelt);
             break;
         }

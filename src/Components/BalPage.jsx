@@ -27,8 +27,8 @@ import {
 } from "../balUtils.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
-import { moveConveyorBelts } from "../conveyorBelts.js";
 import { changeColor, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow } from "../colorUtils.js";
+import { changeConveyorBeltMode, conveyorBeltModes, moveConveyorBelts } from "../conveyorBelts.js";
 import { checkCopiers } from "../copiers.js";
 import { checkDamagedStones } from "../damagedStones.js";
 import { checkDelays } from "../delays.js";
@@ -93,7 +93,7 @@ let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelObject = -1;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -484,7 +484,7 @@ function BalPage() {
       }
     }
 
-    if (gameInfo.hasPiston) {
+    if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0)) {
       info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, false);
       if (info.updated) {
         update = true;
@@ -722,6 +722,13 @@ function BalPage() {
               }
             }
             break;
+          case "$conveyorbeltmode":
+            if (values.length === 3) {
+              if (validXY && (conveyorBeltModes().includes(valuesLowerCase[2]))) {
+                changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
+              }
+            }
+            break;
           case "$direction":
             if (values.length === 3) {
               if (["left", "right", "none"].includes(valuesLowerCase[2])) {
@@ -902,6 +909,9 @@ function BalPage() {
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
       data = await getLevel(gameVars.currentLevel, gateTravelling);
+      if (data.error !== "") {
+        showMessage("Error", data.error);
+      }
       gd = stringArrayToNumberArray(data.levelData);
       backData = null;
       backData = gd.backData;
@@ -974,7 +984,7 @@ function BalPage() {
       }
       deleteColorAtColumn(gameVars.fgcolor, createLevelSelectedCell.x);
       deleteColorAtColumn(gameVars.bgcolor, createLevelSelectedCell.x);
-      moveObjects(gameInfo, gameVars, "deleteColumn", createLevelSelectedCell.x);
+      moveObjects(gameInfo, gameVars, "deleteColumn", createLevelSelectedCell.x, 0, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -1006,7 +1016,7 @@ function BalPage() {
       backData.splice(createLevelSelectedCell.y, 1);
       deleteColorAtRow(gameVars.fgcolor, createLevelSelectedCell.y);
       deleteColorAtRow(gameVars.bgcolor, createLevelSelectedCell.y);
-      moveObjects(gameInfo, gameVars, "deleteRow", createLevelSelectedCell.y);
+      moveObjects(gameInfo, gameVars, "deleteRow", 0, createLevelSelectedCell.y, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -1041,7 +1051,7 @@ function BalPage() {
         gameData[i].splice(createLevelSelectedCell.x, 0, value);
         backData[i].splice(createLevelSelectedCell.x, 0, 0);
       }
-      moveObjects(gameInfo, gameVars, "insertColumn", createLevelSelectedCell.x);
+      moveObjects(gameInfo, gameVars, "insertColumn", createLevelSelectedCell.x, 0, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -1076,7 +1086,7 @@ function BalPage() {
       }
       gameData.splice(createLevelSelectedCell.y, 0, newRow);
       backData.splice(createLevelSelectedCell.y, 0, newRowBackData);
-      moveObjects(gameInfo, gameVars, "insertRow", createLevelSelectedCell.y);
+      moveObjects(gameInfo, gameVars, "insertRow", 0, createLevelSelectedCell.y, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -1201,6 +1211,12 @@ function BalPage() {
 
   async function clickImportLevel() {
     const result = await importLevel();
+
+    if (result.error) {
+      showMessage("Error", result.error);
+      return;
+    }
+
     if (result !== null) {
       clearMemory(1);
       clearMemory(2);
@@ -1335,7 +1351,7 @@ function BalPage() {
     }
     backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
 
-    arr0 = [2083, 2038, 1, 4, 9, 159, 6, 10, 20, 91, 2033, 2050, 2051, 0, 0, 0];
+    arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 0, 0];
     for (let i = 0; i < arr0.length; i++) {
       if (i < gameDataMenu[0].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
@@ -1347,7 +1363,7 @@ function BalPage() {
         arr2 = [0];
         break;
       case 2:
-        arr1 = [0];
+        arr1 = [2040, 2041, 2042, 2043];
         arr2 = [0];
         break;
       case 3:
@@ -1367,27 +1383,31 @@ function BalPage() {
         arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
         break;
       case 7:
-        arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
-        arr2 = [171, 172, 173, 31, 92, 170, 2040, 2041, 2042, 2043, 2044];
+        arr1 = [6, 7, 2040, 2041, 2042, 2043, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111];
+        arr2 = [112, 81, 31, 92, 170];
         break;
       case 8:
+        arr1 = [171, 172, 173, 2040, 2041, 2044, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091];
+        arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+        break;
+      case 9:
         arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
         arr2 = [0];
         break;
-      case 9:
+      case 10:
         arr1 = [23, 20, 113, 114, 26, 27];
         arr2 = [0];
         break;
-      case 10:
+      case 11:
         arr1 = [91, 119, 120, 97, 157, 167, 89];
         arr2 = [0];
         break;
-      case 11:
+      case 12:
         arr1 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
         arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
         break;
-      case 12:
       case 13:
+      case 14:
         arr1 = [2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067];
         arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083];
         break;
@@ -1745,9 +1765,6 @@ function BalPage() {
       cbMusic.current.value = getSettings().music.toString();
       cbGraphics.current.checked = getSettings().nicerGraphics;
       cbSound.current.value = getSettings().sound.toString();
-      updateGameButtonsDisplay();
-      updateCreateLevelCanvasDisplay();
-      updateMenuItemsDisplay();
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
@@ -1756,6 +1773,9 @@ function BalPage() {
       initLevel(gameVars.currentLevel);
     }
 
+    updateGameButtonsDisplay();
+    updateCreateLevelCanvasDisplay();
+    updateMenuItemsDisplay();
     updateGameCanvas();
     setLevelNumber(gameVars.currentLevel);
     updateGreen();
@@ -1940,9 +1960,10 @@ function BalPage() {
     const menuBalls = 4;
     const menuPistons = 6;
     const menuElevators = 7;
-    const menuGroups = 11;
-    const menuForegroundColors = 12;
-    const menuBackgroundColors = 13;
+    const menuConveyorBelts = 8;
+    const menuGroups = 12;
+    const menuForegroundColors = 13;
+    const menuBackgroundColors = 14;
     let idx = -1;
     let info = "";
     let obj = null;
@@ -2008,9 +2029,20 @@ function BalPage() {
               }
             }
 
-            if ((createLevelMenu === menuElevators) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
+            if (((createLevelMenu === menuElevators) || (createLevelMenu === menuConveyorBelts)) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
               if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
                 showMessage("Info", "Click on an elevator or a conveyor belt to set a valid direction.");
+              }
+            }
+
+            if (createLevelMenu === menuConveyorBelts) {
+              if ((createLevelObject >= 2084) && (createLevelObject <= 2091)) {
+                if (changeConveyorBeltMode(gameInfo, column, row, ["notrigger", "rightleft", "noneright", "noneleft", "nonerightleft", "none", "right", "left"][createLevelObject - 2084]) === -1) {
+                  showMessage("Info", "Click on a conveyor belt to set the mode of it.");
+                }
+              }
+              if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
+                changeGroup(gameInfo, column, row, createLevelObject - 2000);
               }
             }
 
@@ -2061,6 +2093,8 @@ function BalPage() {
         if (!e.altKey && !e.ctrlKey && (e.shiftKey || (!e.shiftKey && (createLevelObject === -2)))) {
           createLevelSelectedCell = { x: column, y: row };
           updateGameCanvas();
+          fillMenu(2);
+          updateCreateLevelCanvas();
         }
       } else {
         // PLAY
@@ -2102,7 +2136,7 @@ function BalPage() {
               idx = findElementByCoordinate(column, row, gameInfo.conveyorBelts);
               if (idx >= 0) {
                 obj = gameInfo.conveyorBelts[idx];
-                info = `Object: Conveyor belt, Direction: ${obj.direction}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+                info = `Object: Conveyor belt, Direction: ${obj.direction}, Mode: ${obj.mode}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
               }
               break;
             default:
@@ -2165,13 +2199,54 @@ function BalPage() {
     let column = Math.floor(x / size1);
     let row = Math.floor(y / size1);
 
+    const menuSelect = 2;
+    let xNew = -1;
+    let yNew = -1;
+
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-        if ((row === 0) && (column > 0)) {
+        if (row === 0) {
           fillMenu(column + 1);
           updateCreateLevelCanvas();
         }
         createLevelObject = gameDataMenu[row][column];
+
+        if ((createLevelMenu === menuSelect) && (createLevelSelectedCell !== null)) {
+          if ((createLevelObject >= 2040) && (createLevelObject <= 2043)) {
+            xNew = createLevelSelectedCell.x;
+            yNew = createLevelSelectedCell.y;
+            switch (createLevelObject) {
+              case 2040:
+                xNew--;
+                break;
+              case 2041:
+                xNew++;
+                break;
+              case 2042:
+                yNew--;
+                break;
+              case 2043:
+                yNew++;
+                break;
+              default:
+                break;
+            }
+            if (xNew >= 0 && xNew < gameData[0].length && yNew >= 0 && yNew < gameData.length) {
+              if ((gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
+                gameData[yNew][xNew] = gameData[createLevelSelectedCell.y][createLevelSelectedCell.x];
+                backData[yNew][xNew] = backData[createLevelSelectedCell.y][createLevelSelectedCell.x];
+                gameData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
+                backData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
+                moveObjects(gameInfo, gameVars, "moveCell", createLevelSelectedCell.x, createLevelSelectedCell.y, xNew, yNew);
+                createLevelSelectedCell.x = xNew;
+                createLevelSelectedCell.y = yNew;
+                updateGameCanvas();
+              }
+            }
+            createLevelObject = 0;
+          }
+        }
+
         switch (createLevelObject) {
           case 0:
             createLevelObject = backDataMenu[row][column];

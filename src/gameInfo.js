@@ -228,7 +228,6 @@ export function getGameInfo(backData, gameData) {
                     }
                     let piston = { x: j, y: i, activated: false, sticky: false, inverted: false, direction: direction, mode: "toggle", group: 1 };
                     result.pistons.push(piston);
-                    result.hasPiston = true;
                     break;
                 }
                 case 167: {
@@ -237,7 +236,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 171: {
-                    let conveyorBelt = { x: j, y: i, direction: "right", group: 1 };
+                    let conveyorBelt = { x: j, y: i, mode: "notrigger", direction: "right", group: 1 };
                     result.conveyorBelts.push(conveyorBelt);
                     break;
                 }
@@ -284,7 +283,6 @@ export function initGameInfo(info) {
     info.hasKey = false;
     info.hasLadder = false;
     info.hasPickaxe = false;
-    info.hasPiston = false;
     info.hasPropeller = false;
     info.hasTelekineticPower = false;
     info.hasTravelGate = false;

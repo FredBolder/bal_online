@@ -1403,7 +1403,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
   }
 }
 
-export function moveObjects(gameInfo, gameVars, mode, value1) {
+export function moveObjects(gameInfo, gameVars, mode, x1, y1, x2, y2) {
   const refs = [];
 
   for (let i = 0; i < gameVars.bgcolor.length; i++) {
@@ -1531,23 +1531,29 @@ export function moveObjects(gameInfo, gameVars, mode, value1) {
     if ((p.x !== -1) && (p.y !== -1)) {
       switch (mode) {
         case "deleteColumn":
-          if (p.x > value1) {
+          if (p.x > x1) {
             p.x = p.x - 1;
           }
           break;
         case "deleteRow":
-          if (p.y > value1) {
+          if (p.y > y1) {
             p.y = p.y - 1;
           }
           break;
         case "insertColumn":
-          if (p.x >= value1) {
+          if (p.x >= x1) {
             p.x = p.x + 1;
           }
           break;
         case "insertRow":
-          if (p.y >= value1) {
+          if (p.y >= y1) {
             p.y = p.y + 1;
+          }
+          break;
+        case "moveCell":
+          if ((p.x === x1) && (p.y === y1)) {
+            p.x = x2;
+            p.y = y2;
           }
           break;
         default:
