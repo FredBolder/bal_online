@@ -315,7 +315,7 @@ function BalPage() {
       playSound("teleport");
     }
 
-    info = checkTrapDoors(gameData, gameInfo);
+    info = checkTrapDoors(backData, gameData, gameInfo);
     if (info.sound) {
       playSound("trap");
     }

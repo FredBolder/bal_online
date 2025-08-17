@@ -1,23 +1,20 @@
-export function checkTrapDoors(gameData, gameInfo) {
+import { hasWeight } from "./balUtils.js";
+
+export function checkTrapDoors(backData, gameData, gameInfo) {
   let result = {};
   result.updated = false;
   result.sound = false;
-  let data = 0;
+  let weight = false;
 
   for (let i = 0; i < gameInfo.trapDoors.length; i++) {
     let trapDoor = gameInfo.trapDoors[i];
-    data = gameData[trapDoor.y - 1][trapDoor.x];
-    if (
-      data === 0 &&
-      (gameData[trapDoor.y][trapDoor.x] === 0 ||
-        gameData[trapDoor.y][trapDoor.x] === 13 ||
-        gameData[trapDoor.y][trapDoor.x] === 14)
-    ) {
+    weight = hasWeight(backData, gameData, gameInfo, trapDoor.x, trapDoor.x, trapDoor.y, false);
+    if (!weight && [0, 13, 14].includes(gameData[trapDoor.y][trapDoor.x])) {
       gameData[trapDoor.y][trapDoor.x] = 13;
       result.updated = true;
       trapDoor.status = 0;
     }
-    if (data === 2 || data === 4 || data === 8) {
+    if (weight) {
       if (trapDoor.status >= 0) {
         trapDoor.status++;
       }
