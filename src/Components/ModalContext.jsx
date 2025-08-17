@@ -71,7 +71,7 @@ export const ModalProvider = ({ children }) => {
           onChange={(e) => (inputValue = e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              e.preventDefault(); // only prevent Enter's default
+              e.preventDefault();
               close(inputValue);
             }
           }}
@@ -84,12 +84,51 @@ export const ModalProvider = ({ children }) => {
     ));
   };
 
+  const showSelect = (title, message, options, defaultIndex = 0) => {
+    if (options.length === 0) {
+      return Promise.resolve(null);
+    }
+    const safeIndex = (defaultIndex >= 0 && defaultIndex < options.length)
+      ? defaultIndex
+      : 0;
+    let selectValue = options[safeIndex];
+
+    return showModal(title, ({ close }) => (
+      <div>
+        <p>{message}</p>
+        <select
+          className="modal-select"
+          autoFocus
+          defaultValue={options[safeIndex]}
+          onChange={(e) => (selectValue = e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              close(selectValue);
+            }
+          }}
+        >
+          {options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <div className="modal-button-container">
+          <button className="modal-button" onClick={() => close(selectValue)}>OK</button>
+          <button className="modal-button" onClick={() => close(null)}>Cancel</button>
+        </div>
+      </div>
+    ));
+  };
+
 
   return (
     <ModalContext.Provider value={{
       showMessage,
       showConfirm,
       showInput,
+      showSelect,
       modalState
     }}>
       {children}

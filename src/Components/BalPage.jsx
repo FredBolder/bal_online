@@ -117,7 +117,7 @@ let gameVarsMenu = {};
 initGameVars(gameVarsMenu);
 
 function BalPage() {
-  const { showMessage, showConfirm, showInput } = useModal();
+  const { showMessage, showConfirm, showInput, showSelect } = useModal();
   const { modalState } = useContext(ModalContext);
 
   const cbArrowButtons = useRef(null);
@@ -147,14 +147,9 @@ function BalPage() {
   const insertColumn = useRef(null);
   const insertRow = useRef(null);
   const levelSetting = useRef(null);
+  const loadLevel = useRef(null);
   const loadRandom = useRef(null);
   const newLevel = useRef(null);
-  const series1 = useRef(null);
-  const series2 = useRef(null);
-  const series3 = useRef(null);
-  const seriesEasy = useRef(null);
-  const seriesExtreme = useRef(null);
-  const seriesSmall = useRef(null);
   const tryAgainButton = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
@@ -1116,39 +1111,44 @@ function BalPage() {
     }
   }
 
-  async function clickSeries(s) {
+  async function clickLoadLevel() {
     let level = 200;
 
-    switch (s) {
-      case "1":
-        level = 200;
-        break;
-      case "2":
-        level = 300;
-        break;
-      case "3":
-        level = 700;
-        break;
-      case "Small":
-        level = 750;
-        break;
-      case "Easy":
-        level = 3000;
-        break;
-      case "Extreme":
-        level = 901;
-        break;
-      default:
-        level = 200;
-        break;
-    }
-    if (getSettings().lessQuestions) {
-      initLevel(level);
-    } else {
-      const confirm = await showConfirm("Question", `Load the first level of series ${s}?`);
-      if (confirm === "YES") {
-        initLevel(level);
+    const value = await showSelect(
+      "Load level", 
+      "Load the first level of series:", 
+      ["1", "2", "3", "4", "Small", "Easy", "Extreme"],
+      0
+    );
+
+    if (value !== null) {
+      switch (value) {
+        case "1":
+          level = 200;
+          break;
+        case "2":
+          level = 300;
+          break;
+        case "3":
+          level = 400;
+          break;
+        case "4":
+          level = 700;
+          break;
+        case "Small":
+          level = 750;
+          break;
+        case "Easy":
+          level = 3000;
+          break;
+        case "Extreme":
+          level = 901;
+          break;
+        default:
+          level = 200;
+          break;
       }
+      initLevel(level);
     }
   }
 
@@ -1808,12 +1808,7 @@ function BalPage() {
     deleteRow.current.style.display = (createLevel) ? "block" : "none";
 
     loadRandom.current.style.display = (!createLevel) ? "block" : "none";
-    series1.current.style.display = (!createLevel) ? "block" : "none";
-    series2.current.style.display = (!createLevel) ? "block" : "none";
-    series3.current.style.display = (!createLevel) ? "block" : "none";
-    seriesEasy.current.style.display = (!createLevel) ? "block" : "none";
-    seriesExtreme.current.style.display = (!createLevel) ? "block" : "none";
-    seriesSmall.current.style.display = (!createLevel) ? "block" : "none";
+    loadLevel.current.style.display = (!createLevel) ? "block" : "none";
     tryAgainButton.current.style.display = (!createLevel) ? "block" : "none";
   }
 
@@ -2309,23 +2304,8 @@ function BalPage() {
                   <label>Level setting</label>
                 </div>
 
-                <div ref={series1} onClick={() => { clickSeries("1") }}>
-                  <label>Series 1</label>
-                </div>
-                <div ref={series2} onClick={() => { clickSeries("2") }}>
-                  <label>Series 2</label>
-                </div>
-                <div ref={series3} onClick={() => { clickSeries("3") }}>
-                  <label>Series 3</label>
-                </div>
-                <div ref={seriesSmall} onClick={() => { clickSeries("Small") }}>
-                  <label>Series Small</label>
-                </div>
-                <div ref={seriesEasy} onClick={() => { clickSeries("Easy") }}>
-                  <label>Series Easy</label>
-                </div>
-                <div ref={seriesExtreme} onClick={() => { clickSeries("Extreme") }}>
-                  <label>Series Extreme</label>
+                <div ref={loadLevel} onClick={() => { clickLoadLevel() }}>
+                  <label>Load level</label>
                 </div>
                 <div ref={loadRandom} onClick={randomLevel}>
                   <label>Random level</label>

@@ -6,12 +6,16 @@ const series1Start = 200;
 const series1End = 224;
 const series2Start = 300;
 const series2End = 327;
-const series3Start = 700;
-const series3End = 749;
+const series3Start = 400;
+const series3End = 409;
+const series4Start = 700;
+const series4End = 749;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 904;
+const seriesChoniaPollaStart = 990;
+const seriesChoniaPollaEnd = 991;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
@@ -84,7 +88,7 @@ export function fixLevel(gameData, gameInfo) {
   if (errorMoreThanOneSmallBlueBall) {
     result += "There was more than one small blue ball.\n";
   }
-  
+
   if (!foundBlue) {
     result += "There was no blue ball.\n";
     if (used < empty.length) {
@@ -131,6 +135,9 @@ export function getAllLevels() {
     levels.push(i);
   }
   for (let i = series3Start; i <= series3End; i++) {
+    levels.push(i);
+  }
+  for (let i = series4Start; i <= series4End; i++) {
     levels.push(i);
   }
   for (let i = seriesSmallStart; i <= seriesSmallEnd; i++) {
@@ -563,9 +570,16 @@ async function loadFromFile(n, gateTravelling = false) {
 export async function getLevel(n, gateTravelling = false) {
   let result = [];
 
-  if ((n >= series1Start && n <= series1End) || (n >= series2Start && n <= series2End) || (n >= series3Start && n <= series3End) ||
-    (n >= seriesSmallStart && n <= seriesSmallEnd) || (n >= seriesEasyStart && n <= seriesEasyEnd) || (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
-    (n >= seriesSecretStart && n <= seriesSecretEnd) || (n >= 990 && n <= 991) || (n === 9999)) {
+  if ((n >= series1Start && n <= series1End) ||
+    (n >= series2Start && n <= series2End) ||
+    (n >= series3Start && n <= series3End) ||
+    (n >= series4Start && n <= series4End) ||
+    (n >= seriesSmallStart && n <= seriesSmallEnd) ||
+    (n >= seriesEasyStart && n <= seriesEasyEnd) ||
+    (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
+    (n >= seriesSecretStart && n <= seriesSecretEnd) ||
+    (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
+    (n === 9999)) {
     result = await loadFromFile(n, gateTravelling);
   } else {
     result = await loadFromFile(1000, false);
@@ -584,6 +598,9 @@ export function getRandomLevel(currentLevel) {
     levels.push(i);
   }
   for (let i = series3Start + 1; i <= series3End; i++) {
+    levels.push(i);
+  }
+  for (let i = series4Start + 1; i <= series4End; i++) {
     levels.push(i);
   }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {

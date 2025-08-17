@@ -3,6 +3,11 @@
     width: 100%;
 }
 
+.modal-select {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
 .modal-button-container {
     display: flex;
     flex-direction: row;
