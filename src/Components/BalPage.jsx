@@ -43,6 +43,7 @@ import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameIn
 import { fixLevel, getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
+import { checkMovers } from "../movers.js";
 import { checkMusicBoxes } from "../musicBoxes.js"
 import { moveOrangeBalls } from "../orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
@@ -369,6 +370,10 @@ function BalPage() {
     }
 
     if (gameVars.timeFreezer === 0) {
+      if (checkMovers(gameData, gameInfo)) {
+        update = true;
+      }
+
       if (gameVars.elevatorCounter >= gameVars.elevatorCountTo) {
         gameVars.elevatorCounter = 0;
         if (moveElevators(gameData, gameInfo)) {
@@ -726,7 +731,7 @@ function BalPage() {
             break;
           case "$direction":
             if (values.length === 3) {
-              if (["left", "right", "none"].includes(valuesLowerCase[2])) {
+              if (["left", "right", "none", "upleft", "upright", "downleft", "downright"].includes(valuesLowerCase[2])) {
                 changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
               }
             }
@@ -956,16 +961,32 @@ function BalPage() {
 
   async function clickNewLevel(silent = false) {
     let level = 9999;
+    let value = null;
 
-    if (getSettings().lessQuestions || silent) {
-      initLevel(level);
-      createLevelSelectedCell = null;
+    if (silent) {
+      value = "Normal (32 x 20)";
     } else {
-      const confirm = await showConfirm("Question", "Start with a new level?");
-      if (confirm === "YES") {
-        initLevel(level);
-        createLevelSelectedCell = null;
+      value = await showSelect("New level", "Size", ["Normal (32 x 20)", "Small (10 x 10)", "Square (20 x 20)"], 0);
+    }
+    if (value !== null) {
+      switch (value) {
+        case "Normal (32 x 20)":
+          level = 9999;
+          break;
+        case "Small (10 x 10)":
+          level = 9998;
+          break;
+        case "Square (20 x 20)":
+          level = 9997;
+          break;
+        default:
+          level = 9999;
+          break;
       }
+      await initLevel(level);
+      // 9999 has a special meaning
+      gameVars.currentLevel = 9999;
+      setLevelNumber(9999);
     }
   }
 
@@ -1115,8 +1136,8 @@ function BalPage() {
     let level = 200;
 
     const value = await showSelect(
-      "Load level", 
-      "Load the first level of series:", 
+      "Load level",
+      "Load the first level of series:",
       ["1", "2", "3", "4", "Small", "Easy", "Extreme"],
       0
     );
@@ -1384,7 +1405,7 @@ function BalPage() {
         break;
       case 7:
         arr1 = [6, 7, 2040, 2041, 2042, 2043, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111];
-        arr2 = [112, 81, 31, 92, 170];
+        arr2 = [112, 81, 31, 92, 170, 178, 2092, 2093, 2094, 2095];
         break;
       case 8:
         arr1 = [171, 172, 173, 2040, 2041, 2044, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091];
@@ -2026,7 +2047,13 @@ function BalPage() {
 
             if (((createLevelMenu === menuElevators) || (createLevelMenu === menuConveyorBelts)) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
               if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
-                showMessage("Info", "Click on an elevator or a conveyor belt to set a valid direction.");
+                showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+              }
+            }
+
+            if ((createLevelMenu === menuElevators) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
+              if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
+                showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
               }
             }
 
@@ -2132,6 +2159,13 @@ function BalPage() {
               if (idx >= 0) {
                 obj = gameInfo.conveyorBelts[idx];
                 info = `Object: Conveyor belt, Direction: ${obj.direction}, Mode: ${obj.mode}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+              }
+              break;
+            case 178:
+              idx = findElementByCoordinate(column, row, gameInfo.movers);
+              if (idx >= 0) {
+                obj = gameInfo.movers[idx];
+                info = `Object: Mover, Direction: ${obj.direction}, Position: ${obj.x}, ${obj.y}`;
               }
               break;
             default:

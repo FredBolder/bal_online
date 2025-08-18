@@ -2,27 +2,27 @@ import { secretSeriesCodePart } from "./codes.js";
 import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
-import { moveOrangeBallInDirection } from "./orangeBalls.js";
+import { moversDirections } from "./movers.js";
+import { moveOrangeBallInDirection, updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
+import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
-const timeBombsTime = 100;
-
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
-  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173].includes(n);
+  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178].includes(n);
 }
 
 export function changeDirection(gameData, gameInfo, x, y, direction) {
   let idx = -1;
 
-  if ((direction === "left") || (direction === "right") || (direction === "none")) {
+  if (["left", "right", "none"].includes(direction)) {
     if (idx === -1) {
       idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
       if (idx >= 0) {
@@ -30,7 +30,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
       }
     }
   }
-  if ((direction === "left") || (direction === "right")) {
+  if (["left", "right"].includes(direction)) {
     if (idx === -1) {
       idx = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
       if (idx >= 0) {
@@ -43,7 +43,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
       }
     }
   }
-  if ((direction === "up") || (direction === "down")) {
+  if (["up", "down"].includes(direction)) {
     if (idx === -1) {
       idx = findElementByCoordinate(x, y, gameInfo.elevators);
       if (idx >= 0) {
@@ -53,6 +53,14 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
         } else {
           gameData[y][x] = 6;
         }
+      }
+    }
+  }
+  if (moversDirections().includes(direction)) {
+    if (idx === -1) {
+      idx = findElementByCoordinate(x, y, gameInfo.movers);
+      if (idx >= 0) {
+        gameInfo.movers[idx].direction = direction;
       }
     }
   }
@@ -538,6 +546,9 @@ export function charToNumber(c) {
     case "'":
       result = 177;
       break;
+    case "η":
+      result = 178;
+      break;
     case "|":
       result = 1000;
       break;
@@ -700,10 +711,6 @@ export function freeToSwim(x1, x2, y, gameData) {
     }
   }
   return !found;
-}
-
-export function getTimeBombsTime() {
-  return timeBombsTime;
 }
 
 export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDown) {
@@ -1263,6 +1270,9 @@ export function numberToChar(n) {
     case 177:
       result = "'";
       break;
+    case 178:
+      result = "η";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1368,14 +1378,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       updateYellowBall(gameInfo.yellowBalls, oldX, oldY, newX, newY, "none");
       break;
     case 40:
-      for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
-        const orangeBall = gameInfo.orangeBalls[i];
-        if ((orangeBall.x === oldX) && (orangeBall.y === oldY)) {
-          orangeBall.x = newX;
-          orangeBall.y = newY;
-          orangeBall.direction = "none";
-        }
-      }
+      updateOrangeBall(gameInfo.orangeBalls, oldX, oldY, newX, newY, "none");
       break;
     case 82:
       gameData[newY][newX] = 83;
@@ -1393,14 +1396,39 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       updateObject(gameInfo.forces, oldX, oldY, newX, newY);
       break;
     case 117:
-      updateObject(gameInfo.timeBombs, oldX, oldY, newX, newY);
+      updateTimeBomb(gameInfo.timeBombs, oldX, oldY, newX, newY);
       break;
     case 171:
       updateObject(gameInfo.conveyorBelts, oldX, oldY, newX, newY);
       break;
+    case 178:
+      updateObject(gameInfo.movers, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
+}
+
+export function moveObjectInDirection(gameData, gameInfo, x, y, direction) {
+    let newX = x;
+    let newY = y;
+    switch (direction) {
+        case "down":
+            newY++;
+            break;
+        case "left":
+            newX--;
+            break;
+        case "right":
+            newX++;
+            break;
+        case "up":
+            newY--;
+            break;
+        default:
+            break;
+    }
+    moveObject(gameData, gameInfo, x, y, newX, newY);
 }
 
 export function moveObjects(gameInfo, gameVars, mode, x1, y1, x2, y2) {
@@ -1462,6 +1490,10 @@ export function moveObjects(gameInfo, gameVars, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.magnets.length; i++) {
     refs.push(gameInfo.magnets[i]);
+  }
+
+  for (let i = 0; i < gameInfo.movers.length; i++) {
+    refs.push(gameInfo.movers[i]);
   }
 
   for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
@@ -1724,11 +1756,14 @@ export function moveLeft(backData, gameData, gameInfo) {
               idx1 = findElementByCoordinate(x - 1, y, gameInfo.timeBombs);
               if (idx1 >= 0) {
                 gameInfo.timeBombs[idx1].x = x - 2;
-                gameInfo.timeBombs[idx1].status = timeBombsTime;
+                gameInfo.timeBombs[idx1].status = getTimeBombsTime();
               }
               break;
             case 171:
               updateObject(gameInfo.conveyorBelts, x - 1, y, x - 2, y);
+              break;
+            case 178:
+              updateObject(gameInfo.movers, x - 1, y, x - 2, y);
               break;
             default:
               break;
@@ -1911,11 +1946,14 @@ export function moveRight(backData, gameData, gameInfo) {
               idx1 = findElementByCoordinate(x + 1, y, gameInfo.timeBombs);
               if (idx1 >= 0) {
                 gameInfo.timeBombs[idx1].x = x + 2;
-                gameInfo.timeBombs[idx1].status = timeBombsTime;
+                gameInfo.timeBombs[idx1].status = getTimeBombsTime();
               }
               break;
             case 171:
               updateObject(gameInfo.conveyorBelts, x + 1, y, x + 2, y);
+              break;
+            case 178:
+              updateObject(gameInfo.movers, x + 1, y, x + 2, y);
               break;
             default:
               break;
@@ -2105,11 +2143,14 @@ export function jump(backData, gameData, gameInfo) {
               idx = findElementByCoordinate(x, y - 1, gameInfo.timeBombs);
               if (idx >= 0) {
                 gameInfo.timeBombs[idx].y = y - 2;
-                gameInfo.timeBombs[idx].status = timeBombsTime;
+                gameInfo.timeBombs[idx].status = getTimeBombsTime();
               }
               break;
             case 171:
               updateObject(gameInfo.conveyorBelts, x, y - 1, x, y - 2);
+              break;
+            case 178:
+              updateObject(gameInfo.movers, x, y - 1, x, y - 2);
               break;
             default:
               break;
@@ -2316,7 +2357,7 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
             idx = findElementByCoordinate(x, y + 1, gameInfo.timeBombs);
             if (idx >= 0) {
               gameInfo.timeBombs[idx].y = y + 2;
-              gameInfo.timeBombs[idx].status = timeBombsTime;
+              gameInfo.timeBombs[idx].status = getTimeBombsTime();
             }
             break;
           case 171:

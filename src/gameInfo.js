@@ -240,6 +240,11 @@ export function getGameInfo(backData, gameData) {
                     result.conveyorBelts.push(conveyorBelt);
                     break;
                 }
+                case 178: {
+                    let mover = { x: j, y: i, direction: "right" };
+                    result.movers.push(mover);
+                    break;
+                }
                 default:
                     break;
             }
@@ -289,6 +294,7 @@ export function initGameInfo(info) {
     info.hasWeakStone = false;
     info.horizontalElevators = [];
     info.magnets = [];
+    info.movers = [];
     info.musicBoxes = [];
     info.orangeBalls = [];
     info.pistons = [];

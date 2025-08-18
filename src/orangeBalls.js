@@ -110,3 +110,13 @@ export function moveOrangeBallInDirection(orangeBalls, x, y, direction, continue
     }
 }
 
+export function updateOrangeBall(orangeBalls, x1, y1, x2, y2, direction) {
+    for (let i = 0; i < orangeBalls.length; i++) {
+        if (orangeBalls[i].x === x1 && orangeBalls[i].y === y1) {
+            orangeBalls[i].x = x2;
+            orangeBalls[i].y = y2;
+            orangeBalls[i].direction = direction;
+        }
+    }
+}
+

@@ -242,6 +242,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.conveyorBelts.push(conveyorBelt);
             break;
         }
+        case 178: {
+            let mover = { x, y, direction: "right" };
+            gameInfo.movers.push(mover);
+            break;
+        }
         default:
             break;
     }
@@ -484,6 +489,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
             if (idx >= 0) {
                 gameInfo.conveyorBelts.splice(idx, 1);
+            }
+            break;
+        case 178:
+            idx = findElementByCoordinate(x, y, gameInfo.movers);
+            if (idx >= 0) {
+                gameInfo.movers.splice(idx, 1);
             }
             break;
         default:

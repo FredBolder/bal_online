@@ -10,7 +10,7 @@ import {
 } from "./drawUtils.js";
 import { electricityTarget } from "./electricity.js";
 import { getObjectCoordinates } from "./telekinesis.js";
-import { booleanToInt, polar, randomInt } from "./utils.js";
+import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
 
 let bitmapLava = null;
 let bitmapWeakStone = null;
@@ -482,7 +482,13 @@ function drawLevel(
 
   function drawDirectionChanger3() {
     // Direction: - and |, code: 86, +
+    let d1 = w1 * 0.1;
+    let d2 = w1 * 0.1;
     drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, "black");
+    drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, "black");
+    drawLine(ctx, xmin + d1, ymin + d1 + d2, xmin + d1, ymax - d1 - d2, "black");
+    drawLine(ctx, xmax - d1, ymin + d1 + d2, xmax - d1, ymax - d1 - d2, "black");
   }
 
   function drawDirectionChanger4() {
@@ -973,6 +979,56 @@ function drawLevel(
       drawLine(ctx, xmin + 1, ymin + 1, xmax - 1, ymax - 1, "silver");
     }
     ctx.lineWidth = 1;
+  }
+
+  function drawMover(x, y) {
+    let angle = 0;
+    let d1 = w1 / 3;
+    let d2 = w1 / 10;
+    let d3 = w1 / 8;
+    let direction = "right";
+    let idx = -1;
+
+    const points = [
+      { x: xc - d1, y: yc },
+      { x: xc + d1, y: yc },
+      { x: xc + d3, y: yc - d2 },
+      { x: xc + d3, y: yc + d2 },
+    ];
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+
+    idx = findElementByCoordinate(x, y, gameInfo.movers);
+    if (idx >= 0) {
+      direction = gameInfo.movers[idx].direction;
+    }
+    switch (direction) {
+      case "left":
+        angle = 180;
+        break;
+      case "right":
+        angle = 0;
+        break;
+      case "upleft":
+        angle = -135;
+        break;
+      case "upright":
+        angle = -45;
+        break;
+      case "downleft":
+        angle = 135;
+        break;
+      case "downright":
+        angle = 45;
+        break;
+      default:
+        angle = 0;
+        break;
+    }
+    const rotatedPoints = rotatePoints(points, { x: xc, y: yc }, angle);
+    drawLine(ctx, rotatedPoints[0].x, rotatedPoints[0].y, rotatedPoints[1].x, rotatedPoints[1].y, "white");
+    drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[2].x, rotatedPoints[2].y, "white");
+    drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[3].x, rotatedPoints[3].y, "white");
   }
 
   function drawMusicBox() {
@@ -2184,6 +2240,9 @@ function drawLevel(
         case 177:
           drawSpike(col, row, "left");
           break;
+        case 178:
+          drawMover(col, row);
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -2287,6 +2346,22 @@ function drawLevel(
         case 2091:
           // Conveyor mode left
           drawAbbreviation("LE");
+          break;
+        case 2092:
+          // upleft
+          drawAbbreviation("UL");
+          break;
+        case 2093:
+          // upright
+          drawAbbreviation("UR");
+          break;
+        case 2094:
+          // downleft
+          drawAbbreviation("DL");
+          break;
+        case 2095:
+          // downright
+          drawAbbreviation("DR");
           break;
         default:
           if (gd < 2000) {

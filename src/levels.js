@@ -1,5 +1,6 @@
 import { charToNumber } from "./balUtils.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
+import { moversDirections } from "./movers.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 const series1Start = 200;
@@ -343,8 +344,22 @@ export function checkLevel(data, settings) {
               }
               break;
             case "$direction":
-              if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+              switch (data[y][x]) {
+                case "{":
+                case "Ø":
+                case "}":
+                  if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+                  }
+                  break;
+                case "η":
+                  if (!moversDirections().includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No conveyor belt or mover found at the coordinates ${x}, ${y}.\n`;
+                  break;
               }
               break;
             case "$gameticks":
@@ -579,7 +594,7 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
-    (n === 9999)) {
+    (n >= 9997) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
   } else {
     result = await loadFromFile(1000, false);

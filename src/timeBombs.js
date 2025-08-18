@@ -33,7 +33,7 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                     if ((x !== timeBomb.x) || (y !== timeBomb.y)) {
                         el = gameData[y][x];
                         if ((el === 2) || (el === 3)) {
-                            result.gameOver = true;                            
+                            result.gameOver = true;
                         }
                         removeObject(gameData, gameInfo, x, y);
 
@@ -67,4 +67,19 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
     }
     return result;
 }
+
+export function getTimeBombsTime() {
+  return 100;
+}
+
+export function updateTimeBomb(timeBombs, x1, y1, x2, y2) {
+    for (let i = 0; i < timeBombs.length; i++) {
+        if (timeBombs[i].x === x1 && timeBombs[i].y === y1) {
+            timeBombs[i].x = x2;
+            timeBombs[i].y = y2;
+            timeBombs[i].status = getTimeBombsTime();
+        }
+    }
+}
+
 

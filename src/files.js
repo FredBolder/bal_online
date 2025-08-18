@@ -124,6 +124,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    for (let i = 0; i < gameInfo.movers.length; i++) {
+        const mover = gameInfo.movers[i];
+        if (mover.direction !== "right") {
+            line = `$direction: ${mover.x}, ${mover.y}, ${mover.direction}`;
+            lines.push(line);
+        }
+    }
+
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
         if (musicBox.mode !== "note") {

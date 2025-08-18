@@ -66,6 +66,39 @@ export function reverseString(s) {
   return result;
 }
 
+/**
+ * Rotate an array of points around a base point by an angle (degrees).
+ * @param {Array<{x:number,y:number}>} points - array of points to rotate
+ * @param {{x:number,y:number}} basePoint - center of rotation
+ * @param {number} angle - degrees (can be negative; values outside [-360,360] are supported)
+ * @returns {Array<{x:number,y:number}>} new array with rotated points
+ */
+export function rotatePoints(points, basePoint, angle) {
+  if (!Array.isArray(points)) throw new TypeError('points must be an array');
+  if (typeof basePoint !== 'object' || basePoint === null
+      || typeof basePoint.x !== 'number' || typeof basePoint.y !== 'number') {
+    throw new TypeError('basePoint must be an object with numeric x and y');
+  }
+  if (typeof angle !== 'number' || !isFinite(angle)) {
+    throw new TypeError('angle must be a finite number (degrees)');
+  }
+
+  const rad = angle * Math.PI / 180;       // degrees -> radians
+  const cos = Math.cos(rad);
+  const sin = Math.sin(rad);
+
+  return points.map(p => {
+    if (typeof p !== 'object' || p === null || typeof p.x !== 'number' || typeof p.y !== 'number') {
+      throw new TypeError('each point must be an object with numeric x and y');
+    }
+    const dx = p.x - basePoint.x;
+    const dy = p.y - basePoint.y;
+    const rx = cos * dx - sin * dy + basePoint.x;
+    const ry = sin * dx + cos * dy + basePoint.y;
+    return { x: rx, y: ry };
+  });
+}
+
 export function stringToBoolean(value) {
   return value === "1" ? true: false;
 }

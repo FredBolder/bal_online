@@ -1,4 +1,4 @@
-import { findElementByCoordinate, getTimeBombsTime, updateObject } from "./balUtils.js";
+import { moveObjectInDirection } from "./balUtils.js";
 
 export function getObjectCoordinates(gameData, gameInfo) {
     let result = {};
@@ -61,68 +61,6 @@ function isMoveableObject(gameData, x, y) {
     return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139, 171, 172, 173].includes(gameData[y][x]);
 }
 
-function moveObject(gameData, gameInfo, x, y, direction) {
-    let element = gameData[y][x];
-    let idx = -1;
-    let newX = x;
-    let newY = y;
-    switch (direction) {
-        case "down":
-            newY++;
-            break;
-        case "left":
-            newX--;
-            break;
-        case "right":
-            newX++;
-            break;
-        case "up":
-            newY--;
-            break;
-        default:
-            break;
-    }
-    gameData[y][x] = 0;
-    gameData[newY][newX] = element;
-    switch (element) {
-        case 9:
-            idx = findElementByCoordinate(x, y, gameInfo.yellowBalls);
-            if (idx >= 0) {
-                gameInfo.yellowBalls[idx].x = newX;
-                gameInfo.yellowBalls[idx].y = newY;
-                gameInfo.yellowBalls[idx].direction = "none";
-            }
-            break;
-        case 40:
-            idx = findElementByCoordinate(x, y, gameInfo.orangeBalls);
-            if (idx >= 0) {
-                gameInfo.orangeBalls[idx].x = newX;
-                gameInfo.orangeBalls[idx].y = newY;
-                gameInfo.orangeBalls[idx].direction = "none";
-            }
-            break;
-        case 82:
-            gameData[newY][newX] = 83;
-            break;
-        case 98:
-            gameData[newY][newX] = 82;
-            break;
-        case 117:
-            idx = findElementByCoordinate(x, y, gameInfo.timeBombs);
-            if (idx >= 0) {
-                gameInfo.timeBombs[idx].x = newX;
-                gameInfo.timeBombs[idx].y = newY;
-                gameInfo.timeBombs[idx].status = getTimeBombsTime();
-            }
-            break;
-        case 171:
-            updateObject(gameInfo.conveyorBelts, x, y, newX, newY);
-            break;
-        default:
-            break;
-    }
-}
-
 export function moveObjectWithTelekineticPower(gameData, gameInfo) {
     let result = {};
     result.eating = false;
@@ -135,41 +73,41 @@ export function moveObjectWithTelekineticPower(gameData, gameInfo) {
     let maxX = gameData[0].length - 1;
 
     if (!gameInfo.hasTelekineticPower) {
-        return;
+        return result;
     }
     if (!found && (x > 0) && (y > 0)) {
         if (isMoveableObject(gameData, x - 1, y) && (gameData[y - 1][x - 1] === 0)) {
-            moveObject(gameData, gameInfo, x - 1, y, "up");
+            moveObjectInDirection(gameData, gameInfo, x - 1, y, "up");
             found = true;
         }
     }
     if (!found && (x <= maxX) && (y > 0)) {
         if (isMoveableObject(gameData, x + 1, y) && (gameData[y - 1][x + 1] === 0)) {
-            moveObject(gameData, gameInfo, x + 1, y, "up");
+            moveObjectInDirection(gameData, gameInfo, x + 1, y, "up");
             found = true;
         }
     }
     if (!found && (x > 1)) {
         if (isMoveableObject(gameData, x - 2, y) && (gameData[y][x - 1] === 0)) {
-            moveObject(gameData, gameInfo, x - 2, y, "right");
+            moveObjectInDirection(gameData, gameInfo, x - 2, y, "right");
             found = true;
         }
     }
     if (!found && (x < maxX)) {
         if (isMoveableObject(gameData, x + 2, y) && (gameData[y][x + 1] === 0)) {
-            moveObject(gameData, gameInfo, x + 2, y, "left");
+            moveObjectInDirection(gameData, gameInfo, x + 2, y, "left");
             found = true;
         }
     }
     if (!found && (x > 0) && (y > 0)) {
         if (isMoveableObject(gameData, x - 1, y - 1) && (gameData[y][x - 1] === 0)) {
-            moveObject(gameData, gameInfo, x - 1, y - 1, "down");
+            moveObjectInDirection(gameData, gameInfo, x - 1, y - 1, "down");
             found = true;
         }
     }
     if (!found && (x <= maxX) && (y > 0)) {
         if (isMoveableObject(gameData, x + 1, y - 1) && (gameData[y][x + 1] === 0)) {
-            moveObject(gameData, gameInfo, x + 1, y - 1, "down");
+            moveObjectInDirection(gameData, gameInfo, x + 1, y - 1, "down");
             found = true;
         }
     }
