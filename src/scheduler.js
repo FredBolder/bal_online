@@ -18,7 +18,6 @@ import { moveOrangeBalls } from "./orangeBalls.js";
 import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
 import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./teleports.js";
 import { moveRedBalls } from "./redBalls.js";
-import { playSound } from "./sound.js";
 import { checkTimeBombs } from "./timeBombs.js";
 import { checkTrapDoors } from "./trapDoors.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "./yellowBalls.js";
@@ -56,6 +55,8 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     let savePropeller = false;
     let saveTelekineticPower = false;
     let saveWeakStone = false;
+
+    let playSounds = [];
     let updateCanvas = false;
     let updateGreen = false;
     let updateLevelNumber = false;
@@ -88,7 +89,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     }
 
     if (checkMagnets(gameInfo)) {
-        playSound("magnet");
+        playSounds.push("magnet");
     }
 
     if (checkDelays(gameData, gameInfo)) {
@@ -101,22 +102,22 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
 
     if (checkPurpleTeleports(backData, gameData, gameInfo)) {
         updateCanvas = true;
-        playSound("teleport");
+        playSounds.push("teleport");
     }
 
     info = checkTrapDoors(backData, gameData, gameInfo);
     if (info.sound) {
-        playSound("trap");
+        playSounds.push("trap");
     }
     if (info.updated) {
         updateCanvas = true;
     }
     info = checkDamagedStones(gameData, gameInfo);
     if (info.sound === 1) {
-        playSound("breaking1");
+        playSounds.push("breaking1");
     }
     if (info.sound === 2) {
-        playSound("breaking2");
+        playSounds.push("breaking2");
     }
     if (info.updated) {
         updateCanvas = true;
@@ -208,7 +209,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
                 updateCanvas = true;
             }
             if (info.eating) {
-                playSound("eat");
+                playSounds.push("eat");
             }
         }
     }
@@ -251,7 +252,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         gameVars.explosionCounter = 2;
         info = checkDetonator(backData, gameData, gameInfo, false);
         if (info.explosion) {
-            playSound("explosion");
+            playSounds.push("explosion");
         }
         if (info.updated) {
             updateCanvas = true;
@@ -261,7 +262,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     if (gameVars.timeFreezer === 0) {
         info = checkTimeBombs(gameData, backData, gameInfo);
         if (info.explosion) {
-            playSound("explosion");
+            playSounds.push("explosion");
         }
         if (info.updated) {
             updateCanvas = true;
@@ -307,7 +308,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         let teleport2 = -1;
         switch (gameVars.teleporting) {
             case 1:
-                playSound("teleport");
+                playSounds.push("teleport");
                 gameVars.teleporting = 2;
                 break;
             case 2:
@@ -339,7 +340,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     if (gameInfo.hasTravelGate) {
         switch (gameVars.gateTravelling) {
             case 1:
-                playSound("teleport");
+                playSounds.push("teleport");
                 gameVars.gateTravelling = 2;
                 break;
             case 2:
@@ -384,7 +385,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
             gameInfo.electricityActive = true;
         }
         if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
-            playSound("electricity");
+            playSounds.push("electricity");
         }
         if (
             gameInfo.electricityActive ||
@@ -401,7 +402,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         updateCanvas = true;
     }
     if (info.sound !== "") {
-        playSound(info.sound);
+        playSounds.push(info.sound);
     }
     if (info.sound === "pain") {
         gameVars.gameOver = true;
@@ -409,9 +410,15 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     }
 
     if (updateCanvas) {
-        checkGameOver(backData, gameData, gameInfo, gameVars);
+        const gameOverResult = checkGameOver(backData, gameData, gameInfo, gameVars);
+        for (let i = 0; i < gameOverResult.playSounds.length; i++) {
+            const snd = gameOverResult.playSounds[i];
+            if (!playSounds.includes(snd)) {
+                playSounds.push(snd);
+            }
+        }
     }
 
-    return { updateCanvas, updateGreen, updateLevelNumber };
+    return { playSounds, updateCanvas, updateGreen, updateLevelNumber };
 }
 

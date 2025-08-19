@@ -173,6 +173,12 @@ function BalPage() {
       return;
     }
     const info = await gameScheduler(backData, gameData, gameInfo, gameVars);
+    if (info.playSounds.length > 0) {
+      for (let i = 0; i < info.playSounds.length; i++) {
+        const snd = info.playSounds[i];
+        playSound(snd);
+      }
+    }
     if (info.updateCanvas) {
       updateGameCanvas();
     }
@@ -1030,14 +1036,18 @@ function BalPage() {
   }
 
   async function handleKeyDown(e) {
-    let info = {};
-    info.player = false;
-    info.eating = false;
-    info.sound = "";
-    info.rotate = false;
-    info.update = false;
+    let info = {
+      eating: false,
+      freezeTime: 0,
+      message: "",
+      player: false,
+      slowDownYellow: false,
+      sound: "",
+      rotate: false,
+      update: false,
+    };
+
     let codes = "";
-    let rotate = false;
 
     if (modalOpen) {
       return;
@@ -1054,6 +1064,8 @@ function BalPage() {
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
       return;
     }
+
+
     if (e.preventDefault) {
       if (
         e.key === "ArrowLeft" ||
@@ -1113,7 +1125,9 @@ function BalPage() {
         case "4":
           info = moveLeft(backData, gameData, gameInfo);
           if (info.rotate) {
-            rotate = rotateGame(backData, gameData, gameInfo);
+            if (rotateGame(backData, gameData, gameInfo)) {
+              info.update = true;
+            }
           }
           if (info.teleporting) {
             gameVars.teleporting = 1;
@@ -1128,8 +1142,9 @@ function BalPage() {
         case "6":
           info = moveRight(backData, gameData, gameInfo);
           if (info.rotate) {
-            // eslint-disable-next-line no-unused-vars
-            rotate = rotateGame(backData, gameData, gameInfo);
+            if (rotateGame(backData, gameData, gameInfo)) {
+              info.update = true;
+            }
           }
           if (info.teleporting) {
             gameVars.teleporting = 1;
@@ -1144,7 +1159,10 @@ function BalPage() {
         case "8":
           info = jump(backData, gameData, gameInfo);
           if (info.player) {
-            gameVars.elevatorCounter += 2; // To prevent that you fall from the elevator
+            // To prevent that you fall from the elevator
+            if (gameVars.elevatorCounter >= (gameVars.elevatorCountTo - 3)) {
+              gameVars.elevatorCounter -= 2;
+            }
           }
           break;
         case "q":
@@ -1179,41 +1197,62 @@ function BalPage() {
           break;
       }
     }
-    if (info.player) {
-      gameVars.skipFalling = 1;
-      updateGameCanvas();
-      if (checkGameOver(backData, gameData, gameInfo, gameVars)) {
-        updateGameCanvas();
-      }
-    }
-    if (info.freezeTime > 0) {
-      gameVars.timeFreezer = info.freezeTime;
-    }
+
+
+    // Create non-existing properties
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "freezeTime")) {
+      info.freezeTime = 0;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "message")) {
+      info.message = "";
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "player")) {
+      info.player = false;
     }
     if (!Object.prototype.hasOwnProperty.call(info, "slowDownYellow")) {
       info.slowDownYellow = 0;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "sound")) {
+      info.sound = "";
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "rotate")) {
+      info.rotate = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "update")) {
       info.update = false;
     }
-    if (info.update) {
-      updateGameCanvas();
-      if (checkGameOver(backData, gameData, gameInfo, gameVars)) {
-        updateGameCanvas();
-      }
+
+
+    if (info.freezeTime > 0) {
+      gameVars.timeFreezer = info.freezeTime;
     }
     if (info.slowDownYellow > 0) {
       gameVars.yellowSlowCounter = info.slowDownYellow;
     }
+    if (info.player) {
+      gameVars.skipFalling = 1;
+      updateGameCanvas();
+    }
+    if (info.update) {
+      updateGameCanvas();
+    }
+
+
+    // Game over must be checked before checking if the level is solved
+    const gameOverResult = checkGameOver(backData, gameData, gameInfo, gameVars);
+    for (let i = 0; i < gameOverResult.playSounds.length; i++) {
+      const snd = gameOverResult.playSounds[i];
+      playSound(snd);
+    }
+
+    // Check if level is solved
     if (info.eating) {
       gameInfo.greenBalls--;
       updateGreen();
       playSound("eat");
-      if (checkGameOver(backData, gameData, gameInfo, gameVars)) {
-        updateGameCanvas();
-      }
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
         ((thisWorldGreen === 0) && (otherWorldGreen === 0)))
       ) {
@@ -1227,16 +1266,11 @@ function BalPage() {
         }
       }
     }
+
     if (info.sound !== "") {
-      if (info.message === "") {
-        playSound(info.sound);
-      } else {
-        await playSound(info.sound);
-      }
+      playSound(info.sound);
     }
-    if (!Object.prototype.hasOwnProperty.call(info, "message")) {
-      info.message = "";
-    }
+
     if (info.message !== "") {
       showMessage("Message", info.message);
     }
@@ -1359,7 +1393,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2015;
+        gameVars.currentLevel = 211;
       }
       initLevel(gameVars.currentLevel);
     }

@@ -3,11 +3,13 @@ import { inWater } from "./balUtils.js";
 import { globalVars } from "./glob.js";
 import { electricityTarget } from "./electricity.js";
 import { checkRedBalls } from "./redBalls.js";
-import { playSound } from "./sound.js";
 import { checkSpikes } from "./spikes.js";
 
 export function checkGameOver(backData, gameData, gameInfo, gameVars) {
     let target = -1;
+
+    let playSounds = [];
+    let updateCanvas = false;
 
     if (!globalVars.loading && !gameVars.gameOver && gameInfo.electricity.length > 0 && gameInfo.electricityActive) {
         for (let i = 0; i < gameInfo.electricity.length; i++) {
@@ -36,7 +38,7 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
         if (redInfo.length > 0) {
             gameVars.laser = redInfo;
             gameVars.gameOver = true;
-            playSound("laser");
+            playSounds.push("laser");
         } else {
             gameVars.laser = null;
         }
@@ -63,9 +65,9 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
     }
     if (checkSpikes(backData, gameData, gameInfo)) {
         gameVars.gameOver = true;
-        playSound("pain");
+        playSounds.push("pain");
     }
 
-    return gameVars.gameOver;
+    return { playSounds, updateCanvas };
 }
 

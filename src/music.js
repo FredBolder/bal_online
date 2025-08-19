@@ -1,8 +1,13 @@
 import { getPreDelay, Operator } from "./operator.js";
 import { Filter } from "./filter.js";
 import { Reverb } from "./reverb.js";
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
+let audioCtx = null;
+let reverb = null;
+
+if (typeof window !== "undefined") {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
+}
 
 let filtersList = [];
 let operatorsList = [];
