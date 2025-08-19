@@ -31,6 +31,7 @@ import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
+import { globalVars } from "../glob.js";
 import { fixLevel, getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
@@ -77,7 +78,6 @@ let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
-let loading = true;
 let modalOpen = false;
 let otherWorldGreen = -1;
 let thisWorldGreen = -1;
@@ -165,7 +165,7 @@ function BalPage() {
   }
 
   async function runGameScheduler() {
-    if (modalOpen || createLevel || loading || !gameData || !backData || !gameVars || !gameInfo) {
+    if (modalOpen || createLevel || globalVars.loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
     if (gameVars.gameOver || (gameData.length < 2) || (backData.length < 2) ||
@@ -466,7 +466,7 @@ function BalPage() {
         clearMemory(1);
         clearMemory(2);
       }
-      loading = true;
+      globalVars.loading = true;
       initGameVars(gameVars);
       gameVars.currentLevel = n;
       setLevelNumber(n);
@@ -491,7 +491,7 @@ function BalPage() {
       if (gameVars.startlevelmessage !== "") {
         showMessage("Message", gameVars.startlevelmessage);
       }
-      loading = false;
+      globalVars.loading = false;
     } catch (err) {
       console.log(err);
     }
@@ -807,7 +807,7 @@ function BalPage() {
       clearMemory(2);
       isInOtherWorld = false;
       otherWorldGreen = -1;
-      loading = true;
+      globalVars.loading = true;
       initGameVars(gameVars);
       backData = null;
       backData = result.backData;
@@ -825,7 +825,7 @@ function BalPage() {
       if (gameVars.startlevelmessage !== "") {
         showMessage("Message", gameVars.startlevelmessage);
       }
-      loading = false;
+      globalVars.loading = false;
     }
   }
 
@@ -1048,7 +1048,7 @@ function BalPage() {
       return;
     }
 
-    if (loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
+    if (globalVars.loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
       return;
     }
     if (gameInfo.blueBall.x === -1 || gameInfo.blueBall.y === -1 || gameData.length === 0) {
