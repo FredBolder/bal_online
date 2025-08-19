@@ -10,9 +10,7 @@ import {
   changePistonInverted,
   changePistonMode,
   changePistonSticky,
-  checkFalling,
   findElementByCoordinate,
-  inWater,
   jump,
   jumpLeft,
   jumpRight,
@@ -28,40 +26,21 @@ import {
 import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { changeColor, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow } from "../colorUtils.js";
-import { changeConveyorBeltMode, conveyorBeltModes, moveConveyorBelts } from "../conveyorBelts.js";
-import { checkCopiers } from "../copiers.js";
-import { checkDamagedStones } from "../damagedStones.js";
-import { checkDelays } from "../delays.js";
-import { checkDetonator } from "../detonator.js";
-import { electricityTarget } from "../electricity.js";
-import { checkForces } from "../force.js";
-import { clearBitMapLava, drawLevel } from "../drawLevel.js";
-import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "../elevators.js";
+import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
+import { checkGameOver } from "../gameOver.js";
+import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
-import { moveFish } from "../fish.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { fixLevel, getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
-import { checkMovers } from "../movers.js";
-import { checkMusicBoxes } from "../musicBoxes.js"
-import { moveOrangeBalls } from "../orangeBalls.js";
-import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "../pistons.js";
-import { checkPurpleTeleports, deleteIfPurpleTeleport, deleteTeleports, findTheOtherTeleport } from "../teleports.js";
-import { checkRedBalls, moveRedBalls } from "../redBalls.js";
+import { gameScheduler } from "../scheduler.js";
+import { deleteIfPurpleTeleport } from "../teleports.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { playSound } from "../sound.js";
-import { checkSpikes } from "../spikes.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
-import { checkTimeBombs } from "../timeBombs.js";
-import { checkTrapDoors } from "../trapDoors.js";
 import { tryParseInt } from "../utils.js";
-import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "../yellowBalls.js";
-import { moveYellowBars } from "../yellowBars.js";
-import { checkYellowPausers } from "../yellowPausers.js";
-import { checkYellowPushersTriggers } from "../yellowPushers.js";
-import { checkYellowStoppers } from "../yellowStoppers.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -94,7 +73,7 @@ let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelObject = -1;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let isInOtherWorld = false;
@@ -185,108 +164,7 @@ function BalPage() {
     }
   }
 
-  function saveProgress() {
-    localStorage.setItem("lastSolvedLevel", gameVars.currentLevel.toString());
-  }
-
-  function checkGameOver() {
-    let target = -1;
-
-    if (!loading && !gameVars.gameOver && gameInfo.electricity.length > 0 && gameInfo.electricityActive) {
-      for (let i = 0; i < gameInfo.electricity.length; i++) {
-        const elec = gameInfo.electricity[i];
-        target = electricityTarget(backData, gameData, elec.x, elec.y);
-        if (target > 0) {
-          if (gameData[target][elec.x] === 2) {
-            gameVars.gameOver = true;
-          }
-          if (backData[target][elec.x] === 20 || backData[target][elec.x] === 23) {
-            if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData) ||
-              inWater(gameInfo.blueBall1.x, gameInfo.blueBall1.y, backData) ||
-              (gameInfo.twoBlue && inWater(gameInfo.blueBall2.x, gameInfo.blueBall2.y, backData))) {
-              gameVars.gameOver = true;
-            }
-            for (let j = 0; j < gameInfo.redFish.length; j++) {
-              const fish = gameInfo.redFish[j];
-              fish.isDead = true;
-            }
-          }
-        }
-      }
-    }
-    if ((gameVars.timeFreezer === 0) && (!gameVars.gameOver)) {
-      let redInfo = checkRedBalls(gameData, gameInfo.redBalls);
-      if (redInfo.length > 0) {
-        gameVars.laser = redInfo;
-        gameVars.gameOver = true;
-        playSound("laser");
-      } else {
-        gameVars.laser = null;
-      }
-    }
-    if (!gameVars.gameOver && !gameInfo.hasDivingGlasses) {
-      if ([20, 23].includes(backData[gameInfo.blueBall1.y][gameInfo.blueBall1.x])) {
-        gameVars.gameOver = true;
-      }
-      if (gameInfo.twoBlue && [20, 23].includes(backData[gameInfo.blueBall2.y][gameInfo.blueBall2.x])) {
-        gameVars.gameOver = true;
-      }
-    }
-    if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && (gameInfo.redFish.length > 0)) {
-      for (let i = 0; i < gameInfo.redFish.length && !gameVars.gameOver; i++) {
-        const fish = gameInfo.redFish[i];
-        if (!fish.isDead &&
-          (((Math.abs(gameInfo.blueBall.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall.y - fish.y) < 2)) ||
-            ((Math.abs(gameInfo.blueBall1.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall1.y - fish.y) < 2)) ||
-            (gameInfo.twoBlue && (Math.abs(gameInfo.blueBall2.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall2.y - fish.y) < 2)))
-        ) {
-          gameVars.gameOver = true;
-        }
-      }
-    }
-    if (checkSpikes(backData, gameData, gameInfo)) {
-      gameVars.gameOver = true;
-      playSound("pain");
-    }
-    if (gameVars.gameOver) {
-      updateGameCanvas();
-    }
-  }
-
-  async function gameScheduler() {
-    let info = {};
-    let saveCoilSpring = false;
-    let saveDivingGlasses = false;
-    let saveKey = false;
-    let saveLadder = false;
-    let savePickaxe = false;
-    let savePropeller = false;
-    let saveTelekineticPower = false;
-    let saveWeakStone = false;
-    let update = false;
-
-    function loadItems() {
-      gameInfo.hasCoilSpring = saveCoilSpring;
-      gameInfo.hasDivingGlasses = saveDivingGlasses;
-      gameInfo.hasKey = saveKey;
-      gameInfo.hasLadder = saveLadder;
-      gameInfo.hasPickaxe = savePickaxe;
-      gameInfo.hasPropeller = savePropeller;
-      gameInfo.hasTelekineticPower = saveTelekineticPower;
-      gameInfo.hasWeakStone = saveWeakStone;
-    }
-
-    function saveItems() {
-      saveCoilSpring = gameInfo.hasCoilSpring;
-      saveDivingGlasses = gameInfo.hasDivingGlasses;
-      saveKey = gameInfo.hasKey;
-      saveLadder = gameInfo.hasLadder;
-      savePickaxe = gameInfo.hasPickaxe;
-      savePropeller = gameInfo.hasPropeller;
-      saveTelekineticPower = gameInfo.hasTelekineticPower;
-      saveWeakStone = gameInfo.hasWeakStone;
-    }
-
+  async function runGameScheduler() {
     if (modalOpen || createLevel || loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
@@ -294,334 +172,20 @@ function BalPage() {
       (gameInfo.blueBall.x === -1) || (gameInfo.blueBall.y === -1)) {
       return;
     }
-
-    if (gameVars.timeFreezer > 0) {
-      gameVars.timeFreezer--;
-    }
-
-    if (checkMagnets(gameInfo)) {
-      playSound("magnet");
-    }
-
-    if (checkDelays(gameData, gameInfo)) {
-      update = true;
-    }
-
-    if (checkMusicBoxes(gameData, gameInfo)) {
-      update = true;
-    }
-
-    if (checkPurpleTeleports(backData, gameData, gameInfo)) {
-      update = true;
-      playSound("teleport");
-    }
-
-    info = checkTrapDoors(backData, gameData, gameInfo);
-    if (info.sound) {
-      playSound("trap");
-    }
-    if (info.updated) {
-      update = true;
-    }
-    info = checkDamagedStones(gameData, gameInfo);
-    if (info.sound === 1) {
-      playSound("breaking1");
-    }
-    if (info.sound === 2) {
-      playSound("breaking2");
-    }
-    if (info.updated) {
-      update = true;
-    }
-
-    if (checkForces(gameData, gameInfo)) {
-      update = true;
-    }
-
-    info = checkCopiers(gameData, gameInfo);
-    if (info.updated) {
-      update = true;
-    }
-
-    gameVars.refreshCounter++;
-    if (gameVars.refreshCounter >= gameVars.refreshCountTo) {
-      gameVars.refreshCounter = 0;
-      clearBitMapLava();
-      update = true;
-    }
-
-    if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
-      if (gameVars.fishCounter >= gameVars.fishCountTo) {
-        gameVars.fishCounter = 0;
-        moveFish(backData, gameData, gameInfo, gameInfo.blueBall.x, gameInfo.blueBall.y);
-        update = true;
-      }
-      gameVars.fishCounter++;
-    }
-
-    gameVars.wave1++;
-    if (gameVars.wave1 > 5) {
-      gameVars.wave1 = 1;
-      gameVars.wave2++;
-      if (gameVars.wave2 > 3) {
-        gameVars.wave2 = 1;
-      }
-      update = true;
-    }
-
-    if (gameVars.timeFreezer === 0) {
-      if (checkMovers(gameData, gameInfo)) {
-        update = true;
-      }
-
-      if (gameVars.elevatorCounter >= gameVars.elevatorCountTo) {
-        gameVars.elevatorCounter = 0;
-        if (moveElevators(gameData, gameInfo)) {
-          update = true;
-        }
-        if (moveHorizontalElevators(gameData, gameInfo)) {
-          update = true;
-        }
-      }
-      gameVars.elevatorCounter++;
-
-      if (checkElevatorInOuts(gameData, gameInfo)) {
-        update = true;
-      }
-
-      if ((gameVars.conveyorBeltCounter === gameVars.conveyorBeltCountTo) ||
-        (gameVars.conveyorBeltCounter === Math.round(gameVars.conveyorBeltCountTo * 0.5))) {
-        update = true;
-        gameVars.conveyorBeltAngleLeft -= Math.PI / 4;
-        if (gameVars.conveyorBeltAngleLeft <= 0) {
-          gameVars.conveyorBeltAngleLeft = Math.PI * 2;
-        }
-        gameVars.conveyorBeltAngleRight += Math.PI / 4;
-        if (gameVars.conveyorBeltAngleRight >= Math.PI * 2) {
-          gameVars.conveyorBeltAngleRight = 0;
-        }
-      }
-
-      if (gameVars.conveyorBeltCounter >= gameVars.conveyorBeltCountTo) {
-        gameVars.conveyorBeltCounter = 0;
-        if (moveConveyorBelts(gameData, gameInfo)) {
-          update = true;
-
-        }
-      }
-      gameVars.conveyorBeltCounter++;
-
-      if (gameVars.redCounter > 0) {
-        gameVars.redCounter--;
-      } else {
-        gameVars.redCounter = 2;
-        info = moveRedBalls(backData, gameData, gameInfo);
-        if (info.updated) {
-          update = true;
-        }
-        if (info.eating) {
-          playSound("eat");
-        }
-      }
-    }
-
-    if (!gameVars.yellowPaused) {
-      if (gameVars.yellowSlowCounter > 0) {
-        gameVars.yellowSlowCounter--;
-      }
-      if (gameVars.yellowCounter > 0) {
-        if (gameVars.yellowCounter === 1) {
-          stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
-        }
-        gameVars.yellowCounter--;
-      } else {
-        if (gameVars.yellowSlowCounter > 0) {
-          gameVars.yellowCounter = 5;
-        } else {
-          gameVars.yellowCounter = 1;
-        }
-        if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
-          update = true;
-        }
-        if (moveYellowBars(backData, gameData, gameInfo)) {
-          update = true;
-        }
-      }
-    }
-    if (gameVars.orangeCounter > 0) {
-      gameVars.orangeCounter--;
-    } else {
-      gameVars.orangeCounter = 1;
-      if (moveOrangeBalls(gameData, gameInfo.orangeBalls)) {
-        update = true;
-      }
-    }
-
-    if (gameVars.explosionCounter > 0) {
-      gameVars.explosionCounter--;
-    } else {
-      gameVars.explosionCounter = 2;
-      info = checkDetonator(backData, gameData, gameInfo, false);
-      if (info.explosion) {
-        playSound("explosion");
-      }
-      if (info.updated) {
-        update = true;
-      }
-    }
-
-    if (gameVars.timeFreezer === 0) {
-      info = checkTimeBombs(gameData, backData, gameInfo);
-      if (info.explosion) {
-        playSound("explosion");
-      }
-      if (info.updated) {
-        update = true;
-      }
-      if (info.gameOver) {
-        gameVars.gameOver = true;
-        updateGameCanvas();
-      }
-    }
-
-    if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0)) {
-      info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, false);
-      if (info.updated) {
-        update = true;
-      }
-      if (gameVars.pistonsRepeatFastModeCounter > 0) {
-        gameVars.pistonsRepeatFastModeCounter--;
-      } else {
-        gameVars.pistonsRepeatFastModeCounter = gameVars.pistonsRepeatFastModeCountTo;
-        if (pistonsRepeatFast(gameData, gameInfo, gameVars)) {
-          update = true;
-        }
-        if (gameVars.pistonsRepeatSlowModeCounter > 0) {
-          gameVars.pistonsRepeatSlowModeCounter--;
-        } else {
-          gameVars.pistonsRepeatSlowModeCounter = gameVars.pistonsRepeatSlowModeCountTo;
-          if (pistonsRepeatSlow(gameData, gameInfo, gameVars)) {
-            update = true;
-          }
-        }
-      }
-    }
-
-    info = checkYellowPushersTriggers(backData, gameData, gameInfo, gameVars, false);
-    if (info.updated) {
-      update = true;
-    }
-    checkYellowPausers(backData, gameData, gameInfo, gameVars, false);
-    checkYellowStoppers(backData, gameData, gameInfo, gameVars, false);
-
-    if (gameInfo.teleports.length > 0) {
-      let teleport1 = -1;
-      let teleport2 = -1;
-      switch (gameVars.teleporting) {
-        case 1:
-          playSound("teleport");
-          gameVars.teleporting = 2;
-          break;
-        case 2:
-          teleport1 = findElementByCoordinate(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
-          if (teleport1 >= 0) {
-            if (gameInfo.teleports[teleport1].selfDestructing) {
-              gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-            } else {
-              gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 31;
-            }
-            teleport2 = findTheOtherTeleport(teleport1, gameInfo.teleports);
-            if (teleport2 >= 0) {
-              gameInfo.blueBall.x = gameInfo.teleports[teleport2].x;
-              gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
-            }
-            if (gameInfo.teleports[teleport1].selfDestructing) {
-              deleteTeleports("white", true, gameInfo);
-            }
-          }
-          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
-          update = true;
-          gameVars.teleporting = 0;
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (gameInfo.hasTravelGate) {
-      switch (gameVars.gateTravelling) {
-        case 1:
-          playSound("teleport");
-          gameVars.gateTravelling = 2;
-          break;
-        case 2:
-          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 132;
-          clearMemory(0); // Prevent conflicts between two worlds          
-          if (isInOtherWorld) {
-            isInOtherWorld = false;
-            saveToMemory(gameData, backData, gameInfo, gameVars, 2);
-            saveItems();
-            await clickLoadFromMemory(1);
-            loadItems();
-          } else {
-            isInOtherWorld = true;
-            saveToMemory(gameData, backData, gameInfo, gameVars, 1);
-            saveItems();
-            await clickLoadFromMemory(2);
-            loadItems();
-          }
-          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-          gameInfo.blueBall.x = gameInfo.travelGate.x;
-          gameInfo.blueBall.y = gameInfo.travelGate.y;
-          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
-          gameVars.gateTravelling = 0;
-          updateGameCanvas();
-          break;
-        default:
-          break;
-      }
-    }
-
-    if ((gameVars.timeFreezer === 0) && (gameInfo.electricity.length > 0)) {
-      if (gameVars.electricityCounter > 110) {
-        gameVars.electricityCounter = 0;
-      }
-      gameInfo.electricityActive = false;
-      if (
-        (gameVars.electricityCounter > 50 && gameVars.electricityCounter < 60) ||
-        (gameVars.electricityCounter > 90 && gameVars.electricityCounter < 100)
-      ) {
-        gameInfo.electricityActive = true;
-      }
-      if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
-        playSound("electricity");
-      }
-      if (
-        gameInfo.electricityActive ||
-        gameVars.elecActiveSaved !== gameInfo.electricityActive
-      ) {
-        update = true;
-      }
-      gameVars.elecActiveSaved = gameInfo.electricityActive;
-      gameVars.electricityCounter++;
-    }
-
-    info = checkFalling(backData, gameData, gameInfo, gameVars);
-    if (info.update) {
-      update = true;
-    }
-    if (info.sound !== "") {
-      playSound(info.sound);
-    }
-    if (info.sound === "pain") {
-      gameVars.gameOver = true;
+    const info = await gameScheduler(backData, gameData, gameInfo, gameVars);
+    if (info.updateCanvas) {
       updateGameCanvas();
     }
-
-    if (update) {
-      updateGameCanvas();
-      checkGameOver();
+    if (info.updateGreen) {
+      updateGreen();
     }
+    if (info.updateLevelNumber) {
+      setLevelNumber(gameVars.currentLevel);
+    }
+  }
+
+  function saveProgress() {
+    localStorage.setItem("lastSolvedLevel", gameVars.currentLevel.toString());
   }
 
   async function hint(gameVars) {
@@ -1618,7 +1182,9 @@ function BalPage() {
     if (info.player) {
       gameVars.skipFalling = 1;
       updateGameCanvas();
-      checkGameOver();
+      if (checkGameOver(backData, gameData, gameInfo, gameVars)) {
+        updateGameCanvas();
+      }
     }
     if (info.freezeTime > 0) {
       gameVars.timeFreezer = info.freezeTime;
@@ -1634,7 +1200,9 @@ function BalPage() {
     }
     if (info.update) {
       updateGameCanvas();
-      checkGameOver();
+      if (checkGameOver(backData, gameData, gameInfo, gameVars)) {
+        updateGameCanvas();
+      }
     }
     if (info.slowDownYellow > 0) {
       gameVars.yellowSlowCounter = info.slowDownYellow;
@@ -1643,7 +1211,9 @@ function BalPage() {
       gameInfo.greenBalls--;
       updateGreen();
       playSound("eat");
-      checkGameOver();
+      if (checkGameOver(backData, gameData, gameInfo, gameVars)) {
+        updateGameCanvas();
+      }
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
         ((thisWorldGreen === 0) && (otherWorldGreen === 0)))
       ) {
@@ -1804,7 +1374,7 @@ function BalPage() {
     //const el = myRef.current;
     //el.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
-    gameInterval = setInterval(gameScheduler, 50);
+    gameInterval = setInterval(runGameScheduler, 50);
     return () => {
       //el.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);

@@ -1,0 +1,4 @@
+export const globalVars = {
+    isInOtherWorld: false,
+    loading: false,
+}
