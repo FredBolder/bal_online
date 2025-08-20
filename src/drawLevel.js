@@ -1100,13 +1100,15 @@ function drawLevel(
     drawText(ctx, xc, yc, "π", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
-  function drawPickaxe() {
+  function drawPickaxe(x, y) {
+    let color = getFgcolor(x, y, "silver");
     let d1 = w1 / 4;
     let d2 = w1 / 4;
     let d3 = w1 / 3;
     ctx.lineWidth = 3;
-    drawLine(ctx, xmin + d1, ymin + d1, xmax - d2, ymax - d2, "silver");
+    drawLine(ctx, xmin + d1, ymin + d1, xmax - d2, ymax - d2, color);
     ctx.lineWidth = 1;
+    canvas.strokeStyle = color;
     ctx.beginPath();
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.ellipse(xc + d3, yc + d3, w1 * 0.7, w2 * 0.7, 0, 1.1 * Math.PI, 1.4 * Math.PI, false);
@@ -1454,6 +1456,28 @@ function drawLevel(
         ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
         break;
     }
+    ctx.fill();
+  }
+
+  function drawStar(color) {
+    const outerRadius = Math.min(w1, w2) * 0.25;
+    const innerRatio = Math.sin(Math.PI * 18 / 180) / Math.sin(Math.PI * 54 / 180);
+    const innerRadius = outerRadius * innerRatio;
+    const cx = xc;
+    const cy = yc - w2 * 0.25;
+
+    ctx.beginPath();
+    const spikes = 5;
+    const step = Math.PI / spikes;
+    let angle = -Math.PI / 2;
+    for (let i = 0; i < spikes; i++) {
+      ctx.lineTo(cx + Math.cos(angle) * outerRadius, cy + Math.sin(angle) * outerRadius);
+      angle += step;
+      ctx.lineTo(cx + Math.cos(angle) * innerRadius, cy + Math.sin(angle) * innerRadius);
+      angle += step;
+    }
+    ctx.closePath();
+    ctx.fillStyle = color;
     ctx.fill();
   }
 
@@ -1942,7 +1966,7 @@ function drawLevel(
           // Teleport - will be drawn later
           break;
         case 34:
-          drawPickaxe();
+          drawPickaxe(col, row);
           break;
         case 35:
           drawWeakStone();
@@ -2242,6 +2266,18 @@ function drawLevel(
           break;
         case 178:
           drawMover(col, row);
+          break;
+        case 179:
+          drawStar("yellow");
+          break;
+        case 180:
+          drawStar("blue");
+          break;
+        case 181:
+          drawStar("silver");
+          break;
+        case 182:
+          drawStar("red");
           break;
         case 1000:
           // For manual only (empty)

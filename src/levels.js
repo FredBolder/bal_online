@@ -8,7 +8,7 @@ const series1End = 224;
 const series2Start = 300;
 const series2End = 327;
 const series3Start = 400;
-const series3End = 415;
+const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
 const seriesSmallStart = 750;
@@ -21,6 +21,8 @@ const seriesSecretStart = 2000;
 const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
+const hiddenMiniSeries1Start = 3100;
+const hiddenMiniSeries1End = 3100;
 
 export function checkLevel(data, settings) {
   // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable
@@ -507,6 +509,9 @@ export function getAllLevels() {
   for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
     levels.push(i);
   }
+  for (let i = hiddenMiniSeries1Start; i <= hiddenMiniSeries1End; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -519,6 +524,10 @@ function getSettingInfo(name, settingsInfo) {
     }
   }
   return info;
+}
+
+export function getHiddenMiniStart() {
+  return hiddenMiniSeries1Start;
 }
 
 export function getSecretStart() {
@@ -536,6 +545,7 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesEasyStart && n <= seriesEasyEnd) ||
     (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
+    (n >= hiddenMiniSeries1Start && n <= hiddenMiniSeries1End) ||
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
     (n >= 9997) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);

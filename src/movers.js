@@ -1,4 +1,4 @@
-import { moveObject } from "./balUtils.js";
+import { findElementByCoordinate, moveObject } from "./balUtils.js";
 
 export function checkMovers(gameData, gameInfo) {
     let update = false;
@@ -66,6 +66,68 @@ export function checkMovers(gameData, gameInfo) {
     return update;
 }
 
+export function moverCanMoveBlueBall(gameData, gameInfo) {
+    let result = false;
+    let idx = -1;
+    let x = gameInfo.blueBall.x;
+    let y = gameInfo.blueBall.y;
+
+    if (y < (gameData.length - 1)) {
+        if (gameData[y + 1][x] === 178) {
+            idx = findElementByCoordinate(x, y + 1, gameInfo.movers);
+            if (idx >= 0) {
+                const mover = gameInfo.movers[idx];
+                switch (mover.direction) {
+                    case "left":
+                        if (mover.x > 0) {
+                            if (gameData[mover.y - 1][mover.x - 1] === 0) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    case "right":
+                        if (mover.x < (gameData[0].length - 1)) {
+                            if (gameData[mover.y - 1][mover.x + 1] === 0) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    case "upleft":
+                        if ((mover.x > 0) && (mover.y > 0)) {
+                            if ((gameData[mover.y - 2][mover.x - 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    case "upright":
+                        if ((mover.x < (gameData[0].length - 1)) && (mover.y > 0)) {
+                            if ((gameData[mover.y - 2][mover.x + 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    case "downleft":
+                        if (mover.x > 0) {
+                            if ((gameData[mover.y][mover.x - 1] === 0) && (gameData[mover.y - 1][mover.x - 1] === 0)) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    case "downright":
+                        if (mover.x < (gameData[0].length - 1)) {
+                            if ((gameData[mover.y][mover.x + 1] === 0) && (gameData[mover.y - 1][mover.x + 1] === 0)) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    return result;
+}
 
 export function moversDirections() {
     return ["left", "right", "upleft", "upright", "downleft", "downright"];

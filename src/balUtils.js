@@ -1,8 +1,9 @@
-import { secretSeriesCodePart } from "./codes.js";
+import { numberToCode, secretSeriesCodePart } from "./codes.js";
 import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
+import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
-import { moversDirections } from "./movers.js";
+import { moverCanMoveBlueBall, moversDirections } from "./movers.js";
 import { moveOrangeBallInDirection, updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
@@ -548,6 +549,18 @@ export function charToNumber(c) {
       break;
     case "η":
       result = 178;
+      break;
+    case "Ć":
+      result = 179;
+      break;
+    case "Ĉ":
+      result = 180;
+      break;
+    case "Ċ":
+      result = 181;
+      break;
+    case "Č":
+      result = 182;
       break;
     case "|":
       result = 1000;
@@ -1273,6 +1286,18 @@ export function numberToChar(n) {
     case 178:
       result = "η";
       break;
+    case 179:
+      result = "Ć";
+      break;
+    case 180:
+      result = "Ĉ";
+      break;
+    case 181:
+      result = "Ċ";
+      break;
+    case 182:
+      result = "Č";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1307,7 +1332,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
     for (let j = 0; j < arr[i].length; j++) {
       data = charToNumber(arr[i][j]);
       if (importing) {
-        if ([133, 134, 135].includes(data)) {
+        if ([133, 134, 135, 179, 180, 181, 182].includes(data)) {
           data = 0;
         }
       }
@@ -1410,25 +1435,25 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
 }
 
 export function moveObjectInDirection(gameData, gameInfo, x, y, direction) {
-    let newX = x;
-    let newY = y;
-    switch (direction) {
-        case "down":
-            newY++;
-            break;
-        case "left":
-            newX--;
-            break;
-        case "right":
-            newX++;
-            break;
-        case "up":
-            newY--;
-            break;
-        default:
-            break;
-    }
-    moveObject(gameData, gameInfo, x, y, newX, newY);
+  let newX = x;
+  let newY = y;
+  switch (direction) {
+    case "down":
+      newY++;
+      break;
+    case "left":
+      newX--;
+      break;
+    case "right":
+      newX++;
+      break;
+    case "up":
+      newY--;
+      break;
+    default:
+      break;
+  }
+  moveObject(gameData, gameInfo, x, y, newX, newY);
 }
 
 export function moveObjects(gameInfo, gameVars, mode, x1, y1, x2, y2) {
@@ -1656,6 +1681,9 @@ function take(gameData, gameInfo, result, x, y) {
       result.message = "You are duplicated! By pressing the B key or the S button you can set ";
       result.message += "which one you control."
       break;
+    case 179:
+      result.message = "The code for the hidden mini series 1 is: " + numberToCode(getHiddenMiniStart());
+      break;
     default:
       break;
   }
@@ -1704,10 +1732,14 @@ export function moveLeft(backData, gameData, gameInfo) {
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (gameData.length > 0) {
+    if (moverCanMoveBlueBall(gameData, gameInfo)) {
+      return result;
+    }
+
     if (!fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key etc.
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(row[x - 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(row[x - 1]) ||
           (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x - 1, y);
@@ -1893,11 +1925,15 @@ export function moveRight(backData, gameData, gameInfo) {
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
   if (gameData.length > 0) {
+    if (moverCanMoveBlueBall(gameData, gameInfo)) {
+      return result;
+    }
+
     if (!fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceLeft(gameData, gameInfo, x, y)) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key etc.
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(row[x + 1]) ||
+        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(row[x + 1]) ||
           (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x + 1, y);
@@ -2073,9 +2109,13 @@ export function jump(backData, gameData, gameInfo) {
 
   if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
+      if (moverCanMoveBlueBall(gameData, gameInfo)) {
+        return result;
+      }
+
       if (gameInfo.hasCoilSpring && (y > 1) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![25, 137, 90].includes(backData[y - 1][x])) && (![25, 137, 90].includes(backData[y][x])) && (![80].includes(backData[y - 2][x]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(gameData[y - 2][x])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 2][x])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y - 2);
             if (gameData[y - 2][x] === 168) {
@@ -2094,7 +2134,7 @@ export function jump(backData, gameData, gameInfo) {
       }
       if (!result.player && (y > 0) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if (![80].includes(backData[y - 1][x])) {
-          if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(gameData[y - 1][x]) ||
+          if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 1][x]) ||
             (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y - 1);
@@ -2216,9 +2256,13 @@ export function jumpLeft(backData, gameData, gameInfo) {
 
   if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
+      if (moverCanMoveBlueBall(gameData, gameInfo)) {
+        return result;
+      }
+
       if (gameInfo.hasCoilSpring && y > 1 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x - 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(gameData[y - 2][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 2][x - 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x - 1, y - 2);
             if (gameData[y - 2][x - 1] === 168) {
@@ -2237,7 +2281,7 @@ export function jumpLeft(backData, gameData, gameInfo) {
       }
       if (!result.player && y > 0 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![80].includes(backData[y - 1][x - 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(gameData[y - 1][x - 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 1][x - 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x - 1, y - 1);
             if (gameData[y - 1][x - 1] === 168) {
@@ -2271,9 +2315,13 @@ export function jumpRight(backData, gameData, gameInfo) {
 
   if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0) {
+      if (moverCanMoveBlueBall(gameData, gameInfo)) {
+        return result;
+      }
+
       if (gameInfo.hasCoilSpring && y > 1 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x + 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(gameData[y - 2][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 2][x + 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + 1, y - 2);
             if (gameData[y - 2][x + 1] === 168) {
@@ -2292,7 +2340,7 @@ export function jumpRight(backData, gameData, gameInfo) {
       }
       if (!result.player && y > 0 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
         if ((gameData[y - 1][x] === 0) && (![80].includes(backData[y - 1][x + 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168].includes(gameData[y - 1][x + 1])) {
+          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 1][x + 1])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + 1, y - 1);
             if (gameData[y - 1][x + 1] === 168) {
@@ -2484,6 +2532,10 @@ export function moveDownLeft(backData, gameData, gameInfo) {
 
   if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2) {
+      if (moverCanMoveBlueBall(gameData, gameInfo)) {
+        return result;
+      }
+
       if (
         gameData[y + 1][x - 1] === 0 &&
         gameData[y + 1][x] === 0 &&
@@ -2510,6 +2562,10 @@ export function moveDownRight(backData, gameData, gameInfo) {
 
   if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2) {
+      if (moverCanMoveBlueBall(gameData, gameInfo)) {
+        return result;
+      }
+
       if (
         gameData[y + 1][x + 1] === 0 &&
         gameData[y + 1][x] === 0 &&

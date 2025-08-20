@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { checkMovers } from "./movers.js";
+import { checkMovers, moverCanMoveBlueBall } from "./movers.js";
 import { initGameInfo } from "./gameInfo.js";
 
-describe("checkMovers", () => {
+describe("movers", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+
+    // checkMovers
 
     let gameInfo01a = {
         ...defaultGameInfo,
@@ -86,6 +88,69 @@ describe("checkMovers", () => {
         expect(JSON.stringify(gameInfo01b.yellowBalls)).toBe(JSON.stringify([{ x: 4, y: 3, direction: "none" }]));
     });
 
+    // moverCanMoveBlueBall
+
+    let gameInfo02a = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 4 },
+        movers: [
+            { x: 1, y: 5, direction: "right" },
+            { x: 3, y: 5, direction: "right" },
+            { x: 5, y: 5, direction: "right" }
+        ]
+    };
+    let input02a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 4, 0, 5, 0, 1],
+        [1, 178, 1, 178, 1, 178, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02a = input02a.map(row => [...row]);
+
+    let info02a = moverCanMoveBlueBall(input02a, gameInfo02a);
+    it("moverCanMoveBlueBall A", () => {
+        expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
+    });
+    it("moverCanMoveBlueBall A info", () => {
+        expect(info02a).toBe(true);
+    });
+    it("moverCanMoveBlueBall A blueBall", () => {
+        expect(JSON.stringify(gameInfo02a.blueBall)).toBe(JSON.stringify({ x: 1, y: 4 }));
+    });
+
+    let gameInfo02b = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 4 },
+        movers: [
+            { x: 1, y: 5, direction: "left" },
+            { x: 3, y: 5, direction: "right" },
+            { x: 5, y: 5, direction: "right" }
+        ]
+    };
+    let input02b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 4, 0, 5, 0, 1],
+        [1, 178, 1, 178, 1, 178, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02b = input02b.map(row => [...row]);
+
+    let info02b = moverCanMoveBlueBall(input02b, gameInfo02b);
+    it("moverCanMoveBlueBall B", () => {
+        expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
+    });
+    it("moverCanMoveBlueBall B info", () => {
+        expect(info02b).toBe(false);
+    });
+    it("moverCanMoveBlueBall B blueBall", () => {
+        expect(JSON.stringify(gameInfo02b.blueBall)).toBe(JSON.stringify({ x: 1, y: 4 }));
+    });
 
     // Insert new tests here
 });
