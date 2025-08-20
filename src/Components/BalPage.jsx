@@ -1043,7 +1043,15 @@ function BalPage() {
       info.update = false;
     }
 
-
+    // Game over must be checked before checking if the level is solved
+    const gameOverResult = checkGameOver(backData, gameData, gameInfo, gameVars);
+    if (gameOverResult.updateCanvas) {
+      info.update = true;
+    }
+    for (let i = 0; i < gameOverResult.playSounds.length; i++) {
+      const snd = gameOverResult.playSounds[i];
+      playSound(snd);
+    }
     if (info.freezeTime > 0) {
       gameVars.timeFreezer = info.freezeTime;
     }
@@ -1058,13 +1066,6 @@ function BalPage() {
       updateGameCanvas();
     }
 
-
-    // Game over must be checked before checking if the level is solved
-    const gameOverResult = checkGameOver(backData, gameData, gameInfo, gameVars);
-    for (let i = 0; i < gameOverResult.playSounds.length; i++) {
-      const snd = gameOverResult.playSounds[i];
-      playSound(snd);
-    }
 
     // Check if level is solved
     if (info.eating) {

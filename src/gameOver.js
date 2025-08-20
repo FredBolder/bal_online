@@ -67,6 +67,9 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
         gameVars.gameOver = true;
         playSounds.push("pain");
     }
+    if (gameVars.gameOver) {
+        updateCanvas = true;
+    }
 
     return { playSounds, updateCanvas };
 }
