@@ -5,13 +5,11 @@ import { checkDamagedStones } from "./damagedStones.js";
 import { checkDelays } from "./delays.js";
 import { checkDetonator } from "./detonator.js";
 import { checkGameOver } from "./gameOver.js";
-import { globalVars } from "./glob.js";
 import { checkForces } from "./force.js";
 import { clearBitMapLava } from "./drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "./elevators.js";
 import { moveFish } from "./fish.js";
 import { checkMagnets } from "./magnets.js";
-import { clearMemory, loadFromMemory, saveToMemory } from "./memory.js";
 import { checkMovers } from "./movers.js";
 import { checkMusicBoxes } from "./musicBoxes.js"
 import { moveOrangeBalls } from "./orangeBalls.js";
@@ -26,62 +24,14 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
-async function loadLevelFromMemory(backData, gameData, gameInfo, gameVars, idx) {
-    const data = loadFromMemory(idx);
-    if (data !== null) {
-        gameData = null;
-        gameData = data.gameData;
-        backData = null;
-        backData = data.backData;
-        gameInfo = null;
-        gameInfo = data.gameInfo;
-        if (gameInfo.player === 2) {
-            gameInfo.blueBall = gameInfo.blueBall2;
-        } else {
-            gameInfo.blueBall = gameInfo.blueBall1;
-        }
-        gameVars = null;
-        gameVars = data.gameVars;
-    }
-}
-
 export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     let info = {};
-    let saveCoilSpring = false;
-    let saveDivingGlasses = false;
-    let saveKey = false;
-    let saveLadder = false;
-    let savePickaxe = false;
-    let savePropeller = false;
-    let saveTelekineticPower = false;
-    let saveWeakStone = false;
 
+    let gateTravelling = false;
     let playSounds = [];
     let updateCanvas = false;
     let updateGreen = false;
     let updateLevelNumber = false;
-
-    function loadItems() {
-        gameInfo.hasCoilSpring = saveCoilSpring;
-        gameInfo.hasDivingGlasses = saveDivingGlasses;
-        gameInfo.hasKey = saveKey;
-        gameInfo.hasLadder = saveLadder;
-        gameInfo.hasPickaxe = savePickaxe;
-        gameInfo.hasPropeller = savePropeller;
-        gameInfo.hasTelekineticPower = saveTelekineticPower;
-        gameInfo.hasWeakStone = saveWeakStone;
-    }
-
-    function saveItems() {
-        saveCoilSpring = gameInfo.hasCoilSpring;
-        saveDivingGlasses = gameInfo.hasDivingGlasses;
-        saveKey = gameInfo.hasKey;
-        saveLadder = gameInfo.hasLadder;
-        savePickaxe = gameInfo.hasPickaxe;
-        savePropeller = gameInfo.hasPropeller;
-        saveTelekineticPower = gameInfo.hasTelekineticPower;
-        saveWeakStone = gameInfo.hasWeakStone;
-    }
 
     // SCHEDULER
     if (gameVars.timeFreezer > 0) {
@@ -337,40 +287,8 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         }
     }
 
-    if (gameInfo.hasTravelGate) {
-        switch (gameVars.gateTravelling) {
-            case 1:
-                playSounds.push("teleport");
-                gameVars.gateTravelling = 2;
-                break;
-            case 2:
-                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 132;
-                clearMemory(0); // Prevent conflicts between two worlds          
-                if (globalVars.isInOtherWorld) {
-                    globalVars.isInOtherWorld = false;
-                    saveToMemory(gameData, backData, gameInfo, gameVars, 2);
-                    saveItems();
-                    await loadLevelFromMemory(backData, gameData, gameInfo, gameVars, 1);
-                    loadItems();
-                } else {
-                    globalVars.isInOtherWorld = true;
-                    saveToMemory(gameData, backData, gameInfo, gameVars, 1);
-                    saveItems();
-                    await loadLevelFromMemory(backData, gameData, gameInfo, gameVars, 2);
-                    loadItems();
-                }
-                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-                gameInfo.blueBall.x = gameInfo.travelGate.x;
-                gameInfo.blueBall.y = gameInfo.travelGate.y;
-                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
-                gameVars.gateTravelling = 0;
-                updateCanvas = true;
-                updateGreen = true;
-                updateLevelNumber = true;
-                break;
-            default:
-                break;
-        }
+    if (gameInfo.hasTravelGate && (gameVars.gateTravelling > 0)) {
+        gateTravelling = true;
     }
 
     if ((gameVars.timeFreezer === 0) && (gameInfo.electricity.length > 0)) {
@@ -419,6 +337,6 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         }
     }
 
-    return { playSounds, updateCanvas, updateGreen, updateLevelNumber };
+    return { gateTravelling, playSounds, updateCanvas, updateGreen, updateLevelNumber };
 }
 

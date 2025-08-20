@@ -1,5 +1,5 @@
-import { charToNumber } from "./balUtils.js";
-import { conveyorBeltModes } from "./conveyorBelts.js";
+import { changeDirection, changeGroup, charToNumber, findElementByCoordinate } from "./balUtils.js";
+import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
@@ -21,155 +21,6 @@ const seriesSecretStart = 2000;
 const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
-
-export function fixLevel(gameData, gameInfo) {
-  const empty = [];
-  let result = "";
-  let errorGameRotatorInNonSquareLevel = false;
-  let errorMoreThanOneBlueBall = false;
-  let errorMoreThanOneSmallBlueBall = false;
-  let foundBlue = false;
-  let foundSmallblue = false;
-  let foundSmallGreen = false;
-  let nSmallGreenBalls = 0;
-  let used = 0;
-  const xMax = gameData[0].length - 1;
-  const yMax = gameData.length - 1;
-  let x = -1;
-  let y = -1;
-
-  for (let i = gameData.length - 1; i >= 0; i--) {
-    for (let j = 0; j <= xMax; j++) {
-      const el = gameData[i][j];
-      switch (el) {
-        case 0:
-          if ((empty.length < 5) && (j > 0) && (i > 0) && (j < xMax) && (i < (gameData.length - 1))) {
-            empty.push({ x: j, y: i });
-          }
-          break;
-        case 3:
-          foundSmallGreen = true;
-          nSmallGreenBalls++;
-          break;
-        case 2:
-          if (foundBlue) {
-            errorMoreThanOneBlueBall = true;
-            gameData[i][j] = 0;
-          } else {
-            gameInfo.blueBall.x = j;
-            gameInfo.blueBall.y = i;
-          }
-          foundBlue = true;
-          break;
-        case 89:
-          if (xMax !== yMax) {
-            errorGameRotatorInNonSquareLevel = true;
-            gameData[i][j] = 0;
-          }
-          break;
-        case 168:
-          if (foundSmallblue) {
-            errorMoreThanOneSmallBlueBall = true;
-            gameData[i][j] = 0;
-          }
-          foundSmallblue = true;
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  if (errorGameRotatorInNonSquareLevel) {
-    result += "There was a game rotator in a non square level.\n";
-  }
-  if (errorMoreThanOneBlueBall) {
-    result += "There was more than one blue ball.\n";
-  }
-  if (errorMoreThanOneSmallBlueBall) {
-    result += "There was more than one small blue ball.\n";
-  }
-
-  if (!foundBlue) {
-    result += "There was no blue ball.\n";
-    if (used < empty.length) {
-      x = empty[used].x;
-      y = empty[used].y;
-      used++;
-    } else {
-      x = 1;
-      y = gameData.length - 2;
-    }
-    gameData[y][x] = 2;
-    gameInfo.blueBall.x = x;
-    gameInfo.blueBall.y = y;
-  }
-
-  if (!foundSmallGreen) {
-    result += "There was no small green ball.\n";
-    if (used < empty.length) {
-      x = empty[used].x;
-      y = empty[used].y;
-      used++;
-    } else {
-      x = 2;
-      y = gameData.length - 2;
-    }
-    gameData[y][x] = 3;
-    nSmallGreenBalls = 1;
-  }
-  gameInfo.greenBalls = nSmallGreenBalls;
-
-  if (result !== "") {
-    result = "The folowing problems were fixed. Please review the level.\n" + result;
-  }
-  return result;
-}
-
-export function getAllLevels() {
-  let levels = [];
-
-  for (let i = series1Start; i <= series1End; i++) {
-    levels.push(i);
-  }
-  for (let i = series2Start; i <= series2End; i++) {
-    levels.push(i);
-  }
-  for (let i = series3Start; i <= series3End; i++) {
-    levels.push(i);
-  }
-  for (let i = series4Start; i <= series4End; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesSmallStart; i <= seriesSmallEnd; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesExtremeStart; i <= seriesExtremeEnd; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
-    levels.push(i);
-  }
-  return levels;
-}
-
-function getSettingInfo(name, settingsInfo) {
-  let info = null;
-
-  for (let i = 0; i < settingsInfo.length; i++) {
-    if (name === settingsInfo[i].name) {
-      info = settingsInfo[i];
-    }
-  }
-  return info;
-}
-
-function settingNr(index) {
-  return `Setting ${index + 1}: `;
-}
 
 export function checkLevel(data, settings) {
   // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable
@@ -525,61 +376,153 @@ export function checkLevel(data, settings) {
   return msg;
 }
 
-export function getSecretStart() {
-  return seriesSecretStart;
-}
+export function fixLevel(gameData, gameInfo) {
+  const empty = [];
+  let result = "";
+  let errorGameRotatorInNonSquareLevel = false;
+  let errorMoreThanOneBlueBall = false;
+  let errorMoreThanOneSmallBlueBall = false;
+  let foundBlue = false;
+  let foundSmallblue = false;
+  let foundSmallGreen = false;
+  let nSmallGreenBalls = 0;
+  let used = 0;
+  const xMax = gameData[0].length - 1;
+  const yMax = gameData.length - 1;
+  let x = -1;
+  let y = -1;
 
-async function loadFromFile(n, gateTravelling = false) {
-  let levelData = [];
-  let levelSettings = [];
-  let msg = "";
-  let fn = n.toString();
-  while (fn.length < 4) {
-    fn = "0" + fn;
-  }
-  fn = `/Levels/` + fn;
-  if (gateTravelling) {
-    fn += "g";
-  }
-  fn += ".dat";
-  try {
-    const response = await fetch(fn);
-    if (!response.ok) throw new Error(`Failed to load file: ${fn}`);
-
-    const d = await response.text();
-    const data = d.split("\n");
-    for (let i = 0; i < data.length; i++) {
-      const line = data[i].trim();
-      if ((line !== "") && !line.startsWith("//")) {
-        if (line.startsWith("$")) {
-          levelSettings.push(line);
-        } else {
-          levelData.push(line);
-        }
+  for (let i = gameData.length - 1; i >= 0; i--) {
+    for (let j = 0; j <= xMax; j++) {
+      const el = gameData[i][j];
+      switch (el) {
+        case 0:
+          if ((empty.length < 5) && (j > 0) && (i > 0) && (j < xMax) && (i < (gameData.length - 1))) {
+            empty.push({ x: j, y: i });
+          }
+          break;
+        case 3:
+          foundSmallGreen = true;
+          nSmallGreenBalls++;
+          break;
+        case 2:
+          if (foundBlue) {
+            errorMoreThanOneBlueBall = true;
+            gameData[i][j] = 0;
+          } else {
+            gameInfo.blueBall.x = j;
+            gameInfo.blueBall.y = i;
+          }
+          foundBlue = true;
+          break;
+        case 89:
+          if (xMax !== yMax) {
+            errorGameRotatorInNonSquareLevel = true;
+            gameData[i][j] = 0;
+          }
+          break;
+        case 168:
+          if (foundSmallblue) {
+            errorMoreThanOneSmallBlueBall = true;
+            gameData[i][j] = 0;
+          }
+          foundSmallblue = true;
+          break;
+        default:
+          break;
       }
     }
-
-    msg = checkLevel(levelData, levelSettings);
-    if (msg !== "") {
-      throw new Error(msg);
-    }
-  } catch (err) {
-    levelSettings = null;
-    levelSettings = [];
-    levelData = null;
-    levelData = [
-      "11111111111111111111111111111111111111111",
-      "1                                       1",
-      "1   55555  5555   5555    555   5555    1",
-      "1   5      5   5  5   5  5   5  5   5   1",
-      "1   555    5555   5555   5   5  5555    1",
-      "1   5      5  5   5  5   5   5  5  5    1",
-      "1   55555  5   5  5   5   555   5   5  31",
-      "1 2                                     1",
-      "11111111111111111111111111111111111111111"
-    ];
   }
-  return { levelSettings, levelData, error: msg };
+
+  if (errorGameRotatorInNonSquareLevel) {
+    result += "There was a game rotator in a non square level.\n";
+  }
+  if (errorMoreThanOneBlueBall) {
+    result += "There was more than one blue ball.\n";
+  }
+  if (errorMoreThanOneSmallBlueBall) {
+    result += "There was more than one small blue ball.\n";
+  }
+
+  if (!foundBlue) {
+    result += "There was no blue ball.\n";
+    if (used < empty.length) {
+      x = empty[used].x;
+      y = empty[used].y;
+      used++;
+    } else {
+      x = 1;
+      y = gameData.length - 2;
+    }
+    gameData[y][x] = 2;
+    gameInfo.blueBall.x = x;
+    gameInfo.blueBall.y = y;
+  }
+
+  if (!foundSmallGreen) {
+    result += "There was no small green ball.\n";
+    if (used < empty.length) {
+      x = empty[used].x;
+      y = empty[used].y;
+      used++;
+    } else {
+      x = 2;
+      y = gameData.length - 2;
+    }
+    gameData[y][x] = 3;
+    nSmallGreenBalls = 1;
+  }
+  gameInfo.greenBalls = nSmallGreenBalls;
+
+  if (result !== "") {
+    result = "The folowing problems were fixed. Please review the level.\n" + result;
+  }
+  return result;
+}
+
+export function getAllLevels() {
+  let levels = [];
+
+  for (let i = series1Start; i <= series1End; i++) {
+    levels.push(i);
+  }
+  for (let i = series2Start; i <= series2End; i++) {
+    levels.push(i);
+  }
+  for (let i = series3Start; i <= series3End; i++) {
+    levels.push(i);
+  }
+  for (let i = series4Start; i <= series4End; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesSmallStart; i <= seriesSmallEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesExtremeStart; i <= seriesExtremeEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
+    levels.push(i);
+  }
+  return levels;
+}
+
+function getSettingInfo(name, settingsInfo) {
+  let info = null;
+
+  for (let i = 0; i < settingsInfo.length; i++) {
+    if (name === settingsInfo[i].name) {
+      info = settingsInfo[i];
+    }
+  }
+  return info;
+}
+
+export function getSecretStart() {
+  return seriesSecretStart;
 }
 
 export async function getLevel(n, gateTravelling = false) {
@@ -635,5 +578,313 @@ export function getRandomLevel(currentLevel) {
   }
   return result;
 }
+
+async function loadFromFile(n, gateTravelling = false) {
+  let levelData = [];
+  let levelSettings = [];
+  let msg = "";
+  let fn = n.toString();
+  while (fn.length < 4) {
+    fn = "0" + fn;
+  }
+  fn = `/Levels/` + fn;
+  if (gateTravelling) {
+    fn += "g";
+  }
+  fn += ".dat";
+  try {
+    const response = await fetch(fn);
+    if (!response.ok) throw new Error(`Failed to load file: ${fn}`);
+
+    const d = await response.text();
+    const data = d.split("\n");
+    for (let i = 0; i < data.length; i++) {
+      const line = data[i].trim();
+      if ((line !== "") && !line.startsWith("//")) {
+        if (line.startsWith("$")) {
+          levelSettings.push(line);
+        } else {
+          levelData.push(line);
+        }
+      }
+    }
+
+    msg = checkLevel(levelData, levelSettings);
+    if (msg !== "") {
+      throw new Error(msg);
+    }
+  } catch (err) {
+    levelSettings = null;
+    levelSettings = [];
+    levelData = null;
+    levelData = [
+      "11111111111111111111111111111111111111111",
+      "1                                       1",
+      "1   55555  5555   5555    555   5555    1",
+      "1   5      5   5  5   5  5   5  5   5   1",
+      "1   555    5555   5555   5   5  5555    1",
+      "1   5      5  5   5  5   5   5  5  5    1",
+      "1   55555  5   5  5   5   555   5   5  31",
+      "1 2                                     1",
+      "11111111111111111111111111111111111111111"
+    ];
+  }
+  return { levelSettings, levelData, error: msg };
+}
+
+export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings, initColors = true) {
+  let color = "";
+  let element = 0;
+  let gameTicks = 0;
+  let group = -1;
+  let instrument = "kalimba";
+  let h = -1;
+  let idx = -1;
+  let mode = "";
+  let p1 = -1;
+  let sound = "";
+  let validXY = false;
+  let volume = 90;
+  let w = -1;
+  let x = -1;
+  let y = -1;
+
+  if (initColors) {
+    gameVars.bgcolor = null;
+    gameVars.bgcolor = [];
+    gameVars.fgcolor = null;
+    gameVars.fgcolor = [];
+  }
+  for (let i = 0; i < levelSettings.length; i++) {
+    const setting = levelSettings[i];
+    p1 = setting.indexOf(":");
+    if (p1 >= 0) {
+      const name = setting.slice(0, p1).toLowerCase().trim();
+      const value = setting.slice(p1 + 1).trim();
+      const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+      const valuesLowerCase = values.map(value => value.toLowerCase());
+      if (values.length >= 2) {
+        x = tryParseInt(values[0], -1);
+        y = tryParseInt(values[1], -1);
+        validXY = ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length));
+      }
+      switch (name) {
+        case "$addnotes":
+          if (values.length >= 3) {
+            if (validXY) {
+              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              if (idx >= 0) {
+                gameInfo.musicBoxes[idx].noteIndex = 0;
+                for (let note = 2; note < values.length; note++) {
+                  gameInfo.musicBoxes[idx].notes.push(values[note]);
+                }
+              }
+            }
+          }
+          break;
+        case "$background":
+          if (values.length === 5) {
+            w = tryParseInt(values[2], -1);
+            h = tryParseInt(values[3], -1);
+            element = tryParseInt(values[4], -1);
+            if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
+              ([20, 23, 25, 80, 90, 137].includes(element))) {
+              for (let posY = y; posY < (y + h); posY++) {
+                for (let posX = x; posX < (x + w); posX++) {
+                  backData[posY][posX] = element;
+                }
+              }
+            }
+          }
+          break;
+        case "$bgcolor":
+        case "$fgcolor":
+          if (values.length === 5) {
+            w = tryParseInt(values[2], -1);
+            h = tryParseInt(values[3], -1);
+            color = values[4];
+            if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
+              if (name === "$bgcolor") {
+                gameVars.bgcolor.push({ x, y, w, h, color })
+              } else {
+                gameVars.fgcolor.push({ x, y, w, h, color })
+              }
+            }
+          }
+          break;
+        case "$conveyorbeltmode":
+          if (values.length === 3) {
+            if (validXY && (conveyorBeltModes().includes(valuesLowerCase[2]))) {
+              changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
+            }
+          }
+          break;
+        case "$direction":
+          if (values.length === 3) {
+            if (["left", "right", "none", "upleft", "upright", "downleft", "downright"].includes(valuesLowerCase[2])) {
+              changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
+            }
+          }
+          break;
+        case "$gameticks":
+          if (values.length === 2) {
+            gameTicks = tryParseInt(values[1], -1);
+            if (gameTicks >= 1) {
+              switch (valuesLowerCase[0]) {
+                case "conveyorbelt":
+                  gameVars.conveyorBeltCountTo = gameTicks;
+                  break;
+                case "elevator":
+                  gameVars.elevatorCountTo = gameTicks;
+                  break;
+                case "fish":
+                  gameVars.fishCountTo = gameTicks;
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        case "$gameticksxy":
+          if (values.length === 3) {
+            gameTicks = tryParseInt(values[2], -1);
+            if (validXY && (gameTicks >= 1)) {
+              idx = findElementByCoordinate(x, y, gameInfo.delays);
+              if (idx >= 0) {
+                gameInfo.delays[idx].gameTicks = gameTicks;
+              }
+            }
+          }
+          break;
+        case "$group":
+          if (values.length === 3) {
+            group = tryParseInt(values[2], -1);
+            if (validXY && (group >= 1) && (group <= 32)) {
+              changeGroup(gameInfo, x, y, group);
+            }
+          }
+          break;
+        case "$hint":
+          gameVars.hint = value;
+          break;
+        case "$instrument":
+          if (values.length >= 4) {
+            instrument = valuesLowerCase[2];
+            volume = tryParseInt(values[3], -1);
+            if (validXY && (volume >= 0) && (volume <= 100)) {
+              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              if (idx >= 0) {
+                gameInfo.musicBoxes[idx].instrument = instrument;
+                gameInfo.musicBoxes[idx].volume = volume;
+              }
+            }
+          }
+          break;
+        case "$inverted":
+          if (values.length === 3) {
+            if (validXY) {
+              idx = findElementByCoordinate(x, y, gameInfo.pistons);
+              if (idx >= 0) {
+                switch (valuesLowerCase[2]) {
+                  case "no":
+                    gameInfo.pistons[idx].inverted = false;
+                    break;
+                  case "yes":
+                    gameInfo.pistons[idx].inverted = true;
+                    break;
+                  default:
+                    break;
+                }
+              }
+            }
+          }
+          break;
+        case "$musicbox":
+          if (values.length === 4) {
+            mode = valuesLowerCase[2];
+            gameTicks = tryParseInt(values[3], -1);
+            if (validXY && ["note", "song"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
+              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              if (idx >= 0) {
+                gameInfo.musicBoxes[idx].mode = mode;
+                gameInfo.musicBoxes[idx].delay = gameTicks;
+              }
+            }
+          }
+          break;
+        case "$notes":
+          if (values.length >= 3) {
+            if (validXY) {
+              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              if (idx >= 0) {
+                gameInfo.musicBoxes[idx].notes = [];
+                gameInfo.musicBoxes[idx].noteIndex = 0;
+                for (let note = 2; note < values.length; note++) {
+                  gameInfo.musicBoxes[idx].notes.push(values[note]);
+                }
+              }
+            }
+          }
+          break;
+        case "$pistonmode":
+          if (values.length === 3) {
+            if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
+              idx = findElementByCoordinate(x, y, gameInfo.pistons);
+              if (idx >= 0) {
+                gameInfo.pistons[idx].mode = valuesLowerCase[2];
+              }
+            }
+          }
+          break;
+        case "$sound":
+          if (values.length === 2) {
+            element = tryParseInt(values[0], -1);
+            sound = valuesLowerCase[1];
+            if (["default", "never", "player"].includes(sound)) {
+              switch (element) {
+                case 22:
+                  gameVars.soundLava = sound;
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        case "$startlevelmessage":
+          gameVars.startlevelmessage = value;
+          break;
+        case "$sticky":
+          if (values.length === 3) {
+            if (validXY) {
+              idx = findElementByCoordinate(x, y, gameInfo.pistons);
+              if (idx >= 0) {
+                switch (valuesLowerCase[2]) {
+                  case "no":
+                    gameInfo.pistons[idx].sticky = false;
+                    break;
+                  case "yes":
+                    gameInfo.pistons[idx].sticky = true;
+                    break;
+                  default:
+                    break;
+                }
+              }
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+}
+
+function settingNr(index) {
+  return `Setting ${index + 1}: `;
+}
+
+
 
 

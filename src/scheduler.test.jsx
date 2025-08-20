@@ -43,6 +43,7 @@ describe("gameScheduler", async () => {
     });
     it("gameScheduler A info", () => {
         expect(JSON.stringify(info01a)).toBe(JSON.stringify({
+            gateTravelling: false,
             playSounds: [],
             updateCanvas: true,
             updateGreen: false,

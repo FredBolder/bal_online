@@ -26,13 +26,13 @@ import {
 import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { changeColor, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow } from "../colorUtils.js";
-import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
+import { changeConveyorBeltMode } from "../conveyorBelts.js";
 import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { globalVars } from "../glob.js";
-import { fixLevel, getAllLevels, getLevel, getSecretStart, getRandomLevel } from "../levels.js";
+import { fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { gameScheduler } from "../scheduler.js";
@@ -77,10 +77,7 @@ let ctx;
 let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
-let isInOtherWorld = false;
 let modalOpen = false;
-let otherWorldGreen = -1;
-let thisWorldGreen = -1;
 
 let gameData = [];
 let backData = [];
@@ -165,6 +162,39 @@ function BalPage() {
   }
 
   async function runGameScheduler() {
+    let saveCoilSpring = false;
+    let saveDivingGlasses = false;
+    let saveKey = false;
+    let saveLadder = false;
+    let savePickaxe = false;
+    let savePropeller = false;
+    let saveTelekineticPower = false;
+    let saveWeakStone = false;
+
+    function loadItems() {
+      gameInfo.hasCoilSpring = saveCoilSpring;
+      gameInfo.hasDivingGlasses = saveDivingGlasses;
+      gameInfo.hasKey = saveKey;
+      gameInfo.hasLadder = saveLadder;
+      gameInfo.hasPickaxe = savePickaxe;
+      gameInfo.hasPropeller = savePropeller;
+      gameInfo.hasTelekineticPower = saveTelekineticPower;
+      gameInfo.hasWeakStone = saveWeakStone;
+    }
+
+    function saveItems() {
+      saveCoilSpring = gameInfo.hasCoilSpring;
+      saveDivingGlasses = gameInfo.hasDivingGlasses;
+      saveKey = gameInfo.hasKey;
+      saveLadder = gameInfo.hasLadder;
+      savePickaxe = gameInfo.hasPickaxe;
+      savePropeller = gameInfo.hasPropeller;
+      saveTelekineticPower = gameInfo.hasTelekineticPower;
+      saveWeakStone = gameInfo.hasWeakStone;
+    }
+
+
+
     if (modalOpen || createLevel || globalVars.loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
@@ -173,6 +203,42 @@ function BalPage() {
       return;
     }
     const info = await gameScheduler(backData, gameData, gameInfo, gameVars);
+    if (info.gateTravelling) {
+      switch (gameVars.gateTravelling) {
+        case 1:
+          playSound("teleport");
+          gameVars.gateTravelling = 2;
+          break;
+        case 2:
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 132;
+          clearMemory(0); // Prevent conflicts between two worlds          
+          if (globalVars.isInOtherWorld) {
+            globalVars.isInOtherWorld = false;
+            saveToMemory(gameData, backData, gameInfo, gameVars, 2);
+            saveItems();
+            await clickLoadFromMemory(1);
+            loadItems();
+          } else {
+            globalVars.isInOtherWorld = true;
+            saveToMemory(gameData, backData, gameInfo, gameVars, 1);
+            saveItems();
+            await clickLoadFromMemory(2);
+            loadItems();
+          }
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+          gameInfo.blueBall.x = gameInfo.travelGate.x;
+          gameInfo.blueBall.y = gameInfo.travelGate.y;
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
+          gameVars.gateTravelling = 0;
+          info.updateCanvas = true;
+          info.updateGreen = true;
+          info.updateLevelNumber = true;
+          break;
+        default:
+          break;
+      }
+    }
+
     if (info.playSounds.length > 0) {
       for (let i = 0; i < info.playSounds.length; i++) {
         const snd = info.playSounds[i];
@@ -209,297 +275,6 @@ function BalPage() {
         msg = "There is no hint available for this level."
       }
       showMessage("Info", msg);
-    }
-  }
-
-  function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings, initColors = true) {
-    let color = "";
-    let element = 0;
-    let gameTicks = 0;
-    let group = -1;
-    let instrument = "kalimba";
-    let h = -1;
-    let idx = -1;
-    let mode = "";
-    let p1 = -1;
-    let sound = "";
-    let validXY = false;
-    let volume = 90;
-    let w = -1;
-    let x = -1;
-    let y = -1;
-
-    if (initColors) {
-      gameVars.bgcolor = null;
-      gameVars.bgcolor = [];
-      gameVars.fgcolor = null;
-      gameVars.fgcolor = [];
-    }
-    for (let i = 0; i < levelSettings.length; i++) {
-      const setting = levelSettings[i];
-      p1 = setting.indexOf(":");
-      if (p1 >= 0) {
-        const name = setting.slice(0, p1).toLowerCase().trim();
-        const value = setting.slice(p1 + 1).trim();
-        const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
-        const valuesLowerCase = values.map(value => value.toLowerCase());
-        if (values.length >= 2) {
-          x = tryParseInt(values[0], -1);
-          y = tryParseInt(values[1], -1);
-          validXY = ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length));
-        }
-        switch (name) {
-          case "$addnotes":
-            if (values.length >= 3) {
-              if (validXY) {
-                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
-                if (idx >= 0) {
-                  gameInfo.musicBoxes[idx].noteIndex = 0;
-                  for (let note = 2; note < values.length; note++) {
-                    gameInfo.musicBoxes[idx].notes.push(values[note]);
-                  }
-                }
-              }
-            }
-            break;
-          case "$background":
-            if (values.length === 5) {
-              w = tryParseInt(values[2], -1);
-              h = tryParseInt(values[3], -1);
-              element = tryParseInt(values[4], -1);
-              if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
-                ([20, 23, 25, 80, 90, 137].includes(element))) {
-                for (let posY = y; posY < (y + h); posY++) {
-                  for (let posX = x; posX < (x + w); posX++) {
-                    backData[posY][posX] = element;
-                  }
-                }
-              }
-            }
-            break;
-          case "$bgcolor":
-          case "$fgcolor":
-            if (values.length === 5) {
-              w = tryParseInt(values[2], -1);
-              h = tryParseInt(values[3], -1);
-              color = values[4];
-              if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
-                if (name === "$bgcolor") {
-                  gameVars.bgcolor.push({ x, y, w, h, color })
-                } else {
-                  gameVars.fgcolor.push({ x, y, w, h, color })
-                }
-              }
-            }
-            break;
-          case "$conveyorbeltmode":
-            if (values.length === 3) {
-              if (validXY && (conveyorBeltModes().includes(valuesLowerCase[2]))) {
-                changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
-              }
-            }
-            break;
-          case "$direction":
-            if (values.length === 3) {
-              if (["left", "right", "none", "upleft", "upright", "downleft", "downright"].includes(valuesLowerCase[2])) {
-                changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
-              }
-            }
-            break;
-          case "$gameticks":
-            if (values.length === 2) {
-              gameTicks = tryParseInt(values[1], -1);
-              if (gameTicks >= 1) {
-                switch (valuesLowerCase[0]) {
-                  case "conveyorbelt":
-                    gameVars.conveyorBeltCountTo = gameTicks;
-                    break;
-                  case "elevator":
-                    gameVars.elevatorCountTo = gameTicks;
-                    break;
-                  case "fish":
-                    gameVars.fishCountTo = gameTicks;
-                    break;
-                  default:
-                    break;
-                }
-              }
-            }
-            break;
-          case "$gameticksxy":
-            if (values.length === 3) {
-              gameTicks = tryParseInt(values[2], -1);
-              if (validXY && (gameTicks >= 1)) {
-                idx = findElementByCoordinate(x, y, gameInfo.delays);
-                if (idx >= 0) {
-                  gameInfo.delays[idx].gameTicks = gameTicks;
-                }
-              }
-            }
-            break;
-          case "$group":
-            if (values.length === 3) {
-              group = tryParseInt(values[2], -1);
-              if (validXY && (group >= 1) && (group <= 32)) {
-                changeGroup(gameInfo, x, y, group);
-              }
-            }
-            break;
-          case "$hint":
-            gameVars.hint = value;
-            break;
-          case "$instrument":
-            if (values.length >= 4) {
-              instrument = valuesLowerCase[2];
-              volume = tryParseInt(values[3], -1);
-              if (validXY && (volume >= 0) && (volume <= 100)) {
-                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
-                if (idx >= 0) {
-                  gameInfo.musicBoxes[idx].instrument = instrument;
-                  gameInfo.musicBoxes[idx].volume = volume;
-                }
-              }
-            }
-            break;
-          case "$inverted":
-            if (values.length === 3) {
-              if (validXY) {
-                idx = findElementByCoordinate(x, y, gameInfo.pistons);
-                if (idx >= 0) {
-                  switch (valuesLowerCase[2]) {
-                    case "no":
-                      gameInfo.pistons[idx].inverted = false;
-                      break;
-                    case "yes":
-                      gameInfo.pistons[idx].inverted = true;
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              }
-            }
-            break;
-          case "$musicbox":
-            if (values.length === 4) {
-              mode = valuesLowerCase[2];
-              gameTicks = tryParseInt(values[3], -1);
-              if (validXY && ["note", "song"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
-                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
-                if (idx >= 0) {
-                  gameInfo.musicBoxes[idx].mode = mode;
-                  gameInfo.musicBoxes[idx].delay = gameTicks;
-                }
-              }
-            }
-            break;
-          case "$notes":
-            if (values.length >= 3) {
-              if (validXY) {
-                idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
-                if (idx >= 0) {
-                  gameInfo.musicBoxes[idx].notes = [];
-                  gameInfo.musicBoxes[idx].noteIndex = 0;
-                  for (let note = 2; note < values.length; note++) {
-                    gameInfo.musicBoxes[idx].notes.push(values[note]);
-                  }
-                }
-              }
-            }
-            break;
-          case "$pistonmode":
-            if (values.length === 3) {
-              if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
-                idx = findElementByCoordinate(x, y, gameInfo.pistons);
-                if (idx >= 0) {
-                  gameInfo.pistons[idx].mode = valuesLowerCase[2];
-                }
-              }
-            }
-            break;
-          case "$sound":
-            if (values.length === 2) {
-              element = tryParseInt(values[0], -1);
-              sound = valuesLowerCase[1];
-              if (["default", "never", "player"].includes(sound)) {
-                switch (element) {
-                  case 22:
-                    gameVars.soundLava = sound;
-                    break;
-                  default:
-                    break;
-                }
-              }
-            }
-            break;
-          case "$startlevelmessage":
-            gameVars.startlevelmessage = value;
-            break;
-          case "$sticky":
-            if (values.length === 3) {
-              if (validXY) {
-                idx = findElementByCoordinate(x, y, gameInfo.pistons);
-                if (idx >= 0) {
-                  switch (valuesLowerCase[2]) {
-                    case "no":
-                      gameInfo.pistons[idx].sticky = false;
-                      break;
-                    case "yes":
-                      gameInfo.pistons[idx].sticky = true;
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              }
-            }
-            break;
-          default:
-            break;
-        }
-      }
-    }
-  }
-
-  async function initLevel(n, gateTravelling = false) {
-    let data = [];
-    let gd;
-
-    try {
-      if (!gateTravelling) {
-        isInOtherWorld = false;
-        otherWorldGreen = -1;
-        clearMemory(1);
-        clearMemory(2);
-      }
-      globalVars.loading = true;
-      initGameVars(gameVars);
-      gameVars.currentLevel = n;
-      setLevelNumber(n);
-      gameInfo.blueBall.x = -1;
-      gameInfo.blueBall.y = -1;
-      data = await getLevel(gameVars.currentLevel, gateTravelling);
-      if (data.error !== "") {
-        showMessage("Error", data.error);
-      }
-      gd = stringArrayToNumberArray(data.levelData);
-      backData = null;
-      backData = gd.backData;
-      gameData = null;
-      gameData = gd.gameData;
-      gameInfo = null;
-      gameInfo = getGameInfo(backData, gameData);
-      loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
-      gameVars.laser = null;
-      gameVars.gameOver = false;
-      updateGameCanvas();
-      updateGreen();
-      if (gameVars.startlevelmessage !== "") {
-        showMessage("Message", gameVars.startlevelmessage);
-      }
-      globalVars.loading = false;
-    } catch (err) {
-      console.log(err);
     }
   }
 
@@ -759,6 +534,7 @@ function BalPage() {
       const data = loadFromMemory(idx);
       if (data === null) {
         if (idx > 0) {
+          // Gate travelling for the first time
           await initLevel(gameVars.currentLevel, true);
         } else {
           showMessage("Info", "No level in memory.");
@@ -811,8 +587,8 @@ function BalPage() {
     if (result !== null) {
       clearMemory(1);
       clearMemory(2);
-      isInOtherWorld = false;
-      otherWorldGreen = -1;
+      globalVars.isInOtherWorld = false;
+      globalVars.otherWorldGreen = -1;
       globalVars.loading = true;
       initGameVars(gameVars);
       backData = null;
@@ -1020,6 +796,48 @@ function BalPage() {
       if (i < gameDataMenu[2].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 2, arr2[i]);
       }
+    }
+  }
+
+  async function initLevel(n, gateTravelling = false) {
+    let data = [];
+    let gd;
+
+    try {
+      if (!gateTravelling) {
+        globalVars.isInOtherWorld = false;
+        globalVars.otherWorldGreen = -1;
+        clearMemory(1);
+        clearMemory(2);
+      }
+      globalVars.loading = true;
+      initGameVars(gameVars);
+      gameVars.currentLevel = n;
+      setLevelNumber(n);
+      gameInfo.blueBall.x = -1;
+      gameInfo.blueBall.y = -1;
+      data = await getLevel(gameVars.currentLevel, gateTravelling);
+      if (data.error !== "") {
+        showMessage("Error", data.error);
+      }
+      gd = stringArrayToNumberArray(data.levelData);
+      backData = null;
+      backData = gd.backData;
+      gameData = null;
+      gameData = gd.gameData;
+      gameInfo = null;
+      gameInfo = getGameInfo(backData, gameData);
+      loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
+      gameVars.laser = null;
+      gameVars.gameOver = false;
+      updateGameCanvas();
+      updateGreen();
+      if (gameVars.startlevelmessage !== "") {
+        showMessage("Message", gameVars.startlevelmessage);
+      }
+      globalVars.loading = false;
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -1254,7 +1072,7 @@ function BalPage() {
       updateGreen();
       playSound("eat");
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
-        ((thisWorldGreen === 0) && (otherWorldGreen === 0)))
+        ((globalVars.thisWorldGreen === 0) && (globalVars.otherWorldGreen === 0)))
       ) {
         if (gameVars.currentLevel === 9999) {
           showMessage("Congratulations!", "You have solved the level!");
@@ -1393,7 +1211,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 211;
+        gameVars.currentLevel = 2004;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1439,10 +1257,10 @@ function BalPage() {
 
   function updateGreen() {
     setGreen(gameInfo.greenBalls);
-    if (isInOtherWorld) {
-      otherWorldGreen = gameInfo.greenBalls;
+    if (globalVars.isInOtherWorld) {
+      globalVars.otherWorldGreen = gameInfo.greenBalls;
     } else {
-      thisWorldGreen = gameInfo.greenBalls;
+      globalVars.thisWorldGreen = gameInfo.greenBalls;
     }
   }
 
