@@ -492,10 +492,8 @@ export function removeObject(gameData, gameInfo, x, y) {
             }
             break;
         case 178:
-            console.log("fred1");
             idx = findElementByCoordinate(x, y, gameInfo.movers);
             if (idx >= 0) {
-            console.log("fred2");
                 gameInfo.movers.splice(idx, 1);
             }
             break;
