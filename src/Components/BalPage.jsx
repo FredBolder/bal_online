@@ -11,6 +11,7 @@ import {
   changePistonMode,
   changePistonSticky,
   findElementByCoordinate,
+  inWater,
   jump,
   jumpLeft,
   jumpRight,
@@ -866,6 +867,7 @@ function BalPage() {
     };
 
     let codes = "";
+    let isJumping = false;
 
     if (modalOpen) {
       return;
@@ -976,22 +978,25 @@ function BalPage() {
         case "W":
         case "8":
           info = jump(backData, gameData, gameInfo);
-          if (info.player) {
-            // To prevent that you fall from the elevator
-            if (gameVars.elevatorCounter >= (gameVars.elevatorCountTo - 3)) {
-              gameVars.elevatorCounter -= 2;
-            }
+          if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+            isJumping = true;
           }
           break;
         case "q":
         case "Q":
         case "7":
           info = jumpLeft(backData, gameData, gameInfo);
+          if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+            isJumping = true;
+          }
           break;
         case "e":
         case "E":
         case "9":
           info = jumpRight(backData, gameData, gameInfo);
+          if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+            isJumping = true;
+          }
           break;
         case "ArrowDown":
         case "s":
@@ -1016,6 +1021,12 @@ function BalPage() {
       }
     }
 
+    if (isJumping) {
+      // To prevent that you fall from the elevator
+      if (gameVars.elevatorCounter >= (gameVars.elevatorCountTo - 3)) {
+        gameVars.elevatorCounter -= 2;
+      }
+    }
 
     // Create non-existing properties
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
