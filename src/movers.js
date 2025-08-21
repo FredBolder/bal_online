@@ -25,8 +25,24 @@ export function checkMovers(gameData, gameInfo) {
                             }
                         }
                         break;
+                    case "up":
+                        if (mover.y > 1) {
+                            if ((gameData[mover.y - 2][mover.x] === 0) && ![2, 8, 93, 94].includes(gameData[mover.y - 1][mover.x])) {
+                                moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x, mover.y - 2);
+                                update = true;
+                            }
+                        }
+                        break;
+                    case "down":
+                        if (mover.y < (gameData.length - 1)) {
+                            if (gameData[mover.y + 1][mover.x] === 0) {
+                                moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x, mover.y + 1);
+                                update = true;
+                            }
+                        }
+                        break;
                     case "upleft":
-                        if ((mover.x > 0) && (mover.y > 0)) {
+                        if ((mover.x > 0) && (mover.y > 1)) {
                             if ((gameData[mover.y - 2][mover.x - 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
                                 moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x - 1, mover.y - 2);
                                 update = true;
@@ -34,7 +50,7 @@ export function checkMovers(gameData, gameInfo) {
                         }
                         break;
                     case "upright":
-                        if ((mover.x < (gameData[0].length - 1)) && (mover.y > 0)) {
+                        if ((mover.x < (gameData[0].length - 1)) && (mover.y > 1)) {
                             if ((gameData[mover.y - 2][mover.x + 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
                                 moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x + 1, mover.y - 2);
                                 update = true;
@@ -92,6 +108,20 @@ export function moverCanMoveBlueBall(gameData, gameInfo) {
                             }
                         }
                         break;
+                    case "up":
+                        if (mover.y > 1) {
+                            if ((gameData[mover.y - 2][mover.x] === 0) && ![2, 8, 93, 94].includes(gameData[mover.y - 1][mover.x])) {
+                                result = true;
+                            }
+                        }
+                        break;
+                    case "down":
+                        if (mover.y < (gameData.length - 1)) {
+                            if (gameData[mover.y + 1][mover.x] === 0) {
+                                result = true;
+                            }
+                        }
+                        break;
                     case "upleft":
                         if ((mover.x > 0) && (mover.y > 0)) {
                             if ((gameData[mover.y - 2][mover.x - 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
@@ -130,6 +160,6 @@ export function moverCanMoveBlueBall(gameData, gameInfo) {
 }
 
 export function moversDirections() {
-    return ["left", "right", "upleft", "upright", "downleft", "downright"];
+    return ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
 }
 

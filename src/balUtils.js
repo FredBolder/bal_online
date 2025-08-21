@@ -633,7 +633,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         ) {
           result.update = true;
           if (element1 === 40) {
-            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "rightDown", true);
+            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downright", true);
             gameData[i][j + 1] = gameData[i][j];
             gameData[i][j] = 0;
           } else {
@@ -651,7 +651,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         ) {
           result.update = true;
           if (element1 === 40) {
-            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "leftDown", true);
+            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downleft", true);
             gameData[i][j - 1] = gameData[i][j];
             gameData[i][j] = 0;
           } else {
@@ -2377,7 +2377,7 @@ export function pushDown(backData, gameData, gameInfo, gameVars) {
   }
   if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
     if (gameData.length > 0 && y < gameData.length - 2 && !hasForceUp(gameData, gameInfo, x, y)) {
-      if (!result.player && (canMoveAlone(gameData[y + 1][x]) && (gameData[y + 1][x] !== 109)) && gameData[y + 2][x] === 0 &&
+      if (!result.player && (canMoveAlone(gameData[y + 1][x]) && ![109, 178].includes(gameData[y + 1][x])) && gameData[y + 2][x] === 0 &&
         !hasForceUp(gameData, gameInfo, x, y + 1)) {
         gameData[y + 2][x] = gameData[y + 1][x];
         gameData[y + 1][x] = 2;

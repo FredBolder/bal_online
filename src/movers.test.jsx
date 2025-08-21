@@ -88,6 +88,44 @@ describe("movers", () => {
         expect(JSON.stringify(gameInfo01b.yellowBalls)).toBe(JSON.stringify([{ x: 4, y: 3, direction: "none" }]));
     });
 
+    let gameInfo01c = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 3 },
+        movers: [
+            { x: 1, y: 4, direction: "down" },
+            { x: 3, y: 4, direction: "down" },
+            { x: 5, y: 4, direction: "up" }
+        ]
+    };
+    let input01c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 4, 0, 5, 0, 1],
+        [1, 178, 1, 178, 1, 178, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 5, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 178, 1, 178, 1, 178, 1, 1],
+        [1, 2, 0, 4, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01c = checkMovers(input01c, gameInfo01c);
+    it("checkMovers C", () => {
+        expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
+    });
+    it("checkMovers C info", () => {
+        expect(info01c).toBe(true);
+    });
+    it("checkMovers C blueBall", () => {
+        expect(JSON.stringify(gameInfo01c.blueBall)).toBe(JSON.stringify({ x: 1, y: 5 }));
+    });
+
     // moverCanMoveBlueBall
 
     let gameInfo02a = {

@@ -1009,6 +1009,12 @@ function drawLevel(
       case "right":
         angle = 0;
         break;
+      case "up":
+        angle = -90;
+        break;
+      case "down":
+        angle = 90;
+        break;
       case "upleft":
         angle = -135;
         break;

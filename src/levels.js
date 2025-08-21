@@ -731,7 +731,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$direction":
           if (values.length === 3) {
-            if (["left", "right", "none", "upleft", "upright", "downleft", "downright"].includes(valuesLowerCase[2])) {
+            if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
               changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
             }
           }

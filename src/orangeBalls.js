@@ -14,7 +14,7 @@ export function moveOrangeBalls(arr, orangeBalls) {
                     orangeBall.direction = "none";
                 }
                 break;
-            case "leftDown":
+            case "downleft":
                 if ((orangeBall.x > 0) && (arr[orangeBall.y][orangeBall.x - 1] === 0)) {
                     arr[orangeBall.y][orangeBall.x] = 0;
                     update = true;
@@ -41,7 +41,7 @@ export function moveOrangeBalls(arr, orangeBalls) {
                     orangeBall.direction = "none";
                 }
                 break;
-            case "rightDown":
+            case "downright":
                 if ((orangeBall.x < arr[0].length - 1) && (arr[orangeBall.y][orangeBall.x + 1] === 0)) {
                     arr[orangeBall.y][orangeBall.x] = 0;
                     update = true;
@@ -84,22 +84,22 @@ export function moveOrangeBallInDirection(orangeBalls, x, y, direction, continue
                 case "right":
                     orangeBall.x++;
                     break;
-                case "leftDown":
+                case "downleft":
                     orangeBall.x--;
                     orangeBall.y++;
                     break;
-                case "leftUp":
+                case "upleft":
                     orangeBall.x--;
                     orangeBall.y--;
                     break;
                 case "up":
                     orangeBall.y--;
                     break;
-                case "rightDown":
+                case "downright":
                     orangeBall.x++;
                     orangeBall.y++;
                     break;
-                case "rightUp":
+                case "upright":
                     orangeBall.x++;
                     orangeBall.y--;
                     break;

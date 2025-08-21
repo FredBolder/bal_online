@@ -336,6 +336,41 @@ export function rotateGame(backData, gameData, gameInfo) {
         rotateXY(gameInfo.magnets[i], rows);
       }
 
+      // Movers
+      for (let i = 0; i < gameInfo.movers.length; i++) {
+        rotateXY(gameInfo.movers[i], rows);
+        let data = gameInfo.movers[i].direction;
+        switch (data) {
+          case "down":
+            data = "left";
+            break;
+          case "left":
+            data = "up";
+            break;
+          case "up":
+            data = "right";
+            break;
+          case "right":
+            data = "down";
+            break;
+          case "downleft":
+            data = "upleft";
+            break;
+          case "upleft":
+            data = "upright";
+            break;
+          case "upright":
+            data = "downright";
+            break;
+          case "downright":
+            data = "downleft";
+            break;
+          default:
+            break;
+        }
+        gameInfo.movers[i].direction = data;
+      }
+
       // Music boxes
       for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         rotateXY(gameInfo.musicBoxes[i], rows);
@@ -358,17 +393,17 @@ export function rotateGame(backData, gameData, gameInfo) {
           case "right":
             data = "down";
             break;
-          case "leftDown":
-            data = "leftUp";
+          case "downleft":
+            data = "upleft";
             break;
-          case "leftUp":
-            data = "rightUp";
+          case "upleft":
+            data = "upright";
             break;
-          case "rightDown":
-            data = "leftDown";
+          case "upright":
+            data = "downright";
             break;
-          case "rightUp":
-            data = "rightDown";
+          case "downright":
+            data = "downleft";
             break;
           default:
             break;

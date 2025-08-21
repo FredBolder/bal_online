@@ -877,6 +877,10 @@ function BalPage() {
     if (["Alt", "Ctrl", "Shift"].includes(e.key)) {
       return;
     }
+    if (e.altKey || e.ctrlKey) {
+      return;
+    }
+
 
     if (globalVars.loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
       return;
@@ -899,7 +903,24 @@ function BalPage() {
     }
 
     if (createLevel) {
-
+      if (!e.shiftKey) {
+        switch (e.key) {
+          case "ArrowLeft":
+            moveSelection(createLevelSelectedCell, "left");
+            break;
+          case "ArrowRight":
+            moveSelection(createLevelSelectedCell, "right");
+            break;
+          case "ArrowUp":
+            moveSelection(createLevelSelectedCell, "up");
+            break;
+          case "ArrowDown":
+            moveSelection(createLevelSelectedCell, "down");
+            break;
+          default:
+            break;
+        }
+      }
       return;
     }
 
@@ -1105,76 +1126,72 @@ function BalPage() {
       showMessage("Message", info.message);
     }
 
-    if (!e.altKey && !e.ctrlKey) {
-      if (kPressed) {
-        if ((fred) && (e.key === "%")) {
-          codes = "";
-          const allLevels = getAllLevels();
-          for (let i = 0; i < allLevels.length; i++) {
-            const level = allLevels[i];
-            if (i > 0) {
-              codes += ", ";
-            }
-            codes += `${level} = ${numberToCode(level)}`;
+    if (kPressed) {
+      if ((fred) && (e.key === "%")) {
+        codes = "";
+        const allLevels = getAllLevels();
+        for (let i = 0; i < allLevels.length; i++) {
+          const level = allLevels[i];
+          if (i > 0) {
+            codes += ", ";
           }
-          showMessage("Info", codes);
+          codes += `${level} = ${numberToCode(level)}`;
         }
+        showMessage("Info", codes);
+      }
 
-        if (!e.shiftKey) {
-          switch (e.key) {
-            case "h":
-              showWhatBlueBallHas();
-              break;
-            case "l":
-              // Move a 2-step stairs to the left
-              pressKeysSequentially("qaeda");
-              break;
-            case "r":
-              // Move a 2-step stairs to the right
-              pressKeysSequentially("edqad");
-              break;
-            default:
-              break;
-          }
-        } else {
-          switch (e.key) {
-            case "C":
-              if (fred) {
-                showMessage("Info", numberToCode(gameVars.currentLevel));
-              }
-              break;
-            case "H":
-              hint(gameVars);
-              break;
-            case "L":
-              // Move a 3-step stairs to the left
-              pressKeysSequentially("qqaddedaqaeda");
-              break;
-            case "N":
-              // Next level
-              if (fred) {
-                initLevel(gameVars.currentLevel + 1);
-              }
-              break;
-            case "P":
-              // Previous level
-              if (fred) {
-                initLevel(gameVars.currentLevel - 1);
-              }
-              break;
-            case "R":
-              // Move a 3-step stairs to the right
-              pressKeysSequentially("eedaaqadedqad");
-              break;
-            default:
-              break;
-          }
+      if (!e.shiftKey) {
+        switch (e.key) {
+          case "h":
+            showWhatBlueBallHas();
+            break;
+          case "l":
+            // Move a 2-step stairs to the left
+            pressKeysSequentially("qaeda");
+            break;
+          case "r":
+            // Move a 2-step stairs to the right
+            pressKeysSequentially("edqad");
+            break;
+          default:
+            break;
+        }
+      } else {
+        switch (e.key) {
+          case "C":
+            if (fred) {
+              showMessage("Info", numberToCode(gameVars.currentLevel));
+            }
+            break;
+          case "H":
+            hint(gameVars);
+            break;
+          case "L":
+            // Move a 3-step stairs to the left
+            pressKeysSequentially("qqaddedaqaeda");
+            break;
+          case "N":
+            // Next level
+            if (fred) {
+              initLevel(gameVars.currentLevel + 1);
+            }
+            break;
+          case "P":
+            // Previous level
+            if (fred) {
+              initLevel(gameVars.currentLevel - 1);
+            }
+            break;
+          case "R":
+            // Move a 3-step stairs to the right
+            pressKeysSequentially("eedaaqadedqad");
+            break;
+          default:
+            break;
         }
       }
-      kPressed = ((e.key === "k") || (e.key === "K"));
-    } else {
-      kPressed = false;
     }
+    kPressed = ((e.key === "k") || (e.key === "K"));
 
     // Extra check
     if (checkMagnets(gameInfo)) {
@@ -1663,8 +1680,6 @@ function BalPage() {
     let row = Math.floor(y / size1);
 
     const menuSelect = 2;
-    let xNew = -1;
-    let yNew = -1;
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
@@ -1676,37 +1691,22 @@ function BalPage() {
 
         if ((createLevelMenu === menuSelect) && (createLevelSelectedCell !== null)) {
           if ((createLevelObject >= 2040) && (createLevelObject <= 2043)) {
-            xNew = createLevelSelectedCell.x;
-            yNew = createLevelSelectedCell.y;
             switch (createLevelObject) {
               case 2040:
-                xNew--;
+                moveSelection(createLevelSelectedCell, "left");
                 break;
               case 2041:
-                xNew++;
+                moveSelection(createLevelSelectedCell, "right");
                 break;
               case 2042:
-                yNew--;
+                moveSelection(createLevelSelectedCell, "up");
                 break;
               case 2043:
-                yNew++;
+                moveSelection(createLevelSelectedCell, "down");
                 break;
               default:
                 break;
             }
-            if (xNew >= 0 && xNew < gameData[0].length && yNew >= 0 && yNew < gameData.length) {
-              if ((gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
-                gameData[yNew][xNew] = gameData[createLevelSelectedCell.y][createLevelSelectedCell.x];
-                backData[yNew][xNew] = backData[createLevelSelectedCell.y][createLevelSelectedCell.x];
-                gameData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
-                backData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
-                moveObjects(gameInfo, gameVars, "moveCell", createLevelSelectedCell.x, createLevelSelectedCell.y, xNew, yNew);
-                createLevelSelectedCell.x = xNew;
-                createLevelSelectedCell.y = yNew;
-                updateGameCanvas();
-              }
-            }
-            createLevelObject = 0;
           }
         }
 
@@ -1730,6 +1730,45 @@ function BalPage() {
             break;
         }
       }
+    }
+  }
+
+  function moveSelection(cell, direction) {
+    let xNew = -1;
+    let yNew = -1;
+
+    if (cell !== null) {
+      xNew = createLevelSelectedCell.x;
+      yNew = createLevelSelectedCell.y;
+      switch (direction) {
+        case "left":
+          xNew--;
+          break;
+        case "right":
+          xNew++;
+          break;
+        case "up":
+          yNew--;
+          break;
+        case "down":
+          yNew++;
+          break;
+        default:
+          break;
+      }
+      if (xNew >= 0 && xNew < gameData[0].length && yNew >= 0 && yNew < gameData.length) {
+        if ((gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
+          gameData[yNew][xNew] = gameData[createLevelSelectedCell.y][createLevelSelectedCell.x];
+          backData[yNew][xNew] = backData[createLevelSelectedCell.y][createLevelSelectedCell.x];
+          gameData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
+          backData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
+          moveObjects(gameInfo, gameVars, "moveCell", createLevelSelectedCell.x, createLevelSelectedCell.y, xNew, yNew);
+          createLevelSelectedCell.x = xNew;
+          createLevelSelectedCell.y = yNew;
+          updateGameCanvas();
+        }
+      }
+      createLevelObject = 0;
     }
   }
 
