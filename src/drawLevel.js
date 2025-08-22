@@ -2405,6 +2405,10 @@ function drawLevel(
           // downright
           drawAbbreviation("DR");
           break;
+        case 2096:
+          // Copy
+          drawAbbreviation("C");
+          break;
         default:
           if (gd < 2000) {
             drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

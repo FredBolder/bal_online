@@ -57,7 +57,7 @@ export const ModalProvider = ({ children }) => {
     ));
   };
 
-  const showInput = (title, message, defaultValue = "") => {
+  const showInput = (title, message, defaultValue, isPassword = false) => {
     let inputValue = defaultValue;
 
     return showModal(title, ({ close }) => (
@@ -65,7 +65,7 @@ export const ModalProvider = ({ children }) => {
         <p>{message}</p>
         <input
           className="modal-input"
-          type="text"
+          type={isPassword ? "password" : "text"}
           autoFocus
           defaultValue={defaultValue}
           onChange={(e) => (inputValue = e.target.value)}
