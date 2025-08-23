@@ -40,7 +40,8 @@ describe("balUtils One direction ports", () => {
                 gateTravelling: false,
                 player: true,
                 teleporting: false,
-                rotate: false,
+                rotateLeft: false,
+                rotateRight: false,
                 sound: "",
             })
         );

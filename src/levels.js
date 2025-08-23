@@ -418,6 +418,7 @@ export function fixLevel(gameData, gameInfo) {
           foundBlue = true;
           break;
         case 89:
+        case 183:
           if (xMax !== yMax) {
             errorGameRotatorInNonSquareLevel = true;
             gameData[i][j] = 0;

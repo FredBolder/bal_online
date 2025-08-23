@@ -121,7 +121,7 @@ describe("balUtils pushDown", () => {
     ];
     let inputBack01d = zeroArray(7, 7);
     let expectedOutput01d = input01d.map(row => [...row]);
-    let info01d = pushDown(inputBack01d, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: 8 }] }, { ...defaultGameVars });
+    let info01d = pushDown(inputBack01d, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: "up" }] }, { ...defaultGameVars });
     it("pushDown D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });

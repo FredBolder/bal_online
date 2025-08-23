@@ -130,7 +130,7 @@ describe("Orange ball", () => {
         [1, 0, 0, 2, 0, 109, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info03a = checkForces(input03a, { ...defaultGameInfo, forces: [{ x: 5, y: 5, direction: 8 }], orangeBalls: orangeBalls03a });
+    let info03a = checkForces(input03a, { ...defaultGameInfo, forces: [{ x: 5, y: 5, direction: "up" }], orangeBalls: orangeBalls03a });
     it("Force orange ball up A", () => {
         expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
     });

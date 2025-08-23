@@ -728,7 +728,7 @@ function drawLevel(
     }
   }
 
-  function drawGameRotator() {
+  function drawGameRotator(rotateLeft = false) {
     let d1 = w1 * 0.3;
     let d2 = w1 * 0.15;
     let pt1 = { x: 0, y: 0 };
@@ -740,10 +740,17 @@ function drawLevel(
     ctx.beginPath();
     ctx.arc(xc, yc, d1, 0.75 * Math.PI, 0.25 * Math.PI, false);
     ctx.stroke();
-    pt1 = polar(xc, yc, 45, d1);
-    pt1.x -= 1;
-    pt2 = polar(pt1.x, pt1.y, 0, d2);
-    pt3 = polar(pt1.x, pt1.y, -90, d2);
+    if (rotateLeft) {
+      pt1 = polar(xc, yc, 135, d1);
+      pt1.x += 1;
+      pt2 = polar(pt1.x, pt1.y, 180, d2);
+      pt3 = polar(pt1.x, pt1.y, -90, d2);
+    } else {
+      pt1 = polar(xc, yc, 45, d1);
+      pt1.x -= 1;
+      pt2 = polar(pt1.x, pt1.y, 0, d2);
+      pt3 = polar(pt1.x, pt1.y, -90, d2);
+    }
     drawLine(ctx, pt1.x, pt1.y, pt2.x, pt2.y, "white");
     drawLine(ctx, pt1.x, pt1.y, pt3.x, pt3.y, "white");
   }
@@ -2285,6 +2292,10 @@ function drawLevel(
         case 182:
           drawStar("red");
           break;
+        case 183:
+          // Game rotator left
+          drawGameRotator(true);
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -2297,7 +2308,7 @@ function drawLevel(
           drawAbbreviation("T");
           break;
         case 2035:
-          // Piston mode - momentary
+          // Piston mode - momentary OR Menu Select - Move
           drawAbbreviation("M");
           break;
         case 2036:

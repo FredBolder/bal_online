@@ -51,7 +51,7 @@ describe("Spikes", () => {
     let gameInfo01c = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 2 },
-        forces: [{ x: 3, y: 4, direction: 8 }],
+        forces: [{ x: 3, y: 4, direction: "up" }],
     };
     let input01c = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -69,7 +69,7 @@ describe("Spikes", () => {
     let gameInfo01d = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 2 },
-        forces: [{ x: 3, y: 4, direction: 8 }],
+        forces: [{ x: 3, y: 4, direction: "up" }],
     };
     let input01d = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -87,7 +87,7 @@ describe("Spikes", () => {
     let gameInfo01e = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 2 },
-        forces: [{ x: 3, y: 4, direction: 8 }],
+        forces: [{ x: 3, y: 4, direction: "up" }],
     };
     let input01e = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -105,7 +105,7 @@ describe("Spikes", () => {
     let gameInfo01f = {
         ...defaultGameInfo,
         blueBall: { x: 5, y: 4 },
-        forces: [{ x: 3, y: 4, direction: 6 }],
+        forces: [{ x: 3, y: 4, direction: "right" }],
     };
     let input01f = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -123,7 +123,7 @@ describe("Spikes", () => {
     let gameInfo01g = {
         ...defaultGameInfo,
         blueBall: { x: 2, y: 4 },
-        forces: [{ x: 6, y: 4, direction: 4 }],
+        forces: [{ x: 6, y: 4, direction: "left" }],
     };
     let input01g = [
         [1, 1, 1, 1, 1, 1, 1, 1],
@@ -160,7 +160,7 @@ describe("Spikes", () => {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 3 },
         hasPropeller: true,
-        forces: [{ x: 3, y: 1, direction: 2 }],
+        forces: [{ x: 3, y: 1, direction: "down" }],
     };
     let input01i = [
         [1, 1, 1, 1, 1, 1, 1, 1],

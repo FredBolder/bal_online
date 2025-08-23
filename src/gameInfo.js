@@ -131,22 +131,22 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 109: {
-                    let force = { x: j, y: i, direction: 8 };
+                    let force = { x: j, y: i, direction: "up" };
                     result.forces.push(force);
                     break;
                 }
                 case 110: {
-                    let force = { x: j, y: i, direction: 2 };
+                    let force = { x: j, y: i, direction: "down" };
                     result.forces.push(force);
                     break;
                 }
                 case 111: {
-                    let force = { x: j, y: i, direction: 6 };
+                    let force = { x: j, y: i, direction: "right" };
                     result.forces.push(force);
                     break;
                 }
                 case 112: {
-                    let force = { x: j, y: i, direction: 4 };
+                    let force = { x: j, y: i, direction: "left" };
                     result.forces.push(force);
                     break;
                 }

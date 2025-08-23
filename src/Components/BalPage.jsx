@@ -316,6 +316,7 @@ function BalPage() {
       value = await showSelect("New level", "Size", ["Normal (32 x 20)", "Small (10 x 10)", "Square (20 x 20)"], 0);
     }
     if (value !== null) {
+      createLevelSelectedCell = null;
       switch (value) {
         case "Normal (32 x 20)":
           level = 9999;
@@ -732,7 +733,7 @@ function BalPage() {
         arr2 = [0];
         break;
       case 2:
-        arr1 = [2040, 2041, 2042, 2043, 2096];
+        arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
         arr2 = [0];
         break;
       case 3:
@@ -768,7 +769,7 @@ function BalPage() {
         arr2 = [0];
         break;
       case 11:
-        arr1 = [91, 119, 120, 97, 157, 167, 89];
+        arr1 = [91, 119, 120, 97, 157, 167, 89, 183];
         arr2 = [0];
         break;
       case 12:
@@ -863,7 +864,8 @@ function BalPage() {
       player: false,
       slowDownYellow: false,
       sound: "",
-      rotate: false,
+      rotateLeft: false,
+      rotateRight: false,
       update: false,
     };
 
@@ -907,16 +909,16 @@ function BalPage() {
       if (!e.shiftKey) {
         switch (e.key) {
           case "ArrowLeft":
-            moveSelection(createLevelSelectedCell, "left");
+            moveSelectedObject(createLevelSelectedCell, "left");
             break;
           case "ArrowRight":
-            moveSelection(createLevelSelectedCell, "right");
+            moveSelectedObject(createLevelSelectedCell, "right");
             break;
           case "ArrowUp":
-            moveSelection(createLevelSelectedCell, "up");
+            moveSelectedObject(createLevelSelectedCell, "up");
             break;
           case "ArrowDown":
-            moveSelection(createLevelSelectedCell, "down");
+            moveSelectedObject(createLevelSelectedCell, "down");
             break;
           default:
             break;
@@ -966,8 +968,13 @@ function BalPage() {
         case "A":
         case "4":
           info = moveLeft(backData, gameData, gameInfo);
-          if (info.rotate) {
+          if (info.rotateRight) {
             if (rotateGame(backData, gameData, gameInfo)) {
+              info.update = true;
+            }
+          }
+          if (info.rotateLeft) {
+            if (rotateGame(backData, gameData, gameInfo, true)) {
               info.update = true;
             }
           }
@@ -983,8 +990,13 @@ function BalPage() {
         case "D":
         case "6":
           info = moveRight(backData, gameData, gameInfo);
-          if (info.rotate) {
+          if (info.rotateRight) {
             if (rotateGame(backData, gameData, gameInfo)) {
+              info.update = true;
+            }
+          }
+          if (info.rotateLeft) {
+            if (rotateGame(backData, gameData, gameInfo, true)) {
               info.update = true;
             }
           }
@@ -1069,8 +1081,11 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "sound")) {
       info.sound = "";
     }
-    if (!Object.prototype.hasOwnProperty.call(info, "rotate")) {
-      info.rotate = false;
+    if (!Object.prototype.hasOwnProperty.call(info, "rotateLeft")) {
+      info.rotateLeft = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "rotateRight")) {
+      info.rotateRight = false;
     }
     if (!Object.prototype.hasOwnProperty.call(info, "update")) {
       info.update = false;
@@ -1455,113 +1470,163 @@ function BalPage() {
     let x = e.clientX - rect.left - leftMargin;
     let y = e.clientY - rect.top - topMargin;
 
+    let oneSelected = true;
+    let xmin = -1;
+    let ymin = -1;
+    let xmax = -1;
+    let ymax = -1;
+
     let column = Math.floor(x / size1);
     let row = Math.floor(y / size1);
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (createLevel) {
         // CREATE
-        if (!e.altKey && !e.shiftKey && !e.ctrlKey && (createLevelObject >= 0)) {
-          if (createLevelObject >= 2000) {
-            if (createLevelMenu === menuToNumber("select")) {
-              if (createLevelSelectedCell !== null) {
-                switch (createLevelObject) {
-                  case 2096:
-                    copyCell(backData, gameData, gameInfo, createLevelSelectedCell.x, createLevelSelectedCell.y, column, row);
-                    break;
-                  default:
-                    break;
-                }
-              }
+        if (!e.altKey && !e.shiftKey) {
+          xmin = column;
+          xmax = xmin;
+          ymin = row;
+          ymax = ymin;
+          if (e.ctrlKey && (createLevelSelectedCell !== null)) {
+            if (column > createLevelSelectedCell.x) {
+              xmin = createLevelSelectedCell.x;
+              xmax = column;
+            } else {
+              xmin = column;
+              xmax = createLevelSelectedCell.x;
             }
-
-            if ((createLevelMenu === menuToNumber("balls")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
-              if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
-                showMessage("Info", "Click on a red ball to set the intelligence.");
-              }
+            if (row > createLevelSelectedCell.y) {
+              ymin = createLevelSelectedCell.y;
+              ymax = row;
+            } else {
+              ymin = row;
+              ymax = createLevelSelectedCell.y;
             }
-
-            if (createLevelMenu === menuToNumber("pistons")) {
-              if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                changeGroup(gameInfo, column, row, createLevelObject - 2000);
-              }
-              if ((createLevelObject >= 2034) && (createLevelObject <= 2037)) {
-                if (changePistonMode(gameInfo, column, row, ["toggle", "momentary", "repeatfast", "repeatslow"][createLevelObject - 2034]) === -1) {
-                  showMessage("Info", "Click on a piston to set the piston mode.");
-                }
-              }
-              if (createLevelObject === 2038) {
-                if (changePistonSticky(gameInfo, column, row) === -1) {
-                  showMessage("Info", "Click on a piston to toggle between sticky and not sticky.");
-                }
-              }
-              if (createLevelObject === 2039) {
-                if (changePistonInverted(gameInfo, column, row) === -1) {
-                  showMessage("Info", "Click on a piston to toggle between inverted and not inverted.");
-                }
-              }
-            }
-
-            if (((createLevelMenu === menuToNumber("elevators")) || (createLevelMenu === menuToNumber("conveyorbelts"))) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
-              if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
-                showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
-              }
-            }
-
-            if ((createLevelMenu === menuToNumber("elevators")) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
-              if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
-                showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
-              }
-            }
-
-            if (createLevelMenu === menuToNumber("conveyorbelts")) {
-              if ((createLevelObject >= 2084) && (createLevelObject <= 2091)) {
-                if (changeConveyorBeltMode(gameInfo, column, row, ["notrigger", "rightleft", "noneright", "noneleft", "nonerightleft", "none", "right", "left"][createLevelObject - 2084]) === -1) {
-                  showMessage("Info", "Click on a conveyor belt to set the mode of it.");
-                }
-              }
-              if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                changeGroup(gameInfo, column, row, createLevelObject - 2000);
-              }
-            }
-
-            if ((createLevelMenu === menuToNumber("groups")) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
-              changeGroup(gameInfo, column, row, createLevelObject - 2000);
-            }
-
-            if (createLevelMenu === menuToNumber("foregroundcolors")) {
-              if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
-                changeColor(gameVars.fgcolor, column, row, createLevelObject - 2052);
-              }
-              if (createLevelObject === 2083) {
-                deleteColorAtPosition(gameVars.fgcolor, column, row);
-              }
-            }
-
-            if (createLevelMenu === menuToNumber("backgroundcolors")) {
-              if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
-                changeColor(gameVars.bgcolor, column, row, createLevelObject - 2052);
-              }
-              if (createLevelObject === 2083) {
-                deleteColorAtPosition(gameVars.bgcolor, column, row);
-              }
-            }
-          } else if (createLevelObject > 0) {
-            deleteIfPurpleTeleport(backData, gameInfo, column, row);
-            addObject(backData, gameData, gameInfo, column, row, createLevelObject);
           }
-          updateGameCanvas();
-          updateGreen();
-        }
+          oneSelected = ((xmin === xmax) && (ymin === ymax));
 
-        // DELETE
-        if (!e.altKey && !e.shiftKey && !e.ctrlKey && (createLevelObject === -3)) {
-          if (gameData[row][column] > 0) {
-            removeObject(gameData, gameInfo, column, row);
-          } else {
-            deleteIfPurpleTeleport(backData, gameInfo, column, row);
-            if ([20, 23, 25, 90].includes(backData[row][column])) {
-              backData[row][column] = 0;
+          for (let r = ymin; r <= ymax; r++) {
+            for (let c = xmin; c <= xmax; c++) {
+              row = r;
+              column = c;
+
+              if (createLevelObject >= 2000) {
+                if (createLevelMenu === menuToNumber("select")) {
+                  if (createLevelSelectedCell !== null) {
+                    switch (createLevelObject) {
+                      case 2035:
+                        moveSelectedObject(createLevelSelectedCell, "position", { x: column, y: row });
+                        break;
+                      case 2096:
+                        if ((createLevelSelectedCell.x !== column) || (createLevelSelectedCell.y !== row)) {
+                          copyCell(backData, gameData, gameInfo, createLevelSelectedCell.x, createLevelSelectedCell.y, column, row);
+                        }
+                        break;
+                      default:
+                        break;
+                    }
+                  }
+                }
+
+                if ((createLevelMenu === menuToNumber("balls")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
+                  if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a red ball to set the intelligence.");
+                    }
+                  }
+                }
+
+                if (createLevelMenu === menuToNumber("pistons")) {
+                  if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
+                    changeGroup(gameInfo, column, row, createLevelObject - 2000);
+                  }
+                  if ((createLevelObject >= 2034) && (createLevelObject <= 2037)) {
+                    if (changePistonMode(gameInfo, column, row, ["toggle", "momentary", "repeatfast", "repeatslow"][createLevelObject - 2034]) === -1) {
+                      if (oneSelected) {
+                        showMessage("Info", "Click on a piston to set the piston mode.");
+                      }
+                    }
+                  }
+                  if (createLevelObject === 2038) {
+                    if (changePistonSticky(gameInfo, column, row) === -1) {
+                      if (oneSelected) {
+                        showMessage("Info", "Click on a piston to toggle between sticky and not sticky.");
+                      }
+                    }
+                  }
+                  if (createLevelObject === 2039) {
+                    if (changePistonInverted(gameInfo, column, row) === -1) {
+                      if (oneSelected) {
+                        showMessage("Info", "Click on a piston to toggle between inverted and not inverted.");
+                      }
+                    }
+                  }
+                }
+
+                if (((createLevelMenu === menuToNumber("elevators")) || (createLevelMenu === menuToNumber("conveyorbelts"))) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
+                  if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+                    }
+                  }
+                }
+
+                if ((createLevelMenu === menuToNumber("elevators")) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
+                  if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+                    }
+                  }
+                }
+
+                if (createLevelMenu === menuToNumber("conveyorbelts")) {
+                  if ((createLevelObject >= 2084) && (createLevelObject <= 2091)) {
+                    if (changeConveyorBeltMode(gameInfo, column, row, ["notrigger", "rightleft", "noneright", "noneleft", "nonerightleft", "none", "right", "left"][createLevelObject - 2084]) === -1) {
+                      if (oneSelected) {
+                        showMessage("Info", "Click on a conveyor belt to set the mode of it.");
+                      }
+                    }
+                  }
+                  if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
+                    changeGroup(gameInfo, column, row, createLevelObject - 2000);
+                  }
+                }
+
+                if ((createLevelMenu === menuToNumber("groups")) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
+                  changeGroup(gameInfo, column, row, createLevelObject - 2000);
+                }
+
+                if (createLevelMenu === menuToNumber("foregroundcolors")) {
+                  if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                    changeColor(gameVars.fgcolor, column, row, createLevelObject - 2052);
+                  }
+                  if (createLevelObject === 2083) {
+                    deleteColorAtPosition(gameVars.fgcolor, column, row);
+                  }
+                }
+
+                if (createLevelMenu === menuToNumber("backgroundcolors")) {
+                  if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                    changeColor(gameVars.bgcolor, column, row, createLevelObject - 2052);
+                  }
+                  if (createLevelObject === 2083) {
+                    deleteColorAtPosition(gameVars.bgcolor, column, row);
+                  }
+                }
+              } else if (createLevelObject > 0) {
+                deleteIfPurpleTeleport(backData, gameInfo, column, row);
+                addObject(backData, gameData, gameInfo, column, row, createLevelObject);
+              } else if (createLevelObject === -3) {
+                // DELETE
+                if (gameData[row][column] > 0) {
+                  removeObject(gameData, gameInfo, column, row);
+                } else {
+                  deleteIfPurpleTeleport(backData, gameInfo, column, row);
+                  if ([20, 23, 25, 90].includes(backData[row][column])) {
+                    backData[row][column] = 0;
+                  }
+                }
+              }
             }
           }
           updateGameCanvas();
@@ -1696,16 +1761,16 @@ function BalPage() {
         if ((createLevelMenu === menuToNumber("select")) && (createLevelSelectedCell !== null)) {
           switch (createLevelObject) {
             case 2040:
-              moveSelection(createLevelSelectedCell, "left");
+              moveSelectedObject(createLevelSelectedCell, "left");
               break;
             case 2041:
-              moveSelection(createLevelSelectedCell, "right");
+              moveSelectedObject(createLevelSelectedCell, "right");
               break;
             case 2042:
-              moveSelection(createLevelSelectedCell, "up");
+              moveSelectedObject(createLevelSelectedCell, "up");
               break;
             case 2043:
-              moveSelection(createLevelSelectedCell, "down");
+              moveSelectedObject(createLevelSelectedCell, "down");
               break;
             default:
               break;
@@ -1735,14 +1800,14 @@ function BalPage() {
     }
   }
 
-  function moveSelection(cell, direction) {
+  function moveSelectedObject(cell, mode, position = null) {
     let xNew = -1;
     let yNew = -1;
 
     if (cell !== null) {
-      xNew = createLevelSelectedCell.x;
-      yNew = createLevelSelectedCell.y;
-      switch (direction) {
+      xNew = cell.x;
+      yNew = cell.y;
+      switch (mode) {
         case "left":
           xNew--;
           break;
@@ -1755,18 +1820,24 @@ function BalPage() {
         case "down":
           yNew++;
           break;
+        case "position":
+          if (position !== null) {
+            xNew = position.x;
+            yNew = position.y;
+          }
+          break;
         default:
           break;
       }
       if (xNew >= 0 && xNew < gameData[0].length && yNew >= 0 && yNew < gameData.length) {
         if ((gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
-          gameData[yNew][xNew] = gameData[createLevelSelectedCell.y][createLevelSelectedCell.x];
-          backData[yNew][xNew] = backData[createLevelSelectedCell.y][createLevelSelectedCell.x];
-          gameData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
-          backData[createLevelSelectedCell.y][createLevelSelectedCell.x] = 0;
-          moveObjects(gameInfo, gameVars, "moveCell", createLevelSelectedCell.x, createLevelSelectedCell.y, xNew, yNew);
-          createLevelSelectedCell.x = xNew;
-          createLevelSelectedCell.y = yNew;
+          gameData[yNew][xNew] = gameData[cell.y][cell.x];
+          backData[yNew][xNew] = backData[cell.y][cell.x];
+          gameData[cell.y][cell.x] = 0;
+          backData[cell.y][cell.x] = 0;
+          moveObjects(gameInfo, gameVars, "moveCell", cell.x, cell.y, xNew, yNew);
+          cell.x = xNew;
+          cell.y = yNew;
           updateGameCanvas();
         }
       }

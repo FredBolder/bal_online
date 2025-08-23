@@ -125,22 +125,22 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 109: {
-            let force = { x, y, direction: 8 };
+            let force = { x, y, direction: "up" };
             gameInfo.forces.push(force);
             break;
         }
         case 110: {
-            let force = { x, y, direction: 2 };
+            let force = { x, y, direction: "down" };
             gameInfo.forces.push(force);
             break;
         }
         case 111: {
-            let force = { x, y, direction: 6 };
+            let force = { x, y, direction: "right" };
             gameInfo.forces.push(force);
             break;
         }
         case 112: {
-            let force = { x, y, direction: 4 };
+            let force = { x, y, direction: "left" };
             gameInfo.forces.push(force);
             break;
         }

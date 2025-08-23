@@ -1,13 +1,84 @@
-function rotateXY(obj, rows) {
+function rotateDirection(direction, rotateLeft) {
+  let result = direction;
+
+  if (rotateLeft) {
+    switch (direction) {
+      case "down":
+        result = "right";
+        break;
+      case "right":
+        result = "up";
+        break;
+      case "up":
+        result = "left";
+        break;
+      case "left":
+        result = "down";
+        break;
+      case "downleft":
+        result = "downright";
+        break;
+      case "downright":
+        result = "upright";
+        break;
+      case "upright":
+        result = "upleft";
+        break;
+      case "upleft":
+        result = "downleft";
+        break;
+      default:
+        break;
+    }
+  } else {
+    switch (direction) {
+      case "down":
+        result = "left";
+        break;
+      case "left":
+        result = "up";
+        break;
+      case "up":
+        result = "right";
+        break;
+      case "right":
+        result = "down";
+        break;
+      case "downleft":
+        result = "upleft";
+        break;
+      case "upleft":
+        result = "upright";
+        break;
+      case "upright":
+        result = "downright";
+        break;
+      case "downright":
+        result = "downleft";
+        break;
+      default:
+        break;
+    }
+  }
+  return result;
+}
+
+function rotateXY(obj, rows, rotateLeft) {
   let x = obj.x;
   let y = obj.y;
+
   if ((x >= 0) && (y >= 0)) {
-    obj.y = x;
-    obj.x = rows - (y + 1);
+    if (rotateLeft) {
+      obj.y = rows - (x + 1);
+      obj.x = y;
+    } else {
+      obj.y = x;
+      obj.x = rows - (y + 1);
+    }
   }
 }
 
-export function rotateGame(backData, gameData, gameInfo) {
+export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
   let rotated = false;
   let newBackData = [];
   let newGameData = [];
@@ -25,202 +96,78 @@ export function rotateGame(backData, gameData, gameInfo) {
         let newGameRow = [];
         let newBackRow = [];
         for (let j = rows - 1; j >= 0; j--) {
-          let gd = gameData[j][i];
-          switch (gd) {
-            case 6:
-              gd = 7;
-              break;
-            case 7:
-              gd = 106;
-              break;
-            case 10:
-              gd = 88;
-              break;
-            case 11:
-              gd = 87;
-              break;
-            case 15:
-              gd = 17;
-              break;
-            case 16:
-              gd = 15;
-              break;
-            case 17:
-              gd = 18;
-              break;
-            case 18:
-              gd = 16;
-              break;
-            case 84:
-              gd = 85;
-              break;
-            case 85:
-              gd = 84;
-              break;
-            case 87:
-              gd = 10;
-              break;
-            case 88:
-              gd = 11;
-              break;
-            case 95:
-              gd = 96;
-              break;
-            case 96:
-              gd = 95;
-              break;
-            case 100:
-              gd = 103;
-              break;
-            case 101:
-              gd = 104;
-              break;
-            case 103:
-              gd = 101;
-              break;
-            case 104:
-              gd = 100;
-              break;
-            case 106:
-              gd = 107;
-              break;
-            case 107:
-              gd = 6;
-              break;
-            case 109:
-              gd = 111;
-              break;
-            case 110:
-              gd = 112;
-              break;
-            case 111:
-              gd = 110;
-              break;
-            case 112:
-              gd = 109;
-              break;
-            case 121:
-              gd = 124;
-              break;
-            case 122:
-              gd = 125;
-              break;
-            case 124:
-              gd = 122;
-              break;
-            case 125:
-              gd = 121;
-              break;
-            case 126:
-              gd = 129;
-              break;
-            case 127:
-              gd = 130;
-              break;
-            case 129:
-              gd = 127;
-              break;
-            case 130:
-              gd = 126;
-              break;
-            case 138:
-              gd = 139;
-              break;
-            case 139:
-              gd = 138;
-              break;
-            case 141:
-              gd = 143;
-              break;
-            case 142:
-              gd = 141;
-              break;
-            case 143:
-              gd = 144;
-              break;
-            case 144:
-              gd = 142;
-              break;
-            case 145:
-              gd = 147;
-              break;
-            case 146:
-              gd = 148;
-              break;
-            case 147:
-              gd = 146;
-              break;
-            case 148:
-              gd = 145;
-              break;
-            case 149:
-              gd = 151;
-              break;
-            case 150:
-              gd = 149;
-              break;
-            case 151:
-              gd = 152;
-              break;
-            case 152:
-              gd = 150;
-              break;
-            case 159:
-              gd = 165;
-              break;
-            case 161:
-              gd = 163;
-              break;
-            case 163:
-              gd = 159;
-              break;
-            case 165:
-              gd = 161;
-              break;
-            case 160:
-              gd = 166;
-              break;
-            case 162:
-              gd = 164;
-              break;
-            case 164:
-              gd = 160;
-              break;
-            case 166:
-              gd = 162;
-              break;
-            case 174:
-              gd = 176;
-              break;
-            case 175:
-              gd = 177;
-              break;
-            case 176:
-              gd = 175;
-              break;
-            case 177:
-              gd = 174;
-              break;
-            default:
-              break;
+          let gd = 0;
+          let bd = 0;
+          if (rotateLeft) {
+            gd = gameData[(columns - 1) - j][(rows - 1) - i];
+            bd = backData[(columns - 1) - j][(rows - 1) - i];
+          } else {
+            gd = gameData[j][i];
+            bd = backData[j][i];
           }
-          let bd = backData[j][i];
-          switch (bd) {
-            case 25:
-              bd = 90;
-              break;
-            case 80:
-              bd = 137;
-              break;
-            case 90:
-              bd = 25;
-              break;
-            case 137:
-              bd = 80;
-              break;
-            default:
-              break;
+          let gdMap = null;
+          let bdMap = null;
+          if (rotateLeft) {
+            gdMap = {
+              6: 107, 7: 6,
+              10: 87, 11: 88,
+              15: 16, 16: 18, 17: 15, 18: 17,
+              84: 85, 85: 84,
+              87: 11, 88: 10,
+              95: 96, 96: 95,
+              100: 104, 101: 103, 103: 100, 104: 101,
+              106: 7, 107: 106,
+              109: 112, 110: 111, 111: 109, 112: 110,
+              121: 125, 122: 124, 124: 121, 125: 122,
+              126: 130, 127: 129, 129: 126, 130: 127,
+              138: 139, 139: 138,
+              141: 142, 142: 144, 143: 141, 144: 143,
+              145: 148, 146: 147, 147: 145, 148: 146,
+              149: 150, 150: 152, 151: 149, 152: 151,
+              159: 163, 161: 165, 163: 161, 165: 159,
+              160: 164, 162: 166, 164: 162, 166: 160,
+              174: 177, 175: 176, 176: 174, 177: 175
+            };
+
+            bdMap = {
+              25: 90,
+              80: 137,
+              90: 25,
+              137: 80
+            };
+          } else {
+            gdMap = {
+              6: 7, 7: 106,
+              10: 88, 11: 87,
+              15: 17, 16: 15, 17: 18, 18: 16,
+              84: 85, 85: 84,
+              87: 10, 88: 11,
+              95: 96, 96: 95,
+              100: 103, 101: 104, 103: 101, 104: 100,
+              106: 107, 107: 6,
+              109: 111, 110: 112, 111: 110, 112: 109,
+              121: 124, 122: 125, 124: 122, 125: 121,
+              126: 129, 127: 130, 129: 127, 130: 126,
+              138: 139, 139: 138,
+              141: 143, 142: 141, 143: 144, 144: 142,
+              145: 147, 146: 148, 147: 146, 148: 145,
+              149: 151, 150: 149, 151: 152, 152: 150,
+              159: 165, 161: 163, 163: 159, 165: 161,
+              160: 166, 162: 164, 164: 160, 166: 162,
+              174: 176, 175: 177, 176: 175, 177: 174
+            };
+
+            bdMap = {
+              25: 90,
+              80: 137,
+              90: 25,
+              137: 80
+            };
           }
+
+          if (Object.prototype.hasOwnProperty.call(gdMap, gd)) gd = gdMap[gd];
+          if (Object.prototype.hasOwnProperty.call(bdMap, bd)) bd = bdMap[bd];
+
           newGameRow.push(gd);
           newBackRow.push(bd);
         }
@@ -239,34 +186,34 @@ export function rotateGame(backData, gameData, gameInfo) {
       }
 
       // Blue ball
-      rotateXY(gameInfo.blueBall1, rows);
+      rotateXY(gameInfo.blueBall1, rows, rotateLeft);
       if (gameInfo.twoBlue) {
-        rotateXY(gameInfo.blueBall2, rows);
+        rotateXY(gameInfo.blueBall2, rows, rotateLeft);
       }
 
       // Copiers
       for (let i = 0; i < gameInfo.copiers.length; i++) {
-        rotateXY(gameInfo.copiers[i], rows);
+        rotateXY(gameInfo.copiers[i], rows, rotateLeft);
       }
 
       // ConveyorBelts
       for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
-        rotateXY(gameInfo.conveyorBelts[i], rows);
+        rotateXY(gameInfo.conveyorBelts[i], rows, rotateLeft);
       }
 
       // Damaged stones
       for (let i = 0; i < gameInfo.damagedStones.length; i++) {
-        rotateXY(gameInfo.damagedStones[i], rows);
+        rotateXY(gameInfo.damagedStones[i], rows, rotateLeft);
       }
 
       // Delays
       for (let i = 0; i < gameInfo.delays.length; i++) {
-        rotateXY(gameInfo.delay[i], rows);
+        rotateXY(gameInfo.delay[i], rows, rotateLeft);
       }
 
       // Electricity
       for (let i = 0; i < gameInfo.electricity.length; i++) {
-        rotateXY(gameInfo.electricity[i], rows);
+        rotateXY(gameInfo.electricity[i], rows, rotateLeft);
       }
 
       // Elevators
@@ -275,9 +222,15 @@ export function rotateGame(backData, gameData, gameInfo) {
         x = gameInfo.elevators[i].x;
         y = gameInfo.elevators[i].y;
         let newHor = {};
-        newHor.x = rows - (y + 1);
-        newHor.y = x;
-        newHor.right = gameInfo.elevators[i].up;
+        if (rotateLeft) {
+          newHor.x = y;
+          newHor.y = rows - (x + 1);
+          newHor.right = !gameInfo.elevators[i].up;
+        } else {
+          newHor.x = rows - (y + 1);
+          newHor.y = x;
+          newHor.right = gameInfo.elevators[i].up;
+        }
         newHorElevators.push(newHor);
       }
       let newVerElevators = [];
@@ -285,9 +238,15 @@ export function rotateGame(backData, gameData, gameInfo) {
         x = gameInfo.horizontalElevators[i].x;
         y = gameInfo.horizontalElevators[i].y;
         let newVer = {};
-        newVer.x = rows - (y + 1);
-        newVer.y = x;
-        newVer.up = gameInfo.horizontalElevators[i].right;
+        if (rotateLeft) {
+          newVer.x = y;
+          newVer.y = rows - (x + 1);
+          newVer.up = gameInfo.horizontalElevators[i].right;
+        } else {
+          newVer.x = rows - (y + 1);
+          newVer.y = x;
+          newVer.up = !gameInfo.horizontalElevators[i].right;
+        }
         newVerElevators.push(newVer);
       }
       while (gameInfo.horizontalElevators.length > 0) {
@@ -305,220 +264,94 @@ export function rotateGame(backData, gameData, gameInfo) {
 
       // Elevator entrances and exits
       for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
-        rotateXY(gameInfo.elevatorInOuts[i], rows);
+        rotateXY(gameInfo.elevatorInOuts[i], rows, rotateLeft);
       }
 
       // Forces
       for (let i = 0; i < gameInfo.forces.length; i++) {
-        rotateXY(gameInfo.forces[i], rows);
-        let data = gameInfo.forces[i].direction;
-        switch (data) {
-          case 2:
-            data = 4;
-            break;
-          case 4:
-            data = 8;
-            break;
-          case 6:
-            data = 2;
-            break;
-          case 8:
-            data = 6;
-            break;
-          default:
-            break;
-        }
-        gameInfo.forces[i].direction = data;
+        rotateXY(gameInfo.forces[i], rows, rotateLeft);
+        gameInfo.forces[i].direction = rotateDirection(gameInfo.forces[i].direction, rotateLeft);
       }
 
       // Magnets
       for (let i = 0; i < gameInfo.magnets.length; i++) {
-        rotateXY(gameInfo.magnets[i], rows);
+        rotateXY(gameInfo.magnets[i], rows, rotateLeft);
       }
 
       // Movers
       for (let i = 0; i < gameInfo.movers.length; i++) {
-        rotateXY(gameInfo.movers[i], rows);
-        let data = gameInfo.movers[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          case "downleft":
-            data = "upleft";
-            break;
-          case "upleft":
-            data = "upright";
-            break;
-          case "upright":
-            data = "downright";
-            break;
-          case "downright":
-            data = "downleft";
-            break;
-          default:
-            break;
-        }
-        gameInfo.movers[i].direction = data;
+        rotateXY(gameInfo.movers[i], rows, rotateLeft);
+        gameInfo.movers[i].direction = rotateDirection(gameInfo.movers[i].direction, rotateLeft);
       }
 
       // Music boxes
       for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
-        rotateXY(gameInfo.musicBoxes[i], rows);
+        rotateXY(gameInfo.musicBoxes[i], rows, rotateLeft);
       }
 
       // Orange balls
       for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
-        rotateXY(gameInfo.orangeBalls[i], rows);
-        let data = gameInfo.orangeBalls[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          case "downleft":
-            data = "upleft";
-            break;
-          case "upleft":
-            data = "upright";
-            break;
-          case "upright":
-            data = "downright";
-            break;
-          case "downright":
-            data = "downleft";
-            break;
-          default:
-            break;
-        }
-        gameInfo.orangeBalls[i].direction = data;
+        rotateXY(gameInfo.orangeBalls[i], rows, rotateLeft);
+        gameInfo.orangeBalls[i].direction = rotateDirection(gameInfo.orangeBalls[i].direction, rotateLeft);
       }
 
       // Pistons
       for (let i = 0; i < gameInfo.pistons.length; i++) {
-        rotateXY(gameInfo.pistons[i], rows);
-        let data = gameInfo.pistons[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          default:
-            break;
-        }
-        gameInfo.pistons[i].direction = data;
+        rotateXY(gameInfo.pistons[i], rows, rotateLeft);
+        gameInfo.pistons[i].direction = rotateDirection(gameInfo.pistons[i].direction, rotateLeft);
       }
 
       // Red balls
       for (let i = 0; i < gameInfo.redBalls.length; i++) {
-        rotateXY(gameInfo.redBalls[i], rows);
+        rotateXY(gameInfo.redBalls[i], rows, rotateLeft);
       }
 
       // Red fish
       for (let i = 0; i < gameInfo.redFish.length; i++) {
-        rotateXY(gameInfo.redFish[i], rows);
+        rotateXY(gameInfo.redFish[i], rows, rotateLeft);
       }
 
       // Teleports
       for (let i = 0; i < gameInfo.teleports.length; i++) {
-        rotateXY(gameInfo.teleports[i], rows);
+        rotateXY(gameInfo.teleports[i], rows, rotateLeft);
       }
 
       // Time bombs
       for (let i = 0; i < gameInfo.timeBombs.length; i++) {
-        rotateXY(gameInfo.timeBombs[i], rows);
+        rotateXY(gameInfo.timeBombs[i], rows, rotateLeft);
       }
 
       // Trap doors
       for (let i = 0; i < gameInfo.trapDoors.length; i++) {
-        rotateXY(gameInfo.trapDoors[i], rows);
+        rotateXY(gameInfo.trapDoors[i], rows, rotateLeft);
       }
 
       // Yellow balls
       for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
-        rotateXY(gameInfo.yellowBalls[i], rows);
-        let data = gameInfo.yellowBalls[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          default:
-            break;
-        }
-        gameInfo.yellowBalls[i].direction = data;
+        rotateXY(gameInfo.yellowBalls[i], rows, rotateLeft);
+        gameInfo.yellowBalls[i].direction = rotateDirection(gameInfo.yellowBalls[i].direction, rotateLeft);
       }
 
       // Yellow bars
       for (let i = 0; i < gameInfo.yellowBars.length; i++) {
-        rotateXY(gameInfo.yellowBars[i], rows);
-        let data = gameInfo.yellowBars[i].direction;
-        switch (data) {
-          case "down":
-            data = "left";
-            break;
-          case "left":
-            data = "up";
-            break;
-          case "up":
-            data = "right";
-            break;
-          case "right":
-            data = "down";
-            break;
-          default:
-            break;
-        }
-        gameInfo.yellowBars[i].direction = data;
+        rotateXY(gameInfo.yellowBars[i], rows, rotateLeft);
+        gameInfo.yellowBars[i].direction = rotateDirection(gameInfo.yellowBars[i].direction, rotateLeft);
       }
 
       // Triggers, detonators etc
-      rotateXY(gameInfo.detonator, rows);
+      rotateXY(gameInfo.detonator, rows, rotateLeft);
       for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
-        rotateXY(gameInfo.pistonsTriggers[i], rows);
+        rotateXY(gameInfo.pistonsTriggers[i], rows, rotateLeft);
       }
-      rotateXY(gameInfo.travelGate, rows);
+      rotateXY(gameInfo.travelGate, rows, rotateLeft);
       for (let i = 0; i < gameInfo.yellowBallPushersTriggers.length; i++) {
-        rotateXY(gameInfo.yellowBallPushersTriggers[i], rows);
+        rotateXY(gameInfo.yellowBallPushersTriggers[i], rows, rotateLeft);
       }
       for (let i = 0; i < gameInfo.yellowStoppers.length; i++) {
-        rotateXY(gameInfo.yellowStoppers[i], rows);
+        rotateXY(gameInfo.yellowStoppers[i], rows, rotateLeft);
       }
       for (let i = 0; i < gameInfo.yellowPausers.length; i++) {
-        rotateXY(gameInfo.yellowPausers[i], rows);
+        rotateXY(gameInfo.yellowPausers[i], rows, rotateLeft);
       }
     }
   }

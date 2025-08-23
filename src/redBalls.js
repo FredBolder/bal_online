@@ -2,7 +2,7 @@ import { isEmpty, falling } from "./balUtils.js";
 import { randomInt } from "./utils.js";
 
 export function checkRedBalls(arr, redBalls) {
-  let direction = 0;
+  let direction = "none";
   let hit = -1; // -1 = not known yet, 0 = no, 1 = yes 
   let result = [];
   let checkX = 0;
@@ -13,9 +13,9 @@ export function checkRedBalls(arr, redBalls) {
     for (let j = 0; (j < 2) && (hit !== 1); j++) {
       hit = -1;
       if (j === 0) {
-        direction = 4;
+        direction = "left";
       } else {
-        direction = 6;
+        direction = "right";
       }
       result = [];
       result.push({ x: red.x, y: red.y });
@@ -23,28 +23,28 @@ export function checkRedBalls(arr, redBalls) {
       checkY = red.y;
       while (hit === -1) {
         switch (direction) {
-          case 2:
+          case "down":
             if (checkY < arr.length - 1) {
               checkY++;
             } else {
               hit = 0;
             }
             break;
-          case 4:
+          case "left":
             if (checkX > 0) {
               checkX--;
             } else {
               hit = 0;
             }
             break;
-          case 6:
+          case "right":
             if (checkX < arr[checkY].length) {
               checkX++;
             } else {
               hit = 0;
             }
             break;
-          case 8:
+          case "up":
             if (checkY > 0) {
               checkY--;
             } else {
@@ -65,17 +65,17 @@ export function checkRedBalls(arr, redBalls) {
             // Mirror /
             result.push({ x: checkX, y: checkY });
             switch (direction) {
-              case 2:
-                direction = 4;
+              case "down":
+                direction = "left";
                 break;
-              case 4:
-                direction = 2;
+              case "left":
+                direction = "down";
                 break;
-              case 6:
-                direction = 8;
+              case "right":
+                direction = "up";
                 break;
-              case 8:
-                direction = 6;
+              case "up":
+                direction = "right";
                 break;
               default:
                 break;
@@ -85,17 +85,17 @@ export function checkRedBalls(arr, redBalls) {
             // Mirror \
             result.push({ x: checkX, y: checkY });
             switch (direction) {
-              case 2:
-                direction = 6;
+              case "down":
+                direction = "right";
                 break;
-              case 4:
-                direction = 8;
+              case "left":
+                direction = "up";
                 break;
-              case 6:
-                direction = 2;
+              case "right":
+                direction = "down";
                 break;
-              case 8:
-                direction = 4;
+              case "up":
+                direction = "left";
                 break;
               default:
                 break;

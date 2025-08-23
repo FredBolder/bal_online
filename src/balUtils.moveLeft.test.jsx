@@ -168,7 +168,7 @@ describe("balUtils moveLeft", () => {
     [1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput01h = input01h.map(row => [...row]);
-  let info01h = moveLeft(inputBack01_3_6, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: 6 }] });
+  let info01h = moveLeft(inputBack01_3_6, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right" }] });
   it("moveLeft H", () => {
     expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
   });

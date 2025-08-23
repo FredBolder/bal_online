@@ -127,7 +127,7 @@ describe("balUtils falling", () => {
         [1, 0, 0, 0, 0, 1],
         [1, 1, 1, 109, 1, 1],
     ];
-    let info01i = falling(3, 2, backData, input01i, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 4, direction: 8 }] });
+    let info01i = falling(3, 2, backData, input01i, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 4, direction: "up" }] });
     it("falling I info", () => {
         expect(info01i).toBe(false);
     });

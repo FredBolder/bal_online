@@ -562,6 +562,9 @@ export function charToNumber(c) {
     case "Č":
       result = 182;
       break;
+    case "Ä":
+      result = 183;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1298,6 +1301,9 @@ export function numberToChar(n) {
     case 182:
       result = "Č";
       break;
+    case 183:
+      result = "Ä";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1727,7 +1733,8 @@ export function moveLeft(backData, gameData, gameInfo) {
   result.gateTravelling = false;
   result.player = false;
   result.teleporting = false;
-  result.rotate = false;
+  result.rotateLeft = false;
+  result.rotateRight = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
@@ -1811,12 +1818,16 @@ export function moveLeft(backData, gameData, gameInfo) {
             result.sound = "unlock";
           }
         }
-        if (!result.player && row[x - 1] === 89 && row[x - 2] === 0) {
+        if (!result.player && [89, 183].includes(row[x - 1]) && row[x - 2] === 0) {
           row[x - 2] = 2;
           row[x] = element;
           gameInfo.blueBall.x = x - 2;
           result.player = true;
-          result.rotate = true;
+          if (row[x - 1] === 89) {
+            result.rotateRight = true;
+          } else {
+            result.rotateLeft = true;
+          }
         }
       }
       if (x > 2) {
@@ -1920,7 +1931,8 @@ export function moveRight(backData, gameData, gameInfo) {
   result.gateTravelling = false;
   result.player = false;
   result.teleporting = false;
-  result.rotate = false;
+  result.rotateLeft = false;
+  result.rotateRight = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
@@ -2005,12 +2017,16 @@ export function moveRight(backData, gameData, gameInfo) {
             result.sound = "unlock";
           }
         }
-        if (!result.player && row[x + 1] === 89 && row[x + 2] === 0) {
+        if (!result.player && [89, 183].includes(row[x + 1]) && row[x + 2] === 0) {
           row[x + 2] = 2;
           row[x] = element;
           gameInfo.blueBall.x = x + 2;
           result.player = true;
-          result.rotate = true;
+          if (row[x + 1] === 89) {
+            result.rotateRight = true;
+          } else {
+            result.rotateLeft = true;
+          }
         }
       }
       if (x < maxX - 2) {

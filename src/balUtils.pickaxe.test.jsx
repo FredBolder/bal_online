@@ -35,7 +35,8 @@ describe("balUtils Pickaxe", () => {
         gateTravelling : false,
         player: true,
         teleporting: false,
-        rotate: false,
+        rotateLeft: false,
+        rotateRight: false,
         sound: "pickaxe",
       })
     );
@@ -66,7 +67,8 @@ describe("balUtils Pickaxe", () => {
         gateTravelling : false,
         player: false,
         teleporting: false,
-        rotate: false,
+        rotateLeft: false,
+        rotateRight: false,
         sound: "",
       })
     );

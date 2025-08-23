@@ -288,7 +288,7 @@ describe("Yellow bar", () => {
     let gameInfo01k = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 4 },
-        forces: [{ x: 4, y: 1, direction: 2 }],
+        forces: [{ x: 4, y: 1, direction: "down" }],
         yellowBars: [{ x: 3, y: 3, direction: "none" }],
     };
     let input01k = [
@@ -314,7 +314,7 @@ describe("Yellow bar", () => {
     let gameInfo01l = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 1 },
-        forces: [{ x: 4, y: 4, direction: 8 }],
+        forces: [{ x: 4, y: 4, direction: "up" }],
         yellowBars: [{ x: 3, y: 2, direction: "none" }],
     };
     let input01l = [
@@ -340,7 +340,7 @@ describe("Yellow bar", () => {
     let gameInfo01m = {
         ...defaultGameInfo,
         blueBall: { x: 7, y: 3 },
-        forces: [{ x: 0, y: 3, direction: 6 }],
+        forces: [{ x: 0, y: 3, direction: "right" }],
         yellowBars: [{ x: 3, y: 3, direction: "none" }],
     };
     let input01m = [
@@ -365,7 +365,7 @@ describe("Yellow bar", () => {
     let gameInfo01n = {
         ...defaultGameInfo,
         blueBall: { x: 2, y: 3 },
-        forces: [{ x: 8, y: 3, direction: 4 }],
+        forces: [{ x: 8, y: 3, direction: "left" }],
         yellowBars: [{ x: 3, y: 3, direction: "none" }],
     };
     let input01n = [
@@ -628,7 +628,7 @@ describe("Yellow bar", () => {
     let gameInfo02i = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 7 },
-        forces: [{ x: 4, y: 1, direction: 2 }],
+        forces: [{ x: 4, y: 1, direction: "down" }],
         yellowBars: [{ x: 4, y: 4, direction: "none" }],
     };
     let input02i = [
@@ -657,7 +657,7 @@ describe("Yellow bar", () => {
     let gameInfo02j = {
         ...defaultGameInfo,
         blueBall: { x: 4, y: 1 },
-        forces: [{ x: 4, y: 7, direction: 8 }],
+        forces: [{ x: 4, y: 7, direction: "up" }],
         yellowBars: [{ x: 4, y: 2, direction: "none" }],
     };
     let input02j = [
@@ -686,7 +686,7 @@ describe("Yellow bar", () => {
     let gameInfo02k = {
         ...defaultGameInfo,
         blueBall: { x: 5, y: 4 },
-        forces: [{ x: 1, y: 4, direction: 6 }],
+        forces: [{ x: 1, y: 4, direction: "right" }],
         yellowBars: [{ x: 4, y: 1, direction: "none" }],
     };
     let input02k = [
@@ -712,7 +712,7 @@ describe("Yellow bar", () => {
     let gameInfo02l = {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 4 },
-        forces: [{ x: 7, y: 4, direction: 4 }],
+        forces: [{ x: 7, y: 4, direction: "left" }],
         yellowBars: [{ x: 4, y: 1, direction: "none" }],
     };
     let input02l = [

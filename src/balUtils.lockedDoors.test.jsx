@@ -36,7 +36,8 @@ describe("balUtils Locked doors", () => {
         gateTravelling : false,
         player: true,
         teleporting: false,
-        rotate: false,
+        rotateLeft: false,
+        rotateRight: false,
         sound: "unlock",
       })
     );
@@ -67,7 +68,8 @@ describe("balUtils Locked doors", () => {
         gateTravelling : false,
         player: false,
         teleporting: false,
-        rotate: false,
+        rotateLeft: false,
+        rotateRight: false,
         sound: "",
       })
     );
@@ -98,7 +100,8 @@ describe("balUtils Locked doors", () => {
         gateTravelling : false,
         player: true,
         teleporting: false,
-        rotate: false,
+        rotateLeft: false,
+        rotateRight: false,
         sound: "unlock",
       })
     );
@@ -129,7 +132,8 @@ describe("balUtils Locked doors", () => {
         gateTravelling : false,
         player: false,
         teleporting: false,
-        rotate: false,
+        rotateLeft: false,
+        rotateRight: false,
         sound: "",
       })
     );
