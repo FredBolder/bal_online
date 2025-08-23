@@ -1,5 +1,12 @@
 let memoryStrings = ["", "", "", "", ""];
 
+// idx
+// 0 Play - Save to memory / Load from memory
+// 1 Play - Travel gate home
+// 2 Play - Travel gate other world
+// 3 Create level create / test
+// 4 Create level undo
+
 export function clearMemory(idx) {
     memoryStrings[idx] = "";
 }

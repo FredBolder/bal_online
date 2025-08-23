@@ -80,6 +80,8 @@ let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
+let undoAction = "";
+let undoPossible = false;
 
 let gameData = [];
 let backData = [];
@@ -130,6 +132,7 @@ function BalPage() {
   const loadRandom = useRef(null);
   const newLevel = useRef(null);
   const tryAgainButton = useRef(null);
+  const undo = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
 
@@ -331,6 +334,7 @@ function BalPage() {
           level = 9999;
           break;
       }
+      saveUndo("New level");
       await initLevel(level);
       // 9999 has a special meaning
       gameVars.currentLevel = 9999;
@@ -340,6 +344,7 @@ function BalPage() {
 
   async function clickDeleteColumn() {
     function del() {
+      saveUndo("Delete column");
       for (let i = 0; i < gameData.length; i++) {
         removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
         deleteIfPurpleTeleport(backData, gameInfo, createLevelSelectedCell.x, i);
@@ -372,6 +377,7 @@ function BalPage() {
 
   async function clickDeleteRow() {
     function del() {
+      saveUndo("Delete row");
       for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
         removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
         deleteIfPurpleTeleport(backData, gameInfo, i, createLevelSelectedCell.y);
@@ -404,6 +410,7 @@ function BalPage() {
 
   async function clickInsertColumn() {
     function ins() {
+      saveUndo("Insert column");
       let value = 0;
       let n = gameData.length;
       for (let i = 0; i < n; i++) {
@@ -437,6 +444,7 @@ function BalPage() {
 
   async function clickInsertRow() {
     function ins() {
+      saveUndo("Insert row");
       let n = gameData[0].length;
       let newRow = [];
       let newRowBackData = [];
@@ -534,6 +542,9 @@ function BalPage() {
 
   async function clickLoadFromMemory(idx) {
     async function load() {
+      if ((idx === 0) && createLevel) {
+        saveUndo("Load from memory");
+      }
       const data = loadFromMemory(idx);
       if (data === null) {
         if (idx > 0) {
@@ -588,6 +599,9 @@ function BalPage() {
     }
 
     if (result !== null) {
+      if (createLevel) {
+        saveUndo("Import level");
+      }
       clearMemory(1);
       clearMemory(2);
       globalVars.isInOtherWorld = false;
@@ -611,6 +625,18 @@ function BalPage() {
         showMessage("Message", gameVars.startlevelmessage);
       }
       globalVars.loading = false;
+    }
+  }
+
+  async function clickUndo() {
+    if (undoPossible) {
+      const confirm = await showConfirm("Question", `Undo ${undoAction}?`);
+      if (confirm === "YES") {
+        clickLoadFromMemory(4);
+        undoPossible = false;
+      }
+    } else {
+      showMessage("Message", "There is nothing to undo.")
     }
   }
 
@@ -1239,6 +1265,12 @@ function BalPage() {
     }
   }
 
+  function saveUndo(action) {
+    saveToMemory(gameData, backData, gameInfo, gameVars, 4);
+    undoAction = action;
+    undoPossible = true;
+  }
+
   //const myRef = useRef(document);
 
 
@@ -1294,6 +1326,7 @@ function BalPage() {
     insertRow.current.style.display = (createLevel) ? "block" : "none";
     deleteColumn.current.style.display = (createLevel) ? "block" : "none";
     deleteRow.current.style.display = (createLevel) ? "block" : "none";
+    undo.current.style.display = (createLevel) ? "block" : "none";
 
     loadRandom.current.style.display = (!createLevel) ? "block" : "none";
     loadLevel.current.style.display = (!createLevel) ? "block" : "none";
@@ -1504,6 +1537,11 @@ function BalPage() {
             }
           }
           oneSelected = ((xmin === xmax) && (ymin === ymax));
+          if (!oneSelected) {
+            saveUndo("Multiple cells action");
+          } else {
+            undoPossible = false;
+          }
 
           for (let r = ymin; r <= ymax; r++) {
             for (let c = xmin; c <= xmax; c++) {
@@ -1882,6 +1920,9 @@ function BalPage() {
                 </div>
                 <div ref={levelSetting} onClick={() => { clickLevelSetting() }}>
                   <label>Level setting</label>
+                </div>
+                <div ref={undo} onClick={() => { clickUndo() }}>
+                  <label>Undo</label>
                 </div>
 
                 <div ref={loadLevel} onClick={() => { clickLoadLevel() }}>
