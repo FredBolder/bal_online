@@ -80,6 +80,7 @@ let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
+let redoPossible = false;
 let undoBuffer = [];
 
 let gameData = [];
@@ -130,6 +131,7 @@ function BalPage() {
   const loadLevel = useRef(null);
   const loadRandom = useRef(null);
   const newLevel = useRef(null);
+  const redo = useRef(null);
   const tryAgainButton = useRef(null);
   const undo = useRef(null);
   const [green, setGreen] = useState(0);
@@ -629,10 +631,28 @@ function BalPage() {
     }
   }
 
+  async function clickRedo() {
+    if (redoPossible) {
+      const confirm = await showConfirm("Question", "Redo?");
+      if (confirm === "YES") {
+        redoPossible = false;
+        undoBuffer.length = 0;
+        undoBuffer = [];
+        clickLoadFromMemory(5);
+        updateGameCanvas();
+        updateGreen();
+      }
+    } else {
+      showMessage("Message", "There is nothing to redo.");
+    }
+  }
+
   async function clickUndo() {
     if (undoBuffer.length > 0) {
       const confirm = await showConfirm("Question", `Undo ${undoBuffer[undoBuffer.length - 1].action}?`);
       if (confirm === "YES") {
+        saveToMemory(gameData, backData, gameInfo, gameVars, 5);
+        redoPossible = true;
         const undoItem = undoBuffer.pop();
         const obj = JSON.parse(undoItem.objString);
         switch (undoItem.type) {
@@ -1299,6 +1319,7 @@ function BalPage() {
     // type
     // level, single, move
     let idx = -1;
+    redoPossible = false;
     if (type === "level") {
       saveToMemory(gameData, backData, gameInfo, gameVars, 4);
       for (let i = 0; i < undoBuffer.length; i++) {
@@ -1378,6 +1399,7 @@ function BalPage() {
     deleteColumn.current.style.display = (createLevel) ? "block" : "none";
     deleteRow.current.style.display = (createLevel) ? "block" : "none";
     undo.current.style.display = (createLevel) ? "block" : "none";
+    redo.current.style.display = (createLevel) ? "block" : "none";
 
     loadRandom.current.style.display = (!createLevel) ? "block" : "none";
     loadLevel.current.style.display = (!createLevel) ? "block" : "none";
@@ -2059,6 +2081,9 @@ function BalPage() {
                 </div>
                 <div ref={undo} onClick={() => { clickUndo() }}>
                   <label>Undo</label>
+                </div>
+                <div ref={redo} onClick={() => { clickRedo() }}>
+                  <label>Redo</label>
                 </div>
 
                 <div ref={loadLevel} onClick={() => { clickLoadLevel() }}>

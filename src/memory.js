@@ -1,4 +1,4 @@
-let memoryStrings = ["", "", "", "", ""];
+let memoryStrings = ["", "", "", "", "", ""];
 
 // idx
 // 0 Play - Save to memory / Load from memory
@@ -6,6 +6,7 @@ let memoryStrings = ["", "", "", "", ""];
 // 2 Play - Travel gate other world
 // 3 Create level create / test
 // 4 Create level undo
+// 5 Create level redo
 
 export function clearMemory(idx) {
     memoryStrings[idx] = "";
