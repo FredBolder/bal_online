@@ -28,7 +28,7 @@ import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { changeColor, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow } from "../colorUtils.js";
 import { changeConveyorBeltMode } from "../conveyorBelts.js";
-import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createMode2.js";
+import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
