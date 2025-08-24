@@ -22,7 +22,7 @@ const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
 const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3100;
+const hiddenMiniSeries1End = 3101;
 
 export function checkLevel(data, settings) {
   // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable

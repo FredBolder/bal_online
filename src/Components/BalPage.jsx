@@ -635,9 +635,8 @@ function BalPage() {
     if (redoPossible) {
       const confirm = await showConfirm("Question", "Redo?");
       if (confirm === "YES") {
+        saveUndo("Redo", "level", null);
         redoPossible = false;
-        undoBuffer.length = 0;
-        undoBuffer = [];
         clickLoadFromMemory(5);
         updateGameCanvas();
         updateGreen();
