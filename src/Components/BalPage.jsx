@@ -663,7 +663,7 @@ function BalPage() {
             break;
           case "move":
             if (obj !== null) {
-              moveSelectedObject({ x: obj.x1, y: obj.y1 }, "position", { x: obj.x2, y: obj.y2 });
+              moveSelectedObject({ x: obj.x1, y: obj.y1 }, "position", { x: obj.x2, y: obj.y2 }, false);
             }
             break;
           case "bgcolors":
@@ -982,21 +982,25 @@ function BalPage() {
 
     if (createLevel) {
       if (!e.shiftKey) {
+        let direction = "";
         switch (e.key) {
           case "ArrowLeft":
-            moveSelectedObject(createLevelSelectedCell, "left");
+            direction = "left";
             break;
           case "ArrowRight":
-            moveSelectedObject(createLevelSelectedCell, "right");
+            direction = "right";
             break;
           case "ArrowUp":
-            moveSelectedObject(createLevelSelectedCell, "up");
+            direction = "up";
             break;
           case "ArrowDown":
-            moveSelectedObject(createLevelSelectedCell, "down");
+            direction = "down";
             break;
           default:
             break;
+        }
+        if (direction !== "") {
+          moveSelectedObject(createLevelSelectedCell, direction, null, true);
         }
       }
       return;
@@ -1613,11 +1617,7 @@ function BalPage() {
           }
           oneSelected = ((xmin === xmax) && (ymin === ymax));
           if (oneSelected) {
-            if (move) {
-              if (createLevelSelectedCell !== null) {
-                saveUndo("Move object", "move", { x1: column, y1: row, x2: createLevelSelectedCell.x, y2: createLevelSelectedCell.y });
-              }
-            } else {
+            if (!move) {
               singleCellAction = true;
               switch (createLevelObject) {
                 case 2:
@@ -1665,7 +1665,7 @@ function BalPage() {
                   if (createLevelSelectedCell !== null) {
                     switch (createLevelObject) {
                       case 2035:
-                        moveSelectedObject(createLevelSelectedCell, "position", { x: column, y: row });
+                        moveSelectedObject(createLevelSelectedCell, "position", { x: column, y: row }, true);
                         break;
                       case 2096:
                         if ((createLevelSelectedCell.x !== column) || (createLevelSelectedCell.y !== row)) {
@@ -1906,8 +1906,6 @@ function BalPage() {
 
     let confirm = null;
     let direction = "";
-    let xNew = -1;
-    let yNew = -1;
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
@@ -1944,31 +1942,24 @@ function BalPage() {
 
         if ((createLevelMenu === menuToNumber("select")) && (createLevelSelectedCell !== null)) {
           direction = "";
-          xNew = createLevelSelectedCell.x;
-          yNew = createLevelSelectedCell.y;
           switch (createLevelObject) {
             case 2040:
               direction = "left";
-              xNew--;
               break;
             case 2041:
               direction = "right";
-              xNew++;
               break;
             case 2042:
               direction = "up";
-              yNew--;
               break;
             case 2043:
               direction = "down";
-              yNew++;
               break;
             default:
               break;
           }
-          if ((direction !== "") && (gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
-            saveUndo("Move object", "move", { x1: xNew, y1: yNew, x2: createLevelSelectedCell.x, y2: createLevelSelectedCell.y });
-            moveSelectedObject(createLevelSelectedCell, direction);
+          if (direction !== "") {
+            moveSelectedObject(createLevelSelectedCell, direction, null, true);
           }
         }
 
@@ -1995,7 +1986,7 @@ function BalPage() {
     }
   }
 
-  function moveSelectedObject(cell, mode, position = null) {
+  function moveSelectedObject(cell, mode, position, addUndo) {
     let xNew = -1;
     let yNew = -1;
 
@@ -2026,6 +2017,9 @@ function BalPage() {
       }
       if (xNew >= 0 && xNew < gameData[0].length && yNew >= 0 && yNew < gameData.length) {
         if ((gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
+          if (addUndo) {
+            saveUndo("Move object", "move", { x1: xNew, y1: yNew, x2: cell.x, y2: cell.y });
+          }
           gameData[yNew][xNew] = gameData[cell.y][cell.x];
           backData[yNew][xNew] = backData[cell.y][cell.x];
           gameData[cell.y][cell.x] = 0;
