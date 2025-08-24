@@ -1,5 +1,6 @@
-import { addObject } from "./addRemoveObject.js";
+import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinate } from "./balUtils.js";
+import { deleteIfPurpleTeleport } from "./teleports.js";
 
 export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
     let idx1 = -1;
@@ -30,14 +31,14 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             }
             break;
         case 107:
-        case 7: 
+        case 7:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.horizontalElevators);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.horizontalElevators);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.horizontalElevators[idx2].right = gameInfo.horizontalElevators[idx1].right;
             }
-            break;        
-        case 157: 
+            break;
+        case 157:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.musicBoxes);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.musicBoxes);
             if ((idx1 >= 0) && (idx2 >= 0)) {
@@ -47,19 +48,19 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.musicBoxes[idx2].delay = gameInfo.musicBoxes[idx1].delay;
                 gameInfo.musicBoxes[idx2].group = gameInfo.musicBoxes[idx1].group;
             }
-            break;          
-        
-        case 158: 
+            break;
+
+        case 158:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.pistonsTriggers);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.pistonsTriggers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.pistonsTriggers[idx2].group = gameInfo.pistonsTriggers[idx1].group;
             }
-            break;          
+            break;
         case 159:
         case 161:
         case 163:
-        case 165: 
+        case 165:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.pistons);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.pistons);
             if ((idx1 >= 0) && (idx2 >= 0)) {
@@ -69,16 +70,16 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.pistons[idx2].mode = gameInfo.pistons[idx1].mode;
                 gameInfo.pistons[idx2].group = gameInfo.pistons[idx1].group;
             }
-            break;          
-        case 167: 
+            break;
+        case 167:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.delays);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.delays);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.delays[idx2].gameTicks = gameInfo.delays[idx1].gameTicks;
             }
-            break;          
+            break;
 
-        case 171: 
+        case 171:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.conveyorBelts);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.conveyorBelts);
             if ((idx1 >= 0) && (idx2 >= 0)) {
@@ -86,18 +87,89 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.conveyorBelts[idx2].direction = gameInfo.conveyorBelts[idx1].direction;
                 gameInfo.conveyorBelts[idx2].group = gameInfo.conveyorBelts[idx1].group;
             }
-            break;         
-        case 178: 
+            break;
+        case 178:
             idx1 = findElementByCoordinate(x1, y1, gameInfo.movers);
             idx2 = findElementByCoordinate(x2, y2, gameInfo.movers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.movers[idx2].direction = gameInfo.movers[idx1].direction;
             }
-            break;         
+            break;
 
         default:
             break;
     }
+}
+
+function getObjectInfo(gameInfo, x, y, n) {
+    let idx = -1;
+
+    switch (n) {
+        case 8:
+        case 93:
+        case 94:
+            idx = findElementByCoordinate(x, y, gameInfo.redBalls);
+            if (idx >= 0) {
+                return { arr: gameInfo.redBalls, idx };
+            }
+            break;
+        case 6:
+        case 106:
+            idx = findElementByCoordinate(x, y, gameInfo.elevators);
+            if (idx >= 0) {
+                return { arr: gameInfo.elevators, idx };
+            }
+            break;
+        case 7:
+        case 107:
+            idx = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
+            if (idx >= 0) {
+                return { arr: gameInfo.horizontalElevators, idx };
+            }
+            break;
+        case 157:
+            idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+            if (idx >= 0) {
+                return { arr: gameInfo.musicBoxes, idx };
+            }
+            break;
+        case 158:
+            idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+            if (idx >= 0) {
+                return { arr: gameInfo.pistonsTriggers, idx };
+            }
+            break;
+        case 159:
+        case 161:
+        case 163:
+        case 165:
+            idx = findElementByCoordinate(x, y, gameInfo.pistons);
+            if (idx >= 0) {
+                return { arr: gameInfo.pistons, idx };
+            }
+            break;
+        case 167:
+            idx = findElementByCoordinate(x, y, gameInfo.delays);
+            if (idx >= 0) {
+                return { arr: gameInfo.delays, idx };
+            }
+            break;
+        case 171:
+            idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+            if (idx >= 0) {
+                return { arr: gameInfo.conveyorBelts, idx };
+            }
+            break;
+        case 178:
+            idx = findElementByCoordinate(x, y, gameInfo.movers);
+            if (idx >= 0) {
+                return { arr: gameInfo.movers, idx };
+            }
+            break;
+        default:
+            break;
+    }
+    return null;
 }
 
 export function menuToNumber(s) {
@@ -151,4 +223,55 @@ export function menuToNumber(s) {
             break;
     }
     return result;
+}
+
+export function loadCellForUndo(backData, gameData, gameInfo, obj) {
+    let createLevelObject = 0;
+    let objectInfo = null;
+    let x = -1;
+    let y = -1;
+
+    if (obj !== null) {
+        x = obj.x;
+        y = obj.y;
+        if (obj.gd === 0) {
+            removeObject(gameData, gameInfo, x, y);
+        }
+        if (obj.bd === 0) {
+            deleteIfPurpleTeleport(backData, gameInfo, x, y);
+            if ([20, 23, 25, 90].includes(backData[y][x])) {
+                backData[y][x] = 0;
+            }
+        }
+        createLevelObject = obj.gd;
+        if (createLevelObject === 0) {
+            createLevelObject = obj.bd;
+        }
+        if (createLevelObject >= 0) {
+            deleteIfPurpleTeleport(backData, gameInfo, x, y);
+            addObject(backData, gameData, gameInfo, x, y, createLevelObject);
+            if (obj.gi !== null) {
+                objectInfo = getObjectInfo(gameInfo, x, y, obj.gd);
+                if (objectInfo !== null) {
+                    // Copy properties into existing object
+                    Object.assign(objectInfo.arr[objectInfo.idx], obj.gi);
+                }
+            }
+        }
+    }
+}
+
+export function saveCellForUndo(backData, gameData, gameInfo, x, y) {
+    const obj = {};
+    let objectInfo = null;
+    obj.x = x;
+    obj.y = y;
+    obj.bd = backData[y][x];
+    obj.gd = gameData[y][x];
+    obj.gi = null;
+    objectInfo = getObjectInfo(gameInfo, x, y, obj.gd);
+    if (objectInfo !== null) {
+        obj.gi = objectInfo.arr[objectInfo.idx]
+    }
+    return obj;
 }

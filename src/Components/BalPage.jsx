@@ -28,7 +28,7 @@ import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import { changeColor, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow } from "../colorUtils.js";
 import { changeConveyorBeltMode } from "../conveyorBelts.js";
-import { copyCell, menuToNumber } from "../createmode.js";
+import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createMode.js";
 import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
@@ -80,8 +80,7 @@ let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
-let undoAction = "";
-let undoPossible = false;
+let undoBuffer = [];
 
 let gameData = [];
 let backData = [];
@@ -334,7 +333,9 @@ function BalPage() {
           level = 9999;
           break;
       }
-      saveUndo("New level");
+      if (!silent) {
+        saveUndo("New level", "level");
+      }
       await initLevel(level);
       // 9999 has a special meaning
       gameVars.currentLevel = 9999;
@@ -344,7 +345,7 @@ function BalPage() {
 
   async function clickDeleteColumn() {
     function del() {
-      saveUndo("Delete column");
+      saveUndo("Delete column", "level");
       for (let i = 0; i < gameData.length; i++) {
         removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
         deleteIfPurpleTeleport(backData, gameInfo, createLevelSelectedCell.x, i);
@@ -377,7 +378,7 @@ function BalPage() {
 
   async function clickDeleteRow() {
     function del() {
-      saveUndo("Delete row");
+      saveUndo("Delete row", "level");
       for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
         removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
         deleteIfPurpleTeleport(backData, gameInfo, i, createLevelSelectedCell.y);
@@ -410,7 +411,7 @@ function BalPage() {
 
   async function clickInsertColumn() {
     function ins() {
-      saveUndo("Insert column");
+      saveUndo("Insert column", "level");
       let value = 0;
       let n = gameData.length;
       for (let i = 0; i < n; i++) {
@@ -444,7 +445,7 @@ function BalPage() {
 
   async function clickInsertRow() {
     function ins() {
-      saveUndo("Insert row");
+      saveUndo("Insert row", "level");
       let n = gameData[0].length;
       let newRow = [];
       let newRowBackData = [];
@@ -543,7 +544,7 @@ function BalPage() {
   async function clickLoadFromMemory(idx) {
     async function load() {
       if ((idx === 0) && createLevel) {
-        saveUndo("Load from memory");
+        saveUndo("Load from memory", "level");
       }
       const data = loadFromMemory(idx);
       if (data === null) {
@@ -600,7 +601,7 @@ function BalPage() {
 
     if (result !== null) {
       if (createLevel) {
-        saveUndo("Import level");
+        saveUndo("Import level", "level");
       }
       clearMemory(1);
       clearMemory(2);
@@ -629,11 +630,40 @@ function BalPage() {
   }
 
   async function clickUndo() {
-    if (undoPossible) {
-      const confirm = await showConfirm("Question", `Undo ${undoAction}?`);
+    if (undoBuffer.length > 0) {
+      const confirm = await showConfirm("Question", `Undo ${undoBuffer[undoBuffer.length - 1].action}?`);
       if (confirm === "YES") {
-        clickLoadFromMemory(4);
-        undoPossible = false;
+        const undoItem = undoBuffer.pop();
+        const obj = JSON.parse(undoItem.objString);
+        switch (undoItem.type) {
+          case "level":
+            clickLoadFromMemory(4);
+            break;
+          case "single":
+            loadCellForUndo(backData, gameData, gameInfo, obj);
+            break;
+          case "move":
+            if (obj !== null) {
+              moveSelectedObject({ x: obj.x1, y: obj.y1 }, "position", { x: obj.x2, y: obj.y2 });
+            }
+            break;
+          case "bgcolors":
+            if (obj !== null) {
+              gameVars.bgcolor.length = 0;
+              gameVars.bgcolor = obj.colors;
+            }
+            break;
+          case "fgcolors":
+            if (obj !== null) {
+              gameVars.fgcolor.length = 0;
+              gameVars.fgcolor = obj.colors;
+            }
+            break;
+          default:
+            break;
+        }
+        updateGameCanvas();
+        updateGreen();
       }
     } else {
       showMessage("Message", "There is nothing to undo.")
@@ -755,7 +785,7 @@ function BalPage() {
     }
     switch (n) {
       case 1:
-        arr1 = [0];
+        arr1 = [2050, 2051];
         arr2 = [0];
         break;
       case 2:
@@ -1265,10 +1295,31 @@ function BalPage() {
     }
   }
 
-  function saveUndo(action) {
-    saveToMemory(gameData, backData, gameInfo, gameVars, 4);
-    undoAction = action;
-    undoPossible = true;
+  function saveUndo(action, type, obj = null) {
+    // type
+    // level, single, move
+    let idx = -1;
+    if (type === "level") {
+      saveToMemory(gameData, backData, gameInfo, gameVars, 4);
+      for (let i = 0; i < undoBuffer.length; i++) {
+        if (undoBuffer[i].type === "level") {
+          idx = i;
+        }
+        if (idx >= 0) {
+          // There can only be one item with type level
+          undoBuffer.splice(0, idx + 1);
+        }
+      }
+    }
+    while (undoBuffer.length >= 10) {
+      undoBuffer.splice(0, 1);
+    }
+    const undoItem = {
+      action,
+      type,
+      objString: JSON.stringify(obj)
+    };
+    undoBuffer.push(undoItem);
   }
 
   //const myRef = useRef(document);
@@ -1475,6 +1526,7 @@ function BalPage() {
   function handleGameCanvasClick(e) {
     let idx = -1;
     let info = "";
+    let move = false;
     let obj = null;
 
     if (!gameData || !backData) {
@@ -1504,6 +1556,7 @@ function BalPage() {
     let y = e.clientY - rect.top - topMargin;
 
     let oneSelected = true;
+    let singleCellAction = false;
     let xmin = -1;
     let ymin = -1;
     let xmax = -1;
@@ -1516,11 +1569,12 @@ function BalPage() {
       if (createLevel) {
         // CREATE
         if (!e.altKey && !e.shiftKey) {
+          move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2035));
           xmin = column;
           xmax = xmin;
           ymin = row;
           ymax = ymin;
-          if (e.ctrlKey && (createLevelSelectedCell !== null)) {
+          if (e.ctrlKey && (createLevelSelectedCell !== null) && !move) {
             if (column > createLevelSelectedCell.x) {
               xmin = createLevelSelectedCell.x;
               xmax = column;
@@ -1537,10 +1591,47 @@ function BalPage() {
             }
           }
           oneSelected = ((xmin === xmax) && (ymin === ymax));
-          if (!oneSelected) {
-            saveUndo("Multiple cells action");
+          if (oneSelected) {
+            if (move) {
+              if (createLevelSelectedCell !== null) {
+                saveUndo("Move object", "move", { x1: column, y1: row, x2: createLevelSelectedCell.x, y2: createLevelSelectedCell.y });
+              }
+            } else {
+              singleCellAction = true;
+              switch (createLevelObject) {
+                case 2:
+                  if ((gameInfo.blueBall.x >= 0) && (gameInfo.blueBall.y >= 0)) {
+                    saveUndo("Move blue ball", "move", { x1: column, y1: row, x2: gameInfo.blueBall.x, y2: gameInfo.blueBall.y });
+                    singleCellAction = false;
+                  }
+                  break;
+                case 37:
+                  if ((gameInfo.detonator.x >= 0) && (gameInfo.detonator.y >= 0)) {
+                    saveUndo("Move detonator", "move", { x1: column, y1: row, x2: gameInfo.detonator.x, y2: gameInfo.detonator.y });
+                    singleCellAction = false;
+                  }
+                  break;
+                case 132:
+                  // Not possible yet in level creator
+                  if ((gameInfo.travelGate.x >= 0) && (gameInfo.travelGate.y >= 0)) {
+                    saveUndo("Move travel gate", "move", { x1: column, y1: row, x2: gameInfo.travelGate.x, y2: gameInfo.travelGate.y });
+                    singleCellAction = false;
+                  }
+                  break;
+                default:
+                  break;
+              }
+              if ((createLevelMenu === menuToNumber("backgroundcolors")) || (createLevelMenu === menuToNumber("foregroundcolors"))) {
+                if ((createLevelObject >= 2052) && (createLevelObject <= 2083)) {
+                  singleCellAction = false;
+                }
+              }
+              if (singleCellAction) {
+                saveUndo("Single cell action", "single", saveCellForUndo(backData, gameData, gameInfo, column, row));
+              }
+            }
           } else {
-            undoPossible = false;
+            saveUndo("Multiple cells action", "level");
           }
 
           for (let r = ymin; r <= ymax; r++) {
@@ -1636,18 +1727,22 @@ function BalPage() {
 
                 if (createLevelMenu === menuToNumber("foregroundcolors")) {
                   if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                    saveUndo("Change foreground color", "fgcolors", { colors: gameVars.fgcolor });
                     changeColor(gameVars.fgcolor, column, row, createLevelObject - 2052);
                   }
                   if (createLevelObject === 2083) {
+                    saveUndo("Delete foreground color", "fgcolors", { colors: gameVars.fgcolor });
                     deleteColorAtPosition(gameVars.fgcolor, column, row);
                   }
                 }
 
                 if (createLevelMenu === menuToNumber("backgroundcolors")) {
                   if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                    saveUndo("Change background color", "bgcolors", { colors: gameVars.bgcolor });
                     changeColor(gameVars.bgcolor, column, row, createLevelObject - 2052);
                   }
                   if (createLevelObject === 2083) {
+                    saveUndo("Delete background color", "bgcolors", { colors: gameVars.bgcolor });
                     deleteColorAtPosition(gameVars.bgcolor, column, row);
                   }
                 }
@@ -1761,7 +1856,7 @@ function BalPage() {
     }
   }
 
-  function handleCreateLevelCanvasClick(e) {
+  async function handleCreateLevelCanvasClick(e) {
     if (!createLevel || !gameDataMenu || (gameDataMenu.length < 1)) {
       return false;
     }
@@ -1788,6 +1883,11 @@ function BalPage() {
     let column = Math.floor(x / size1);
     let row = Math.floor(y / size1);
 
+    let confirm = null;
+    let direction = "";
+    let xNew = -1;
+    let yNew = -1;
+
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
         if (row === 0) {
@@ -1796,22 +1896,58 @@ function BalPage() {
         }
         createLevelObject = gameDataMenu[row][column];
 
-        if ((createLevelMenu === menuToNumber("select")) && (createLevelSelectedCell !== null)) {
+        if (createLevelMenu === menuToNumber("delete")) {
           switch (createLevelObject) {
-            case 2040:
-              moveSelectedObject(createLevelSelectedCell, "left");
+            case 2050:
+              confirm = await showConfirm("Question", "Delete all foreground color settings?");
+              if (confirm === "YES") {
+                saveUndo("Delete all foreground color settings", "fgcolors", { colors: gameVars.fgcolor });
+                gameVars.fgcolor.length = 0;
+                gameVars.fgcolor = [];
+                updateGameCanvas();
+              }
               break;
-            case 2041:
-              moveSelectedObject(createLevelSelectedCell, "right");
-              break;
-            case 2042:
-              moveSelectedObject(createLevelSelectedCell, "up");
-              break;
-            case 2043:
-              moveSelectedObject(createLevelSelectedCell, "down");
+            case 2051:
+              confirm = await showConfirm("Question", "Delete all background color settings?");
+              if (confirm === "YES") {
+                saveUndo("Delete all background color settings", "bgcolors", { colors: gameVars.bgcolor });
+                gameVars.bgcolor.length = 0;
+                gameVars.bgcolor = [];
+                updateGameCanvas();
+              }
               break;
             default:
               break;
+          }
+        }
+
+        if ((createLevelMenu === menuToNumber("select")) && (createLevelSelectedCell !== null)) {
+          direction = "";
+          xNew = createLevelSelectedCell.x;
+          yNew = createLevelSelectedCell.y;
+          switch (createLevelObject) {
+            case 2040:
+              direction = "left";
+              xNew--;
+              break;
+            case 2041:
+              direction = "right";
+              xNew++;
+              break;
+            case 2042:
+              direction = "up";
+              yNew--;
+              break;
+            case 2043:
+              direction = "down";
+              yNew++;
+              break;
+            default:
+              break;
+          }
+          if ((direction !== "") && (gameData[yNew][xNew] === 0) && (backData[yNew][xNew] === 0)) {
+            saveUndo("Move object", "move", { x1: xNew, y1: yNew, x2: createLevelSelectedCell.x, y2: createLevelSelectedCell.y });
+            moveSelectedObject(createLevelSelectedCell, direction);
           }
         }
 
