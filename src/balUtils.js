@@ -1462,16 +1462,8 @@ export function moveObjectInDirection(gameData, gameInfo, x, y, direction) {
   moveObject(gameData, gameInfo, x, y, newX, newY);
 }
 
-export function moveObjects(gameInfo, gameVars, mode, x1, y1, x2, y2) {
+export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
   const refs = [];
-
-  for (let i = 0; i < gameVars.bgcolor.length; i++) {
-    refs.push(gameVars.bgcolor[i]);
-  }
-
-  for (let i = 0; i < gameVars.fgcolor.length; i++) {
-    refs.push(gameVars.fgcolor[i]);
-  }
 
   refs.push(gameInfo.blueBall1);
 

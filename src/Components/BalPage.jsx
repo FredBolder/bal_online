@@ -26,7 +26,8 @@ import {
 } from "../balUtils.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
-import { changeColor, changeColors, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow, deleteColors } from "../colorUtils.js";
+import { changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors, 
+  insertColorsAtColumn, insertColorsAtRow, moveColor } from "../colorUtils.js";
 import { changeConveyorBeltMode } from "../conveyorBelts.js";
 import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { checkGameOver } from "../gameOver.js";
@@ -354,9 +355,9 @@ function BalPage() {
         gameData[i].splice(createLevelSelectedCell.x, 1);
         backData[i].splice(createLevelSelectedCell.x, 1);
       }
-      deleteColorAtColumn(gameVars.fgcolor, createLevelSelectedCell.x);
-      deleteColorAtColumn(gameVars.bgcolor, createLevelSelectedCell.x);
-      moveObjects(gameInfo, gameVars, "deleteColumn", createLevelSelectedCell.x, 0, 0, 0);
+      deleteColorsAtColumn(gameVars.fgcolor, createLevelSelectedCell.x);
+      deleteColorsAtColumn(gameVars.bgcolor, createLevelSelectedCell.x);
+      moveObjects(gameInfo, "deleteColumn", createLevelSelectedCell.x, 0, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -387,9 +388,9 @@ function BalPage() {
       }
       gameData.splice(createLevelSelectedCell.y, 1);
       backData.splice(createLevelSelectedCell.y, 1);
-      deleteColorAtRow(gameVars.fgcolor, createLevelSelectedCell.y);
-      deleteColorAtRow(gameVars.bgcolor, createLevelSelectedCell.y);
-      moveObjects(gameInfo, gameVars, "deleteRow", 0, createLevelSelectedCell.y, 0, 0);
+      deleteColorsAtRow(gameVars.fgcolor, createLevelSelectedCell.y);
+      deleteColorsAtRow(gameVars.bgcolor, createLevelSelectedCell.y);
+      moveObjects(gameInfo, "deleteRow", 0, createLevelSelectedCell.y, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -425,7 +426,9 @@ function BalPage() {
         gameData[i].splice(createLevelSelectedCell.x, 0, value);
         backData[i].splice(createLevelSelectedCell.x, 0, 0);
       }
-      moveObjects(gameInfo, gameVars, "insertColumn", createLevelSelectedCell.x, 0, 0, 0);
+      insertColorsAtColumn(gameVars.fgcolor, createLevelSelectedCell.x);
+      insertColorsAtColumn(gameVars.bgcolor, createLevelSelectedCell.x);
+      moveObjects(gameInfo, "insertColumn", createLevelSelectedCell.x, 0, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -461,7 +464,9 @@ function BalPage() {
       }
       gameData.splice(createLevelSelectedCell.y, 0, newRow);
       backData.splice(createLevelSelectedCell.y, 0, newRowBackData);
-      moveObjects(gameInfo, gameVars, "insertRow", 0, createLevelSelectedCell.y, 0, 0);
+      insertColorsAtRow(gameVars.fgcolor, createLevelSelectedCell.y);
+      insertColorsAtRow(gameVars.bgcolor, createLevelSelectedCell.y);
+      moveObjects(gameInfo, "insertRow", 0, createLevelSelectedCell.y, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
       updateGreen();
@@ -2051,7 +2056,9 @@ function BalPage() {
           backData[yNew][xNew] = backData[cell.y][cell.x];
           gameData[cell.y][cell.x] = 0;
           backData[cell.y][cell.x] = 0;
-          moveObjects(gameInfo, gameVars, "moveCell", cell.x, cell.y, xNew, yNew);
+          moveColor(gameVars.bgcolor, cell.x, cell.y, xNew, yNew);
+          moveColor(gameVars.fgcolor, cell.x, cell.y, xNew, yNew);
+          moveObjects(gameInfo, "moveCell", cell.x, cell.y, xNew, yNew);
           cell.x = xNew;
           cell.y = yNew;
           updateGameCanvas();
