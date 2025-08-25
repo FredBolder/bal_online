@@ -26,7 +26,7 @@ import {
 } from "../balUtils.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
-import { changeColor, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow } from "../colorUtils.js";
+import { changeColor, changeColors, deleteColorAtColumn, deleteColorAtPosition, deleteColorAtRow, deleteColors } from "../colorUtils.js";
 import { changeConveyorBeltMode } from "../conveyorBelts.js";
 import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { checkGameOver } from "../gameOver.js";
@@ -1320,7 +1320,7 @@ function BalPage() {
 
   function saveUndo(action, type, obj = null) {
     // type
-    // level, single, move
+    // bgcolors, fgcolors, level, move, single
     let idx = -1;
     redoPossible = false;
     if (type === "level") {
@@ -1555,10 +1555,10 @@ function BalPage() {
     let obj = null;
 
     if (!gameData || !backData) {
-      return false;
+      return;
     }
     if ((gameData.length < 1) || (backData.length < 1)) {
-      return false;
+      return;
     }
 
     const rows = gameData.length;
@@ -1590,288 +1590,315 @@ function BalPage() {
     let column = Math.floor(x / size1);
     let row = Math.floor(y / size1);
 
-    if (column >= 0 && column < columns && row >= 0 && row < rows) {
-      if (createLevel) {
-        // CREATE
-        if (!e.altKey && !e.shiftKey) {
-          move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2035));
-          xmin = column;
-          xmax = xmin;
-          ymin = row;
-          ymax = ymin;
-          if (e.ctrlKey && (createLevelSelectedCell !== null) && !move) {
-            if (column > createLevelSelectedCell.x) {
-              xmin = createLevelSelectedCell.x;
-              xmax = column;
-            } else {
-              xmin = column;
-              xmax = createLevelSelectedCell.x;
-            }
-            if (row > createLevelSelectedCell.y) {
-              ymin = createLevelSelectedCell.y;
-              ymax = row;
-            } else {
-              ymin = row;
-              ymax = createLevelSelectedCell.y;
-            }
-          }
-          oneSelected = ((xmin === xmax) && (ymin === ymax));
-          if (oneSelected) {
-            if (!move) {
-              singleCellAction = true;
-              switch (createLevelObject) {
-                case 2:
-                  if ((gameInfo.blueBall.x >= 0) && (gameInfo.blueBall.y >= 0)) {
-                    saveUndo("Move blue ball", "move", { x1: column, y1: row, x2: gameInfo.blueBall.x, y2: gameInfo.blueBall.y });
-                    singleCellAction = false;
-                  }
-                  break;
-                case 37:
-                  if ((gameInfo.detonator.x >= 0) && (gameInfo.detonator.y >= 0)) {
-                    saveUndo("Move detonator", "move", { x1: column, y1: row, x2: gameInfo.detonator.x, y2: gameInfo.detonator.y });
-                    singleCellAction = false;
-                  }
-                  break;
-                case 132:
-                  // Not possible yet in level creator
-                  if ((gameInfo.travelGate.x >= 0) && (gameInfo.travelGate.y >= 0)) {
-                    saveUndo("Move travel gate", "move", { x1: column, y1: row, x2: gameInfo.travelGate.x, y2: gameInfo.travelGate.y });
-                    singleCellAction = false;
-                  }
-                  break;
-                default:
-                  break;
-              }
-              if ((createLevelMenu === menuToNumber("backgroundcolors")) || (createLevelMenu === menuToNumber("foregroundcolors"))) {
-                if ((createLevelObject >= 2052) && (createLevelObject <= 2083)) {
-                  singleCellAction = false;
-                }
-              }
-              if (singleCellAction) {
-                saveUndo("Single cell action", "single", saveCellForUndo(backData, gameData, gameInfo, column, row));
-              }
-            }
+    if ((column < 0) || (column >= columns) || (row < 0) || (row >= rows)) {
+      return;
+    }
+
+    if (createLevel) {
+      // CREATE
+      if (!e.altKey && !e.ctrlKey && (e.shiftKey || (createLevelObject === -2))) {
+        // SELECT
+        createLevelSelectedCell = { x: column, y: row };
+        updateGameCanvas();
+        fillMenu(2);
+        updateCreateLevelCanvas();
+        return;
+      }
+      if (!e.altKey && !e.shiftKey) {
+        move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2035));
+        xmin = column;
+        xmax = xmin;
+        ymin = row;
+        ymax = ymin;
+        if (e.ctrlKey && (createLevelSelectedCell !== null) && !move) {
+          if (column > createLevelSelectedCell.x) {
+            xmin = createLevelSelectedCell.x;
+            xmax = column;
           } else {
-            saveUndo("Multiple cells action", "level");
+            xmin = column;
+            xmax = createLevelSelectedCell.x;
           }
+          if (row > createLevelSelectedCell.y) {
+            ymin = createLevelSelectedCell.y;
+            ymax = row;
+          } else {
+            ymin = row;
+            ymax = createLevelSelectedCell.y;
+          }
+        }
+        oneSelected = ((xmin === xmax) && (ymin === ymax));
+        if (oneSelected) {
+          // Single cell
+          singleCellAction = true;
+          switch (createLevelObject) {
+            case 2:
+              if ((gameInfo.blueBall.x >= 0) && (gameInfo.blueBall.y >= 0)) {
+                saveUndo("Move blue ball", "move", { x1: column, y1: row, x2: gameInfo.blueBall.x, y2: gameInfo.blueBall.y });
+                singleCellAction = false;
+              }
+              break;
+            case 37:
+              if ((gameInfo.detonator.x >= 0) && (gameInfo.detonator.y >= 0)) {
+                saveUndo("Move detonator", "move", { x1: column, y1: row, x2: gameInfo.detonator.x, y2: gameInfo.detonator.y });
+                singleCellAction = false;
+              }
+              break;
+            case 132:
+              // Not possible yet in level creator
+              if ((gameInfo.travelGate.x >= 0) && (gameInfo.travelGate.y >= 0)) {
+                saveUndo("Move travel gate", "move", { x1: column, y1: row, x2: gameInfo.travelGate.x, y2: gameInfo.travelGate.y });
+                singleCellAction = false;
+              }
+              break;
+            default:
+              break;
+          }
+          if ((createLevelMenu === menuToNumber("backgroundcolors")) || (createLevelMenu === menuToNumber("foregroundcolors"))) {
+            if ((createLevelObject >= 2052) && (createLevelObject <= 2083)) {
+              singleCellAction = false;
+            }
+          }
+          if (move) {
+              singleCellAction = false;
+          }
+          if (singleCellAction) {
+            saveUndo("Single cell action", "single", saveCellForUndo(backData, gameData, gameInfo, column, row));
+          }
+        } else {
+          // Multiple cells
+          if (createLevelMenu === menuToNumber("backgroundcolors") && (createLevelObject >= 2052) && (createLevelObject <= 2083)) {
+            if (createLevelObject === 2083) {
+              saveUndo("Delete background colors", "bgcolors", { colors: gameVars.bgcolor });
+              deleteColors(gameVars.bgcolor, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1);
+            } else {
+              saveUndo("Change background colors", "bgcolors", { colors: gameVars.bgcolor });
+              changeColors(gameVars.bgcolor, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1, createLevelObject - 2052);
+            }
+            updateGameCanvas();
+            return;
+          }
+          if (createLevelMenu === menuToNumber("foregroundcolors") && (createLevelObject >= 2052) && (createLevelObject <= 2083)) {
+            if (createLevelObject === 2083) {
+              saveUndo("Delete foreground colors", "fgcolors", { colors: gameVars.fgcolor });
+              deleteColors(gameVars.fgcolor, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1);
+            } else {
+              saveUndo("Change foreground colors", "fgcolors", { colors: gameVars.fgcolor });
+              changeColors(gameVars.fgcolor, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1, createLevelObject - 2052);
+            }
+            updateGameCanvas();
+            return;
+          }
+          saveUndo("Multiple cells action", "level");
+        }
 
-          for (let r = ymin; r <= ymax; r++) {
-            for (let c = xmin; c <= xmax; c++) {
-              row = r;
-              column = c;
+        for (let r = ymin; r <= ymax; r++) {
+          for (let c = xmin; c <= xmax; c++) {
+            row = r;
+            column = c;
 
-              if (createLevelObject >= 2000) {
-                if (createLevelMenu === menuToNumber("select")) {
-                  if (createLevelSelectedCell !== null) {
-                    switch (createLevelObject) {
-                      case 2035:
-                        moveSelectedObject(createLevelSelectedCell, "position", { x: column, y: row }, true);
-                        break;
-                      case 2096:
-                        if ((createLevelSelectedCell.x !== column) || (createLevelSelectedCell.y !== row)) {
-                          copyCell(backData, gameData, gameInfo, createLevelSelectedCell.x, createLevelSelectedCell.y, column, row);
-                        }
-                        break;
-                      default:
-                        break;
-                    }
-                  }
-                }
-
-                if ((createLevelMenu === menuToNumber("balls")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
-                  if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a red ball to set the intelligence.");
-                    }
-                  }
-                }
-
-                if (createLevelMenu === menuToNumber("pistons")) {
-                  if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                    changeGroup(gameInfo, column, row, createLevelObject - 2000);
-                  }
-                  if ((createLevelObject >= 2034) && (createLevelObject <= 2037)) {
-                    if (changePistonMode(gameInfo, column, row, ["toggle", "momentary", "repeatfast", "repeatslow"][createLevelObject - 2034]) === -1) {
-                      if (oneSelected) {
-                        showMessage("Info", "Click on a piston to set the piston mode.");
+            if (createLevelObject >= 2000) {
+              if (createLevelMenu === menuToNumber("select")) {
+                if (createLevelSelectedCell !== null) {
+                  switch (createLevelObject) {
+                    case 2035:
+                      moveSelectedObject(createLevelSelectedCell, "position", { x: column, y: row }, true);
+                      break;
+                    case 2096:
+                      if ((createLevelSelectedCell.x !== column) || (createLevelSelectedCell.y !== row)) {
+                        copyCell(backData, gameData, gameInfo, createLevelSelectedCell.x, createLevelSelectedCell.y, column, row);
                       }
-                    }
-                  }
-                  if (createLevelObject === 2038) {
-                    if (changePistonSticky(gameInfo, column, row) === -1) {
-                      if (oneSelected) {
-                        showMessage("Info", "Click on a piston to toggle between sticky and not sticky.");
-                      }
-                    }
-                  }
-                  if (createLevelObject === 2039) {
-                    if (changePistonInverted(gameInfo, column, row) === -1) {
-                      if (oneSelected) {
-                        showMessage("Info", "Click on a piston to toggle between inverted and not inverted.");
-                      }
-                    }
+                      break;
+                    default:
+                      break;
                   }
                 }
+              }
 
-                if (((createLevelMenu === menuToNumber("elevators")) || (createLevelMenu === menuToNumber("conveyorbelts"))) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
-                  if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
-                    }
+              if ((createLevelMenu === menuToNumber("balls")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
+                if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a red ball to set the intelligence.");
                   }
                 }
+              }
 
-                if ((createLevelMenu === menuToNumber("elevators")) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
-                  if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
-                    }
-                  }
-                }
-
-                if (createLevelMenu === menuToNumber("conveyorbelts")) {
-                  if ((createLevelObject >= 2084) && (createLevelObject <= 2091)) {
-                    if (changeConveyorBeltMode(gameInfo, column, row, ["notrigger", "rightleft", "noneright", "noneleft", "nonerightleft", "none", "right", "left"][createLevelObject - 2084]) === -1) {
-                      if (oneSelected) {
-                        showMessage("Info", "Click on a conveyor belt to set the mode of it.");
-                      }
-                    }
-                  }
-                  if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                    changeGroup(gameInfo, column, row, createLevelObject - 2000);
-                  }
-                }
-
-                if ((createLevelMenu === menuToNumber("groups")) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
+              if (createLevelMenu === menuToNumber("pistons")) {
+                if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
                 }
-
-                if (createLevelMenu === menuToNumber("foregroundcolors")) {
-                  if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
-                    saveUndo("Change foreground color", "fgcolors", { colors: gameVars.fgcolor });
-                    changeColor(gameVars.fgcolor, column, row, createLevelObject - 2052);
-                  }
-                  if (createLevelObject === 2083) {
-                    saveUndo("Delete foreground color", "fgcolors", { colors: gameVars.fgcolor });
-                    deleteColorAtPosition(gameVars.fgcolor, column, row);
+                if ((createLevelObject >= 2034) && (createLevelObject <= 2037)) {
+                  if (changePistonMode(gameInfo, column, row, ["toggle", "momentary", "repeatfast", "repeatslow"][createLevelObject - 2034]) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a piston to set the piston mode.");
+                    }
                   }
                 }
-
-                if (createLevelMenu === menuToNumber("backgroundcolors")) {
-                  if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
-                    saveUndo("Change background color", "bgcolors", { colors: gameVars.bgcolor });
-                    changeColor(gameVars.bgcolor, column, row, createLevelObject - 2052);
-                  }
-                  if (createLevelObject === 2083) {
-                    saveUndo("Delete background color", "bgcolors", { colors: gameVars.bgcolor });
-                    deleteColorAtPosition(gameVars.bgcolor, column, row);
+                if (createLevelObject === 2038) {
+                  if (changePistonSticky(gameInfo, column, row) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a piston to toggle between sticky and not sticky.");
+                    }
                   }
                 }
-              } else if (createLevelObject > 0) {
+                if (createLevelObject === 2039) {
+                  if (changePistonInverted(gameInfo, column, row) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a piston to toggle between inverted and not inverted.");
+                    }
+                  }
+                }
+              }
+
+              if (((createLevelMenu === menuToNumber("elevators")) || (createLevelMenu === menuToNumber("conveyorbelts"))) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
+                if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+                  }
+                }
+              }
+
+              if ((createLevelMenu === menuToNumber("elevators")) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
+                if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+                  }
+                }
+              }
+
+              if (createLevelMenu === menuToNumber("conveyorbelts")) {
+                if ((createLevelObject >= 2084) && (createLevelObject <= 2091)) {
+                  if (changeConveyorBeltMode(gameInfo, column, row, ["notrigger", "rightleft", "noneright", "noneleft", "nonerightleft", "none", "right", "left"][createLevelObject - 2084]) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a conveyor belt to set the mode of it.");
+                    }
+                  }
+                }
+                if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
+                  changeGroup(gameInfo, column, row, createLevelObject - 2000);
+                }
+              }
+
+              if ((createLevelMenu === menuToNumber("groups")) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
+                changeGroup(gameInfo, column, row, createLevelObject - 2000);
+              }
+
+              if (createLevelMenu === menuToNumber("foregroundcolors")) {
+                if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                  saveUndo("Change foreground color", "fgcolors", { colors: gameVars.fgcolor });
+                  changeColor(gameVars.fgcolor, column, row, createLevelObject - 2052);
+                }
+                if (createLevelObject === 2083) {
+                  saveUndo("Delete foreground color", "fgcolors", { colors: gameVars.fgcolor });
+                  deleteColorAtPosition(gameVars.fgcolor, column, row);
+                }
+              }
+
+              if (createLevelMenu === menuToNumber("backgroundcolors")) {
+                if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                  saveUndo("Change background color", "bgcolors", { colors: gameVars.bgcolor });
+                  changeColor(gameVars.bgcolor, column, row, createLevelObject - 2052);
+                }
+                if (createLevelObject === 2083) {
+                  saveUndo("Delete background color", "bgcolors", { colors: gameVars.bgcolor });
+                  deleteColorAtPosition(gameVars.bgcolor, column, row);
+                }
+              }
+            } else if (createLevelObject > 0) {
+              deleteIfPurpleTeleport(backData, gameInfo, column, row);
+              addObject(backData, gameData, gameInfo, column, row, createLevelObject);
+            } else if (createLevelObject === -3) {
+              // DELETE
+              if (gameData[row][column] > 0) {
+                removeObject(gameData, gameInfo, column, row);
+              } else {
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
-                addObject(backData, gameData, gameInfo, column, row, createLevelObject);
-              } else if (createLevelObject === -3) {
-                // DELETE
-                if (gameData[row][column] > 0) {
-                  removeObject(gameData, gameInfo, column, row);
-                } else {
-                  deleteIfPurpleTeleport(backData, gameInfo, column, row);
-                  if ([20, 23, 25, 90].includes(backData[row][column])) {
-                    backData[row][column] = 0;
-                  }
+                if ([20, 23, 25, 90].includes(backData[row][column])) {
+                  backData[row][column] = 0;
                 }
               }
             }
           }
+        }
+        updateGameCanvas();
+        updateGreen();
+      }
+    } else {
+      // PLAY
+      if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
+        info = "";
+        switch (gameData[row][column]) {
+          case 157:
+            idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
+            if (idx >= 0) {
+              obj = gameInfo.musicBoxes[idx];
+              info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;
+          case 158:
+            idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
+            if (idx >= 0) {
+              obj = gameInfo.pistonsTriggers[idx];
+              info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;
+          case 159:
+          case 161:
+          case 163:
+          case 165:
+            idx = findElementByCoordinate(column, row, gameInfo.pistons);
+            if (idx >= 0) {
+              obj = gameInfo.pistons[idx];
+              info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;
+          case 167:
+            idx = findElementByCoordinate(column, row, gameInfo.delays);
+            if (idx >= 0) {
+              obj = gameInfo.delays[idx];
+              info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;
+          case 171:
+            idx = findElementByCoordinate(column, row, gameInfo.conveyorBelts);
+            if (idx >= 0) {
+              obj = gameInfo.conveyorBelts[idx];
+              info = `Object: Conveyor belt, Direction: ${obj.direction}, Mode: ${obj.mode}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;
+          case 178:
+            idx = findElementByCoordinate(column, row, gameInfo.movers);
+            if (idx >= 0) {
+              obj = gameInfo.movers[idx];
+              info = `Object: Mover, Direction: ${obj.direction}, Position: ${obj.x}, ${obj.y}`;
+            }
+            break;
+          default:
+            break;
+        }
+        if (info !== "") {
+          showMessage("Info", info);
+        }
+      }
+      if (!e.altKey && e.shiftKey && e.ctrlKey) {
+        info = "";
+        switch (gameData[row][column]) {
+          case 24:
+            info = "No, this is not The Net! The π indicates that this level is made by Panagiotis.";
+            break;
+          default:
+            break;
+        }
+        if (info !== "") {
+          showMessage("Info", info);
+        }
+      }
+      if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
+        if (gameData[row][column] === 0) {
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+          gameInfo.blueBall.x = column;
+          gameInfo.blueBall.y = row;
+          gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
           updateGameCanvas();
-          updateGreen();
-        }
-
-        // SELECT
-        if (!e.altKey && !e.ctrlKey && (e.shiftKey || (!e.shiftKey && (createLevelObject === -2)))) {
-          createLevelSelectedCell = { x: column, y: row };
-          updateGameCanvas();
-          fillMenu(2);
-          updateCreateLevelCanvas();
-        }
-      } else {
-        // PLAY
-        if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-          info = "";
-          switch (gameData[row][column]) {
-            case 157:
-              idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
-              if (idx >= 0) {
-                obj = gameInfo.musicBoxes[idx];
-                info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-              }
-              break;
-            case 158:
-              idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
-              if (idx >= 0) {
-                obj = gameInfo.pistonsTriggers[idx];
-                info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-              }
-              break;
-            case 159:
-            case 161:
-            case 163:
-            case 165:
-              idx = findElementByCoordinate(column, row, gameInfo.pistons);
-              if (idx >= 0) {
-                obj = gameInfo.pistons[idx];
-                info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
-              }
-              break;
-            case 167:
-              idx = findElementByCoordinate(column, row, gameInfo.delays);
-              if (idx >= 0) {
-                obj = gameInfo.delays[idx];
-                info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
-              }
-              break;
-            case 171:
-              idx = findElementByCoordinate(column, row, gameInfo.conveyorBelts);
-              if (idx >= 0) {
-                obj = gameInfo.conveyorBelts[idx];
-                info = `Object: Conveyor belt, Direction: ${obj.direction}, Mode: ${obj.mode}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-              }
-              break;
-            case 178:
-              idx = findElementByCoordinate(column, row, gameInfo.movers);
-              if (idx >= 0) {
-                obj = gameInfo.movers[idx];
-                info = `Object: Mover, Direction: ${obj.direction}, Position: ${obj.x}, ${obj.y}`;
-              }
-              break;
-            default:
-              break;
-          }
-          if (info !== "") {
-            showMessage("Info", info);
-          }
-        }
-        if (!e.altKey && e.shiftKey && e.ctrlKey) {
-          info = "";
-          switch (gameData[row][column]) {
-            case 24:
-              info = "No, this is not The Net! The π indicates that this level is made by Panagiotis.";
-              break;
-            default:
-              break;
-          }
-          if (info !== "") {
-            showMessage("Info", info);
-          }
-        }
-        if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
-          if (gameData[row][column] === 0) {
-            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-            gameInfo.blueBall.x = column;
-            gameInfo.blueBall.y = row;
-            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
-            updateGameCanvas();
-          }
         }
       }
     }

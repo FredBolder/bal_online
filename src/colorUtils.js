@@ -16,6 +16,24 @@ export function changeColor(colors, x, y, colorIndex) {
   return idx;
 }
 
+export function changeColors(colors, x, y, w, h, colorIndex) {
+    let color = indexToColor(colorIndex);
+    const newColors = [];
+
+    for (let i = 0; i < colors.length; i++) {
+        // Keep the colors that are outside or partly outside the area
+        const colorObj = colors[i];
+        if ((colorObj.x < x) || (colorObj.y < y) || ((colorObj.x + colorObj.w - 1) > (x + w - 1)) || ((colorObj.y + colorObj.h - 1) > (y + h - 1))) {
+            newColors.push(colorObj);
+        }
+    }
+    colors.length = 0;
+    for (let i = 0; i < newColors.length; i++) {
+        colors.push(newColors[i]);
+    }
+    colors.push({ x, y, w, h, color });
+}
+
 export function deleteColorAtColumn(colors, column) {
     let newColors = [];
 
@@ -61,6 +79,22 @@ export function deleteColorAtRow(colors, row) {
     for (let i = 0; i < newColors.length; i++) {
         colors.push(newColors[i]);
 
+    }
+}
+
+export function deleteColors(colors, x, y, w, h) {
+    const newColors = [];
+
+    for (let i = 0; i < colors.length; i++) {
+        // Keep the colors that are outside or partly outside the area
+        const colorObj = colors[i];
+        if ((colorObj.x < x) || (colorObj.y < y) || ((colorObj.x + colorObj.w - 1) > (x + w - 1)) || ((colorObj.y + colorObj.h - 1) > (y + h - 1))) {
+            newColors.push(colorObj);
+        }
+    }
+    colors.length = 0;
+    for (let i = 0; i < newColors.length; i++) {
+        colors.push(newColors[i]);
     }
 }
 
