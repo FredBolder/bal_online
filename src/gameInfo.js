@@ -333,6 +333,7 @@ export function initGameVars(vars) {
     vars.fishCountTo = 12;
     vars.gameOver = false;
     vars.gateTravelling = 0;
+    vars.gravity = "down";
     vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;

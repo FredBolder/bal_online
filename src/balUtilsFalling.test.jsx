@@ -17,7 +17,7 @@ describe("balUtils falling", () => {
         [1, 0, 16, 1, 1, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01a = falling(2, 2, backData, input01a, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } });
+    let info01a = falling(2, 2, backData, input01a, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, { ...defaultGameVars });
     it("falling A info", () => {
         expect(info01a).toBe(true);
     });
@@ -29,7 +29,7 @@ describe("balUtils falling", () => {
         [1, 4, 16, 1, 1, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01b = falling(2, 2, backData, input01b, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } });
+    let info01b = falling(2, 2, backData, input01b, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, { ...defaultGameVars });
     it("falling B info", () => {
         expect(info01b).toBe(false);
     });
@@ -41,7 +41,7 @@ describe("balUtils falling", () => {
         [1, 1, 1, 15, 0, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01c = falling(3, 2, backData, input01c, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } });
+    let info01c = falling(3, 2, backData, input01c, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling C info", () => {
         expect(info01c).toBe(true);
     });
@@ -53,7 +53,7 @@ describe("balUtils falling", () => {
         [1, 1, 1, 15, 4, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01d = falling(3, 2, backData, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } });
+    let info01d = falling(3, 2, backData, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling D info", () => {
         expect(info01d).toBe(false);
     });
@@ -65,7 +65,7 @@ describe("balUtils falling", () => {
         [1, 1, 1, 0, 1, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01e = falling(3, 2, backData, input01e, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } });
+    let info01e = falling(3, 2, backData, input01e, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling E info", () => {
         expect(info01e).toBe(true);
     });
@@ -84,7 +84,7 @@ describe("balUtils falling", () => {
         [0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0],
     ];
-    let info01f = falling(3, 2, backData01f, input01f, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } });
+    let info01f = falling(3, 2, backData01f, input01f, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling F info", () => {
         expect(info01f).toBe(false);
     });
@@ -103,7 +103,7 @@ describe("balUtils falling", () => {
         [0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0],
     ];
-    let info01g = falling(3, 2, backData01g, input01g, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } });
+    let info01g = falling(3, 2, backData01g, input01g, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling G info", () => {
         expect(info01g).toBe(false);
     });
@@ -115,7 +115,7 @@ describe("balUtils falling", () => {
         [1, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01h = falling(3, 2, backData, input01h, { ...defaultGameInfo, hasPropeller: true, blueBall: { x: 3, y: 2 } });
+    let info01h = falling(3, 2, backData, input01h, { ...defaultGameInfo, hasPropeller: true, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling H info", () => {
         expect(info01h).toBe(false);
     });
@@ -127,7 +127,7 @@ describe("balUtils falling", () => {
         [1, 0, 0, 0, 0, 1],
         [1, 1, 1, 109, 1, 1],
     ];
-    let info01i = falling(3, 2, backData, input01i, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 4, direction: "up" }] });
+    let info01i = falling(3, 2, backData, input01i, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 4, direction: "up" }] }, { ...defaultGameVars });
     it("falling I info", () => {
         expect(info01i).toBe(false);
     });
@@ -146,7 +146,7 @@ describe("balUtils falling", () => {
         [0, 23, 23, 23, 23, 0],
         [0, 0, 0, 0, 0, 0],
     ];
-    let info01j = falling(3, 2, backData01j, input01j, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } });
+    let info01j = falling(3, 2, backData01j, input01j, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
     it("falling J info", () => {
         expect(info01j).toBe(false);
     });

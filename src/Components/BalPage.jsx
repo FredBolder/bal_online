@@ -13,8 +13,7 @@ import {
   findElementByCoordinate,
   inWater,
   jump,
-  jumpLeft,
-  jumpRight,
+  jumpLeftOrRight,
   moveDownLeft,
   moveDownRight,
   moveLeft,
@@ -26,8 +25,10 @@ import {
 } from "../balUtils.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
-import { changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors, 
-  insertColorsAtColumn, insertColorsAtRow, moveColor } from "../colorUtils.js";
+import {
+  changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
+  insertColorsAtColumn, insertColorsAtRow, moveColor
+} from "../colorUtils.js";
 import { changeConveyorBeltMode } from "../conveyorBelts.js";
 import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { checkGameOver } from "../gameOver.js";
@@ -849,7 +850,7 @@ function BalPage() {
         arr2 = [0];
         break;
       case 11:
-        arr1 = [91, 119, 120, 97, 157, 167, 89, 183];
+        arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
         arr2 = [0];
         break;
       case 12:
@@ -938,14 +939,13 @@ function BalPage() {
 
   async function handleKeyDown(e) {
     let info = {
+      action: "",
       eating: false,
       freezeTime: 0,
       message: "",
       player: false,
       slowDownYellow: false,
       sound: "",
-      rotateLeft: false,
-      rotateRight: false,
       update: false,
     };
 
@@ -1037,10 +1037,10 @@ function BalPage() {
           }
           break;
         case "ArrowLeft":
-          info = jumpLeft(backData, gameData, gameInfo);
+          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
           break;
         case "ArrowRight":
-          info = jumpRight(backData, gameData, gameInfo);
+          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
           break;
         default:
           break;
@@ -1051,51 +1051,19 @@ function BalPage() {
         case "a":
         case "A":
         case "4":
-          info = moveLeft(backData, gameData, gameInfo);
-          if (info.rotateRight) {
-            if (rotateGame(backData, gameData, gameInfo)) {
-              info.update = true;
-            }
-          }
-          if (info.rotateLeft) {
-            if (rotateGame(backData, gameData, gameInfo, true)) {
-              info.update = true;
-            }
-          }
-          if (info.teleporting) {
-            gameVars.teleporting = 1;
-          }
-          if (info.gateTravelling) {
-            gameVars.gateTravelling = 1;
-          }
+          info = moveLeft(backData, gameData, gameInfo, gameVars);
           break;
         case "ArrowRight":
         case "d":
         case "D":
         case "6":
-          info = moveRight(backData, gameData, gameInfo);
-          if (info.rotateRight) {
-            if (rotateGame(backData, gameData, gameInfo)) {
-              info.update = true;
-            }
-          }
-          if (info.rotateLeft) {
-            if (rotateGame(backData, gameData, gameInfo, true)) {
-              info.update = true;
-            }
-          }
-          if (info.teleporting) {
-            gameVars.teleporting = 1;
-          }
-          if (info.gateTravelling) {
-            gameVars.gateTravelling = 1;
-          }
+          info = moveRight(backData, gameData, gameInfo, gameVars);
           break;
         case "ArrowUp":
         case "w":
         case "W":
         case "8":
-          info = jump(backData, gameData, gameInfo);
+          info = jump(backData, gameData, gameInfo, gameVars);
           if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
             isJumping = true;
           }
@@ -1103,7 +1071,7 @@ function BalPage() {
         case "q":
         case "Q":
         case "7":
-          info = jumpLeft(backData, gameData, gameInfo);
+          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
           if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
             isJumping = true;
           }
@@ -1111,7 +1079,7 @@ function BalPage() {
         case "e":
         case "E":
         case "9":
-          info = jumpRight(backData, gameData, gameInfo);
+          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
           if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
             isJumping = true;
           }
@@ -1147,6 +1115,9 @@ function BalPage() {
     }
 
     // Create non-existing properties
+    if (!Object.prototype.hasOwnProperty.call(info, "action")) {
+      info.action = "";
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
     }
@@ -1165,14 +1136,35 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "sound")) {
       info.sound = "";
     }
-    if (!Object.prototype.hasOwnProperty.call(info, "rotateLeft")) {
-      info.rotateLeft = false;
-    }
-    if (!Object.prototype.hasOwnProperty.call(info, "rotateRight")) {
-      info.rotateRight = false;
-    }
     if (!Object.prototype.hasOwnProperty.call(info, "update")) {
       info.update = false;
+    }
+
+    switch (info.action) {
+      case "gateTravelling":
+        gameVars.gateTravelling = 1;
+        break;
+      case "gravityDown":
+        gameVars.gravity = "down";
+        break;
+      case "gravityUp":
+        gameVars.gravity = "up";
+        break;
+      case "rotateLeft":
+        if (rotateGame(backData, gameData, gameInfo, true)) {
+          info.update = true;
+        }
+        break;
+      case "rotateRight":
+        if (rotateGame(backData, gameData, gameInfo)) {
+          info.update = true;
+        }
+        break;
+      case "teleporting":
+        gameVars.teleporting = 1;
+        break;
+      default:
+        break;
     }
 
     // Game over must be checked before checking if the level is solved
@@ -1664,7 +1656,7 @@ function BalPage() {
             }
           }
           if (move) {
-              singleCellAction = false;
+            singleCellAction = false;
           }
           if (singleCellAction) {
             saveUndo("Single cell action", "single", saveCellForUndo(backData, gameData, gameInfo, column, row));

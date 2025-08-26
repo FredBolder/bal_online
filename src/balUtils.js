@@ -15,6 +15,10 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
+function canBeTakenOrIsEmpty() {
+  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179];
+}
+
 function canMoveAlone(n) {
   // Object that can move, but not together with another object
   return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178].includes(n);
@@ -565,6 +569,12 @@ export function charToNumber(c) {
     case "Ä":
       result = 183;
       break;
+    case "Є":
+      result = 184;
+      break;
+    case "З":
+      result = 185;
+      break;
     case "|":
       result = 1000;
       break;
@@ -572,10 +582,13 @@ export function charToNumber(c) {
       result = -1;
       break;
   }
+  // More possible characters
+  // https://www.w3schools.com/charsets/ref_utf_cyrillic.asp
   return result;
 }
 
 export function checkFalling(backData, gameData, gameInfo, gameVars) {
+  let forceDown = false;
   let forceUp = false;
   let idx = -1;
   let skip = false;
@@ -583,117 +596,199 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
   result.update = false;
   result.sound = "";
 
-  for (let i = gameData.length - 2; i >= 0; i--) {
-    for (let j = 0; j < gameData[i].length; j++) {
-      let element1 = gameData[i][j];
-      let element2 = gameData[i + 1][j];
+  // Depending on the gravity direction, falling has another meaning
 
-      if ((element2 === 22) && ([2, 4, 8, 9, 40, 93, 94].includes(element1))) {
-        // lava
-        result.update = true;
-        if (gameVars.soundLava !== "never") {
-          if (element1 === 2) {
-            result.sound = "pain";
+  // GRAVITY DOWN (NORMAL)
+  if (gameVars.gravity === "down") {
+    for (let i = gameData.length - 2; i >= 0; i--) {
+      for (let j = 0; j < gameData[i].length; j++) {
+        let element1 = gameData[i][j];
+        let element2 = gameData[i + 1][j];
+
+        if ((element2 === 22) && ([2, 4, 8, 9, 40, 93, 94].includes(element1))) {
+          // lava
+          result.update = true;
+          if (gameVars.soundLava !== "never") {
+            if (element1 === 2) {
+              result.sound = "pain";
+            } else {
+              if (gameVars.soundLava !== "player") {
+                result.sound = "splash1";
+              }
+            }
+          }
+          gameData[i][j] = 0;
+          switch (element1) {
+            case 8:
+            case 93:
+            case 94:
+              idx = findElementByCoordinate(j, i, gameInfo.redBalls);
+              if (idx >= 0) {
+                gameInfo.redBalls.splice(idx, 1);
+              }
+              break;
+            case 9:
+              idx = findElementByCoordinate(j, i, gameInfo.yellowBalls);
+              if (idx >= 0) {
+                gameInfo.yellowBalls.splice(idx, 1);
+              }
+              break;
+            case 40:
+              idx = findElementByCoordinate(j, i, gameInfo.orangeBalls);
+              if (idx >= 0) {
+                gameInfo.orangeBalls.splice(idx, 1);
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (j < gameData[i].length - 1) {
+          if (
+            // wall |\
+            element2 === 15 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData) &&
+            (!gameInfo.hasPropeller || (element1 !== 2))
+          ) {
+            result.update = true;
+            if (element1 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downright", true);
+              gameData[i][j + 1] = gameData[i][j];
+              gameData[i][j] = 0;
+            } else {
+              moveObject(gameData, gameInfo, j, i, j + 1, i);
+            }
+          }
+        }
+
+        if (j >= 1) {
+          if (
+            // wall /|
+            element2 === 16 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData) &&
+            (!gameInfo.hasPropeller || (element1 !== 2))
+          ) {
+            result.update = true;
+            if (element1 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downleft", true);
+              gameData[i][j - 1] = gameData[i][j];
+              gameData[i][j] = 0;
+            } else {
+              moveObject(gameData, gameInfo, j, i, j - 1, i);
+            }
+          }
+        }
+      }
+    }
+
+    for (let i = gameData.length - 2; i >= 0; i--) {
+      for (let j = 0; j < gameData[i].length; j++) {
+        let element1 = gameData[i][j];
+        let element2 = gameData[i + 1][j];
+
+        forceUp = hasForceUp(gameData, gameInfo, j, i);
+
+        if (element2 === 0 &&
+          (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
+            (((element1 === 4) || (element1 === 40)) && !forceUp))) {
+          skip = ((element1 === 2) && (gameVars.skipFalling > 0));
+          if (skip) {
+            gameVars.skipFalling--;
           } else {
-            if (gameVars.soundLava !== "player") {
+            result.update = true;
+            if (element1 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
+              gameData[i + 1][j] = gameData[i][j];
+              gameData[i][j] = 0;
+            } else {
+              moveObject(gameData, gameInfo, j, i, j, i + 1);
+            }
+            if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
               result.sound = "splash1";
             }
           }
         }
-        gameData[i][j] = 0;
-        switch (element1) {
-          case 8:
-          case 93:
-          case 94:
-            idx = findElementByCoordinate(j, i, gameInfo.redBalls);
-            if (idx >= 0) {
-              gameInfo.redBalls.splice(idx, 1);
-            }
-            break;
-          case 9:
-            idx = findElementByCoordinate(j, i, gameInfo.yellowBalls);
-            if (idx >= 0) {
-              gameInfo.yellowBalls.splice(idx, 1);
-            }
-            break;
-          case 40:
-            idx = findElementByCoordinate(j, i, gameInfo.orangeBalls);
-            if (idx >= 0) {
-              gameInfo.orangeBalls.splice(idx, 1);
-            }
-            break;
-          default:
-            break;
-        }
       }
+    }
+  }
 
-      if (j < gameData[i].length - 1) {
-        if (
-          // wall |\
-          element2 === 15 && [2, 4, 8, 40, 93, 94].includes(element1) &&
-          gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData) &&
-          (!gameInfo.hasPropeller || (element1 !== 2))
-        ) {
-          result.update = true;
-          if (element1 === 40) {
-            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downright", true);
-            gameData[i][j + 1] = gameData[i][j];
-            gameData[i][j] = 0;
-          } else {
-            moveObject(gameData, gameInfo, j, i, j + 1, i);
+  // GRAVITY UP
+  if (gameVars.gravity === "up") {
+    for (let i = 1; i <= gameData.length - 1; i++) {
+      for (let j = 0; j < gameData[i].length; j++) {
+        let element1 = gameData[i][j];
+        let element2 = gameData[i - 1][j];
+
+        if (j < gameData[i].length - 1) {
+          if (
+            // wall |/
+            element2 === 17 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            gameData[i][j + 1] === 0 && gameData[i - 1][j + 1] === 0 && !inWater(j, i, backData) &&
+            (!gameInfo.hasPropeller || (element1 !== 2))
+          ) {
+            result.update = true;
+            if (element1 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "upright", true);
+              gameData[i][j + 1] = gameData[i][j];
+              gameData[i][j] = 0;
+            } else {
+              moveObject(gameData, gameInfo, j, i, j + 1, i);
+            }
+          }
+        }
+
+        if (j >= 1) {
+          if (
+            // wall \|
+            element2 === 18 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            gameData[i][j - 1] === 0 && gameData[i - 1][j - 1] === 0 && !inWater(j, i, backData) &&
+            (!gameInfo.hasPropeller || (element1 !== 2))
+          ) {
+            result.update = true;
+            if (element1 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "upleft", true);
+              gameData[i][j - 1] = gameData[i][j];
+              gameData[i][j] = 0;
+            } else {
+              moveObject(gameData, gameInfo, j, i, j - 1, i);
+            }
           }
         }
       }
+    }
 
-      if (j >= 1) {
-        if (
-          // wall /|
-          element2 === 16 && [2, 4, 8, 40, 93, 94].includes(element1) &&
-          gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData) &&
-          (!gameInfo.hasPropeller || (element1 !== 2))
-        ) {
-          result.update = true;
-          if (element1 === 40) {
-            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downleft", true);
-            gameData[i][j - 1] = gameData[i][j];
-            gameData[i][j] = 0;
+    for (let i = 1; i <= gameData.length - 1; i++) {
+      for (let j = 0; j < gameData[i].length; j++) {
+        let element1 = gameData[i][j];
+        let element2 = gameData[i - 1][j];
+
+        forceDown = hasForceDown(gameData, gameInfo, j, i);
+
+        if (element2 === 0 &&
+          (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
+            (((element1 === 4) || (element1 === 40)) && !forceDown))) {
+          skip = ((element1 === 2) && (gameVars.skipFalling > 0));
+          if (skip) {
+            gameVars.skipFalling--;
           } else {
-            moveObject(gameData, gameInfo, j, i, j - 1, i);
+            result.update = true;
+            if (element1 === 40) {
+              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "up", true);
+              gameData[i - 1][j] = gameData[i][j];
+              gameData[i][j] = 0;
+            } else {
+              moveObject(gameData, gameInfo, j, i, j, i - 1);
+            }
+            if (!inWater(j, i, backData) && inWater(j, i - 1, backData)) {
+              result.sound = "splash1";
+            }
           }
         }
       }
     }
   }
 
-  for (let i = gameData.length - 2; i >= 0; i--) {
-    for (let j = 0; j < gameData[i].length; j++) {
-      let element1 = gameData[i][j];
-      let element2 = gameData[i + 1][j];
-
-      forceUp = hasForceUp(gameData, gameInfo, j, i);
-
-      if (element2 === 0 &&
-        (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo)) ||
-          (((element1 === 4) || (element1 === 40)) && !forceUp))) {
-        skip = ((element1 === 2) && (gameVars.skipFalling > 0));
-        if (skip) {
-          gameVars.skipFalling--;
-        } else {
-          result.update = true;
-          if (element1 === 40) {
-            moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
-            gameData[i + 1][j] = gameData[i][j];
-            gameData[i][j] = 0;
-          } else {
-            moveObject(gameData, gameInfo, j, i, j, i + 1);
-          }
-          if (!inWater(j, i, backData) && inWater(j, i + 1, backData)) {
-            result.sound = "splash1";
-          }
-        }
-      }
-    }
-  }
   return result;
 }
 
@@ -809,71 +904,134 @@ function isTravelGate(x, y, travelGate) {
   return ((x === travelGate.x) && (y === travelGate.y));
 }
 
-export function falling(x, y, backData, gameData, gameInfo) {
+export function falling(x, y, backData, gameData, gameInfo, gameVars) {
   const element = gameData[y][x];
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
 
-  if (y >= gameData.length - 1) {
-    return false;
-  }
+  // Depending on the gravity direction, falling has another meaning
 
-  if ((gameData[y + 1][x] === 0) ||
-    ((gameData[y + 1][x] === 15) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-    ((gameData[y + 1][x] === 16) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
-  ) {
-    result = true;
-    // ladder
-    if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y + 1, backData))) {
-      result = false;
+  if (gameVars.gravity === "down") {
+    if (y >= gameData.length - 1) {
+      return false;
     }
-    // teleport
-    if ([2].includes(element) && isWhiteTeleport(x, y, gameInfo.teleports)) {
-      result = false;
-    }
-    // Water
-    if ([2].includes(element) && inWater(x, y, backData)) {
-      result = false;
-    }
-    // Rope
-    if ([2].includes(element)) {
-      if ((backData[y + 1][x] === 80) || (backData[y][x] === 137)) {
+
+    if ((gameData[y + 1][x] === 0) ||
+      ((gameData[y + 1][x] === 15) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      ((gameData[y + 1][x] === 16) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+    ) {
+      result = true;
+      // ladder
+      if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y + 1, backData))) {
         result = false;
       }
-      if (y > 0) {
-        if (backData[y - 1][x] === 80) {
+      // teleport
+      if ([2].includes(element) && isWhiteTeleport(x, y, gameInfo.teleports)) {
+        result = false;
+      }
+      // Water
+      if ([2].includes(element) && inWater(x, y, backData)) {
+        result = false;
+      }
+      // Rope
+      if ([2].includes(element)) {
+        if ((backData[y + 1][x] === 80) || (backData[y][x] === 137)) {
           result = false;
         }
+        if (y > 0) {
+          if (backData[y - 1][x] === 80) {
+            result = false;
+          }
+        }
+      }
+      // Propeller
+      if ([2].includes(element) && gameInfo.hasPropeller) {
+        result = false;
+      }
+      // Force up
+      if (forceUp) {
+        result = false;
       }
     }
-    // Propeller
-    if ([2].includes(element) && gameInfo.hasPropeller) {
-      result = false;
+  }
+
+  if (gameVars.gravity === "up") {
+    if (y <= 0) {
+      return false;
     }
-    // Force up
-    if (forceUp) {
-      result = false;
+
+    if ((gameData[y - 1][x] === 0) ||
+      ((gameData[y - 1][x] === 17) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      ((gameData[y - 1][x] === 18) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+    ) {
+      result = true;
+      // ladder
+      if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y - 1, backData))) {
+        result = false;
+      }
+      // teleport
+      if ([2].includes(element) && isWhiteTeleport(x, y, gameInfo.teleports)) {
+        result = false;
+      }
+      // Water
+      if ([2].includes(element) && inWater(x, y, backData)) {
+        result = false;
+      }
+      // Rope
+      if ([2].includes(element)) {
+        if ((backData[y - 1][x] === 80) || (backData[y][x] === 137)) {
+          result = false;
+        }
+        if (y < (backData.length - 1)) {
+          if (backData[y + 1][x] === 80) {
+            result = false;
+          }
+        }
+      }
+      // Propeller
+      if ([2].includes(element) && gameInfo.hasPropeller) {
+        result = false;
+      }
+      // Force up
+      if (forceUp) {
+        result = false;
+      }
     }
   }
+
   return result;
 }
 
-export function fallingOrRising(x, y, backData, gameData, gameInfo) {
-  return (falling(x, y, backData, gameData, gameInfo) || rising(x, y, gameData, gameInfo));
+export function fallingOrRising(x, y, backData, gameData, gameInfo, gameVars) {
+  return (falling(x, y, backData, gameData, gameInfo, gameVars) || rising(x, y, gameData, gameInfo, gameVars));
 }
 
-export function rising(x, y, gameData, gameInfo) {
+export function rising(x, y, gameData, gameInfo, gameVars) {
   let forceDown = hasForceDown(gameData, gameInfo, x, y);
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
+  // Depending on the gravity direction, rising has another meaning
 
-  if (y <= 0) {
-    return false;
+  if (gameVars.gravity === "down") {
+    if (y <= 0) {
+      return false;
+    }
+
+    if ((gameData[y - 1][x] === 0) && forceUp && !forceDown) {
+      result = true;
+    }
   }
 
-  if ((gameData[y - 1][x] === 0) && forceUp && !forceDown) {
-    result = true;
+  if (gameVars.gravity === "up") {
+    if (y >= (gameData.length - 1)) {
+      return false;
+    }
+
+    if ((gameData[y + 1][x] === 0) && !forceUp && forceDown) {
+      result = true;
+    }
   }
+
   return result;
 }
 
@@ -1304,6 +1462,12 @@ export function numberToChar(n) {
     case 183:
       result = "Ä";
       break;
+    case 184:
+      result = "Є";
+      break;
+    case 185:
+      result = "З";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1714,20 +1878,17 @@ export function zeroArray(rows, columns) {
   return result;
 }
 
-export function moveLeft(backData, gameData, gameInfo) {
+export function moveLeft(backData, gameData, gameInfo, gameVars) {
   let idx1 = -1;
   let idx2 = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
   let result = {};
   let row = gameData[y];
+  result.action = "";
   result.eating = false;
   result.freezeTime = -1;
-  result.gateTravelling = false;
   result.player = false;
-  result.teleporting = false;
-  result.rotateLeft = false;
-  result.rotateRight = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
@@ -1736,10 +1897,10 @@ export function moveLeft(backData, gameData, gameInfo) {
       return result;
     }
 
-    if (!fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceRight(gameData, gameInfo, x, y)) {
+    if (!fallingOrRising(x, y, backData, gameData, gameInfo, gameVars) && !hasForceRight(gameData, gameInfo, x, y)) {
       if (x > 0) {
         // empty space, green ball, diving glasses, key etc.
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(row[x - 1]) ||
+        if (!result.player && (canBeTakenOrIsEmpty().includes(row[x - 1]) ||
           (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x - 1, y);
@@ -1811,15 +1972,26 @@ export function moveLeft(backData, gameData, gameInfo) {
             result.sound = "unlock";
           }
         }
-        if (!result.player && [89, 183].includes(row[x - 1]) && row[x - 2] === 0) {
+        if (!result.player && [89, 183, 184, 185].includes(row[x - 1]) && row[x - 2] === 0) {
           row[x - 2] = 2;
           row[x] = element;
           gameInfo.blueBall.x = x - 2;
           result.player = true;
-          if (row[x - 1] === 89) {
-            result.rotateRight = true;
-          } else {
-            result.rotateLeft = true;
+          switch (row[x - 1]) {
+            case 89:
+              result.action = "rotateRight";
+              break;
+            case 183:
+              result.action = "rotateLeft";
+              break;
+            case 184:
+              result.action = "gravityUp";
+              break;
+            case 185:
+              result.action = "gravityDown";
+              break;
+            default:
+              break;
           }
         }
       }
@@ -1852,7 +2024,7 @@ export function moveLeft(backData, gameData, gameInfo) {
             row[x] = element;
             gameInfo.blueBall.x = x - 1;
             result.player = true;
-            result.teleporting = true;
+            result.action = "teleporting";
           }
         }
       }
@@ -1874,7 +2046,7 @@ export function moveLeft(backData, gameData, gameInfo) {
           row[x] = element;
           gameInfo.blueBall.x = x - 1;
           result.player = true;
-          result.gateTravelling = true;
+          result.action = "gateTravelling";
         }
       }
       if (result.player) {
@@ -1911,7 +2083,7 @@ export function moveLeft(backData, gameData, gameInfo) {
   return result;
 }
 
-export function moveRight(backData, gameData, gameInfo) {
+export function moveRight(backData, gameData, gameInfo, gameVars) {
   let idx1 = -1;
   let idx2 = -1;
   let x = gameInfo.blueBall.x;
@@ -1919,13 +2091,10 @@ export function moveRight(backData, gameData, gameInfo) {
   let result = {};
   let row = gameData[y];
   let maxX = 0;
+  result.action = "";
   result.eating = false;
   result.freezeTime = -1;
-  result.gateTravelling = false;
   result.player = false;
-  result.teleporting = false;
-  result.rotateLeft = false;
-  result.rotateRight = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
 
@@ -1934,11 +2103,11 @@ export function moveRight(backData, gameData, gameInfo) {
       return result;
     }
 
-    if (!fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceLeft(gameData, gameInfo, x, y)) {
+    if (!fallingOrRising(x, y, backData, gameData, gameInfo, gameVars) && !hasForceLeft(gameData, gameInfo, x, y)) {
       maxX = gameData[0].length - 1;
       if (x < maxX) {
         // empty space, green ball, diving glasses, key etc.
-        if (!result.player && ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(row[x + 1]) ||
+        if (!result.player && (canBeTakenOrIsEmpty().includes(row[x + 1]) ||
           (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
           result.sound = "take";
           take(gameData, gameInfo, result, x + 1, y);
@@ -2010,15 +2179,26 @@ export function moveRight(backData, gameData, gameInfo) {
             result.sound = "unlock";
           }
         }
-        if (!result.player && [89, 183].includes(row[x + 1]) && row[x + 2] === 0) {
+        if (!result.player && [89, 183, 184, 185].includes(row[x + 1]) && row[x + 2] === 0) {
           row[x + 2] = 2;
           row[x] = element;
           gameInfo.blueBall.x = x + 2;
           result.player = true;
-          if (row[x + 1] === 89) {
-            result.rotateRight = true;
-          } else {
-            result.rotateLeft = true;
+          switch (row[x + 1]) {
+            case 89:
+              result.action = "rotateRight";
+              break;
+            case 183:
+              result.action = "rotateLeft";
+              break;
+            case 184:
+              result.action = "gravityUp";
+              break;
+            case 185:
+              result.action = "gravityDown";
+              break;
+            default:
+              break;
           }
         }
       }
@@ -2046,7 +2226,7 @@ export function moveRight(backData, gameData, gameInfo) {
             row[x] = element;
             gameInfo.blueBall.x = x + 1;
             result.player = true;
-            result.teleporting = true;
+            result.action = "teleporting";
           }
         }
       }
@@ -2068,7 +2248,7 @@ export function moveRight(backData, gameData, gameInfo) {
           row[x] = element;
           gameInfo.blueBall.x = x + 1;
           result.player = true;
-          result.gateTravelling = true;
+          result.action = "gateTravelling";
         }
       }
       if (result.player) {
@@ -2105,7 +2285,11 @@ export function moveRight(backData, gameData, gameInfo) {
   return result;
 }
 
-export function jump(backData, gameData, gameInfo) {
+export function jump(backData, gameData, gameInfo, gameVars) {
+  let dy1 = 0;
+  let dy2 = 0;
+  let minY = 0;
+  let maxY = 0;
   let idx = -1;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
@@ -2115,253 +2299,260 @@ export function jump(backData, gameData, gameInfo) {
   result.player = false;
   result.sound = "";
   let element = gameInfo.hasWeakStone ? 35 : 0;
+  const gravityDown = (gameVars.gravity === "down");
+  const gravityUp = (gameVars.gravity === "up");
 
-  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
-    if (gameData.length > 0) {
-      if (moverCanMoveBlueBall(gameData, gameInfo)) {
-        return result;
+  if (gameData.length <= 0) {
+    return result;
+  }
+  if (isWhiteTeleport(x, y, gameInfo.teleports) || isTravelGate(x, y, gameInfo.travelGate)) {
+    return result;
+  }
+  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+    return result;
+  }
+  if (fallingOrRising(x, y, backData, gameData, gameInfo, gameVars)) {
+    return result;
+  }
+  if ((gravityDown && hasForceDown(gameData, gameInfo, x, y)) ||
+    (gravityUp && hasForceUp(gameData, gameInfo, x, y))) {
+    return result;
+  }
+
+  for (let i = 0; i < 2; i++) {
+    if (i === 0) {
+      minY = 2;
+      maxY = gameData.length - 3;
+      if (gravityDown) {
+        dy1 = -1;
+        dy2 = -2;
+      } else {
+        dy1 = 1;
+        dy2 = 2;
       }
-
-      if (gameInfo.hasCoilSpring && (y > 1) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if ((gameData[y - 1][x] === 0) && (![25, 137, 90].includes(backData[y - 1][x])) && (![25, 137, 90].includes(backData[y][x])) && (![80].includes(backData[y - 2][x]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 2][x])) {
+    } else {
+      minY = 1;
+      maxY = gameData.length - 2;
+      if (gravityDown) {
+        dy1 = -1;
+        dy2 = -1;
+      } else {
+        dy1 = 1;
+        dy2 = 1;
+      }
+    }
+    // Skip the first time if the blue ball has no coil spring
+    if (!result.player && ((i !== 0) || gameInfo.hasCoilSpring)) {
+      if ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY))) {
+        if (((i !== 0) || ((gameData[y + dy1][x] === 0))) &&
+          ((i !== 0) || ((![25, 137, 90].includes(backData[y + dy1][x])) && (![25, 137, 90].includes(backData[y][x])))) &&
+          (![80].includes(backData[y + dy2][x]))) {
+          if (canBeTakenOrIsEmpty().includes(gameData[y + dy2][x]) ||
+            ((i !== 0) && [12, 35].includes(gameData[y - 1][x]) && gameInfo.hasPickaxe)
+          ) {
             result.sound = "take";
-            take(gameData, gameInfo, result, x, y - 2);
-            if (gameData[y - 2][x] === 168) {
+            take(gameData, gameInfo, result, x, y + dy2);
+            if (gameData[y + dy2][x] === 168) {
               gameData[y][x] = 2;
               gameInfo.blueBall2.x = gameInfo.blueBall1.x;
               gameInfo.blueBall2.y = gameInfo.blueBall1.y;
             } else {
               gameData[y][x] = element;
             }
-            gameData[y - 2][x] = 2;
-            gameInfo.blueBall.x = x;
-            gameInfo.blueBall.y = y - 2;
-            result.player = true;
-          }
-        }
-      }
-      if (!result.player && (y > 0) && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if (![80].includes(backData[y - 1][x])) {
-          if (([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 1][x]) ||
-            (((gameData[y - 1][x] === 12) || (gameData[y - 1][x] === 35)) && gameInfo.hasPickaxe))) {
-            result.sound = "take";
-            take(gameData, gameInfo, result, x, y - 1);
-            if (gameData[y - 1][x] === 168) {
-              gameData[y][x] = 2;
-              gameInfo.blueBall2.x = gameInfo.blueBall1.x;
-              gameInfo.blueBall2.y = gameInfo.blueBall1.y;
-            } else {
-              gameData[y][x] = element;
-            }
-            if (!gameInfo.hasWeakStone && gameInfo.hasLadder && (gameData[y - 1][x] === 0)) {
+            if ((i !== 0) && !gameInfo.hasWeakStone && gameInfo.hasLadder && (gameData[y - 1][x] === 0)) {
               backData[y][x] = 25;
             }
-            gameData[y - 1][x] = 2;
-            gameInfo.blueBall.y = y - 1;
-            result.player = true;
-          }
-        }
-      }
-      if (!result.player && y > 1 && !fallingOrRising(x, y, backData, gameData, gameInfo)) {
-        if ((canMoveAlone(gameData[y - 1][x]) && (gameData[y - 1][x] !== 110)) && gameData[y - 2][x] === 0 &&
-          !hasForceDown(gameData, gameInfo, x, y - 1)) {
-          gameData[y - 2][x] = gameData[y - 1][x];
-          gameData[y - 1][x] = 2;
-          gameData[y][x] = element;
-          gameInfo.blueBall.y = y - 1;
-          switch (gameData[y - 2][x]) {
-            case 9:
-              updateYellowBall(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
-              break;
-            case 82:
-              gameData[y - 2][x] = 83;
-              break;
-            case 98:
-              gameData[y - 2][x] = 82;
-              break;
-            case 109:
-            case 111:
-            case 112:
-              updateObject(gameInfo.forces, x, y - 1, x, y - 2);
-              break;
-            case 115:
-              updateObject(gameInfo.yellowBallPushers, x, y - 1, x, y - 2);
-              break;
-            case 117:
-              idx = findElementByCoordinate(x, y - 1, gameInfo.timeBombs);
-              if (idx >= 0) {
-                gameInfo.timeBombs[idx].y = y - 2;
-                gameInfo.timeBombs[idx].status = getTimeBombsTime();
-              }
-              break;
-            case 171:
-              updateObject(gameInfo.conveyorBelts, x, y - 1, x, y - 2);
-              break;
-            case 178:
-              updateObject(gameInfo.movers, x, y - 1, x, y - 2);
-              break;
-            default:
-              break;
-          }
-          result.player = true;
-        }
-        if (
-          !result.player &&
-          gameData[y - 1][x] === 87 &&
-          gameData[y - 2][x] === 0
-        ) {
-          gameData[y - 2][x] = 2;
-          gameData[y][x] = element;
-          gameInfo.blueBall.y = y - 2;
-          result.player = true;
-        }
-        // Horizontal rope
-        if (!result.player && (gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (backData[y - 1][x] === 80)) {
-          gameData[y - 2][x] = 2;
-          gameData[y][x] = element;
-          gameInfo.blueBall.y = y - 2;
-          result.player = true;
-        }
-        if (!result.player && ([100, 101, 102, 104].includes(gameData[y - 1][x]))) {
-          if (movePurpleBar(backData, gameData, gameInfo, "up")) {
-            result.player = true;
-            gameData[y - 1][x] = 2;
-            gameData[y][x] = element;
-            gameInfo.blueBall.y = y - 1;
-          }
-        }
-        if (!result.player && ([121, 122, 123, 125].includes(gameData[y - 1][x]))) {
-          if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "up", -1)) {
-            result.player = true;
-            gameData[y - 1][x] = 2;
-            gameData[y][x] = element;
-            gameInfo.blueBall.y = y - 1;
-          }
-        }
-        if (!result.player && ([126, 127, 128, 130].includes(gameData[y - 1][x]))) {
-          if (moveLightBlueBar(backData, gameData, gameInfo, "up")) {
-            result.player = true;
-            gameData[y - 1][x] = 2;
-            gameData[y][x] = element;
-            gameInfo.blueBall.y = y - 1;
-          }
-        }
-      }
-    }
-  }
-  return result;
-}
-
-export function jumpLeft(backData, gameData, gameInfo) {
-  let x = gameInfo.blueBall.x;
-  let y = gameInfo.blueBall.y;
-  let result = {};
-  result.eating = false;
-  result.freezeTime = -1;
-  result.player = false;
-  result.sound = "";
-  let element = gameInfo.hasWeakStone ? 35 : 0;
-
-  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
-    if (gameData.length > 0) {
-      if (moverCanMoveBlueBall(gameData, gameInfo)) {
-        return result;
-      }
-
-      if (gameInfo.hasCoilSpring && y > 1 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x - 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 2][x - 1])) {
-            result.sound = "take";
-            take(gameData, gameInfo, result, x - 1, y - 2);
-            if (gameData[y - 2][x - 1] === 168) {
-              gameData[y][x] = 2;
-              gameInfo.blueBall2.x = gameInfo.blueBall1.x;
-              gameInfo.blueBall2.y = gameInfo.blueBall1.y;
-            } else {
-              gameData[y][x] = element;
-            }
-            gameData[y - 2][x - 1] = 2;
-            gameInfo.blueBall.x = x - 1;
-            gameInfo.blueBall.y = y - 2;
-            result.player = true;
-          }
-        }
-      }
-      if (!result.player && y > 0 && x > 0 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if ((gameData[y - 1][x] === 0) && (![80].includes(backData[y - 1][x - 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 1][x - 1])) {
-            result.sound = "take";
-            take(gameData, gameInfo, result, x - 1, y - 1);
-            if (gameData[y - 1][x - 1] === 168) {
-              gameData[y][x] = 2;
-              gameInfo.blueBall2.x = gameInfo.blueBall1.x;
-              gameInfo.blueBall2.y = gameInfo.blueBall1.y;
-            } else {
-              gameData[y][x] = element;
-            }
-            gameData[y - 1][x - 1] = 2;
-            gameInfo.blueBall.x = x - 1;
-            gameInfo.blueBall.y = y - 1;
+            gameData[y + dy2][x] = 2;
+            gameInfo.blueBall.x = x;
+            gameInfo.blueBall.y = y + dy2;
             result.player = true;
           }
         }
       }
     }
   }
+
+  minY = 1;
+  maxY = gameData.length - 2;
+  if (gravityDown) {
+    dy1 = -1;
+    dy2 = -2;
+  } else {
+    dy1 = 1;
+    dy2 = 2;
+  }
+  if (!result.player && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
+    if ((canMoveAlone(gameData[y + dy1][x]) && (gameData[y + dy1][x] !== 110)) && gameData[y + dy2][x] === 0 &&
+      !hasForceDown(gameData, gameInfo, x, y + dy1)) {
+      gameData[y + dy2][x] = gameData[y + dy1][x];
+      gameData[y + dy1][x] = 2;
+      gameData[y][x] = element;
+      gameInfo.blueBall.y = y + dy1;
+      switch (gameData[y + dy2][x]) {
+        case 9:
+          updateYellowBall(gameInfo.yellowBalls, x, y + dy1, x, y + dy2, "up");
+          break;
+        case 82:
+          gameData[y + dy2][x] = 83;
+          break;
+        case 98:
+          gameData[y + dy2][x] = 82;
+          break;
+        case 109:
+        case 111:
+        case 112:
+          updateObject(gameInfo.forces, x, y + dy1, x, y + dy2);
+          break;
+        case 115:
+          updateObject(gameInfo.yellowBallPushers, x, y + dy1, x, y + dy2);
+          break;
+        case 117:
+          idx = findElementByCoordinate(x, y + dy1, gameInfo.timeBombs);
+          if (idx >= 0) {
+            gameInfo.timeBombs[idx].y = y + dy2;
+            gameInfo.timeBombs[idx].status = getTimeBombsTime();
+          }
+          break;
+        case 171:
+          updateObject(gameInfo.conveyorBelts, x, y + dy1, x, y + dy2);
+          break;
+        case 178:
+          updateObject(gameInfo.movers, x, y + dy1, x, y + dy2);
+          break;
+        default:
+          break;
+      }
+      result.player = true;
+    }
+    if (
+      !result.player &&
+      gameData[y + dy1][x] === 87 &&
+      gameData[y + dy2][x] === 0
+    ) {
+      gameData[y + dy2][x] = 2;
+      gameData[y][x] = element;
+      gameInfo.blueBall.y = y + dy2;
+      result.player = true;
+    }
+    // Horizontal rope
+    if (!result.player && (gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && (backData[y + dy1][x] === 80)) {
+      gameData[y + dy2][x] = 2;
+      gameData[y][x] = element;
+      gameInfo.blueBall.y = y + dy2;
+      result.player = true;
+    }
+    if (!result.player && ([100, 101, 102, 104].includes(gameData[y + dy1][x]))) {
+      if (movePurpleBar(backData, gameData, gameInfo, "up")) {
+        result.player = true;
+        gameData[y + dy1][x] = 2;
+        gameData[y][x] = element;
+        gameInfo.blueBall.y = y + dy1;
+      }
+    }
+    if (!result.player && ([121, 122, 123, 125].includes(gameData[y + dy1][x]))) {
+      if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "up", -1)) {
+        result.player = true;
+        gameData[y + dy1][x] = 2;
+        gameData[y][x] = element;
+        gameInfo.blueBall.y = y + dy1;
+      }
+    }
+    if (!result.player && ([126, 127, 128, 130].includes(gameData[y + dy1][x]))) {
+      if (moveLightBlueBar(backData, gameData, gameInfo, "up")) {
+        result.player = true;
+        gameData[y + dy1][x] = 2;
+        gameData[y][x] = element;
+        gameInfo.blueBall.y = y + dy1;
+      }
+    }
+  }
   return result;
 }
 
-export function jumpRight(backData, gameData, gameInfo) {
-  let x = gameInfo.blueBall.x;
-  let y = gameInfo.blueBall.y;
-  let result = {};
+export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, direction) {
+  let dx = 0;
+  let dy1 = 0;
+  let dy2 = 0;
+  let minY = 0;
+  let maxY = 0;
+  const x = gameInfo.blueBall.x;
+  const y = gameInfo.blueBall.y;
+  const result = {};
   result.eating = false;
   result.freezeTime = -1;
   result.player = false;
   result.sound = "";
-  let element = gameInfo.hasWeakStone ? 35 : 0;
+  const element = gameInfo.hasWeakStone ? 35 : 0;
+  const gravityDown = (gameVars.gravity === "down");
+  const gravityUp = (gameVars.gravity === "up");
 
-  if (!isWhiteTeleport(x, y, gameInfo.teleports) && !isTravelGate(x, y, gameInfo.travelGate)) {
-    if (gameData.length > 0) {
-      if (moverCanMoveBlueBall(gameData, gameInfo)) {
-        return result;
+  if (gameData.length <= 0) {
+    return result;
+  }
+  if (isWhiteTeleport(x, y, gameInfo.teleports) || isTravelGate(x, y, gameInfo.travelGate)) {
+    return result;
+  }
+  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+    return result;
+  }
+  if (fallingOrRising(x, y, backData, gameData, gameInfo, gameVars)) {
+    return result;
+  }
+  if ((gravityDown && hasForceDown(gameData, gameInfo, x, y)) ||
+    (gravityUp && hasForceUp(gameData, gameInfo, x, y))) {
+    return result;
+  }
+
+  switch (direction) {
+    case "left":
+      dx = -1;
+      break;
+    case "right":
+      dx = 1;
+      break;
+    default:
+      break;
+  }
+
+  for (let i = 0; i < 2; i++) {
+    if (i === 0) {
+      minY = 2;
+      maxY = gameData.length - 3;
+      if (gravityDown) {
+        dy1 = -1;
+        dy2 = -2;
+      } else {
+        dy1 = 1;
+        dy2 = 2;
       }
-
-      if (gameInfo.hasCoilSpring && y > 1 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if ((gameData[y - 1][x] === 0) && (gameData[y - 2][x] === 0) && (![80].includes(backData[y - 2][x + 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 2][x + 1])) {
+    } else {
+      minY = 1;
+      maxY = gameData.length - 2;
+      if (gravityDown) {
+        dy1 = -1;
+        dy2 = -1;
+      } else {
+        dy1 = 1;
+        dy2 = 1;
+      }
+    }
+    // Skip the first time if the blue ball has no coil spring
+    if (!result.player && ((i !== 0) || gameInfo.hasCoilSpring)) {
+      if ((x > 0) && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
+        if ((gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && ![80].includes(backData[y + dy2][x + dx])) {
+          if (canBeTakenOrIsEmpty().includes(gameData[y + dy2][x + dx])) {
             result.sound = "take";
-            take(gameData, gameInfo, result, x + 1, y - 2);
-            if (gameData[y - 2][x + 1] === 168) {
+            take(gameData, gameInfo, result, x + dx, y + dy2);
+            if (gameData[y + dy2][x + dx] === 168) {
               gameData[y][x] = 2;
               gameInfo.blueBall2.x = gameInfo.blueBall1.x;
               gameInfo.blueBall2.y = gameInfo.blueBall1.y;
             } else {
               gameData[y][x] = element;
             }
-            gameData[y - 2][x + 1] = 2;
-            gameInfo.blueBall.x = x + 1;
-            gameInfo.blueBall.y = y - 2;
-            result.player = true;
-          }
-        }
-      }
-      if (!result.player && y > 0 && x < gameData[0].length - 1 && !fallingOrRising(x, y, backData, gameData, gameInfo) && !hasForceDown(gameData, gameInfo, x, y)) {
-        if ((gameData[y - 1][x] === 0) && (![80].includes(backData[y - 1][x + 1]))) {
-          if ([0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179].includes(gameData[y - 1][x + 1])) {
-            result.sound = "take";
-            take(gameData, gameInfo, result, x + 1, y - 1);
-            if (gameData[y - 1][x + 1] === 168) {
-              gameData[y][x] = 2;
-              gameInfo.blueBall2.x = gameInfo.blueBall1.x;
-              gameInfo.blueBall2.y = gameInfo.blueBall1.y;
-            } else {
-              gameData[y][x] = element;
-            }
-            gameData[y - 1][x + 1] = 2;
-            gameInfo.blueBall.x = x + 1;
-            gameInfo.blueBall.y = y - 1;
+            gameData[y + dy2][x + dx] = 2;
+            gameInfo.blueBall.x = x + dx;
+            gameInfo.blueBall.y = y + dy2;
             result.player = true;
           }
         }

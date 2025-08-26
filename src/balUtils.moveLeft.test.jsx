@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { moveLeft, zeroArray } from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils moveLeft", () => {
   const defaultGameInfo = {};
   initGameInfo(defaultGameInfo);
+  const defaultGameVars = {};
+  initGameVars(defaultGameVars);
 
   let gameInfo01a = { ...defaultGameInfo, blueBall: { x: 1, y: 1 } };
   let inputBack01_3_6 = zeroArray(3, 6);
@@ -18,7 +20,7 @@ describe("balUtils moveLeft", () => {
     [1, 2, 0, 4, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01a = moveLeft(inputBack01_3_6, input01a, gameInfo01a);
+  let info01a = moveLeft(inputBack01_3_6, input01a, gameInfo01a, { ...defaultGameVars });
   it("moveLeft A", () => {
     expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
   });
@@ -43,7 +45,7 @@ describe("balUtils moveLeft", () => {
     [1, 2, 0, 4, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01b = moveLeft(inputBack01_3_6, input01b, gameInfo01b);
+  let info01b = moveLeft(inputBack01_3_6, input01b, gameInfo01b, { ...defaultGameVars });
   it("moveLeft B", () => {
     expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
   });
@@ -67,7 +69,7 @@ describe("balUtils moveLeft", () => {
     [1, 2, 0, 4, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01c = moveLeft(inputBack01_3_6, input01c, { ...defaultGameInfo, blueBall: { x: 2, y: 1 } });
+  let info01c = moveLeft(inputBack01_3_6, input01c, { ...defaultGameInfo, blueBall: { x: 2, y: 1 } }, { ...defaultGameVars });
   it("moveLeft C", () => {
     expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
   });
@@ -88,7 +90,7 @@ describe("balUtils moveLeft", () => {
     [1, 4, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01d = moveLeft(inputBack01_3_6, input01d, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } });
+  let info01d = moveLeft(inputBack01_3_6, input01d, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
   it("moveLeft D", () => {
     expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
   });
@@ -109,7 +111,7 @@ describe("balUtils moveLeft", () => {
     [1, 4, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01e = moveLeft(inputBack01_3_6, input01e, { ...defaultGameInfo, blueBall: { x: 3, y: 1 } });
+  let info01e = moveLeft(inputBack01_3_6, input01e, { ...defaultGameInfo, blueBall: { x: 3, y: 1 } }, { ...defaultGameVars });
   it("moveLeft E", () => {
     expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
   });
@@ -130,7 +132,7 @@ describe("balUtils moveLeft", () => {
     [1, 0, 4, 4, 4, 2, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info01f = moveLeft(inputBack01_3_6, input01f, { ...defaultGameInfo, blueBall: { x: 5, y: 1 } });
+  let info01f = moveLeft(inputBack01_3_6, input01f, { ...defaultGameInfo, blueBall: { x: 5, y: 1 } }, { ...defaultGameVars });
   it("moveLeft F", () => {
     expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
   });
@@ -151,7 +153,7 @@ describe("balUtils moveLeft", () => {
     [1, 5, 4, 2, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01g = moveLeft(inputBack01_3_6, input01g, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } });
+  let info01g = moveLeft(inputBack01_3_6, input01g, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
   it("moveLeft G", () => {
     expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
   });
@@ -168,7 +170,7 @@ describe("balUtils moveLeft", () => {
     [1, 1, 1, 1, 1, 1],
   ];
   let expectedOutput01h = input01h.map(row => [...row]);
-  let info01h = moveLeft(inputBack01_3_6, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right" }] });
+  let info01h = moveLeft(inputBack01_3_6, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right" }] }, { ...defaultGameVars });
   it("moveLeft H", () => {
     expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
   });
@@ -198,7 +200,7 @@ describe("balUtils moveLeft", () => {
     [1, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let info01i = moveLeft(inputBack01_8_6, input01i, gameInfo01i);
+  let info01i = moveLeft(inputBack01_8_6, input01i, gameInfo01i, { ...defaultGameVars });
   it("moveLeft I", () => {
     expect(JSON.stringify(input01i)).toBe(JSON.stringify(expectedOutput01i));
   });

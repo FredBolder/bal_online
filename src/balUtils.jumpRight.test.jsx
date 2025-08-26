@@ -1,13 +1,15 @@
 import { describe, it, expect } from "vitest";
 import {
-  jumpRight,
+  jumpLeftOrRight,
   zeroArray,
 } from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
-describe("balUtils jumpRight", () => {
+describe("balUtils jump right", () => {
   const defaultGameInfo = {};
   initGameInfo(defaultGameInfo);
+  const defaultGameVars = {};
+  initGameVars(defaultGameVars);
 
   let gameInfo01a = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
   let inputBack01_5_5 = zeroArray(5, 5);
@@ -25,17 +27,17 @@ describe("balUtils jumpRight", () => {
     [1, 0, 0, 0, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info01a = jumpRight(inputBack01_5_5, input01a, gameInfo01a);
-  it("jumpRight A", () => {
+  let info01a = jumpLeftOrRight(inputBack01_5_5, input01a, gameInfo01a, { ...defaultGameVars }, "right");
+  it("jump right A", () => {
     expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
   });
-  it("jumpRight A eating", () => {
+  it("jump right A eating", () => {
     expect(info01a.eating).toBe(false);
   });
-  it("jumpRight A player", () => {
+  it("jump right A player", () => {
     expect(info01a.player).toBe(true);
   });
-  it("jumpRight A blueBall", () => {
+  it("jump right A blueBall", () => {
     expect(JSON.stringify(gameInfo01a.blueBall)).toBe(JSON.stringify({ x: 3, y: 2 }));
   });
 
@@ -53,14 +55,14 @@ describe("balUtils jumpRight", () => {
     [1, 4, 0, 0, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info01b = jumpRight(inputBack01_5_5, input01b, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } });
-  it("jumpRight B", () => {
+  let info01b = jumpLeftOrRight(inputBack01_5_5, input01b, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "right");
+  it("jump right B", () => {
     expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
   });
-  it("jumpRight B eating", () => {
+  it("jump right B eating", () => {
     expect(info01b.eating).toBe(true);
   });
-  it("jumpRight B player", () => {
+  it("jump right B player", () => {
     expect(info01b.player).toBe(true);
   });
 
@@ -78,14 +80,14 @@ describe("balUtils jumpRight", () => {
     [1, 4, 0, 1, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info01c = jumpRight(inputBack01_5_5, input01c, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } });
-  it("jumpRight C", () => {
+  let info01c = jumpLeftOrRight(inputBack01_5_5, input01c, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "right");
+  it("jump right C", () => {
     expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
   });
-  it("jumpRight C eating", () => {
+  it("jump right C eating", () => {
     expect(info01c.eating).toBe(false);
   });
-  it("jumpRight C player", () => {
+  it("jump right C player", () => {
     expect(info01c.player).toBe(true);
   });
 
@@ -103,14 +105,14 @@ describe("balUtils jumpRight", () => {
     [1, 0, 2, 1, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info01d = jumpRight(inputBack01_5_5, input01d, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } });
-  it("jumpRight D", () => {
+  let info01d = jumpLeftOrRight(inputBack01_5_5, input01d, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "right");
+  it("jump right D", () => {
     expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
   });
-  it("jumpRight D eating", () => {
+  it("jump right D eating", () => {
     expect(info01d.eating).toBe(false);
   });
-  it("jumpRight D player", () => {
+  it("jump right D player", () => {
     expect(info01d.player).toBe(false);
   });
 
@@ -128,14 +130,14 @@ describe("balUtils jumpRight", () => {
     [1, 0, 2, 1, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info01e = jumpRight(inputBack01_5_5, input01e, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } });
-  it("jumpRight E", () => {
+  let info01e = jumpLeftOrRight(inputBack01_5_5, input01e, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "right");
+  it("jump right E", () => {
     expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
   });
-  it("jumpRight E eating", () => {
+  it("jump right E eating", () => {
     expect(info01e.eating).toBe(false);
   });
-  it("jumpRight E player", () => {
+  it("jump right E player", () => {
     expect(info01e.player).toBe(false);
   });
 
@@ -154,17 +156,17 @@ describe("balUtils jumpRight", () => {
     [1, 0, 0, 1, 1],
     [1, 1, 1, 1, 1],
   ];
-  let info01f = jumpRight(inputBack01_5_5, input01f, gameInfo01f);
-  it("jumpRight F", () => {
+  let info01f = jumpLeftOrRight(inputBack01_5_5, input01f, gameInfo01f, { ...defaultGameVars }, "right");
+  it("jump right F", () => {
     expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
   });
-  it("jumpRight F eating", () => {
+  it("jump right F eating", () => {
     expect(info01f.eating).toBe(true);
   });
-  it("jumpRight F player", () => {
+  it("jump right F player", () => {
     expect(info01f.player).toBe(true);
   });
-  it("jumpRight F blueBall", () => {
+  it("jump right F blueBall", () => {
     expect(JSON.stringify(gameInfo01f.blueBall)).toBe(JSON.stringify({ x: 3, y: 1 }));
   });
 
@@ -177,7 +179,7 @@ describe("balUtils jumpRight", () => {
     [1, 1, 1, 1, 1],
   ];
   let expectedOutput01g = input01g.map(row => [...row]);
-  let info01g = jumpRight(inputBack01_5_5, input01g, gameInfo01g);
+  let info01g = jumpLeftOrRight(inputBack01_5_5, input01g, gameInfo01g, { ...defaultGameVars }, "right");
   it("jumpLeft G", () => {
     expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
   });

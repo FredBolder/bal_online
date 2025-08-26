@@ -755,6 +755,30 @@ function drawLevel(
     drawLine(ctx, pt1.x, pt1.y, pt3.x, pt3.y, "white");
   }
 
+  function drawGravityChangerDown(x, y) {
+    const color = getFgcolor(x, y, "#464646");
+    const d1 = w1 * 0.07; 
+    const d2 = w1 * 0.15; 
+    drawFilledBox(ctx, xmin, ymin, w1, w2, color);
+    drawFilledCircle(ctx, xc, (yc + ymax) * 0.5, w1 * 0.25, "white");
+    drawLine(ctx, xmin, ymax, xmax, ymax, "white");
+    drawLine(ctx, xc, ymin, xc, yc - (d1 * 2), "white");
+    drawLine(ctx, xc - d2, ymin + d1, xc - d2, yc - d1, "white");
+    drawLine(ctx, xc + d2, ymin + d1, xc + d2, yc - d1, "white");
+  }
+
+  function drawGravityChangerUp(x, y) {
+    const color = getFgcolor(x, y, "#464646");
+    const d1 = w1 * 0.07; 
+    const d2 = w1 * 0.15; 
+    drawFilledBox(ctx, xmin, ymin, w1, w2, color);
+    drawFilledCircle(ctx, xc, (ymin + yc) * 0.5, w1 * 0.25, "white");
+    drawLine(ctx, xmin, ymax, xmax, ymax, "white");
+    drawLine(ctx, xc, ymax, xc, yc + (d1 * 2), "white");
+    drawLine(ctx, xc - d2, ymax - d1, xc - d2, yc + d1, "white");
+    drawLine(ctx, xc + d2, ymax - d1, xc + d2, yc + d1, "white");
+  }
+
   function drawGrayBall(moves) {
     if (nicerGraphics) {
       ctx.drawImage(elements.elementGray, xmin, ymin, w1, w2);
@@ -2296,6 +2320,12 @@ function drawLevel(
           // Game rotator left
           drawGameRotator(true);
           break;
+        case 184:
+          drawGravityChangerUp(col, row);
+          break;  
+        case 185:
+          drawGravityChangerDown(col, row);
+          break;  
         case 1000:
           // For manual only (empty)
           break;

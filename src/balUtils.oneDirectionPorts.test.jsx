@@ -27,7 +27,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 10, 2, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = moveRight(inputBack01abcd, input01a, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } });
+    let info01a = moveRight(inputBack01abcd, input01a, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, { ...defaultGameVars });
     it("One direction ports A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -35,13 +35,10 @@ describe("balUtils One direction ports", () => {
     it("One direction ports A info", () => {
         expect(JSON.stringify(info01a)).toBe(
             JSON.stringify({
+                action: "",
                 eating: false,
                 freezeTime: -1,
-                gateTravelling: false,
                 player: true,
-                teleporting: false,
-                rotateLeft: false,
-                rotateRight: false,
                 sound: "",
             })
         );
@@ -59,7 +56,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 2, 11, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = moveLeft(inputBack01abcd, input01b, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } });
+    let info01b = moveLeft(inputBack01abcd, input01b, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, { ...defaultGameVars });
     it("One direction ports B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -80,7 +77,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 2, 11, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = moveRight(inputBack01abcd, input01c, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } });
+    let info01c = moveRight(inputBack01abcd, input01c, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, { ...defaultGameVars });
     it("One direction ports C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
@@ -101,7 +98,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 10, 2, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01d = moveLeft(inputBack01abcd, input01d, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } });
+    let info01d = moveLeft(inputBack01abcd, input01d, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, { ...defaultGameVars });
     it("One direction ports D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
@@ -126,7 +123,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01e = jump(inputBack01ej, input01e, gameInfo01e);
+    let info01e = jump(inputBack01ej, input01e, gameInfo01e, { ...defaultGameVars });
     it("One direction ports E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
@@ -160,7 +157,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01f = jump(inputBack01ej, input01f, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } });
+    let info01f = jump(inputBack01ej, input01f, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars });
     it("One direction ports F", () => {
         expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
     });
@@ -270,7 +267,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01j = jump(inputBack01ej, input01j, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } });
+    let info01j = jump(inputBack01ej, input01j, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars });
     it("One direction ports J", () => {
         expect(JSON.stringify(input01j)).toBe(JSON.stringify(expectedOutput01j));
     });

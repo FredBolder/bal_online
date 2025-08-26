@@ -172,6 +172,42 @@ function getObjectInfo(gameInfo, x, y, n) {
     return null;
 }
 
+export function loadCellForUndo(backData, gameData, gameInfo, obj) {
+    let createLevelObject = 0;
+    let objectInfo = null;
+    let x = -1;
+    let y = -1;
+
+    if (obj !== null) {
+        x = obj.x;
+        y = obj.y;
+        if (obj.gd === 0) {
+            removeObject(gameData, gameInfo, x, y);
+        }
+        if (obj.bd === 0) {
+            deleteIfPurpleTeleport(backData, gameInfo, x, y);
+            if ([20, 23, 25, 90].includes(backData[y][x])) {
+                backData[y][x] = 0;
+            }
+        }
+        createLevelObject = obj.gd;
+        if (createLevelObject === 0) {
+            createLevelObject = obj.bd;
+        }
+        if (createLevelObject >= 0) {
+            deleteIfPurpleTeleport(backData, gameInfo, x, y);
+            addObject(backData, gameData, gameInfo, x, y, createLevelObject);
+            if (obj.gi !== null) {
+                objectInfo = getObjectInfo(gameInfo, x, y, obj.gd);
+                if (objectInfo !== null) {
+                    // Copy properties into existing object
+                    Object.assign(objectInfo.arr[objectInfo.idx], obj.gi);
+                }
+            }
+        }
+    }
+}
+
 export function menuToNumber(s) {
     let result = -1;
 
@@ -223,42 +259,6 @@ export function menuToNumber(s) {
             break;
     }
     return result;
-}
-
-export function loadCellForUndo(backData, gameData, gameInfo, obj) {
-    let createLevelObject = 0;
-    let objectInfo = null;
-    let x = -1;
-    let y = -1;
-
-    if (obj !== null) {
-        x = obj.x;
-        y = obj.y;
-        if (obj.gd === 0) {
-            removeObject(gameData, gameInfo, x, y);
-        }
-        if (obj.bd === 0) {
-            deleteIfPurpleTeleport(backData, gameInfo, x, y);
-            if ([20, 23, 25, 90].includes(backData[y][x])) {
-                backData[y][x] = 0;
-            }
-        }
-        createLevelObject = obj.gd;
-        if (createLevelObject === 0) {
-            createLevelObject = obj.bd;
-        }
-        if (createLevelObject >= 0) {
-            deleteIfPurpleTeleport(backData, gameInfo, x, y);
-            addObject(backData, gameData, gameInfo, x, y, createLevelObject);
-            if (obj.gi !== null) {
-                objectInfo = getObjectInfo(gameInfo, x, y, obj.gd);
-                if (objectInfo !== null) {
-                    // Copy properties into existing object
-                    Object.assign(objectInfo.arr[objectInfo.idx], obj.gi);
-                }
-            }
-        }
-    }
 }
 
 export function saveCellForUndo(backData, gameData, gameInfo, x, y) {

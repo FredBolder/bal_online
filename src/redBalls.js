@@ -122,6 +122,7 @@ export function moveRedBalls(
   backData,
   gameData,
   gameInfo,
+  gameVars,
 ) {
   let changeDirection = false;
   let directionAfterJump = "none";
@@ -143,7 +144,7 @@ export function moveRedBalls(
       const red = gameInfo.redBalls[i];
       prevX = red.x;
 
-      if ((red.smart > 0) && !falling(red.x, red.y, backData, gameData, gameInfo)) {
+      if ((red.smart > 0) && !falling(red.x, red.y, backData, gameData, gameInfo, gameVars)) {
         changeDirection = false;
 
         waitLeft = false;

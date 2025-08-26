@@ -132,7 +132,7 @@ describe("balUtils Ladders", () => {
     [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info01d = jump(inputBack01abcd, input01d, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } });
+  let info01d = jump(inputBack01abcd, input01d, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } }, { ...defaultGameVars });
   it("Ladders D", () => {
     expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
   });

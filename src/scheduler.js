@@ -154,7 +154,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
             gameVars.redCounter--;
         } else {
             gameVars.redCounter = 2;
-            info = moveRedBalls(backData, gameData, gameInfo);
+            info = moveRedBalls(backData, gameData, gameInfo, gameVars);
             if (info.updated) {
                 updateCanvas = true;
             }

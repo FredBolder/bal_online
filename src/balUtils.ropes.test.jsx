@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { jump, jumpLeft, jumpRight, pushDown } from "./balUtils.js";
+import { jump, jumpLeftOrRight, pushDown } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("Ropes", () => {
@@ -74,7 +74,7 @@ describe("Ropes", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = jump(inputBack01, input01b, gameInfo01b);
+    let info01b = jump(inputBack01, input01b, gameInfo01b, { ...defaultGameVars });
     it("Horizontal rope B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -164,7 +164,7 @@ describe("Ropes", () => {
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01e = input01e.map(row => [...row]);
-    let info01e = jumpRight(inputBack01, input01e, gameInfo01e);
+    let info01e = jumpLeftOrRight(inputBack01, input01e, gameInfo01e, { ...defaultGameVars }, "right");
     it("Horizontal rope E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
@@ -196,7 +196,7 @@ describe("Ropes", () => {
         [1, 0, 1, 1, 1, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01f = jumpRight(inputBack01, input01f, gameInfo01f);
+    let info01f = jumpLeftOrRight(inputBack01, input01f, gameInfo01f, { ...defaultGameVars }, "right");
     it("Horizontal rope F", () => {
         expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
     });
@@ -219,7 +219,7 @@ describe("Ropes", () => {
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01g = input01g.map(row => [...row]);
-    let info01g = jumpLeft(inputBack01, input01g, gameInfo01g);
+    let info01g = jumpLeftOrRight(inputBack01, input01g, gameInfo01g, { ...defaultGameVars }, "left");
     it("Horizontal rope G", () => {
         expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
     });
@@ -251,7 +251,7 @@ describe("Ropes", () => {
         [1, 0, 1, 1, 1, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01h = jumpLeft(inputBack01, input01h, gameInfo01h);
+    let info01h = jumpLeftOrRight(inputBack01, input01h, gameInfo01h, { ...defaultGameVars }, "left");
     it("Horizontal rope H", () => {
         expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
     });
