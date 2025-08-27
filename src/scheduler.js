@@ -143,7 +143,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
 
         if (gameVars.conveyorBeltCounter >= gameVars.conveyorBeltCountTo) {
             gameVars.conveyorBeltCounter = 0;
-            if (moveConveyorBelts(gameData, gameInfo)) {
+            if (moveConveyorBelts(gameData, gameInfo, gameVars)) {
                 updateCanvas = true;
 
             }

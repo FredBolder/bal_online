@@ -1,24 +1,56 @@
 import { findElementByCoordinate, moveObject } from "./balUtils.js";
 
-export function changeConveyorBeltMode(gameInfo, x, y, mode) {
-  let idx = -1;
+function moveableByConveyorBelt(gameInfo, n) {
+    let result = false;
 
-  if (conveyorBeltModes().includes(mode)) {
-    if (idx === -1) {
-      idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
-      if (idx >= 0) {
-        gameInfo.conveyorBelts[idx].mode = mode;
-      }
+    switch (n) {
+        case 4:
+        case 8:
+        case 40:
+        case 93:
+        case 94:
+            result = true;
+            break;
+        case 2:
+            result = !gameInfo.hasPropeller;
+            break;
+        default:
+            result = false;
+            break;
     }
-  }
-  return idx;
+    return result;
+}
+
+export function changeConveyorBeltMode(gameInfo, x, y, mode) {
+    let idx = -1;
+
+    if (conveyorBeltModes().includes(mode)) {
+        if (idx === -1) {
+            idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+            if (idx >= 0) {
+                gameInfo.conveyorBelts[idx].mode = mode;
+            }
+        }
+    }
+    return idx;
 }
 
 export function conveyorBeltModes() {
     return ["notrigger", "nonerightleft", "rightleft", "noneright", "noneleft", "none", "right", "left"];
 }
 
-export function moveConveyorBelts(gameData, gameInfo) {
+export function moveConveyorBelts(gameData, gameInfo, gameVars) {
+    function checkMove(x, y, left) {
+        let dx = left ? -1: 1;
+        if (moveableByConveyorBelt(gameInfo, gameData[y][x]) && gameData[y][x + dx] === 0) {
+            moveObject(gameData, gameInfo, x, y, x + dx, y);
+            updated = true;
+        } else {
+            stop = true;
+        }
+    }
+
+    const gravityDown = (gameVars.gravity === "down");
     let updated = false;
     let stop = false;
     let xmin = -1;
@@ -50,31 +82,33 @@ export function moveConveyorBelts(gameData, gameInfo) {
                 }
             }
             if (xmax > xmin) {
-                if (conveyorBelt.direction === "right") {
+                if ((conveyorBelt.direction === "right") === gravityDown) {
                     for (let x = xmax; x >= xmin; x--) {
                         if (x < (columnMax - 1)) {
                             stop = false;
-                            for (let j = y - 1; j >= 0 && !stop; j--) {
-                                if ([2, 4, 8, 40, 93, 94].includes(gameData[j][x]) && gameData[j][x + 1] === 0) {
-                                    moveObject(gameData, gameInfo, x, j, x + 1, j);
-                                    updated = true;
-                                } else {
-                                    stop = true;
+                            if (gravityDown) {
+                                for (let j = y - 1; j >= 0 && !stop; j--) {
+                                    checkMove(x, j, false);
+                                }
+                            } else {
+                                for (let j = y + 1; j < gameData.length && !stop; j++) {
+                                    checkMove(x, j, false);
                                 }
                             }
                         }
                     }
                 }
-                if (conveyorBelt.direction === "left") {
+                if ((conveyorBelt.direction === "left") === gravityDown) {
                     for (let x = xmin; x <= xmax; x++) {
                         if (x > 0) {
                             stop = false;
-                            for (let j = y - 1; j >= 0 && !stop; j--) {
-                                if ([2, 4, 8, 40, 93, 94].includes(gameData[j][x]) && gameData[j][x - 1] === 0) {
-                                    moveObject(gameData, gameInfo, x, j, x - 1, j);
-                                    updated = true;
-                                } else {
-                                    stop = true;
+                            if (gravityDown) {
+                                for (let j = y - 1; j >= 0 && !stop; j--) {
+                                    checkMove(x, j, true);
+                                }
+                            } else {
+                                for (let j = y + 1; j < gameData.length && !stop; j++) {
+                                    checkMove(x, j, true);
                                 }
                             }
                         }
