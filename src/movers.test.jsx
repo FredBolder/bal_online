@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { checkMovers, moverCanMoveBlueBall } from "./movers.js";
 import { initGameInfo } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("movers", () => {
     const defaultGameInfo = {};
@@ -146,7 +147,7 @@ describe("movers", () => {
         [1, 178, 1, 178, 1, 178, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02a = input02a.map(row => [...row]);
+    let expectedOutput02a = copy2dArray(input02a);
 
     let info02a = moverCanMoveBlueBall(input02a, gameInfo02a);
     it("moverCanMoveBlueBall A", () => {
@@ -177,7 +178,7 @@ describe("movers", () => {
         [1, 178, 1, 178, 1, 178, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02b = input02b.map(row => [...row]);
+    let expectedOutput02b = copy2dArray(input02b);
 
     let info02b = moverCanMoveBlueBall(input02b, gameInfo02b);
     it("moverCanMoveBlueBall B", () => {

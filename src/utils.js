@@ -11,6 +11,10 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
 
+export function copy2dArray(arr) {
+  return arr.map(row => [...row]);
+}
+
 export function minMax(value, min, max) {
   let result = value;
   if (max >= min) {

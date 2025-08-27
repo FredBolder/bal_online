@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { pushObject, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("balUtils pushObject", () => {
     const defaultGameInfo = {};
@@ -120,7 +121,7 @@ describe("balUtils pushObject", () => {
         [1, 1, 1, 109, 1, 1, 1],
     ];
     let inputBack01d = zeroArray(7, 7);
-    let expectedOutput01d = input01d.map(row => [...row]);
+    let expectedOutput01d = copy2dArray(input01d);
     let info01d = pushObject(inputBack01d, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: "up" }] }, { ...defaultGameVars });
     it("pushObject D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));

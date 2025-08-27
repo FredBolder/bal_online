@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { checkFalling, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { moveOrangeBalls } from "./orangeBalls.js";
+import { copy2dArray } from "./utils.js";
 
 describe("balUtils Triangle stones", () => {
     const defaultGameInfo = {};
@@ -65,7 +66,7 @@ describe("balUtils Triangle stones", () => {
         [1, 1, 0, 0, 2, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01c = input01c.map(row => [...row]);
+    let expectedOutput01c = copy2dArray(input01c);
     let info01c = checkFalling(inputBack01abcde, input01c, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
@@ -107,7 +108,7 @@ describe("balUtils Triangle stones", () => {
         [1, 1, 0, 0, 2, 1, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01e = input01e.map(row => [...row]);
+    let expectedOutput01e = copy2dArray(input01e);
     let info01e = checkFalling(inputBack01abcde, input01e, { ...defaultGameInfo }, { ...defaultGameVars });
     it("Triangled Walls E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));

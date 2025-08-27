@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { moveObjectWithTelekineticPower } from "./telekinesis.js";
 import { getTimeBombsTime } from "./timeBombs.js";
+import { copy2dArray } from "./utils.js";
 
 describe("moveObjectWithTelekineticPower", () => {
     const defaultGameInfo = {};
@@ -48,7 +49,7 @@ describe("moveObjectWithTelekineticPower", () => {
         [1, 2, 5, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01b = input01b.map(row => [...row]);
+    let expectedOutput01b = copy2dArray(input01b);
 
     let info01b = moveObjectWithTelekineticPower(input01b, gameInfo01b);
     it("moveObjectWithTelekineticPower B", () => {

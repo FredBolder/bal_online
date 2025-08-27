@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { checkForces, hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Force", () => {
     const defaultGameInfo = {};
@@ -138,7 +139,7 @@ describe("Force", () => {
         [1, 0, 111, 5, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02c = input02c.map(row => [...row]);
+    let expectedOutput02c = copy2dArray(input02c);
     let info02c = checkForces(input02c, { ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: "right" }] });
     it("Force right C", () => {
         expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
@@ -229,7 +230,7 @@ describe("Force", () => {
         [1, 0, 2, 5, 0, 112, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput03c = input03c.map(row => [...row]);
+    let expectedOutput03c = copy2dArray(input03c);
     let info03c = checkForces(input03c, { ...defaultGameInfo, forces: [{ x: 5, y: 3, direction: "left" }] });
     it("Force left C", () => {
         expect(JSON.stringify(input03c)).toBe(JSON.stringify(expectedOutput03c));

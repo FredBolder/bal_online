@@ -4,6 +4,7 @@ import {
   zeroArray,
 } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("balUtils jump left", () => {
   const defaultGameInfo = {};
@@ -178,7 +179,7 @@ describe("balUtils jump left", () => {
     [1, 1, 15, 0, 1],
     [1, 1, 1, 1, 1],
   ];
-  let expectedOutput01g = input01g.map(row => [...row]);
+  let expectedOutput01g = copy2dArray(input01g);
   let info01g = jumpLeftOrRight(inputBack01_5_5, input01g, gameInfo01g, { ...defaultGameVars }, "left");
   it("jump left G", () => {
     expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));

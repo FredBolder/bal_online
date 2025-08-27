@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport, getPurpleTeleportColor, isWhiteTeleport } from "./teleports.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Teleports", () => {
     const defaultGameInfo = {};
@@ -199,8 +200,8 @@ describe("Teleports", () => {
         [0, 0, 0, 170, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    let expectedOutput04b = input04b.map(row => [...row]);
-    let expectedBackData04b = backData04b.map(row => [...row]);
+    let expectedOutput04b = copy2dArray(input04b);
+    let expectedBackData04b = copy2dArray(backData04b);
     let info04b = checkPurpleTeleports(backData04b, input04b, gameInfo04b, { ...defaultGameVars });
     it("checkPurpleTeleports B", () => {
         expect(JSON.stringify(input04b)).toBe(JSON.stringify(expectedOutput04b));
@@ -236,8 +237,8 @@ describe("Teleports", () => {
         [0, 0, 0, 170, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-    let expectedOutput04c = input04c.map(row => [...row]);
-    let expectedBackData04c = backData04c.map(row => [...row]);
+    let expectedOutput04c = copy2dArray(input04c);
+    let expectedBackData04c = copy2dArray(backData04c);
     let info04c = checkPurpleTeleports(backData04c, input04c, gameInfo04c, { ...defaultGameVars });
     it("checkPurpleTeleports C", () => {
         expect(JSON.stringify(input04c)).toBe(JSON.stringify(expectedOutput04c));

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { pushObject, zeroArray } from "./balUtils.js";
 import { checkDetonator } from "./detonator.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("detonator", () => {
     const defaultGameInfo = {};
@@ -48,7 +49,7 @@ describe("detonator", () => {
         [1, 0, 0, 0, 0, 37, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01b = input01b.map(row => [...row]);
+    let expectedOutput01b = copy2dArray(input01b);
     let info01b = checkDetonator(backData01, input01b, gameInfo01b, false);
     it("checkDetonator B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));

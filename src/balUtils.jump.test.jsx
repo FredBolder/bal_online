@@ -4,6 +4,8 @@ import {
   zeroArray,
 } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
+
 
 describe("balUtils jump", () => {
   const defaultGameInfo = {};
@@ -100,7 +102,7 @@ describe("balUtils jump", () => {
     [1, 0, 2, 0, 1],
     [1, 1, 1, 1, 1],
   ];
-  let expectedOutput01d = input01d.map(row => [...row]);
+  let expectedOutput01d = copy2dArray(input01d);
   let info01d = jump(inputBack01d, input01d, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down" }] }, { ...defaultGameVars });
   it("jump D", () => {
     expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));

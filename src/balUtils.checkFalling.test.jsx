@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { checkFalling, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("balUtils checkFalling", () => {
     const defaultGameInfo = {};
@@ -65,7 +66,7 @@ describe("balUtils checkFalling", () => {
         [1, 1, 1, 1, 1],
     ];
     let inputBack01c = zeroArray(4, 5);
-    let expectedOutput01c = input01c.map(row => [...row]);
+    let expectedOutput01c = copy2dArray(input01c);
     let info01c = checkFalling(inputBack01c, input01c, { ...defaultGameInfo }, { ...defaultGameVars });
     it("checkFalling C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));

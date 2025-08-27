@@ -4,6 +4,7 @@ import {
   zeroArray,
 } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("balUtils moveRight", () => {
   const defaultGameInfo = {};
@@ -305,7 +306,7 @@ describe("balUtils moveRight", () => {
     [1, 2, 5, 0, 112, 1],
     [1, 1, 1, 1, 1, 1],
   ];
-  let expectedOutput01m = input01m.map(row => [...row]);
+  let expectedOutput01m = copy2dArray(input01m);
   let info01m = moveRight(inputBack01_3_6, input01m, { ...defaultGameInfo, blueBall: { x: 1, y: 1 }, forces: [{ x: 4, y: 1, direction: "left" }] }, { ...defaultGameVars });
   it("moveRight M", () => {
     expect(JSON.stringify(input01m)).toBe(JSON.stringify(expectedOutput01m));

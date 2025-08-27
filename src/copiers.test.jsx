@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { checkCopiers } from "./copiers.js";
+import { copy2dArray } from "./utils.js";
 
 
 describe("Copiers", () => {
@@ -66,7 +67,7 @@ describe("Copiers", () => {
         [1, 2, 0, 0, 4, 97, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01c = input01c.map(row => [...row]);
+    let expectedOutput01c = copy2dArray(input01c);
     let info01c = checkCopiers(input01c, gameInfo01c);
     it("checkCopiers C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));

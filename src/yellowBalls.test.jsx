@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { jump, pushObject, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkSynchroniser, moveYellowBalls } from "./yellowBalls.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Yellow ball", () => {
     const defaultGameInfo = {};
@@ -362,7 +363,7 @@ describe("Yellow ball", () => {
         [1, 2, 9, 0, 155, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02b = input02b.map(row => [...row]);
+    let expectedOutput02b = copy2dArray(input02b);
     let yellow02b = [{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 2, y: 5, direction: "right" }];
     let result02b = checkSynchroniser(input02b, yellow02b, 4, 3, "right");
     it("checkSynchroniser B", () => {
@@ -386,7 +387,7 @@ describe("Yellow ball", () => {
         [1, 2, 0, 9, 155, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02c = input02c.map(row => [...row]);
+    let expectedOutput02c = copy2dArray(input02c);
     let yellow02c = [{ x: 2, y: 1, direction: "none" }, { x: 3, y: 3, direction: "right" }, { x: 3, y: 4, direction: "right" }, { x: 3, y: 5, direction: "up" }];
     let result02c = checkSynchroniser(input02c, yellow02c, 4, 3, "right");
     it("checkSynchroniser C", () => {
@@ -442,7 +443,7 @@ describe("Yellow ball", () => {
         [1, 2, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02e = input02e.map(row => [...row]);
+    let expectedOutput02e = copy2dArray(input02e);
     let yellow02e = [{ x: 3, y: 4, direction: "up" }, { x: 4, y: 4, direction: "up" }];
     let result02e = checkSynchroniser(input02e, yellow02e, 3, 3, "up");
     it("checkSynchroniser E", () => {
@@ -498,7 +499,7 @@ describe("Yellow ball", () => {
         [1, 2, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02g = input02g.map(row => [...row]);
+    let expectedOutput02g = copy2dArray(input02g);
     let yellow02g = [{ x: 3, y: 2, direction: "down" }, { x: 4, y: 2, direction: "down" }];
     let result02g = checkSynchroniser(input02g, yellow02g, 3, 3, "down");
     it("checkSynchroniser G", () => {
@@ -554,7 +555,7 @@ describe("Yellow ball", () => {
         [1, 2, 0, 0, 155, 9, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02i = input02i.map(row => [...row]);
+    let expectedOutput02i = copy2dArray(input02i);
     let yellow02i = [{ x: 5, y: 2, direction: "left" }, { x: 5, y: 3, direction: "left" }, { x: 5, y: 4, direction: "left" }, { x: 5, y: 5, direction: "left" }];
     let result02i = checkSynchroniser(input02i, yellow02i, 4, 2, "left");
     it("checkSynchroniser I", () => {

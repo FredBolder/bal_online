@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { moveConveyorBelts } from "./conveyorBelts.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("moveConveyorBelts", () => {
     const defaultGameInfo = {};
@@ -126,7 +127,7 @@ describe("moveConveyorBelts", () => {
         [1, 0, 171, 172, 172, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01d = input01d.map(row => [...row]);
+    let expectedOutput01d = copy2dArray(input01d);
     let info01d = moveConveyorBelts(input01d, gameInfo01d);
     it("moveConveyorBelts D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));

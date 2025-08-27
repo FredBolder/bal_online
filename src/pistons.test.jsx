@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkPistonsTriggers } from "./pistons.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Pistons", () => {
     const defaultGameInfo = {};
@@ -166,7 +167,7 @@ describe("Pistons", () => {
         [1, 158, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01e = input01e.map(row => [...row]);
+    let expectedOutput01e = copy2dArray(input01e);
     let info01e = checkPistonsTriggers(backData, input01e, gameInfo01e, { ...defaultGameVars, pistonGroupsActivated: [...pistonGroupsActivated] }, false);
     it("checkPistonsTriggers E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
@@ -318,7 +319,7 @@ describe("Pistons", () => {
         [1, 158, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01j = input01j.map(row => [...row]);
+    let expectedOutput01j = copy2dArray(input01j);
     let info01j = checkPistonsTriggers(backData, input01j, gameInfo01j, { ...defaultGameVars, pistonGroupsActivated: [...pistonGroupsActivated] }, false);
     it("checkPistonsTriggers J", () => {
         expect(JSON.stringify(input01j)).toBe(JSON.stringify(expectedOutput01j));
@@ -341,7 +342,7 @@ describe("Pistons", () => {
         [1, 158, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01k = input01k.map(row => [...row]);
+    let expectedOutput01k = copy2dArray(input01k);
     let info01k = checkPistonsTriggers(backData, input01k, gameInfo01k, { ...defaultGameVars, pistonGroupsActivated: [...pistonGroupsActivated] }, false);
     it("checkPistonsTriggers K", () => {
         expect(JSON.stringify(input01k)).toBe(JSON.stringify(expectedOutput01k));

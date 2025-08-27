@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { checkForces } from "./force.js";
 import { moveOrangeBalls } from "./orangeBalls.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Orange ball", () => {
     const defaultGameInfo = {};
@@ -46,7 +47,7 @@ describe("Orange ball", () => {
         [1, 0, 5, 40, 0, 2, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01b = input01b.map(row => [...row]);
+    let expectedOutput01b = copy2dArray(input01b);
     let info01b = moveOrangeBalls(input01b, orangeBalls01b);
     it("moveOrangeBalls left B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
@@ -97,7 +98,7 @@ describe("Orange ball", () => {
         [1, 0, 0, 2, 0, 40, 5, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput02b = input02b.map(row => [...row]);
+    let expectedOutput02b = copy2dArray(input02b);
     let info02b = moveOrangeBalls(input02b, orangeBalls02b);
     it("moveOrangeBalls right B", () => {
         expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));

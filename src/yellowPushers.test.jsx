@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Yellow ball pushers", () => {
     const defaultGameInfo = {};
@@ -137,7 +138,7 @@ describe("Yellow ball pushers", () => {
         [1, 0, 0, 0, 0, 0, 0, 116, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01d = input01d.map(row => [...row]);
+    let expectedOutput01d = copy2dArray(input01d);
     let info01d = checkYellowPushersTriggers(backData, input01d, gameInfo01d, { ...defaultGameVars }, false);
     it("checkYellowBallPushersTrigger D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));

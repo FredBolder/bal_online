@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { jump, jumpLeftOrRight, pushObject } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
+import { copy2dArray } from "./utils.js";
 
 describe("Ropes", () => {
     const defaultGameInfo = {};
@@ -163,7 +164,7 @@ describe("Ropes", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01e = input01e.map(row => [...row]);
+    let expectedOutput01e = copy2dArray(input01e);
     let info01e = jumpLeftOrRight(inputBack01, input01e, gameInfo01e, { ...defaultGameVars }, "right");
     it("Horizontal rope E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
@@ -218,7 +219,7 @@ describe("Ropes", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput01g = input01g.map(row => [...row]);
+    let expectedOutput01g = copy2dArray(input01g);
     let info01g = jumpLeftOrRight(inputBack01, input01g, gameInfo01g, { ...defaultGameVars }, "left");
     it("Horizontal rope G", () => {
         expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
