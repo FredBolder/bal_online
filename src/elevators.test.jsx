@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { moveElevators, moveHorizontalElevators } from "./elevators.js";
 
 describe("Elevators", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     // ***** MOVE ELEVATORS *****
 
@@ -33,7 +35,7 @@ describe("Elevators", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = moveElevators(input01a, gameInfo01a);
+    let info01a = moveElevators(input01a, gameInfo01a, { ...defaultGameVars });
     it("moveElevators A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -71,7 +73,7 @@ describe("Elevators", () => {
         [1, 2, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = moveElevators(input01b, gameInfo01b);
+    let info01b = moveElevators(input01b, gameInfo01b, { ...defaultGameVars });
     it("moveElevators B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -80,6 +82,43 @@ describe("Elevators", () => {
     });
     it("moveElevators B blue ball", () => {
         expect(JSON.stringify(gameInfo01b.blueBall)).toBe(JSON.stringify({ x: 1, y: 7 }));
+    });
+
+    let gameInfo01c = {
+        ...defaultGameInfo,
+        blueBall: { x: 3, y: 3 },
+        elevators: [{ x: 3, y: 5, up: false }],
+        hasPropeller: true
+    };
+    let input01c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 4, 0, 0, 0, 1],
+        [1, 0, 0, 6, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 4, 0, 0, 0, 1],
+        [1, 0, 0, 6, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info01c = moveElevators(input01c, gameInfo01c, { ...defaultGameVars });
+    it("moveElevators C", () => {
+        expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
+    });
+    it("moveElevators C info", () => {
+        expect(info01c).toBe(true);
+    });
+    it("moveElevators C blue ball", () => {
+        expect(JSON.stringify(gameInfo01c.blueBall)).toBe(JSON.stringify({ x: 3, y: 3 }));
     });
 
     // ***** MOVE HORIZONTAL ELEVATORS *****
@@ -112,7 +151,7 @@ describe("Elevators", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02a = moveHorizontalElevators(input02a, gameInfo02a);
+    let info02a = moveHorizontalElevators(input02a, gameInfo02a, { ...defaultGameVars });
     it("moveHorizontalElevators A", () => {
         expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
     });
@@ -156,7 +195,7 @@ describe("Elevators", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02b = moveHorizontalElevators(input02b, gameInfo02b);
+    let info02b = moveHorizontalElevators(input02b, gameInfo02b, { ...defaultGameVars });
     it("moveHorizontalElevators B", () => {
         expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
     });
@@ -215,7 +254,8 @@ describe("Elevators", () => {
         [1, 0, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02c = moveHorizontalElevators(input02c, gameInfo02c);
+
+    let info02c = moveHorizontalElevators(input02c, gameInfo02c, { ...defaultGameVars });
     it("moveHorizontalElevators C", () => {
         expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
     });
@@ -235,6 +275,95 @@ describe("Elevators", () => {
     it("moveHorizontalElevators C blue ball", () => {
         expect(JSON.stringify(gameInfo02c.blueBall)).toBe(JSON.stringify({ x: 5, y: 4 }));
     });
+
+    // GRAVITY UP
+
+    let gameInfo03a = {
+        ...defaultGameInfo,
+        blueBall: { x: 5, y: 4 },
+        horizontalElevators: [{ x: 5, y: 2, right: false }]
+    };
+    let input03a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 7, 0, 1],
+        [1, 0, 0, 0, 0, 4, 0, 1],
+        [1, 0, 0, 0, 0, 2, 0, 1],
+        [1, 0, 0, 0, 0, 5, 0, 1],
+        [1, 0, 0, 0, 0, 4, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput03a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 7, 0, 0, 1],
+        [1, 0, 0, 0, 4, 0, 0, 1],
+        [1, 0, 0, 0, 2, 0, 0, 1],
+        [1, 0, 0, 0, 0, 5, 0, 1],
+        [1, 0, 0, 0, 0, 4, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info03a = moveHorizontalElevators(input03a, gameInfo03a, { ...defaultGameVars, gravity: "up" });
+    it("moveHorizontalElevators Gravity Up A", () => {
+        expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
+    });
+    it("moveHorizontalElevators Gravity Up A info", () => {
+        expect(info03a).toBe(true);
+    });
+    it("moveHorizontalElevators Gravity Up A elevators", () => {
+        expect(JSON.stringify(gameInfo03a.horizontalElevators)).toBe(
+            JSON.stringify([{ x: 4, y: 2, right: false }])
+        );
+    });
+    it("moveHorizontalElevators Gravity Up A blue ball", () => {
+        expect(JSON.stringify(gameInfo03a.blueBall)).toBe(JSON.stringify({ x: 4, y: 4 }));
+    });
+
+    let gameInfo03b = {
+        ...defaultGameInfo,
+        blueBall: { x: 5, y: 4 },
+        elevators: [{ x: 5, y: 2, up: false }]
+    };
+    let input03b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 6, 0, 1],
+        [1, 0, 0, 0, 0, 4, 0, 1],
+        [1, 0, 0, 0, 0, 2, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput03b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 6, 0, 1],
+        [1, 0, 0, 0, 0, 4, 0, 1],
+        [1, 0, 0, 0, 0, 2, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info03b = moveElevators(input03b, gameInfo03b, { ...defaultGameVars, gravity: "up" });
+    it("moveElevators Gravity Up B", () => {
+        expect(JSON.stringify(input03b)).toBe(JSON.stringify(expectedOutput03b));
+    });
+    it("moveElevators Gravity Up B info", () => {
+        expect(info03b).toBe(true);
+    });
+    it("moveElevators Gravity Up B elevators", () => {
+        expect(JSON.stringify(gameInfo03b.elevators)).toBe(
+            JSON.stringify([{ x: 5, y: 3, up: false }])
+        );
+    });
+    it("moveElevators Gravity Up B blue ball", () => {
+        expect(JSON.stringify(gameInfo03b.blueBall)).toBe(JSON.stringify({ x: 5, y: 5 }));
+    });
+
 
 
     // Insert new tests here

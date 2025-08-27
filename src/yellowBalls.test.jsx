@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { jump, zeroArray } from "./balUtils.js";
+import { jump, pushObject, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkSynchroniser, moveYellowBalls } from "./yellowBalls.js";
 
@@ -591,11 +591,11 @@ describe("Yellow ball", () => {
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let info3a = jump(inputBack03, input03a, gameInfo3a, { ...defaultGameVars, gravity: "up" });
-    it("Jump (push yellow ball down) A", () => {
+    it("jump (push yellow ball down) Gravity Up A", () => {
         expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
     });
 
-    it("Jump (push yellow ball down) A info", () => {
+    it("jump (push yellow ball down) Gravity Up A info", () => {
         expect(JSON.stringify(info3a)).toBe(JSON.stringify({
             eating: false,
             freezeTime: -1,
@@ -604,12 +604,46 @@ describe("Yellow ball", () => {
         }));
     });
 
-    it("Jump (push yellow ball down) A yellowBalls", () => {
+    it("jump (push yellow ball down) Gravity Up A yellowBalls", () => {
         expect(JSON.stringify(gameInfo3a.yellowBalls)).toBe(
             JSON.stringify([{ x: 2, y: 3, direction: "down" }])
         );
     });
 
+    let gameInfo3b = { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, yellowBalls: [{ x: 2, y: 3, direction: "none" }] };
+    let input03b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 3, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 9, 0, 0, 0, 0, 1],
+        [1, 0, 2, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput03b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 3, 0, 0, 0, 1],
+        [1, 0, 9, 0, 0, 0, 0, 1],
+        [1, 0, 2, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info3b = pushObject(inputBack03, input03b, gameInfo3b, { ...defaultGameVars, gravity: "up" });
+    it("pushObject Gravity Up B", () => {
+        expect(JSON.stringify(input03b)).toBe(JSON.stringify(expectedOutput03b));
+    });
+
+    it("pushObject Gravity Up B info", () => {
+        expect(JSON.stringify(info3b)).toBe(JSON.stringify({
+            player: true,
+            sound: ""
+        }));
+    });
+
+    it("pushObject Gravity Up B yellowBalls", () => {
+        expect(JSON.stringify(gameInfo3b.yellowBalls)).toBe(
+            JSON.stringify([{ x: 2, y: 2, direction: "up" }])
+        );
+    });
 
 
     // Insert new tests here

@@ -2621,7 +2621,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy1;
-      switch (gameData[y + 2][x]) {
+      switch (gameData[y + dy2][x]) {
         case 9:
           updateYellowBall(gameInfo.yellowBalls, x, y + dy1, x, y + dy2, direction);
           break;
