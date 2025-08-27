@@ -3,7 +3,7 @@ import {
     moveLeft,
     moveRight,
     jump,
-    pushDown,
+    pushObject,
     zeroArray,
 } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
@@ -188,7 +188,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 2, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01g = pushDown(inputBack01ej, input01g, gameInfo01g, { ...defaultGameVars });
+    let info01g = pushObject(inputBack01ej, input01g, gameInfo01g, { ...defaultGameVars });
     it("One direction ports G", () => {
         expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
     });
@@ -217,7 +217,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 4, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01h = pushDown(inputBack01ej, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
+    let info01h = pushObject(inputBack01ej, input01h, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
     it("One direction ports H", () => {
         expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
     });
@@ -242,7 +242,7 @@ describe("balUtils One direction ports", () => {
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01i = pushDown(inputBack01ej, input01i, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
+    let info01i = pushObject(inputBack01ej, input01i, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
     it("One direction ports I", () => {
         expect(JSON.stringify(input01i)).toBe(JSON.stringify(expectedOutput01i));
     });
@@ -283,7 +283,78 @@ describe("balUtils One direction ports", () => {
         );
     });
 
+    // GRAVITY UP
 
+    let inputBack02 = zeroArray(5, 7);
+
+    let gameInfo02a = { ...defaultGameInfo, blueBall: { x: 2, y: 1 } };
+    let input02a = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 2, 0, 0, 0, 1],
+        [1, 1, 88, 1, 88, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02a = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 1, 88, 1, 88, 1, 1],
+        [1, 0, 2, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02a = jump(inputBack02, input02a, gameInfo02a, { ...defaultGameVars, gravity: "up" });
+    it("One direction ports Gravity Up A", () => {
+        expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
+    });
+
+    it("One direction ports Gravity Up A info", () => {
+        expect(JSON.stringify(info02a)).toBe(
+            JSON.stringify({
+                eating: false,
+                freezeTime: -1,
+                player: true,
+                sound: "",
+            })
+        );
+    });
+
+    it("One direction ports Gravity Up A blueBall", () => {
+        expect(JSON.stringify(gameInfo02a.blueBall)).toBe(
+            JSON.stringify({ x: 2, y: 3 })
+        );
+    });
+
+    let gameInfo02b = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
+    let input02b = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 1, 87, 1, 88, 1, 1],
+        [1, 0, 2, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02b = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 2, 0, 0, 0, 1],
+        [1, 1, 87, 1, 88, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02b = pushObject(inputBack02, input02b, gameInfo02b, { ...defaultGameVars, gravity: "up" });
+    it("One direction ports Gravity Up B", () => {
+        expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
+    });
+
+    it("One direction ports Gravity Up B info", () => {
+        expect(JSON.stringify(info02b)).toBe(
+            JSON.stringify({ player: true, sound: "" })
+        );
+    });
+
+    it("One direction ports Gravity Up B blueBall", () => {
+        expect(JSON.stringify(gameInfo02b.blueBall)).toBe(
+            JSON.stringify({ x: 2, y: 1 })
+        );
+    });
 
     // Insert new tests here
 });

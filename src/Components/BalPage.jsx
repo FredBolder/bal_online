@@ -14,12 +14,11 @@ import {
   inWater,
   jump,
   jumpLeftOrRight,
-  moveDownLeft,
-  moveDownRight,
+  moveDiagonal,
   moveLeft,
   moveObjects,
   moveRight,
-  pushDown,
+  pushObject,
   stringArrayToNumberArray,
   zeroArray,
 } from "../balUtils.js";
@@ -61,12 +60,14 @@ import imgSlowDownYellow from "../Images/slow_down_yellow.png";
 import imgWhite from "../Images/white_ball.svg";
 import imgYellow from "../Images/yellow_ball.svg";
 import actionButton from "../Images/action_button.png";
-import arrowJumpLeft from "../Images/arrow_topLeft.svg";
-import arrowJumpRight from "../Images/arrow_topRight.svg";
 import arrowDown from "../Images/arrow_down.svg";
-import arrowUp from "../Images/arrow_up.svg";
+import arrowDownLeft from "../Images/arrow_down_left.svg";
+import arrowDownRight from "../Images/arrow_down_right.svg";
 import arrowLeft from "../Images/arrow_left.svg";
 import arrowRight from "../Images/arrow_right.svg";
+import arrowUp from "../Images/arrow_up.svg";
+import arrowUpLeft from "../Images/arrow_up_left.svg";
+import arrowUpRight from "../Images/arrow_up_right.svg";
 import selectButton from "../Images/select_button.png";
 
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
@@ -103,6 +104,10 @@ function BalPage() {
   const { showMessage, showConfirm, showInput, showSelect } = useModal();
   const { modalState } = useContext(ModalContext);
 
+  const arrowButtonDownLeft = useRef(null);
+  const arrowButtonDownRight = useRef(null);
+  const arrowButtonUpLeft = useRef(null);
+  const arrowButtonUpRight = useRef(null);
   const cbArrowButtons = useRef(null);
   const cbCreateLevel = useRef(null);
   const cbGraphics = useRef(null);
@@ -950,6 +955,7 @@ function BalPage() {
     };
 
     let codes = "";
+    const gravityDown = (gameVars.gravity === "down");
     let isJumping = false;
 
     if (modalOpen) {
@@ -1063,43 +1069,76 @@ function BalPage() {
         case "w":
         case "W":
         case "8":
-          info = jump(backData, gameData, gameInfo, gameVars);
-          if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
-            isJumping = true;
+          if (gravityDown) {
+            info = jump(backData, gameData, gameInfo, gameVars);
+            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+              isJumping = true;
+            }
+          } else {
+            info = pushObject(backData, gameData, gameInfo, gameVars);
           }
           break;
         case "q":
         case "Q":
         case "7":
-          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
-          if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
-            isJumping = true;
+          if (gravityDown) {
+            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+              isJumping = true;
+            }
+          } else {
+            info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
           }
           break;
         case "e":
         case "E":
         case "9":
-          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
-          if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
-            isJumping = true;
+          if (gravityDown) {
+            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
+            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+              isJumping = true;
+            }
+          } else {
+            info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
           }
           break;
         case "ArrowDown":
         case "s":
         case "S":
         case "2":
-          info = pushDown(backData, gameData, gameInfo, gameVars);
+          if (gravityDown) {
+            info = pushObject(backData, gameData, gameInfo, gameVars);
+          } else {
+            info = jump(backData, gameData, gameInfo, gameVars);
+            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+              isJumping = true;
+            }
+          }
           break;
         case "y":
         case "Y":
         case "1":
-          info = moveDownLeft(backData, gameData, gameInfo);
+          if (gravityDown) {
+            info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
+          } else {
+            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+              isJumping = true;
+            }
+          }
           break;
         case "c":
         case "C":
         case "3":
           if (!kPressed || (e.key === "3")) {
-            info = moveDownRight(backData, gameData, gameInfo);
+            if (gravityDown) {
+              info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
+            } else {
+              info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
+              if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+                isJumping = true;
+              }
+            }
           }
           break;
         default:
@@ -1146,9 +1185,11 @@ function BalPage() {
         break;
       case "gravityDown":
         gameVars.gravity = "down";
+        updateGameButtonsDisplay();
         break;
       case "gravityUp":
         gameVars.gravity = "up";
+        updateGameButtonsDisplay();
         break;
       case "rotateLeft":
         if (rotateGame(backData, gameData, gameInfo, true)) {
@@ -1389,6 +1430,10 @@ function BalPage() {
 
   function updateGameButtonsDisplay() {
     elementGameButtons.current.style.display = (getSettings().arrowButtons && !createLevel) ? "block" : "none";
+    arrowButtonDownLeft.current.style.display = (gameVars.gravity === "up") ? "inline" : "none";
+    arrowButtonDownRight.current.style.display = (gameVars.gravity === "up") ? "inline" : "none";
+    arrowButtonUpLeft.current.style.display = (gameVars.gravity === "down") ? "inline" : "none";
+    arrowButtonUpRight.current.style.display = (gameVars.gravity === "down") ? "inline" : "none";
   }
 
   function updateMenuItemsDisplay() {
@@ -1521,24 +1566,32 @@ function BalPage() {
     handleKeyDown({ key: "2", shiftKey: false });
   }
 
-  function buttonJump() {
-    handleKeyDown({ key: "8", shiftKey: false });
+  function buttonDownLeft() {
+    handleKeyDown({ key: "1", shiftKey: false });
   }
 
-  function buttonJumpLeft() {
-    handleKeyDown({ key: "7", shiftKey: false });
+  function buttonDownRight() {
+    handleKeyDown({ key: "3", shiftKey: false });
   }
 
-  function buttonJumpRight() {
-    handleKeyDown({ key: "9", shiftKey: false });
-  }
-
-  function buttonMoveLeft() {
+  function buttonLeft() {
     handleKeyDown({ key: "4", shiftKey: false });
   }
 
-  function buttonMoveRight() {
+  function buttonRight() {
     handleKeyDown({ key: "6", shiftKey: false });
+  }
+
+  function buttonUp() {
+    handleKeyDown({ key: "8", shiftKey: false });
+  }
+
+  function buttonUpLeft() {
+    handleKeyDown({ key: "7", shiftKey: false });
+  }
+
+  function buttonUpRight() {
+    handleKeyDown({ key: "9", shiftKey: false });
   }
 
   function buttonSelect() {
@@ -2222,23 +2275,29 @@ function BalPage() {
             />
             <div className="gameButtons">
               <div ref={elementGameButtons}>
-                <button className="gameButton" onClick={buttonJumpLeft}>
-                  <img src={arrowJumpLeft} alt="Arrow Up Left button" />
+                <button ref={arrowButtonDownLeft} className="gameButton" onClick={buttonDownLeft}>
+                  <img src={arrowDownLeft} alt="Arrow Down Left button" />
                 </button>
-                <button className="gameButton" onClick={buttonMoveLeft}>
+                <button ref={arrowButtonUpLeft} className="gameButton" onClick={buttonUpLeft}>
+                  <img src={arrowUpLeft} alt="Arrow Up Left button" />
+                </button>
+                <button className="gameButton" onClick={buttonLeft}>
                   <img src={arrowLeft} alt="Arrow Left button" />
                 </button>
-                <button className="gameButton" onClick={buttonJump}>
+                <button className="gameButton" onClick={buttonUp}>
                   <img src={arrowUp} alt="Arrow Up button" />
                 </button>
                 <button className="gameButton" onClick={buttonDown}>
                   <img src={arrowDown} alt="Arrow Down button" />
                 </button>
-                <button className="gameButton" onClick={buttonMoveRight}>
+                <button className="gameButton" onClick={buttonRight}>
                   <img src={arrowRight} alt="Arrow Right button" />
                 </button>
-                <button className="gameButton" onClick={buttonJumpRight}>
-                  <img src={arrowJumpRight} alt="Arrow Up Right button" />
+                <button ref={arrowButtonUpRight} className="gameButton" onClick={buttonUpRight}>
+                  <img src={arrowUpRight} alt="Arrow Up Right button" />
+                </button>
+                <button ref={arrowButtonDownRight} className="gameButton" onClick={buttonDownRight}>
+                  <img src={arrowDownRight} alt="Arrow Down Right button" />
                 </button>
                 <button className="gameButton" onClick={buttonAction}>
                   <img src={actionButton} alt="Action button" />

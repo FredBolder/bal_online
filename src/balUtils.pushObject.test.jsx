@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { pushDown, zeroArray } from "./balUtils.js";
+import { pushObject, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 
-describe("balUtils pushDown", () => {
+describe("balUtils pushObject", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
     const defaultGameVars = {};
@@ -29,24 +29,24 @@ describe("balUtils pushDown", () => {
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = pushDown(inputBack01a, input01a, gameInfo01a, { ...defaultGameVars });
-    it("pushDown A", () => {
+    let info01a = pushObject(inputBack01a, input01a, gameInfo01a, { ...defaultGameVars });
+    it("pushObject A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
 
-    it("pushDown A yellow", () => {
+    it("pushObject A yellow", () => {
         expect(JSON.stringify(yellow01a)).toBe(
             JSON.stringify([{ x: 3, y: 4, direction: "down" }])
         );
     });
 
-    it("pushDown A info", () => {
+    it("pushObject A info", () => {
         expect(JSON.stringify(info01a)).toBe(
             JSON.stringify({ player: true, sound: "" })
         );
     });
 
-    it("pushDown A blueBall", () => {
+    it("pushObject A blueBall", () => {
         expect(JSON.stringify(gameInfo01a.blueBall)).toBe(JSON.stringify({ x: 3, y: 3 }));
     });
 
@@ -69,12 +69,12 @@ describe("balUtils pushDown", () => {
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = pushDown(inputBack01b, input01b, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
-    it("pushDown B", () => {
+    let info01b = pushObject(inputBack01b, input01b, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
+    it("pushObject B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
 
-    it("pushDown B info", () => {
+    it("pushObject B info", () => {
         expect(JSON.stringify(info01b)).toBe(
             JSON.stringify({ player: true, sound: "" })
         );
@@ -99,12 +99,12 @@ describe("balUtils pushDown", () => {
         [1, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = pushDown(inputBack01c, input01c, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
-    it("pushDown C", () => {
+    let info01c = pushObject(inputBack01c, input01c, { ...defaultGameInfo, blueBall: { x: 3, y: 2 } }, { ...defaultGameVars });
+    it("pushObject C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
 
-    it("pushDown C info", () => {
+    it("pushObject C info", () => {
         expect(JSON.stringify(info01c)).toBe(
             JSON.stringify({ player: false, sound: "" })
         );
@@ -121,11 +121,11 @@ describe("balUtils pushDown", () => {
     ];
     let inputBack01d = zeroArray(7, 7);
     let expectedOutput01d = input01d.map(row => [...row]);
-    let info01d = pushDown(inputBack01d, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: "up" }] }, { ...defaultGameVars });
-    it("pushDown D", () => {
+    let info01d = pushObject(inputBack01d, input01d, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: "up" }] }, { ...defaultGameVars });
+    it("pushObject D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
-    it("pushDown D info", () => {
+    it("pushObject D info", () => {
         expect(JSON.stringify(info01d)).toBe(
             JSON.stringify({ player: false, sound: "" })
         );
@@ -152,19 +152,19 @@ describe("balUtils pushDown", () => {
         [1, 1, 1, 1, 1, 1, 1],
     ];
     let inputBack01e = zeroArray(7, 7);
-    let info01e = pushDown(inputBack01e, input01e, gameInfo01e, { ...defaultGameVars });
-    it("pushDown E", () => {
+    let info01e = pushObject(inputBack01e, input01e, gameInfo01e, { ...defaultGameVars });
+    it("pushObject E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
-    it("pushDown E info", () => {
+    it("pushObject E info", () => {
         expect(JSON.stringify(info01e)).toBe(
             JSON.stringify({ player: true, sound: "" })
         );
     });
-    it("pushDown E blueBall", () => {
+    it("pushObject E blueBall", () => {
         expect(JSON.stringify(gameInfo01e.blueBall)).toBe(JSON.stringify({ x: 3, y: 1 }));
     });
-    it("pushDown E yellow", () => {
+    it("pushObject E yellow", () => {
         expect(JSON.stringify(yellow01e)).toBe(
             JSON.stringify([{ x: 3, y: 2, direction: "down" }])
         );

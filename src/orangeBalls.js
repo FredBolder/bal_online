@@ -1,13 +1,13 @@
-export function moveOrangeBalls(arr, orangeBalls) {
+export function moveOrangeBalls(gameData, orangeBalls) {
     let update = false;
 
     for (let i = 0; i < orangeBalls.length; i++) {
         const orangeBall = orangeBalls[i];
         switch (orangeBall.direction) {
             case "left":
-                if ((orangeBall.x > 0) && (arr[orangeBall.y][orangeBall.x - 1] === 0)) {
-                    arr[orangeBall.y][orangeBall.x] = 0;
-                    arr[orangeBall.y][orangeBall.x - 1] = 40;
+                if ((orangeBall.x > 0) && (gameData[orangeBall.y][orangeBall.x - 1] === 0)) {
+                    gameData[orangeBall.y][orangeBall.x] = 0;
+                    gameData[orangeBall.y][orangeBall.x - 1] = 40;
                     orangeBall.x--;
                     update = true;
                 } else {
@@ -15,15 +15,32 @@ export function moveOrangeBalls(arr, orangeBalls) {
                 }
                 break;
             case "downleft":
-                if ((orangeBall.x > 0) && (arr[orangeBall.y][orangeBall.x - 1] === 0)) {
-                    arr[orangeBall.y][orangeBall.x] = 0;
+                if ((orangeBall.x > 0) && (gameData[orangeBall.y][orangeBall.x - 1] === 0)) {
+                    gameData[orangeBall.y][orangeBall.x] = 0;
                     update = true;
-                    if ((orangeBall.y < arr.length - 1) && (arr[orangeBall.y + 1][orangeBall.x - 1] === 0)) {
-                        arr[orangeBall.y + 1][orangeBall.x - 1] = 40;
+                    if ((orangeBall.y < gameData.length - 1) && (gameData[orangeBall.y + 1][orangeBall.x - 1] === 0)) {
+                        gameData[orangeBall.y + 1][orangeBall.x - 1] = 40;
                         orangeBall.x--;
                         orangeBall.y++;
                     } else {
-                        arr[orangeBall.y][orangeBall.x - 1] = 40;
+                        gameData[orangeBall.y][orangeBall.x - 1] = 40;
+                        orangeBall.x--;
+                        orangeBall.direction = "left";
+                    }
+                } else {
+                    orangeBall.direction = "none";
+                }
+                break;
+            case "upleft":
+                if ((orangeBall.x > 0) && (gameData[orangeBall.y][orangeBall.x - 1] === 0)) {
+                    gameData[orangeBall.y][orangeBall.x] = 0;
+                    update = true;
+                    if ((orangeBall.y > 0) && (gameData[orangeBall.y - 1][orangeBall.x - 1] === 0)) {
+                        gameData[orangeBall.y - 1][orangeBall.x - 1] = 40;
+                        orangeBall.x--;
+                        orangeBall.y--;
+                    } else {
+                        gameData[orangeBall.y][orangeBall.x - 1] = 40;
                         orangeBall.x--;
                         orangeBall.direction = "left";
                     }
@@ -32,9 +49,9 @@ export function moveOrangeBalls(arr, orangeBalls) {
                 }
                 break;
             case "right":
-                if ((orangeBall.x < arr[0].length - 1) && (arr[orangeBall.y][orangeBall.x + 1] === 0)) {
-                    arr[orangeBall.y][orangeBall.x] = 0;
-                    arr[orangeBall.y][orangeBall.x + 1] = 40;
+                if ((orangeBall.x < gameData[0].length - 1) && (gameData[orangeBall.y][orangeBall.x + 1] === 0)) {
+                    gameData[orangeBall.y][orangeBall.x] = 0;
+                    gameData[orangeBall.y][orangeBall.x + 1] = 40;
                     orangeBall.x++;
                     update = true;
                 } else {
@@ -42,15 +59,32 @@ export function moveOrangeBalls(arr, orangeBalls) {
                 }
                 break;
             case "downright":
-                if ((orangeBall.x < arr[0].length - 1) && (arr[orangeBall.y][orangeBall.x + 1] === 0)) {
-                    arr[orangeBall.y][orangeBall.x] = 0;
+                if ((orangeBall.x < gameData[0].length - 1) && (gameData[orangeBall.y][orangeBall.x + 1] === 0)) {
+                    gameData[orangeBall.y][orangeBall.x] = 0;
                     update = true;
-                    if ((orangeBall.y < arr.length - 1) && (arr[orangeBall.y + 1][orangeBall.x + 1] === 0)) {
-                        arr[orangeBall.y + 1][orangeBall.x + 1] = 40;
+                    if ((orangeBall.y < gameData.length - 1) && (gameData[orangeBall.y + 1][orangeBall.x + 1] === 0)) {
+                        gameData[orangeBall.y + 1][orangeBall.x + 1] = 40;
                         orangeBall.x++;
                         orangeBall.y++;
                     } else {
-                        arr[orangeBall.y][orangeBall.x + 1] = 40;
+                        gameData[orangeBall.y][orangeBall.x + 1] = 40;
+                        orangeBall.x++;
+                        orangeBall.direction = "right";
+                    }
+                } else {
+                    orangeBall.direction = "none";
+                }
+                break;
+            case "upright":
+                if ((orangeBall.x < gameData[0].length - 1) && (gameData[orangeBall.y][orangeBall.x + 1] === 0)) {
+                    gameData[orangeBall.y][orangeBall.x] = 0;
+                    update = true;
+                    if ((orangeBall.y > 0) && (gameData[orangeBall.y - 1][orangeBall.x + 1] === 0)) {
+                        gameData[orangeBall.y - 1][orangeBall.x + 1] = 40;
+                        orangeBall.x++;
+                        orangeBall.y--;
+                    } else {
+                        gameData[orangeBall.y][orangeBall.x + 1] = 40;
                         orangeBall.x++;
                         orangeBall.direction = "right";
                     }

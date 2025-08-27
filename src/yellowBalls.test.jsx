@@ -1,10 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo } from "./gameInfo.js";
+import { jump, zeroArray } from "./balUtils.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkSynchroniser, moveYellowBalls } from "./yellowBalls.js";
 
 describe("Yellow ball", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     // *** moveYellowBalls ***
 
@@ -565,6 +568,48 @@ describe("Yellow ball", () => {
     it("checkSynchroniser I result", () => {
         expect(JSON.stringify(result02i)).toBe(JSON.stringify([]));
     });
+
+    // GRAVITY UP
+
+    let inputBack03 = zeroArray(6, 8);
+
+    let gameInfo3a = { ...defaultGameInfo, blueBall: { x: 2, y: 1 }, yellowBalls: [{ x: 2, y: 2, direction: "none" }] };
+    let input03a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 2, 3, 0, 0, 0, 1],
+        [1, 0, 9, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput03a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 3, 0, 0, 0, 1],
+        [1, 0, 2, 0, 0, 0, 0, 1],
+        [1, 0, 9, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info3a = jump(inputBack03, input03a, gameInfo3a, { ...defaultGameVars, gravity: "up" });
+    it("Jump (push yellow ball down) A", () => {
+        expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
+    });
+
+    it("Jump (push yellow ball down) A info", () => {
+        expect(JSON.stringify(info3a)).toBe(JSON.stringify({
+            eating: false,
+            freezeTime: -1,
+            player: true,
+            sound: ""
+        }));
+    });
+
+    it("Jump (push yellow ball down) A yellowBalls", () => {
+        expect(JSON.stringify(gameInfo3a.yellowBalls)).toBe(
+            JSON.stringify([{ x: 2, y: 3, direction: "down" }])
+        );
+    });
+
 
 
     // Insert new tests here
