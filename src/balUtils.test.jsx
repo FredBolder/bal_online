@@ -1,18 +1,20 @@
 import { describe, it, expect } from "vitest";
 import {
   charToNumber,
-  hasWeight,
+  hasWeightAbove,
   isEmpty,
   numberArrayToStringArray,
   numberToChar,
   stringArrayToNumberArray,
   zeroArray,
 } from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils", () => {
   const defaultGameInfo = {};
   initGameInfo(defaultGameInfo);
+  const defaultGameVars = {};
+  initGameVars(defaultGameVars);
 
   // stringArrayToNumberArray
 
@@ -168,7 +170,7 @@ describe("balUtils", () => {
     [1, 1, 1, 1, 1, 1, 1],
   ];
   let inputBack05_7_7 = zeroArray(7, 7);
-  let info05a = hasWeight(inputBack05_7_7, input05a, gameInfo05a, 2, 4, 3, false);
+  let info05a = hasWeightAbove(inputBack05_7_7, input05a, gameInfo05a, { ...defaultGameVars }, 2, 4, 3, false);
   it("hasWeight A", () => {
     expect(info05a).toBe(true);
   });
@@ -183,7 +185,7 @@ describe("balUtils", () => {
     [1, 2, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info05b = hasWeight(inputBack05_7_7, input05b, gameInfo05b, 2, 4, 3, false);
+  let info05b = hasWeightAbove(inputBack05_7_7, input05b, gameInfo05b, { ...defaultGameVars }, 2, 4, 3, false);
   it("hasWeight B", () => {
     expect(info05b).toBe(false);
   });
@@ -207,7 +209,7 @@ describe("balUtils", () => {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
   ];
-  let info05c = hasWeight(inputBack05c, input05c, gameInfo05c, 2, 4, 3, false);
+  let info05c = hasWeightAbove(inputBack05c, input05c, gameInfo05c, { ...defaultGameVars }, 2, 4, 3, false);
   it("hasWeight C", () => {
     expect(info05c).toBe(false);
   });
@@ -231,7 +233,7 @@ describe("balUtils", () => {
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
   ];
-  let info05d = hasWeight(inputBack05d, input05d, gameInfo05d, 2, 4, 3, false);
+  let info05d = hasWeightAbove(inputBack05d, input05d, gameInfo05d, { ...defaultGameVars }, 2, 4, 3, false);
   it("hasWeight D", () => {
     expect(info05d).toBe(true);
   });
@@ -246,7 +248,7 @@ describe("balUtils", () => {
     [1, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info05e = hasWeight(inputBack05_7_7, input05e, gameInfo05e, 2, 4, 3, false);
+  let info05e = hasWeightAbove(inputBack05_7_7, input05e, gameInfo05e, { ...defaultGameVars }, 2, 4, 3, false);
   it("hasWeight E", () => {
     expect(info05e).toBe(true);
   });
@@ -265,7 +267,7 @@ describe("balUtils", () => {
     [1, 2, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1],
   ];
-  let info05f = hasWeight(inputBack05_7_7, input05f, gameInfo05f, 2, 2, 3, false);
+  let info05f = hasWeightAbove(inputBack05_7_7, input05f, gameInfo05f, { ...defaultGameVars }, 2, 2, 3, false);
   it("hasWeight F", () => {
     expect(info05f).toBe(true);
   });

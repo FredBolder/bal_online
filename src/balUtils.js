@@ -824,7 +824,7 @@ export function freeToSwim(x1, x2, y, gameData) {
   return !found;
 }
 
-export function hasWeight(backData, gameData, gameInfo, xmin, xmax, y, pushingDown) {
+export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, y, pushingDown) {
   let weight = false;
   let result = false;
 
@@ -2059,7 +2059,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (!result.player && ([101, 102, 103, 104].includes(gameData[y][x - 1]))) {
-    if (movePurpleBar(backData, gameData, gameInfo, "left")) {
+    if (movePurpleBar(backData, gameData, gameInfo, gameVars, "left")) {
       result.player = true;
       gameData[y][x - 1] = 2;
       gameData[y][x] = element;
@@ -2067,7 +2067,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (!result.player && ([122, 123, 124, 125].includes(gameData[y][x - 1]))) {
-    if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "left", -1)) {
+    if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, "left", -1)) {
       result.player = true;
       gameData[y][x - 1] = 2;
       gameData[y][x] = element;
@@ -2075,7 +2075,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (!result.player && ([127, 128, 129, 130].includes(gameData[y][x - 1]))) {
-    if (moveLightBlueBar(backData, gameData, gameInfo, "left")) {
+    if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, "left")) {
       result.player = true;
       gameData[y][x - 1] = 2;
       gameData[y][x] = element;
@@ -2263,7 +2263,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (!result.player && ([100, 102, 103, 104].includes(gameData[y][x + 1]))) {
-    if (movePurpleBar(backData, gameData, gameInfo, "right")) {
+    if (movePurpleBar(backData, gameData, gameInfo, gameVars, "right")) {
       result.player = true;
       gameData[y][x + 1] = 2;
       gameInfo.blueBall.x = x + 1;
@@ -2271,7 +2271,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (!result.player && ([121, 123, 124, 125].includes(gameData[y][x + 1]))) {
-    if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, "right", -1)) {
+    if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, "right", -1)) {
       result.player = true;
       gameData[y][x + 1] = 2;
       gameInfo.blueBall.x = x + 1;
@@ -2279,7 +2279,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (!result.player && ([126, 128, 129, 130].includes(gameData[y][x + 1]))) {
-    if (moveLightBlueBar(backData, gameData, gameInfo, "right")) {
+    if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, "right")) {
       result.player = true;
       gameData[y][x + 1] = 2;
       gameInfo.blueBall.x = x + 1;
@@ -2455,7 +2455,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
     }
     el = gravityDown ? 104: 103;
     if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
-      if (movePurpleBar(backData, gameData, gameInfo, direction)) {
+      if (movePurpleBar(backData, gameData, gameInfo, gameVars, direction)) {
         result.player = true;
         gameData[y + dy1][x] = 2;
         gameData[y][x] = element;
@@ -2464,7 +2464,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
     }
     el = gravityDown ? 125: 124;
     if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
-      if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, direction, -1)) {
+      if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, direction, -1)) {
         result.player = true;
         gameData[y + dy1][x] = 2;
         gameData[y][x] = element;
@@ -2473,7 +2473,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
     }
     el = gravityDown ? 130: 129;
     if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
-      if (moveLightBlueBar(backData, gameData, gameInfo, direction)) {
+      if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, direction)) {
         result.player = true;
         gameData[y + dy1][x] = 2;
         gameData[y][x] = element;
@@ -2708,7 +2708,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     }
     el = gravityDown ? 103: 104;
     if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
-      if (movePurpleBar(backData, gameData, gameInfo, direction)) {
+      if (movePurpleBar(backData, gameData, gameInfo, gameVars, direction)) {
         // Blue ball is updated in movePurpleBar when moving down
         result.player = true;
         if (gameData[y][x] === 0) {
@@ -2718,7 +2718,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     }
     el = gravityDown ? 124: 125;
     if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
-      if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, direction, -1)) {
+      if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, direction, -1)) {
         // Blue ball is updated in moveYellowBar when moving down
         result.player = true;
         if (gameData[y][x] === 0) {
@@ -2728,7 +2728,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     }
     el = gravityDown ? 129: 130;
     if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
-      if (moveLightBlueBar(backData, gameData, gameInfo, direction)) {
+      if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, direction)) {
         // Blue ball is updated in moveLightBlueBar when moving down
         result.player = true;
         if (gameData[y][x] === 0) {
@@ -2737,11 +2737,11 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       }
     }
     if (!result.player && [37, 116, 131, 136, 158].includes(gameData[y + dy1][x])) {
-      if (!hasWeight(backData, gameData, gameInfo, x, x, y + dy1, false)) {
+      if (!hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + dy1, false)) {
         result.player = true;
         switch (gameData[y + dy1][x]) {
           case 37:
-            info = checkDetonator(backData, gameData, gameInfo, true);
+            info = checkDetonator(backData, gameData, gameInfo, gameVars, true);
             if (info.explosion) {
               result.sound = "explosion";
             }

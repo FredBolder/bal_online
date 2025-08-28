@@ -1,7 +1,7 @@
-import { hasWeight } from "./balUtils.js";
+import { hasWeightAbove } from "./balUtils.js";
 import { hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
-export function checkSpikes(backData, gameData, gameInfo) {
+export function checkSpikes(backData, gameData, gameInfo, gameVars) {
     let gameOver = false;
     const points = [];
     let x = -1;
@@ -23,7 +23,7 @@ export function checkSpikes(backData, gameData, gameInfo) {
             if (y < yMax) {
                 if (gameData[y + 1][x] === 174) {
                     // Spike up
-                    if (hasWeight(backData, gameData, gameInfo, x, x, y + 1, false)) {
+                    if (hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + 1, false)) {
                         gameOver = true;
                     }
                 }

@@ -1,13 +1,13 @@
-import { hasWeight } from "./balUtils.js";
+import { hasWeightAbove } from "./balUtils.js";
 
-export function checkDetonator(backData, gameData, gameInfo, pushingDown) {
+export function checkDetonator(backData, gameData, gameInfo, gameVars, pushingDown) {
     let info = { updated: false, explosion: false };
     let detonator = false;
     const x = gameInfo.detonator.x;
     const y = gameInfo.detonator.y;
 
     if (y > 0) {
-        detonator = hasWeight(backData, gameData, gameInfo, x, x, y, pushingDown);
+        detonator = hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y, pushingDown);
         for (let i = 0; i < gameData.length; i++) {
             for (let j = 0; j < gameData[i].length; j++) {
                 if (gameData[i][j] === 36 && detonator) {

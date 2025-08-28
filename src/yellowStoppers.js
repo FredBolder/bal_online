@@ -1,4 +1,4 @@
-import { hasWeight } from "./balUtils.js";
+import { hasWeightAbove } from "./balUtils.js";
 
 export function checkYellowStoppers(backData, gameData, gameInfo, gameVars, pushingDown) {
     let weight = false;
@@ -10,7 +10,7 @@ export function checkYellowStoppers(backData, gameData, gameInfo, gameVars, push
         const yellowStopper = gameInfo.yellowStoppers[i];
         xTrigger = yellowStopper.x;
         yTrigger = yellowStopper.y;
-        weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
+        weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xTrigger, xTrigger, yTrigger, pushingDown);
         if (yellowStopper.pressed) {
             if (!weight) {
                 yellowStopper.pressed = false;

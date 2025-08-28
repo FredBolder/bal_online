@@ -1,7 +1,7 @@
-import { hasWeight, updateObject } from "./balUtils.js";
+import { hasWeightAbove, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
-export function movePurpleBar(backData, gameData, gameInfo, direction) {
+export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction) {
     let x = gameInfo.blueBall.x;
     let y = gameInfo.blueBall.y;
     let error = false;
@@ -253,7 +253,7 @@ export function movePurpleBar(backData, gameData, gameInfo, direction) {
 
         update = false;
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
-            weight = hasWeight(backData, gameData, gameInfo, xmin, xmax, ymin, false);
+            weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
             switch (direction) {
                 case "down":
                     if (vertical) {

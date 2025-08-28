@@ -55,7 +55,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         playSounds.push("teleport");
     }
 
-    info = checkTrapDoors(backData, gameData, gameInfo);
+    info = checkTrapDoors(backData, gameData, gameInfo, gameVars);
     if (info.sound) {
         playSounds.push("trap");
     }
@@ -182,7 +182,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
             if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
                 updateCanvas = true;
             }
-            if (moveYellowBars(backData, gameData, gameInfo)) {
+            if (moveYellowBars(backData, gameData, gameInfo, gameVars)) {
                 updateCanvas = true;
             }
         }
@@ -200,7 +200,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         gameVars.explosionCounter--;
     } else {
         gameVars.explosionCounter = 2;
-        info = checkDetonator(backData, gameData, gameInfo, false);
+        info = checkDetonator(backData, gameData, gameInfo, gameVars, false);
         if (info.explosion) {
             playSounds.push("explosion");
         }

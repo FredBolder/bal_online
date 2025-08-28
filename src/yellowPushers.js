@@ -1,4 +1,4 @@
-import { findElementByCoordinate, hasWeight } from "./balUtils.js";
+import { findElementByCoordinate, hasWeightAbove } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
@@ -27,7 +27,7 @@ export function checkYellowPushersTriggers(backData, gameData, gameInfo, gameVar
         const yellowBallPushersTrigger = gameInfo.yellowBallPushersTriggers[i];
         xTrigger = yellowBallPushersTrigger.x;
         yTrigger = yellowBallPushersTrigger.y;
-        weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
+        weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xTrigger, xTrigger, yTrigger, pushingDown);
         if (yellowBallPushersTrigger.pressed) {
             if (!weight) {
                 yellowBallPushersTrigger.pressed = false;
@@ -51,7 +51,7 @@ export function checkYellowPushersTriggers(backData, gameData, gameInfo, gameVar
                     updateYellowBall(gameInfo.yellowBalls, x + 1, y, x + 2, y, "right");
                     result.updated = true;
                 }
-                if (moveYellowBar(x, y, backData, gameData, gameInfo, "right", -1, true)) {
+                if (moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, "right", -1, true)) {
                     result.updated = true;
                 }
             }
@@ -62,7 +62,7 @@ export function checkYellowPushersTriggers(backData, gameData, gameInfo, gameVar
                     updateYellowBall(gameInfo.yellowBalls, x - 1, y, x - 2, y, "left");
                     result.updated = true;
                 }
-                if (moveYellowBar(x, y, backData, gameData, gameInfo, "left", -1, true)) {
+                if (moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, "left", -1, true)) {
                     result.updated = true;
                 }
             }
@@ -73,7 +73,7 @@ export function checkYellowPushersTriggers(backData, gameData, gameInfo, gameVar
                     updateYellowBall(gameInfo.yellowBalls, x, y + 1, x, y + 2, "down");
                     result.updated = true;
                 }
-                if (moveYellowBar(x, y, backData, gameData, gameInfo, "down", -1, true)) {
+                if (moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, "down", -1, true)) {
                     result.updated = true;
                 }
             }
@@ -84,7 +84,7 @@ export function checkYellowPushersTriggers(backData, gameData, gameInfo, gameVar
                     updateYellowBall(gameInfo.yellowBalls, x, y - 1, x, y - 2, "up");
                     result.updated = true;
                 }
-                if (moveYellowBar(x, y, backData, gameData, gameInfo, "up", -1, true)) {
+                if (moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, "up", -1, true)) {
                     result.updated = true;
                 }
             }

@@ -31,7 +31,7 @@ describe("detonator", () => {
         [1, 0, 0, 0, 0, 37, 1],
         [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkDetonator(backData01, input01a, gameInfo01a, false);
+    let info01a = checkDetonator(backData01, input01a, gameInfo01a, { ...defaultGameVars }, false);
     it("checkDetonator A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -50,7 +50,7 @@ describe("detonator", () => {
         [1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01b = copy2dArray(input01b);
-    let info01b = checkDetonator(backData01, input01b, gameInfo01b, false);
+    let info01b = checkDetonator(backData01, input01b, gameInfo01b, { ...defaultGameVars }, false);
     it("checkDetonator B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });

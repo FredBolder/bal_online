@@ -23,7 +23,7 @@ describe("Spikes", () => {
         [1, 0, 0, 174, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkSpikes(inputBack01, input01a, gameInfo01a);
+    let info01a = checkSpikes(inputBack01, input01a, gameInfo01a, { ...defaultGameVars });
     it("checkSpikes A", () => {
         expect(info01a).toBe(true);
     });
@@ -43,7 +43,7 @@ describe("Spikes", () => {
         [1, 0, 0, 175, 0, 0, 174, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkSpikes(inputBack01, input01b, gameInfo01b);
+    let info01b = checkSpikes(inputBack01, input01b, gameInfo01b, { ...defaultGameVars });
     it("checkSpikes B", () => {
         expect(info01b).toBe(true);
     });
@@ -61,7 +61,7 @@ describe("Spikes", () => {
         [1, 0, 0, 109, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = checkSpikes(inputBack01, input01c, gameInfo01c);
+    let info01c = checkSpikes(inputBack01, input01c, gameInfo01c, { ...defaultGameVars });
     it("checkSpikes C", () => {
         expect(info01c).toBe(true);
     });
@@ -79,7 +79,7 @@ describe("Spikes", () => {
         [1, 0, 0, 109, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01d = checkSpikes(inputBack01, input01d, gameInfo01d);
+    let info01d = checkSpikes(inputBack01, input01d, gameInfo01d, { ...defaultGameVars });
     it("checkSpikes D", () => {
         expect(info01d).toBe(true);
     });
@@ -97,7 +97,7 @@ describe("Spikes", () => {
         [1, 0, 0, 109, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01e = checkSpikes(inputBack01, input01e, gameInfo01e);
+    let info01e = checkSpikes(inputBack01, input01e, gameInfo01e, { ...defaultGameVars });
     it("checkSpikes E", () => {
         expect(info01e).toBe(false);
     });
@@ -115,7 +115,7 @@ describe("Spikes", () => {
         [1, 0, 0, 111, 0, 2, 177, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01f = checkSpikes(inputBack01, input01f, gameInfo01f);
+    let info01f = checkSpikes(inputBack01, input01f, gameInfo01f, { ...defaultGameVars });
     it("checkSpikes F", () => {
         expect(info01f).toBe(true);
     });
@@ -133,7 +133,7 @@ describe("Spikes", () => {
         [1, 176, 2, 0, 0, 0, 112, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01g = checkSpikes(inputBack01, input01g, gameInfo01g);
+    let info01g = checkSpikes(inputBack01, input01g, gameInfo01g, { ...defaultGameVars });
     it("checkSpikes G", () => {
         expect(info01g).toBe(true);
     });
@@ -151,7 +151,7 @@ describe("Spikes", () => {
         [1, 0, 0, 174, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01h = checkSpikes(inputBack01, input01h, gameInfo01h);
+    let info01h = checkSpikes(inputBack01, input01h, gameInfo01h, { ...defaultGameVars });
     it("checkSpikes H", () => {
         expect(info01h).toBe(false);
     });
@@ -170,7 +170,7 @@ describe("Spikes", () => {
         [1, 0, 0, 174, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01i = checkSpikes(inputBack01, input01i, gameInfo01i);
+    let info01i = checkSpikes(inputBack01, input01i, gameInfo01i, { ...defaultGameVars });
     it("checkSpikes I", () => {
         expect(info01i).toBe(true);
     });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { zeroArray } from "./balUtils.js";
 import { moveYellowBar, moveYellowBars } from "./yellowBars.js";
 import { copy2dArray } from "./utils.js";
@@ -7,6 +7,8 @@ import { copy2dArray } from "./utils.js";
 describe("Yellow bar", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     const backData = zeroArray(20, 20); // bigger array, so it can be used for all
 
@@ -33,7 +35,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = moveYellowBar(4, 4, backData, input01a, gameInfo01a, "up", -1);
+    let info01a = moveYellowBar(4, 4, backData, input01a, gameInfo01a, { ...defaultGameVars }, "up", -1);
     it("Horizontal yellow bar A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -58,7 +60,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01b = copy2dArray(input01b);
-    let info01b = moveYellowBar(4, 4, backData, input01b, gameInfo01b, "up", -1);
+    let info01b = moveYellowBar(4, 4, backData, input01b, gameInfo01b, { ...defaultGameVars }, "up", -1);
     it("Horizontal yellow bar B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -91,7 +93,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 121, 123, 123, 122, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = moveYellowBar(4, 2, backData, input01c, gameInfo01c, "down", -1);
+    let info01c = moveYellowBar(4, 2, backData, input01c, gameInfo01c, { ...defaultGameVars }, "down", -1);
     it("Horizontal yellow bar C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
@@ -119,7 +121,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01d = copy2dArray(input01d);
-    let info01d = moveYellowBar(4, 2, backData, input01d, gameInfo01d, "down", -1);
+    let info01d = moveYellowBar(4, 2, backData, input01d, gameInfo01d, { ...defaultGameVars }, "down", -1);
     it("Horizontal yellow bar D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
@@ -149,7 +151,7 @@ describe("Yellow bar", () => {
         [1, 0, 121, 123, 123, 122, 0, 2, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01e = moveYellowBar(7, 3, backData, input01e, gameInfo01e, "left", -1);
+    let info01e = moveYellowBar(7, 3, backData, input01e, gameInfo01e, { ...defaultGameVars }, "left", -1);
     it("Horizontal yellow bar E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
@@ -173,7 +175,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01f = copy2dArray(input01f);
-    let info01f = moveYellowBar(7, 3, backData, input01f, gameInfo01f, "left", -1);
+    let info01f = moveYellowBar(7, 3, backData, input01f, gameInfo01f, { ...defaultGameVars }, "left", -1);
     it("Horizontal yellow bar F", () => {
         expect(JSON.stringify(input01f)).toBe(JSON.stringify(expectedOutput01f));
     });
@@ -197,7 +199,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01g = copy2dArray(input01g);
-    let info01g = moveYellowBar(7, 3, backData, input01g, gameInfo01g, "left", -1);
+    let info01g = moveYellowBar(7, 3, backData, input01g, gameInfo01g, { ...defaultGameVars }, "left", -1);
     it("Horizontal yellow bar G", () => {
         expect(JSON.stringify(input01g)).toBe(JSON.stringify(expectedOutput01g));
     });
@@ -227,7 +229,7 @@ describe("Yellow bar", () => {
         [1, 0, 2, 0, 121, 123, 123, 122, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01h = moveYellowBar(2, 3, backData, input01h, gameInfo01h, "right", -1);
+    let info01h = moveYellowBar(2, 3, backData, input01h, gameInfo01h, { ...defaultGameVars }, "right", -1);
     it("Horizontal yellow bar H", () => {
         expect(JSON.stringify(input01h)).toBe(JSON.stringify(expectedOutput01h));
     });
@@ -251,7 +253,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01i = copy2dArray(input01i);
-    let info01i = moveYellowBar(2, 3, backData, input01i, gameInfo01i, "right", -1);
+    let info01i = moveYellowBar(2, 3, backData, input01i, gameInfo01i, { ...defaultGameVars }, "right", -1);
     it("Horizontal yellow bar I", () => {
         expect(JSON.stringify(input01i)).toBe(JSON.stringify(expectedOutput01i));
     });
@@ -275,7 +277,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01j = copy2dArray(input01j);
-    let info01j = moveYellowBar(2, 3, backData, input01j, gameInfo01j, "right", -1);
+    let info01j = moveYellowBar(2, 3, backData, input01j, gameInfo01j, { ...defaultGameVars }, "right", -1);
     it("Horizontal yellow bar J", () => {
         expect(JSON.stringify(input01j)).toBe(JSON.stringify(expectedOutput01j));
     });
@@ -301,7 +303,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01k = copy2dArray(input01k);
-    let info01k = moveYellowBar(4, 4, backData, input01k, gameInfo01k, "up", -1);
+    let info01k = moveYellowBar(4, 4, backData, input01k, gameInfo01k, { ...defaultGameVars }, "up", -1);
     it("Horizontal yellow bar K", () => {
         expect(JSON.stringify(input01k)).toBe(JSON.stringify(expectedOutput01k));
     });
@@ -327,7 +329,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01l = copy2dArray(input01l);
-    let info01l = moveYellowBar(4, 1, backData, input01l, gameInfo01l, "down", -1);
+    let info01l = moveYellowBar(4, 1, backData, input01l, gameInfo01l, { ...defaultGameVars }, "down", -1);
     it("Horizontal yellow bar L", () => {
         expect(JSON.stringify(input01l)).toBe(JSON.stringify(expectedOutput01l));
     });
@@ -352,7 +354,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01m = copy2dArray(input01m);
-    let info01m = moveYellowBar(7, 3, backData, input01m, gameInfo01m, "left", -1);
+    let info01m = moveYellowBar(7, 3, backData, input01m, gameInfo01m, { ...defaultGameVars }, "left", -1);
     it("Horizontal yellow bar M", () => {
         expect(JSON.stringify(input01m)).toBe(JSON.stringify(expectedOutput01m));
     });
@@ -377,7 +379,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput01n = copy2dArray(input01n);
-    let info01n = moveYellowBar(2, 3, backData, input01n, gameInfo01n, "right", -1);
+    let info01n = moveYellowBar(2, 3, backData, input01n, gameInfo01n, { ...defaultGameVars }, "right", -1);
     it("Horizontal yellow bar N", () => {
         expect(JSON.stringify(input01n)).toBe(JSON.stringify(expectedOutput01n));
     });
@@ -412,7 +414,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02a = moveYellowBar(4, 4, backData, input02a, gameInfo02a, "up", -1);
+    let info02a = moveYellowBar(4, 4, backData, input02a, gameInfo02a, { ...defaultGameVars }, "up", -1);
     it("Vertical yellow bar A", () => {
         expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
     });
@@ -438,7 +440,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02b = copy2dArray(input02b);
-    let info02b = moveYellowBar(4, 5, backData, input02b, gameInfo02b, "up", -1);
+    let info02b = moveYellowBar(4, 5, backData, input02b, gameInfo02b, { ...defaultGameVars }, "up", -1);
     it("Vertical yellow bar B", () => {
         expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
     });
@@ -472,7 +474,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 0, 125, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02c = moveYellowBar(4, 1, backData, input02c, gameInfo02c, "down", -1);
+    let info02c = moveYellowBar(4, 1, backData, input02c, gameInfo02c, { ...defaultGameVars }, "down", -1);
     it("Vertical yellow bar C", () => {
         expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
     });
@@ -501,7 +503,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02d = copy2dArray(input02d);
-    let info02d = moveYellowBar(4, 1, backData, input02d, gameInfo02d, "down", -1);
+    let info02d = moveYellowBar(4, 1, backData, input02d, gameInfo02d, { ...defaultGameVars }, "down", -1);
     it("Vertical yellow bar D", () => {
         expect(JSON.stringify(input02d)).toBe(JSON.stringify(expectedOutput02d));
     });
@@ -533,7 +535,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 125, 0, 2, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02e = moveYellowBar(5, 4, backData, input02e, gameInfo02e, "left", -1);
+    let info02e = moveYellowBar(5, 4, backData, input02e, gameInfo02e, { ...defaultGameVars }, "left", -1);
     it("Vertical yellow bar E", () => {
         expect(JSON.stringify(input02e)).toBe(JSON.stringify(expectedOutput02e));
     });
@@ -558,7 +560,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02f = copy2dArray(input02f);
-    let info02f = moveYellowBar(5, 4, backData, input02f, gameInfo02f, "left", -1);
+    let info02f = moveYellowBar(5, 4, backData, input02f, gameInfo02f, { ...defaultGameVars }, "left", -1);
     it("Vertical yellow bar F", () => {
         expect(JSON.stringify(input02f)).toBe(JSON.stringify(expectedOutput02f));
     });
@@ -583,7 +585,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02g = copy2dArray(input02g);
-    let info02g = moveYellowBar(5, 4, backData, input02g, gameInfo02g, "left", -1);
+    let info02g = moveYellowBar(5, 4, backData, input02g, gameInfo02g, { ...defaultGameVars }, "left", -1);
     it("Vertical yellow bar G", () => {
         expect(JSON.stringify(input02g)).toBe(JSON.stringify(expectedOutput02g));
     });
@@ -615,7 +617,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 2, 0, 125, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info02h = moveYellowBar(3, 4, backData, input02h, gameInfo02h, "right", -1);
+    let info02h = moveYellowBar(3, 4, backData, input02h, gameInfo02h, { ...defaultGameVars }, "right", -1);
     it("Vertical yellow bar H", () => {
         expect(JSON.stringify(input02h)).toBe(JSON.stringify(expectedOutput02h));
     });
@@ -644,7 +646,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02i = copy2dArray(input02i);
-    let info02i = moveYellowBar(4, 7, backData, input02i, gameInfo02i, "up", -1);
+    let info02i = moveYellowBar(4, 7, backData, input02i, gameInfo02i, { ...defaultGameVars }, "up", -1);
     it("Vertical yellow bar I", () => {
         expect(JSON.stringify(input02i)).toBe(JSON.stringify(expectedOutput02i));
     });
@@ -673,7 +675,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02j = copy2dArray(input02j);
-    let info02j = moveYellowBar(4, 1, backData, input02j, gameInfo02j, "down", -1);
+    let info02j = moveYellowBar(4, 1, backData, input02j, gameInfo02j, { ...defaultGameVars }, "down", -1);
     it("Vertical yellow bar J", () => {
         expect(JSON.stringify(input02j)).toBe(JSON.stringify(expectedOutput02j));
     });
@@ -699,7 +701,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02k = copy2dArray(input02k);
-    let info02k = moveYellowBar(5, 4, backData, input02k, gameInfo02k, "left", -1);
+    let info02k = moveYellowBar(5, 4, backData, input02k, gameInfo02k, { ...defaultGameVars }, "left", -1);
     it("Vertical yellow bar K", () => {
         expect(JSON.stringify(input02k)).toBe(JSON.stringify(expectedOutput02k));
     });
@@ -725,7 +727,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput02l = copy2dArray(input02l);
-    let info02l = moveYellowBar(3, 4, backData, input02l, gameInfo02l, "right", -1);
+    let info02l = moveYellowBar(3, 4, backData, input02l, gameInfo02l, { ...defaultGameVars }, "right", -1);
     it("Vertical yellow bar L", () => {
         expect(JSON.stringify(input02l)).toBe(JSON.stringify(expectedOutput02l));
     });
@@ -752,7 +754,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput03a = copy2dArray(input03a);
-    let info03a = moveYellowBars(backData, input03a, gameInfo03a);
+    let info03a = moveYellowBars(backData, input03a, gameInfo03a, { ...defaultGameVars });
     it("Horizontal yellow bars A", () => {
         expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
     });
@@ -784,7 +786,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info03b = moveYellowBars(backData, input03b, gameInfo03b);
+    let info03b = moveYellowBars(backData, input03b, gameInfo03b, { ...defaultGameVars });
     it("Horizontal yellow bars B", () => {
         expect(JSON.stringify(input03b)).toBe(JSON.stringify(expectedOutput03b));
     });
@@ -809,7 +811,7 @@ describe("Yellow bar", () => {
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
     let expectedOutput03c = copy2dArray(input03c);
-    let info03c = moveYellowBars(backData, input03c, gameInfo03c);
+    let info03c = moveYellowBars(backData, input03c, gameInfo03c, { ...defaultGameVars });
     it("Horizontal yellow bars C", () => {
         expect(JSON.stringify(input03c)).toBe(JSON.stringify(expectedOutput03c));
     });
@@ -849,7 +851,7 @@ describe("Yellow bar", () => {
         [1, 0, 0, 0, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info04a = moveYellowBars(backData, input04a, gameInfo04a);
+    let info04a = moveYellowBars(backData, input04a, gameInfo04a, { ...defaultGameVars });
     it("Vertical yellow bars A", () => {
         expect(JSON.stringify(input04a)).toBe(JSON.stringify(expectedOutput04a));
     });

@@ -1,11 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { checkTrapDoors } from "./trapDoors.js";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils checkTrapDoors", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     let inputBack01 = zeroArray(7, 6);
 
@@ -32,7 +34,7 @@ describe("balUtils checkTrapDoors", () => {
         [1, 2, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01a = checkTrapDoors(inputBack01, input01a, gameInfo01a);
+    let info01a = checkTrapDoors(inputBack01, input01a, gameInfo01a, { ...defaultGameVars });
     it("checkTrapDoors A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -67,7 +69,7 @@ describe("balUtils checkTrapDoors", () => {
         [1, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1],
     ];
-    let info01b = checkTrapDoors(inputBack01, input01b, gameInfo01b);
+    let info01b = checkTrapDoors(inputBack01, input01b, gameInfo01b, { ...defaultGameVars });
     it("checkTrapDoors B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });

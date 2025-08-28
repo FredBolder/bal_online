@@ -63,7 +63,7 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
             }
         }
     }
-    if (checkSpikes(backData, gameData, gameInfo)) {
+    if (checkSpikes(backData, gameData, gameInfo, gameVars)) {
         gameVars.gameOver = true;
         playSounds.push("pain");
     }

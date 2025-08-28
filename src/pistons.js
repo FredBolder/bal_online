@@ -1,4 +1,4 @@
-import { hasWeight, moveObject } from "./balUtils.js";
+import { hasWeightAbove, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 
 function canMove(element) {
@@ -17,7 +17,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         const pistonsTrigger = gameInfo.pistonsTriggers[i];
         xTrigger = pistonsTrigger.x;
         yTrigger = pistonsTrigger.y;
-        weight = hasWeight(backData, gameData, gameInfo, xTrigger, xTrigger, yTrigger, pushingDown);
+        weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xTrigger, xTrigger, yTrigger, pushingDown);
         if (weight) {
             if (!groupsWithWeight.includes(pistonsTrigger.group)) {
                 groupsWithWeight.push(pistonsTrigger.group);

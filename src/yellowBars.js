@@ -1,7 +1,7 @@
-import { findElementByCoordinate, hasWeight, updateObject } from "./balUtils.js";
+import { findElementByCoordinate, hasWeightAbove, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
-export function moveYellowBar(x, y, backData, gameData, gameInfo, dir, index, pusher = false) {
+export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir, index, pusher = false) {
     let changeDirection = false;
     let direction = "none";
     let element = 0;
@@ -350,7 +350,7 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, dir, index, pu
         findAndSetIndex(xmin, ymax);
         findAndSetIndex(xmax, ymax);
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0) && (idx >= 0)) {
-            weight = hasWeight(backData, gameData, gameInfo, xmin, xmax, ymin, false);
+            weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
             if (pusher && (gameInfo.yellowBars[idx].direction !== "none")) {
                 return false;
             }
@@ -557,11 +557,11 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, dir, index, pu
     return update;
 }
 
-export function moveYellowBars(backData, gameData, gameInfo) {
+export function moveYellowBars(backData, gameData, gameInfo, gameVars) {
     let update = false;
 
     for (let i = 0; i < gameInfo.yellowBars.length; i++) {
-        if (moveYellowBar(-1, -1, backData, gameData, gameInfo, "none", i)) {
+        if (moveYellowBar(-1, -1, backData, gameData, gameInfo, gameVars, "none", i)) {
             update = true;
         }
     }

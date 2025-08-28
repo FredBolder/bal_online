@@ -1,6 +1,6 @@
-import { hasWeight } from "./balUtils.js";
+import { hasWeightAbove } from "./balUtils.js";
 
-export function checkTrapDoors(backData, gameData, gameInfo) {
+export function checkTrapDoors(backData, gameData, gameInfo, gameVars) {
   let result = {};
   result.updated = false;
   result.sound = false;
@@ -8,7 +8,7 @@ export function checkTrapDoors(backData, gameData, gameInfo) {
 
   for (let i = 0; i < gameInfo.trapDoors.length; i++) {
     let trapDoor = gameInfo.trapDoors[i];
-    weight = hasWeight(backData, gameData, gameInfo, trapDoor.x, trapDoor.x, trapDoor.y, false);
+    weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, trapDoor.x, trapDoor.x, trapDoor.y, false);
     if (!weight && [0, 13, 14].includes(gameData[trapDoor.y][trapDoor.x])) {
       gameData[trapDoor.y][trapDoor.x] = 13;
       result.updated = true;
