@@ -825,18 +825,23 @@ export function freeToSwim(x1, x2, y, gameData) {
 }
 
 export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, y, pushingDown) {
-  let weight = false;
+  const gravityDown = (gameVars.gravity === "down");
   let result = false;
 
   if (y > 0) {
     for (let i = xmin; i <= xmax; i++) {
+      let weight = false;
       const el = gameData[y - 1][i];
-      weight = [2, 4, 8, 40, 93, 94].includes(el);
-      if (!pushingDown || (i !== gameInfo.blueBall.x) || ((y - 1) !== gameInfo.blueBall.y)) {
-        if ((el === 2) && !hasForceDown(gameData, gameInfo, i, y - 1)) {
-          if (gameInfo.hasPropeller || [20, 23, 25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
-            weight = false;
-          }
+      const forceDown = hasForceDown(gameData, gameInfo, i, y - 1);
+      const pushing = (pushingDown && (i === gameInfo.blueBall.x) && ((y - 1) === gameInfo.blueBall.y));
+      if ([2, 4, 8, 40, 93, 94].includes(el)) {
+        if (pushing || gravityDown || forceDown) {
+          weight = true;
+        }
+      }
+      if ((el === 2) && !forceDown && !pushing) {
+        if (gameInfo.hasPropeller || [20, 23, 25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
+          weight = false;
         }
       }
       if (weight) {
@@ -846,6 +851,35 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
   }
   return result;
 }
+
+export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xmax, y, pushingUp) {
+  const gravityUp = (gameVars.gravity === "up");
+  let result = false;
+
+  if (y < gameData.length - 1) {
+    for (let i = xmin; i <= xmax; i++) {
+      let weight = false;
+      const el = gameData[y + 1][i];
+      const forceUp = hasForceUp(gameData, gameInfo, i, y + 1);
+      const pushing = (pushingUp && (i === gameInfo.blueBall.x) && ((y + 1) === gameInfo.blueBall.y));
+      if ([2, 4, 8, 40, 93, 94].includes(el)) {
+        if (pushing || gravityUp || forceUp) {
+          weight = true;
+        }
+      }
+      if ((el === 2) && !forceUp && !pushing) {
+        if (gameInfo.hasPropeller || [20, 23, 25, 90, 137].includes(backData[y + 1][i]) || isHorizontalRope(i, y + 2, backData)) {
+          weight = false;
+        }
+      }
+      if (weight) {
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+
 
 export function inWater(x, y, backData) {
   let result = [20, 23].includes(backData[y][x]);
@@ -2298,8 +2332,9 @@ export function jump(backData, gameData, gameInfo, gameVars) {
   let maxY = 0;
   let oneDirection = 0;
   let idx = -1;
-  let x = gameInfo.blueBall.x;
-  let y = gameInfo.blueBall.y;
+  let info = null;
+  const x = gameInfo.blueBall.x;
+  const y = gameInfo.blueBall.y;
   let result = {};
   result.eating = false;
   result.freezeTime = -1;
@@ -2453,7 +2488,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
-    el = gravityDown ? 104: 103;
+    el = gravityDown ? 104 : 103;
     if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
       if (movePurpleBar(backData, gameData, gameInfo, gameVars, direction)) {
         result.player = true;
@@ -2462,7 +2497,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
         gameInfo.blueBall.y = y + dy1;
       }
     }
-    el = gravityDown ? 125: 124;
+    el = gravityDown ? 125 : 124;
     if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
       if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, direction, -1)) {
         result.player = true;
@@ -2471,7 +2506,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
         gameInfo.blueBall.y = y + dy1;
       }
     }
-    el = gravityDown ? 130: 129;
+    el = gravityDown ? 130 : 129;
     if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
       if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, direction)) {
         result.player = true;
@@ -2481,6 +2516,35 @@ export function jump(backData, gameData, gameInfo, gameVars) {
       }
     }
   }
+
+  if (!result.player && !gravityDown && [37, 116, 131, 136, 158].includes(gameData[y + dy1][x])) {
+    if (!hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + dy1, false)) {
+      result.player = true;
+      switch (gameData[y + dy1][x]) {
+        case 37:
+          info = checkDetonator(backData, gameData, gameInfo, gameVars, true);
+          if (info.explosion) {
+            result.sound = "explosion";
+          }
+          break;
+        case 116:
+          checkYellowPushersTriggers(backData, gameData, gameInfo, gameVars, true);
+          break;
+        case 131:
+          checkYellowStoppers(backData, gameData, gameInfo, gameVars, true);
+          break;
+        case 136:
+          checkYellowPausers(backData, gameData, gameInfo, gameVars, true);
+          break;
+        case 158:
+          checkPistonsTriggers(backData, gameData, gameInfo, gameVars, true);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   return result;
 }
 
@@ -2706,7 +2770,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       result.player = true;
       result.sound = "pickaxe";
     }
-    el = gravityDown ? 103: 104;
+    el = gravityDown ? 103 : 104;
     if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
       if (movePurpleBar(backData, gameData, gameInfo, gameVars, direction)) {
         // Blue ball is updated in movePurpleBar when moving down
@@ -2716,7 +2780,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
         }
       }
     }
-    el = gravityDown ? 124: 125;
+    el = gravityDown ? 124 : 125;
     if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
       if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, direction, -1)) {
         // Blue ball is updated in moveYellowBar when moving down
@@ -2726,7 +2790,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
         }
       }
     }
-    el = gravityDown ? 129: 130;
+    el = gravityDown ? 129 : 130;
     if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
       if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, direction)) {
         // Blue ball is updated in moveLightBlueBar when moving down
@@ -2736,7 +2800,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
         }
       }
     }
-    if (!result.player && [37, 116, 131, 136, 158].includes(gameData[y + dy1][x])) {
+    if (!result.player && gravityDown && [37, 116, 131, 136, 158].includes(gameData[y + dy1][x])) {
       if (!hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + dy1, false)) {
         result.player = true;
         switch (gameData[y + dy1][x]) {
