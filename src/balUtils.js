@@ -2293,6 +2293,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
   let direction = 0;
   let dy1 = 0;
   let dy2 = 0;
+  let el = 0;
   let minY = 0;
   let maxY = 0;
   let oneDirection = 0;
@@ -2452,7 +2453,8 @@ export function jump(backData, gameData, gameInfo, gameVars) {
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
-    if (!result.player && ([100, 101, 102, 104].includes(gameData[y + dy1][x]))) {
+    el = gravityDown ? 104: 103;
+    if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
       if (movePurpleBar(backData, gameData, gameInfo, direction)) {
         result.player = true;
         gameData[y + dy1][x] = 2;
@@ -2460,7 +2462,8 @@ export function jump(backData, gameData, gameInfo, gameVars) {
         gameInfo.blueBall.y = y + dy1;
       }
     }
-    if (!result.player && ([121, 122, 123, 125].includes(gameData[y + dy1][x]))) {
+    el = gravityDown ? 125: 124;
+    if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
       if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, direction, -1)) {
         result.player = true;
         gameData[y + dy1][x] = 2;
@@ -2468,7 +2471,8 @@ export function jump(backData, gameData, gameInfo, gameVars) {
         gameInfo.blueBall.y = y + dy1;
       }
     }
-    if (!result.player && ([126, 127, 128, 130].includes(gameData[y + dy1][x]))) {
+    el = gravityDown ? 130: 129;
+    if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
       if (moveLightBlueBar(backData, gameData, gameInfo, direction)) {
         result.player = true;
         gameData[y + dy1][x] = 2;
@@ -2578,6 +2582,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
   let direction = "";
   let dy1 = 0;
   let dy2 = 0;
+  let el = 0;
   let idx = -1;
   let info = null;
   let minY = 0;
@@ -2701,7 +2706,8 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       result.player = true;
       result.sound = "pickaxe";
     }
-    if (!result.player && ([100, 101, 102, 103].includes(gameData[y + dy1][x]))) {
+    el = gravityDown ? 103: 104;
+    if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
       if (movePurpleBar(backData, gameData, gameInfo, direction)) {
         // Blue ball is updated in movePurpleBar when moving down
         result.player = true;
@@ -2710,7 +2716,8 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
         }
       }
     }
-    if (!result.player && ([121, 122, 123, 124].includes(gameData[y + dy1][x]))) {
+    el = gravityDown ? 124: 125;
+    if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
       if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, direction, -1)) {
         // Blue ball is updated in moveYellowBar when moving down
         result.player = true;
@@ -2719,7 +2726,8 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
         }
       }
     }
-    if (!result.player && ([126, 127, 128, 129].includes(gameData[y + dy1][x]))) {
+    el = gravityDown ? 129: 130;
+    if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
       if (moveLightBlueBar(backData, gameData, gameInfo, direction)) {
         // Blue ball is updated in moveLightBlueBar when moving down
         result.player = true;

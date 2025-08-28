@@ -1,12 +1,14 @@
 import { describe, it, expect } from "vitest";
-import { zeroArray } from "./balUtils.js";
-import { initGameInfo } from "./gameInfo.js";
+import { jump, zeroArray } from "./balUtils.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { copy2dArray } from "./utils.js";
 
 describe("Purple bar", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     const backData = zeroArray(20, 20); // bigger array, so it can be used for all
 
@@ -520,6 +522,45 @@ describe("Purple bar", () => {
     it("Vertical purple bar L info", () => {
         expect(info02l).toBe(false);
     });
+
+    // GRAVITY UP
+
+    let gameInfo03a = { ...defaultGameInfo, blueBall: { x: 4, y: 1 } };
+    let input03a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 0, 103, 0, 0, 0, 1],
+        [1, 0, 0, 0, 102, 0, 0, 0, 1],
+        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput03a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 0, 103, 0, 0, 0, 1],
+        [1, 0, 0, 0, 102, 0, 0, 0, 1],
+        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info03a = jump(backData, input03a, gameInfo03a, { ...defaultGameVars, gravity: "up" });
+    it("Vertical purple bar J", () => {
+        expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
+    });
+    it("Vertical purple bar J info", () => {
+        expect(JSON.stringify(info03a)).toBe(JSON.stringify({
+            eating: false,
+            freezeTime: -1,
+            player: true,
+            sound: "",
+        }));
+    });
+
 
     // Insert new tests here
 });
