@@ -50,6 +50,9 @@ export function checkLevel(data, settings) {
   let differentLength = false;
   let gameTicks = 0;
   let group = 0;
+  let foundGravityChanger = false;
+  let foundLava = false;
+  let foundWater = false;
   let info = null;
   let msg = "";
   let msgExtra = "";
@@ -89,6 +92,13 @@ export function checkLevel(data, settings) {
           case "b":
             nDetonators++;
             break;
+          case "Є":
+          case "З":
+            foundGravityChanger = true;
+            break;
+          case "V":
+            foundLava = true;
+            break;
           case "Π":
             nPurpleSelfDestructingTeleports++;
             break;
@@ -106,6 +116,13 @@ export function checkLevel(data, settings) {
             break;
           case "g":
             nTravelgates++;
+            break;
+          case "W":
+          case "w":
+          case "ς":
+          case "σ":
+          case "f":
+            foundWater = true;
             break;
           default:
             break;
@@ -126,6 +143,9 @@ export function checkLevel(data, settings) {
     }
     if ((nGameRotator > 0) && (data.length !== data[0].length)) {
       msg += "There can only be a game rotator when the number of columns is the same as the number of rows.\n";
+    }
+    if (foundGravityChanger && (foundWater || foundLava)) {
+      msg += "There can be no gravity changer in a level with water and/or lava.\n";
     }
     if (nSmallBlueBalls > 1) {
       msg += "There can be only one small blue ball.\n";
@@ -378,15 +398,19 @@ export function checkLevel(data, settings) {
   return msg;
 }
 
-export function fixLevel(gameData, gameInfo) {
+export function fixLevel(backData, gameData, gameInfo) {
   const empty = [];
+  const gravityChangerPositions = [];
   let result = "";
   let errorGameRotatorInNonSquareLevel = false;
   let errorMoreThanOneBlueBall = false;
   let errorMoreThanOneSmallBlueBall = false;
   let foundBlue = false;
+  let foundGravityChanger = false;
+  let foundLava = false;
   let foundSmallblue = false;
   let foundSmallGreen = false;
+  let foundWater = false;
   let nSmallGreenBalls = 0;
   let used = 0;
   const xMax = gameData[0].length - 1;
@@ -396,8 +420,9 @@ export function fixLevel(gameData, gameInfo) {
 
   for (let i = gameData.length - 1; i >= 0; i--) {
     for (let j = 0; j <= xMax; j++) {
-      const el = gameData[i][j];
-      switch (el) {
+      const gd = gameData[i][j];
+      const bd = backData[i][j];
+      switch (gd) {
         case 0:
           if ((empty.length < 5) && (j > 0) && (i > 0) && (j < xMax) && (i < (gameData.length - 1))) {
             empty.push({ x: j, y: i });
@@ -417,6 +442,9 @@ export function fixLevel(gameData, gameInfo) {
           }
           foundBlue = true;
           break;
+        case 22:
+          foundLava = true;
+          break;
         case 89:
         case 183:
           if (xMax !== yMax) {
@@ -430,6 +458,21 @@ export function fixLevel(gameData, gameInfo) {
             gameData[i][j] = 0;
           }
           foundSmallblue = true;
+          break;
+        case 184:
+        case 185:
+          foundGravityChanger = true;
+          gravityChangerPositions.push({ x: j, y: i });
+          break;
+        default:
+          break;
+      }
+      switch (bd) {
+        case 20:
+        case 23:
+        case 113:
+        case 114:
+          foundWater = true;
           break;
         default:
           break;
@@ -445,6 +488,13 @@ export function fixLevel(gameData, gameInfo) {
   }
   if (errorMoreThanOneSmallBlueBall) {
     result += "There was more than one small blue ball.\n";
+  }
+  if (foundGravityChanger && (foundWater || foundLava)) {
+    result += "There was a gravity changer in a level with water and/or lava.\n";
+    for (let i = 0; i < gravityChangerPositions.length; i++) {
+      const position = gravityChangerPositions[i];
+      gameData[position.y][position.x] = 0;
+    }
   }
 
   if (!foundBlue) {

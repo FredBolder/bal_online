@@ -1825,7 +1825,7 @@ function drawLevel(
       return;
     }
 
-    info = getObjectCoordinates(gameData, gameInfo);
+    info = getObjectCoordinates(gameData, gameInfo, gameVars);
     if ((info.x === x) && (info.y === y)) {
       highlight();
     }

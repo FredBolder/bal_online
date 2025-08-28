@@ -776,7 +776,7 @@ function BalPage() {
       }
       fillMenu(1);
     } else {
-      msg = fixLevel(gameData, gameInfo);
+      msg = fixLevel(backData, gameData, gameInfo);
       updateGreen();
       if (msg !== "") {
         showMessage("Error", msg);
@@ -1020,7 +1020,7 @@ function BalPage() {
     switch (e.key) {
       case " ": {
         if (gameInfo.hasTelekineticPower) {
-          info = moveObjectWithTelekineticPower(gameData, gameInfo);
+          info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
         }
         break;
       }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { initGameInfo } from "./gameInfo.js";
+import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { moveObjectWithTelekineticPower } from "./telekinesis.js";
 import { getTimeBombsTime } from "./timeBombs.js";
 import { copy2dArray } from "./utils.js";
@@ -7,6 +7,8 @@ import { copy2dArray } from "./utils.js";
 describe("moveObjectWithTelekineticPower", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
+    const defaultGameVars = {};
+    initGameVars(defaultGameVars);
 
     let gameInfo01a = {
         ...defaultGameInfo,
@@ -29,7 +31,7 @@ describe("moveObjectWithTelekineticPower", () => {
         [1, 2, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01a = moveObjectWithTelekineticPower(input01a, gameInfo01a);
+    let info01a = moveObjectWithTelekineticPower(input01a, gameInfo01a, { ...defaultGameVars });
     it("moveObjectWithTelekineticPower A", () => {
         expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
     });
@@ -51,7 +53,7 @@ describe("moveObjectWithTelekineticPower", () => {
     ];
     let expectedOutput01b = copy2dArray(input01b);
 
-    let info01b = moveObjectWithTelekineticPower(input01b, gameInfo01b);
+    let info01b = moveObjectWithTelekineticPower(input01b, gameInfo01b, { ...defaultGameVars });
     it("moveObjectWithTelekineticPower B", () => {
         expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
     });
@@ -81,7 +83,7 @@ describe("moveObjectWithTelekineticPower", () => {
         [1, 2, 0, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01c = moveObjectWithTelekineticPower(input01c, gameInfo01c);
+    let info01c = moveObjectWithTelekineticPower(input01c, gameInfo01c, { ...defaultGameVars });
     it("moveObjectWithTelekineticPower C", () => {
         expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
     });
@@ -114,7 +116,7 @@ describe("moveObjectWithTelekineticPower", () => {
         [1, 0, 0, 0, 2, 117, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01d = moveObjectWithTelekineticPower(input01d, gameInfo01d);
+    let info01d = moveObjectWithTelekineticPower(input01d, gameInfo01d, { ...defaultGameVars });
     it("moveObjectWithTelekineticPower D", () => {
         expect(JSON.stringify(input01d)).toBe(JSON.stringify(expectedOutput01d));
     });
@@ -146,7 +148,7 @@ describe("moveObjectWithTelekineticPower", () => {
         [1, 2, 28, 0, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let info01e = moveObjectWithTelekineticPower(input01e, gameInfo01e);
+    let info01e = moveObjectWithTelekineticPower(input01e, gameInfo01e, { ...defaultGameVars });
     it("moveObjectWithTelekineticPower E", () => {
         expect(JSON.stringify(input01e)).toBe(JSON.stringify(expectedOutput01e));
     });
@@ -154,7 +156,123 @@ describe("moveObjectWithTelekineticPower", () => {
         expect(info01e.player).toBe(true);
     });
 
+    // GRAVITY UP
 
+    let gameInfo02a = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 1 },
+        hasTelekineticPower: true
+    };
+    let input02a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 5, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 0, 5, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02a = moveObjectWithTelekineticPower(input02a, gameInfo02a, { ...defaultGameVars, gravity: "up" });
+    it("moveObjectWithTelekineticPower Gravity Up A", () => {
+        expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
+    });
+    it("moveObjectWithTelekineticPower Gravity Up A info.player", () => {
+        expect(info02a.player).toBe(true);
+    });
+
+    let gameInfo02b = {
+        ...defaultGameInfo,
+        blueBall: { x: 4, y: 1 },
+        hasTelekineticPower: true
+    };
+    let input02b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 5, 2, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 2, 0, 0, 1],
+        [1, 0, 0, 5, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02b = moveObjectWithTelekineticPower(input02b, gameInfo02b, { ...defaultGameVars, gravity: "up" });
+    it("moveObjectWithTelekineticPower Gravity Up B", () => {
+        expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
+    });
+    it("moveObjectWithTelekineticPower Gravity Up B info.player", () => {
+        expect(info02b.player).toBe(true);
+    });
+
+    let gameInfo02c = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 1 },
+        hasTelekineticPower: true
+    };
+    let input02c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 0, 0, 0, 0, 0, 1],
+        [1, 0, 5, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02c = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 5, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02c = moveObjectWithTelekineticPower(input02c, gameInfo02c, { ...defaultGameVars, gravity: "up" });
+    it("moveObjectWithTelekineticPower Gravity Up C", () => {
+        expect(JSON.stringify(input02c)).toBe(JSON.stringify(expectedOutput02c));
+    });
+    it("moveObjectWithTelekineticPower Gravity Up C info.player", () => {
+        expect(info02c.player).toBe(true);
+    });
+
+    let gameInfo02d = {
+        ...defaultGameInfo,
+        blueBall: { x: 4, y: 1 },
+        hasTelekineticPower: true
+    };
+    let input02d = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 2, 0, 0, 1],
+        [1, 0, 0, 82, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput02d = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 83, 2, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02d = moveObjectWithTelekineticPower(input02d, gameInfo02d, { ...defaultGameVars, gravity: "up" });
+    it("moveObjectWithTelekineticPower Gravity Up D", () => {
+        expect(JSON.stringify(input02d)).toBe(JSON.stringify(expectedOutput02d));
+    });
+    it("moveObjectWithTelekineticPower Gravity Up D info.player", () => {
+        expect(info02d.player).toBe(true);
+    });
 
     // Insert new tests here
 });
