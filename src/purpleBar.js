@@ -376,31 +376,29 @@ export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction)
                     }
                     break;
                 case "up":
-                    if (!weightAbove) {
-                        if (vertical) {
-                            update = false;
-                            if (ymin > 0) {
-                                if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
-                                    update = true;
-                                    for (let i = ymin - 1; i < ymax; i++) {
-                                        gameData[i][xmin] = gameData[i + 1][xmin];
-                                    }
-                                    gameData[ymax][xmin] = 0;
+                    if (vertical) {
+                        update = false;
+                        if (ymin > 0) {
+                            if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
+                                update = true;
+                                for (let i = ymin - 1; i < ymax; i++) {
+                                    gameData[i][xmin] = gameData[i + 1][xmin];
                                 }
+                                gameData[ymax][xmin] = 0;
                             }
-                        } else {
-                            update = true;
+                        }
+                    } else {
+                        update = true;
+                        for (let i = xmin; i <= xmax; i++) {
+                            const el = gameData[y - 2][i];
+                            if ((el !== 0) || hasForceDown(gameData, gameInfo, i, y - 2)) {
+                                update = false;
+                            }
+                        }
+                        if (update) {
                             for (let i = xmin; i <= xmax; i++) {
-                                const el = gameData[y - 2][i];
-                                if ((el !== 0) || hasForceDown(gameData, gameInfo, i, y - 2)) {
-                                    update = false;
-                                }
-                            }
-                            if (update) {
-                                for (let i = xmin; i <= xmax; i++) {
-                                    gameData[y - 2][i] = gameData[y - 1][i];
-                                    gameData[y - 1][i] = 0;
-                                }
+                                gameData[y - 2][i] = gameData[y - 1][i];
+                                gameData[y - 1][i] = 0;
                             }
                         }
                     }

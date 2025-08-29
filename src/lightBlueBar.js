@@ -331,16 +331,14 @@ export function moveLightBlueBar(backData, gameData, gameInfo, gameVars, directi
                     }
                     break;
                 case "up":
-                    if (!weightAbove) {
-                        if (vertical) {
-                            if (ymin > 0) {
-                                if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
-                                    update = true;
-                                    for (let i = ymin - 1; i < ymax; i++) {
-                                        gameData[i][xmin] = gameData[i + 1][xmin];
-                                    }
-                                    gameData[ymax][xmin] = 0;
+                    if (vertical) {
+                        if (ymin > 0) {
+                            if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
+                                update = true;
+                                for (let i = ymin - 1; i < ymax; i++) {
+                                    gameData[i][xmin] = gameData[i + 1][xmin];
                                 }
+                                gameData[ymax][xmin] = 0;
                             }
                         }
                     }

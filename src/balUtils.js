@@ -2409,7 +2409,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
             } else {
               gameData[y][x] = element;
             }
-            if ((i !== 0) && !gameInfo.hasWeakStone && gameInfo.hasLadder && (gameData[y - 1][x] === 0)) {
+            if ((i !== 0) && !gameInfo.hasWeakStone && gameInfo.hasLadder && (gameData[y + dy1][x] === 0)) {
               backData[y][x] = 25;
             }
             gameData[y + dy2][x] = 2;

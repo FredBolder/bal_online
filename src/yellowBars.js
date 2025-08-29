@@ -420,7 +420,8 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                     }
                     break;
                 case "left":
-                    if (!weightAbove && !weightBelow) {
+                    // If index >= 0, the bar is already moving and will not be stopped.
+                    if ((!weightAbove && !weightBelow) || (index >= 0)) {
                         if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
@@ -454,7 +455,8 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                     }
                     break;
                 case "right":
-                    if (!weightAbove && !weightBelow) {
+                    // If index >= 0, the bar is already moving and will not be stopped.
+                    if ((!weightAbove && !weightBelow) || (index >= 0)) {
                         if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
@@ -488,38 +490,37 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                     }
                     break;
                 case "up":
-                    if (!weightAbove) {
-                        if (ymin > 0) {
-                            if (vertical) {
-                                update = false;
-                                if ((gameData[ymin - 1][xmin] === 86)) {
-                                    changeDirection = true;
-                                    direction = "down";
-                                }
-                                if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
-                                    update = true;
-                                    for (let i = ymin - 1; i < ymax; i++) {
-                                        gameData[i][xmin] = gameData[i + 1][xmin];
-                                    }
-                                    gameData[ymax][xmin] = 0;
-                                }
-                            } else {
+                    if (ymin > 0) {
+                        if (vertical) {
+                            update = false;
+                            if ((gameData[ymin - 1][xmin] === 86)) {
+                                changeDirection = true;
+                                direction = "down";
+                            }
+                            if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {
                                 update = true;
-                                for (let i = xmin; i <= xmax; i++) {
-                                    const el = gameData[ymin - 1][i];
-                                    if ((el !== 0) || hasForceDown(gameData, gameInfo, i, ymin - 1)) {
-                                        update = false;
-                                    }
+                                for (let i = ymin - 1; i < ymax; i++) {
+                                    gameData[i][xmin] = gameData[i + 1][xmin];
                                 }
-                                if (update) {
-                                    for (let i = xmin; i <= xmax; i++) {
-                                        gameData[ymin - 1][i] = gameData[ymin][i];
-                                        gameData[ymin][i] = 0;
-                                    }
+                                gameData[ymax][xmin] = 0;
+                            }
+                        } else {
+                            update = true;
+                            for (let i = xmin; i <= xmax; i++) {
+                                const el = gameData[ymin - 1][i];
+                                if ((el !== 0) || hasForceDown(gameData, gameInfo, i, ymin - 1)) {
+                                    update = false;
+                                }
+                            }
+                            if (update) {
+                                for (let i = xmin; i <= xmax; i++) {
+                                    gameData[ymin - 1][i] = gameData[ymin][i];
+                                    gameData[ymin][i] = 0;
                                 }
                             }
                         }
                     }
+
                     break;
                 default:
                     break;
