@@ -1,11 +1,12 @@
-import { hasWeightAbove, updateObject } from "./balUtils.js";
+import { hasWeightAbove, hasWeightBelow, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 export function moveLightBlueBar(backData, gameData, gameInfo, gameVars, direction) {
     let x = gameInfo.blueBall.x;
     let y = gameInfo.blueBall.y;
     let error = false;
-    let weight = false;
+    let weightAbove = false;
+    let weightBelow = false;
     let maxCol = 0;
     let stop = false;
     let xmin = -1;
@@ -253,7 +254,8 @@ export function moveLightBlueBar(backData, gameData, gameInfo, gameVars, directi
 
         update = false;
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
-            weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
+            weightAbove = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
+            weightBelow = hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xmax, ymax, false);
             switch (direction) {
                 case "down":
                     if (vertical) {
@@ -299,7 +301,7 @@ export function moveLightBlueBar(backData, gameData, gameInfo, gameVars, directi
                     }
                     break;
                 case "left":
-                    if (!weight) {
+                    if (!weightAbove && !weightBelow) {
                         if (!vertical) {
                             if (xmin > 0) {
                                 if ((gameData[ymin][xmin - 1] === 0) && !hasForceRight(gameData, gameInfo, xmin - 1, ymin)) {
@@ -314,7 +316,7 @@ export function moveLightBlueBar(backData, gameData, gameInfo, gameVars, directi
                     }
                     break;
                 case "right":
-                    if (!weight) {
+                    if (!weightAbove && !weightBelow) {
                         if (!vertical) {
                             if (xmin > 0) {
                                 if ((gameData[ymin][xmax + 1] === 0) && !hasForceLeft(gameData, gameInfo, xmax + 1, ymin)) {
@@ -329,7 +331,7 @@ export function moveLightBlueBar(backData, gameData, gameInfo, gameVars, directi
                     }
                     break;
                 case "up":
-                    if (!weight) {
+                    if (!weightAbove) {
                         if (vertical) {
                             if (ymin > 0) {
                                 if ((gameData[ymin - 1][xmin] === 0) && !hasForceDown(gameData, gameInfo, xmin, ymin - 1)) {

@@ -1,4 +1,4 @@
-import { findElementByCoordinate, hasWeightAbove, updateObject } from "./balUtils.js";
+import { findElementByCoordinate, hasWeightAbove, hasWeightBelow, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir, index, pusher = false) {
@@ -6,7 +6,8 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
     let direction = "none";
     let element = 0;
     let error = false;
-    let weight = false;
+    let weightAbove = false;
+    let weightBelow = false;
     let idx = -1;
     let maxCol = 0;
     let stop = false;
@@ -350,7 +351,8 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
         findAndSetIndex(xmin, ymax);
         findAndSetIndex(xmax, ymax);
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0) && (idx >= 0)) {
-            weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
+            weightAbove = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
+            weightBelow = hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xmax, ymax, false);
             if (pusher && (gameInfo.yellowBars[idx].direction !== "none")) {
                 return false;
             }
@@ -418,7 +420,7 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                     }
                     break;
                 case "left":
-                    if (!weight) {
+                    if (!weightAbove && !weightBelow) {
                         if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
@@ -452,7 +454,7 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                     }
                     break;
                 case "right":
-                    if (!weight) {
+                    if (!weightAbove && !weightBelow) {
                         if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
@@ -486,7 +488,7 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                     }
                     break;
                 case "up":
-                    if (!weight) {
+                    if (!weightAbove) {
                         if (ymin > 0) {
                             if (vertical) {
                                 update = false;

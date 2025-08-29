@@ -525,41 +525,64 @@ describe("Purple bar", () => {
 
     // GRAVITY UP
 
-    let gameInfo03a = { ...defaultGameInfo, blueBall: { x: 4, y: 1 } };
+    // ***** Horizontal purple bar *****
+
     let input03a = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1, 1],
+        [1, 0, 0, 100, 102, 102, 101, 2, 1],
+        [1, 0, 0, 4, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1],
     ];
-    let expectedOutput03a = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 2, 0, 0, 0, 1],
-        [1, 0, 0, 0, 103, 0, 0, 0, 1],
-        [1, 0, 0, 0, 102, 0, 0, 0, 1],
-        [1, 0, 0, 0, 104, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info03a = jump(backData, input03a, gameInfo03a, { ...defaultGameVars, gravity: "up" });
-    it("Vertical purple bar J", () => {
+    let expectedOutput03a = copy2dArray(input03a);
+    let info03a = movePurpleBar(backData, input03a, { ...defaultGameInfo, blueBall: { x: 7, y: 2 } }, { ...defaultGameVars, gravity: "up" }, "left");
+    it("Horizontal purple bar Gravity Up A", () => {
         expect(JSON.stringify(input03a)).toBe(JSON.stringify(expectedOutput03a));
     });
-    it("Vertical purple bar J info", () => {
-        expect(JSON.stringify(info03a)).toBe(JSON.stringify({
+    it("Horizontal purple bar Gravity Up A info", () => {
+        expect(info03a).toBe(false);
+    });
+
+
+    // ***** Vertical purple bar *****
+
+    let gameInfo04a = { ...defaultGameInfo, blueBall: { x: 4, y: 1 } };
+    let input04a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 0, 103, 0, 0, 0, 1],
+        [1, 0, 0, 0, 102, 0, 0, 0, 1],
+        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput04a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 0, 103, 0, 0, 0, 1],
+        [1, 0, 0, 0, 102, 0, 0, 0, 1],
+        [1, 0, 0, 0, 104, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info04a = jump(backData, input04a, gameInfo04a, { ...defaultGameVars, gravity: "up" });
+    it("Vertical purple bar Gravity Up A", () => {
+        expect(JSON.stringify(input04a)).toBe(JSON.stringify(expectedOutput04a));
+    });
+    it("Vertical purple bar Gravity Up A info", () => {
+        expect(JSON.stringify(info04a)).toBe(JSON.stringify({
             eating: false,
             freezeTime: -1,
             player: true,
             sound: "",
         }));
     });
+
 
 
     // Insert new tests here

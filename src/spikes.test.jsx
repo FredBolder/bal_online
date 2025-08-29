@@ -175,6 +175,43 @@ describe("Spikes", () => {
         expect(info01i).toBe(true);
     });
 
+    // GRAVITY UP
+
+    let inputBack02 = zeroArray(6, 8);
+
+    let gameInfo02a = {
+        ...defaultGameInfo,
+        blueBall: { x: 3, y: 3 },
+    };
+    let input02a = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 0, 0, 0, 0, 0, 1],
+        [1, 3, 0, 2, 0, 0, 0, 1],
+        [1, 0, 0, 174, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02a = checkSpikes(inputBack02, input02a, gameInfo02a, { ...defaultGameVars, gravity: "up" });
+    it("checkSpikes Gravity Up A", () => {
+        expect(info02a).toBe(false);
+    });
+
+    let gameInfo02b = {
+        ...defaultGameInfo,
+        blueBall: { x: 3, y: 2 },
+    };
+    let input02b = [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 175, 0, 0, 0, 1],
+        [1, 1, 0, 2, 0, 0, 0, 1],
+        [1, 3, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info02b = checkSpikes(inputBack02, input02b, gameInfo02b, { ...defaultGameVars, gravity: "up" });
+    it("checkSpikes Gravity Up B", () => {
+        expect(info02b).toBe(true);
+    });
 
 
     // Insert new tests here

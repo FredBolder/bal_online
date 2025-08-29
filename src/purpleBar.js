@@ -1,11 +1,12 @@
-import { hasWeightAbove, updateObject } from "./balUtils.js";
+import { hasWeightAbove, hasWeightBelow, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction) {
     let x = gameInfo.blueBall.x;
     let y = gameInfo.blueBall.y;
     let error = false;
-    let weight = false;
+    let weightAbove = false;
+    let weightBelow = false;
     let maxCol = 0;
     let stop = false;
     let xmin = -1;
@@ -253,7 +254,8 @@ export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction)
 
         update = false;
         if (!error && (xmin >= 0) && (ymin >= 0) && (xmax >= 0) && (ymax >= 0)) {
-            weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
+            weightAbove = hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, ymin, false);
+            weightBelow = hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xmax, ymax, false);
             switch (direction) {
                 case "down":
                     if (vertical) {
@@ -314,7 +316,7 @@ export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction)
                     }
                     break;
                 case "left":
-                    if (!weight) {
+                    if (!weightAbove && !weightBelow) {
                         if (vertical) {
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
@@ -344,9 +346,8 @@ export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction)
                     }
                     break;
                 case "right":
-                    if (!weight) {
+                    if (!weightAbove && !weightBelow) {
                         if (vertical) {
-                            // Do not move when there is an object with weight on top
                             update = true;
                             for (let i = ymin; i <= ymax; i++) {
                                 const el = gameData[i][x + 2];
@@ -375,7 +376,7 @@ export function movePurpleBar(backData, gameData, gameInfo, gameVars, direction)
                     }
                     break;
                 case "up":
-                    if (!weight) {
+                    if (!weightAbove) {
                         if (vertical) {
                             update = false;
                             if (ymin > 0) {
