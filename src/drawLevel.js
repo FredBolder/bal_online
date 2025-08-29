@@ -24,7 +24,6 @@ function drawLevel(
   ctx,
   backData,
   gameData,
-  nicerGraphics,
   elements,
   status,
   gameInfo,
@@ -113,17 +112,6 @@ function drawLevel(
   }
 
   function drawAllRedFish() {
-    let d1 = 0;
-    let d2 = 0;
-    let d3 = 0;
-    let d4 = 0;
-    let d5 = 0;
-    let d6 = 0;
-    let pt1 = { x: 0, y: 0 };
-    let pt2 = { x: 0, y: 0 };
-    let pt3 = { x: 0, y: 0 };
-    let pt4 = { x: 0, y: 0 };
-
     for (let i = 0; i < gameInfo.redFish.length; i++) {
       const fish = gameInfo.redFish[i];
       xmin = fish.x * size1 + leftMargin;
@@ -134,49 +122,11 @@ function drawLevel(
       w2 = ymax - ymin + 1;
       xc = Math.round((xmax + xmin) / 2);
       yc = Math.round((ymax + ymin) / 2);
-      let mirror = 1;
       if (fish.direction == 4) {
-        mirror = -1;
-      }
-      d1 = (w1 / 2.3) * mirror;
-      d2 = w1 / 2.3;
-      d3 = 0;
-      d4 = (w1 / 3.5) * mirror;
-      d5 = w1 / 3;
-      d6 = w1 / 12;
-      pt1.x = Math.round(xc - d1);
-      pt1.y = Math.round(yc - d2);
-      pt2.x = Math.round(xc - d3);
-      pt2.y = Math.round(yc - d6);
-      pt3.x = Math.round(xc - d1);
-      pt3.y = Math.round(yc + d5);
-      pt4.x = Math.round(xc - d4);
-      pt4.y = Math.round(yc);
-      ctx.fillStyle = "red";
-      ctx.strokeStyle = "red";
-      ctx.beginPath();
-      ctx.moveTo(pt1.x, pt1.y);
-      ctx.lineTo(pt2.x, pt2.y);
-      ctx.lineTo(pt3.x, pt3.y);
-      ctx.lineTo(pt4.x, pt4.y);
-      ctx.lineTo(pt1.x, pt1.y);
-      ctx.fill();
-      ctx.stroke();
-      if (mirror === 1) {
-        d1 = w1 / 7;
+        ctx.drawImage(elements.elementRedFishLeft, xmin, ymin, w1, w2);
       } else {
-        d1 = w1 / 2.5;
+        ctx.drawImage(elements.elementRedFishRight, xmin, ymin, w1, w2);
       }
-      d2 = w1 / 3;
-      d3 = w1 / 3.2;
-      d4 = w1 / 3.8;
-      ctx.fillStyle = "red";
-      ctx.strokeStyle = "red";
-      ctx.beginPath();
-      // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
-      ctx.ellipse(xc - d1 + d3, yc - d2 + d4, d3, d4, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
     }
   }
 
@@ -229,52 +179,34 @@ function drawLevel(
     drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
   }
 
+
   function drawBlueBall() {
-    let d1 = 0;
-    let d2 = 0;
-    let d3 = 0;
-    let eye = 0;
-    let scaleFactor = gameInfo.hasPropeller ? 0.9 : 1;
-    if (nicerGraphics) {
-      if (gameInfo.hasDivingGlasses) {
-        ctx.drawImage(elements.elementDiving, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
-      } else {
-        if (status.gameOver) {
-          ctx.drawImage(elements.elementSad, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
-        } else {
-          ctx.drawImage(elements.elementHappy, xmin + ((1 - scaleFactor) * w1 * 0.5), ymin + ((1 - scaleFactor) * w2), w1 * scaleFactor, w2 * scaleFactor);
-        }
-      }
+    const scaleFactor = gameInfo.hasPropeller ? 0.9 : 1;
+    const offsetX = (1 - scaleFactor) * w1 * 0.5;
+    const offsetY = (1 - scaleFactor) * w2;
+    ctx.save();
+    // The rotation center point is always the canvas origin. 
+    // To change the center point, the canvas has to be moved by using the translate() method.
+    ctx.translate(Math.round(xc), Math.round(yc));
+    if (gameVars.gravity === "up") {
+      ctx.rotate(Math.PI);
+    }
+    ctx.translate(-Math.round(xc), -Math.round(yc));
+
+    if (gameInfo.hasDivingGlasses) {
+      ctx.drawImage(elements.elementDiving, xmin + offsetX, ymin + offsetY, w1 * scaleFactor, w2 * scaleFactor);
     } else {
-      drawFilledCircle(ctx, xc, yc + ((1 - scaleFactor) * w2 * 0.5), w1 * scaleFactor * 0.5, "blue");
-
-      eye = Math.round(w1 * scaleFactor / 20);
-      if (eye < 1) {
-        eye = 1;
-      }
-      d1 = size1 / 3.25;
-      d2 = Math.round(w1 * scaleFactor / 12);
-      drawFilledCircle(ctx, xmin + d1, yc - d2 + ((1 - scaleFactor) * w2 * 0.5), eye, "white");
-      drawFilledCircle(ctx, xmax - d1, yc - d2 + ((1 - scaleFactor) * w2 * 0.5), eye, "white");
-
-      d1 = w1 * scaleFactor / 3.5;
-      d2 = w1 * scaleFactor / 3;
-      d3 = w1 * scaleFactor / 2;
-      ctx.strokeStyle = "white";
-      ctx.beginPath();
       if (status.gameOver) {
-        ctx.arc(xc, yc + d3 + ((1 - scaleFactor) * w2 * 0.5), (w1 * scaleFactor) - (2 * d1), 1.25 * Math.PI, 1.75 * Math.PI, false);
+        ctx.drawImage(elements.elementSad, xmin + offsetX, ymin + offsetY, w1 * scaleFactor, w2 * scaleFactor);
       } else {
-        ctx.arc(xc, ymin + d2 + ((1 - scaleFactor) * w2 * 0.5), (w1 * scaleFactor) - (2 * d1), 0.25 * Math.PI, 0.75 * Math.PI, false);
-      }
-      ctx.stroke();
-      if (gameInfo.hasDivingGlasses) {
-        drawDivingGlasses("gray", scaleFactor);
+        ctx.drawImage(elements.elementHappy, xmin + offsetX, ymin + offsetY, w1 * scaleFactor, w2 * scaleFactor);
       }
     }
     if (gameInfo.hasPropeller) {
       drawPropeller(-w2 * 0.17);
     }
+
+    ctx.restore();
   }
 
   function drawBomb(x, y) {
@@ -757,8 +689,8 @@ function drawLevel(
 
   function drawGravityChangerDown(x, y) {
     const color = getFgcolor(x, y, "#464646");
-    const d1 = w1 * 0.07; 
-    const d2 = w1 * 0.15; 
+    const d1 = w1 * 0.07;
+    const d2 = w1 * 0.15;
     drawFilledBox(ctx, xmin, ymin, w1, w2, color);
     drawFilledCircle(ctx, xc, (yc + ymax) * 0.5, w1 * 0.25, "white");
     drawLine(ctx, xmin, ymax, xmax, ymax, "white");
@@ -769,8 +701,8 @@ function drawLevel(
 
   function drawGravityChangerUp(x, y) {
     const color = getFgcolor(x, y, "#464646");
-    const d1 = w1 * 0.07; 
-    const d2 = w1 * 0.15; 
+    const d1 = w1 * 0.07;
+    const d2 = w1 * 0.15;
     drawFilledBox(ctx, xmin, ymin, w1, w2, color);
     drawFilledCircle(ctx, xc, (ymin + yc) * 0.5, w1 * 0.25, "white");
     drawLine(ctx, xmin, ymax, xmax, ymax, "white");
@@ -780,16 +712,9 @@ function drawLevel(
   }
 
   function drawGrayBall(moves) {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementGray, xmin, ymin, w1, w2);
-      if (moves > 0) {
-        drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
-      }
-    } else {
-      drawBall("#464646");
-      if (moves > 0) {
-        drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
-      }
+    ctx.drawImage(elements.elementGray, xmin, ymin, w1, w2);
+    if (moves > 0) {
+      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
     }
   }
 
@@ -927,11 +852,7 @@ function drawLevel(
   }
 
   function drawLightBlueBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementLightBlue, xmin, ymin, w1, w2);
-    } else {
-      drawBall("deepskyblue");
-    }
+    ctx.drawImage(elements.elementLightBlue, xmin, ymin, w1, w2);
   }
 
   function drawLightBulb() {
@@ -1112,11 +1033,7 @@ function drawLevel(
   }
 
   function drawOrangeBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementOrange, xmin, ymin, w1, w2);
-    } else {
-      drawBall("orange");
-    }
+    ctx.drawImage(elements.elementOrange, xmin, ymin, w1, w2);
   }
 
   function drawPalmTreeTrunkPart() {
@@ -1324,11 +1241,7 @@ function drawLevel(
   }
 
   function drawPurpleBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementPurple, xmin, ymin, w1, w2);
-    } else {
-      drawBall("darkmagenta");
-    }
+    ctx.drawImage(elements.elementPurple, xmin, ymin, w1, w2);
   }
 
   function drawQuarterCircleStoneBottomLeft(x, y) {
@@ -1395,40 +1308,14 @@ function drawLevel(
   }
 
   function drawRedBall() {
-    let d1 = 0;
-    let d2 = 0;
-    let eye = 0;
-
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
-    } else {
-      drawBall("red");
-
-      eye = Math.round(w1 / 20);
-      if (eye < 1) {
-        eye = 1;
-      }
-      d1 = size1 / 3.25;
-      d2 = Math.round(w1 / 12);
-      drawFilledCircle(
-        ctx,
-        Math.round(xmin + d1),
-        Math.round(yc - d2),
-        eye,
-        "white"
-      );
-      drawFilledCircle(
-        ctx,
-        Math.round(xmax - d1),
-        Math.round(yc - d2),
-        eye,
-        "white"
-      );
-
-      d1 = w1 / 6;
-      d2 = w1 / 5;
-      drawLine(ctx, xc - d1, yc + d2, xc + d1, yc + d2, "white");
+    ctx.save();
+    ctx.translate(Math.round(xc), Math.round(yc));
+    if (gameVars.gravity === "up") {
+      ctx.rotate(Math.PI);
     }
+    ctx.translate(-Math.round(xc), -Math.round(yc));
+    ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
+    ctx.restore();
   }
 
   function drawSmallBlueBall() {
@@ -1436,11 +1323,7 @@ function drawLevel(
   }
 
   function drawSmallGreenBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementGreen, xmin + w1 * 0.25, ymin, w1 * 0.5, w2 * 0.5);
-    } else {
-      drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "green");
-    }
+    ctx.drawImage(elements.elementGreen, xmin + w1 * 0.25, ymin, w1 * 0.5, w2 * 0.5);
   }
 
   function drawSmallLadder() {
@@ -1718,19 +1601,11 @@ function drawLevel(
   }
 
   function drawWhiteBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
-    } else {
-      drawBall("white");
-    }
+    ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
   }
 
   function drawYellowBall() {
-    if (nicerGraphics) {
-      ctx.drawImage(elements.elementYellow, xmin, ymin, w1, w2);
-    } else {
-      drawBall("yellow");
-    }
+    ctx.drawImage(elements.elementYellow, xmin, ymin, w1, w2);
   }
 
   function drawYellowBallSynchroniser() {
@@ -2322,10 +2197,10 @@ function drawLevel(
           break;
         case 184:
           drawGravityChangerUp(col, row);
-          break;  
+          break;
         case 185:
           drawGravityChangerDown(col, row);
-          break;  
+          break;
         case 1000:
           // For manual only (empty)
           break;

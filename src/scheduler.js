@@ -42,11 +42,11 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         playSounds.push("magnet");
     }
 
-    if (checkDelays(gameData, gameInfo)) {
+    if (checkDelays(backData, gameData, gameInfo, gameVars)) {
         updateCanvas = true;
     }
 
-    if (checkMusicBoxes(gameData, gameInfo)) {
+    if (checkMusicBoxes(backData, gameData, gameInfo, gameVars)) {
         updateCanvas = true;
     }
 
@@ -62,7 +62,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     if (info.updated) {
         updateCanvas = true;
     }
-    info = checkDamagedStones(gameData, gameInfo);
+    info = checkDamagedStones(backData, gameData, gameInfo, gameVars);
     if (info.sound === 1) {
         playSounds.push("breaking1");
     }

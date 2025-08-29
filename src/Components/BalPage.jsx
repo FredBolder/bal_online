@@ -56,6 +56,8 @@ import imgMusicNote from "../Images/music_note.svg";
 import imgOrange from "../Images/orange_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
 import imgRed from "../Images/red_ball.svg";
+import imgRedFishLeft from "../Images/red_fish_left.png";
+import imgRedFishRight from "../Images/red_fish_right.png";
 import imgSlowDownYellow from "../Images/slow_down_yellow.png";
 import imgWhite from "../Images/white_ball.svg";
 import imgYellow from "../Images/yellow_ball.svg";
@@ -110,7 +112,6 @@ function BalPage() {
   const arrowButtonUpRight = useRef(null);
   const cbArrowButtons = useRef(null);
   const cbCreateLevel = useRef(null);
-  const cbGraphics = useRef(null);
   const cbMusic = useRef(null);
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
@@ -127,6 +128,8 @@ function BalPage() {
   const elementOrange = useRef(null);
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
+  const elementRedFishLeft = useRef(null);
+  const elementRedFishRight = useRef(null);
   const elementSad = useRef(null);
   const elementSlowDownYellow = useRef(null);
   const elementWhite = useRef(null);
@@ -755,7 +758,6 @@ function BalPage() {
       cbArrowButtons.current.checked,
       cbQuestions.current.checked,
       tryParseInt(cbMusic.current.value, 50),
-      cbGraphics.current.checked,
       tryParseInt(cbSound.current.value, 50)
     );
     saveSettings();
@@ -1186,10 +1188,12 @@ function BalPage() {
       case "gravityDown":
         gameVars.gravity = "down";
         updateGameButtonsDisplay();
+        info.update = true;
         break;
       case "gravityUp":
         gameVars.gravity = "up";
         updateGameButtonsDisplay();
+        info.update = true;
         break;
       case "rotateLeft":
         if (rotateGame(backData, gameData, gameInfo, true)) {
@@ -1396,7 +1400,6 @@ function BalPage() {
       cbCreateLevel.current.checked = false;
       cbQuestions.current.checked = getSettings().lessQuestions;
       cbMusic.current.value = getSettings().music.toString();
-      cbGraphics.current.checked = getSettings().nicerGraphics;
       cbSound.current.value = getSettings().sound.toString();
       gameVars.currentLevel = 200;
       loadProgress();
@@ -1484,6 +1487,8 @@ function BalPage() {
       elementOrange: elementOrange.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
+      elementRedFishLeft: elementRedFishLeft.current,
+      elementRedFishRight: elementRedFishRight.current,
       elementSad: elementSad.current,
       elementSlowDownYellow: elementSlowDownYellow.current,
       elementWhite: elementWhite.current,
@@ -1499,7 +1504,6 @@ function BalPage() {
       ctx,
       backDataMenu,
       gameDataMenu,
-      getSettings().nicerGraphics,
       elements,
       status,
       gameInfoMenu,
@@ -1533,6 +1537,8 @@ function BalPage() {
       elementOrange: elementOrange.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
+      elementRedFishLeft: elementRedFishLeft.current,
+      elementRedFishRight: elementRedFishRight.current,
       elementSad: elementSad.current,
       elementSlowDownYellow: elementSlowDownYellow.current,
       elementWhite: elementWhite.current,
@@ -1548,7 +1554,6 @@ function BalPage() {
       ctx,
       backData,
       gameData,
-      getSettings().nicerGraphics,
       elements,
       status,
       gameInfo,
@@ -2229,17 +2234,6 @@ function BalPage() {
                 <div>
                   <input
                     type="checkbox"
-                    id="graphics"
-                    ref={cbGraphics}
-                    name="graphics"
-                    value="graphics"
-                    onChange={handleChangeSettings}
-                  />
-                  <label htmlFor="graphics">Nicer graphics</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
                     id="questions"
                     ref={cbQuestions}
                     name="questions"
@@ -2325,6 +2319,12 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementRed} src={imgRed} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementRedFishLeft} src={imgRedFishLeft} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementRedFishRight} src={imgRedFishRight} />
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementGray} src={imgGray} />

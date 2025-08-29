@@ -1,12 +1,13 @@
-export function checkDamagedStones(arr, gameInfo) {
+import { hasWeightAbove, hasWeightBelow } from "./balUtils";
+
+export function checkDamagedStones(backData, gameData, gameInfo, gameVars) {
     let result = { update: false, sound: 0 };
-    let data = 0;
 
     for (let i = 0; i < gameInfo.damagedStones.length; i++) {
         const damagedStone = gameInfo.damagedStones[i];
         if (damagedStone.status !== -1) {
-            data = arr[damagedStone.y - 1][damagedStone.x];
-            if ([2, 4, 8, 40, 93, 94].includes(data)) {
+            if (hasWeightAbove(backData, gameData, gameInfo, gameVars, damagedStone.x, damagedStone.x, damagedStone.y, false) ||
+                hasWeightBelow(backData, gameData, gameInfo, gameVars, damagedStone.x, damagedStone.x, damagedStone.y, false)) {
                 damagedStone.status++;
                 if ((damagedStone.status === 5) && (result.sound === 0)) {
                     result.sound = 1;
@@ -16,7 +17,7 @@ export function checkDamagedStones(arr, gameInfo) {
                 }
                 if (damagedStone.status >= 12) {
                     damagedStone.status = -1;
-                    arr[damagedStone.y][damagedStone.x] = 0;
+                    gameData[damagedStone.y][damagedStone.x] = 0;
                     result.update = true;
                 }
             } else {

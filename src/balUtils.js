@@ -1817,6 +1817,7 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 }
 
 function take(gameData, gameInfo, result, x, y) {
+  let idx = -1;
   switch (gameData[y][x]) {
     case 0:
       result.sound = "";
@@ -1826,6 +1827,12 @@ function take(gameData, gameInfo, result, x, y) {
       result.eating = true;
       break;
     case 12:
+      idx = findElementByCoordinate(x, y, gameInfo.damagedStones);
+      if (idx >= 0) {
+        gameInfo.damagedStones[idx].status = -1;
+      }
+      result.sound = "pickaxe";
+      break;
     case 35:
       result.sound = "pickaxe";
       break;
@@ -2391,7 +2398,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
           ((i !== 0) || ((![25, 137, 90].includes(backData[y + dy1][x])) && (![25, 137, 90].includes(backData[y][x])))) &&
           (![80].includes(backData[y + dy2][x]))) {
           if (canBeTakenOrIsEmpty().includes(gameData[y + dy2][x]) ||
-            ((i !== 0) && [12, 35].includes(gameData[y - 1][x]) && gameInfo.hasPickaxe)
+            ((i !== 0) && [12, 35].includes(gameData[y + dy1][x]) && gameInfo.hasPickaxe)
           ) {
             result.sound = "take";
             take(gameData, gameInfo, result, x, y + dy2);
@@ -2764,6 +2771,12 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       result.player = true;
     }
     if (!result.player && ((gameData[y + dy1][x] === 12) || (gameData[y + dy1][x] === 35)) && gameInfo.hasPickaxe) {
+      if (gameData[y + dy1][x] === 12) {
+          idx = findElementByCoordinate(x, y + dy1, gameInfo.damagedStones);
+          if (idx >= 0) {
+            gameInfo.damagedStones[idx].status = -1;
+          }
+      }
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy1;
