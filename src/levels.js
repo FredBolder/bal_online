@@ -22,40 +22,15 @@ const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3014;
 const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3101;
+const hiddenMiniSeries1End = 3102;
 
 export function checkLevel(data, settings) {
-  // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable
-  // number of parameters.
-  const settingsInfo = [
-    { name: "$addnotes", params: 0, xy: true },
-    { name: "$background", params: 5, xy: true },
-    { name: "$bgcolor", params: 5, xy: true },
-    { name: "$conveyorbeltmode", params: 3, xy: true },
-    { name: "$direction", params: 3, xy: true },
-    { name: "$fgcolor", params: 5, xy: true },
-    { name: "$gameticks", params: 2, xy: false },
-    { name: "$gameticksxy", params: 3, xy: true },
-    { name: "$group", params: 3, xy: true },
-    { name: "$hint", params: 0, xy: false },
-    { name: "$instrument", params: 4, xy: true },
-    { name: "$inverted", params: 3, xy: true },
-    { name: "$musicbox", params: 4, xy: true },
-    { name: "$notes", params: 0, xy: true },
-    { name: "$pistonmode", params: 3, xy: true },
-    { name: "$sound", params: 2, xy: false },
-    { name: "$startlevelmessage", params: 0, xy: false },
-    { name: "$sticky", params: 3, xy: true }
-  ];
+  let checkSettingsResult = "";
   let differentLength = false;
-  let gameTicks = 0;
-  let group = 0;
   let foundGravityChanger = false;
   let foundLava = false;
   let foundWater = false;
-  let info = null;
   let msg = "";
-  let msgExtra = "";
   let nBlueBalls = 0;
   let nDetonators = 0;
   let nGameRotator = 0;
@@ -65,13 +40,6 @@ export function checkLevel(data, settings) {
   let nSelfDestructingTeleports = 0;
   let nTeleports = 0;
   let nTravelgates = 0;
-  let p1 = -1;
-  let validXY = false;
-  let volume = 0;
-  let h = -1;
-  let w = -1;
-  let x = -1;
-  let y = -1;
 
   // Check Data
   if (data.length > 0) {
@@ -173,6 +141,51 @@ export function checkLevel(data, settings) {
   }
 
   // Check Settings
+  checkSettingsResult = checkSettings(data, settings);
+  msg += checkSettingsResult;
+
+  return msg;
+}
+
+export function checkSettings(data, settings) {
+  // This function works with code 1 and code 2, so data with characters and data with numbers
+
+  // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable
+  // number of parameters.
+  const settingsInfo = [
+    { name: "$addnotes", params: 0, xy: true },
+    { name: "$background", params: 5, xy: true },
+    { name: "$bgcolor", params: 5, xy: true },
+    { name: "$conveyorbeltmode", params: 3, xy: true },
+    { name: "$direction", params: 3, xy: true },
+    { name: "$fgcolor", params: 5, xy: true },
+    { name: "$gameticks", params: 2, xy: false },
+    { name: "$gameticksxy", params: 3, xy: true },
+    { name: "$group", params: 3, xy: true },
+    { name: "$hint", params: 0, xy: false },
+    { name: "$instrument", params: 4, xy: true },
+    { name: "$inverted", params: 3, xy: true },
+    { name: "$musicbox", params: 4, xy: true },
+    { name: "$notes", params: 0, xy: true },
+    { name: "$pistonmode", params: 3, xy: true },
+    { name: "$sound", params: 2, xy: false },
+    { name: "$startlevelmessage", params: 0, xy: false },
+    { name: "$sticky", params: 3, xy: true }
+  ];
+
+  let gameTicks = 0;
+  let group = 0;
+  let info = null;
+  let msg = "";
+  let msgExtra = "";
+  let p1 = -1;
+  let validXY = false;
+  let volume = 0;
+  let h = -1;
+  let w = -1;
+  let x = -1;
+  let y = -1;
+
   for (let i = 0; i < settings.length; i++) {
     const setting = settings[i];
     p1 = setting.indexOf(":");
@@ -211,21 +224,20 @@ export function checkLevel(data, settings) {
               if (!conveyorBeltModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid conveyor mode ${values[2]}.\n`;
               }
-              if (validXY && (data[y][x] !== "{")) {
-                console.log(data[y][x]);
+              if (validXY && !["{", 171].includes(data[y][x])) {
                 msg += `${settingNr(i)}No conveyor found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$direction":
               switch (data[y][x]) {
                 case "{":
-                case "Ø":
-                case "}":
+                case "171":
                   if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
                 case "η":
+                case "178":
                   if (!moversDirections().includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
@@ -245,7 +257,7 @@ export function checkLevel(data, settings) {
               }
               break;
             case "$gameticksxy":
-              if (validXY && ![")"].includes(data[y][x])) {
+              if (validXY && ![")", 167].includes(data[y][x])) {
                 msg += `${settingNr(i)}No delay found at the coordinates ${x}, ${y}.\n`;
               }
               gameTicks = tryParseInt(values[2], -1);
@@ -268,7 +280,7 @@ export function checkLevel(data, settings) {
               if ((volume < 0) || (volume > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[3]} for volume.\n`;
               }
-              if (validXY && !["M"].includes(data[y][x])) {
+              if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -280,7 +292,7 @@ export function checkLevel(data, settings) {
               if ((gameTicks < 1) || (gameTicks > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[3]} for delay.\n`;
               }
-              if (validXY && !["M"].includes(data[y][x])) {
+              if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -288,7 +300,7 @@ export function checkLevel(data, settings) {
               if (!["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid piston mode ${values[2]}.\n`;
               }
-              if (validXY && !["Ù", "Ì", "Ö", "Ë"].includes(data[y][x])) {
+              if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -302,7 +314,7 @@ export function checkLevel(data, settings) {
               if (!["yes", "no"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}yes or no expected.\n`;
               }
-              if (validXY && !["Ù", "Ì", "Ö", "Ë"].includes(data[y][x])) {
+              if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -311,7 +323,7 @@ export function checkLevel(data, settings) {
               if (values.length < 3) {
                 msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
               }
-              if (validXY && !["M"].includes(data[y][x])) {
+              if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -394,7 +406,6 @@ export function checkLevel(data, settings) {
       msg += `${settingNr(i)}Colon (:) expected.\n`;
     }
   }
-
   return msg;
 }
 

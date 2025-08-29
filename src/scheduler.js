@@ -124,7 +124,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
         }
         gameVars.elevatorCounter++;
 
-        if (checkElevatorInOuts(gameData, gameInfo)) {
+        if (checkElevatorInOuts(gameData, gameInfo, gameVars)) {
             updateCanvas = true;
         }
 

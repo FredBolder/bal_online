@@ -21,20 +21,27 @@ function moveableByElevator(gameInfo, n) {
   return result;
 }
 
-export function checkElevatorInOuts(gameData, gameInfo) {
+export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
   let data1 = 0;
   let data2 = 0;
   let data3 = 0;
   let data4 = 0;
   let data5 = 0;
+  let dy = 0;
   let updated = false;
+
+  if (gameVars.gravity === "down") {
+    dy = -1;
+  } else {
+    dy = 1;
+  }
 
   for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
     const elevatorInOut = gameInfo.elevatorInOuts[i];
     data1 = gameData[elevatorInOut.y][elevatorInOut.x + 1];
-    data2 = gameData[elevatorInOut.y - 1][elevatorInOut.x];
-    data3 = gameData[elevatorInOut.y - 1][elevatorInOut.x + 1];
-    data4 = gameData[elevatorInOut.y - 1][elevatorInOut.x - 1];
+    data2 = gameData[elevatorInOut.y + dy][elevatorInOut.x];
+    data3 = gameData[elevatorInOut.y + dy][elevatorInOut.x + 1];
+    data4 = gameData[elevatorInOut.y + dy][elevatorInOut.x - 1];
     data5 = gameData[elevatorInOut.y][elevatorInOut.x - 1];
     elevatorInOut.player = false;
     switch (elevatorInOut.status) {
@@ -43,13 +50,13 @@ export function checkElevatorInOuts(gameData, gameInfo) {
           if (moveableByElevator(gameInfo, data2) && (data3 === 0) && (elevatorInOut.status === 0)) {
             // Enter from the left
             updated = true;
-            moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x + 1, elevatorInOut.y - 1);
+            moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy, elevatorInOut.x + 1, elevatorInOut.y + dy);
             elevatorInOut.status = 10;
           }
           if (moveableByElevator(gameInfo, data3) && (data2 === 0) && (elevatorInOut.status === 0)) {
             // Exit to the left
             updated = true;
-            moveObject(gameData, gameInfo, elevatorInOut.x + 1, elevatorInOut.y - 1, elevatorInOut.x, elevatorInOut.y - 1);
+            moveObject(gameData, gameInfo, elevatorInOut.x + 1, elevatorInOut.y + dy, elevatorInOut.x, elevatorInOut.y + dy);
             elevatorInOut.status = 1;
           }
         }
@@ -57,13 +64,13 @@ export function checkElevatorInOuts(gameData, gameInfo) {
           if (moveableByElevator(gameInfo, data2) && (data4 === 0) && (elevatorInOut.status === 0)) {
             // Enter from the right
             updated = true;
-            moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x - 1, elevatorInOut.y - 1);
+            moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy, elevatorInOut.x - 1, elevatorInOut.y + dy);
             elevatorInOut.status = 10;
           }
           if (moveableByElevator(gameInfo, data4) && (data2 === 0) && (elevatorInOut.status === 0)) {
             // Exit to the right
             updated = true;
-            moveObject(gameData, gameInfo, elevatorInOut.x - 1, elevatorInOut.y - 1, elevatorInOut.x, elevatorInOut.y - 1);
+            moveObject(gameData, gameInfo, elevatorInOut.x - 1, elevatorInOut.y + dy, elevatorInOut.x, elevatorInOut.y + dy);
             elevatorInOut.status = 2;
           }
         }
@@ -72,7 +79,7 @@ export function checkElevatorInOuts(gameData, gameInfo) {
         if (data4 === 0) {
           // Further to the left
           updated = true;
-          moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x - 1, elevatorInOut.y - 1);
+          moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy, elevatorInOut.x - 1, elevatorInOut.y + dy);
         }
         elevatorInOut.status = 10;
         break;
@@ -80,7 +87,7 @@ export function checkElevatorInOuts(gameData, gameInfo) {
         if (data3 === 0) {
           // Further to the right
           updated = true;
-          moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y - 1, elevatorInOut.x + 1, elevatorInOut.y - 1);
+          moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy, elevatorInOut.x + 1, elevatorInOut.y + dy);
         }
         elevatorInOut.status = 10;
         break;

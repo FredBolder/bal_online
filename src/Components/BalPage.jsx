@@ -35,7 +35,7 @@ import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { globalVars } from "../glob.js";
-import { fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
+import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { gameScheduler } from "../scheduler.js";
@@ -81,7 +81,7 @@ let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelObject = -1;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -496,12 +496,18 @@ function BalPage() {
   }
 
   async function clickLevelSetting() {
+    let checkSettingsResult = "";
     let setting = null;
 
     setting = await showInput("Level setting", "Enter a setting (example: $gameticks: conveyorbelt, 10).", "");
     if (setting !== null) {
+      checkSettingsResult = checkSettings(gameData, [setting]);
+      if (checkSettingsResult === "") {
       loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
       updateGameCanvas();
+      } else {
+        showMessage("Error", checkSettingsResult);
+      }
     }
   }
 
@@ -1404,7 +1410,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 426;
+        gameVars.currentLevel = 3102;
       }
       initLevel(gameVars.currentLevel);
     }
