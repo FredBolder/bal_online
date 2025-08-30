@@ -390,7 +390,6 @@ describe("Yellow bar", () => {
         expect(JSON.stringify(gameInfo01n.yellowBars)).toBe(JSON.stringify([{ x: 3, y: 3, direction: "none" }]));
     });
 
-
     // ***** Vertical yellow bar *****
 
     let gameInfo02a = {
@@ -822,6 +821,41 @@ describe("Yellow bar", () => {
         expect(JSON.stringify(gameInfo03c.yellowBars)).toBe(JSON.stringify([{ x: 1, y: 3, direction: "none" }]));
     });
 
+    let gameInfo03d = {
+        ...defaultGameInfo,
+        blueBall: { x: 6, y: 2 },
+        yellowBars: [{ x: 3, y: 3, direction: "left" }],
+    };
+    let input03d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 4, 2, 0, 1],
+        [1, 0, 0, 121, 123, 123, 122, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput03d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 4, 2, 0, 0, 1],
+        [1, 0, 121, 123, 123, 122, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info03d = moveYellowBars(backData, input03d, gameInfo03d, { ...defaultGameVars });
+    it("Horizontal yellow bars D", () => {
+        expect(JSON.stringify(input03d)).toBe(JSON.stringify(expectedOutput03d));
+    });
+    it("Horizontal yellow bars D info", () => {
+        expect(info03d).toBe(true);
+    });
+    it("Horizontal yellow bars D yellowBars", () => {
+        expect(JSON.stringify(gameInfo03d.yellowBars)).toBe(JSON.stringify([{ x: 2, y: 3, direction: "left" }]));
+    });
+    it("Horizontal yellow bars D blueBall", () => {
+        expect(JSON.stringify(gameInfo03d.blueBall)).toBe(JSON.stringify({ x: 5, y: 2 }));
+    });
+
     // ***** Vertical yellow bars *****
 
     let gameInfo04a = {
@@ -862,6 +896,44 @@ describe("Yellow bar", () => {
         expect(JSON.stringify(gameInfo04a.yellowBars)).toBe(JSON.stringify([{ x: 2, y: 2, direction: "left" }, { x: 6, y: 2, direction: "up" }]));
     });
 
+    // GRAVITY UP
+
+    // ***** Horizontal yellow bars *****
+
+    let gameInfo05a = {
+        ...defaultGameInfo,
+        blueBall: { x: 6, y: 3 },
+        yellowBars: [{ x: 3, y: 2, direction: "left" }],
+    };
+    let input05a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 121, 123, 123, 122, 0, 1],
+        [1, 0, 0, 0, 0, 4, 2, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput05a = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 121, 123, 123, 122, 0, 0, 1],
+        [1, 0, 0, 0, 4, 2, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let info05a = moveYellowBars(backData, input05a, gameInfo05a, { ...defaultGameVars, gravity: "up" });
+    it("Horizontal yellow bars Gravity Up A", () => {
+        expect(JSON.stringify(input05a)).toBe(JSON.stringify(expectedOutput05a));
+    });
+    it("Horizontal yellow bars Gravity Up A info", () => {
+        expect(info05a).toBe(true);
+    });
+    it("Horizontal yellow bars Gravity Up A yellowBars", () => {
+        expect(JSON.stringify(gameInfo05a.yellowBars)).toBe(JSON.stringify([{ x: 2, y: 2, direction: "left" }]));
+    });
+    it("Horizontal yellow bars Gravity Up A blueBall", () => {
+        expect(JSON.stringify(gameInfo05a.blueBall)).toBe(JSON.stringify({ x: 5, y: 3 }));
+    });
 
 
     // Insert new tests here

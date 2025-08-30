@@ -1,4 +1,4 @@
-import { findElementByCoordinate, hasWeightAbove, hasWeightBelow, updateObject } from "./balUtils.js";
+import { findElementByCoordinate, hasWeightAbove, hasWeightBelow, moveObject, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir, index, pusher = false) {
@@ -449,6 +449,20 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                                         gameData[ymin][i] = gameData[ymin][i + 1];
                                     }
                                     gameData[ymin][xmax] = 0;
+                                    for (let i = xmin - 1; i < xmax; i++) {
+                                        // Move objects with weight that are on top
+                                        if ((gameData[ymin - 1][i] === 0) &&
+                                            hasWeightAbove(backData, gameData, gameInfo, gameVars, i + 1, i + 1, ymin, false) &&
+                                            !hasForceRight(gameData, gameInfo, i, ymin - 1)) {
+                                            moveObject(gameData, gameInfo, i + 1, ymin - 1, i, ymin - 1);
+                                        }
+                                        // Move objects with weight that are on the bottom
+                                        if ((gameData[ymax + 1][i] === 0) &&
+                                            hasWeightBelow(backData, gameData, gameInfo, gameVars, i + 1, i + 1, ymax, false) &&
+                                            !hasForceRight(gameData, gameInfo, i, ymax + 1)) {
+                                            moveObject(gameData, gameInfo, i + 1, ymax + 1, i, ymax + 1);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -484,6 +498,20 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
                                         gameData[ymin][i + 1] = gameData[ymin][i];
                                     }
                                     gameData[ymin][xmin] = 0;
+                                    for (let i = xmax + 1; i > xmin; i--) {
+                                        // Move objects with weight that are on top
+                                        if ((gameData[ymin - 1][i] === 0) &&
+                                            hasWeightAbove(backData, gameData, gameInfo, gameVars, i - 1, i - 1, ymin, false) &&
+                                            !hasForceRight(gameData, gameInfo, i, ymin - 1)) {
+                                            moveObject(gameData, gameInfo, i - 1, ymin - 1, i, ymin - 1);
+                                        }
+                                        // Move objects with weight that are on the bottom
+                                        if ((gameData[ymax + 1][i] === 0) &&
+                                            hasWeightBelow(backData, gameData, gameInfo, gameVars, i - 1, i - 1, ymax, false) &&
+                                            !hasForceRight(gameData, gameInfo, i, ymax + 1)) {
+                                            moveObject(gameData, gameInfo, i - 1, ymax + 1, i, ymax + 1);
+                                        }
+                                    }
                                 }
                             }
                         }
