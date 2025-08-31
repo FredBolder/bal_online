@@ -517,7 +517,7 @@ function BalPage() {
     const value = await showSelect(
       "Load level",
       "Load the first level of series:",
-      ["1", "2", "3", "4", "Small", "Easy", "Extreme"],
+      ["1", "2", "3", "4", "Small", "Easy", "Extreme", "Chronia Polla"],
       0
     );
 
@@ -543,6 +543,9 @@ function BalPage() {
           break;
         case "Extreme":
           level = 901;
+          break;
+        case "Chronia Polla":
+          level = 990;
           break;
         default:
           level = 200;
@@ -1410,7 +1413,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 223;
+        gameVars.currentLevel = 990;
       }
       initLevel(gameVars.currentLevel);
     }

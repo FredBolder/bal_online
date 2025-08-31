@@ -1,5 +1,6 @@
 
 import { inWater } from "./balUtils.js";
+import { fishIsCloseToBlueBall } from "./fish.js";
 import { globalVars } from "./glob.js";
 import { electricityTarget } from "./electricity.js";
 import { checkRedBalls } from "./redBalls.js";
@@ -52,15 +53,8 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
         }
     }
     if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && (gameInfo.redFish.length > 0)) {
-        for (let i = 0; i < gameInfo.redFish.length && !gameVars.gameOver; i++) {
-            const fish = gameInfo.redFish[i];
-            if (!fish.isDead &&
-                (((Math.abs(gameInfo.blueBall.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall.y - fish.y) < 2)) ||
-                    ((Math.abs(gameInfo.blueBall1.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall1.y - fish.y) < 2)) ||
-                    (gameInfo.twoBlue && (Math.abs(gameInfo.blueBall2.x - fish.x) < 2) && (Math.abs(gameInfo.blueBall2.y - fish.y) < 2)))
-            ) {
-                gameVars.gameOver = true;
-            }
+        if (fishIsCloseToBlueBall(gameInfo)) {
+            gameVars.gameOver = true;
         }
     }
     if (checkSpikes(backData, gameData, gameInfo, gameVars)) {

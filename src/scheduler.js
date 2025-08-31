@@ -92,7 +92,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
         if (gameVars.fishCounter >= gameVars.fishCountTo) {
             gameVars.fishCounter = 0;
-            moveFish(backData, gameData, gameInfo, gameInfo.blueBall.x, gameInfo.blueBall.y);
+            moveFish(backData, gameData, gameInfo);
             updateCanvas = true;
         }
         gameVars.fishCounter++;

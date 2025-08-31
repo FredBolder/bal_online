@@ -803,27 +803,6 @@ export function findElementByCoordinate(x, y, elements) {
   return result;
 }
 
-export function freeToSwim(x1, x2, y, gameData) {
-  let found = false;
-
-  if (y >= 0 && y < gameData.length && x1 !== x2) {
-    if (x2 > x1) {
-      for (let i = x1 + 1; i < x2; i++) {
-        if (gameData[y][i] !== 0) {
-          found = true;
-        }
-      }
-    } else {
-      for (let i = x2 + 1; i < x1; i++) {
-        if (gameData[y][i] !== 0) {
-          found = true;
-        }
-      }
-    }
-  }
-  return !found;
-}
-
 export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xmax, y, pushingDown) {
   const gravityDown = (gameVars.gravity === "down");
   let result = false;

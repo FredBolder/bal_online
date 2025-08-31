@@ -16,13 +16,13 @@ const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
 const seriesExtremeEnd = 904;
 const seriesChoniaPollaStart = 990;
-const seriesChoniaPollaEnd = 991;
+const seriesChoniaPollaEnd = 993;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
-const seriesEasyEnd = 3014;
+const seriesEasyEnd = 3015;
 const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3102;
+const hiddenMiniSeries1End = 3103;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";

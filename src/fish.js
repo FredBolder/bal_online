@@ -1,11 +1,57 @@
-import { freeToSwim, inWater } from "./balUtils.js";
+import { inWater } from "./balUtils.js";
 
-export function moveFish(backData, gameData, gameInfo, x, y) {
+export function fishIsCloseToBlueBall(gameInfo) {
+  let result = false;
+
+  for (let i = 0; i < gameInfo.redFish.length && !result; i++) {
+    const fish = gameInfo.redFish[i];
+    if (!fish.isDead) {
+      if (!result && (fish.y === gameInfo.blueBall1.y) && (Math.abs(fish.x - gameInfo.blueBall1.x) <= 1)) {
+        result = true;
+      }
+      if (!result && (fish.x === gameInfo.blueBall1.x) && (Math.abs(fish.y - gameInfo.blueBall1.y) <= 1)) {
+        result = true;
+      }
+      if (!result && gameInfo.twoBlue && (fish.y === gameInfo.blueBall2.y) && (Math.abs(fish.x - gameInfo.blueBall2.x) <= 1)) {
+        result = true;
+      }
+      if (!result && gameInfo.twoBlue && (fish.x === gameInfo.blueBall2.x) && (Math.abs(fish.y - gameInfo.blueBall2.y) <= 1)) {
+        result = true;
+      }
+    }
+  }
+  return result;
+}
+
+function freeToSwim(x1, x2, y, gameData) {
+  let found = false;
+
+  if (y >= 0 && y < gameData.length && x1 !== x2) {
+    if (x2 > x1) {
+      for (let i = x1 + 1; i < x2; i++) {
+        if (gameData[y][i] !== 0) {
+          found = true;
+        }
+      }
+    } else {
+      for (let i = x2 + 1; i < x1; i++) {
+        if (gameData[y][i] !== 0) {
+          found = true;
+        }
+      }
+    }
+  }
+  return !found;
+}
+
+export function moveFish(backData, gameData, gameInfo) {
   let attack = false;
   let changed = false;
   let down = false;
   let up = false;
   let upOrDown = false;
+  const x = gameInfo.blueBall.x;
+  const y = gameInfo.blueBall.y;
 
   attack = inWater(x, y, backData);
   for (let i = 0; i < gameInfo.redFish.length; i++) {
