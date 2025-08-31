@@ -22,7 +22,7 @@ const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3015;
 const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3103;
+const hiddenMiniSeries1End = 3104;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
@@ -162,6 +162,7 @@ export function checkSettings(data, settings) {
     { name: "$gameticks", params: 2, xy: false },
     { name: "$gameticksxy", params: 3, xy: true },
     { name: "$group", params: 3, xy: true },
+    { name: "$has", params: 1, xy: false },
     { name: "$hint", params: 0, xy: false },
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
@@ -269,6 +270,11 @@ export function checkSettings(data, settings) {
               group = tryParseInt(values[2], -1);
               if ((group < 1) || (group > 32)) {
                 msg += `${settingNr(i)}Invalid value ${values[2]} for group.\n`;
+              }
+              break;
+            case "$has":
+              if (!["coilspring", "divingglasses", "key", "ladder", "pickaxe", "propeller", "telekineticpower", "weakstone"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
               break;
             case "$instrument":
@@ -835,6 +841,36 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             if (validXY && (group >= 1) && (group <= 32)) {
               changeGroup(gameInfo, x, y, group);
             }
+          }
+          break;
+        case "$has":
+          switch (valuesLowerCase[0]) {
+            case "coilspring":
+              gameInfo.hasCoilSpring = true;
+              break;
+            case "divingglasses":
+              gameInfo.hasDivingGlasses = true;
+              break;
+            case "key":
+              gameInfo.hasKey = true;
+              break;
+            case "ladder":
+              gameInfo.hasLadder = true;
+              break;
+            case "pickaxe":
+              gameInfo.hasPickaxe = true;
+              break;
+            case "propeller":
+              gameInfo.hasPropeller = true;
+              break;
+            case "telekineticpower":
+              gameInfo.hasTelekineticPower = true;
+              break;
+            case "weakstone":
+              gameInfo.hasWeakStone = true;
+              break;
+            default:
+              break;
           }
           break;
         case "$hint":

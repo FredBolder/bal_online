@@ -107,6 +107,62 @@ describe("Rotate game", () => {
         );
     });
 
+    initGameInfo(defaultGameInfo);
+    let inputBack01c = zeroArray(6, 6);
+    let input01c = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 3, 1],
+        [1, 0, 0, 0, 0, 1],
+        [1, 9, 0, 0, 0, 1],
+        [1, 115, 2, 116, 0, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let expectedOutput01c = [
+        [1, 1, 1, 1, 1, 1],
+        [1, 115, 9, 0, 0, 1],
+        [1, 2, 0, 0, 0, 1],
+        [1, 116, 0, 0, 0, 1],
+        [1, 0, 0, 0, 3, 1],
+        [1, 1, 1, 1, 1, 1],
+    ];
+    let gameInfo01c = {
+        ...defaultGameInfo,
+        blueBall1: { x: 2, y: 4 },
+        greenBalls: 1,
+        yellowBalls: [{ x: 1, y: 3, direction: "none" }],
+        yellowBallPushers: [{ x: 1, y: 4 }],
+        yellowBallPushersTriggers: [{ x: 3, y: 4, pressed: false }],
+    };
+    gameInfo01c.blueBall = gameInfo01c.blueBall1;
+    let info01c = rotateGame(inputBack01c, input01c, gameInfo01c);
+    it("rotateGame right C rotated", () => {
+        expect(info01c).toBe(true);
+    });
+    it("rotateGame right C game array", () => {
+        expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
+    });
+    it("rotateGame right C blueBall", () => {
+        expect(JSON.stringify(gameInfo01c.blueBall)).toBe(
+            JSON.stringify({ x: 1, y: 2 })
+        );
+    });
+    it("rotateGame right C yellowBalls", () => {
+        expect(JSON.stringify(gameInfo01c.yellowBalls)).toBe(
+            JSON.stringify([{ x: 2, y: 1, direction: "none" }])
+        );
+    });
+    it("rotateGame right C yellowBallPushers", () => {
+        expect(JSON.stringify(gameInfo01c.yellowBallPushers)).toBe(
+            JSON.stringify([{ x: 1, y: 1 }])
+        );
+    });
+    it("rotateGame right C yellowBallPushersTriggers", () => {
+        expect(JSON.stringify(gameInfo01c.yellowBallPushersTriggers)).toBe(
+            JSON.stringify([{ x: 1, y: 3, pressed: false }])
+        );
+    });
+
+
     // ROTATE LEFT
 
     initGameInfo(defaultGameInfo);
