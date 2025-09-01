@@ -29,7 +29,7 @@ export const ModalProvider = ({ children }) => {
 
   const showMessage = (title, message) => {
     return showModal(title, ({ close }) => (
-      <div tabIndex={0} autoFocus onKeyDown={(e) => e.key === "Enter" && close(true)}>
+      <div tabIndex={0} onKeyDown={(e) => e.key === "Enter" && close(true)}>
         <p>
           {message.split('\n').map((line, index) => (
             <React.Fragment key={index}>
@@ -39,7 +39,7 @@ export const ModalProvider = ({ children }) => {
           ))}
         </p>
         <div className="modal-button-container">
-          <button className="modal-button" onClick={() => close(true)}>OK</button>
+          <button autoFocus className="modal-button" onClick={() => close(true)}>OK</button>
         </div>
       </div>
     ));

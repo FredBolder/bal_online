@@ -22,7 +22,7 @@ const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3015;
 const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3104;
+const hiddenMiniSeries1End = 3105;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
