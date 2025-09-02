@@ -87,7 +87,8 @@ export function getGameInfo(backData, gameData) {
                         x: j,
                         y: i,
                         selfDestructing: gameData[i][j] === 92,
-                        color: "white"
+                        color: "white",
+                        group: 1
                     };
                     result.teleports.push(teleport);
                     break;
@@ -255,7 +256,8 @@ export function getGameInfo(backData, gameData) {
                         x: j,
                         y: i,
                         selfDestructing: true,
-                        color: getPurpleTeleportColor()
+                        color: getPurpleTeleportColor(),
+                        group: 1
                     };
                     result.teleports.push(teleport);
                     break;

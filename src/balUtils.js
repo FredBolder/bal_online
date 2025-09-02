@@ -97,6 +97,12 @@ export function changeGroup(gameInfo, x, y, group) {
       gameInfo.pistons[idx].group = group;
     }
   }
+  if (idx === -1) {
+    idx = findElementByCoordinate(x, y, gameInfo.teleports);
+    if (idx >= 0) {
+      gameInfo.teleports[idx].group = group;
+    }
+  }
   return idx;
 }
 

@@ -131,24 +131,29 @@ function drawLevel(
   }
 
   function drawAllTeleports() {
-    ctx.lineWidth = 3;
     for (let i = 0; i < gameInfo.teleports.length; i++) {
-      if (gameInfo.teleports[i].selfDestructing) {
+      ctx.lineWidth = 3;
+      const teleport = gameInfo.teleports[i];
+      console.log(teleport);
+      const xmin = teleport.x * size1 + leftMargin;
+      const xmax = xmin + size1 - 1;
+      const ymin = teleport.y * size1 + topMargin;
+      const ymax = ymin + size1 - 1;
+      const xc = Math.round((xmax + xmin) / 2);
+      const yc = Math.round((ymax + ymin) / 2);
+
+      if (teleport.selfDestructing) {
         ctx.setLineDash([2, 2]);
       } else {
         ctx.setLineDash([]);
       }
-      drawBox(
-        ctx,
-        gameInfo.teleports[i].x * size1 + leftMargin + 1,
-        gameInfo.teleports[i].y * size1 + topMargin + 1,
-        size1 - 2,
-        size1 - 2,
-        gameInfo.teleports[i].color
-      );
+      drawBox(ctx, xmin + 1, ymin + 1, size1 - 2, size1 - 2, teleport.color);
+      ctx.setLineDash([]);
+      ctx.lineWidth = 1;
+      if ([0, 31, 92].includes(gameData[teleport.y][teleport.x])) {
+        drawText(ctx, xc, yc, teleport.group.toString(), "middle", teleport.color, w2 * 0.7, w1 * 0.8, teleport.color, 1);
+      }
     }
-    ctx.setLineDash([]);
-    ctx.lineWidth = 1;
   }
 
   function drawBall(color) {

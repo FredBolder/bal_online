@@ -10,70 +10,96 @@ describe("Teleports", () => {
     initGameVars(defaultGameVars);
 
     let teleports01 = [
-        { x: 2, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 2, selfDestructing: false, color: "white" },
-        { x: 2, y: 4, selfDestructing: true, color: "white" },
-        { x: 4, y: 4, selfDestructing: true, color: "white" },
-        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
-        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 10, selfDestructing: false, color: "white", group: 2 },
+        { x: 4, y: 10, selfDestructing: false, color: "white", group: 2 },
     ];
     let gameInfo01a = { ...defaultGameInfo, teleports: [...teleports01] };
     let expectedOutput01a = [
-        { x: 2, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 2, selfDestructing: false, color: "white" },
-        { x: 2, y: 4, selfDestructing: true, color: "white" },
-        { x: 4, y: 4, selfDestructing: true, color: "white" },
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 10, selfDestructing: false, color: "white", group: 2 },
+        { x: 4, y: 10, selfDestructing: false, color: "white", group: 2 },
     ];
-    deleteTeleports(getPurpleTeleportColor(), true, gameInfo01a);
+    deleteTeleports(getPurpleTeleportColor(), true, 1, gameInfo01a);
     it("deleteTeleports A", () => {
         expect(JSON.stringify(gameInfo01a.teleports)).toBe(JSON.stringify(expectedOutput01a));
     });
 
     let gameInfo01b = { ...defaultGameInfo, teleports: [...teleports01] };
     let expectedOutput01b = [
-        { x: 2, y: 4, selfDestructing: true, color: "white" },
-        { x: 4, y: 4, selfDestructing: true, color: "white" },
-        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
-        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 10, selfDestructing: false, color: "white", group: 2 },
+        { x: 4, y: 10, selfDestructing: false, color: "white", group: 2 },
     ];
-    deleteTeleports("white", false, gameInfo01b);
+    deleteTeleports("white", false, 1, gameInfo01b);
     it("deleteTeleports B", () => {
         expect(JSON.stringify(gameInfo01b.teleports)).toBe(JSON.stringify(expectedOutput01b));
     });
 
     let gameInfo01c = { ...defaultGameInfo, teleports: [...teleports01] };
     let expectedOutput01c = [
-        { x: 2, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 2, selfDestructing: false, color: "white" },
-        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
-        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 10, selfDestructing: false, color: "white", group: 2 },
+        { x: 4, y: 10, selfDestructing: false, color: "white", group: 2 },
     ];
-    deleteTeleports("white", true, gameInfo01c);
+    deleteTeleports("white", true, 1, gameInfo01c);
     it("deleteTeleports C", () => {
         expect(JSON.stringify(gameInfo01c.teleports)).toBe(JSON.stringify(expectedOutput01c));
     });
 
     let gameInfo01d = { ...defaultGameInfo, teleports: [...teleports01] };
     let expectedOutput01d = [
-        { x: 2, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 2, selfDestructing: false, color: "white" },
-        { x: 2, y: 4, selfDestructing: true, color: "white" },
-        { x: 4, y: 4, selfDestructing: true, color: "white" },
-        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
-        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 10, selfDestructing: false, color: "white", group: 2 },
+        { x: 4, y: 10, selfDestructing: false, color: "white", group: 2 },
     ];
-    deleteTeleports(getPurpleTeleportColor(), false, gameInfo01d);
+    deleteTeleports(getPurpleTeleportColor(), false, 1, gameInfo01d);
     it("deleteTeleports D", () => {
         expect(JSON.stringify(gameInfo01d.teleports)).toBe(JSON.stringify(expectedOutput01d));
     });
 
+    let gameInfo01e = { ...defaultGameInfo, teleports: [...teleports01] };
+    let expectedOutput01e = [
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+    ];
+    deleteTeleports("white", false, 2, gameInfo01e);
+    it("deleteTeleports E", () => {
+        expect(JSON.stringify(gameInfo01e.teleports)).toBe(JSON.stringify(expectedOutput01e));
+    });
+
     let teleports02 = [
-        { x: 2, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
-        { x: 2, y: 4, selfDestructing: true, color: "white" },
-        { x: 4, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 4, selfDestructing: true, color: "white" },
-        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 8, selfDestructing: false, color: "white", group: 5 },
+        { x: 4, y: 8, selfDestructing: false, color: "white", group: 5 },
     ];
     const info02a = findTheOtherTeleport(0, teleports02);
     it("findTheOtherTeleport A", () => {
@@ -99,14 +125,20 @@ describe("Teleports", () => {
     it("findTheOtherTeleport F", () => {
         expect(info02f).toBe(2);
     });
+    const info02g = findTheOtherTeleport(7, teleports02);
+    it("findTheOtherTeleport G", () => {
+        expect(info02g).toBe(6);
+    });
 
     let teleports03 = [
-        { x: 2, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
-        { x: 2, y: 4, selfDestructing: true, color: "white" },
-        { x: 4, y: 2, selfDestructing: false, color: "white" },
-        { x: 4, y: 4, selfDestructing: true, color: "white" },
-        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor() },
+        { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
+        { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
+        { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        { x: 3, y: 8, selfDestructing: false, color: "white", group: 32 },
+        { x: 5, y: 8, selfDestructing: false, color: "white", group: 32 },
     ];
     const info03a = isWhiteTeleport(2, 2, teleports03);
     it("isWhiteTeleport A", () => {
@@ -124,13 +156,17 @@ describe("Teleports", () => {
     it("isWhiteTeleport D", () => {
         expect(info03d).toBe(true);
     });
+    const info03e = isWhiteTeleport(3, 8, teleports03);
+    it("isWhiteTeleport E", () => {
+        expect(info03e).toBe(true);
+    });
 
     let gameInfo04a = {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 4 },
         teleports: [
-            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor() },
-            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor() },
+            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
         ]
     }
     let input04a = [
@@ -180,8 +216,8 @@ describe("Teleports", () => {
         ...defaultGameInfo,
         blueBall: { x: 3, y: 4 },
         teleports: [
-            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor() },
-            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor() },
+            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
         ]
     }
     let input04b = [
@@ -217,8 +253,8 @@ describe("Teleports", () => {
         ...defaultGameInfo,
         blueBall: { x: 1, y: 4 },
         teleports: [
-            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor() },
-            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor() },
+            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
         ]
     }
     let input04c = [
@@ -248,6 +284,65 @@ describe("Teleports", () => {
     });
     it("checkPurpleTeleports C backData", () => {
         expect(JSON.stringify(backData04c)).toBe(JSON.stringify(expectedBackData04c));
+    });
+
+    let gameInfo04d = {
+        ...defaultGameInfo,
+        blueBall: { x: 1, y: 4 },
+        teleports: [
+            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+            { x: 1, y: 2, selfDestructing: true, color: getPurpleTeleportColor(), group: 32 },
+            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+            { x: 6, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 32 },
+        ]
+    }
+    let input04d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 28, 0, 0, 0, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let backData04d = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 170, 0, 0],
+        [0, 170, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 170, 0, 0, 170, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    let expectedOutput04d = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 28, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    let expectedBackData04d = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 170, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 170, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    let info04d = checkPurpleTeleports(backData04d, input04d, gameInfo04d, { ...defaultGameVars });
+    it("checkPurpleTeleports D", () => {
+        expect(JSON.stringify(input04d)).toBe(JSON.stringify(expectedOutput04d));
+    });
+    it("checkPurpleTeleports D info", () => {
+        expect(info04d).toBe(true);
+    });
+    it("checkPurpleTeleports D backData", () => {
+        expect(JSON.stringify(backData04d)).toBe(JSON.stringify(expectedBackData04d));
+    });
+    it("checkPurpleTeleports D teleports", () => {
+        expect(JSON.stringify(gameInfo04d.teleports)).toBe(JSON.stringify([
+            { x: 6, y: 1, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+            { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
+        ]));
     });
 
 

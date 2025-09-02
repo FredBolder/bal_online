@@ -190,6 +190,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    for (let i = 0; i < gameInfo.teleports.length; i++) {
+        const teleport = gameInfo.teleports[i];
+        if (teleport.group > 1) {
+            line = `$group: ${teleport.x}, ${teleport.y}, ${teleport.group}`;
+            lines.push(line);
+        }
+    }
+
     first = true;
     h = 1;
     w = 1;

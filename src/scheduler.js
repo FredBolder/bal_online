@@ -275,7 +275,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
                         gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
                     }
                     if (gameInfo.teleports[teleport1].selfDestructing) {
-                        deleteTeleports("white", true, gameInfo);
+                        deleteTeleports("white", true, gameInfo.teleports[teleport1].group, gameInfo);
                     }
                 }
                 gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;

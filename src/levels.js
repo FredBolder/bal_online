@@ -1,6 +1,8 @@
+import { removeObject } from "./addRemoveObject.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinate } from "./balUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
+import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 const series1Start = 200;
@@ -22,7 +24,7 @@ const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
 const seriesEasyEnd = 3015;
 const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3105;
+const hiddenMiniSeries1End = 3106;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
@@ -30,16 +32,53 @@ export function checkLevel(data, settings) {
   let foundGravityChanger = false;
   let foundLava = false;
   let foundWater = false;
+  let group = -1;
+  let groups = [];
+  let idx = -1;
   let msg = "";
   let nBlueBalls = 0;
   let nDetonators = 0;
   let nGameRotator = 0;
-  let nPurpleSelfDestructingTeleports = 0;
+  let nPurpleSelfDestructingTeleports = [];
   let nSmallBlueBalls = 0;
   let nSmallGreenBalls = 0;
-  let nSelfDestructingTeleports = 0;
-  let nTeleports = 0;
+  let nSelfDestructingTeleports = [];
+  let nTeleports = [];
   let nTravelgates = 0;
+  let p1 = -1;
+  let validXY = false;
+  let x = -1;
+  let y = -1;
+
+  for (let i = 0; i < 32; i++) {
+    nPurpleSelfDestructingTeleports.push(0);
+    nSelfDestructingTeleports.push(0);
+    nTeleports.push(0);
+  }
+  // Read the groups to be able to test more
+  for (let i = 0; i < settings.length; i++) {
+    const setting = settings[i];
+    p1 = setting.indexOf(":");
+    if (p1 >= 0) {
+      const name = setting.slice(0, p1).toLowerCase().trim();
+      const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
+      if (values.length >= 2) {
+        x = tryParseInt(values[0], -1);
+        y = tryParseInt(values[1], -1);
+        validXY = ((x >= 0) && (y >= 0) && (x < data[0].length) && (y < data.length));
+      }
+      if ((name === "$group") && validXY) {
+        group = tryParseInt(values[2], -1);
+        if ((group >= 1) && (group <= 32)) {
+          groups.push({ x, y, group });
+        }
+      }
+    }
+  }
+  if (groups.length > 1) {
+    // In case of duplicates, the last is used
+    groups.reverse();
+  }
 
   // Check Data
   if (data.length > 0) {
@@ -68,7 +107,9 @@ export function checkLevel(data, settings) {
             foundLava = true;
             break;
           case "Π":
-            nPurpleSelfDestructingTeleports++;
+            idx = findElementByCoordinate(j, i, groups);
+            group = (idx >= 0) ? groups[idx].group - 1 : 0;
+            nPurpleSelfDestructingTeleports[group]++;
             break;
           case "%":
             nSmallBlueBalls++;
@@ -77,10 +118,14 @@ export function checkLevel(data, settings) {
             nSmallGreenBalls++;
             break;
           case "τ":
-            nSelfDestructingTeleports++;
+            idx = findElementByCoordinate(j, i, groups);
+            group = (idx >= 0) ? groups[idx].group - 1 : 0;
+            nSelfDestructingTeleports[group]++;
             break;
           case "T":
-            nTeleports++;
+            idx = findElementByCoordinate(j, i, groups);
+            group = (idx >= 0) ? groups[idx].group - 1 : 0;
+            nTeleports[group]++;
             break;
           case "g":
             nTravelgates++;
@@ -124,14 +169,20 @@ export function checkLevel(data, settings) {
     if (nSmallGreenBalls < 1) {
       msg += "There is no small green ball.\n";
     }
-    if ((nTeleports !== 0) && (nTeleports !== 2)) {
-      msg += "There can be only 0 or 2 normal teleports.\n";
+    for (let i = 0; i < nTeleports.length; i++) {
+      if ((nTeleports[i] !== 0) && (nTeleports[i] !== 2)) {
+        msg += `There is an invalid number of teleports in group ${i + 1}.\n`;
+      }
     }
-    if ((nSelfDestructingTeleports !== 0) && (nSelfDestructingTeleports !== 2)) {
-      msg += "There can be only 0 or 2 self-destructing teleports.\n";
+    for (let i = 0; i < nSelfDestructingTeleports.length; i++) {
+      if ((nSelfDestructingTeleports[i] !== 0) && (nSelfDestructingTeleports[i] !== 2)) {
+        msg += `There is an invalid number of self-destructing teleports in group ${i + 1}.\n`;
+      }
     }
-    if ((nPurpleSelfDestructingTeleports !== 0) && (nPurpleSelfDestructingTeleports !== 2)) {
-      msg += "There can be only 0 or 2 purple self-destructing teleports.\n";
+    for (let i = 0; i < nPurpleSelfDestructingTeleports.length; i++) {
+      if ((nPurpleSelfDestructingTeleports[i] !== 0) && (nPurpleSelfDestructingTeleports[i] !== 2)) {
+        msg += `There is an invalid number of purple self-destructing teleports in group ${i + 1}.\n`;
+      }
     }
     if (nTravelgates > 1) {
       msg += "There can be only one travel gate.\n";
@@ -419,6 +470,7 @@ export function fixLevel(backData, gameData, gameInfo) {
   const empty = [];
   const gravityChangerPositions = [];
   let result = "";
+  let deleteCells = [];
   let errorGameRotatorInNonSquareLevel = false;
   let errorMoreThanOneBlueBall = false;
   let errorMoreThanOneSmallBlueBall = false;
@@ -428,12 +480,21 @@ export function fixLevel(backData, gameData, gameInfo) {
   let foundSmallblue = false;
   let foundSmallGreen = false;
   let foundWater = false;
+  let nPurpleSelfDestructingTeleports = [];
+  let nSelfDestructingTeleports = [];
   let nSmallGreenBalls = 0;
+  let nTeleports = [];
   let used = 0;
   const xMax = gameData[0].length - 1;
   const yMax = gameData.length - 1;
   let x = -1;
   let y = -1;
+
+  for (let i = 0; i < 32; i++) {
+    nPurpleSelfDestructingTeleports.push(0);
+    nSelfDestructingTeleports.push(0);
+    nTeleports.push(0);
+  }
 
   for (let i = gameData.length - 1; i >= 0; i--) {
     for (let j = 0; j <= xMax; j++) {
@@ -527,6 +588,61 @@ export function fixLevel(backData, gameData, gameInfo) {
     gameData[y][x] = 2;
     gameInfo.blueBall.x = x;
     gameInfo.blueBall.y = y;
+  }
+
+  for (let i = 0; i < gameInfo.teleports.length; i++) {
+    const teleport = gameInfo.teleports[i];
+    if (teleport.color === "white" && !teleport.selfDestructing) {
+      nTeleports[teleport.group - 1]++;
+    }
+    if (teleport.color === "white" && teleport.selfDestructing) {
+      nSelfDestructingTeleports[teleport.group - 1]++;
+    }
+    if (teleport.color === getPurpleTeleportColor() && teleport.selfDestructing) {
+      nPurpleSelfDestructingTeleports[teleport.group - 1]++;
+    }
+  }
+  for (let i = 0; i < nTeleports.length; i++) {
+    if ((nTeleports[i] !== 0) && (nTeleports[i] !== 2)) {
+      for (let j = 0; j < gameInfo.teleports.length; j++) {
+        const teleport = gameInfo.teleports[j];
+        if ((teleport.group === (i + 1)) && (teleport.color === "white") && !teleport.selfDestructing) {
+          deleteCells.push({ x: teleport.x, y: teleport.y });
+        }
+      }
+      result += `There was an invalid number of teleports in group ${i + 1}.\n`;
+    }
+  }
+  for (let i = 0; i < nSelfDestructingTeleports.length; i++) {
+    if ((nSelfDestructingTeleports[i] !== 0) && (nSelfDestructingTeleports[i] !== 2)) {
+      for (let j = 0; j < gameInfo.teleports.length; j++) {
+        const teleport = gameInfo.teleports[j];
+        if ((teleport.group === (i + 1)) && (teleport.color === "white") && teleport.selfDestructing) {
+          deleteCells.push({ x: teleport.x, y: teleport.y });
+        }
+      }
+      result += `There was an invalid number of self-destructing teleports in group ${i + 1}.\n`;
+    }
+  }
+  for (let i = 0; i < nPurpleSelfDestructingTeleports.length; i++) {
+    if ((nPurpleSelfDestructingTeleports[i] !== 0) && (nPurpleSelfDestructingTeleports[i] !== 2)) {
+      for (let j = 0; j < gameInfo.teleports.length; j++) {
+        const teleport = gameInfo.teleports[j];
+        if ((teleport.group === (i + 1)) && (teleport.color === getPurpleTeleportColor()) && teleport.selfDestructing) {
+          deleteCells.push({ x: teleport.x, y: teleport.y });
+        }
+      }
+      result += `There was an invalid number of purple self-destructing teleports in group ${i + 1}.\n`;
+    }
+  }
+  for (let i = 0; i < deleteCells.length; i++) {
+    x = deleteCells[i].x;
+    y = deleteCells[i].y;
+    if (backData[y][x] === 170) {
+      deleteIfPurpleTeleport(backData, gameInfo, x, y);
+    } else {
+      removeObject(gameData, gameInfo, x, y);
+    }
   }
 
   if (!foundSmallGreen) {

@@ -94,7 +94,8 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
                 x,
                 y,
                 selfDestructing: obj === 92,
-                color: "white"
+                color: "white",
+                group: 1
             };
             gameInfo.teleports.push(teleport);
             break;
@@ -232,7 +233,8 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
                 x,
                 y,
                 selfDestructing: true,
-                color: getPurpleTeleportColor()
+                color: getPurpleTeleportColor(),
+                group: 1
             };
             gameInfo.teleports.push(teleport);
             break;
