@@ -96,16 +96,7 @@ function HelpPage() {
                     <div className="textBox">
                         If you see for example a
                         level number 750, it doesn&apos;t mean that there are 750 or even more
-                        levels. The number depends also on the series and on the&nbsp;
-                        <a
-                            className="link"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href="https://fredbolder.github.io/bal/"
-                        >
-                            original Bal game
-                        </a>
-                        .
+                        levels. The number depends also on the series and on the original Bal game.
                         When you solve a level, you will get a code that gives you access
                         to the next level whenever you want by pressing the Code button, so
                         it is important to write down the code.

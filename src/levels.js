@@ -22,7 +22,7 @@ const seriesChoniaPollaEnd = 993;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
-const seriesEasyEnd = 3018;
+const seriesEasyEnd = 3022;
 const hiddenMiniSeries1Start = 3100;
 const hiddenMiniSeries1End = 3106;
 
@@ -324,7 +324,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["coilspring", "divingglasses", "key", "ladder", "pickaxe", "propeller", "telekineticpower", "weakstone"].includes(valuesLowerCase[0])) {
+              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "pickaxe", "propeller", "telekineticpower", "weakstone"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
               break;
@@ -961,6 +961,16 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$has":
           switch (valuesLowerCase[0]) {
+            case "nothing":
+              gameInfo.hasCoilSpring = false;
+              gameInfo.hasDivingGlasses = false;
+              gameInfo.hasKey = false;
+              gameInfo.hasLadder = false;
+              gameInfo.hasPickaxe = false;
+              gameInfo.hasPropeller = false;
+              gameInfo.hasTelekineticPower = false;
+              gameInfo.hasWeakStone = false;
+              break;
             case "coilspring":
               gameInfo.hasCoilSpring = true;
               break;

@@ -867,6 +867,7 @@ export function initGameInfo(info) {
     info.elevators = [];
     info.forces = [];
     info.greenBalls = 0;
+    info.has = [];
     info.hasCoilSpring = false;
     info.hasDivingGlasses = false;
     info.hasKey = false;

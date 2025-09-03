@@ -102,6 +102,39 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameInfo.hasCoilSpring) {
+        line = `$has: coilspring`;
+        lines.push(line);
+    }
+    if (gameInfo.hasDivingGlasses) {
+        line = `$has: divingglasses`;
+        lines.push(line);
+    }
+    if (gameInfo.hasKey) {
+        line = `$has: key`;
+        lines.push(line);
+    }
+    if (gameInfo.hasLadder) {
+        line = `$has: ladder`;
+        lines.push(line);
+    }
+    if (gameInfo.hasPickaxe) {
+        line = `$has: pickaxe`;
+        lines.push(line);
+    }
+    if (gameInfo.hasPropeller) {
+        line = `$has: propeller`;
+        lines.push(line);
+    }
+    if (gameInfo.hasTelekineticPower) {
+        line = `$has: telekineticpower`;
+        lines.push(line);
+    }
+    if (gameInfo.hasWeakStone) {
+        line = `$has: weakstone`;
+        lines.push(line);
+    }
+
     for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
         const conveyorBelt = gameInfo.conveyorBelts[i];
         if (conveyorBelt.direction !== "right") {
