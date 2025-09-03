@@ -1,4 +1,4 @@
-import { findElementByCoordinate, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, moveObject } from "./balUtils.js";
 
 export function checkMovers(gameData, gameInfo) {
     let update = false;
@@ -90,7 +90,7 @@ export function moverCanMoveBlueBall(gameData, gameInfo) {
 
     if (y < (gameData.length - 1)) {
         if (gameData[y + 1][x] === 178) {
-            idx = findElementByCoordinate(x, y + 1, gameInfo.movers);
+            idx = findElementByCoordinates(x, y + 1, gameInfo.movers);
             if (idx >= 0) {
                 const mover = gameInfo.movers[idx];
                 switch (mover.direction) {

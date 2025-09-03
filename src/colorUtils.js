@@ -1,10 +1,10 @@
-import { findElementByCoordinate } from "./balUtils";
+import { findElementByCoordinates } from "./balUtils";
 
 export function changeColor(colors, x, y, colorIndex) {
     let idx = -1;
     let color = indexToColor(colorIndex);
 
-    idx = findElementByCoordinate(x, y, colors);
+    idx = findElementByCoordinates(x, y, colors);
     if (idx >= 0) {
         const colorObj = colors[idx];
         if ((colorObj.w === 1) && (colorObj.h === 1)) {

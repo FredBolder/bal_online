@@ -1,4 +1,4 @@
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinates } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
 import {
   drawBox,
@@ -276,7 +276,7 @@ function drawLevel(
         ctx.stroke();
         drawLine(ctx, xc, ymin, xmax + 0.5, ymin, color);
         drawLine(ctx, xc, yBottom, xmax + 0.5, yBottom, color);
-        idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+        idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
         if (idx >= 0) {
           switch (gameInfo.conveyorBelts[idx].direction) {
             case "left":
@@ -876,22 +876,22 @@ function drawLevel(
     }
   }
 
-  function drawLock(x, y) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
-    let d1 = w1 / 4;
-    let d2 = w1 / 12;
-    let d3 = w1 / 10;
-    let d4 = w1 / 6;
-    let d5 = w1 / 6;
-    let d6 = ymin + d3 + d5;
-    drawFilledBox(ctx, xmin + d1, yc, (xmax - d1) - (xmin + d1), (w2 / 2) - d2, "gold");
-    ctx.strokeStyle = "silver";
+  function drawLockedDoor(x, y) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
+    const d1 = w2 * 0.35;
+    const d2 = w1 * 0.15;
+    const d3 = w1 * 0.1;
+    const d4 = w1 * 0.25;
+    drawFilledCircle(ctx, xc, ymin + d1, d2, "black");
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "black";
     ctx.beginPath();
-    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
-    ctx.ellipse(Math.round(xc), Math.round(d6), Math.round(d4), Math.round(d5), 0, Math.PI, 2 * Math.PI, false);
+    ctx.moveTo(xc, ymin + d4);
+    ctx.lineTo(xc - d2, ymax - d3);
+    ctx.lineTo(xc + d2, ymax - d3);
+    ctx.lineTo(xc, ymin + d4);
     ctx.stroke();
-    drawLine(ctx, xc - d4, d6, xc - d4, yc, "silver");
-    drawLine(ctx, xc + d4, d6, xc + d4, yc, "silver");
+    ctx.fill();
   }
 
   function drawMagnet(x, y, rectangular = false) {
@@ -955,7 +955,7 @@ function drawLevel(
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
 
-    idx = findElementByCoordinate(x, y, gameInfo.movers);
+    idx = findElementByCoordinates(x, y, gameInfo.movers);
     if (idx >= 0) {
       direction = gameInfo.movers[idx].direction;
     }
@@ -1090,7 +1090,7 @@ function drawLevel(
     const textHeight = w2 * 0.6;
     const textMaxWidth = w1 * 0.6;
 
-    idx = findElementByCoordinate(x, y, gameInfo.pistons);
+    idx = findElementByCoordinates(x, y, gameInfo.pistons);
     if (idx >= 0) {
       activated = gameInfo.pistons[idx].activated;
       group = gameInfo.pistons[idx].group;
@@ -1193,7 +1193,7 @@ function drawLevel(
     let group = 0;
     let idx = 0;
 
-    idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+    idx = findElementByCoordinates(x, y, gameInfo.pistonsTriggers);
     if (idx >= 0) {
       group = gameInfo.pistonsTriggers[idx].group;
     }
@@ -1310,6 +1310,16 @@ function drawLevel(
       default:
         break;
     }
+  }
+
+  function drawRaster() {
+    let d1 = w1 / 3;
+
+    //drawBox(ctx, xmin, ymin, w1, w2, "white");
+    drawLine(ctx, xmin + d1, ymin, xmin + d1, ymax, "#777777");
+    drawLine(ctx, xmin + d1 + d1, ymin, xmin + d1 + d1, ymax, "#777777");
+    drawLine(ctx, xmin, ymin + d1, xmax, ymin + d1, "#777777");
+    drawLine(ctx, xmin, ymin + d1 + d1, xmax, ymin + d1 + d1, "#777777");
   }
 
   function drawRedBall() {
@@ -1877,7 +1887,7 @@ function drawLevel(
           drawKey(col, row);
           break;
         case 30:
-          drawLock(col, row);
+          drawLockedDoor(col, row);
           break;
         case 31:
           // Teleport - will be drawn later
@@ -2330,6 +2340,18 @@ function drawLevel(
           // Copy
           drawAbbreviation("C");
           break;
+        case 2097:
+          // Toggle raster
+          drawRaster();
+          break;
+        case 2098:
+          // Show coordinates
+          drawAbbreviation("X, Y");
+          break;
+        case 2099:
+          // Show info
+          drawAbbreviation("?");
+          break;
         default:
           if (gd < 2000) {
             drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
@@ -2347,8 +2369,13 @@ function drawLevel(
       if ((gameInfo.travelGate.x === col) && (gameInfo.travelGate.y === row)) {
         drawTravelGate(col, row);
       }
-      if (raster) {
-        drawBox(ctx, xmin, ymin, w1, w2, "white");
+      if (raster !== null) {
+        if (raster.dash.length > 0) {
+          drawBox(ctx, xmin, ymin, w1, w2, "black");
+          ctx.setLineDash(raster.dash);
+        }
+        drawBox(ctx, xmin, ymin, w1, w2, raster.color);
+        ctx.setLineDash([]);
       }
 
       highlightBlueBall(col, row);

@@ -1,4 +1,4 @@
-import { findElementByCoordinate, hasWeightAbove, hasWeightBelow, moveObject, updateObject } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove, hasWeightBelow, moveObject, updateObject } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 
 export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir, index, pusher = false) {
@@ -21,7 +21,7 @@ export function moveYellowBar(x, y, backData, gameData, gameInfo, gameVars, dir,
 
     function findAndSetIndex(xIdx, yIdx) {
         if (idx === -1) {
-            idx = findElementByCoordinate(xIdx, yIdx, gameInfo.yellowBars);
+            idx = findElementByCoordinates(xIdx, yIdx, gameInfo.yellowBars);
         }
     }
 

@@ -1,4 +1,4 @@
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinates } from "./balUtils.js";
 
 export function checkCopiers(arr, gameInfo) {
     let element = 0;
@@ -24,7 +24,7 @@ export function checkCopiers(arr, gameInfo) {
                 }
                 arr[copier.y][x] = element;
                 if ([93, 94].includes(element)) {
-                    idx = findElementByCoordinate(copier.x, copier.y - 1, gameInfo.redBalls);
+                    idx = findElementByCoordinates(copier.x, copier.y - 1, gameInfo.redBalls);
                     if (idx >= 0) {
                         redBall1 = gameInfo.redBalls[idx];
                         redBall1.x = x;

@@ -1,5 +1,5 @@
 import { removeObject } from "./addRemoveObject.js";
-import { changeDirection, changeGroup, charToNumber, findElementByCoordinate } from "./balUtils.js";
+import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
@@ -22,7 +22,7 @@ const seriesChoniaPollaEnd = 993;
 const seriesSecretStart = 2000;
 const seriesSecretEnd = 2016;
 const seriesEasyStart = 3000;
-const seriesEasyEnd = 3015;
+const seriesEasyEnd = 3018;
 const hiddenMiniSeries1Start = 3100;
 const hiddenMiniSeries1End = 3106;
 
@@ -107,7 +107,7 @@ export function checkLevel(data, settings) {
             foundLava = true;
             break;
           case "Π":
-            idx = findElementByCoordinate(j, i, groups);
+            idx = findElementByCoordinates(j, i, groups);
             group = (idx >= 0) ? groups[idx].group - 1 : 0;
             nPurpleSelfDestructingTeleports[group]++;
             break;
@@ -118,12 +118,12 @@ export function checkLevel(data, settings) {
             nSmallGreenBalls++;
             break;
           case "τ":
-            idx = findElementByCoordinate(j, i, groups);
+            idx = findElementByCoordinates(j, i, groups);
             group = (idx >= 0) ? groups[idx].group - 1 : 0;
             nSelfDestructingTeleports[group]++;
             break;
           case "T":
-            idx = findElementByCoordinate(j, i, groups);
+            idx = findElementByCoordinates(j, i, groups);
             group = (idx >= 0) ? groups[idx].group - 1 : 0;
             nTeleports[group]++;
             break;
@@ -866,7 +866,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$addnotes":
           if (values.length >= 3) {
             if (validXY) {
-              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].noteIndex = 0;
                 for (let note = 2; note < values.length; note++) {
@@ -944,7 +944,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length === 3) {
             gameTicks = tryParseInt(values[2], -1);
             if (validXY && (gameTicks >= 1)) {
-              idx = findElementByCoordinate(x, y, gameInfo.delays);
+              idx = findElementByCoordinates(x, y, gameInfo.delays);
               if (idx >= 0) {
                 gameInfo.delays[idx].gameTicks = gameTicks;
               }
@@ -997,7 +997,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             instrument = valuesLowerCase[2];
             volume = tryParseInt(values[3], -1);
             if (validXY && (volume >= 0) && (volume <= 100)) {
-              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].instrument = instrument;
                 gameInfo.musicBoxes[idx].volume = volume;
@@ -1008,7 +1008,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$inverted":
           if (values.length === 3) {
             if (validXY) {
-              idx = findElementByCoordinate(x, y, gameInfo.pistons);
+              idx = findElementByCoordinates(x, y, gameInfo.pistons);
               if (idx >= 0) {
                 switch (valuesLowerCase[2]) {
                   case "no":
@@ -1029,7 +1029,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             mode = valuesLowerCase[2];
             gameTicks = tryParseInt(values[3], -1);
             if (validXY && ["note", "song"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
-              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].mode = mode;
                 gameInfo.musicBoxes[idx].delay = gameTicks;
@@ -1040,7 +1040,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$notes":
           if (values.length >= 3) {
             if (validXY) {
-              idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].notes = [];
                 gameInfo.musicBoxes[idx].noteIndex = 0;
@@ -1054,7 +1054,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$pistonmode":
           if (values.length === 3) {
             if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
-              idx = findElementByCoordinate(x, y, gameInfo.pistons);
+              idx = findElementByCoordinates(x, y, gameInfo.pistons);
               if (idx >= 0) {
                 gameInfo.pistons[idx].mode = valuesLowerCase[2];
               }
@@ -1082,7 +1082,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$sticky":
           if (values.length === 3) {
             if (validXY) {
-              idx = findElementByCoordinate(x, y, gameInfo.pistons);
+              idx = findElementByCoordinates(x, y, gameInfo.pistons);
               if (idx >= 0) {
                 switch (valuesLowerCase[2]) {
                   case "no":

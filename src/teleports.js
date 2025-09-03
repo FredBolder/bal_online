@@ -1,4 +1,4 @@
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinates } from "./balUtils.js";
 
 export function checkPurpleTeleports(backData, gameData, gameInfo) {
     let found = false;
@@ -59,7 +59,7 @@ export function deleteIfPurpleTeleport(backData, gameInfo, x, y) {
     let idx = -1;
 
     if (backData[y][x] === 170) {
-        idx = findElementByCoordinate(x, y, gameInfo.teleports);
+        idx = findElementByCoordinates(x, y, gameInfo.teleports);
         if (idx >= 0) {
             gameInfo.teleports.splice(idx, 1);
         }

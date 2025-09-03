@@ -10,7 +10,6 @@ import {
   changePistonInverted,
   changePistonMode,
   changePistonSticky,
-  findElementByCoordinate,
   inWater,
   jump,
   jumpLeftOrRight,
@@ -33,7 +32,7 @@ import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../cre
 import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
-import { getGameInfo, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
+import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { globalVars } from "../glob.js";
 import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
@@ -80,6 +79,7 @@ let createLevel = false;
 let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelObject = -1;
+let createLevelRaster = false;
 let ctx;
 let fred = false; // TODO: Set to false when publishing
 let gameInterval;
@@ -503,8 +503,8 @@ function BalPage() {
     if (setting !== null) {
       checkSettingsResult = checkSettings(gameData, [setting]);
       if (checkSettingsResult === "") {
-      loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
-      updateGameCanvas();
+        loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
+        updateGameCanvas();
       } else {
         showMessage("Error", checkSettingsResult);
       }
@@ -818,7 +818,7 @@ function BalPage() {
     }
     backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
 
-    arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 0, 0];
+    arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 0, 2097];
     for (let i = 0; i < arr0.length; i++) {
       if (i < gameDataMenu[0].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
@@ -877,6 +877,10 @@ function BalPage() {
       case 14:
         arr1 = [2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067];
         arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083];
+        break;
+      case 16:
+        arr1 = [2097, 2098, 2099];
+        arr2 = [0];
         break;
       default:
         arr1 = [0];
@@ -1413,7 +1417,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3106;
+        gameVars.currentLevel = 3017;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1517,7 +1521,7 @@ function BalPage() {
       status,
       gameInfoMenu,
       gameVarsMenu,
-      true,
+      { color: "white", dash: [] },
       null
     );
   }
@@ -1567,7 +1571,7 @@ function BalPage() {
       status,
       gameInfo,
       gameVars,
-      false,
+      (createLevel && createLevelRaster) ? { color: "#777777", dash: [2, 2] } : null,
       createLevelSelectedCell
     );
   }
@@ -1613,10 +1617,8 @@ function BalPage() {
   }
 
   function handleGameCanvasClick(e) {
-    let idx = -1;
     let info = "";
     let move = false;
-    let obj = null;
 
     if (!gameData || !backData) {
       return;
@@ -1667,6 +1669,21 @@ function BalPage() {
         fillMenu(2);
         updateCreateLevelCanvas();
         return;
+      }
+      if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
+        switch (createLevelObject) {
+          case -4:
+            showMessage("Position", `X=${column}, Y=${row}, Width=${gameData[0].length}, Height=${gameData.length} `);
+            return;
+          case -5:
+            info = getInfoByCoordinates(backData, gameData, gameInfo, column, row, true);
+            if (info !== "") {
+              showMessage("Info", info);
+            }
+            return;
+          default:
+            break;
+        }
       }
       if (!e.altKey && !e.shiftKey) {
         move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2035));
@@ -1888,61 +1905,14 @@ function BalPage() {
       }
     } else {
       // PLAY
+
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-        info = "";
-        switch (gameData[row][column]) {
-          case 157:
-            idx = findElementByCoordinate(column, row, gameInfo.musicBoxes);
-            if (idx >= 0) {
-              obj = gameInfo.musicBoxes[idx];
-              info = `Object: Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 158:
-            idx = findElementByCoordinate(column, row, gameInfo.pistonsTriggers);
-            if (idx >= 0) {
-              obj = gameInfo.pistonsTriggers[idx];
-              info = `Object: Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 159:
-          case 161:
-          case 163:
-          case 165:
-            idx = findElementByCoordinate(column, row, gameInfo.pistons);
-            if (idx >= 0) {
-              obj = gameInfo.pistons[idx];
-              info = `Object: Piston, Activated: ${obj.activated}, Group: ${obj.group}, Direction: ${obj.direction}, Mode: ${obj.mode}, Sticky: ${obj.sticky}, Inverted: ${obj.inverted}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 167:
-            idx = findElementByCoordinate(column, row, gameInfo.delays);
-            if (idx >= 0) {
-              obj = gameInfo.delays[idx];
-              info = `Object: Delay, Game ticks: ${obj.gameTicks}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 171:
-            idx = findElementByCoordinate(column, row, gameInfo.conveyorBelts);
-            if (idx >= 0) {
-              obj = gameInfo.conveyorBelts[idx];
-              info = `Object: Conveyor belt, Direction: ${obj.direction}, Mode: ${obj.mode}, Group: ${obj.group}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          case 178:
-            idx = findElementByCoordinate(column, row, gameInfo.movers);
-            if (idx >= 0) {
-              obj = gameInfo.movers[idx];
-              info = `Object: Mover, Direction: ${obj.direction}, Position: ${obj.x}, ${obj.y}`;
-            }
-            break;
-          default:
-            break;
-        }
+        info = getInfoByCoordinates(backData, gameData, gameInfo, column, row, fred);
         if (info !== "") {
           showMessage("Info", info);
         }
       }
+
       if (!e.altKey && e.shiftKey && e.ctrlKey) {
         info = "";
         switch (gameData[row][column]) {
@@ -2054,6 +2024,19 @@ function BalPage() {
           }
         }
 
+        if (createLevelMenu === menuToNumber("info")) {
+          switch (createLevelObject) {
+            case 2097:
+              if (row > 0) {
+                createLevelRaster = !createLevelRaster;
+                updateGameCanvas();
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
         switch (createLevelObject) {
           case 0:
             createLevelObject = backDataMenu[row][column];
@@ -2069,6 +2052,14 @@ function BalPage() {
               // Delete
               createLevelObject = -3;
             }
+            break;
+          case 2098:
+            // Position
+            createLevelObject = -4;
+            break;
+          case 2099:
+            // Info
+            createLevelObject = -5;
             break;
           default:
             break;

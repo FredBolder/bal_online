@@ -1,4 +1,4 @@
-import { findElementByCoordinate, hasWeightAbove } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
@@ -8,7 +8,7 @@ function isNotMovingYellowBall(gameData, gameInfo, x, y) {
     let result = false;
 
     if (gameData[y][x] === 9) {
-        idx = findElementByCoordinate(x, y, gameInfo.yellowBalls);
+        idx = findElementByCoordinates(x, y, gameInfo.yellowBalls);
         if (idx >= 0) {
             result = (gameInfo.yellowBalls[idx].direction === "none");
         }

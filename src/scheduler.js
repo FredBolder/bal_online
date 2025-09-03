@@ -1,4 +1,4 @@
-import { checkFalling, findElementByCoordinate, } from "./balUtils.js";
+import { checkFalling, findElementByCoordinates, } from "./balUtils.js";
 import { moveConveyorBelts } from "./conveyorBelts.js";
 import { checkCopiers } from "./copiers.js";
 import { checkDamagedStones } from "./damagedStones.js";
@@ -262,7 +262,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
                 gameVars.teleporting = 2;
                 break;
             case 2:
-                teleport1 = findElementByCoordinate(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
+                teleport1 = findElementByCoordinates(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
                 if (teleport1 >= 0) {
                     if (gameInfo.teleports[teleport1].selfDestructing) {
                         gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;

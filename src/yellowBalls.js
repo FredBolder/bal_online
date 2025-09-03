@@ -1,4 +1,4 @@
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinates } from "./balUtils.js";
 
 function checkDirectionChanger(gameData, x, y) {
     let result = { directionChanger: 0, pointToAdd: null };
@@ -90,7 +90,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     }
                     found = false;
                     if (gameData[i][x + 1] === 9) {
-                        idx = findElementByCoordinate(x + 1, i, yellowBalls);
+                        idx = findElementByCoordinates(x + 1, i, yellowBalls);
                         if (idx >= 0) {
                             if (yellowBalls[idx].direction === "left") {
                                 found = true;
@@ -105,7 +105,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     for (let i = ymin; i <= ymax; i++) {
                         gameData[i][x - 1] = gameData[i][x + 1];
                         gameData[i][x + 1] = 0;
-                        idx = findElementByCoordinate(x + 1, i, yellowBalls);
+                        idx = findElementByCoordinates(x + 1, i, yellowBalls);
                         if (idx >= 0) {
                             yellowBalls[idx].x = x - 1;
                             skip.push(idx);
@@ -124,7 +124,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     }
                     found = false;
                     if (gameData[i][x - 1] === 9) {
-                        idx = findElementByCoordinate(x - 1, i, yellowBalls);
+                        idx = findElementByCoordinates(x - 1, i, yellowBalls);
                         if (idx >= 0) {
                             if (yellowBalls[idx].direction === "right") {
                                 found = true;
@@ -139,7 +139,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     for (let i = ymin; i <= ymax; i++) {
                         gameData[i][x + 1] = gameData[i][x - 1];
                         gameData[i][x - 1] = 0;
-                        idx = findElementByCoordinate(x - 1, i, yellowBalls);
+                        idx = findElementByCoordinates(x - 1, i, yellowBalls);
                         if (idx >= 0) {
                             yellowBalls[idx].x = x + 1;
                             skip.push(idx);
@@ -158,7 +158,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     }
                     found = false;
                     if (gameData[y + 1][i] === 9) {
-                        idx = findElementByCoordinate(i, y + 1, yellowBalls);
+                        idx = findElementByCoordinates(i, y + 1, yellowBalls);
                         if (idx >= 0) {
                             if (yellowBalls[idx].direction === "up") {
                                 found = true;
@@ -173,7 +173,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     for (let i = xmin; i <= xmax; i++) {
                         gameData[y - 1][i] = gameData[y + 1][i];
                         gameData[y + 1][i] = 0;
-                        idx = findElementByCoordinate(i, y + 1, yellowBalls);
+                        idx = findElementByCoordinates(i, y + 1, yellowBalls);
                         if (idx >= 0) {
                             yellowBalls[idx].y = y - 1;
                             skip.push(idx);
@@ -192,7 +192,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     }
                     found = false;
                     if (gameData[y - 1][i] === 9) {
-                        idx = findElementByCoordinate(i, y - 1, yellowBalls);
+                        idx = findElementByCoordinates(i, y - 1, yellowBalls);
                         if (idx >= 0) {
                             if (yellowBalls[idx].direction === "down") {
                                 found = true;
@@ -207,7 +207,7 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                     for (let i = xmin; i <= xmax; i++) {
                         gameData[y + 1][i] = gameData[y - 1][i];
                         gameData[y - 1][i] = 0;
-                        idx = findElementByCoordinate(i, y - 1, yellowBalls);
+                        idx = findElementByCoordinates(i, y - 1, yellowBalls);
                         if (idx >= 0) {
                             yellowBalls[idx].y = y + 1;
                             skip.push(idx);

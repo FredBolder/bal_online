@@ -29,7 +29,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
 
   if (["left", "right", "none"].includes(direction)) {
     if (idx === -1) {
-      idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+      idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
       if (idx >= 0) {
         gameInfo.conveyorBelts[idx].direction = direction;
       }
@@ -37,7 +37,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
   }
   if (["left", "right"].includes(direction)) {
     if (idx === -1) {
-      idx = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
+      idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
       if (idx >= 0) {
         gameInfo.horizontalElevators[idx].right = (direction === "right");
         if (direction === "right") {
@@ -50,7 +50,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
   }
   if (["up", "down"].includes(direction)) {
     if (idx === -1) {
-      idx = findElementByCoordinate(x, y, gameInfo.elevators);
+      idx = findElementByCoordinates(x, y, gameInfo.elevators);
       if (idx >= 0) {
         gameInfo.elevators[idx].up = (direction === "up");
         if (direction === "up") {
@@ -63,7 +63,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
   }
   if (moversDirections().includes(direction)) {
     if (idx === -1) {
-      idx = findElementByCoordinate(x, y, gameInfo.movers);
+      idx = findElementByCoordinates(x, y, gameInfo.movers);
       if (idx >= 0) {
         gameInfo.movers[idx].direction = direction;
       }
@@ -75,30 +75,30 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
 export function changeGroup(gameInfo, x, y, group) {
   let idx = -1;
 
-  idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+  idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
   if (idx >= 0) {
     gameInfo.conveyorBelts[idx].group = group;
   }
   if (idx === -1) {
-    idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
       gameInfo.musicBoxes[idx].group = group;
     }
   }
   if (idx === -1) {
-    idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+    idx = findElementByCoordinates(x, y, gameInfo.pistonsTriggers);
     if (idx >= 0) {
       gameInfo.pistonsTriggers[idx].group = group;
     }
   }
   if (idx === -1) {
-    idx = findElementByCoordinate(x, y, gameInfo.pistons);
+    idx = findElementByCoordinates(x, y, gameInfo.pistons);
     if (idx >= 0) {
       gameInfo.pistons[idx].group = group;
     }
   }
   if (idx === -1) {
-    idx = findElementByCoordinate(x, y, gameInfo.teleports);
+    idx = findElementByCoordinates(x, y, gameInfo.teleports);
     if (idx >= 0) {
       gameInfo.teleports[idx].group = group;
     }
@@ -109,7 +109,7 @@ export function changeGroup(gameInfo, x, y, group) {
 export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   let idx = -1;
 
-  idx = findElementByCoordinate(x, y, gameInfo.redBalls);
+  idx = findElementByCoordinates(x, y, gameInfo.redBalls);
   if (idx >= 0) {
     gameInfo.redBalls[idx].smart = intelligence;
     gameData[y][x] = [8, 93, 94][intelligence];
@@ -120,7 +120,7 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
 export function changePistonInverted(gameInfo, x, y) {
   let idx = -1;
 
-  idx = findElementByCoordinate(x, y, gameInfo.pistons);
+  idx = findElementByCoordinates(x, y, gameInfo.pistons);
   if (idx >= 0) {
     gameInfo.pistons[idx].inverted = !gameInfo.pistons[idx].inverted;
   }
@@ -130,7 +130,7 @@ export function changePistonInverted(gameInfo, x, y) {
 export function changePistonMode(gameInfo, x, y, mode) {
   let idx = -1;
 
-  idx = findElementByCoordinate(x, y, gameInfo.pistons);
+  idx = findElementByCoordinates(x, y, gameInfo.pistons);
   if (idx >= 0) {
     gameInfo.pistons[idx].mode = mode;
   }
@@ -140,7 +140,7 @@ export function changePistonMode(gameInfo, x, y, mode) {
 export function changePistonSticky(gameInfo, x, y) {
   let idx = -1;
 
-  idx = findElementByCoordinate(x, y, gameInfo.pistons);
+  idx = findElementByCoordinates(x, y, gameInfo.pistons);
   if (idx >= 0) {
     gameInfo.pistons[idx].sticky = !gameInfo.pistons[idx].sticky;
   }
@@ -628,19 +628,19 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
             case 8:
             case 93:
             case 94:
-              idx = findElementByCoordinate(j, i, gameInfo.redBalls);
+              idx = findElementByCoordinates(j, i, gameInfo.redBalls);
               if (idx >= 0) {
                 gameInfo.redBalls.splice(idx, 1);
               }
               break;
             case 9:
-              idx = findElementByCoordinate(j, i, gameInfo.yellowBalls);
+              idx = findElementByCoordinates(j, i, gameInfo.yellowBalls);
               if (idx >= 0) {
                 gameInfo.yellowBalls.splice(idx, 1);
               }
               break;
             case 40:
-              idx = findElementByCoordinate(j, i, gameInfo.orangeBalls);
+              idx = findElementByCoordinates(j, i, gameInfo.orangeBalls);
               if (idx >= 0) {
                 gameInfo.orangeBalls.splice(idx, 1);
               }
@@ -798,7 +798,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
   return result;
 }
 
-export function findElementByCoordinate(x, y, elements) {
+export function findElementByCoordinates(x, y, elements) {
   let result = -1;
 
   for (let i = 0; i < elements.length; i++) {
@@ -1812,7 +1812,7 @@ function take(gameData, gameInfo, result, x, y) {
       result.eating = true;
       break;
     case 12:
-      idx = findElementByCoordinate(x, y, gameInfo.damagedStones);
+      idx = findElementByCoordinates(x, y, gameInfo.damagedStones);
       if (idx >= 0) {
         gameInfo.damagedStones[idx].status = -1;
       }
@@ -1976,7 +1976,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
           updateObject(gameInfo.yellowBallPushers, x - 1, y, x - 2, y);
           break;
         case 117:
-          idx1 = findElementByCoordinate(x - 1, y, gameInfo.timeBombs);
+          idx1 = findElementByCoordinates(x - 1, y, gameInfo.timeBombs);
           if (idx1 >= 0) {
             gameInfo.timeBombs[idx1].x = x - 2;
             gameInfo.timeBombs[idx1].status = getTimeBombsTime();
@@ -2043,7 +2043,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   }
   if (!result.player && x > 0) {
     if ((row[x - 1] === 31) || (row[x - 1] === 92)) {
-      idx1 = findElementByCoordinate(x - 1, y, gameInfo.teleports);
+      idx1 = findElementByCoordinates(x - 1, y, gameInfo.teleports);
       if (idx1 === -1) {
         idx2 = -1;
       } else {
@@ -2059,7 +2059,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (result.player) {
-    const teleport = findElementByCoordinate(x, y, gameInfo.teleports);
+    const teleport = findElementByCoordinates(x, y, gameInfo.teleports);
     if (teleport >= 0) {
       if (gameInfo.teleports[teleport].color === "white") {
         if (gameInfo.teleports[teleport].selfDestructing) {
@@ -2185,7 +2185,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
           updateObject(gameInfo.yellowBallPushers, x + 1, y, x + 2, y);
           break;
         case 117:
-          idx1 = findElementByCoordinate(x + 1, y, gameInfo.timeBombs);
+          idx1 = findElementByCoordinates(x + 1, y, gameInfo.timeBombs);
           if (idx1 >= 0) {
             gameInfo.timeBombs[idx1].x = x + 2;
             gameInfo.timeBombs[idx1].status = getTimeBombsTime();
@@ -2247,7 +2247,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   }
   if (!result.player && x < gameData[0].length - 1) {
     if ((row[x + 1] === 31) || (row[x + 1] === 92)) {
-      idx1 = findElementByCoordinate(x + 1, y, gameInfo.teleports);
+      idx1 = findElementByCoordinates(x + 1, y, gameInfo.teleports);
       if (idx1 === -1) {
         idx2 = -1;
       } else {
@@ -2263,7 +2263,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
     }
   }
   if (result.player) {
-    const teleport = findElementByCoordinate(x, y, gameInfo.teleports);
+    const teleport = findElementByCoordinates(x, y, gameInfo.teleports);
     if (teleport >= 0) {
       if (gameInfo.teleports[teleport].color === "white") {
         if (gameInfo.teleports[teleport].selfDestructing) {
@@ -2446,7 +2446,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
           updateObject(gameInfo.yellowBallPushers, x, y + dy1, x, y + dy2);
           break;
         case 117:
-          idx = findElementByCoordinate(x, y + dy1, gameInfo.timeBombs);
+          idx = findElementByCoordinates(x, y + dy1, gameInfo.timeBombs);
           if (idx >= 0) {
             gameInfo.timeBombs[idx].y = y + dy2;
             gameInfo.timeBombs[idx].status = getTimeBombsTime();
@@ -2701,7 +2701,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
           updateObject(gameInfo.yellowBallPushers, x, y + dy1, x, y + dy2);
           break;
         case 117:
-          idx = findElementByCoordinate(x, y + dy1, gameInfo.timeBombs);
+          idx = findElementByCoordinates(x, y + dy1, gameInfo.timeBombs);
           if (idx >= 0) {
             gameInfo.timeBombs[idx].y = y + dy2;
             gameInfo.timeBombs[idx].status = getTimeBombsTime();
@@ -2757,7 +2757,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     }
     if (!result.player && ((gameData[y + dy1][x] === 12) || (gameData[y + dy1][x] === 35)) && gameInfo.hasPickaxe) {
       if (gameData[y + dy1][x] === 12) {
-          idx = findElementByCoordinate(x, y + dy1, gameInfo.damagedStones);
+          idx = findElementByCoordinates(x, y + dy1, gameInfo.damagedStones);
           if (idx >= 0) {
             gameInfo.damagedStones[idx].status = -1;
           }

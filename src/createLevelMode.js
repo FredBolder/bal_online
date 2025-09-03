@@ -1,5 +1,5 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
-import { findElementByCoordinate } from "./balUtils.js";
+import { findElementByCoordinates } from "./balUtils.js";
 import { deleteIfPurpleTeleport } from "./teleports.js";
 
 export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
@@ -16,31 +16,31 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
         case 8:
         case 93:
         case 94:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.redBalls);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.redBalls);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.redBalls);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.redBalls);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.redBalls[idx2].smart = gameInfo.redBalls[idx1].smart;
             }
             break;
         case 106:
         case 6:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.elevators);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.elevators);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.elevators);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.elevators);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.elevators[idx2].up = gameInfo.elevators[idx1].up;
             }
             break;
         case 107:
         case 7:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.horizontalElevators);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.horizontalElevators);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.horizontalElevators);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.horizontalElevators);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.horizontalElevators[idx2].right = gameInfo.horizontalElevators[idx1].right;
             }
             break;
         case 157:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.musicBoxes);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.musicBoxes);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.musicBoxes);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.musicBoxes);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.musicBoxes[idx2].instrument = gameInfo.musicBoxes[idx1].instrument;
                 gameInfo.musicBoxes[idx2].volume = gameInfo.musicBoxes[idx1].volume;
@@ -51,8 +51,8 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             break;
 
         case 158:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.pistonsTriggers);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.pistonsTriggers);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.pistonsTriggers);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.pistonsTriggers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.pistonsTriggers[idx2].group = gameInfo.pistonsTriggers[idx1].group;
             }
@@ -61,8 +61,8 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
         case 161:
         case 163:
         case 165:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.pistons);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.pistons);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.pistons);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.pistons);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.pistons[idx2].sticky = gameInfo.pistons[idx1].sticky;
                 gameInfo.pistons[idx2].inverted = gameInfo.pistons[idx1].inverted;
@@ -72,16 +72,16 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             }
             break;
         case 167:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.delays);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.delays);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.delays);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.delays);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.delays[idx2].gameTicks = gameInfo.delays[idx1].gameTicks;
             }
             break;
 
         case 171:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.conveyorBelts);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.conveyorBelts);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.conveyorBelts);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.conveyorBelts);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.conveyorBelts[idx2].mode = gameInfo.conveyorBelts[idx1].mode;
                 gameInfo.conveyorBelts[idx2].direction = gameInfo.conveyorBelts[idx1].direction;
@@ -89,8 +89,8 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             }
             break;
         case 178:
-            idx1 = findElementByCoordinate(x1, y1, gameInfo.movers);
-            idx2 = findElementByCoordinate(x2, y2, gameInfo.movers);
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.movers);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.movers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.movers[idx2].direction = gameInfo.movers[idx1].direction;
             }
@@ -108,33 +108,33 @@ function getObjectInfo(gameInfo, x, y, n) {
         case 8:
         case 93:
         case 94:
-            idx = findElementByCoordinate(x, y, gameInfo.redBalls);
+            idx = findElementByCoordinates(x, y, gameInfo.redBalls);
             if (idx >= 0) {
                 return { arr: gameInfo.redBalls, idx };
             }
             break;
         case 6:
         case 106:
-            idx = findElementByCoordinate(x, y, gameInfo.elevators);
+            idx = findElementByCoordinates(x, y, gameInfo.elevators);
             if (idx >= 0) {
                 return { arr: gameInfo.elevators, idx };
             }
             break;
         case 7:
         case 107:
-            idx = findElementByCoordinate(x, y, gameInfo.horizontalElevators);
+            idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
             if (idx >= 0) {
                 return { arr: gameInfo.horizontalElevators, idx };
             }
             break;
         case 157:
-            idx = findElementByCoordinate(x, y, gameInfo.musicBoxes);
+            idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
             if (idx >= 0) {
                 return { arr: gameInfo.musicBoxes, idx };
             }
             break;
         case 158:
-            idx = findElementByCoordinate(x, y, gameInfo.pistonsTriggers);
+            idx = findElementByCoordinates(x, y, gameInfo.pistonsTriggers);
             if (idx >= 0) {
                 return { arr: gameInfo.pistonsTriggers, idx };
             }
@@ -143,25 +143,25 @@ function getObjectInfo(gameInfo, x, y, n) {
         case 161:
         case 163:
         case 165:
-            idx = findElementByCoordinate(x, y, gameInfo.pistons);
+            idx = findElementByCoordinates(x, y, gameInfo.pistons);
             if (idx >= 0) {
                 return { arr: gameInfo.pistons, idx };
             }
             break;
         case 167:
-            idx = findElementByCoordinate(x, y, gameInfo.delays);
+            idx = findElementByCoordinates(x, y, gameInfo.delays);
             if (idx >= 0) {
                 return { arr: gameInfo.delays, idx };
             }
             break;
         case 171:
-            idx = findElementByCoordinate(x, y, gameInfo.conveyorBelts);
+            idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
             if (idx >= 0) {
                 return { arr: gameInfo.conveyorBelts, idx };
             }
             break;
         case 178:
-            idx = findElementByCoordinate(x, y, gameInfo.movers);
+            idx = findElementByCoordinates(x, y, gameInfo.movers);
             if (idx >= 0) {
                 return { arr: gameInfo.movers, idx };
             }
@@ -253,6 +253,9 @@ export function menuToNumber(s) {
             break;
         case "backgroundcolors":
             result = 14;
+            break;
+        case "info":
+            result = 16;
             break;
         default:
             result = -1;
