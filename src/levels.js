@@ -1,5 +1,5 @@
 import { removeObject } from "./addRemoveObject.js";
-import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
+import { changeDirection, changeGroup, changePart, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
@@ -219,6 +219,7 @@ export function checkSettings(data, settings) {
     { name: "$inverted", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$notes", params: 0, xy: true },
+    { name: "$part", params: 3, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
@@ -342,7 +343,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$musicbox":
-              if (!["note", "song"].includes(valuesLowerCase[2])) {
+              if (!["note", "song", "keyboard"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid music box mode ${values[2]}.\n`;
               }
               gameTicks = tryParseInt(values[3], -1);
@@ -351,6 +352,19 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$part":
+              switch (data[y][x]) {
+                case "M":
+                case "157":
+                  if (!["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for part.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
               }
               break;
             case "$pistonmode":
@@ -1038,7 +1052,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length === 4) {
             mode = valuesLowerCase[2];
             gameTicks = tryParseInt(values[3], -1);
-            if (validXY && ["note", "song"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
+            if (validXY && ["note", "song", "keyboard"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
               idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].mode = mode;
@@ -1058,6 +1072,13 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   gameInfo.musicBoxes[idx].notes.push(values[note]);
                 }
               }
+            }
+          }
+          break;
+        case "$part":
+          if (values.length === 3) {
+            if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
+              changePart(gameInfo, x, y, valuesLowerCase[2]);
             }
           }
           break;

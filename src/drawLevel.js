@@ -9,6 +9,7 @@ import {
   drawText,
 } from "./drawUtils.js";
 import { electricityTarget } from "./electricity.js";
+import { validNotesForKeyboardMode } from "./musicBoxes.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
 
@@ -994,14 +995,124 @@ function drawLevel(
     drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[3].x, rotatedPoints[3].y, "white");
   }
 
-  function drawMusicBox() {
-    const ratio = 241 / 450;
-    const margin = 0.1;
-    const height = w2 * (1 - margin - margin);
-    const width = height * ratio;
+  function drawMusicBox(x, y) {
+    let black1start = -1;
+    let black1width = -1;
+    let black2start = -1;
+    let black2width = -1;
+    let blackHalfWidth = -1;
+    let idx = -1;
+    let mode = "note";
+    let note = "";
+    let notes = ["C4"];
+    let part = "bottom";
+    let width3div5 = -1;
+    let width4div7 = -1;
+
+    const musicNoteRatio = 241 / 450;
+    const musicNoteMargin = 0.1;
+    const musicNoteHeight = w2 * (1 - musicNoteMargin - musicNoteMargin);
+    const musicNoteWidth = musicNoteHeight * musicNoteRatio;
+
+    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+    if (idx >= 0) {
+      mode = gameInfo.musicBoxes[idx].mode;
+      notes = gameInfo.musicBoxes[idx].notes;
+      part = gameInfo.musicBoxes[idx].part;
+    }
+
+    if (mode === "keyboard") {
+      if (!validNotesForKeyboardMode(notes)) {
+        mode = "note";
+      }
+    }
+
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
-    drawBox(ctx, xmin, ymin, w1, w2, "black");
-    ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - width)), ymin + (margin * w2), width, height);
+
+    switch (mode) {
+      case "note":
+      case "song":
+        drawBox(ctx, xmin, ymin, w1, w2, "black");
+        ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - musicNoteWidth)), ymin + (musicNoteMargin * w2), musicNoteWidth, musicNoteHeight);
+        break;
+      case "keyboard":
+        if (notes.length === 1) {
+          drawLine(ctx, xmin - 0.5, ymin - 0.5, xmin - 0.5, ymax + 0.5, "black");
+          drawLine(ctx, xmax + 0.5, ymin - 0.5, xmax + 0.5, ymax + 0.5, "black");
+          if ((part === "top") || (part === "middle")) {
+            blackHalfWidth = w1 * (13.7642 / 23.5) * 0.5;
+            width3div5 = (w1 * 3) / 5;
+            width4div7 = (w1 * 4) / 7;
+            black1start = -1;
+            black1width = -1;
+            black2start = -1;
+            black2width = -1;
+            note = notes[0][0];
+            switch (note) {
+              case "C":
+                black1start = xmin + (1.5 * width3div5) - blackHalfWidth;
+                black1width = w1 - (black1start - xmin);
+                break;
+              case "D":
+                black1start = xmin;
+                black1width = (xmin - w1) + (1.5 * width3div5) + blackHalfWidth - xmin;
+                black2start = (xmin - w1) + (3.5 * width3div5) - blackHalfWidth;
+                black2width = w1 - (black2start - xmin);
+                break;
+              case "E":
+                black1start = xmin;
+                black1width = (xmin - (w1 * 2)) + (3.5 * width3div5) + blackHalfWidth - xmin;
+                break;
+              case "F":
+                black1start = xmin + (1.5 * width4div7) - blackHalfWidth;
+                black1width = w1 - (black1start - xmin);
+                break;
+              case "G":
+                black1start = xmin;
+                black1width = (xmin - w1) + (1.5 * width4div7) + blackHalfWidth - xmin;
+                black2start = (xmin - w1) + (3.5 * width4div7) - blackHalfWidth;
+                black2width = w1 - (black2start - xmin);
+                break;
+              case "A":
+                black1start = xmin;
+                black1width = (xmin - (w1 * 2)) + (3.5 * width4div7) + blackHalfWidth - xmin;
+                black2start = (xmin - (w1 * 2)) + (5.5 * width4div7) - blackHalfWidth;
+                black2width = w1 - (black2start - xmin);
+                break;
+              case "B":
+                black1start = xmin;
+                black1width = (xmin - (w1 * 3)) + (5.5 * width4div7) + blackHalfWidth - xmin;
+                break;
+              default:
+                break;
+            }
+            for (let i = 0; i < 2; i++) {
+              // Draw two times the same to erase what is under it
+              if ((black1start >= 0) && (black1width > 0)) {
+                if (part === "top") {
+                  drawFilledBox(ctx, black1start, ymin - 0.5, black1width, w2 + 1, "black");
+                  drawBox(ctx, black1start, ymin - 0.5, black1width, w2 + 1, "black");
+                } else {
+                  drawFilledBox(ctx, black1start, ymin - 0.5, black1width, w2 * 0.5, "black");
+                  drawBox(ctx, black1start, ymin - 0.5, black1width, w2 * 0.5, "black");
+                }
+              }
+              if ((black2start >= 0) && (black2width > 0)) {
+                if (part === "top") {
+                  drawFilledBox(ctx, black2start, ymin - 0.5, black2width, w2 + 1, "black");
+                  drawBox(ctx, black2start, ymin - 0.5, black2width, w2 + 1, "black");
+                } else {
+                  drawFilledBox(ctx, black2start, ymin - 0.5, black2width, w2 * 0.5, "black");
+                  drawBox(ctx, black2start, ymin - 0.5, black2width, w2 * 0.5, "black");
+                }
+              }
+            }
+          }
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   function drawNumber(n) {
@@ -1756,11 +1867,14 @@ function drawLevel(
   let w1 = 0;
   let w2 = 0;
 
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
   ctx.lineWidth = 1;
   ctx.shadowBlur = 0;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
   ctx.imageSmoothingEnabled = false;
+
 
   ymin = topMargin;
   for (let row = 0; row < rows; row++) {
@@ -2132,7 +2246,7 @@ function drawLevel(
           drawYellowSlowdowner();
           break;
         case 157:
-          drawMusicBox();
+          drawMusicBox(col, row);
           break;
         case 158:
           drawPistonsTrigger(col, row);
@@ -2224,11 +2338,11 @@ function drawLevel(
           drawAbbreviation("GR");
           break;
         case 2034:
-          // Piston mode - toggle
+          // Piston mode - toggle OR Music box part top
           drawAbbreviation("T");
           break;
         case 2035:
-          // Piston mode - momentary OR Menu Select - Move
+          // Piston mode - momentary OR Menu Select - Move OR Music box part middle
           drawAbbreviation("M");
           break;
         case 2036:
@@ -2240,7 +2354,7 @@ function drawLevel(
           drawAbbreviation("RS");
           break;
         case 2038:
-          // Piston - sticky
+          // Sticky or Song
           drawAbbreviation("S");
           break;
         case 2039:
@@ -2264,7 +2378,7 @@ function drawLevel(
           drawAbbreviation("D");
           break;
         case 2044:
-          // None
+          // None or Note
           drawAbbreviation("N");
           break;
         case 2045:
@@ -2351,6 +2465,43 @@ function drawLevel(
         case 2099:
           // Show info
           drawAbbreviation("?");
+          break;
+        case 2100:
+          // Page up
+          drawAbbreviation("PU");
+          break;
+        case 2101:
+          // Page down
+          drawAbbreviation("PD");
+          break;
+        case 2102:
+          // Music box mode keyboard
+          drawAbbreviation("K");
+          break;
+        case 2103:
+          // Music box part bottom
+          drawAbbreviation("B");
+          break;
+        case 2104:
+          drawAbbreviation("C4");
+          break;
+        case 2105:
+          drawAbbreviation("D4");
+          break;
+        case 2106:
+          drawAbbreviation("E4");
+          break;
+        case 2107:
+          drawAbbreviation("F4");
+          break;
+        case 2108:
+          drawAbbreviation("G4");
+          break;
+        case 2109:
+          drawAbbreviation("A4");
+          break;
+        case 2110:
+          drawAbbreviation("B4");
           break;
         default:
           if (gd < 2000) {

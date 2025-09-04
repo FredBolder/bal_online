@@ -1,5 +1,6 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates } from "./balUtils.js";
+import { globalVars } from "./glob.js";
 import { deleteIfPurpleTeleport } from "./teleports.js";
 
 export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
@@ -211,54 +212,73 @@ export function loadCellForUndo(backData, gameData, gameInfo, obj) {
 export function menuToNumber(s) {
     let result = -1;
 
-    switch (s) {
-        case "delete":
-            result = 1;
+    switch (globalVars.createLevelMenuPage) {
+        case 1:
+            switch (s) {
+                case "delete":
+                    result = 1;
+                    break;
+                case "select":
+                    result = 2;
+                    break;
+                case "stones":
+                    result = 3;
+                    break;
+                case "balls":
+                    result = 4;
+                    break;
+                case "yellowballs":
+                    result = 5;
+                    break;
+                case "pistons":
+                    result = 6;
+                    break;
+                case "elevators":
+                    result = 7;
+                    break;
+                case "conveyorbelts":
+                    result = 8;
+                    break;
+                case "doors":
+                    result = 9;
+                    break;
+                case "water":
+                    result = 10;
+                    break;
+                case "misc":
+                    result = 11;
+                    break;
+                case "groups":
+                    result = 12;
+                    break;
+                case "foregroundcolors":
+                    result = 13;
+                    break;
+                case "backgroundcolors":
+                    result = 14;
+                    break;
+                case "info":
+                    result = 15;
+                    break;
+                default:
+                    result = -1;
+                    break;
+            }
             break;
-        case "select":
-            result = 2;
-            break;
-        case "stones":
-            result = 3;
-            break;
-        case "balls":
-            result = 4;
-            break;
-        case "yellowballs":
-            result = 5;
-            break;
-        case "pistons":
-            result = 6;
-            break;
-        case "elevators":
-            result = 7;
-            break;
-        case "conveyorbelts":
-            result = 8;
-            break;
-        case "doors":
-            result = 9;
-            break;
-        case "water":
-            result = 10;
-            break;
-        case "misc":
-            result = 11;
-            break;
-        case "groups":
-            result = 12;
-            break;
-        case "foregroundcolors":
-            result = 13;
-            break;
-        case "backgroundcolors":
-            result = 14;
-            break;
-        case "info":
-            result = 16;
+        case 2:
+            switch (s) {
+                case "musicboxes":
+                    result = 1;
+                    break;
+                case "info":
+                    result = 15;
+                    break;
+                default:
+                    result = -1;
+                    break;
+            }
             break;
         default:
-            result = -1;
             break;
     }
     return result;

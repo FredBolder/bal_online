@@ -198,7 +198,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 157: {
-                    let musicBox = { x: j, y: i, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, group: 1 };
+                    let musicBox = { x: j, y: i, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, part: "bottom", group: 1 };
                     result.musicBoxes.push(musicBox);
                     break;
                 }
@@ -275,6 +275,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
     let backInfo = "";
     let extraBackInfo = "Additional object information not found!";
     let extraInfo = "Additional object information not found!";
+    let firstNote = "";
     let idx = -1;
     let info = "";
     let obj = null;
@@ -318,18 +319,22 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
         case 157:
             idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
             if (idx >= 0) {
+                firstNote = "none";
                 obj = gameInfo.musicBoxes[idx];
-                extraInfo = `Music box, Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, Note index: ${obj.noteIndex}, Group: ${obj.group}`;
+                if (obj.notes.length > 0) {
+                    firstNote = obj.notes[0];
+                }
+                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, Part: ${obj.part}, Group: ${obj.group}`;
             }
-            info = `, ` + extraInfo;
+            info = `Music box, ` + extraInfo;
             break;
         case 158:
             idx = findElementByCoordinates(x, y, gameInfo.pistonsTriggers);
             if (idx >= 0) {
                 obj = gameInfo.pistonsTriggers[idx];
-                extraInfo = `Pistons trigger, Pressed: ${obj.pressed}, Group: ${obj.group}`;
+                extraInfo = `Pressed: ${obj.pressed}, Group: ${obj.group}`;
             }
-            info = `, ` + extraInfo;
+            info = `Pistons trigger, ` + extraInfo;
             break;
         case 159:
         case 161:

@@ -37,6 +37,7 @@ import { globalVars } from "../glob.js";
 import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
+import { changeMusicBoxMode, changeMusicBoxNote, changeMusicBoxPart } from "../musicBoxes.js";
 import { gameScheduler } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -78,6 +79,7 @@ let kPressed = false;
 let createLevel = false;
 let createLevelSelectedCell = null;
 let createLevelMenu = -1;
+let createLevelMenuPages = 2;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
@@ -818,73 +820,105 @@ function BalPage() {
     }
     backDataMenu = zeroArray(gameDataMenu.length, gameDataMenu[0].length);
 
-    arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 0, 2097];
+    switch (globalVars.createLevelMenuPage) {
+      case 1:
+        arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 2097, 2101];
+        break;
+      case 2:
+        arr0 = [157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        break;
+      default:
+        break;
+    }
     for (let i = 0; i < arr0.length; i++) {
       if (i < gameDataMenu[0].length) {
         addObject(backDataMenu, gameDataMenu, gameInfoMenu, i, 0, arr0[i]);
       }
     }
-    switch (n) {
+    switch (globalVars.createLevelMenuPage) {
       case 1:
-        arr1 = [2050, 2051];
-        arr2 = [0];
+        switch (n) {
+          case 1:
+            arr1 = [2050, 2051];
+            arr2 = [0];
+            break;
+          case 2:
+            arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
+            arr2 = [0];
+            break;
+          case 3:
+            arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
+            arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 22, 36, 37, 117];
+            break;
+          case 4:
+            arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047, 105];
+            arr2 = [95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
+            break;
+          case 5:
+            arr1 = [9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124];
+            arr2 = [125];
+            break;
+          case 6:
+            arr1 = [158, 159, 161, 163, 165, 2034, 2035, 2036, 2037, 2038, 2039];
+            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            break;
+          case 7:
+            arr1 = [6, 7, 2040, 2041, 2042, 2043, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111];
+            arr2 = [112, 81, 31, 92, 170, 178, 2092, 2093, 2094, 2095];
+            break;
+          case 8:
+            arr1 = [171, 172, 173, 2040, 2041, 2044, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091];
+            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            break;
+          case 9:
+            arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
+            arr2 = [0];
+            break;
+          case 10:
+            arr1 = [23, 20, 113, 114, 26, 27];
+            arr2 = [0];
+            break;
+          case 11:
+            arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
+            arr2 = [0];
+            break;
+          case 12:
+            arr1 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
+            break;
+          case 13:
+          case 14:
+            arr1 = [2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067];
+            arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083];
+            break;
+          case 15:
+            arr1 = [2097, 2098, 2099];
+            arr2 = [0];
+            break;
+          default:
+            arr1 = [0];
+            arr2 = [0];
+            break;
+        }
         break;
       case 2:
-        arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
-        arr2 = [0];
-        break;
-      case 3:
-        arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-        arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 22, 36, 37, 117];
-        break;
-      case 4:
-        arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047, 105];
-        arr2 = [95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
-        break;
-      case 5:
-        arr1 = [9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124];
-        arr2 = [125];
-        break;
-      case 6:
-        arr1 = [158, 159, 161, 163, 165, 2034, 2035, 2036, 2037, 2038, 2039];
-        arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
-        break;
-      case 7:
-        arr1 = [6, 7, 2040, 2041, 2042, 2043, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111];
-        arr2 = [112, 81, 31, 92, 170, 178, 2092, 2093, 2094, 2095];
-        break;
-      case 8:
-        arr1 = [171, 172, 173, 2040, 2041, 2044, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091];
-        arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
-        break;
-      case 9:
-        arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
-        arr2 = [0];
-        break;
-      case 10:
-        arr1 = [23, 20, 113, 114, 26, 27];
-        arr2 = [0];
-        break;
-      case 11:
-        arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
-        arr2 = [0];
-        break;
-      case 12:
-        arr1 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
-        arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
-        break;
-      case 13:
-      case 14:
-        arr1 = [2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067];
-        arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083];
-        break;
-      case 16:
-        arr1 = [2097, 2098, 2099];
-        arr2 = [0];
+        switch (n) {
+          case 1:
+            // Music box
+            arr1 = [157, 2044, 2038, 2102, 2034, 2035, 2103];
+            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110];
+            break;
+          case 15:
+            arr1 = [2097, 2098, 2099];
+            arr2 = [0];
+            break;
+          default:
+            arr1 = [0];
+            arr2 = [0];
+            break;
+        }
         break;
       default:
-        arr1 = [0];
-        arr2 = [0];
         break;
     }
 
@@ -1619,6 +1653,7 @@ function BalPage() {
   function handleGameCanvasClick(e) {
     let info = "";
     let move = false;
+    let newValue = "";
 
     if (!gameData || !backData) {
       return;
@@ -1863,6 +1898,50 @@ function BalPage() {
                 changeGroup(gameInfo, column, row, createLevelObject - 2000);
               }
 
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2110)) {
+                if (changeMusicBoxNote(gameInfo, column, row, ["C4","D4","E4","F4","G4","A4","B4"][createLevelObject - 2104]) === -1) {
+                  showMessage("Info", "Click on a music box to set the note of it.");
+                }
+              }
+
+              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102].includes(createLevelObject)) {
+                switch (createLevelObject) {
+                  case 2044:
+                    newValue = "note";
+                    break;
+                  case 2038:
+                    newValue = "song";
+                    break;
+                  case 2102:
+                    newValue = "keyboard";
+                    break;
+                  default:
+                    break;
+                }
+                if (changeMusicBoxMode(gameInfo, column, row, newValue) === -1) {
+                  showMessage("Info", "Click on a music box to set the mode of it.");
+                }
+              }
+
+              if ((createLevelMenu === menuToNumber("musicboxes")) && [2034, 2035, 2103].includes(createLevelObject)) {
+                switch (createLevelObject) {
+                  case 2034:
+                    newValue = "top";
+                    break;
+                  case 2035:
+                    newValue = "middle";
+                    break;
+                  case 2103:
+                    newValue = "bottom";
+                    break;
+                  default:
+                    break;
+                }
+                if (changeMusicBoxPart(gameInfo, column, row, newValue) === -1) {
+                  showMessage("Info", "Click on a music box to set the part of it.");
+                }
+              }
+
               if (createLevelMenu === menuToNumber("foregroundcolors")) {
                 if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
                   saveUndo("Change foreground color", "fgcolors", { colors: gameVars.fgcolor });
@@ -2060,6 +2139,16 @@ function BalPage() {
           case 2099:
             // Info
             createLevelObject = -5;
+            break;
+          case 2101:
+            // Menu page down
+            globalVars.createLevelMenuPage++;
+            if (globalVars.createLevelMenuPage > createLevelMenuPages) {
+              globalVars.createLevelMenuPage = 1;
+            }
+            fillMenu(1);
+            updateCreateLevelCanvas();
+            createLevelObject = -1;
             break;
           default:
             break;

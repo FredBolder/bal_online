@@ -189,6 +189,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$instrument: ${musicBox.x}, ${musicBox.y}, ${musicBox.instrument}, ${musicBox.volume}`;
             lines.push(line);
         }
+        if (musicBox.part !== "bottom") {
+            line = `$part: ${musicBox.x}, ${musicBox.y}, ${musicBox.part}`;
+            lines.push(line);
+        }
         if (musicBox.group > 1) {
             line = `$group: ${musicBox.x}, ${musicBox.y}, ${musicBox.group}`;
             lines.push(line);

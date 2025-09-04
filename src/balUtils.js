@@ -117,6 +117,20 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   return idx;
 }
 
+export function changePart(gameInfo, x, y, part) {
+  let idx = -1;
+
+  if (["top", "middle", "bottom"].includes(part)) {
+    if (idx === -1) {
+      idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+      if (idx >= 0) {
+        gameInfo.musicBoxes[idx].part = part;
+      }
+    }
+  }
+  return idx;
+}
+
 export function changePistonInverted(gameInfo, x, y) {
   let idx = -1;
 

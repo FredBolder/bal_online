@@ -1,6 +1,37 @@
-import { hasWeightAbove, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { playNote } from "./music.js";
 import { getSettings } from "./settings.js";
+
+export function changeMusicBoxMode(gameInfo, x, y, mode) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+  if (idx >= 0) {
+    gameInfo.musicBoxes[idx].mode = mode;
+  }
+  return idx;
+}
+
+export function changeMusicBoxNote(gameInfo, x, y, note) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+  if (idx >= 0) {
+    gameInfo.musicBoxes[idx].notes.length = 0;
+    gameInfo.musicBoxes[idx].notes.push(note);
+  }
+  return idx;
+}
+
+export function changeMusicBoxPart(gameInfo, x, y, part) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+  if (idx >= 0) {
+    gameInfo.musicBoxes[idx].part = part;
+  }
+  return idx;
+}
 
 export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
     let note = "";
@@ -49,4 +80,18 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
         }
     }
     return update;
+}
+
+export function validNotesForKeyboardMode(notes) {
+    let result = true;
+    if (notes.length === 1) {
+        if (notes[0].includes("b") || notes[0].includes("#")) {
+            result = false;
+        }
+    } else if (notes.length > 1) {
+        result = false; // TODO
+    } else {
+        result = false;
+    }
+    return result;
 }
