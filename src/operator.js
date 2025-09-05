@@ -1,14 +1,28 @@
 import { resonancePercentToQ } from "./filter.js";
 import { tryParseInt } from "./utils.js";
 
-function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 3) {
-    const real = new Float32Array(harmonics + 1);
-    const imag = new Float32Array(harmonics + 1);
+function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 5, phaseDeg = 0) {
+  const real = new Float32Array(harmonics + 1);
+  const imag = new Float32Array(harmonics + 1);
+  const phi = (phaseDeg * Math.PI) / 180.0;
+  real[0] = 0;
+  imag[0] = 0;
+  for (let n = 1; n <= harmonics; n++) {
+    const A = (2 / (n * Math.PI)) * Math.sin(n * Math.PI * dutyCycle);
+    real[n] = A * Math.cos(phi);
+    imag[n] = A * Math.sin(phi);
+  }
+  return audioCtx.createPeriodicWave(real, imag, { disableNormalization: true });
+}
 
-    for (let n = 1; n <= harmonics; n++) {
-        real[n] = (2 / (n * Math.PI)) * Math.sin(n * Math.PI * dutyCycle);
-        imag[n] = 0;
-    }
+function createSineWave(audioCtx, phaseDeg = 0) {
+    const real = new Float32Array(2); // index 0 = DC, index 1 = 1st harmonic
+    const imag = new Float32Array(2);
+    const phi = (phaseDeg * Math.PI) / 180.0;
+    real[0] = 0;
+    imag[0] = 0;
+    real[1] = Math.sin(phi);
+    imag[1] = Math.cos(phi);
     return audioCtx.createPeriodicWave(real, imag, { disableNormalization: true });
 }
 
@@ -46,6 +60,7 @@ class Operator {
         this.stopScheduled = false;
         let freq = 440;
         let nOscillators = 1;
+        let phase = 0;
         let pulseWidth = 25;
         this.lfoSettings = { destination: "none", waveform: "sine", frequency: 4, delay: 0, depth: 0.1 };
         this.dcoSettings = { waveform, frequency };
@@ -64,16 +79,16 @@ class Operator {
 
         let oscillator = null;
 
-        if (!["noise", "noiseAndHPF"].includes(this.dcoSettings.waveform) && (detuneOrResonance !== 0)) {
+        if (!["noise", "noiseAndHPF"].includes(waveform) && (detuneOrResonance !== 0)) {
             nOscillators = 3;
         } else {
             nOscillators = 1;
         }
         for (let i = 0; i < nOscillators; i++) {
-            if (["noise", "noiseAndHPF"].includes(this.dcoSettings.waveform)) {
+            if (["noise", "noiseAndHPF"].includes(waveform)) {
                 oscillator = audioContext.createBufferSource();
                 oscillator.buffer = createWhiteNoiseBuffer(audioContext, 1);
-                switch (this.dcoSettings.waveform) {
+                switch (waveform) {
                     case "noiseAndHPF":
                         this.filter = audioContext.createBiquadFilter();
                         this.filter.type = "highpass";
@@ -85,21 +100,31 @@ class Operator {
                 }
             } else {
                 oscillator = audioContext.createOscillator();
-                if (this.dcoSettings.waveform.startsWith("pulse")) {
-                    if (this.dcoSettings.waveform.length > 5) {
-                        pulseWidth = tryParseInt(this.dcoSettings.waveform.slice(5), -1);
+                if (waveform.startsWith("pulse")) {
+                    if (waveform.length > 5) {
+                        pulseWidth = tryParseInt(waveform.slice(5), -1);
                         if (pulseWidth < 1) {
                             pulseWidth = 25;
                         }
                     }
                     oscillator.setPeriodicWave(createPulseWave(audioContext, pulseWidth / 100, 20));
-                } else if (this.dcoSettings.waveform === "cosine") {
-                    const real = new Float32Array([0, 0]); // cosine terms
-                    const imag = new Float32Array([0, 1]); // sine terms
+                } else if (waveform.startsWith("sine") && (waveform.length > 4)) {
+                    phase = tryParseInt(waveform.slice(4), -1);
+                    if (phase < 0) {
+                        phase = 0;
+                    }
+                    oscillator.setPeriodicWave(createSineWave(audioContext, phase));
+                } else if (waveform === "cosine") {
+                    const real = new Float32Array(2);
+                    const imag = new Float32Array(2);
+                    real[0] = 0;
+                    imag[0] = 0;
+                    real[1] = 1; // cosine coefficient
+                    imag[1] = 0; // sine coefficient
                     const wave = audioContext.createPeriodicWave(real, imag, { disableNormalization: true });
                     oscillator.setPeriodicWave(wave);
                 } else {
-                    oscillator.type = this.dcoSettings.waveform;
+                    oscillator.type = waveform;
                 }
                 switch (i) {
                     case 1:
@@ -217,7 +242,6 @@ class Operator {
         let rt = this.dcaSettings.release / 1000;
 
         if (isFirefox) {
-            console.log("Firefox");
             // Calculate current amp gain
             const maxVolume = this.dcaSettings.volume / this.oscList.length;
             const sustainVolume = this.dcaSettings.sustain / this.oscList.length;

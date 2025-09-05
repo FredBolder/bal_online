@@ -180,7 +180,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
 
 export function instruments() {
     return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
-        "piano", "snaredrum", "strings", "trombone", "trumpet", "vibraphone", "xylophone"]
+        "piano", "pipeorgan", "snaredrum", "squarelead", "strings", "trombone", "trumpet", "vibraphone", "xylophone"]
 }
 
 export function validNotesForKeyboardMode(notes) {

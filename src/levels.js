@@ -27,7 +27,7 @@ const seriesEasyEnd = 3022;
 const hiddenMiniSeries1Start = 3100;
 const hiddenMiniSeries1End = 3106;
 const seriesMusicStart = 3200;
-const seriesMusicEnd = 3201;
+const seriesMusicEnd = 3202;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";

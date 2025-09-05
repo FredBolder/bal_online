@@ -1,0 +1,95 @@
+$musicbox: 32, 2, door, 10
+$notes: 32, 2, C4, E4, G4, -, -, -
+$direction: 32, 2, up
+$musicbox: 9, 7, keyboard, 5
+$instrument: 9, 7, pipeorgan, 90
+$part: 9, 7, top
+$direction: 9, 7, up
+$musicbox: 10, 7, keyboard, 5
+$notes: 10, 7, D4
+$instrument: 10, 7, pipeorgan, 90
+$part: 10, 7, top
+$direction: 10, 7, up
+$musicbox: 11, 7, keyboard, 5
+$notes: 11, 7, E4
+$instrument: 11, 7, pipeorgan, 90
+$part: 11, 7, top
+$direction: 11, 7, up
+$musicbox: 12, 7, keyboard, 5
+$notes: 12, 7, F4
+$instrument: 12, 7, pipeorgan, 90
+$part: 12, 7, top
+$direction: 12, 7, up
+$musicbox: 13, 7, keyboard, 5
+$notes: 13, 7, G4
+$instrument: 13, 7, pipeorgan, 90
+$part: 13, 7, top
+$direction: 13, 7, up
+$musicbox: 14, 7, keyboard, 5
+$notes: 14, 7, A4
+$instrument: 14, 7, pipeorgan, 90
+$part: 14, 7, top
+$direction: 14, 7, up
+$musicbox: 15, 7, keyboard, 5
+$notes: 15, 7, B4
+$instrument: 15, 7, pipeorgan, 90
+$part: 15, 7, top
+$direction: 15, 7, up
+$musicbox: 16, 7, keyboard, 5
+$notes: 16, 7, C5
+$instrument: 16, 7, pipeorgan, 90
+$direction: 16, 7, up
+$musicbox: 9, 8, keyboard, 5
+$instrument: 9, 8, pipeorgan, 90
+$direction: 9, 8, up
+$musicbox: 10, 8, keyboard, 5
+$notes: 10, 8, D4
+$instrument: 10, 8, pipeorgan, 90
+$direction: 10, 8, up
+$musicbox: 11, 8, keyboard, 5
+$notes: 11, 8, E4
+$instrument: 11, 8, pipeorgan, 90
+$direction: 11, 8, up
+$musicbox: 12, 8, keyboard, 5
+$notes: 12, 8, F4
+$instrument: 12, 8, pipeorgan, 90
+$direction: 12, 8, up
+$musicbox: 13, 8, keyboard, 5
+$notes: 13, 8, G4
+$instrument: 13, 8, pipeorgan, 90
+$direction: 13, 8, up
+$musicbox: 14, 8, keyboard, 5
+$notes: 14, 8, A4
+$instrument: 14, 8, pipeorgan, 90
+$direction: 14, 8, up
+$musicbox: 15, 8, keyboard, 5
+$notes: 15, 8, B4
+$instrument: 15, 8, pipeorgan, 90
+$direction: 15, 8, up
+$musicbox: 16, 8, keyboard, 5
+$notes: 16, 8, C5
+$instrument: 16, 8, pipeorgan, 90
+$direction: 16, 8, up
+$musicbox: 18, 10, door, 10
+$notes: 18, 10, C4, E4, G4, -, -, -
+$direction: 18, 10, up
+11111111111111111111111111111111111
+111111                          1 1
+1    3                  4       M 1
+1               11111111111111111=1
+1         4   5               3 1=1
+1     111111               4    1=1
+1     1111111111111 1111111111  1=1
+11G   111MMMMMMMM11 11      11  1=1
+111   111MMMMMMMM11p11      11  1=1
+1 3               1         31  1=1
+1             2   M          1  1=1
+1  111111111111111111111111111  1=1
+1                                 1
+1111111111111111111111-111111111111
+13                              111
+1   11              9           111
+1 1111 111           5          131
+1 1111 111       5                1
+1    <                            1
+11111111111111111111111111111111111

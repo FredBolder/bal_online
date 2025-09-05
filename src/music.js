@@ -198,11 +198,40 @@ export async function playNote(instrument, volume, note) {
         operators.push(new Operator(audioCtx, "sine", frequency * 6, detune, maxVolume * 0.2 * f1, 2, 500 * f2, 0, 500 * f3));
         filter.setFilter("lowpass", 3000, 3000, 1200, 1200, 0, 0, 300, 300 * f3);
         break;
+      case "pipeorgan":
+        attack = 3;
+        decay = 50;
+        release = 80;
+        f1 = 1 / 4.82;
+        f2 = 0.9;
+        operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine5", frequency * 2, 0, maxVolume * 0.85 * f1, attack, decay, maxVolume * 0.85 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine8", frequency * 3, 0, maxVolume * 0.65 * f1, attack, decay, maxVolume * 0.65 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine4", frequency * 4, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * 0.5 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine", frequency * 5, 0, maxVolume * 0.3 * f1, attack, decay, maxVolume * 0.3 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine1", frequency * 6, 0, maxVolume * 0.2 * f1, attack, decay, maxVolume * 0.2 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine3", frequency * 7, 0, maxVolume * 0.12 * f1, attack, decay, maxVolume * 0.12 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine7", frequency * 8, 0, maxVolume * 0.08 * f1, attack, decay, maxVolume * 0.08 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine3", frequency * 9, 0, maxVolume * 0.05 * f1, attack, decay, maxVolume * 0.05 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine2", frequency * 10, 0, maxVolume * 0.04 * f1, attack, decay, maxVolume * 0.04 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine1", frequency * 11, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.01 * f1, attack, decay, maxVolume * 0.01 * f1 * f2, release));
+        break;
       case "snaredrum":
         // Frequency has no influence on the noise generator
         operators.push(new Operator(audioCtx, "noiseAndHPF", 1000, 40, maxVolume * 0.4, 0, 500, 0, 125));
         operators.push(new Operator(audioCtx, "sine", 250, 0, maxVolume * 0.6, 0, 400, 0, 100));
         operators[1].setPitchEnv(0.1, 50, 0);
+        break;
+      case "squarelead":
+        attack = 7;
+        decay = 1000;
+        release = 100;
+        f1 = 0.8;
+        f2 = 0.6;
+        operators.push(new Operator(audioCtx, "square", frequency, 7, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        filter.setFilter("lowpass", 2500, 2500, 2500, 2500, 0, attack, decay, release);
+        operators[0].setPitchEnv(60 / 1200, 50, 0);
         break;
       case "strings":
         attack = 100;
