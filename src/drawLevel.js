@@ -190,14 +190,14 @@ function drawLevel(
     const scaleFactor = gameInfo.hasPropeller ? 0.9 : 1;
     const offsetX = (1 - scaleFactor) * w1 * 0.5;
     const offsetY = (1 - scaleFactor) * w2;
-    ctx.save();
-    // The rotation center point is always the canvas origin. 
-    // To change the center point, the canvas has to be moved by using the translate() method.
-    ctx.translate(Math.round(xc), Math.round(yc));
     if (gameVars.gravity === "up") {
+      ctx.save();
+      // The rotation center point is always the canvas origin. 
+      // To change the center point, the canvas has to be moved by using the translate() method.
+      ctx.translate(Math.round(xc), Math.round(yc));
       ctx.rotate(Math.PI);
+      ctx.translate(-Math.round(xc), -Math.round(yc));
     }
-    ctx.translate(-Math.round(xc), -Math.round(yc));
 
     if (gameInfo.hasDivingGlasses) {
       ctx.drawImage(elements.elementDiving, xmin + offsetX, ymin + offsetY, w1 * scaleFactor, w2 * scaleFactor);
@@ -212,7 +212,9 @@ function drawLevel(
       drawPropeller(-w2 * 0.17);
     }
 
-    ctx.restore();
+    if (gameVars.gravity === "up") {
+      ctx.restore();
+    }
   }
 
   function drawBomb(x, y) {
@@ -996,18 +998,25 @@ function drawLevel(
   }
 
   function drawMusicBox(x, y) {
-    let black1start = -1;
-    let black1width = -1;
-    let black2start = -1;
-    let black2width = -1;
-    let blackHalfWidth = -1;
+    let angle = 0;
+    let black1start = null;
+    let black1width = null;
+    let black2start = null;
+    let black2width = null;
+    let blackHalfWidth = null;
+    let direction = "up";
     let idx = -1;
+    let lineY = null;
+    let line1y1 = null;
+    let line1y2 = null;
+    let line2y1 = null;
+    let line2y2 = null;
     let mode = "note";
     let note = "";
     let notes = ["C4"];
     let part = "bottom";
-    let width3div5 = -1;
-    let width4div7 = -1;
+    let width3div5 = null;
+    let width4div7 = null;
 
     const musicNoteRatio = 241 / 450;
     const musicNoteMargin = 0.1;
@@ -1016,6 +1025,7 @@ function drawLevel(
 
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
+      direction = gameInfo.musicBoxes[idx].direction;
       mode = gameInfo.musicBoxes[idx].mode;
       notes = gameInfo.musicBoxes[idx].notes;
       part = gameInfo.musicBoxes[idx].part;
@@ -1035,23 +1045,50 @@ function drawLevel(
         drawBox(ctx, xmin, ymin, w1, w2, "black");
         ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - musicNoteWidth)), ymin + (musicNoteMargin * w2), musicNoteWidth, musicNoteHeight);
         break;
+      case "door":
+        drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
+        drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+        break;  
       case "keyboard":
         if (notes.length === 1) {
-          drawLine(ctx, xmin - 0.5, ymin - 0.5, xmin - 0.5, ymax + 0.5, "black");
-          drawLine(ctx, xmax + 0.5, ymin - 0.5, xmax + 0.5, ymax + 0.5, "black");
+          note = notes[0][0];
+          switch (direction) {
+            case "down":
+              angle = Math.PI;
+              break;
+            case "left":
+              angle = -0.5 * Math.PI;
+              break;
+            case "right":
+              angle = 0.5 * Math.PI;
+              break;
+            default:
+              angle = 0;
+              break;
+          }
+          if (angle !== 0) {
+            ctx.save();
+            // The rotation center point is always the canvas origin. 
+            // To change the center point, the canvas has to be moved by using the translate() method.
+            ctx.translate(Math.round(xc), Math.round(yc));
+            ctx.rotate(angle);
+            ctx.translate(-Math.round(xc), -Math.round(yc));
+          }
           if ((part === "top") || (part === "middle")) {
             blackHalfWidth = w1 * (13.7642 / 23.5) * 0.5;
             width3div5 = (w1 * 3) / 5;
             width4div7 = (w1 * 4) / 7;
-            black1start = -1;
-            black1width = -1;
-            black2start = -1;
-            black2width = -1;
-            note = notes[0][0];
+            black1start = null;
+            black1width = null;
+            black2start = null;
+            black2width = null;
             switch (note) {
               case "C":
                 black1start = xmin + (1.5 * width3div5) - blackHalfWidth;
                 black1width = w1 - (black1start - xmin);
+                if (part === "bottom") {
+                  console.log(line1y1, line2y1);
+                }
                 break;
               case "D":
                 black1start = xmin;
@@ -1086,27 +1123,82 @@ function drawLevel(
               default:
                 break;
             }
-            for (let i = 0; i < 2; i++) {
-              // Draw two times the same to erase what is under it
-              if ((black1start >= 0) && (black1width > 0)) {
-                if (part === "top") {
-                  drawFilledBox(ctx, black1start, ymin - 0.5, black1width, w2 + 1, "black");
-                  drawBox(ctx, black1start, ymin - 0.5, black1width, w2 + 1, "black");
-                } else {
-                  drawFilledBox(ctx, black1start, ymin - 0.5, black1width, w2 * 0.5, "black");
-                  drawBox(ctx, black1start, ymin - 0.5, black1width, w2 * 0.5, "black");
-                }
-              }
-              if ((black2start >= 0) && (black2width > 0)) {
-                if (part === "top") {
-                  drawFilledBox(ctx, black2start, ymin - 0.5, black2width, w2 + 1, "black");
-                  drawBox(ctx, black2start, ymin - 0.5, black2width, w2 + 1, "black");
-                } else {
-                  drawFilledBox(ctx, black2start, ymin - 0.5, black2width, w2 * 0.5, "black");
-                  drawBox(ctx, black2start, ymin - 0.5, black2width, w2 * 0.5, "black");
-                }
+            if ((black1start !== null) && (black1width !== null)) {
+              if (part === "top") {
+                drawFilledBox(ctx, black1start - 0.5, ymin - 0.5, black1width + 1, w2 + 1, "black");
+              } else {
+                drawFilledBox(ctx, black1start - 0.5, ymin - 0.5, black1width + 1, w2 * 0.5, "black");
               }
             }
+            if ((black2start !== null) && (black2width !== null)) {
+              if (part === "top") {
+                drawFilledBox(ctx, black2start - 0.5, ymin - 0.5, black2width + 1, w2 + 1, "black");
+              } else {
+                drawFilledBox(ctx, black2start - 0.5, ymin - 0.5, black2width + 1, w2 * 0.5, "black");
+              }
+            }
+          }
+          // Draw lines
+          switch (part) {
+            case "top":
+              lineY = null;
+              break;
+            case "middle":
+              lineY = yc;
+              break;
+            case "bottom":
+              lineY = ymin - 0.5;
+              break;
+            default:
+              lineY = null;
+              break;
+          }
+          line1y1 = null;
+          line1y2 = ymax + 0.5;
+          line2y1 = null;
+          line2y2 = ymax + 0.5;
+          switch (note) {
+            case "C":
+              line1y1 = ymin - 0.5;
+              line2y1 = lineY;
+              break;
+            case "D":
+              line1y1 = lineY;
+              line2y1 = lineY;
+              break;
+            case "E":
+              line1y1 = lineY;
+              line2y1 = ymin - 0.5;
+              break;
+            case "F":
+              line1y1 = ymin - 0.5;
+              line2y1 = lineY;
+              break;
+            case "G":
+              line1y1 = lineY;
+              line2y1 = lineY;
+              break;
+            case "A":
+              line1y1 = lineY;
+              line2y1 = lineY;
+              break;
+            case "B":
+              line1y1 = lineY;
+              line2y1 = ymin - 0.5;
+              break;
+            default:
+              line1y1 = null;
+              line2y1 = null;
+              break;
+          }
+          if ((line1y1 !== null) && (line1y2 !== null)) {
+            drawLine(ctx, xmin - 0.5, line1y1, xmin - 0.5, line1y2, "black");
+          }
+          if ((line2y1 !== null) && (line2y2 !== null)) {
+            drawLine(ctx, xmax + 0.5, line2y1, xmax + 0.5, line2y2, "black");
+          }
+          if (angle !== 0) {
+            ctx.restore();
           }
         }
         break;
@@ -1434,14 +1526,16 @@ function drawLevel(
   }
 
   function drawRedBall() {
-    ctx.save();
-    ctx.translate(Math.round(xc), Math.round(yc));
     if (gameVars.gravity === "up") {
+      ctx.save();
+      ctx.translate(Math.round(xc), Math.round(yc));
       ctx.rotate(Math.PI);
+      ctx.translate(-Math.round(xc), -Math.round(yc));
     }
-    ctx.translate(-Math.round(xc), -Math.round(yc));
     ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
-    ctx.restore();
+    if (gameVars.gravity === "up") {
+      ctx.restore();
+    }
   }
 
   function drawSmallBlueBall() {
@@ -2502,6 +2596,13 @@ function drawLevel(
           break;
         case 2110:
           drawAbbreviation("B4");
+          break;
+        case 2111:
+          drawAbbreviation("C5");
+          break;
+        case 2112:
+          // Music box mode door
+          drawAbbreviation("DO");
           break;
         default:
           if (gd < 2000) {

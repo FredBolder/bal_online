@@ -3,5 +3,6 @@ export const globalVars = {
     isInOtherWorld: false,
     loading: true,
     otherWorldGreen: -1,
+    playedNotes: "",
     thisWorldGreen: -1
 }

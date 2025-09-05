@@ -283,6 +283,12 @@ export function checkSettings(data, settings) {
               break;
             case "$direction":
               switch (data[y][x]) {
+                case "M":
+                case "157":
+                  if (!["left", "right", "up", "down"].includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+                  }
+                  break;
                 case "{":
                 case "171":
                   if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
@@ -296,7 +302,7 @@ export function checkSettings(data, settings) {
                   }
                   break;
                 default:
-                  msg += `${settingNr(i)}No conveyor belt or mover found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No conveyor belt, mover or music box found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;
@@ -343,7 +349,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$musicbox":
-              if (!["note", "song", "keyboard"].includes(valuesLowerCase[2])) {
+              if (!["note", "song", "keyboard", "door"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid music box mode ${values[2]}.\n`;
               }
               gameTicks = tryParseInt(values[3], -1);
@@ -1052,7 +1058,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length === 4) {
             mode = valuesLowerCase[2];
             gameTicks = tryParseInt(values[3], -1);
-            if (validXY && ["note", "song", "keyboard"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
+            if (validXY && ["note", "song", "keyboard", "door"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
               idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].mode = mode;

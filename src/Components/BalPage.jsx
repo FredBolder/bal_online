@@ -553,6 +553,7 @@ function BalPage() {
           level = 200;
           break;
       }
+      globalVars.playedNotes = "";
       initLevel(level);
     }
   }
@@ -635,6 +636,7 @@ function BalPage() {
       globalVars.isInOtherWorld = false;
       globalVars.otherWorldGreen = -1;
       globalVars.loading = true;
+      globalVars.playedNotes = "";
       initGameVars(gameVars);
       backData = null;
       backData = result.backData;
@@ -825,7 +827,7 @@ function BalPage() {
         arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2038, 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -839,10 +841,12 @@ function BalPage() {
       case 1:
         switch (n) {
           case 1:
+            // Delete
             arr1 = [2050, 2051];
             arr2 = [0];
             break;
           case 2:
+            // Select
             arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
             arr2 = [0];
             break;
@@ -904,9 +908,19 @@ function BalPage() {
       case 2:
         switch (n) {
           case 1:
+            // Delete
+            arr1 = [2050, 2051];
+            arr2 = [0];
+            break;
+          case 2:
+            // Select
+            arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
+            arr2 = [0];
+            break;
+          case 3:
             // Music box
-            arr1 = [157, 2044, 2038, 2102, 2034, 2035, 2103];
-            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110];
+            arr1 = [157, 2044, 2038, 2102, 2112, 2034, 2035, 2103, 2040, 2041, 2042, 2043];
+            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111];
             break;
           case 15:
             arr1 = [2097, 2098, 2099];
@@ -945,6 +959,7 @@ function BalPage() {
       if (!gateTravelling) {
         globalVars.isInOtherWorld = false;
         globalVars.otherWorldGreen = -1;
+        globalVars.playedNotes = "";
         clearMemory(1);
         clearMemory(2);
       }
@@ -1392,6 +1407,7 @@ function BalPage() {
     async function again() {
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
         await clickLoadFromMemory(3);
+        globalVars.playedNotes = "";
       } else {
         initLevel(gameVars.currentLevel);
       }
@@ -1865,10 +1881,11 @@ function BalPage() {
                 }
               }
 
-              if (((createLevelMenu === menuToNumber("elevators")) || (createLevelMenu === menuToNumber("conveyorbelts"))) && (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
+              if (menuToNumber("conveyorbelts"), [menuToNumber("elevators"), menuToNumber("musicboxes")].includes(createLevelMenu) &&
+                (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
                 if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+                    showMessage("Info", "Click on an elevator, a conveyor belt, a mover or a music box to set a valid direction.");
                   }
                 }
               }
@@ -1898,13 +1915,13 @@ function BalPage() {
                 changeGroup(gameInfo, column, row, createLevelObject - 2000);
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2110)) {
-                if (changeMusicBoxNote(gameInfo, column, row, ["C4","D4","E4","F4","G4","A4","B4"][createLevelObject - 2104]) === -1) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2111)) {
+                if (changeMusicBoxNote(gameInfo, column, row, ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"][createLevelObject - 2104]) === -1) {
                   showMessage("Info", "Click on a music box to set the note of it.");
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102].includes(createLevelObject)) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102, 2112].includes(createLevelObject)) {
                 switch (createLevelObject) {
                   case 2044:
                     newValue = "note";
@@ -1914,6 +1931,9 @@ function BalPage() {
                     break;
                   case 2102:
                     newValue = "keyboard";
+                    break;
+                  case 2112:
+                    newValue = "door";
                     break;
                   default:
                     break;

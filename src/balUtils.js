@@ -27,6 +27,14 @@ function canMoveAlone(n) {
 export function changeDirection(gameData, gameInfo, x, y, direction) {
   let idx = -1;
 
+  if (["left", "right", "up", "down"].includes(direction)) {
+    if (idx === -1) {
+      idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+      if (idx >= 0) {
+        gameInfo.musicBoxes[idx].direction = direction;
+      }
+    }
+  }
   if (["left", "right", "none"].includes(direction)) {
     if (idx === -1) {
       idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);

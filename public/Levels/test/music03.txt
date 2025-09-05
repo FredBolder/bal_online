@@ -1,0 +1,171 @@
+$musicbox: 3, 1, keyboard, 5
+$part: 3, 1, top
+$direction: 3, 1, up
+$musicbox: 4, 1, keyboard, 5
+$notes: 4, 1, D4
+$part: 4, 1, top
+$direction: 4, 1, up
+$musicbox: 5, 1, keyboard, 5
+$notes: 5, 1, E4
+$part: 5, 1, top
+$direction: 5, 1, up
+$musicbox: 6, 1, keyboard, 5
+$notes: 6, 1, F4
+$part: 6, 1, top
+$direction: 6, 1, up
+$musicbox: 7, 1, keyboard, 5
+$notes: 7, 1, G4
+$part: 7, 1, top
+$direction: 7, 1, up
+$musicbox: 8, 1, keyboard, 5
+$notes: 8, 1, A4
+$part: 8, 1, top
+$direction: 8, 1, up
+$musicbox: 9, 1, keyboard, 5
+$notes: 9, 1, B4
+$part: 9, 1, top
+$direction: 9, 1, up
+$musicbox: 10, 1, keyboard, 5
+$direction: 10, 1, up
+$musicbox: 3, 2, keyboard, 5
+$direction: 3, 2, up
+$musicbox: 4, 2, keyboard, 5
+$notes: 4, 2, D4
+$direction: 4, 2, up
+$musicbox: 5, 2, keyboard, 5
+$notes: 5, 2, E4
+$direction: 5, 2, up
+$musicbox: 6, 2, keyboard, 5
+$notes: 6, 2, F4
+$direction: 6, 2, up
+$musicbox: 7, 2, keyboard, 5
+$notes: 7, 2, G4
+$direction: 7, 2, up
+$musicbox: 8, 2, keyboard, 5
+$notes: 8, 2, A4
+$direction: 8, 2, up
+$musicbox: 9, 2, keyboard, 5
+$notes: 9, 2, B4
+$direction: 9, 2, up
+$musicbox: 10, 2, keyboard, 5
+$notes: 10, 2, C5
+$direction: 10, 2, up
+$musicbox: 3, 6, keyboard, 5
+$part: 3, 6, top
+$direction: 3, 6, up
+$musicbox: 4, 6, keyboard, 5
+$notes: 4, 6, D4
+$part: 4, 6, top
+$direction: 4, 6, up
+$musicbox: 5, 6, keyboard, 5
+$notes: 5, 6, E4
+$part: 5, 6, top
+$direction: 5, 6, up
+$musicbox: 6, 6, keyboard, 5
+$notes: 6, 6, F4
+$part: 6, 6, top
+$direction: 6, 6, up
+$musicbox: 7, 6, keyboard, 5
+$notes: 7, 6, G4
+$part: 7, 6, top
+$direction: 7, 6, up
+$musicbox: 8, 6, keyboard, 5
+$notes: 8, 6, A4
+$part: 8, 6, top
+$direction: 8, 6, up
+$musicbox: 9, 6, keyboard, 5
+$notes: 9, 6, B4
+$part: 9, 6, top
+$direction: 9, 6, up
+$musicbox: 3, 7, keyboard, 5
+$part: 3, 7, middle
+$direction: 3, 7, up
+$musicbox: 4, 7, keyboard, 5
+$notes: 4, 7, D4
+$part: 4, 7, middle
+$direction: 4, 7, up
+$musicbox: 5, 7, keyboard, 5
+$notes: 5, 7, E4
+$part: 5, 7, middle
+$direction: 5, 7, up
+$musicbox: 6, 7, keyboard, 5
+$notes: 6, 7, F4
+$part: 6, 7, middle
+$direction: 6, 7, up
+$musicbox: 7, 7, keyboard, 5
+$notes: 7, 7, G4
+$part: 7, 7, middle
+$direction: 7, 7, up
+$musicbox: 8, 7, keyboard, 5
+$notes: 8, 7, A4
+$part: 8, 7, middle
+$direction: 8, 7, up
+$musicbox: 9, 7, keyboard, 5
+$notes: 9, 7, B4
+$part: 9, 7, middle
+$direction: 9, 7, up
+$musicbox: 3, 8, keyboard, 5
+$direction: 3, 8, up
+$musicbox: 4, 8, keyboard, 5
+$notes: 4, 8, D4
+$direction: 4, 8, up
+$musicbox: 5, 8, keyboard, 5
+$notes: 5, 8, E4
+$direction: 5, 8, up
+$musicbox: 6, 8, keyboard, 5
+$notes: 6, 8, F4
+$direction: 6, 8, up
+$musicbox: 7, 8, keyboard, 5
+$notes: 7, 8, G4
+$direction: 7, 8, up
+$musicbox: 8, 8, keyboard, 5
+$notes: 8, 8, A4
+$direction: 8, 8, up
+$musicbox: 9, 8, keyboard, 5
+$notes: 9, 8, B4
+$direction: 9, 8, up
+$musicbox: 3, 11, keyboard, 5
+$part: 3, 11, middle
+$direction: 3, 11, up
+$musicbox: 4, 11, keyboard, 5
+$notes: 4, 11, D4
+$part: 4, 11, middle
+$direction: 4, 11, up
+$musicbox: 5, 11, keyboard, 5
+$notes: 5, 11, E4
+$part: 5, 11, middle
+$direction: 5, 11, up
+$musicbox: 6, 11, keyboard, 5
+$notes: 6, 11, F4
+$part: 6, 11, middle
+$direction: 6, 11, up
+$musicbox: 7, 11, keyboard, 5
+$notes: 7, 11, G4
+$part: 7, 11, middle
+$direction: 7, 11, up
+$musicbox: 8, 11, keyboard, 5
+$notes: 8, 11, A4
+$part: 8, 11, middle
+$direction: 8, 11, up
+$musicbox: 9, 11, keyboard, 5
+$notes: 9, 11, B4
+$part: 9, 11, middle
+$direction: 9, 11, up
+$musicbox: 10, 13, door, 5
+$notes: 10, 13, G4, E4, C4, -, -, -
+$direction: 10, 13, up
+1111111111111
+1  MMMMMMMM 1
+1  MMMMMMMM 1
+1           1
+1         2 1
+1=11111111111
+1= MMMMMMM  1
+1= MMMMMMM  1
+1= MMMMMMM  1
+1=          1
+1=11111111111
+1= MMMMMMM111
+1=        131
+1=        M 1
+1111111111111

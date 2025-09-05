@@ -267,8 +267,14 @@ export function menuToNumber(s) {
             break;
         case 2:
             switch (s) {
-                case "musicboxes":
+                case "delete":
                     result = 1;
+                    break;
+                case "select":
+                    result = 2;
+                    break;
+                case "musicboxes":
+                    result = 3;
                     break;
                 case "info":
                     result = 15;

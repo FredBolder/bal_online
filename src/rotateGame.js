@@ -287,6 +287,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       // Music boxes
       for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         rotateXY(gameInfo.musicBoxes[i], rows, rotateLeft);
+        gameInfo.musicBoxes[i].direction = rotateDirection(gameInfo.musicBoxes[i].direction, rotateLeft);
       }
 
       // Orange balls

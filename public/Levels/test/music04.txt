@@ -1,0 +1,57 @@
+$musicbox: 3, 2, keyboard, 5
+$notes: 3, 2, B4
+$part: 3, 2, top
+$direction: 3, 2, left
+$musicbox: 4, 2, keyboard, 5
+$notes: 4, 2, B4
+$direction: 4, 2, left
+$musicbox: 3, 3, keyboard, 5
+$notes: 3, 3, A4
+$part: 3, 3, top
+$direction: 3, 3, left
+$musicbox: 4, 3, keyboard, 5
+$notes: 4, 3, A4
+$direction: 4, 3, left
+$musicbox: 3, 4, keyboard, 5
+$notes: 3, 4, G4
+$part: 3, 4, top
+$direction: 3, 4, left
+$musicbox: 4, 4, keyboard, 5
+$notes: 4, 4, G4
+$direction: 4, 4, left
+$musicbox: 3, 5, keyboard, 5
+$notes: 3, 5, F4
+$part: 3, 5, top
+$direction: 3, 5, left
+$musicbox: 4, 5, keyboard, 5
+$notes: 4, 5, F4
+$direction: 4, 5, left
+$musicbox: 3, 6, keyboard, 5
+$notes: 3, 6, E4
+$part: 3, 6, top
+$direction: 3, 6, left
+$musicbox: 4, 6, keyboard, 5
+$notes: 4, 6, E4
+$direction: 4, 6, left
+$musicbox: 3, 7, keyboard, 5
+$notes: 3, 7, D4
+$part: 3, 7, top
+$direction: 3, 7, left
+$musicbox: 4, 7, keyboard, 5
+$notes: 4, 7, D4
+$direction: 4, 7, left
+$musicbox: 3, 8, keyboard, 5
+$part: 3, 8, top
+$direction: 3, 8, left
+$musicbox: 4, 8, keyboard, 5
+$direction: 4, 8, left
+1111111111
+1 t      1
+1  MM   t1
+1  MM    1
+1  MM    1
+1  MM  3 1
+1  MM    1
+1t MM    1
+1  MM 2t 1
+1111111111
