@@ -207,35 +207,44 @@ class Operator {
     async stop() {
         if (this.stopScheduled) return;
 
+        const isFirefox = typeof InstallTrigger !== "undefined";
+        let currentAmpGain = safeTarget(0);
+
         this.stopScheduled = true;
         const stopTime = this.audioContext.currentTime;
         const at = this.dcaSettings.attack / 1000;
         const dt = this.dcaSettings.decay / 1000;
-        const rt = this.dcaSettings.release / 1000;
+        let rt = this.dcaSettings.release / 1000;
 
-        // Calculate current amp gain
-        const maxVolume = this.dcaSettings.volume / this.oscList.length;
-        const sustainVolume = this.dcaSettings.sustain / this.oscList.length;
-        let currentAmpGain = safeTarget(0);
-        if (this.startTime !== null) {
-            const elapsed = this.audioContext.currentTime - this.startTime;
-            if (elapsed <= at) {
-                currentAmpGain = safeTarget(maxVolume * (elapsed / at));
-            }
-            if ((elapsed > at) && (elapsed <= (at + dt))) {
-                const decayElapsed = elapsed - at;
-                const decayRatio = decayElapsed / dt;
-                currentAmpGain = safeTarget(maxVolume * Math.pow(sustainVolume / maxVolume, decayRatio));
-            }
-            if (elapsed > (at + dt)) {
-                currentAmpGain = safeTarget(sustainVolume);
+        if (isFirefox) {
+            console.log("Firefox");
+            // Calculate current amp gain
+            const maxVolume = this.dcaSettings.volume / this.oscList.length;
+            const sustainVolume = this.dcaSettings.sustain / this.oscList.length;
+            currentAmpGain = safeTarget(0);
+            if (this.startTime !== null) {
+                const elapsed = this.audioContext.currentTime - this.startTime;
+                if (elapsed <= at) {
+                    currentAmpGain = safeTarget(maxVolume * (elapsed / at));
+                }
+                if ((elapsed > at) && (elapsed <= (at + dt))) {
+                    const decayElapsed = elapsed - at;
+                    const decayRatio = decayElapsed / dt;
+                    currentAmpGain = safeTarget(maxVolume * Math.pow(sustainVolume / maxVolume, decayRatio));
+                }
+                if (elapsed > (at + dt)) {
+                    currentAmpGain = safeTarget(sustainVolume);
+                }
             }
         }
 
         // exponentialRampToValueAtTime does not keep track of the current value
         this.amp.gain.cancelScheduledValues(stopTime);
-        //this.amp.gain.setValueAtTime(this.amp.gain.value, stopTime); // Does not work in Firefox
-        this.amp.gain.setValueAtTime(currentAmpGain, stopTime);
+        if (isFirefox) {
+            this.amp.gain.setValueAtTime(currentAmpGain, stopTime);
+        } else {
+            this.amp.gain.setValueAtTime(this.amp.gain.value, stopTime); // Does not work in Firefox
+        }
         this.amp.gain.exponentialRampToValueAtTime(safeTarget(0), stopTime + rt);
         for (let i = 0; i < this.oscList.length; i++) {
             this.oscList[i].stop(stopTime + rt + 0.02);

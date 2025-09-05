@@ -2452,7 +2452,7 @@ function drawLevel(
           drawAbbreviation("S");
           break;
         case 2039:
-          // Piston - inverted
+          // Piston - inverted OR Music box instrument
           drawAbbreviation("I");
           break;
         case 2040:

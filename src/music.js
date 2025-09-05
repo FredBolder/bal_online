@@ -247,9 +247,10 @@ export async function playNote(instrument, volume, note) {
         }
         break;
       case "vibraphone":
-        operators.push(new Operator(audioCtx, "sine", frequency, 0, maxVolume * 0.5, 5, 1000, 0, 500));
-        operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.3, 5, 750, 0, 375));
-        operators.push(new Operator(audioCtx, "sine", frequency * 10, 0, maxVolume * 0.2, 5, 400, 0, 200));
+        f1 = 1;
+        operators.push(new Operator(audioCtx, "sine", frequency, 0, maxVolume * 0.5, 5, 1000 * f1, 0, 500 * f1));
+        operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.3, 5, 750 * f1, 0, 375 * f1));
+        operators.push(new Operator(audioCtx, "sine", frequency * 10, 0, maxVolume * 0.2, 5, 400 * f1, 0, 200 * f1));
         for (let i = 0; i < operators.length; i++) {
           operators[i].setLfo("dca", "sine", 4, 0.5, 0);
         }

@@ -31,6 +31,16 @@ function blueBallIsCloseToXY(gameData, x, y) {
     return result;
 }
 
+export function changeMusicBoxInstrument(gameInfo, x, y, instrument) {
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+    if (idx >= 0) {
+        gameInfo.musicBoxes[idx].instrument = instrument;
+    }
+    return idx;
+}
+
 export function changeMusicBoxMode(gameInfo, x, y, mode) {
     let idx = -1;
 
@@ -101,7 +111,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 sequence = "";
                 for (let j = 0; j < musicBox.notes.length; j++) {
                     note = musicBox.notes[j];
-                    if (!["-",":"].includes(note)) {
+                    if (!["-", ":"].includes(note)) {
                         sequence += note;
                     }
                 }
@@ -166,6 +176,11 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
         }
     }
     return update;
+}
+
+export function instruments() {
+    return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
+        "piano", "snaredrum", "strings", "trombone", "trumpet", "vibraphone", "xylophone"]
 }
 
 export function validNotesForKeyboardMode(notes) {

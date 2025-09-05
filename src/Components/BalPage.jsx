@@ -37,7 +37,7 @@ import { globalVars } from "../glob.js";
 import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
-import { changeMusicBoxMode, changeMusicBoxNote, changeMusicBoxPart } from "../musicBoxes.js";
+import { changeMusicBoxInstrument, changeMusicBoxMode, changeMusicBoxNote, changeMusicBoxPart, instruments } from "../musicBoxes.js";
 import { gameScheduler } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -80,6 +80,7 @@ let createLevel = false;
 let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
+let createLevelMusicBoxInstrument = "xylophone";
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
@@ -519,7 +520,7 @@ function BalPage() {
     const value = await showSelect(
       "Load level",
       "Load the first level of series:",
-      ["1", "2", "3", "4", "Small", "Easy", "Extreme", "Chronia Polla"],
+      ["1", "2", "3", "4", "Small", "Easy", "Extreme", "Music", "Chronia Polla"],
       0
     );
 
@@ -545,6 +546,9 @@ function BalPage() {
           break;
         case "Extreme":
           level = 901;
+          break;
+        case "Music":
+          level = 3200;
           break;
         case "Chronia Polla":
           level = 990;
@@ -919,7 +923,7 @@ function BalPage() {
             break;
           case 3:
             // Music box
-            arr1 = [157, 2044, 2038, 2102, 2112, 2034, 2035, 2103, 2040, 2041, 2042, 2043];
+            arr1 = [157, 2044, 2038, 2102, 2112, 2034, 2035, 2103, 2040, 2041, 2042, 2043, 2039];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111];
             break;
           case 15:
@@ -1467,7 +1471,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3017;
+        gameVars.currentLevel = 3201;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1962,6 +1966,12 @@ function BalPage() {
                 }
               }
 
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2039) && instruments().includes(createLevelMusicBoxInstrument)) {
+                if (changeMusicBoxInstrument(gameInfo, column, row, createLevelMusicBoxInstrument) === -1) {
+                  showMessage("Info", "Click on a music box to set the instrument of it.");
+                }
+              }
+
               if (createLevelMenu === menuToNumber("foregroundcolors")) {
                 if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
                   saveUndo("Change foreground color", "fgcolors", { colors: gameVars.fgcolor });
@@ -2066,6 +2076,7 @@ function BalPage() {
 
     let confirm = null;
     let direction = "";
+    let newValue = "";
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
@@ -2135,6 +2146,26 @@ function BalPage() {
               break;
           }
         }
+
+        if (createLevelMenu === menuToNumber("musicboxes")) {
+          switch (createLevelObject) {
+            case 2039:
+              if (row > 0) {
+                newValue = await showSelect("Music boxes", "Instrument:", instruments(), 0);
+
+                if (newValue !== null) {
+                  createLevelMusicBoxInstrument = newValue;
+                } else {
+                  createLevelMusicBoxInstrument = "none";
+                  createLevelObject = -1;
+                }
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
 
         switch (createLevelObject) {
           case 0:

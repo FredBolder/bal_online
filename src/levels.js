@@ -2,6 +2,7 @@ import { removeObject } from "./addRemoveObject.js";
 import { changeDirection, changeGroup, changePart, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
+import { instruments } from "./musicBoxes.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
@@ -25,6 +26,8 @@ const seriesEasyStart = 3000;
 const seriesEasyEnd = 3022;
 const hiddenMiniSeries1Start = 3100;
 const hiddenMiniSeries1End = 3106;
+const seriesMusicStart = 3200;
+const seriesMusicEnd = 3201;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
@@ -336,8 +339,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$instrument":
-              if (!["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
-                "piano", "snaredrum", "strings", "trombone", "trumpet", "vibraphone", "xylophone"].includes(valuesLowerCase[2])) {
+              if (!instruments().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid instrument ${values[2]}.\n`;
               }
               volume = tryParseInt(values[3], -1);
@@ -716,6 +718,9 @@ export function getAllLevels() {
   for (let i = hiddenMiniSeries1Start; i <= hiddenMiniSeries1End; i++) {
     levels.push(i);
   }
+  for (let i = seriesMusicStart; i <= seriesMusicEnd; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -748,6 +753,7 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesSmallStart && n <= seriesSmallEnd) ||
     (n >= seriesEasyStart && n <= seriesEasyEnd) ||
     (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
+    (n >= seriesMusicStart && n <= seriesMusicEnd) ||
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
     (n >= hiddenMiniSeries1Start && n <= hiddenMiniSeries1End) ||
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
@@ -776,6 +782,9 @@ export function getRandomLevel(currentLevel) {
     levels.push(i);
   }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
+    levels.push(i);
+  }
+  for (let i = seriesMusicStart + 1; i <= seriesMusicEnd; i++) {
     levels.push(i);
   }
   // Exclude levels
