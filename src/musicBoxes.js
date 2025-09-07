@@ -1,6 +1,6 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { globalVars } from "./glob.js";
-import { playNote } from "./music.js";
+import { playNote, transpose } from "./music.js";
 import { getSettings } from "./settings.js";
 
 function blueBallIsCloseToXY(gameData, x, y) {
@@ -115,7 +115,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         sequence += note;
                     }
                 }
-                if (globalVars.playedNotes.includes(sequence)) {
+                if (globalVars.playedNotes[musicBox.group - 1].includes(sequence)) {
                     gameData[musicBox.y][musicBox.x] = 0;
                 }
             }
@@ -163,9 +163,9 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 if (!musicBox.active && validNotesForKeyboardMode(musicBox.notes) && (gameData[y][x] === 2)) {
                     note = musicBox.notes[0];
                     playNote(musicBox.instrument, musicBox.volume * music * 0.01, note);
-                    globalVars.playedNotes += note;
-                    if (globalVars.playedNotes.length > 100) {
-                        globalVars.playedNotes = globalVars.playedNotes.slice(globalVars.playedNotes.length - 100);
+                    globalVars.playedNotes[musicBox.group - 1] += note;
+                    if (globalVars.playedNotes[musicBox.group - 1].length > 100) {
+                        globalVars.playedNotes[musicBox.group - 1] = globalVars.playedNotes[musicBox.group - 1].slice(globalVars.playedNotes[musicBox.group - 1].length - 100);
                     }
                     musicBox.active = true;
                 }
@@ -181,6 +181,19 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
 export function instruments() {
     return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
         "piano", "pipeorgan", "snaredrum", "squarelead", "strings", "trombone", "trumpet", "vibraphone", "xylophone"]
+}
+
+export function transposeMusicBox(gameInfo, x, y, semitones) {
+    let idx = -1;
+    console.log("FRED transposeMusicBox");
+    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+    if (idx >= 0) {
+        const musicBox = gameInfo.musicBoxes[idx];
+        for (let i = 0; i < musicBox.notes.length; i++) {
+            musicBox.notes[i] = transpose(musicBox.notes[i], semitones);
+        }
+    }
+    return idx;
 }
 
 export function validNotesForKeyboardMode(notes) {

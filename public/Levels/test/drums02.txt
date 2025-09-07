@@ -1,0 +1,30 @@
+$instrument: 1, 7, bassdrum, 90
+$direction: 1, 7, up
+$notes: 2, 7, D4
+$instrument: 2, 7, bassdrum, 90
+$direction: 2, 7, up
+$instrument: 3, 7, snaredrum, 90
+$direction: 3, 7, up
+$notes: 4, 7, D4
+$instrument: 4, 7, snaredrum, 90
+$direction: 4, 7, up
+$instrument: 5, 7, hihat, 90
+$direction: 5, 7, up
+$notes: 6, 7, D4
+$instrument: 6, 7, hihat, 90
+$direction: 6, 7, up
+$instrument: 7, 7, cowbell, 90
+$direction: 7, 7, up
+$notes: 8, 7, D4
+$instrument: 8, 7, cowbell, 90
+$direction: 8, 7, up
+1111111111
+13       1
+1        1
+1        1
+1        1
+1        1
+1        1
+1MMMMMMMM1
+1   2    1
+1111111111

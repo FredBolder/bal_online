@@ -51,6 +51,20 @@ export async function playNote(instrument, volume, note) {
   const newFiltersList = [];
   let filter;
 
+  // Variations
+  let decayFactorNoise = 500;
+  let decayFactorOsc = 500;
+  let freqNoise = 1000;
+  let freqOsc = 500;
+  let levelFactorNoise = 0.4;
+  let levelFactorOsc = 0.6;
+  let phase = 0;
+  let pitchDecay = 50;
+  let pitchStart = 0.1;
+  let waveform = "";
+  let wf = "";
+
+
   const convolver = reverb.getConvolver();
   if (convolver) {
     filter = new Filter(audioCtx);
@@ -123,8 +137,26 @@ export async function playNote(instrument, volume, note) {
         filter.setFilter("lowpass", 500, 500, 90, 90, 0, 5, 1000, 250);
         break;
       case "bassdrum":
-        operators.push(new Operator(audioCtx, "cosine", 55, 0, maxVolume * 1, 0, 400, 0, 100));
-        operators[0].setPitchEnv(1, 100, 0);
+        decayFactorOsc = 1;
+        freqOsc = 55;
+        phase = 20;
+        pitchDecay = 100;
+        pitchStart = 1;
+        waveform = "sine";
+        switch (note) {
+          case "D4":
+            pitchDecay = 75;
+            waveform = "triangle";
+            break;
+          default:
+            break;
+        }
+        wf = waveform;
+        if ((waveform === "sine") && (phase !== 0)) {
+          wf = "sine" + phase.toString();
+        }
+        operators.push(new Operator(audioCtx, wf, 55, 0, maxVolume * 1, 0, 400 * decayFactorOsc, 0, 100));
+        operators[0].setPitchEnv(1, pitchDecay, 0);
         break;
       case "bell":
         decay = 2000;
@@ -152,16 +184,26 @@ export async function playNote(instrument, volume, note) {
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.1 * f1, attack, decay, maxVolume * 0.1 * f1 * f2, release));
         break;
       case "cowbell":
+        freqOsc = 565;
+        decayFactorOsc = 1;
+        switch (note) {
+          case "D4":
+            freqOsc = 500;
+            decayFactorOsc = 1.1;
+            break;
+          default:
+            break;
+        }
         f1 = 1 / 1.275;
-        release = 200;
-        operators.push(new Operator(audioCtx, "sine", 565, 0, maxVolume * 0.767 * f1, 4, 250, 0, 20));
-        operators.push(new Operator(audioCtx, "sine", 565 * 1.81061946902655, 0, maxVolume * 0.079 * f1, 4, 250, 0, release));
-        operators.push(new Operator(audioCtx, "sine", 565 * 2.55221238938053, 0, maxVolume * 0.082 * f1, 4, 250, 0, release));
-        operators.push(new Operator(audioCtx, "sine", 565 * 3.09557522123894, 0, maxVolume * 0.082 * f1, 4, 250, 0, release));
-        operators.push(new Operator(audioCtx, "sine", 565 * 3.46194690265487, 0, maxVolume * 0.034 * f1, 4, 250, 0, release));
-        operators.push(new Operator(audioCtx, "sine", 565 * 4.03185840707965, 0, maxVolume * 0.129 * f1, 4, 250, 0, release));
-        operators.push(new Operator(audioCtx, "sine", 565 * 6.16637168141593, 0, maxVolume * 0.038 * f1, 4, 250, 0, release));
-        operators.push(new Operator(audioCtx, "sine", 565 * 8.37522123893805, 0, maxVolume * 0.064 * f1, 4, 250, 0, release));
+        release = 200 * decayFactorOsc;
+        operators.push(new Operator(audioCtx, "sine", freqOsc, 0, maxVolume * 0.767 * f1, 4, 250, 0, 20));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 1.81061946902655, 0, maxVolume * 0.079 * f1, 4, 250 * decayFactorOsc, 0, release));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 2.55221238938053, 0, maxVolume * 0.082 * f1, 4, 250 * decayFactorOsc, 0, release));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 3.09557522123894, 0, maxVolume * 0.082 * f1, 4, 250 * decayFactorOsc, 0, release));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 3.46194690265487, 0, maxVolume * 0.034 * f1, 4, 250 * decayFactorOsc, 0, release));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 4.03185840707965, 0, maxVolume * 0.129 * f1, 4, 250 * decayFactorOsc, 0, release));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 6.16637168141593, 0, maxVolume * 0.038 * f1, 4, 250 * decayFactorOsc, 0, release));
+        operators.push(new Operator(audioCtx, "sine", freqOsc * 8.37522123893805, 0, maxVolume * 0.064 * f1, 4, 250 * decayFactorOsc, 0, release));
         break;
       case "guitar":
         operators.push(new Operator(audioCtx, "pulse85", frequency, 0, maxVolume, 1, 2200, 0, 500));
@@ -178,7 +220,16 @@ export async function playNote(instrument, volume, note) {
         filter.setFilter("lowpass", 5000, 5000, 2500, 2500, 50, 1, 500, 125);
         break;
       case "hihat":
-        operators.push(new Operator(audioCtx, "noise", frequency, 0, maxVolume * 0.5, 0, 200, 0, 50));
+        decayFactorOsc = 1;
+        switch (note) {
+          case "D4":
+            decayFactorOsc = 4;
+            break;
+          default:
+            break;
+        }
+        // Frequency is only used for noiseAndBPF, noiseAndHPF and noiseAndLPF
+        operators.push(new Operator(audioCtx, "noise", 1000, 0, maxVolume * 0.5, 0, 200 * decayFactorOsc, 0, 50));
         filter.setFilter("highpass", 3500, 3500, 3500, 3500, 15, 0, 0, 250);
         break;
       case "kalimba":
@@ -218,10 +269,29 @@ export async function playNote(instrument, volume, note) {
         operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.01 * f1, attack, decay, maxVolume * 0.01 * f1 * f2, release));
         break;
       case "snaredrum":
-        // Frequency has no influence on the noise generator
-        operators.push(new Operator(audioCtx, "noiseAndHPF", 1000, 40, maxVolume * 0.4, 0, 500, 0, 125));
-        operators.push(new Operator(audioCtx, "sine", 250, 0, maxVolume * 0.6, 0, 400, 0, 100));
-        operators[1].setPitchEnv(0.1, 50, 0);
+        decayFactorNoise = 1;
+        decayFactorOsc = 1;
+        freqNoise = 1000;
+        freqOsc = 250;
+        levelFactorNoise = 0.4;
+        levelFactorOsc = 0.6;
+        pitchDecay = 50;
+        pitchStart = 0.1;
+        switch (note) {
+          case "D4":
+            freqOsc = 180;
+            freqNoise = 800;
+            decayFactorNoise = 0.9;
+            decayFactorOsc = 1.1;
+            levelFactorNoise = 0.3;
+            levelFactorOsc = 0.7;
+            break;
+          default:
+            break;
+        }
+        operators.push(new Operator(audioCtx, "noiseAndHPF", freqNoise, 40, maxVolume * levelFactorNoise, 0, 500 * decayFactorNoise, 0, 125));
+        operators.push(new Operator(audioCtx, "sine", freqOsc, 0, maxVolume * levelFactorOsc, 0, 400 * decayFactorOsc, 0, 100));
+        operators[1].setPitchEnv(pitchStart, pitchDecay, 0);
         break;
       case "squarelead":
         attack = 7;
@@ -310,4 +380,33 @@ export async function playNote(instrument, volume, note) {
     reverb.connectSource(filter.filter); // With reverb
     //filter.connect(audioCtx.destination); // Without reverb
   }
+}
+
+export function transpose(note, semitones) {
+  if (!Number.isInteger(semitones) || semitones < -24 || semitones > 24) {
+    throw new RangeError('Semitones must be an integer between -24 and 24');
+  }
+  const m = String(note).trim().match(/^([A-Ga-g])([#b]?)(-?\d+)$/);
+  if (!m) {
+    throw new Error('Invalid note format. Examples: A4, Bb3, C#6');
+  }
+
+  const [, letter, accidental, octaveStr] = m;
+  const octave = parseInt(octaveStr, 10);
+  const baseOffsets = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  const letterUpper = letter.toUpperCase();
+  let noteIndex = baseOffsets[letterUpper];
+  if (accidental === '#') {
+    noteIndex += 1;
+  } else if (accidental === 'b') {
+    noteIndex -= 1;
+  }
+  let semitoneNumber = octave * 12 + noteIndex;
+  const newSemitoneNumber = semitoneNumber + semitones;
+  const newOctave = Math.floor(newSemitoneNumber / 12);
+  const newIndex = newSemitoneNumber - newOctave * 12; // 0..11
+  const sharpNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const flatNames = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+  const names = accidental === 'b' ? flatNames : sharpNames;
+  return names[newIndex] + String(newOctave);
 }

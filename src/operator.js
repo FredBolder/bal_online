@@ -1,18 +1,86 @@
 import { resonancePercentToQ } from "./filter.js";
 import { tryParseInt } from "./utils.js";
 
+function createBlueNoiseBuffer(audioCtx, durationInSeconds = 1) {
+    const sampleRate = audioCtx.sampleRate;
+    const bufferSize = durationInSeconds * sampleRate;
+    const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let lastWhite = 0.0;
+    for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        // difference emphasizes high frequencies
+        data[i] = white - lastWhite;
+        lastWhite = white;
+    }
+    // normalize to ~ -1..1 range
+    let maxAmp = 0;
+    for (let i = 0; i < bufferSize; i++) {
+        if (Math.abs(data[i]) > maxAmp) maxAmp = Math.abs(data[i]);
+    }
+    if (maxAmp > 0) {
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] /= maxAmp;
+        }
+    }
+    return buffer;
+}
+
+function createBrownNoiseBuffer(audioCtx, durationInSeconds = 1) {
+    const sampleRate = audioCtx.sampleRate;
+    const bufferSize = durationInSeconds * sampleRate;
+    const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let lastOut = 0.0;
+    for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        // simple integrator, with slight damping to prevent drift
+        lastOut = (lastOut + (0.02 * white)) / 1.02;
+        data[i] = lastOut * 3.5; // scale to roughly -1..1
+    }
+    return buffer;
+}
+
+function createPinkNoiseBuffer(audioCtx, durationInSeconds = 1) {
+    const sampleRate = audioCtx.sampleRate;
+    const bufferSize = durationInSeconds * sampleRate;
+    const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    // Paul Kellet's refined method for pink noise
+    // https://www.firstpr.com.au/dsp/pink-noise/
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+
+    for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        const pink = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        b6 = white * 0.115926;
+        // normalize to -1..1
+        data[i] = pink * 0.11;
+    }
+    return buffer;
+}
+
 function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 5, phaseDeg = 0) {
-  const real = new Float32Array(harmonics + 1);
-  const imag = new Float32Array(harmonics + 1);
-  const phi = (phaseDeg * Math.PI) / 180.0;
-  real[0] = 0;
-  imag[0] = 0;
-  for (let n = 1; n <= harmonics; n++) {
-    const A = (2 / (n * Math.PI)) * Math.sin(n * Math.PI * dutyCycle);
-    real[n] = A * Math.cos(phi);
-    imag[n] = A * Math.sin(phi);
-  }
-  return audioCtx.createPeriodicWave(real, imag, { disableNormalization: true });
+    const real = new Float32Array(harmonics + 1);
+    const imag = new Float32Array(harmonics + 1);
+    const phi = (phaseDeg * Math.PI) / 180.0;
+    real[0] = 0;
+    imag[0] = 0;
+    for (let n = 1; n <= harmonics; n++) {
+        const A = (2 / (n * Math.PI)) * Math.sin(n * Math.PI * dutyCycle);
+        real[n] = A * Math.cos(phi);
+        imag[n] = A * Math.sin(phi);
+    }
+    return audioCtx.createPeriodicWave(real, imag, { disableNormalization: true });
 }
 
 function createSineWave(audioCtx, phaseDeg = 0) {
@@ -26,6 +94,35 @@ function createSineWave(audioCtx, phaseDeg = 0) {
     return audioCtx.createPeriodicWave(real, imag, { disableNormalization: true });
 }
 
+function createVioletNoiseBuffer(audioCtx, durationInSeconds = 1) {
+    const sampleRate = audioCtx.sampleRate;
+    const bufferSize = durationInSeconds * sampleRate;
+    const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
+    const data = buffer.getChannelData(0);
+
+    let lastWhite = 0.0;
+    let lastDiff = 0.0;
+    for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        const diff = white - lastWhite;       // 1st derivative → blue noise
+        const violet = diff - lastDiff;       // 2nd derivative → violet noise
+        data[i] = violet;
+        lastWhite = white;
+        lastDiff = diff;
+    }
+    // normalize to ~ -1..1
+    let maxAmp = 0;
+    for (let i = 0; i < bufferSize; i++) {
+        if (Math.abs(data[i]) > maxAmp) maxAmp = Math.abs(data[i]);
+    }
+    if (maxAmp > 0) {
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] /= maxAmp;
+        }
+    }
+    return buffer;
+}
+
 function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = durationInSeconds * sampleRate;
@@ -35,7 +132,6 @@ function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
     for (let i = 0; i < bufferSize; i++) {
         data[i] = Math.random() * 2 - 1; // range: -1 to +1
     }
-
     return buffer;
 }
 
@@ -77,25 +173,57 @@ class Operator {
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
 
+        const noise = ["blueNoise", "brownNoise", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "pinkNoise", "violetNoise"].includes(waveform);
         let oscillator = null;
 
-        if (!["noise", "noiseAndHPF"].includes(waveform) && (detuneOrResonance !== 0)) {
+        if (!noise && (detuneOrResonance !== 0)) {
             nOscillators = 3;
         } else {
             nOscillators = 1;
         }
         for (let i = 0; i < nOscillators; i++) {
-            if (["noise", "noiseAndHPF"].includes(waveform)) {
+            if (noise) {
                 oscillator = audioContext.createBufferSource();
-                oscillator.buffer = createWhiteNoiseBuffer(audioContext, 1);
+                // Noise type
                 switch (waveform) {
+                    case "blueNoise":
+                        oscillator.buffer = createBlueNoiseBuffer(audioContext, 2);
+                        break;
+                    case "brownNoise":
+                        oscillator.buffer = createBrownNoiseBuffer(audioContext, 2);
+                        break;
+                    case "pinkNoise":
+                        oscillator.buffer = createPinkNoiseBuffer(audioContext, 2);
+                        break;
+                    case "violetNoise":
+                        oscillator.buffer = createVioletNoiseBuffer(audioContext, 2);
+                        break;
+                    default:
+                        oscillator.buffer = createWhiteNoiseBuffer(audioContext, 2);
+                        break;
+                }
+                // Filter
+                switch (waveform) {
+                    case "noiseAndBPF":
+                        this.filter = audioContext.createBiquadFilter();
+                        this.filter.type = "bandpass";
+                        this.filter.frequency.value = frequency;
+                        this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
+                        break;
                     case "noiseAndHPF":
                         this.filter = audioContext.createBiquadFilter();
                         this.filter.type = "highpass";
                         this.filter.frequency.value = frequency;
                         this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
                         break;
+                    case "noiseAndLPF":
+                        this.filter = audioContext.createBiquadFilter();
+                        this.filter.type = "lowpass";
+                        this.filter.frequency.value = frequency;
+                        this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
+                        break;
                     default:
+                        this.filter = null;
                         break;
                 }
             } else {

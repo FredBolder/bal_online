@@ -1,95 +1,144 @@
-$musicbox: 32, 2, door, 10
-$notes: 32, 2, C4, E4, G4, -, -, -
-$direction: 32, 2, up
-$musicbox: 9, 7, keyboard, 5
-$instrument: 9, 7, pipeorgan, 90
-$part: 9, 7, top
-$direction: 9, 7, up
-$musicbox: 10, 7, keyboard, 5
-$notes: 10, 7, D4
-$instrument: 10, 7, pipeorgan, 90
-$part: 10, 7, top
-$direction: 10, 7, up
-$musicbox: 11, 7, keyboard, 5
-$notes: 11, 7, E4
-$instrument: 11, 7, pipeorgan, 90
-$part: 11, 7, top
-$direction: 11, 7, up
-$musicbox: 12, 7, keyboard, 5
-$notes: 12, 7, F4
-$instrument: 12, 7, pipeorgan, 90
-$part: 12, 7, top
-$direction: 12, 7, up
-$musicbox: 13, 7, keyboard, 5
-$notes: 13, 7, G4
-$instrument: 13, 7, pipeorgan, 90
-$part: 13, 7, top
-$direction: 13, 7, up
-$musicbox: 14, 7, keyboard, 5
-$notes: 14, 7, A4
-$instrument: 14, 7, pipeorgan, 90
-$part: 14, 7, top
-$direction: 14, 7, up
-$musicbox: 15, 7, keyboard, 5
-$notes: 15, 7, B4
-$instrument: 15, 7, pipeorgan, 90
-$part: 15, 7, top
-$direction: 15, 7, up
-$musicbox: 16, 7, keyboard, 5
-$notes: 16, 7, C5
-$instrument: 16, 7, pipeorgan, 90
-$direction: 16, 7, up
-$musicbox: 9, 8, keyboard, 5
-$instrument: 9, 8, pipeorgan, 90
-$direction: 9, 8, up
-$musicbox: 10, 8, keyboard, 5
-$notes: 10, 8, D4
-$instrument: 10, 8, pipeorgan, 90
-$direction: 10, 8, up
-$musicbox: 11, 8, keyboard, 5
-$notes: 11, 8, E4
-$instrument: 11, 8, pipeorgan, 90
-$direction: 11, 8, up
-$musicbox: 12, 8, keyboard, 5
-$notes: 12, 8, F4
-$instrument: 12, 8, pipeorgan, 90
-$direction: 12, 8, up
-$musicbox: 13, 8, keyboard, 5
-$notes: 13, 8, G4
-$instrument: 13, 8, pipeorgan, 90
-$direction: 13, 8, up
-$musicbox: 14, 8, keyboard, 5
-$notes: 14, 8, A4
-$instrument: 14, 8, pipeorgan, 90
-$direction: 14, 8, up
-$musicbox: 15, 8, keyboard, 5
-$notes: 15, 8, B4
-$instrument: 15, 8, pipeorgan, 90
-$direction: 15, 8, up
-$musicbox: 16, 8, keyboard, 5
-$notes: 16, 8, C5
-$instrument: 16, 8, pipeorgan, 90
-$direction: 16, 8, up
-$musicbox: 18, 10, door, 10
-$notes: 18, 10, C4, E4, G4, -, -, -
-$direction: 18, 10, up
-11111111111111111111111111111111111
-111111                          1 1
-1    3                  4       M 1
-1               11111111111111111=1
-1         4   5               3 1=1
-1     111111               4    1=1
-1     1111111111111 1111111111  1=1
-11G   111MMMMMMMM11 11      11  1=1
-111   111MMMMMMMM11p11      11  1=1
-1 3               1         31  1=1
-1             2   M          1  1=1
-1  111111111111111111111111111  1=1
-1                                 1
-1111111111111111111111-111111111111
-13                              111
-1   11              9           111
-1 1111 111           5          131
-1 1111 111       5                1
-1    <                            1
-11111111111111111111111111111111111
+$musicbox: 9, 9, keyboard, 5
+$notes: 9, 9, A4
+$instrument: 9, 9, squarelead, 90
+$direction: 9, 9, up
+$group: 9, 9, 10
+$musicbox: 10, 9, keyboard, 5
+$notes: 10, 9, B4
+$instrument: 10, 9, squarelead, 90
+$direction: 10, 9, up
+$group: 10, 9, 10
+$musicbox: 11, 9, keyboard, 5
+$notes: 11, 9, C5
+$instrument: 11, 9, squarelead, 90
+$direction: 11, 9, up
+$group: 11, 9, 10
+$musicbox: 12, 9, keyboard, 5
+$notes: 12, 9, A4
+$instrument: 12, 9, squarelead, 90
+$direction: 12, 9, up
+$group: 12, 9, 10
+$musicbox: 13, 9, keyboard, 5
+$notes: 13, 9, B4
+$instrument: 13, 9, squarelead, 90
+$direction: 13, 9, up
+$group: 13, 9, 10
+$musicbox: 14, 9, keyboard, 5
+$notes: 14, 9, C5
+$instrument: 14, 9, squarelead, 90
+$direction: 14, 9, up
+$group: 14, 9, 10
+$musicbox: 15, 9, keyboard, 5
+$notes: 15, 9, E5
+$instrument: 15, 9, squarelead, 90
+$direction: 15, 9, up
+$group: 15, 9, 10
+$musicbox: 16, 9, keyboard, 5
+$notes: 16, 9, A4
+$instrument: 16, 9, squarelead, 90
+$direction: 16, 9, up
+$group: 16, 9, 10
+$musicbox: 17, 9, keyboard, 5
+$notes: 17, 9, B4
+$instrument: 17, 9, squarelead, 90
+$direction: 17, 9, up
+$group: 17, 9, 10
+$musicbox: 10, 3, keyboard, 5
+$notes: 10, 3, C5
+$instrument: 10, 3, squarelead, 90
+$direction: 10, 3, up
+$group: 10, 3, 10
+$musicbox: 19, 9, keyboard, 5
+$notes: 19, 9, A4
+$instrument: 19, 9, squarelead, 90
+$direction: 19, 9, up
+$group: 19, 9, 10
+$musicbox: 20, 9, keyboard, 5
+$notes: 20, 9, B4
+$instrument: 20, 9, squarelead, 90
+$direction: 20, 9, up
+$group: 20, 9, 10
+$musicbox: 21, 9, keyboard, 5
+$notes: 21, 9, C5
+$instrument: 21, 9, squarelead, 90
+$direction: 21, 9, up
+$group: 21, 9, 10
+$musicbox: 22, 9, keyboard, 5
+$notes: 22, 9, F5
+$instrument: 22, 9, squarelead, 90
+$direction: 22, 9, up
+$group: 22, 9, 10
+$musicbox: 23, 9, keyboard, 5
+$notes: 23, 9, A4
+$instrument: 23, 9, squarelead, 90
+$direction: 23, 9, up
+$group: 23, 9, 10
+$musicbox: 9, 14, keyboard, 5
+$notes: 9, 14, A2
+$instrument: 9, 14, bass, 90
+$direction: 9, 14, up
+$group: 9, 14, 11
+$musicbox: 12, 14, keyboard, 5
+$notes: 12, 14, A2
+$instrument: 12, 14, bass, 90
+$direction: 12, 14, up
+$group: 12, 14, 11
+$musicbox: 16, 14, keyboard, 5
+$notes: 16, 14, F2
+$instrument: 16, 14, bass, 90
+$direction: 16, 14, up
+$group: 16, 14, 11
+$musicbox: 19, 14, keyboard, 5
+$notes: 19, 14, F2
+$instrument: 19, 14, bass, 90
+$direction: 19, 14, up
+$group: 19, 14, 11
+$musicbox: 23, 14, keyboard, 5
+$notes: 23, 14, A2
+$instrument: 23, 14, bass, 90
+$direction: 23, 14, up
+$group: 23, 14, 11
+$musicbox: 28, 16, door, 5
+$notes: 28, 16, A4, B4, C5, A4, B4, C5, E5, A4, B4, C5, A4, B4, C5, F5, A4
+$direction: 28, 16, up
+$group: 28, 16, 10
+$pistonmode: 27, 0, momentary
+$sticky: 27, 0, yes
+$group: 29, 0, 2
+$inverted: 29, 0, yes
+$pistonmode: 29, 0, momentary
+$sticky: 29, 0, yes
+$group: 5, 7, 3
+$inverted: 5, 7, yes
+$pistonmode: 5, 7, momentary
+$sticky: 5, 7, yes
+$group: 5, 12, 3
+$inverted: 5, 12, yes
+$pistonmode: 5, 12, momentary
+$sticky: 5, 12, yes
+$group: 20, 1, 4
+$pistonmode: 20, 1, momentary
+$sticky: 20, 1, yes
+$group: 30, 4, 3
+$group: 4, 15, 2
+$group: 30, 13, 4
+111111111111111111111111111Ì1Ì11
+1                  1Ì1    1Φ1ß11
+1                  îßì    1 4  1
+1         M               1111 1
+1       1111111111111111=11111m1
+1   b 4           3     =    J11
+1  1111111^G            =     11
+1    Ì  1               =   1 %1
+1 11 ß  1               =   B 21
+1 1Φ    1MMMMMMMMM MMMMM11111111
+1 11m1G                     1 41
+1 11111E    L            E  1 B1
+1    Ì11VVVVVVVVVVVVVVVVV1  1  1
+1111 ß11111111111111111111  1 m1
+111Φ     M  M   M  M   M    1111
+1111m1G                     1111
+1111111E    L            E  M 11
+11111111VVVVVVVVVVVVVVVVV1  1 31
+11111111111111111111111111  1  1
+11111111111111111111111111111111

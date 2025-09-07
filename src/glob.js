@@ -3,6 +3,12 @@ export const globalVars = {
     isInOtherWorld: false,
     loading: true,
     otherWorldGreen: -1,
-    playedNotes: "",
+    playedNotes: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     thisWorldGreen: -1
+}
+
+export function clearPlayedNotes() {
+    for (let i = 0; i < 32; i++) {
+        globalVars.playedNotes[i] = "";
+    }
 }

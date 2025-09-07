@@ -19,9 +19,30 @@ function canBeTakenOrIsEmpty() {
   return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179];
 }
 
-function canMoveAlone(n) {
+function canMoveAlone(gameData, gameInfo, x, y) {
   // Object that can move, but not together with another object
-  return [9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178].includes(n);
+  let result = false;
+  let idx = -1;
+  const el = gameData[y][x];
+
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178].includes(el)) {
+    result = true;
+  } else {
+    switch (el) {
+      case 157:
+        idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+        if (idx >= 0) {
+          if (gameInfo.musicBoxes[idx].mode === "keyboard") {
+            result = true;
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  return result;
 }
 
 export function changeDirection(gameData, gameInfo, x, y, direction) {
@@ -1970,7 +1991,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   }
   if (x > 1) {
     // 1 object
-    if (!result.player && (whiteOrBlue(row[x - 1]) || (canMoveAlone(row[x - 1]) && (row[x - 1] !== 111))) && row[x - 2] === 0 &&
+    if (!result.player && (whiteOrBlue(row[x - 1]) || (canMoveAlone(gameData, gameInfo, x - 1, y) && (row[x - 1] !== 111))) && row[x - 2] === 0 &&
       !hasForceRight(gameData, gameInfo, x - 1, y)) {
       row[x - 2] = row[x - 1];
       row[x - 1] = 2;
@@ -2003,6 +2024,9 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
             gameInfo.timeBombs[idx1].x = x - 2;
             gameInfo.timeBombs[idx1].status = getTimeBombsTime();
           }
+          break;
+        case 157:
+          updateObject(gameInfo.musicBoxes, x - 1, y, x - 2, y);
           break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x - 1, y, x - 2, y);
@@ -2179,7 +2203,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   }
   if (x < maxX - 1) {
     // 1 object
-    if (!result.player && (whiteOrBlue(row[x + 1]) || (canMoveAlone(row[x + 1]) && (row[x + 1] !== 112))) && row[x + 2] === 0 &&
+    if (!result.player && (whiteOrBlue(row[x + 1]) || (canMoveAlone(gameData, gameInfo, x + 1, y) && (row[x + 1] !== 112))) && row[x + 2] === 0 &&
       !hasForceLeft(gameData, gameInfo, x + 1, y)) {
       row[x + 2] = row[x + 1];
       row[x + 1] = 2;
@@ -2212,6 +2236,9 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
             gameInfo.timeBombs[idx1].x = x + 2;
             gameInfo.timeBombs[idx1].status = getTimeBombsTime();
           }
+          break;
+        case 157:
+          updateObject(gameInfo.musicBoxes, x + 1, y, x + 2, y);
           break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x + 1, y, x + 2, y);
@@ -2443,8 +2470,10 @@ export function jump(backData, gameData, gameInfo, gameVars) {
     oneDirection = 88;
   }
   if (!result.player && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
-    if ((canMoveAlone(gameData[y + dy1][x]) && (gameData[y + dy1][x] !== 110)) && gameData[y + dy2][x] === 0 &&
-      !hasForceDown(gameData, gameInfo, x, y + dy1)) {
+    if ((canMoveAlone(gameData, gameInfo, x, y + dy1) && (gameData[y + dy1][x] !== 110)) && gameData[y + dy2][x] === 0 &&
+      ((gravityDown && !hasForceDown(gameData, gameInfo, x, y + dy1)) ||
+      (gravityUp && !hasForceUp(gameData, gameInfo, x, y + dy1)))
+    ) {
       gameData[y + dy2][x] = gameData[y + dy1][x];
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
@@ -2473,6 +2502,9 @@ export function jump(backData, gameData, gameInfo, gameVars) {
             gameInfo.timeBombs[idx].y = y + dy2;
             gameInfo.timeBombs[idx].status = getTimeBombsTime();
           }
+          break;
+        case 157:
+          updateObject(gameInfo.musicBoxes, x, y + dy1, x, y + dy2);
           break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x, y + dy1, x, y + dy2);
@@ -2697,9 +2729,8 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     oneDirection = 87;
   }
 
-  if ((gravityUp && (y >= minY) && !hasForceDown(gameData, gameInfo, x, y)) || (gravityDown && (y <= maxY) && !hasForceUp(gameData, gameInfo, x, y))) {
-    if (!result.player && (canMoveAlone(gameData[y + dy1][x]) && ![109, 178].includes(gameData[y + dy1][x])) && gameData[y + dy2][x] === 0 &&
-      !hasForceUp(gameData, gameInfo, x, y + dy1)) {
+  if ((gravityUp && (y >= minY) && !hasForceDown(gameData, gameInfo, x, y + dy1)) || (gravityDown && (y <= maxY) && !hasForceUp(gameData, gameInfo, x, y + dy1))) {
+    if (!result.player && (canMoveAlone(gameData, gameInfo, x, y + dy1) && ![109, 178].includes(gameData[y + dy1][x])) && gameData[y + dy2][x] === 0) {
       gameData[y + dy2][x] = gameData[y + dy1][x];
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
@@ -2728,6 +2759,9 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
             gameInfo.timeBombs[idx].y = y + dy2;
             gameInfo.timeBombs[idx].status = getTimeBombsTime();
           }
+          break;
+        case 157:
+          updateObject(gameInfo.musicBoxes, x, y + dy1, x, y + dy2);
           break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x, y + dy1, x, y + dy2);
@@ -2779,10 +2813,10 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     }
     if (!result.player && ((gameData[y + dy1][x] === 12) || (gameData[y + dy1][x] === 35)) && gameInfo.hasPickaxe) {
       if (gameData[y + dy1][x] === 12) {
-          idx = findElementByCoordinates(x, y + dy1, gameInfo.damagedStones);
-          if (idx >= 0) {
-            gameInfo.damagedStones[idx].status = -1;
-          }
+        idx = findElementByCoordinates(x, y + dy1, gameInfo.damagedStones);
+        if (idx >= 0) {
+          gameInfo.damagedStones[idx].status = -1;
+        }
       }
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;

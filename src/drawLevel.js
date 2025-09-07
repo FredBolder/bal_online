@@ -2601,8 +2601,30 @@ function drawLevel(
           drawAbbreviation("C5");
           break;
         case 2112:
+          drawAbbreviation("D5");
+          break;
+        case 2113:
+          drawAbbreviation("E5");
+          break;
+        case 2114:
+          drawAbbreviation("F5");
+          break;
+        case 2115:
+          drawAbbreviation("G5");
+          break;
+        case 2116:
+          drawAbbreviation("A5");
+          break;
+        case 2117:
+          drawAbbreviation("B5");
+          break;
+        case 2130:
           // Music box mode door
           drawAbbreviation("DO");
+          break;
+        case 2131:
+          // Music box mode transpose
+          drawAbbreviation("TR");
           break;
         default:
           if (gd < 2000) {

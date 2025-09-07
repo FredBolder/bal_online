@@ -33,11 +33,11 @@ import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
-import { globalVars } from "../glob.js";
+import { clearPlayedNotes, globalVars } from "../glob.js";
 import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
-import { changeMusicBoxInstrument, changeMusicBoxMode, changeMusicBoxNote, changeMusicBoxPart, instruments } from "../musicBoxes.js";
+import { changeMusicBoxInstrument, changeMusicBoxMode, changeMusicBoxNote, changeMusicBoxPart, instruments, transposeMusicBox } from "../musicBoxes.js";
 import { gameScheduler } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -81,6 +81,7 @@ let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
 let createLevelMusicBoxInstrument = "xylophone";
+let createLevelMusicBoxTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
@@ -557,7 +558,7 @@ function BalPage() {
           level = 200;
           break;
       }
-      globalVars.playedNotes = "";
+      clearPlayedNotes();
       initLevel(level);
     }
   }
@@ -640,7 +641,7 @@ function BalPage() {
       globalVars.isInOtherWorld = false;
       globalVars.otherWorldGreen = -1;
       globalVars.loading = true;
-      globalVars.playedNotes = "";
+      clearPlayedNotes();
       initGameVars(gameVars);
       backData = null;
       backData = result.backData;
@@ -923,8 +924,8 @@ function BalPage() {
             break;
           case 3:
             // Music box
-            arr1 = [157, 2044, 2038, 2102, 2112, 2034, 2035, 2103, 2040, 2041, 2042, 2043, 2039];
-            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111];
+            arr1 = [157, 2044, 2038, 2102, 2130, 2034, 2035, 2103, 2040, 2041, 2042, 2043, 2039];
+            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
           case 15:
             arr1 = [2097, 2098, 2099];
@@ -963,7 +964,7 @@ function BalPage() {
       if (!gateTravelling) {
         globalVars.isInOtherWorld = false;
         globalVars.otherWorldGreen = -1;
-        globalVars.playedNotes = "";
+        clearPlayedNotes();
         clearMemory(1);
         clearMemory(2);
       }
@@ -1411,7 +1412,7 @@ function BalPage() {
     async function again() {
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
         await clickLoadFromMemory(3);
-        globalVars.playedNotes = "";
+        clearPlayedNotes();
       } else {
         initLevel(gameVars.currentLevel);
       }
@@ -1919,13 +1920,13 @@ function BalPage() {
                 changeGroup(gameInfo, column, row, createLevelObject - 2000);
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2111)) {
-                if (changeMusicBoxNote(gameInfo, column, row, ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"][createLevelObject - 2104]) === -1) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2117)) {
+                if (changeMusicBoxNote(gameInfo, column, row, ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"][createLevelObject - 2104]) === -1) {
                   showMessage("Info", "Click on a music box to set the note of it.");
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102, 2112].includes(createLevelObject)) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102, 2130].includes(createLevelObject)) {
                 switch (createLevelObject) {
                   case 2044:
                     newValue = "note";
@@ -1936,7 +1937,7 @@ function BalPage() {
                   case 2102:
                     newValue = "keyboard";
                     break;
-                  case 2112:
+                  case 2130:
                     newValue = "door";
                     break;
                   default:
@@ -1968,6 +1969,12 @@ function BalPage() {
 
               if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2039) && instruments().includes(createLevelMusicBoxInstrument)) {
                 if (changeMusicBoxInstrument(gameInfo, column, row, createLevelMusicBoxInstrument) === -1) {
+                  showMessage("Info", "Click on a music box to set the instrument of it.");
+                }
+              }
+
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2131) && (createLevelMusicBoxTranspose !== 0)) {
+                if (transposeMusicBox(gameInfo, column, row, createLevelMusicBoxTranspose) === -1) {
                   showMessage("Info", "Click on a music box to set the instrument of it.");
                 }
               }
@@ -2077,6 +2084,7 @@ function BalPage() {
     let confirm = null;
     let direction = "";
     let newValue = "";
+    let ok = false;
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
@@ -2150,15 +2158,31 @@ function BalPage() {
         if (createLevelMenu === menuToNumber("musicboxes")) {
           switch (createLevelObject) {
             case 2039:
+              ok = false;
               if (row > 0) {
                 newValue = await showSelect("Music boxes", "Instrument:", instruments(), 0);
-
                 if (newValue !== null) {
                   createLevelMusicBoxInstrument = newValue;
-                } else {
+                  ok = true;
+                }
+              }
+              if (!ok) {
                   createLevelMusicBoxInstrument = "none";
                   createLevelObject = -1;
+              }
+              break;
+            case 2131:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Music boxes", "Transpose semitones (-24..24):", "-12");
+                if (newValue !== null) {
+                  createLevelMusicBoxTranspose = tryParseInt(newValue, 100);
+                  ok = ((createLevelMusicBoxTranspose >= -24) && (createLevelMusicBoxTranspose <= 24));
                 }
+              }
+              if (!ok) {
+                  createLevelMusicBoxTranspose = 0;
+                  createLevelObject = -1;
               }
               break;
             default:
