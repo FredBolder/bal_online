@@ -2,7 +2,7 @@ import { removeObject } from "./addRemoveObject.js";
 import { changeDirection, changeGroup, changePart, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
-import { instruments } from "./musicBoxes.js";
+import { instruments } from "./music.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 

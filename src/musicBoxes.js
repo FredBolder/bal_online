@@ -178,11 +178,6 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
     return update;
 }
 
-export function instruments() {
-    return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "guitar", "harp", "harpsichord", "hihat", "kalimba",
-        "piano", "pipeorgan", "snaredrum", "squarelead", "strings", "trombone", "trumpet", "vibraphone", "xylophone"]
-}
-
 export function transposeMusicBox(gameInfo, x, y, semitones) {
     let idx = -1;
     console.log("FRED transposeMusicBox");
