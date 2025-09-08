@@ -146,20 +146,6 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   return idx;
 }
 
-export function changePart(gameInfo, x, y, part) {
-  let idx = -1;
-
-  if (["top", "middle", "bottom"].includes(part)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-      if (idx >= 0) {
-        gameInfo.musicBoxes[idx].part = part;
-      }
-    }
-  }
-  return idx;
-}
-
 export function changePistonInverted(gameInfo, x, y) {
   let idx = -1;
 
@@ -2472,7 +2458,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
   if (!result.player && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
     if ((canMoveAlone(gameData, gameInfo, x, y + dy1) && (gameData[y + dy1][x] !== 110)) && gameData[y + dy2][x] === 0 &&
       ((gravityDown && !hasForceDown(gameData, gameInfo, x, y + dy1)) ||
-      (gravityUp && !hasForceUp(gameData, gameInfo, x, y + dy1)))
+        (gravityUp && !hasForceUp(gameData, gameInfo, x, y + dy1)))
     ) {
       gameData[y + dy2][x] = gameData[y + dy1][x];
       gameData[y + dy1][x] = 2;

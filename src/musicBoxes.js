@@ -1,6 +1,6 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { globalVars } from "./glob.js";
-import { playNote, transpose } from "./music.js";
+import { instruments, playNote, transpose } from "./music.js";
 import { getSettings } from "./settings.js";
 
 function blueBallIsCloseToXY(gameData, x, y) {
@@ -31,48 +31,45 @@ function blueBallIsCloseToXY(gameData, x, y) {
     return result;
 }
 
-export function changeMusicBoxInstrument(gameInfo, x, y, instrument) {
+export function changeMusicBoxProperty(gameInfo, x, y, property, value) {
     let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
-        gameInfo.musicBoxes[idx].instrument = instrument;
-    }
-    return idx;
-}
-
-export function changeMusicBoxMode(gameInfo, x, y, mode) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-    if (idx >= 0) {
-        gameInfo.musicBoxes[idx].mode = mode;
-    }
-    return idx;
-}
-
-export function changeMusicBoxNote(gameInfo, x, y, note) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-    if (idx >= 0) {
-        gameInfo.musicBoxes[idx].notes.length = 0;
-        gameInfo.musicBoxes[idx].notes.push(note);
-    }
-    return idx;
-}
-
-export function changeMusicBoxPart(gameInfo, x, y, part) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-    if (idx >= 0) {
-        gameInfo.musicBoxes[idx].part = part;
+        const musicBox = gameInfo.musicBoxes[idx];
+        switch (property) {
+            case "instrument":
+                if (instruments().includes(value)) {
+                    musicBox.instrument = value;
+                }
+                break;
+            case "mode":
+                if (musicBoxModes().includes(value)) {
+                    musicBox.mode = value;
+                }
+                break;
+            case "note":
+                musicBox.notes.length = 0;
+                musicBox.notes.push(value);
+                break;
+            case "notespermeasure":
+                musicBox.notesPerMeasure = value;
+                break;
+            case "part":
+                if (["top", "middle", "bottom"].includes(value)) {
+                    musicBox.part = value;
+                }
+                break;
+            default:
+                break;
+        }
     }
     return idx;
 }
 
 export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
+    let count = 0;
+    let countOne = false;
     let note = "";
     let sequence = "";
     let update = false;
@@ -120,20 +117,33 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (((musicBox.mode === "song") || (musicBox.mode === "door")) && musicBox.active) {
+        if (["door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active) {
+            if ((musicBox.mode === "firstcount") && (musicBox.notesPerMeasure > 1) && (musicBox.notes.length > 1)){
+                countOne = false;
+                count = (musicBox.noteIndex % musicBox.notesPerMeasure) + 1;
+                console.log(musicBox.noteIndex, count);
+                // One count later because of pre-delay
+                if ((count === 1) || (count === 2)) {
+                    countOne = true;
+                }
+                if (!countOne && blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
+                    gameVars.gameOver = true;
+                    update = true;
+                }
+            }
             if (musicBox.delayCounter >= musicBox.delay) {
                 musicBox.delayCounter = 0;
                 if (musicBox.notes.length === 0) {
                     musicBox.notes.push("C4");
                     musicBox.noteIndex = 0;
                 }
-                if (musicBox.noteIndex >= musicBox.notes.length) {
-                    musicBox.noteIndex = 0;
-                }
                 note = musicBox.notes[musicBox.noteIndex];
-                musicBox.noteIndex++;
                 if ((music > 0) && (note !== "") && (note !== "-")) {
                     playNote(musicBox.instrument, musicBox.volume * music * 0.01, note);
+                }
+                musicBox.noteIndex++;
+                if (musicBox.noteIndex >= musicBox.notes.length) {
+                    musicBox.noteIndex = 0;
                 }
             }
             musicBox.delayCounter++;
@@ -178,14 +188,19 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
     return update;
 }
 
+export function musicBoxModes() {
+    return ["door", "firstcount", "keyboard", "note", "song"];
+}
+
 export function transposeMusicBox(gameInfo, x, y, semitones) {
     let idx = -1;
-    console.log("FRED transposeMusicBox");
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
         const musicBox = gameInfo.musicBoxes[idx];
         for (let i = 0; i < musicBox.notes.length; i++) {
-            musicBox.notes[i] = transpose(musicBox.notes[i], semitones);
+            if (!["-", "_"].includes(musicBox.notes[i])) {
+                musicBox.notes[i] = transpose(musicBox.notes[i], semitones);
+            }
         }
     }
     return idx;

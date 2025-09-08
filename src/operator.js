@@ -322,7 +322,7 @@ function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
 }
 
 export function getPreDelay() {
-    return 20 / 1000;
+    return 50 / 1000; // was 20, but for sync with first count check same as scheduler
 }
 
 function safeTarget(v) {

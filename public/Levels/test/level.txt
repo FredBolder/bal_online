@@ -1,0 +1,54 @@
+$musicbox: 3, 5, song, 5
+$notes: 3, 5, A3, D4, F4, D4, F4, D4, G3, C#4, E4, C#4, E4, C#4, A3, D4, F4, D4, F4, D4, G3, C#4, E4, C#4, E4, C#4
+$addnotes: 3, 5, A3, D4, F4, D4, F4, D4, G3, C#4, E4, C#4, E4, C#4, A3, D4, F4, D4, F4, D4, A3, Eb4, F4, Eb4, F4, Eb4
+$addnotes: 3, 5, F3, Bb3, F4, D4, F4, D4, G3, C#4, E4, C#4, E4, C#4, A3, D4, F4, D4, F4, D4, F3, Bb3, F4, D4, F4, D4
+$addnotes: 3, 5, F3, Bb3, F4, D4, F4, D4, G3, C#4, E4, C#4, E4, C#4, A3, D4, F4, D4, F4, D4, A3, D4, F4, D4, F4, D4
+$instrument: 3, 5, harp, 30
+$direction: 3, 5, up
+$musicbox: 4, 5, song, 5
+$notes: 4, 5, D3, -, -, -, -, -, A2, -, -, -, -, -, D3, -, -, -, -, -, A2, -, -, -, -, A2
+$addnotes: 4, 5, D3, -, -, -, -, -, A2, -, -, -, -, -, D3, -, -, -, -, -, C3, -, -, -, -, -
+$addnotes: 4, 5, Bb2, -, -, -, -, -, A2, -, -, -, -, -, D3, -, -, -, C3, -, Bb2, -, -, -, -, Bb2
+$addnotes: 4, 5, Bb2, -, -, -, -, -, A2, -, -, -, -, -, D3, -, -, -, -, -, A2, -, B2, -, C#3, -
+$instrument: 4, 5, bass, 80
+$direction: 4, 5, up
+$musicbox: 5, 5, firstcount, 5
+$notes: 5, 5, A5, -, D6, -, F6, -, E6, -, -, F6, E6, -, D6, -, A5, -, -, -, -, -, -, -, -, -
+$addnotes: 5, 5, A5, -, D6, -, F6, -, E6, -, -, F6, G6, -, A6, -, -, -, -, -, -, -, -, -, -, A6
+$addnotes: 5, 5, Bb6, -, G6, -, F6, -, E6, -, F6, -, G6, -, A6, -, F6, -, -, -, -, -, -, -, -, A5
+$addnotes: 5, 5, F6, -, G6, -, F6, -, E6, -, D6, -, C#6, -, D6, -, -, -, -, -, -, -, -, -, -, -
+$instrument: 5, 5, strings, 100
+$notespermeasure: 5, 5, 6
+$direction: 5, 5, up
+$musicbox: 1, 5, song, 5
+$instrument: 1, 5, bassdrum, 90
+$notes: 1, 5, C4, -, -, -, -, C4, C4, -, -, -, -, -, C4, -, -, -, -, C4, C4, -, -, -, -, -
+$direction: 1, 5, up
+$musicbox: 2, 5, song, 5
+$instrument: 2, 5, snaredrum, 90
+$notes: 2, 5, -, -, C4, -, -, -, -, -, C4, -, -, -, -, -, C4, -, -, -, -, -, C4, -, -, -
+$direction: 2, 5, up
+$musicbox: 1, 4, song, 5
+$instrument: 1, 4, hihat, 90
+$notes: 1, 4, C4, -, C4, -, C4, -, C4, -, C4, -, C4, -, C4, -, C4, -, C4, -, C4, -, C4, -, D4, -
+$direction: 1, 4, up
+11111111111111111111111111111111
+1   11131                      1
+12  > > 1                      1
+11111m1=111111111111111111111111
+1M11111=111111111111111111111111
+1MMMMM1=1                      1
+1      =1                      1
+1 1111111                      1
+1 > >                          1
+111m11111                      1
+111111111                      1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+13                             1
+1                              1
+11111111111111111111111111111111

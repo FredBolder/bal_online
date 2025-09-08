@@ -198,7 +198,22 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 157: {
-                    let musicBox = { x: j, y: i, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, part: "bottom", direction: "up", group: 1 };
+                    let musicBox = { 
+                        x: j, 
+                        y: i, 
+                        instrument: "xylophone", 
+                        volume: 90, 
+                        mode: "note", 
+                        active: false, 
+                        delay: 5, 
+                        delayCounter: 0, 
+                        notes: ["C4"], 
+                        noteIndex: 0, 
+                        part: "bottom", 
+                        notesPerMeasure: 0,
+                        direction: "up", 
+                        group: 1 
+                    };
                     result.musicBoxes.push(musicBox);
                     break;
                 }
@@ -324,7 +339,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 if (obj.notes.length > 0) {
                     firstNote = obj.notes[0];
                 }
-                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, Part: ${obj.part}, Direction: ${obj.direction}, Group: ${obj.group}`;
+                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, 
+                Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, 
+                Notes per measure: ${obj.notesPerMeasure}, Part: ${obj.part}, Direction: ${obj.direction}, Group: ${obj.group}`;
             }
             info = `Music box, ` + extraInfo;
             break;

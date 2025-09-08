@@ -38,7 +38,7 @@ import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRan
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
-import { changeMusicBoxInstrument, changeMusicBoxMode, changeMusicBoxNote, changeMusicBoxPart, transposeMusicBox } from "../musicBoxes.js";
+import { changeMusicBoxProperty, transposeMusicBox } from "../musicBoxes.js";
 import { gameScheduler } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -86,7 +86,7 @@ let createLevelMusicBoxTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -925,7 +925,7 @@ function BalPage() {
             break;
           case 3:
             // Music box
-            arr1 = [157, 2044, 2038, 2102, 2130, 2034, 2035, 2103, 2040, 2041, 2042, 2043, 2039];
+            arr1 = [157, 2044, 2038, 2102, 2130, 2132, 2034, 2035, 2103, 2040, 2041, 2042, 2043, 2039];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
           case 15:
@@ -1922,12 +1922,12 @@ function BalPage() {
               }
 
               if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2117)) {
-                if (changeMusicBoxNote(gameInfo, column, row, ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"][createLevelObject - 2104]) === -1) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "note", ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"][createLevelObject - 2104]) === -1) {
                   showMessage("Info", "Click on a music box to set the note of it.");
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102, 2130].includes(createLevelObject)) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102, 2130, 2132].includes(createLevelObject)) {
                 switch (createLevelObject) {
                   case 2044:
                     newValue = "note";
@@ -1941,10 +1941,13 @@ function BalPage() {
                   case 2130:
                     newValue = "door";
                     break;
+                  case 2132:
+                    newValue = "firstcount";
+                    break;
                   default:
                     break;
                 }
-                if (changeMusicBoxMode(gameInfo, column, row, newValue) === -1) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "mode", newValue) === -1) {
                   showMessage("Info", "Click on a music box to set the mode of it.");
                 }
               }
@@ -1963,13 +1966,13 @@ function BalPage() {
                   default:
                     break;
                 }
-                if (changeMusicBoxPart(gameInfo, column, row, newValue) === -1) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "part", newValue) === -1) {
                   showMessage("Info", "Click on a music box to set the part of it.");
                 }
               }
 
               if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2039) && instruments().includes(createLevelMusicBoxInstrument)) {
-                if (changeMusicBoxInstrument(gameInfo, column, row, createLevelMusicBoxInstrument) === -1) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "instrument", createLevelMusicBoxInstrument) === -1) {
                   showMessage("Info", "Click on a music box to set the instrument of it.");
                 }
               }

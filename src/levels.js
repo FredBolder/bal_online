@@ -1,8 +1,9 @@
 import { removeObject } from "./addRemoveObject.js";
-import { changeDirection, changeGroup, changePart, charToNumber, findElementByCoordinates } from "./balUtils.js";
+import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
 import { instruments } from "./music.js";
+import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
@@ -27,7 +28,7 @@ const seriesEasyEnd = 3022;
 const hiddenMiniSeries1Start = 3100;
 const hiddenMiniSeries1End = 3106;
 const seriesMusicStart = 3200;
-const seriesMusicEnd = 3202;
+const seriesMusicEnd = 3203;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
@@ -222,6 +223,7 @@ export function checkSettings(data, settings) {
     { name: "$inverted", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$notes", params: 0, xy: true },
+    { name: "$notespermeasure", params: 3, xy: true },
     { name: "$part", params: 3, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
@@ -235,6 +237,7 @@ export function checkSettings(data, settings) {
   let msg = "";
   let msgExtra = "";
   let p1 = -1;
+  let val_int = 0;
   let validXY = false;
   let volume = 0;
   let h = -1;
@@ -287,19 +290,19 @@ export function checkSettings(data, settings) {
             case "$direction":
               switch (data[y][x]) {
                 case "M":
-                case "157":
+                case 157:
                   if (!["left", "right", "up", "down"].includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
                 case "{":
-                case "171":
+                case 171:
                   if (!["left", "right", "none"].includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
                 case "η":
-                case "178":
+                case 178:
                   if (!moversDirections().includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
@@ -351,7 +354,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$musicbox":
-              if (!["note", "song", "keyboard", "door"].includes(valuesLowerCase[2])) {
+              if (!musicBoxModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid music box mode ${values[2]}.\n`;
               }
               gameTicks = tryParseInt(values[3], -1);
@@ -365,7 +368,7 @@ export function checkSettings(data, settings) {
             case "$part":
               switch (data[y][x]) {
                 case "M":
-                case "157":
+                case 157:
                   if (!["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for part.\n`;
                   }
@@ -404,6 +407,20 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$notespermeasure":
+              switch (data[y][x]) {
+                case "M":
+                case 157:
+                  val_int = tryParseInt(values[2], -1);
+                  if (val_int < 2) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for the number of notes per measure.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
               }
               break;
             default:
@@ -866,6 +883,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
   let mode = "";
   let p1 = -1;
   let sound = "";
+  let val_int = 0;
   let validXY = false;
   let volume = 90;
   let w = -1;
@@ -1067,7 +1085,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length === 4) {
             mode = valuesLowerCase[2];
             gameTicks = tryParseInt(values[3], -1);
-            if (validXY && ["note", "song", "keyboard", "door"].includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
+            if (validXY && musicBoxModes().includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
               idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].mode = mode;
@@ -1090,10 +1108,16 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$notespermeasure":
+          val_int = tryParseInt(values[2], -1);
+          if (val_int >= 2) {
+            changeMusicBoxProperty(gameInfo, x, y, "notespermeasure", val_int);
+          }
+          break;
         case "$part":
           if (values.length === 3) {
             if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
-              changePart(gameInfo, x, y, valuesLowerCase[2]);
+              changeMusicBoxProperty(gameInfo, x, y, "part", valuesLowerCase[2]);
             }
           }
           break;

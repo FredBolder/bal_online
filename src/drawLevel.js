@@ -1014,6 +1014,7 @@ function drawLevel(
     let mode = "note";
     let note = "";
     let notes = ["C4"];
+    let notesPerMeasure = 0;
     let part = "bottom";
     let width3div5 = null;
     let width4div7 = null;
@@ -1028,11 +1029,17 @@ function drawLevel(
       direction = gameInfo.musicBoxes[idx].direction;
       mode = gameInfo.musicBoxes[idx].mode;
       notes = gameInfo.musicBoxes[idx].notes;
+      notesPerMeasure = gameInfo.musicBoxes[idx].notesPerMeasure;
       part = gameInfo.musicBoxes[idx].part;
     }
 
     if (mode === "keyboard") {
       if (!validNotesForKeyboardMode(notes)) {
+        mode = "note";
+      }
+    }
+    if (mode === "firstcount") {
+      if ((notes.length < 2) || (notesPerMeasure < 2)) {
         mode = "note";
       }
     }
@@ -1045,6 +1052,10 @@ function drawLevel(
         drawBox(ctx, xmin, ymin, w1, w2, "black");
         ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - musicNoteWidth)), ymin + (musicNoteMargin * w2), musicNoteWidth, musicNoteHeight);
         break;
+      case "firstcount":
+        drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "red"));
+        drawText(ctx, xc, yc, "one", "middle", "yellow", w2 * 0.7, w1 * 0.8, "yellow", 1);
+        break;  
       case "door":
         drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
         drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
@@ -2625,6 +2636,10 @@ function drawLevel(
         case 2131:
           // Music box mode transpose
           drawAbbreviation("TR");
+          break;
+        case 2132:
+          // Music box mode first count
+          drawAbbreviation("F");
           break;
         default:
           if (gd < 2000) {

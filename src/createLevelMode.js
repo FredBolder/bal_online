@@ -51,6 +51,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 for (let i = 0; i < gameInfo.musicBoxes[idx1].notes.length; i++) {
                     gameInfo.musicBoxes[idx2].notes.push(gameInfo.musicBoxes[idx1].notes[i]);
                 }
+                gameInfo.musicBoxes[idx2].notesPerMeasure = gameInfo.musicBoxes[idx1].notesPerMeasure;
                 gameInfo.musicBoxes[idx2].part = gameInfo.musicBoxes[idx1].part;
                 gameInfo.musicBoxes[idx2].direction = gameInfo.musicBoxes[idx1].direction;
                 gameInfo.musicBoxes[idx2].group = gameInfo.musicBoxes[idx1].group;

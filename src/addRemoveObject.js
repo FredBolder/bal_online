@@ -189,7 +189,22 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 157: {
-            let musicBox = { x, y, instrument: "xylophone", volume: 90, mode: "note", active: false, delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, part: "bottom", direction: "up", group: 1 };
+            let musicBox = { 
+                x, 
+                y, 
+                instrument: "xylophone", 
+                volume: 90, 
+                mode: "note", 
+                active: false, 
+                delay: 5, 
+                delayCounter: 0, 
+                notes: ["C4"], 
+                noteIndex: 0, 
+                notesPerMeasure: 0,
+                part: "bottom", 
+                direction: "up", 
+                group: 1 
+            };
             gameInfo.musicBoxes.push(musicBox);
             break;
         }

@@ -55,10 +55,11 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         }
         for (let j = 0; j < gameInfo.musicBoxes.length; j++) {
             const musicBox = gameInfo.musicBoxes[j];
-            if ((musicBox.mode === "song") && (musicBox.group === pistonsTrigger.group)) {
+            if (["firstcount", "song"].includes(musicBox.mode) && (musicBox.group === pistonsTrigger.group)) {
                 if (gameVars.pistonGroupsActivated[pistonsTrigger.group - 1]) {
                     if (!musicBox.active) {
                         musicBox.noteIndex = 0;
+                        musicBox.delayCounter = musicBox.delay;
                     }
                     musicBox.active = true;
                 } else {
