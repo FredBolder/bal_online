@@ -1014,8 +1014,8 @@ function drawLevel(
     let mode = "note";
     let note = "";
     let notes = ["C4"];
-    let notesPerMeasure = 0;
     let part = "bottom";
+    let stepsPerMeasure = 0;
     let width3div5 = null;
     let width4div7 = null;
 
@@ -1029,7 +1029,7 @@ function drawLevel(
       direction = gameInfo.musicBoxes[idx].direction;
       mode = gameInfo.musicBoxes[idx].mode;
       notes = gameInfo.musicBoxes[idx].notes;
-      notesPerMeasure = gameInfo.musicBoxes[idx].notesPerMeasure;
+      stepsPerMeasure = gameInfo.musicBoxes[idx].stepsPerMeasure;
       part = gameInfo.musicBoxes[idx].part;
     }
 
@@ -1039,7 +1039,7 @@ function drawLevel(
       }
     }
     if (mode === "firstcount") {
-      if ((notes.length < 2) || (notesPerMeasure < 2)) {
+      if ((notes.length < 2) || (stepsPerMeasure < 2)) {
         mode = "note";
       }
     }

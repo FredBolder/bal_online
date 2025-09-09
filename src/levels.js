@@ -223,11 +223,11 @@ export function checkSettings(data, settings) {
     { name: "$inverted", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$notes", params: 0, xy: true },
-    { name: "$notespermeasure", params: 3, xy: true },
     { name: "$part", params: 3, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
+    { name: "$stepspermeasure", params: 3, xy: true },
     { name: "$sticky", params: 3, xy: true }
   ];
 
@@ -391,6 +391,20 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid sound mode ${values[1]}.\n`;
               }
               break;
+            case "$stepspermeasure":
+              switch (data[y][x]) {
+                case "M":
+                case 157:
+                  val_int = tryParseInt(values[2], -1);
+                  if (val_int < 2) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for the number of steps per measure.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
             case "$inverted":
             case "$sticky":
               if (!["yes", "no"].includes(valuesLowerCase[2])) {
@@ -407,20 +421,6 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
-              }
-              break;
-            case "$notespermeasure":
-              switch (data[y][x]) {
-                case "M":
-                case 157:
-                  val_int = tryParseInt(values[2], -1);
-                  if (val_int < 2) {
-                    msg += `${settingNr(i)}Invalid value ${values[2]} for the number of notes per measure.\n`;
-                  }
-                  break;
-                default:
-                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
-                  break;
               }
               break;
             default:
@@ -1108,12 +1108,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
-        case "$notespermeasure":
-          val_int = tryParseInt(values[2], -1);
-          if (val_int >= 2) {
-            changeMusicBoxProperty(gameInfo, x, y, "notespermeasure", val_int);
-          }
-          break;
         case "$part":
           if (values.length === 3) {
             if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
@@ -1148,6 +1142,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$startlevelmessage":
           gameVars.startlevelmessage = value;
+          break;
+        case "$stepspermeasure":
+          val_int = tryParseInt(values[2], -1);
+          if (val_int >= 2) {
+            changeMusicBoxProperty(gameInfo, x, y, "stepspermeasure", val_int);
+          }
           break;
         case "$sticky":
           if (values.length === 3) {
