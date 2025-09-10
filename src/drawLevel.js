@@ -1053,7 +1053,7 @@ function drawLevel(
         ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - musicNoteWidth)), ymin + (musicNoteMargin * w2), musicNoteWidth, musicNoteHeight);
         break;
       case "firstcount":
-        drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "red"));
+        drawFilledBox(ctx, xmin, ymin, w1, w2, "red");
         drawText(ctx, xc, yc, "one", "middle", "yellow", w2 * 0.7, w1 * 0.8, "yellow", 1);
         break;  
       case "door":
