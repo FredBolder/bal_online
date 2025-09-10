@@ -340,3 +340,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     return { gateTravelling, playSounds, updateCanvas, updateGreen, updateLevelNumber };
 }
 
+export function schedulerTime() {
+    return 50;
+}
+

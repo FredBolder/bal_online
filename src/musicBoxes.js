@@ -1,6 +1,8 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { globalVars } from "./glob.js";
 import { instruments, playNote, transpose } from "./music.js";
+import { getPreDelay } from "./operator.js";
+import { schedulerTime } from "./scheduler.js";
 import { getSettings } from "./settings.js";
 
 function blueBallIsCloseToXY(gameData, x, y) {
@@ -68,10 +70,13 @@ export function changeMusicBoxProperty(gameInfo, x, y, property, value) {
 }
 
 export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
-    let count = 0;
     let countOne = false;
     let note = "";
     let sequence = "";
+    let step = 0;
+    let time1 = 0;
+    let time2 = 0;
+    let time3 = 0;
     let update = false;
     let x = -1;
     let y = -1;
@@ -93,8 +98,9 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                     }
                     note = musicBox.notes[musicBox.noteIndex];
                     musicBox.noteIndex++;
-                    if ((music > 0) && (note !== "") && (note !== "-")) {
-                        playNote(musicBox.instrument, musicBox.volume * music * 0.01, note);
+                    if ((music > 0) && (note !== "") && (note !== "-") && (note !== "_")) {
+                        // volume and music are both percentages
+                        playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
                     }
                 }
             }
@@ -109,7 +115,10 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 sequence = "";
                 for (let j = 0; j < musicBox.notes.length; j++) {
                     note = musicBox.notes[j];
-                    if (!["-", ":"].includes(note)) {
+                    if (note.startsWith("*") || note.startsWith(".")) {
+                        note = note.slice(1);
+                    }
+                    if ((note !== "") && !note.includes("-") && !note.includes("_")) {
                         sequence += note;
                     }
                 }
@@ -120,17 +129,13 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
         }
         if (["door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active) {
             if ((musicBox.mode === "firstcount") && (musicBox.stepsPerMeasure > 1) && (musicBox.notes.length > 1)){
-                if (musicBox.noteIndex === -1) {
-                    count = 1;
-                } else {
-                    count = (musicBox.noteIndex % musicBox.stepsPerMeasure) + 1;
-                }
-                countOne = false;
-                //console.log(musicBox.noteIndex, count);
-                if (((count === musicBox.stepsPerMeasure) && (musicBox.delayCounter > (musicBox.delay * 0.1))) || 
-                ((count === 1) && (musicBox.delayCounter < (musicBox.delay * 0.9)))) {
-                    countOne = true;
-                }
+                time1 = getPreDelay();
+                time2 = musicBox.delayCounter * schedulerTime();
+                step = (Math.max(0, musicBox.noteIndex) % musicBox.stepsPerMeasure) + 1;
+                time2 += (step - 1) * musicBox.delay * schedulerTime();
+                time3 = time2 - (musicBox.stepsPerMeasure * musicBox.delay * schedulerTime());
+                console.log(musicBox.noteIndex, step, time1, time2, time3);
+                countOne = ((Math.abs(time2 - time1) < 250) || (Math.abs(time3 - time1) < 250));
                 if (!countOne && blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
                     gameVars.gameOver = true;
                     update = true;
@@ -147,8 +152,8 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                     musicBox.noteIndex = 0;
                 }
                 note = musicBox.notes[musicBox.noteIndex];
-                if ((music > 0) && (note !== "") && (note !== "-")) {
-                    playNote(musicBox.instrument, musicBox.volume * music * 0.01, note);
+                if ((music > 0) && (note !== "") && (note !== "-") && (note !== "_")) {
+                    playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
                 }
             }
             musicBox.delayCounter++;
@@ -177,7 +182,10 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
                 if (!musicBox.active && validNotesForKeyboardMode(musicBox.notes) && (gameData[y][x] === 2)) {
                     note = musicBox.notes[0];
-                    playNote(musicBox.instrument, musicBox.volume * music * 0.01, note);
+                    playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
+                    if (note.startsWith("*") || note.startsWith(".")) {
+                        note = note.slice(1);
+                    }
                     globalVars.playedNotes[musicBox.group - 1] += note;
                     if (globalVars.playedNotes[musicBox.group - 1].length > 100) {
                         globalVars.playedNotes[musicBox.group - 1] = globalVars.playedNotes[musicBox.group - 1].slice(globalVars.playedNotes[musicBox.group - 1].length - 100);
@@ -214,7 +222,7 @@ export function transposeMusicBox(gameInfo, x, y, semitones) {
 export function validNotesForKeyboardMode(notes) {
     let result = true;
     if (notes.length === 1) {
-        if (notes[0].includes("b") || notes[0].includes("#")) {
+        if ((notes[0] === "") || notes[0].includes("b") || notes[0].includes("#") || notes[0].includes("-") || notes[0].includes("_")) {
             result = false;
         }
     } else {

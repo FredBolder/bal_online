@@ -1,3 +1,10 @@
+export function percentageToBoost(percent) {
+    //   0% = strongest cut -12dB
+    //  50% = no boost or cut
+    // 100% = strongest boost +12dB
+    return ((percent / 100) * 2 - 1) * 12;
+}
+
 export function resonancePercentToQ(percent) {
     const minQ = 0.7;
     const maxQ = 20;
@@ -36,7 +43,11 @@ class Filter {
 
         this.filter.type = this.filterSettings.type;
         this.filter.frequency.value = this.filterSettings.freq1;
-        this.filter.Q.value = resonancePercentToQ(this.filterSettings.resonance);
+        if (["highshelf", "lowshelf"].includes(type)) {
+            this.filter.gain.value = percentageToBoost(this.filterSettings.resonance);
+        } else {
+            this.filter.Q.value = resonancePercentToQ(this.filterSettings.resonance);
+        }
     }
 
     async start(preDelay) {

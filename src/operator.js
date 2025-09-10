@@ -1,4 +1,4 @@
-import { resonancePercentToQ } from "./filter.js";
+import { percentageToBoost, resonancePercentToQ } from "./filter.js";
 import { getCymbalNoise } from "./music.js";
 import { tryParseInt } from "./utils.js";
 
@@ -359,7 +359,7 @@ class Operator {
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
 
-        const noise = ["blueNoise", "brownNoise", "metalNoise", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "pinkNoise", "violetNoise"].includes(waveform);
+        const noise = ["blueNoise", "brownNoise", "metalNoise", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "violetNoise"].includes(waveform);
         let oscillator = null;
 
         if (!noise && (detuneOrResonance !== 0)) {
@@ -410,6 +410,12 @@ class Operator {
                         this.filter.type = "lowpass";
                         this.filter.frequency.value = frequency;
                         this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
+                        break;
+                    case "noiseAndLSF":
+                        this.filter = audioContext.createBiquadFilter();
+                        this.filter.type = "lowshelf";
+                        this.filter.frequency.value = frequency;
+                        this.filter.gain.value = percentageToBoost(detuneOrResonance);
                         break;
                     default:
                         this.filter = null;

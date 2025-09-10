@@ -39,7 +39,7 @@ import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
 import { changeMusicBoxProperty, transposeMusicBox } from "../musicBoxes.js";
-import { gameScheduler } from "../scheduler.js";
+import { gameScheduler, schedulerTime } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { playSound } from "../sound.js";
@@ -86,7 +86,7 @@ let createLevelMusicBoxTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -1473,7 +1473,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3203;
+        gameVars.currentLevel = 3202;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -1488,7 +1488,7 @@ function BalPage() {
     //const el = myRef.current;
     //el.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
-    gameInterval = setInterval(runGameScheduler, 50);
+    gameInterval = setInterval(runGameScheduler, schedulerTime());
     return () => {
       //el.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
