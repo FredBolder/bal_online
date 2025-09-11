@@ -1,14 +1,37 @@
-$instrument: 1, 7, bassdrum, 100
-$instrument: 2, 7, snaredrum, 100
-$instrument: 3, 7, hihat, 100
-$instrument: 4, 7, cowbell, 100
-1111111111
-1       31
-1        1
-1        1
-1        1
-1        1
-1        1
-1MMMM    1
-1   2    1
-1111111111
+$instrument: 1, 3, tom, 90
+$notes: 2, 3, D4
+$instrument: 2, 3, tom, 90
+$notes: 3, 3, E4
+$instrument: 3, 3, tom, 90
+$notes: 4, 3, F4
+$instrument: 4, 3, tom, 90
+$instrument: 5, 3, noisedrum, 90
+$notes: 6, 3, D4
+$instrument: 6, 3, noisedrum, 90
+$notes: 10, 3, C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, B5, C6, D6
+$instrument: 10, 3, drums, 90
+$instrument: 1, 7, bassdrum, 90
+$notes: 2, 7, D4
+$instrument: 2, 7, bassdrum, 90
+$instrument: 3, 7, snaredrum, 90
+$notes: 4, 7, D4
+$instrument: 4, 7, snaredrum, 90
+$instrument: 5, 7, hihat, 90
+$notes: 6, 7, D4
+$instrument: 6, 7, hihat, 90
+$instrument: 7, 7, cowbell, 90
+$notes: 8, 7, D4
+$instrument: 8, 7, cowbell, 90
+$instrument: 9, 7, splashcymbal, 90
+$notes: 10, 7, D4
+$instrument: 10, 7, splashcymbal, 90
+111111111111
+13         1
+1          1
+1MMMMMM   M1
+1       2  1
+111111111111
+1          1
+1MMMMMMMMMM1
+1          1
+111111111111

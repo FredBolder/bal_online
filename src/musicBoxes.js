@@ -134,7 +134,6 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 step = (Math.max(0, musicBox.noteIndex) % musicBox.stepsPerMeasure) + 1;
                 time2 += (step - 1) * musicBox.delay * schedulerTime();
                 time3 = time2 - (musicBox.stepsPerMeasure * musicBox.delay * schedulerTime());
-                console.log(musicBox.noteIndex, step, time1, time2, time3);
                 countOne = ((Math.abs(time2 - time1) < 250) || (Math.abs(time3 - time1) < 250));
                 if (!countOne && blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
                     gameVars.gameOver = true;
