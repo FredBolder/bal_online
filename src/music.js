@@ -198,21 +198,29 @@ export async function playNote(instrument, volume, musicalNote) {
     decayFactorOsc1 = 1;
     filterResonanceFactor = 1;
     f1 = 1;
+    f2 = 1;
     switch (variation) {
       case 1:
-        filterResonanceFactor = 0.8;
-        filterResonanceFactor = 0.9;
+        decayFactorOsc1 = 1.1;
+        f2 = 1.75;
+        operators.push(new Operator(audioCtx, "noiseAndHPF", 7500, 0, maxVolume * f1, 0, 25, 0, 25, 1.1 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 1000, 56 * filterResonanceFactor, maxVolume * f1, 0, 900 * decayFactorOsc1, 0, 100, 0.55 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 2000, 64 * filterResonanceFactor, maxVolume * f1, 0, 520 * decayFactorOsc1, 0, 100, 0.85 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 3200, 70 * filterResonanceFactor, maxVolume * f1, 0, 380 * decayFactorOsc1, 0, 100, 0.7 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 5200, 78 * filterResonanceFactor, maxVolume * f1, 0, 240 * decayFactorOsc1, 0, 100, 0.4 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 8400, 86 * filterResonanceFactor, maxVolume * f1, 0, 160 * decayFactorOsc1, 0, 100, 0.23 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 12000, 90 * filterResonanceFactor, maxVolume * f1, 0, 110 * decayFactorOsc1, 0, 100, 0.13 * f2));
         break;
       default:
+        operators.push(new Operator(audioCtx, "noiseAndHPF", 4000, 0, maxVolume * f1, 0, 50, 0, 50, 1.25 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 1200, 64 * filterResonanceFactor, maxVolume * f1, 0, 1200 * decayFactorOsc1, 0, 100, 1.2 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 2400, 64 * filterResonanceFactor, maxVolume * f1, 0, 640 * decayFactorOsc1, 0, 100, 1.6 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 3600, 64 * filterResonanceFactor, maxVolume * f1, 0, 480 * decayFactorOsc1, 0, 100, 1.3 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 5200, 73 * filterResonanceFactor, maxVolume * f1, 0, 340 * decayFactorOsc1, 0, 100, 0.9 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 7500, 79 * filterResonanceFactor, maxVolume * f1, 0, 260 * decayFactorOsc1, 0, 100, 0.6 * f2));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 10500, 85 * filterResonanceFactor, maxVolume * f1, 0, 180 * decayFactorOsc1, 0, 100, 0.39 * f2));
         break;
     }
-    operators.push(new Operator(audioCtx, "noiseAndHPF", 4000, 0, maxVolume * f1, 0, 50, 0, 50, 1.5));
-    operators.push(new Operator(audioCtx, "noiseAndBPF", 1200, 64 * filterResonanceFactor, maxVolume * f1, 0, 1200 * decayFactorOsc1, 0, 100, 1.2));
-    operators.push(new Operator(audioCtx, "noiseAndBPF", 2400, 64 * filterResonanceFactor, maxVolume * f1, 0, 640 * decayFactorOsc1, 0, 100, 1.6));
-    operators.push(new Operator(audioCtx, "noiseAndBPF", 3600, 64 * filterResonanceFactor, maxVolume * f1, 0, 480 * decayFactorOsc1, 0, 100, 1.3));
-    operators.push(new Operator(audioCtx, "noiseAndBPF", 5200, 73 * filterResonanceFactor, maxVolume * f1, 0, 340 * decayFactorOsc1, 0, 100, 1));
-    operators.push(new Operator(audioCtx, "noiseAndBPF", 7500, 79 * filterResonanceFactor, maxVolume * f1, 0, 260 * decayFactorOsc1, 0, 100, 0.8));
-    operators.push(new Operator(audioCtx, "noiseAndBPF", 10500, 85 * filterResonanceFactor, maxVolume * f1, 0, 180 * decayFactorOsc1, 0, 100, 0.6));
   }
 
   function createTom(variation = 0) {
@@ -266,10 +274,10 @@ export async function playNote(instrument, volume, musicalNote) {
 
   const masterVol = Math.max(0, Math.min(volume / 100, 1)); // 0..1
   volumeFactor = 0.75;
-  if (note.startsWith("*")) { 
-    volumeFactor = 1; note = note.slice(1); 
-  } else if (note.startsWith(".")) { 
-    volumeFactor = 0.5; note = note.slice(1); 
+  if (note.startsWith("*")) {
+    volumeFactor = 1; note = note.slice(1);
+  } else if (note.startsWith(".")) {
+    volumeFactor = 0.5; note = note.slice(1);
   }
   const BASE = 0.6;
   maxVolume = BASE * masterVol * volumeFactor;
