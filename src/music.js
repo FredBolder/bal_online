@@ -1,4 +1,5 @@
 import { createMetalNoiseBuffer, getPreDelay, Operator } from "./operator.js";
+import { CombFilter } from "./combFilter.js";
 import { Filter } from "./filter.js";
 import { Reverb } from "./reverb.js";
 let audioCtx = null;
@@ -19,6 +20,7 @@ if (typeof window !== "undefined") {
   });
 }
 
+let combFiltersList = [];
 let filtersList = [];
 let operatorsList = [];
 
@@ -28,7 +30,8 @@ export function getCymbalNoise() {
 
 export function instruments() {
   return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "harp", "harpsichord", "hihat", "kalimba",
-    "noisedrum", "piano", "pipeorgan", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet", "vibraphone", "xylophone"]
+    "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
+    "vibraphone", "xylophone"]
 }
 
 export function noteToFreq(note) {
@@ -71,6 +74,8 @@ export async function playNote(instrument, volume, musicalNote) {
   let operators = [];
   const newFiltersList = [];
   let filter;
+  const newCombFiltersList = [];
+  let combFilter = null;
 
   // Variations
   let decayFactorNoise = 500;
@@ -152,6 +157,10 @@ export async function playNote(instrument, volume, musicalNote) {
     operators.push(new Operator(audioCtx, "metalNoise", 1000, 0, maxVolume * 0.7, 0, 200 * decayFactorOsc1, 0, 50));
     operators.push(new Operator(audioCtx, "noise", 1000, 0, maxVolume * 0.1, 0, 200 * decayFactorOsc1, 0, 50));
     filter.setFilter("highpass", 1500, 1500, 1500, 1500, filterResonance, 0, 200 * decayFactorOsc1, 250);
+    combFilter = new CombFilter(audioCtx);
+    combFilter.setWet(0.5);
+    combFilter.setDelayTime(2.2); // was 2.2
+    combFilter.setFeedback(0.3); // was 0.18 (0..0.6)
   }
 
   function createNoiseDrum(variation = 0) {
@@ -166,6 +175,49 @@ export async function playNote(instrument, volume, musicalNote) {
     // Frequency is only used for noiseAndBPF, noiseAndHPF and noiseAndLPF
     operators.push(new Operator(audioCtx, "noiseAndLSF", 600, 100, maxVolume * 1, 0, 1000 * decayFactorOsc1, 0, 500));
     filter.setFilter("lowpass", 2000, 2000, 500, 500, 0, 0, 200, 200);
+  }
+
+  function createRideCymbal(variation = 0) {
+    switch (variation) {
+      case 1:
+        // Ride bell
+        // Transient
+        decayFactorOsc1 = 1;
+        operators.push(new Operator(audioCtx, "sine", 5200, 0, maxVolume * 0.14, 0, 10, 0, 40));
+        operators.push(new Operator(audioCtx, "noiseAndHPF", 6000, 0, maxVolume * 0.18, 0, 12, 0, 20, 0.28));
+        // Noise
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 900, 92, maxVolume, 0, 1800 * decayFactorOsc1, 0, 100, 0.4 * 1.5));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 1400, 92, maxVolume, 0, 1400 * decayFactorOsc1, 0, 100, 0.36 * 1.5));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 2100, 92, maxVolume, 0, 1100 * decayFactorOsc1, 0, 100, 0.34 * 1.5));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 3200, 90, maxVolume, 0, 900 * decayFactorOsc1, 0, 100, 0.28 * 1.5));
+        // Bell
+        operators.push(new Operator(audioCtx, "sine", 900, 0, maxVolume * 0.1, 2, 1600 * decayFactorOsc1, 0, 100));
+        operators.push(new Operator(audioCtx, "sine", 1400, 0, maxVolume * 0.08, 2, 1200 * decayFactorOsc1, 0, 100));
+        break;
+      default:
+        // Normal ride (bow)
+        decayFactorOsc1 = 1.2;
+        // Transient
+        operators.push(new Operator(audioCtx, "sine", 5200, 0, maxVolume * 0.14, 2, 10, 0, 40));
+        operators.push(new Operator(audioCtx, "noiseAndHPF", 6000, 0, maxVolume * 0.18, 0, 12, 0, 20, 0.28));
+        // Body
+        operators.push(new Operator(audioCtx, "pinkNoiseAndBPF", 600, 56, maxVolume * 0.36, 0, 1200 * decayFactorOsc1, 0, 100, 0.30));
+        // Mids
+        operators.push(new Operator(audioCtx, "pinkNoiseAndBPF", 1200, 62, maxVolume * 0.52, 0, 900 * decayFactorOsc1, 0, 100, 0.58));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 2400, 66, maxVolume * 0.48, 0, 850 * decayFactorOsc1, 0, 100, 0.60));
+        // Highs
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 3600, 76, maxVolume * 0.26, 0, 1500 * decayFactorOsc1, 0, 100, 0.33));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 6000, 80, maxVolume * 1.28, 0, 1600 * decayFactorOsc1, 0, 100, 0.36));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 9000, 84, maxVolume * 0.21 * 0.25, 0, 1500 * decayFactorOsc1, 0, 100, 0.24));
+        // Metal
+        operators.push(new Operator(audioCtx, "metalNoiseAndBPF", 900, 60, maxVolume * 1, 0, 1800 * decayFactorOsc1, 0, 100, 1));
+        operators.push(new Operator(audioCtx, "metalNoiseAndBPF", 1400, 60, maxVolume * 0.9, 0, 1400 * decayFactorOsc1, 0, 100, 0.9));
+        break;
+    }
+    combFilter = new CombFilter(audioCtx);
+    combFilter.setWet(0.2);
+    combFilter.setDelayTime(5); // was 2.2
+    combFilter.setFeedback(0.3); // was 0.18 (0..0.6)
   }
 
   function createSnareDrum(variation = 0) {
@@ -311,6 +363,16 @@ export async function playNote(instrument, volume, musicalNote) {
   }
   filtersList = newFiltersList;
 
+  for (let i = 0; i < combFiltersList.length; i++) {
+    if ((combFiltersList[i].instrument === instrument)) {
+      combFiltersList[i].combFilter.stop();
+    }
+    if (!combFiltersList[i].combFilter.stopped) {
+      newCombFiltersList.push(combFiltersList[i]);
+    }
+  }
+  combFiltersList = newCombFiltersList;
+
   switch (instrument) {
     case "accordion":
       attack = 20;
@@ -451,6 +513,12 @@ export async function playNote(instrument, volume, musicalNote) {
         case "D6":
           createSplashCymbal(1);
           break;
+        case "E6":
+          createRideCymbal(0);
+          break;
+        case "F6":
+          createRideCymbal(1);
+          break;
         default:
           break;
       }
@@ -528,6 +596,18 @@ export async function playNote(instrument, volume, musicalNote) {
       operators.push(new Operator(audioCtx, "sine2", frequency * 10, 0, maxVolume * 0.04 * f1, attack, decay, maxVolume * 0.04 * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine1", frequency * 11, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.01 * f1, attack, decay, maxVolume * 0.01 * f1 * f2, release));
+      break;
+    case "ridecymbal":
+      switch (note) {
+        case "C4":
+          createRideCymbal(0);
+          break;
+        case "D4":
+          createRideCymbal(1);
+          break;
+        default:
+          break;
+      }
       break;
     case "snaredrum":
       switch (note) {
@@ -655,8 +735,17 @@ export async function playNote(instrument, volume, musicalNote) {
     operator.amp.connect(filter.filter);
     operator.start(getPreDelay());
   }
-  reverb.connectSource(filter.filter); // With reverb
-  //filter.connect(audioCtx.destination); // Without reverb
+  if (combFilter !== null) {
+    combFiltersList.push({ instrument, combFilter });
+    combFilter.setSend(1.0); // how much of source -> loop
+    combFilter.setHP(400);
+    combFilter.setLP(12000);
+    combFilter.connectSource(filter.filter);
+    reverb.connectSource(combFilter.combOutput);
+  } else {
+    reverb.connectSource(filter.filter); // With reverb
+    //filter.connect(audioCtx.destination); // Without reverb
+  }
 }
 
 export function transpose(note, semitones) {

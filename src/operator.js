@@ -360,7 +360,7 @@ class Operator {
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
 
-        const noise = ["blueNoise", "brownNoise", "metalNoise", "metalNoiseAndBPF", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "violetNoise"].includes(waveform);
+        const noise = ["blueNoise", "brownNoise", "metalNoise", "metalNoiseAndBPF", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", "violetNoise"].includes(waveform);
         let oscillator = null;
 
         if (!noise && (detuneOrResonance !== 0)) {
@@ -386,6 +386,7 @@ class Operator {
                         oscillator.buffer = getCymbalNoise();
                         break;
                     case "pinkNoise":
+                    case "pinkNoiseAndBPF":
                         oscillator.buffer = createPinkNoiseBuffer(audioContext, 2);
                         break;
                     case "violetNoise":
@@ -399,6 +400,7 @@ class Operator {
                 switch (waveform) {
                     case "noiseAndBPF":
                     case "metalNoiseAndBPF":
+                    case "pinkNoiseAndBPF":
                         this.filter = audioContext.createBiquadFilter();
                         this.filter.type = "bandpass";
                         this.filter.frequency.value = frequency;

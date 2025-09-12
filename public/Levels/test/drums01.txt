@@ -8,7 +8,7 @@ $instrument: 4, 3, tom, 90
 $instrument: 5, 3, noisedrum, 90
 $notes: 6, 3, D4
 $instrument: 6, 3, noisedrum, 90
-$notes: 10, 3, C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, B5, C6, D6
+$notes: 10, 3, C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, B5, C6, D6, E6, F6
 $instrument: 10, 3, drums, 90
 $instrument: 1, 7, bassdrum, 90
 $notes: 2, 7, D4
@@ -25,10 +25,13 @@ $instrument: 8, 7, cowbell, 90
 $instrument: 9, 7, splashcymbal, 90
 $notes: 10, 7, D4
 $instrument: 10, 7, splashcymbal, 90
+$instrument: 7, 3, ridecymbal, 90
+$notes: 8, 3, D4
+$instrument: 8, 3, ridecymbal, 90
 111111111111
 13         1
 1          1
-1MMMMMM   M1
+1MMMMMMMM M1
 1       2  1
 111111111111
 1          1

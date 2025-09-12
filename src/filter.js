@@ -79,6 +79,7 @@ class Filter {
         this.filter.frequency.exponentialRampToValueAtTime(safeTarget(this.filterSettings.freq4), stopTime + frt);
 
         await new Promise(resolve => setTimeout(resolve, (frt + 0.02) * 1000));
+        try { this.filter.disconnect(); } catch(e) { /* ignore */ }
         this.stopped = true;
     }
 }
