@@ -201,6 +201,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
                 notes: ["C4"], 
                 noteIndex: 0, 
                 stepsPerMeasure: 0,
+                oneOne: false,
                 part: "bottom", 
                 direction: "up", 
                 group: 1 

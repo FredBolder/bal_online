@@ -211,6 +211,7 @@ export function getGameInfo(backData, gameData) {
                         noteIndex: 0, 
                         part: "bottom", 
                         stepsPerMeasure: 0,
+                        oneOne: false,
                         direction: "up", 
                         group: 1 
                     };
@@ -341,7 +342,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, 
                 Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, 
-                Steps per measure: ${obj.stepsPerMeasure}, Part: ${obj.part}, Direction: ${obj.direction}, Group: ${obj.group}`;
+                Steps per measure: ${obj.stepsPerMeasure}, On one: ${obj.onOne}, Part: ${obj.part}, Direction: ${obj.direction}, Group: ${obj.group}`;
             }
             info = `Music box, ` + extraInfo;
             break;

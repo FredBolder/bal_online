@@ -69,14 +69,42 @@ export function changeMusicBoxProperty(gameInfo, x, y, property, value) {
     return idx;
 }
 
-export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
+export function checkFirstCount(gameData, gameInfo) {
     let countOne = false;
-    let note = "";
-    let sequence = "";
+    let gameOver = false;
     let step = 0;
     let time1 = 0;
     let time2 = 0;
     let time3 = 0;
+
+    for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+        const musicBox = gameInfo.musicBoxes[i];
+            if ((musicBox.mode === "firstcount") && (musicBox.stepsPerMeasure > 1) && (musicBox.notes.length > 1)){
+                time1 = getPreDelay();
+                time2 = musicBox.delayCounter * schedulerTime();
+                step = (Math.max(0, musicBox.noteIndex) % musicBox.stepsPerMeasure) + 1;
+                time2 += (step - 1) * musicBox.delay * schedulerTime();
+                time3 = time2 - (musicBox.stepsPerMeasure * musicBox.delay * schedulerTime());
+                countOne = ((Math.abs(time2 - time1) < 250) || (Math.abs(time3 - time1) < 250));
+                if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
+                    if (countOne) {
+                        musicBox.onOne = true;
+                    } else {
+                        if (!musicBox.onOne) {
+                            gameOver = true;
+                        }
+                    }
+                } else {
+                    musicBox.onOne = false;
+                }
+            }
+    }
+    return gameOver;
+}
+
+export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
+    let note = "";
+    let sequence = "";
     let update = false;
     let x = -1;
     let y = -1;
@@ -128,18 +156,6 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
             }
         }
         if (["door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active) {
-            if ((musicBox.mode === "firstcount") && (musicBox.stepsPerMeasure > 1) && (musicBox.notes.length > 1)){
-                time1 = getPreDelay();
-                time2 = musicBox.delayCounter * schedulerTime();
-                step = (Math.max(0, musicBox.noteIndex) % musicBox.stepsPerMeasure) + 1;
-                time2 += (step - 1) * musicBox.delay * schedulerTime();
-                time3 = time2 - (musicBox.stepsPerMeasure * musicBox.delay * schedulerTime());
-                countOne = ((Math.abs(time2 - time1) < 250) || (Math.abs(time3 - time1) < 250));
-                if (!countOne && blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
-                    gameVars.gameOver = true;
-                    update = true;
-                }
-            }
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;

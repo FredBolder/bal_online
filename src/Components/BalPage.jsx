@@ -182,7 +182,7 @@ function BalPage() {
     }
   }
 
-  async function runGameScheduler() {
+  async function runGameScheduler(checkAll = true) {
     let saveCoilSpring = false;
     let saveDivingGlasses = false;
     let saveKey = false;
@@ -219,11 +219,24 @@ function BalPage() {
     if (modalOpen || createLevel || globalVars.loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
+
+    if (gameVars.gameOver) {
+      await showMessage("GAME OVER!", "You can try again.");
+      if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
+        await clickLoadFromMemory(3);
+        clearPlayedNotes();
+        return;
+      } else {
+        initLevel(gameVars.currentLevel);
+        return;
+      }
+    }
+
     if (gameVars.gameOver || (gameData.length < 2) || (backData.length < 2) ||
       (gameInfo.blueBall.x === -1) || (gameInfo.blueBall.y === -1)) {
       return;
     }
-    const info = await gameScheduler(backData, gameData, gameInfo, gameVars);
+    const info = await gameScheduler(backData, gameData, gameInfo, gameVars, checkAll);
     if (info.gateTravelling) {
       switch (gameVars.gateTravelling) {
         case 1:
@@ -1331,6 +1344,9 @@ function BalPage() {
       showMessage("Message", info.message);
     }
 
+    // Detect pressing triggers also when walking fast
+    runGameScheduler(false);
+
     if (kPressed) {
       if ((fred) && (e.key === "%")) {
         codes = "";
@@ -1887,7 +1903,7 @@ function BalPage() {
                 }
               }
 
-              if (menuToNumber("conveyorbelts"), [menuToNumber("elevators"), menuToNumber("musicboxes")].includes(createLevelMenu) &&
+              if ([menuToNumber("conveyorbelts"), menuToNumber("elevators"), menuToNumber("musicboxes")].includes(createLevelMenu) &&
                 (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
                 if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
                   if (oneSelected) {
@@ -1899,7 +1915,7 @@ function BalPage() {
               if ((createLevelMenu === menuToNumber("elevators")) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
                 if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on an elevator, a conveyor belt or a mover to set a valid direction.");
+                    showMessage("Info", "Click on a mover to set a valid direction.");
                   }
                 }
               }
@@ -2171,8 +2187,8 @@ function BalPage() {
                 }
               }
               if (!ok) {
-                  createLevelMusicBoxInstrument = "none";
-                  createLevelObject = -1;
+                createLevelMusicBoxInstrument = "none";
+                createLevelObject = -1;
               }
               break;
             case 2131:
@@ -2185,8 +2201,8 @@ function BalPage() {
                 }
               }
               if (!ok) {
-                  createLevelMusicBoxTranspose = 0;
-                  createLevelObject = -1;
+                createLevelMusicBoxTranspose = 0;
+                createLevelObject = -1;
               }
               break;
             default:

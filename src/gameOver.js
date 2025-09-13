@@ -3,6 +3,7 @@ import { inWater } from "./balUtils.js";
 import { fishIsCloseToBlueBall } from "./fish.js";
 import { globalVars } from "./glob.js";
 import { electricityTarget } from "./electricity.js";
+import { checkFirstCount } from "./musicBoxes.js";
 import { checkRedBalls } from "./redBalls.js";
 import { checkSpikes } from "./spikes.js";
 
@@ -60,6 +61,9 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
     if (checkSpikes(backData, gameData, gameInfo, gameVars)) {
         gameVars.gameOver = true;
         playSounds.push("pain");
+    }
+    if (checkFirstCount(gameData, gameInfo)) {
+        gameVars.gameOver = true;
     }
     if (gameVars.gameOver) {
         updateCanvas = true;

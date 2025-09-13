@@ -24,7 +24,7 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
-export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
+export async function gameScheduler(backData, gameData, gameInfo, gameVars, checkAll = true) {
     let info = {};
 
     let gateTravelling = false;
@@ -33,193 +33,198 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     let updateGreen = false;
     let updateLevelNumber = false;
 
-    // SCHEDULER
-    if (gameVars.timeFreezer > 0) {
-        gameVars.timeFreezer--;
+    if (checkAll) {
+        if (gameVars.timeFreezer > 0) {
+            gameVars.timeFreezer--;
+        }
     }
 
     if (checkMagnets(gameInfo)) {
         playSounds.push("magnet");
     }
 
-    if (checkDelays(backData, gameData, gameInfo, gameVars)) {
-        updateCanvas = true;
-    }
+    if (checkAll) {
+        if (checkDelays(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
+        }
 
-    if (checkMusicBoxes(backData, gameData, gameInfo, gameVars)) {
-        updateCanvas = true;
-    }
+        if (checkMusicBoxes(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
+        }
 
-    if (checkPurpleTeleports(backData, gameData, gameInfo)) {
-        updateCanvas = true;
-        playSounds.push("teleport");
-    }
+        if (checkPurpleTeleports(backData, gameData, gameInfo)) {
+            updateCanvas = true;
+            playSounds.push("teleport");
+        }
 
-    info = checkTrapDoors(backData, gameData, gameInfo, gameVars);
-    if (info.sound) {
-        playSounds.push("trap");
-    }
-    if (info.updated) {
-        updateCanvas = true;
-    }
-    info = checkDamagedStones(backData, gameData, gameInfo, gameVars);
-    if (info.sound === 1) {
-        playSounds.push("breaking1");
-    }
-    if (info.sound === 2) {
-        playSounds.push("breaking2");
-    }
-    if (info.updated) {
-        updateCanvas = true;
+        info = checkTrapDoors(backData, gameData, gameInfo, gameVars);
+        if (info.sound) {
+            playSounds.push("trap");
+        }
+        if (info.updated) {
+            updateCanvas = true;
+        }
+        info = checkDamagedStones(backData, gameData, gameInfo, gameVars);
+        if (info.sound === 1) {
+            playSounds.push("breaking1");
+        }
+        if (info.sound === 2) {
+            playSounds.push("breaking2");
+        }
+        if (info.updated) {
+            updateCanvas = true;
+        }
     }
 
     if (checkForces(gameData, gameInfo)) {
         updateCanvas = true;
     }
 
-    info = checkCopiers(gameData, gameInfo);
-    if (info.updated) {
-        updateCanvas = true;
-    }
-
-    gameVars.refreshCounter++;
-    if (gameVars.refreshCounter >= gameVars.refreshCountTo) {
-        gameVars.refreshCounter = 0;
-        clearBitMapLava();
-        updateCanvas = true;
-    }
-
-    if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
-        if (gameVars.fishCounter >= gameVars.fishCountTo) {
-            gameVars.fishCounter = 0;
-            moveFish(backData, gameData, gameInfo);
-            updateCanvas = true;
-        }
-        gameVars.fishCounter++;
-    }
-
-    gameVars.wave1++;
-    if (gameVars.wave1 > 5) {
-        gameVars.wave1 = 1;
-        gameVars.wave2++;
-        if (gameVars.wave2 > 3) {
-            gameVars.wave2 = 1;
-        }
-        updateCanvas = true;
-    }
-
-    if (gameVars.timeFreezer === 0) {
-        if (checkMovers(gameData, gameInfo)) {
+    if (checkAll) {
+        info = checkCopiers(gameData, gameInfo);
+        if (info.updated) {
             updateCanvas = true;
         }
 
-        if (gameVars.elevatorCounter >= gameVars.elevatorCountTo) {
-            gameVars.elevatorCounter = 0;
-            if (moveElevators(gameData, gameInfo, gameVars)) {
+        gameVars.refreshCounter++;
+        if (gameVars.refreshCounter >= gameVars.refreshCountTo) {
+            gameVars.refreshCounter = 0;
+            clearBitMapLava();
+            updateCanvas = true;
+        }
+
+        if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
+            if (gameVars.fishCounter >= gameVars.fishCountTo) {
+                gameVars.fishCounter = 0;
+                moveFish(backData, gameData, gameInfo);
                 updateCanvas = true;
             }
-            if (moveHorizontalElevators(gameData, gameInfo, gameVars)) {
-                updateCanvas = true;
-            }
+            gameVars.fishCounter++;
         }
-        gameVars.elevatorCounter++;
 
-        if (checkElevatorInOuts(gameData, gameInfo, gameVars)) {
+        gameVars.wave1++;
+        if (gameVars.wave1 > 5) {
+            gameVars.wave1 = 1;
+            gameVars.wave2++;
+            if (gameVars.wave2 > 3) {
+                gameVars.wave2 = 1;
+            }
             updateCanvas = true;
         }
 
-        if ((gameVars.conveyorBeltCounter === gameVars.conveyorBeltCountTo) ||
-            (gameVars.conveyorBeltCounter === Math.round(gameVars.conveyorBeltCountTo * 0.5))) {
-            updateCanvas = true;
-            gameVars.conveyorBeltAngleLeft -= Math.PI / 4;
-            if (gameVars.conveyorBeltAngleLeft <= 0) {
-                gameVars.conveyorBeltAngleLeft = Math.PI * 2;
-            }
-            gameVars.conveyorBeltAngleRight += Math.PI / 4;
-            if (gameVars.conveyorBeltAngleRight >= Math.PI * 2) {
-                gameVars.conveyorBeltAngleRight = 0;
-            }
-        }
-
-        if (gameVars.conveyorBeltCounter >= gameVars.conveyorBeltCountTo) {
-            gameVars.conveyorBeltCounter = 0;
-            if (moveConveyorBelts(gameData, gameInfo, gameVars)) {
+        if (gameVars.timeFreezer === 0) {
+            if (checkMovers(gameData, gameInfo)) {
                 updateCanvas = true;
+            }
 
+            if (gameVars.elevatorCounter >= gameVars.elevatorCountTo) {
+                gameVars.elevatorCounter = 0;
+                if (moveElevators(gameData, gameInfo, gameVars)) {
+                    updateCanvas = true;
+                }
+                if (moveHorizontalElevators(gameData, gameInfo, gameVars)) {
+                    updateCanvas = true;
+                }
+            }
+            gameVars.elevatorCounter++;
+
+            if (checkElevatorInOuts(gameData, gameInfo, gameVars)) {
+                updateCanvas = true;
+            }
+
+            if ((gameVars.conveyorBeltCounter === gameVars.conveyorBeltCountTo) ||
+                (gameVars.conveyorBeltCounter === Math.round(gameVars.conveyorBeltCountTo * 0.5))) {
+                updateCanvas = true;
+                gameVars.conveyorBeltAngleLeft -= Math.PI / 4;
+                if (gameVars.conveyorBeltAngleLeft <= 0) {
+                    gameVars.conveyorBeltAngleLeft = Math.PI * 2;
+                }
+                gameVars.conveyorBeltAngleRight += Math.PI / 4;
+                if (gameVars.conveyorBeltAngleRight >= Math.PI * 2) {
+                    gameVars.conveyorBeltAngleRight = 0;
+                }
+            }
+
+            if (gameVars.conveyorBeltCounter >= gameVars.conveyorBeltCountTo) {
+                gameVars.conveyorBeltCounter = 0;
+                if (moveConveyorBelts(gameData, gameInfo, gameVars)) {
+                    updateCanvas = true;
+
+                }
+            }
+            gameVars.conveyorBeltCounter++;
+
+            if (gameVars.redCounter > 0) {
+                gameVars.redCounter--;
+            } else {
+                gameVars.redCounter = 2;
+                info = moveRedBalls(backData, gameData, gameInfo, gameVars);
+                if (info.updated) {
+                    updateCanvas = true;
+                }
+                if (info.eating) {
+                    playSounds.push("eat");
+                }
             }
         }
-        gameVars.conveyorBeltCounter++;
 
-        if (gameVars.redCounter > 0) {
-            gameVars.redCounter--;
+        if (!gameVars.yellowPaused) {
+            if (gameVars.yellowSlowCounter > 0) {
+                gameVars.yellowSlowCounter--;
+            }
+            if (gameVars.yellowCounter > 0) {
+                if (gameVars.yellowCounter === 1) {
+                    stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
+                }
+                gameVars.yellowCounter--;
+            } else {
+                if (gameVars.yellowSlowCounter > 0) {
+                    gameVars.yellowCounter = 5;
+                } else {
+                    gameVars.yellowCounter = 1;
+                }
+                if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
+                    updateCanvas = true;
+                }
+                if (moveYellowBars(backData, gameData, gameInfo, gameVars)) {
+                    updateCanvas = true;
+                }
+            }
+        }
+        if (gameVars.orangeCounter > 0) {
+            gameVars.orangeCounter--;
         } else {
-            gameVars.redCounter = 2;
-            info = moveRedBalls(backData, gameData, gameInfo, gameVars);
+            gameVars.orangeCounter = 1;
+            if (moveOrangeBalls(gameData, gameInfo.orangeBalls)) {
+                updateCanvas = true;
+            }
+        }
+
+        if (gameVars.explosionCounter > 0) {
+            gameVars.explosionCounter--;
+        } else {
+            gameVars.explosionCounter = 2;
+            info = checkDetonator(backData, gameData, gameInfo, gameVars, false);
+            if (info.explosion) {
+                playSounds.push("explosion");
+            }
             if (info.updated) {
                 updateCanvas = true;
             }
-            if (info.eating) {
-                playSounds.push("eat");
-            }
         }
-    }
 
-    if (!gameVars.yellowPaused) {
-        if (gameVars.yellowSlowCounter > 0) {
-            gameVars.yellowSlowCounter--;
-        }
-        if (gameVars.yellowCounter > 0) {
-            if (gameVars.yellowCounter === 1) {
-                stopYellowBallsThatAreBlocked(gameData, gameInfo.yellowBalls);
+        if (gameVars.timeFreezer === 0) {
+            info = checkTimeBombs(gameData, backData, gameInfo);
+            if (info.explosion) {
+                playSounds.push("explosion");
             }
-            gameVars.yellowCounter--;
-        } else {
-            if (gameVars.yellowSlowCounter > 0) {
-                gameVars.yellowCounter = 5;
-            } else {
-                gameVars.yellowCounter = 1;
-            }
-            if (moveYellowBalls(gameData, gameInfo.yellowBalls)) {
+            if (info.updated) {
                 updateCanvas = true;
             }
-            if (moveYellowBars(backData, gameData, gameInfo, gameVars)) {
+            if (info.gameOver) {
+                gameVars.gameOver = true;
                 updateCanvas = true;
             }
-        }
-    }
-    if (gameVars.orangeCounter > 0) {
-        gameVars.orangeCounter--;
-    } else {
-        gameVars.orangeCounter = 1;
-        if (moveOrangeBalls(gameData, gameInfo.orangeBalls)) {
-            updateCanvas = true;
-        }
-    }
-
-    if (gameVars.explosionCounter > 0) {
-        gameVars.explosionCounter--;
-    } else {
-        gameVars.explosionCounter = 2;
-        info = checkDetonator(backData, gameData, gameInfo, gameVars, false);
-        if (info.explosion) {
-            playSounds.push("explosion");
-        }
-        if (info.updated) {
-            updateCanvas = true;
-        }
-    }
-
-    if (gameVars.timeFreezer === 0) {
-        info = checkTimeBombs(gameData, backData, gameInfo);
-        if (info.explosion) {
-            playSounds.push("explosion");
-        }
-        if (info.updated) {
-            updateCanvas = true;
-        }
-        if (info.gameOver) {
-            gameVars.gameOver = true;
-            updateCanvas = true;
         }
     }
 
@@ -253,78 +258,80 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars) {
     checkYellowPausers(backData, gameData, gameInfo, gameVars, false);
     checkYellowStoppers(backData, gameData, gameInfo, gameVars, false);
 
-    if (gameInfo.teleports.length > 0) {
-        let teleport1 = -1;
-        let teleport2 = -1;
-        switch (gameVars.teleporting) {
-            case 1:
-                playSounds.push("teleport");
-                gameVars.teleporting = 2;
-                break;
-            case 2:
-                teleport1 = findElementByCoordinates(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
-                if (teleport1 >= 0) {
-                    if (gameInfo.teleports[teleport1].selfDestructing) {
-                        gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
-                    } else {
-                        gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 31;
+    if (checkAll) {
+        if (gameInfo.teleports.length > 0) {
+            let teleport1 = -1;
+            let teleport2 = -1;
+            switch (gameVars.teleporting) {
+                case 1:
+                    playSounds.push("teleport");
+                    gameVars.teleporting = 2;
+                    break;
+                case 2:
+                    teleport1 = findElementByCoordinates(gameInfo.blueBall.x, gameInfo.blueBall.y, gameInfo.teleports);
+                    if (teleport1 >= 0) {
+                        if (gameInfo.teleports[teleport1].selfDestructing) {
+                            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+                        } else {
+                            gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 31;
+                        }
+                        teleport2 = findTheOtherTeleport(teleport1, gameInfo.teleports);
+                        if (teleport2 >= 0) {
+                            gameInfo.blueBall.x = gameInfo.teleports[teleport2].x;
+                            gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
+                        }
+                        if (gameInfo.teleports[teleport1].selfDestructing) {
+                            deleteTeleports("white", true, gameInfo.teleports[teleport1].group, gameInfo);
+                        }
                     }
-                    teleport2 = findTheOtherTeleport(teleport1, gameInfo.teleports);
-                    if (teleport2 >= 0) {
-                        gameInfo.blueBall.x = gameInfo.teleports[teleport2].x;
-                        gameInfo.blueBall.y = gameInfo.teleports[teleport2].y;
-                    }
-                    if (gameInfo.teleports[teleport1].selfDestructing) {
-                        deleteTeleports("white", true, gameInfo.teleports[teleport1].group, gameInfo);
-                    }
-                }
-                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
+                    gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 2;
+                    updateCanvas = true;
+                    gameVars.teleporting = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (gameInfo.hasTravelGate && (gameVars.gateTravelling > 0)) {
+            gateTravelling = true;
+        }
+
+        if ((gameVars.timeFreezer === 0) && (gameInfo.electricity.length > 0)) {
+            if (gameVars.electricityCounter > 110) {
+                gameVars.electricityCounter = 0;
+            }
+            gameInfo.electricityActive = false;
+            if (
+                (gameVars.electricityCounter > 50 && gameVars.electricityCounter < 60) ||
+                (gameVars.electricityCounter > 90 && gameVars.electricityCounter < 100)
+            ) {
+                gameInfo.electricityActive = true;
+            }
+            if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
+                playSounds.push("electricity");
+            }
+            if (
+                gameInfo.electricityActive ||
+                gameVars.elecActiveSaved !== gameInfo.electricityActive
+            ) {
                 updateCanvas = true;
-                gameVars.teleporting = 0;
-                break;
-            default:
-                break;
+            }
+            gameVars.elecActiveSaved = gameInfo.electricityActive;
+            gameVars.electricityCounter++;
         }
-    }
 
-    if (gameInfo.hasTravelGate && (gameVars.gateTravelling > 0)) {
-        gateTravelling = true;
-    }
-
-    if ((gameVars.timeFreezer === 0) && (gameInfo.electricity.length > 0)) {
-        if (gameVars.electricityCounter > 110) {
-            gameVars.electricityCounter = 0;
-        }
-        gameInfo.electricityActive = false;
-        if (
-            (gameVars.electricityCounter > 50 && gameVars.electricityCounter < 60) ||
-            (gameVars.electricityCounter > 90 && gameVars.electricityCounter < 100)
-        ) {
-            gameInfo.electricityActive = true;
-        }
-        if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
-            playSounds.push("electricity");
-        }
-        if (
-            gameInfo.electricityActive ||
-            gameVars.elecActiveSaved !== gameInfo.electricityActive
-        ) {
+        info = checkFalling(backData, gameData, gameInfo, gameVars);
+        if (info.update) {
             updateCanvas = true;
         }
-        gameVars.elecActiveSaved = gameInfo.electricityActive;
-        gameVars.electricityCounter++;
-    }
-
-    info = checkFalling(backData, gameData, gameInfo, gameVars);
-    if (info.update) {
-        updateCanvas = true;
-    }
-    if (info.sound !== "") {
-        playSounds.push(info.sound);
-    }
-    if (info.sound === "pain") {
-        gameVars.gameOver = true;
-        updateCanvas = true;
+        if (info.sound !== "") {
+            playSounds.push(info.sound);
+        }
+        if (info.sound === "pain") {
+            gameVars.gameOver = true;
+            updateCanvas = true;
+        }
     }
 
     if (updateCanvas) {

@@ -648,20 +648,20 @@ function drawLevel(
   }
 
   function drawGameOver() {
-    let x = leftMargin + gameWidth / 2;
-    let y = gameHeight / 2 + topMargin;
-    drawText(
-      ctx,
-      x,
-      y,
-      "GAME OVER!",
-      "middle",
-      "white",
-      Math.round(gameHeight * 0.6),
-      Math.round(gameWidth * 0.9),
-      "red",
-      5
-    );
+    // let x = leftMargin + gameWidth / 2;
+    // let y = gameHeight / 2 + topMargin;
+    // drawText(
+    //   ctx,
+    //   x,
+    //   y,
+    //   "GAME OVER!",
+    //   "middle",
+    //   "white",
+    //   Math.round(gameHeight * 0.6),
+    //   Math.round(gameWidth * 0.9),
+    //   "red",
+    //   5
+    // );
 
     if (status.laser !== null) {
       drawLaser(status.laser);
