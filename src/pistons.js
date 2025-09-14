@@ -1,4 +1,4 @@
-import { hasWeightAbove, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 
 function canMove(element) {
@@ -299,5 +299,40 @@ function deactivatePiston(gameData, gameInfo, piston, mode) {
     }
     return updated;
 }
+
+export function changePistonInverted(gameInfo, x, y) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.pistons);
+  if (idx >= 0) {
+    gameInfo.pistons[idx].inverted = !gameInfo.pistons[idx].inverted;
+  }
+  return idx;
+}
+
+export function changePistonMode(gameInfo, x, y, mode) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.pistons);
+  if (idx >= 0) {
+    gameInfo.pistons[idx].mode = mode;
+  }
+  return idx;
+}
+
+export function changePistonSticky(gameInfo, x, y) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.pistons);
+  if (idx >= 0) {
+    gameInfo.pistons[idx].sticky = !gameInfo.pistons[idx].sticky;
+  }
+  return idx;
+}
+
+export function pistonModes() {
+    return ["toggle", "momentary", "repeatfast", "repeatslow"];
+}
+
 
 

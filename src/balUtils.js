@@ -146,36 +146,6 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   return idx;
 }
 
-export function changePistonInverted(gameInfo, x, y) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.pistons);
-  if (idx >= 0) {
-    gameInfo.pistons[idx].inverted = !gameInfo.pistons[idx].inverted;
-  }
-  return idx;
-}
-
-export function changePistonMode(gameInfo, x, y, mode) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.pistons);
-  if (idx >= 0) {
-    gameInfo.pistons[idx].mode = mode;
-  }
-  return idx;
-}
-
-export function changePistonSticky(gameInfo, x, y) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.pistons);
-  if (idx >= 0) {
-    gameInfo.pistons[idx].sticky = !gameInfo.pistons[idx].sticky;
-  }
-  return idx;
-}
-
 export function charToNumber(c) {
   let result = 0;
 

@@ -9,6 +9,7 @@ import {
   drawText,
 } from "./drawUtils.js";
 import { electricityTarget } from "./electricity.js";
+import { globalVars } from "./glob.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
@@ -157,6 +158,55 @@ function drawLevel(
     }
   }
 
+  function drawArrow(direction, frontColor, backColor) {
+    let angle = 0;
+    let d1 = w1 / 3;
+    let d2 = w1 / 10;
+    let d3 = w1 / 8;
+
+    const points = [
+      { x: xc - d1, y: yc },
+      { x: xc + d1, y: yc },
+      { x: xc + d3, y: yc - d2 },
+      { x: xc + d3, y: yc + d2 },
+    ];
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, backColor);
+    switch (direction) {
+      case "left":
+        angle = 180;
+        break;
+      case "right":
+        angle = 0;
+        break;
+      case "up":
+        angle = -90;
+        break;
+      case "down":
+        angle = 90;
+        break;
+      case "upleft":
+        angle = -135;
+        break;
+      case "upright":
+        angle = -45;
+        break;
+      case "downleft":
+        angle = 135;
+        break;
+      case "downright":
+        angle = 45;
+        break;
+      default:
+        angle = 0;
+        break;
+    }
+    const rotatedPoints = rotatePoints(points, { x: xc, y: yc }, angle);
+    drawLine(ctx, rotatedPoints[0].x, rotatedPoints[0].y, rotatedPoints[1].x, rotatedPoints[1].y, frontColor);
+    drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[2].x, rotatedPoints[2].y, frontColor);
+    drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[3].x, rotatedPoints[3].y, frontColor);
+  }
+
   function drawBall(color) {
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
   }
@@ -253,7 +303,7 @@ function drawLevel(
   }
 
   function drawColor(n) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, indexToColor(n));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, indexToColor(globalVars.createLevelColorPage, n));
   }
 
   function drawConveyorBelt(x, y, part) {
@@ -447,6 +497,49 @@ function drawLevel(
     ctx.setLineDash([2, 4]);
     drawLine(ctx, xmin, ymax, xmax, ymin, "black");
     ctx.setLineDash([]);
+  }
+
+  function drawDirections() {
+    let angle = 0;
+    let d1 = w1 / 10;
+    let d2 = w1 / 2.5;
+    let d3 = w1 / 10; // was 14
+    let d4 = w1 / 3.5; // was 4
+    let offsetX = 0;
+    let offsetY = 0;
+
+    const points = [
+      { x: xc + d1, y: yc },
+      { x: xc + d2, y: yc },
+      { x: xc + d4, y: yc - d3 },
+      { x: xc + d4, y: yc + d3 },
+    ];
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
+    for (let i = 0; i < 4; i++) {
+      angle = (i * 90);
+      offsetX = 0;
+      offsetY = 0;
+      switch (i) {
+        case 0:
+        case 2:
+          offsetY = - w2 * 0.25;
+          break;
+        case 1:
+          offsetX = w1 * 0.25;
+          break;
+        case 3:
+          offsetX = -w1 * 0.25;
+          offsetY = w2 * 0.5;
+          break;
+        default:
+          break;
+      }
+      const rotatedPoints = rotatePoints(points, { x: xc, y: yc }, angle);
+      drawLine(ctx, rotatedPoints[0].x + offsetX, rotatedPoints[0].y + offsetY, rotatedPoints[1].x + offsetX, rotatedPoints[1].y + offsetY, "white");
+      drawLine(ctx, rotatedPoints[1].x + offsetX, rotatedPoints[1].y + offsetY, rotatedPoints[2].x + offsetX, rotatedPoints[2].y + offsetY, "white");
+      drawLine(ctx, rotatedPoints[1].x + offsetX, rotatedPoints[1].y + offsetY, rotatedPoints[3].x + offsetX, rotatedPoints[3].y + offsetY, "white");
+    }
   }
 
   function drawDivingGlasses(color, scaleFactor = 1) {
@@ -942,59 +1035,14 @@ function drawLevel(
   }
 
   function drawMover(x, y) {
-    let angle = 0;
-    let d1 = w1 / 3;
-    let d2 = w1 / 10;
-    let d3 = w1 / 8;
     let direction = "right";
     let idx = -1;
-
-    const points = [
-      { x: xc - d1, y: yc },
-      { x: xc + d1, y: yc },
-      { x: xc + d3, y: yc - d2 },
-      { x: xc + d3, y: yc + d2 },
-    ];
-
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
 
     idx = findElementByCoordinates(x, y, gameInfo.movers);
     if (idx >= 0) {
       direction = gameInfo.movers[idx].direction;
     }
-    switch (direction) {
-      case "left":
-        angle = 180;
-        break;
-      case "right":
-        angle = 0;
-        break;
-      case "up":
-        angle = -90;
-        break;
-      case "down":
-        angle = 90;
-        break;
-      case "upleft":
-        angle = -135;
-        break;
-      case "upright":
-        angle = -45;
-        break;
-      case "downleft":
-        angle = 135;
-        break;
-      case "downright":
-        angle = 45;
-        break;
-      default:
-        angle = 0;
-        break;
-    }
-    const rotatedPoints = rotatePoints(points, { x: xc, y: yc }, angle);
-    drawLine(ctx, rotatedPoints[0].x, rotatedPoints[0].y, rotatedPoints[1].x, rotatedPoints[1].y, "white");
-    drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[2].x, rotatedPoints[2].y, "white");
-    drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[3].x, rotatedPoints[3].y, "white");
+    drawArrow(direction, "white", "#464646");
   }
 
   function drawMusicBox(x, y) {
@@ -1055,11 +1103,11 @@ function drawLevel(
       case "firstcount":
         drawFilledBox(ctx, xmin, ymin, w1, w2, "red");
         drawText(ctx, xc, yc, "one", "middle", "yellow", w2 * 0.7, w1 * 0.8, "yellow", 1);
-        break;  
+        break;
       case "door":
         drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
         drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
-        break;  
+        break;
       case "keyboard":
         if (notes.length === 1) {
           note = notes[0][0];
@@ -1218,6 +1266,16 @@ function drawLevel(
     }
   }
 
+  function drawNext() {
+    const d1 = w1 * 0.2;
+    const d2 = w1 * 0.1;
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "darkgreen");
+    ctx.lineWidth = 3;
+    drawLine(ctx, xc - d2, ymin + d1, xmax - d1 - d2, yc, "white");
+    drawLine(ctx, xmax - d1 - d2, yc, xc - d2, ymax - d1, "white");
+    ctx.lineWidth = 1;
+  }
+
   function drawNumber(n) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
     drawText(ctx, xc, yc, n.toString(), "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
@@ -1271,6 +1329,41 @@ function drawLevel(
   function drawPanagiotis() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
     drawText(ctx, xc, yc, "π", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+  }
+
+  function drawPart(part) {
+    const d1 = w1 * 0.1;
+    const d2 = w2 * 0.1;
+    const d3 = (w2 - d2 - d2) / 3;
+    const d4 = w1 * 0.1;
+    const d5 = w1 * 0.1;
+    let y = 0;
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
+    for (let i = 0; i < 4; i++) {
+      y = (d3 * i) + ymin + d2;
+      drawLine(ctx, xmin + d1, y, xc - d1, y, "white");
+    }
+    drawLine(ctx, xmin + d1, ymin + d2, xmin + d1, ymax - d2, "white");
+    drawLine(ctx, xc - d1, ymin + d2, xc - d1, ymax - d2, "white");
+    // arrow
+    switch (part) {
+      case "top":
+        y = yc - d3;
+        break;
+      case "middle":
+        y = yc;
+        break;
+      case "bottom":
+        y = yc + d3;
+        break;
+      default:
+        y = yc;
+        break;
+    }
+    drawLine(ctx, xc, y, xmax - d4, y, "white");
+    drawLine(ctx, xc, y, xc + d5, y - d5, "white");
+    drawLine(ctx, xc, y, xc + d5, y + d5, "white");
   }
 
   function drawPickaxe(x, y) {
@@ -1416,6 +1509,17 @@ function drawLevel(
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
     drawText(ctx, xc, ymin + w2 * 0.8, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54, "black", 1);
   }
+
+  function drawPrevious() {
+    const d1 = w1 * 0.2;
+    const d2 = w1 * 0.1;
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "darkgreen");
+    ctx.lineWidth = 3;
+    drawLine(ctx, xc + d2, ymin + d1, xmin + d1 + d2, yc, "white");
+    drawLine(ctx, xmin + d1 + d2, yc, xc + d2, ymax - d1, "white");
+    ctx.lineWidth = 1;
+  }
+
 
   function drawPropeller(offsetY = 0) {
     let d1 = w1 * 0.1;
@@ -2439,125 +2543,72 @@ function drawLevel(
           // For manual only (empty)
           break;
         case 2033:
-          // Create level menu - Group  
-          drawAbbreviation("GR");
+          // Group  
+          drawAbbreviation("gr");
           break;
         case 2034:
-          // Piston mode - toggle OR Music box part top
-          drawAbbreviation("T");
+          drawPart("top");
           break;
         case 2035:
-          // Piston mode - momentary OR Menu Select - Move OR Music box part middle
-          drawAbbreviation("M");
-          break;
-        case 2036:
-          // Piston mode - repeatfast 
-          drawAbbreviation("RF");
-          break;
-        case 2037:
-          // Piston mode - repeatslow 
-          drawAbbreviation("RS");
+          drawPart("middle");
           break;
         case 2038:
-          // Sticky or Song
-          drawAbbreviation("S");
+          // Sticky
+          drawAbbreviation("s");
           break;
         case 2039:
           // Piston - inverted OR Music box instrument
-          drawAbbreviation("I");
+          drawAbbreviation("i");
           break;
         case 2040:
-          // Left
-          drawAbbreviation("L");
+          drawArrow("left", "white", "black");
           break;
         case 2041:
-          // Right
-          drawAbbreviation("R");
+          drawArrow("right", "white", "black");
           break;
         case 2042:
-          // Up
-          drawAbbreviation("U");
+          drawArrow("up", "white", "black");
           break;
         case 2043:
-          // Down
-          drawAbbreviation("D");
-          break;
-        case 2044:
-          // None or Note
-          drawAbbreviation("N");
+          drawArrow("down", "white", "black");
           break;
         case 2045:
           // Not smart
-          drawAbbreviation("S0");
+          drawAbbreviation("s0");
           break;
         case 2046:
           // A little smart
-          drawAbbreviation("S1");
+          drawAbbreviation("s1");
           break;
         case 2047:
           // Smart
-          drawAbbreviation("S2");
+          drawAbbreviation("s2");
           break;
         case 2050:
-          drawAbbreviation("FG");
+          // Foreground color
+          drawAbbreviation("fg");
           break;
         case 2051:
-          drawAbbreviation("BG");
+          // Background color
+          drawAbbreviation("bg");
           break;
         case 2083:
-          drawAbbreviation("X");
+          // Delete
+          drawAbbreviation("del");
           break;
         case 2084:
-          // Conveyor mode notrigger
-          drawAbbreviation("NT");
-          break;
-        case 2085:
-          // Conveyor mode rightleft
-          drawAbbreviation("RL");
-          break;
-        case 2086:
-          // Conveyor mode noneright
-          drawAbbreviation("NR");
-          break;
-        case 2087:
-          // Conveyor mode noneleft
-          drawAbbreviation("NL");
-          break;
-        case 2088:
-          // Conveyor mode nonerightleft
-          drawAbbreviation("NRL");
-          break;
-        case 2089:
-          // Conveyor mode none
-          drawAbbreviation("NO");
-          break;
-        case 2090:
-          // Conveyor mode right
-          drawAbbreviation("RI");
-          break;
-        case 2091:
-          // Conveyor mode left
-          drawAbbreviation("LE");
+          // Select
+          drawAbbreviation("sel");
           break;
         case 2092:
-          // upleft
-          drawAbbreviation("UL");
-          break;
-        case 2093:
-          // upright
-          drawAbbreviation("UR");
-          break;
-        case 2094:
-          // downleft
-          drawAbbreviation("DL");
+          // mode
+          drawAbbreviation("mode");
           break;
         case 2095:
-          // downright
-          drawAbbreviation("DR");
+          drawAbbreviation("move");
           break;
         case 2096:
-          // Copy
-          drawAbbreviation("C");
+          drawAbbreviation("copy");
           break;
         case 2097:
           // Toggle raster
@@ -2565,27 +2616,20 @@ function drawLevel(
           break;
         case 2098:
           // Show coordinates
-          drawAbbreviation("X, Y");
+          drawAbbreviation("x, y");
           break;
         case 2099:
           // Show info
           drawAbbreviation("?");
           break;
         case 2100:
-          // Page up
-          drawAbbreviation("PU");
+          drawPrevious();
           break;
         case 2101:
-          // Page down
-          drawAbbreviation("PD");
-          break;
-        case 2102:
-          // Music box mode keyboard
-          drawAbbreviation("K");
+          drawNext();
           break;
         case 2103:
-          // Music box part bottom
-          drawAbbreviation("B");
+          drawPart("bottom");
           break;
         case 2104:
           drawAbbreviation("C4");
@@ -2629,17 +2673,12 @@ function drawLevel(
         case 2117:
           drawAbbreviation("B5");
           break;
-        case 2130:
-          // Music box mode door
-          drawAbbreviation("DO");
-          break;
         case 2131:
-          // Music box mode transpose
-          drawAbbreviation("TR");
+          // Music box transpose
+          drawAbbreviation("tr");
           break;
-        case 2132:
-          // Music box mode first count
-          drawAbbreviation("F");
+        case 2133:
+          drawDirections()
           break;
         default:
           if (gd < 2000) {
@@ -2650,7 +2689,7 @@ function drawLevel(
       if ((gd >= 2000) && (gd <= 2032)) {
         drawNumber(gd - 2000);
       }
-      if ((gd >= 2052) && (gd <= 2082)) {
+      if ((gd >= 2052) && (gd <= 2081)) {
         drawColor(gd - 2052);
       }
 

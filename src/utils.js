@@ -62,6 +62,17 @@ export function randomInt(min, max) {
   return Math.trunc(Math.random() * (max - min + 1)) + min;
 }
 
+export function removeChar(s, ch) {
+  let result = "";
+
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] !== ch) {
+      result += s[i];
+    }
+  }
+  return result;
+}
+
 export function reverseString(s) {
   let result = "";
   for (let i = 0; i < s.length; i++) {

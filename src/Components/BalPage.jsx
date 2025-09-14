@@ -7,9 +7,6 @@ import {
   changeGroup,
   changeDirection,
   changeIntelligence,
-  changePistonInverted,
-  changePistonMode,
-  changePistonSticky,
   inWater,
   jump,
   jumpLeftOrRight,
@@ -27,7 +24,7 @@ import {
   changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
   insertColorsAtColumn, insertColorsAtRow, moveColor
 } from "../colorUtils.js";
-import { changeConveyorBeltMode } from "../conveyorBelts.js";
+import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
@@ -38,14 +35,15 @@ import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRan
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
-import { changeMusicBoxProperty, transposeMusicBox } from "../musicBoxes.js";
+import { changeMusicBoxProperty, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
+import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { playSound } from "../sound.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { deleteIfPurpleTeleport } from "../teleports.js";
-import { tryParseInt } from "../utils.js";
+import { removeChar, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -78,11 +76,14 @@ const msgAtLeastFiveRows = "There must be at least 5 rows.";
 const msgNoCellSelected = "There is no cell selected. Hold the Shift button and click on a cell to select a cell.";
 let kPressed = false;
 let createLevel = false;
+let createLevelColorPages = 2;
+let createLevelDirection = "";
 let createLevelSelectedCell = null;
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
-let createLevelMusicBoxInstrument = "xylophone";
-let createLevelMusicBoxTranspose = 0;
+let createLevelMode = "";
+let createLevelInstrument = "xylophone";
+let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
@@ -843,10 +844,10 @@ function BalPage() {
 
     switch (globalVars.createLevelMenuPage) {
       case 1:
-        arr0 = [2083, 2038, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 2097, 2101];
+        arr0 = [2083, 2084, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2038, 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -866,55 +867,67 @@ function BalPage() {
             break;
           case 2:
             // Select
-            arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
+            arr1 = [2040, 2041, 2042, 2043, 2095, 2096];
             arr2 = [0];
             break;
           case 3:
+            // Stones
             arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
             arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 22, 36, 37, 117];
             break;
           case 4:
+            // Balls
             arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047, 105];
             arr2 = [95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
             break;
           case 5:
+            // Yellow balls
             arr1 = [9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124];
             arr2 = [125];
             break;
           case 6:
-            arr1 = [158, 159, 161, 163, 165, 2034, 2035, 2036, 2037, 2038, 2039];
+            // Pistons
+            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 7:
-            arr1 = [6, 7, 2040, 2041, 2042, 2043, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111];
-            arr2 = [112, 81, 31, 92, 170, 178, 2092, 2093, 2094, 2095];
+            // Elevators
+            arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 31, 92, 170];
+            arr2 = [81, 178, 2133];
             break;
           case 8:
-            arr1 = [171, 172, 173, 2040, 2041, 2044, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091];
+            // Conveyor belts
+            arr1 = [171, 172, 173, 2092, 2133];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 9:
+            // Doors
             arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
             arr2 = [0];
             break;
           case 10:
+            // Water
             arr1 = [23, 20, 113, 114, 26, 27];
             arr2 = [0];
             break;
           case 11:
+            // Misc
             arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
             arr2 = [0];
             break;
           case 12:
+            // Groups
             arr1 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
             break;
           case 13:
           case 14:
+            // Foreground colors and Background colors
             arr1 = [2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067];
-            arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083];
+            arr2 = [2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2083, 2101];
             break;
           case 15:
+            // Info
             arr1 = [2097, 2098, 2099];
             arr2 = [0];
             break;
@@ -933,15 +946,16 @@ function BalPage() {
             break;
           case 2:
             // Select
-            arr1 = [2040, 2041, 2042, 2043, 2096, 2035];
+            arr1 = [2040, 2041, 2042, 2043, 2095, 2096];
             arr2 = [0];
             break;
           case 3:
             // Music box
-            arr1 = [157, 2044, 2038, 2102, 2130, 2132, 2034, 2035, 2103, 2040, 2041, 2042, 2043, 2039];
+            arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
           case 15:
+            // Info
             arr1 = [2097, 2098, 2099];
             arr2 = [0];
             break;
@@ -1759,7 +1773,7 @@ function BalPage() {
         }
       }
       if (!e.altKey && !e.shiftKey) {
-        move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2035));
+        move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2095));
         xmin = column;
         xmax = xmin;
         ymin = row;
@@ -1851,10 +1865,17 @@ function BalPage() {
             column = c;
 
             if (createLevelObject >= 2000) {
+              if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
+                if (changeDirection(gameData, gameInfo, column, row, createLevelDirection) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on an elevator, a conveyor belt, a mover or a music box to set a valid direction.");
+                  }
+                }
+              }
               if (createLevelMenu === menuToNumber("select")) {
                 if (createLevelSelectedCell !== null) {
                   switch (createLevelObject) {
-                    case 2035:
+                    case 2095:
                       moveSelectedObject(createLevelSelectedCell, "position", { x: column, y: row }, true);
                       break;
                     case 2096:
@@ -1880,10 +1901,10 @@ function BalPage() {
                 if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
                 }
-                if ((createLevelObject >= 2034) && (createLevelObject <= 2037)) {
-                  if (changePistonMode(gameInfo, column, row, ["toggle", "momentary", "repeatfast", "repeatslow"][createLevelObject - 2034]) === -1) {
+                if ((createLevelObject === 2092) && pistonModes().includes(createLevelMode)) {
+                  if (changePistonMode(gameInfo, column, row, createLevelMode) === -1) {
                     if (oneSelected) {
-                      showMessage("Info", "Click on a piston to set the piston mode.");
+                      showMessage("Info", "Click on a piston to set the mode of it.");
                     }
                   }
                 }
@@ -1903,31 +1924,13 @@ function BalPage() {
                 }
               }
 
-              if ([menuToNumber("conveyorbelts"), menuToNumber("elevators"), menuToNumber("musicboxes")].includes(createLevelMenu) &&
-                (createLevelObject >= 2040) && (createLevelObject <= 2044)) {
-                if (changeDirection(gameData, gameInfo, column, row, ["left", "right", "up", "down", "none"][createLevelObject - 2040]) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on an elevator, a conveyor belt, a mover or a music box to set a valid direction.");
-                  }
-                }
-              }
-
-              if ((createLevelMenu === menuToNumber("elevators")) && (createLevelObject >= 2092) && (createLevelObject <= 2095)) {
-                if (changeDirection(gameData, gameInfo, column, row, ["upleft", "upright", "downleft", "downright"][createLevelObject - 2092]) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on a mover to set a valid direction.");
-                  }
-                }
-              }
-
               if (createLevelMenu === menuToNumber("conveyorbelts")) {
-                if ((createLevelObject >= 2084) && (createLevelObject <= 2091)) {
-                  if (changeConveyorBeltMode(gameInfo, column, row, ["notrigger", "rightleft", "noneright", "noneleft", "nonerightleft", "none", "right", "left"][createLevelObject - 2084]) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a conveyor belt to set the mode of it.");
-                    }
+                if ((createLevelObject === 2092) && conveyorBeltModes().includes(createLevelMode)) {
+                  if (changeConveyorBeltMode(gameInfo, column, row, createLevelMode) === -1) {
+                    showMessage("Info", "Click on a conveyor belt to set the mode of it.");
                   }
                 }
+
                 if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
                 }
@@ -1943,27 +1946,8 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && [2044, 2038, 2102, 2130, 2132].includes(createLevelObject)) {
-                switch (createLevelObject) {
-                  case 2044:
-                    newValue = "note";
-                    break;
-                  case 2038:
-                    newValue = "song";
-                    break;
-                  case 2102:
-                    newValue = "keyboard";
-                    break;
-                  case 2130:
-                    newValue = "door";
-                    break;
-                  case 2132:
-                    newValue = "firstcount";
-                    break;
-                  default:
-                    break;
-                }
-                if (changeMusicBoxProperty(gameInfo, column, row, "mode", newValue) === -1) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2092) && musicBoxModes().includes(createLevelMode)) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "mode", createLevelMode) === -1) {
                   showMessage("Info", "Click on a music box to set the mode of it.");
                 }
               }
@@ -1987,20 +1971,20 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2039) && instruments().includes(createLevelMusicBoxInstrument)) {
-                if (changeMusicBoxProperty(gameInfo, column, row, "instrument", createLevelMusicBoxInstrument) === -1) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2039) && instruments().includes(createLevelInstrument)) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "instrument", createLevelInstrument) === -1) {
                   showMessage("Info", "Click on a music box to set the instrument of it.");
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2131) && (createLevelMusicBoxTranspose !== 0)) {
-                if (transposeMusicBox(gameInfo, column, row, createLevelMusicBoxTranspose) === -1) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2131) && (createLevelTranspose !== 0)) {
+                if (transposeMusicBox(gameInfo, column, row, createLevelTranspose) === -1) {
                   showMessage("Info", "Click on a music box to set the instrument of it.");
                 }
               }
 
               if (createLevelMenu === menuToNumber("foregroundcolors")) {
-                if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                if ((createLevelObject >= 2052) && (createLevelObject <= 2081)) {
                   saveUndo("Change foreground color", "fgcolors", { colors: gameVars.fgcolor });
                   changeColor(gameVars.fgcolor, column, row, createLevelObject - 2052);
                 }
@@ -2011,7 +1995,7 @@ function BalPage() {
               }
 
               if (createLevelMenu === menuToNumber("backgroundcolors")) {
-                if ((createLevelObject >= 2052) && (createLevelObject <= 2082)) {
+                if ((createLevelObject >= 2052) && (createLevelObject <= 2081)) {
                   saveUndo("Change background color", "bgcolors", { colors: gameVars.bgcolor });
                   changeColor(gameVars.bgcolor, column, row, createLevelObject - 2052);
                 }
@@ -2175,6 +2159,48 @@ function BalPage() {
           }
         }
 
+        if (createLevelMenu === menuToNumber("pistons")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                createLevelMode = "";
+                createLevelObject = -1;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (createLevelMenu === menuToNumber("conveyorbelts")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Conveyor belts", "Mode:", ["no trigger", "none/right/left", "right/left", "none/right", "none/left", "none", "right", "left"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, "/");
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                createLevelMode = "";
+                createLevelObject = -1;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
         if (createLevelMenu === menuToNumber("musicboxes")) {
           switch (createLevelObject) {
             case 2039:
@@ -2182,12 +2208,26 @@ function BalPage() {
               if (row > 0) {
                 newValue = await showSelect("Music boxes", "Instrument:", instruments(), 0);
                 if (newValue !== null) {
-                  createLevelMusicBoxInstrument = newValue;
+                  createLevelInstrument = newValue;
                   ok = true;
                 }
               }
               if (!ok) {
-                createLevelMusicBoxInstrument = "none";
+                createLevelInstrument = "none";
+                createLevelObject = -1;
+              }
+              break;
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "first count"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                createLevelMode = "";
                 createLevelObject = -1;
               }
               break;
@@ -2196,12 +2236,12 @@ function BalPage() {
               if (row > 0) {
                 newValue = await showInput("Music boxes", "Transpose semitones (-24..24):", "-12");
                 if (newValue !== null) {
-                  createLevelMusicBoxTranspose = tryParseInt(newValue, 100);
-                  ok = ((createLevelMusicBoxTranspose >= -24) && (createLevelMusicBoxTranspose <= 24));
+                  createLevelTranspose = tryParseInt(newValue, 100);
+                  ok = ((createLevelTranspose >= -24) && (createLevelTranspose <= 24));
                 }
               }
               if (!ok) {
-                createLevelMusicBoxTranspose = 0;
+                createLevelTranspose = 0;
                 createLevelObject = -1;
               }
               break;
@@ -2215,7 +2255,7 @@ function BalPage() {
           case 0:
             createLevelObject = backDataMenu[row][column];
             break;
-          case 2038:
+          case 2084:
             if (row === 0) {
               // Select
               createLevelObject = -2;
@@ -2236,14 +2276,46 @@ function BalPage() {
             createLevelObject = -5;
             break;
           case 2101:
-            // Menu page down
-            globalVars.createLevelMenuPage++;
-            if (globalVars.createLevelMenuPage > createLevelMenuPages) {
-              globalVars.createLevelMenuPage = 1;
+            // Next
+            if (row === 0) {
+              globalVars.createLevelMenuPage++;
+              if (globalVars.createLevelMenuPage > createLevelMenuPages) {
+                globalVars.createLevelMenuPage = 1;
+              }
+              fillMenu(1);
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
+            } else if ((createLevelMenu === menuToNumber("backgroundcolors")) || (createLevelMenu === menuToNumber("foregroundcolors"))) {
+              globalVars.createLevelColorPage++;
+              if (globalVars.createLevelColorPage > createLevelColorPages) {
+                globalVars.createLevelColorPage = 1;
+              }
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
             }
-            fillMenu(1);
-            updateCreateLevelCanvas();
-            createLevelObject = -1;
+            break;
+          case 2133:
+            ok = false;
+            if (row > 0) {
+              newValue = null;
+              if (createLevelMenu === menuToNumber("elevators")) {
+                newValue = await showSelect("Movers / Elevators", "Direction:", ["left", "right", "up", "down", "up left", "up right", "down left", "down right"], 0);
+              }
+              if (createLevelMenu === menuToNumber("conveyorbelts")) {
+                newValue = await showSelect("Conveyor belts", "Direction:", ["left", "right", "none"], 0);
+              }
+              if (createLevelMenu === menuToNumber("musicboxes")) {
+                newValue = await showSelect("Music boxes", "Direction:", ["left", "right", "up", "down"], 0);
+              }
+              if (newValue !== null) {
+                createLevelDirection = removeChar(newValue, " ");
+                ok = true;
+              }
+            }
+            if (!ok) {
+              createLevelDirection = "";
+              createLevelObject = -1;
+            }
             break;
           default:
             break;
