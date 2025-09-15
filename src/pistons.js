@@ -58,6 +58,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             if (["firstcount", "song"].includes(musicBox.mode) && (musicBox.group === pistonsTrigger.group)) {
                 if (gameVars.pistonGroupsActivated[pistonsTrigger.group - 1]) {
                     if (!musicBox.active) {
+                        musicBox.ended = false;
                         musicBox.noteIndex = -1;
                         musicBox.delayCounter = 0;
                     }

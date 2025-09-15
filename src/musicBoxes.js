@@ -4,6 +4,7 @@ import { instruments, playNote, transpose } from "./music.js";
 import { getPreDelay } from "./operator.js";
 import { schedulerTime } from "./scheduler.js";
 import { getSettings } from "./settings.js";
+import { randomInt } from "./utils.js";
 
 function blueBallIsCloseToXY(gameData, x, y) {
     let result = false;
@@ -79,25 +80,25 @@ export function checkFirstCount(gameData, gameInfo) {
 
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
-            if ((musicBox.mode === "firstcount") && (musicBox.stepsPerMeasure > 1) && (musicBox.notes.length > 1)){
-                time1 = getPreDelay();
-                time2 = musicBox.delayCounter * schedulerTime();
-                step = (Math.max(0, musicBox.noteIndex) % musicBox.stepsPerMeasure) + 1;
-                time2 += (step - 1) * musicBox.delay * schedulerTime();
-                time3 = time2 - (musicBox.stepsPerMeasure * musicBox.delay * schedulerTime());
-                countOne = ((Math.abs(time2 - time1) < 250) || (Math.abs(time3 - time1) < 250));
-                if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
-                    if (countOne) {
-                        musicBox.onOne = true;
-                    } else {
-                        if (!musicBox.onOne) {
-                            gameOver = true;
-                        }
-                    }
+        if ((musicBox.mode === "firstcount") && (musicBox.stepsPerMeasure > 1) && (musicBox.notes.length > 1)) {
+            time1 = getPreDelay();
+            time2 = musicBox.delayCounter * schedulerTime();
+            step = (Math.max(0, musicBox.noteIndex) % musicBox.stepsPerMeasure) + 1;
+            time2 += (step - 1) * musicBox.delay * schedulerTime();
+            time3 = time2 - (musicBox.stepsPerMeasure * musicBox.delay * schedulerTime());
+            countOne = ((Math.abs(time2 - time1) < 250) || (Math.abs(time3 - time1) < 250));
+            if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
+                if (countOne) {
+                    musicBox.onOne = true;
                 } else {
-                    musicBox.onOne = false;
+                    if (!musicBox.onOne) {
+                        gameOver = true;
+                    }
                 }
+            } else {
+                musicBox.onOne = false;
             }
+        }
     }
     return gameOver;
 }
@@ -136,10 +137,20 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
         if (musicBox.mode === "door") {
             if (gameData[musicBox.y][musicBox.x] === 157) {
                 if (!musicBox.active) {
-                    musicBox.noteIndex = -1;
-                    musicBox.delayCounter = 0;
+                    if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
+                        musicBox.noteIndex = -1;
+                        musicBox.delayCounter = 0;
+                        musicBox.ended = false;
+                        musicBox.active = true;
+                    }
+                } else {
+                    if (!blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
+                        musicBox.active = false;
+                    }
                 }
-                musicBox.active = blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y);
+                if (musicBox.notes.length < 2) {
+                    randomSequence(musicBox.notes);
+                }
                 sequence = "";
                 for (let j = 0; j < musicBox.notes.length; j++) {
                     note = musicBox.notes[j];
@@ -155,20 +166,25 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (["door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active) {
+        if (["door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;
                 if (musicBox.noteIndex >= musicBox.notes.length) {
                     musicBox.noteIndex = 0;
+                    if (musicBox.mode === "door") {
+                        musicBox.ended = true;
+                    }
                 }
                 if (musicBox.notes.length === 0) {
                     musicBox.notes.push("C4");
                     musicBox.noteIndex = 0;
                 }
-                note = musicBox.notes[musicBox.noteIndex];
-                if ((music > 0) && (note !== "") && (note !== "-") && (note !== "_")) {
-                    playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
+                if (!musicBox.ended) {
+                    note = musicBox.notes[musicBox.noteIndex];
+                    if ((music > 0) && (note !== "") && (note !== "-") && (note !== "_")) {
+                        playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
+                    }
                 }
             }
             musicBox.delayCounter++;
@@ -218,6 +234,42 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
 
 export function musicBoxModes() {
     return ["door", "firstcount", "keyboard", "note", "song"];
+}
+
+export function randomSequence(notes) {
+    let n = 0;
+    const sequences = [
+        ["C4", "E4", "G4"],
+        ["G4", "E4", "C4"],
+        ["C4", "E4", "A4"],
+        ["A4", "E4", "C4"],
+        ["D4", "F4", "A4"],
+        ["A4", "F4", "D4"],
+        ["E4", "G4", "B4"],
+        ["B4", "G4", "E4"],
+        ["C4", "F4", "A4"],
+        ["A4", "F4", "C4"],
+        ["C4", "E4", "G4", "C5"],
+        ["C5", "G4", "E4", "C4"],
+        ["C4", "G4", "E4", "G4"],
+        ["D4", "A4", "F4", "A4"],
+        ["E4", "B4", "G4", "B4"],
+        ["C4", "D4", "E4", "G4"],
+        ["D4", "E4", "F4", "A4"],
+        ["G4", "E4", "C4", "E4"],
+        ["A4", "F4", "D4", "F4"],
+        ["B4", "G4", "E4", "G4"],
+        ["C4", "D4", "E4", "F4", "G4"],
+        ["G4", "F4", "E4", "D4", "C4"],
+        ["C4", "E4", "D4", "F4", "E4", "G4"],
+        ["D4", "F4", "E4", "G4", "F4", "A4"],
+        ["C4", "E4", "G4", "C5", "G4", "E4", "C4"],
+    ];
+    n = randomInt(0, sequences.length - 1);
+    notes.length = 0;
+    for (let i = 0; i < sequences[n].length; i++) {
+        notes.push(sequences[n][i]);
+    }
 }
 
 export function transposeMusicBox(gameInfo, x, y, semitones) {

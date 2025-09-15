@@ -68,7 +68,7 @@ $notes: 16, 8, C5
 $instrument: 16, 8, vibraphone, 90
 $direction: 16, 8, up
 $musicbox: 18, 10, door, 5
-$notes: 18, 10, C4, E4, G4, C5, G4, E4, C4, -, -, -, -, -
+$notes: 18, 10, C4
 $instrument: 18, 10, vibraphone, 90
 $direction: 18, 10, up
 11111111111111111111111111111111111

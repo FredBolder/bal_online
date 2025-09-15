@@ -818,6 +818,7 @@ function BalPage() {
       }
       saveToMemory(gameData, backData, gameInfo, gameVars, 3);
     }
+    clearPlayedNotes();
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
     updateMenuItemsDisplay();

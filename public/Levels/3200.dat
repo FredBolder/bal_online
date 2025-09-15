@@ -55,7 +55,7 @@ $musicbox: 16, 8, keyboard, 5
 $notes: 16, 8, C5
 $direction: 16, 8, up
 $musicbox: 18, 10, door, 10
-$notes: 18, 10, C4, E4, G4, -, -, -
+$notes: 18, 10, C4
 $direction: 18, 10, up
 11111111111111111111111111111111111
 111111                          1 1
