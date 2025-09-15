@@ -134,7 +134,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (musicBox.mode === "door") {
+        if ((musicBox.mode === "chord") || (musicBox.mode === "door")) {
             if (gameData[musicBox.y][musicBox.x] === 157) {
                 if (!musicBox.active) {
                     if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
@@ -148,32 +148,44 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         musicBox.active = false;
                     }
                 }
-                if (musicBox.notes.length < 2) {
-                    randomSequence(musicBox.notes);
-                }
-                sequence = "";
-                for (let j = 0; j < musicBox.notes.length; j++) {
-                    note = musicBox.notes[j];
-                    if (note.startsWith("*") || note.startsWith(".")) {
-                        note = note.slice(1);
+                if (musicBox.mode === "door") {
+                    if (musicBox.notes.length < 2) {
+                        randomSequence(musicBox.notes);
                     }
-                    if ((note !== "") && !note.includes("-") && !note.includes("_")) {
-                        sequence += note;
+                    sequence = "";
+                    for (let j = 0; j < musicBox.notes.length; j++) {
+                        note = musicBox.notes[j];
+                        if (note.startsWith("*") || note.startsWith(".")) {
+                            note = note.slice(1);
+                        }
+                        if ((note !== "") && !note.includes("-") && !note.includes("_")) {
+                            sequence += note;
+                        }
                     }
-                }
-                if (globalVars.playedNotes[musicBox.group - 1].includes(sequence)) {
-                    gameData[musicBox.y][musicBox.x] = 0;
+                    if (globalVars.playedNotes[musicBox.group - 1].includes(sequence)) {
+                        gameData[musicBox.y][musicBox.x] = 0;
+                    }
+                } else {
+                    if (musicBox.chordType === "?") {
+                        randomMajorOrMinorChord(musicBox);
+                    }
                 }
             }
         }
-        if (["door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
+        if (["chord", "door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;
                 if (musicBox.noteIndex >= musicBox.notes.length) {
                     musicBox.noteIndex = 0;
-                    if (musicBox.mode === "door") {
+                    if ((musicBox.mode === "chord") || (musicBox.mode === "door")) {
                         musicBox.ended = true;
+                    }
+                    if (musicBox.ended && (musicBox.mode === "chord") && !musicBox.chordsPlaced) {
+                        musicBox.chordsPlaced = true;
+                        gameVars.lastChord = musicBox;
+                        placeChordObjects(gameData, gameInfo, musicBox);
+                        update = true;
                     }
                 }
                 if (musicBox.notes.length === 0) {
@@ -233,10 +245,89 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
 }
 
 export function musicBoxModes() {
-    return ["door", "firstcount", "keyboard", "note", "song"];
+    return ["chord", "door", "firstcount", "keyboard", "note", "song"];
 }
 
-export function randomSequence(notes) {
+function placeChordObjects(gameData, gameInfo, musicBox) {
+    let f1 = 1;
+    let x = 0;
+    let x1 = -1;
+    let x2 = -1;
+    let y = 0;
+
+    if (gameInfo.blueBall.x < musicBox.x) {
+        f1 = -1;
+    } else {
+        f1 = 1;
+    }
+    if (musicBox.y > 0) {
+        x = musicBox.x + f1;
+        y = musicBox.y - 1;
+        while ((x1 === -1) && (x >= 0) && (x < gameData[0].length)) {
+            if (gameData[y][x] === 0) {
+                x1 = x;
+            }
+            x += f1;
+        }
+        while ((x2 === -1) && (x >= 0) && (x < gameData[0].length)) {
+            if (gameData[y][x] === 0) {
+                x2 = x;
+            }
+            x += f1;
+        }
+        if ((x1 >= 0) && (x2 >= 0)) {
+            gameData[y][x1] = 186;
+            gameData[y][x2] = 187;
+        }
+    }
+}
+
+function randomMajorOrMinorChord(musicBox) {
+    const n1 = randomInt(1, 10);
+    let n2 = 0;
+
+    const major = [
+        ["C2", "G3", "C4", "E4"],
+        ["D2", "F#3", "A3", "D4"],
+        ["G1", "G3", "B3", "D4"],
+        ["F1", "F3", "A3", "C4"],
+        ["E1", "G#3", "B3", "E4"],
+        ["A1", "A3", "C#4", "E4"],
+        ["F#1", "F#3", "A#3", "C#4"],
+        ["Ab#1", "Ab3", "C4", "Eb4"],
+        ["Bb#1", "F3", "Bb3", "D4"],
+    ];
+    const minor = [
+        ["C2", "G3", "C4", "Eb4"],
+        ["D2", "F3", "A3", "D4"],
+        ["G1", "G3", "Bb3", "D4"],
+        ["F1", "F3", "Ab3", "C4"],
+        ["E1", "G3", "B3", "E4"],
+        ["A1", "A3", "C4", "E4"],
+        ["F#1", "F#3", "A3", "C#4"],
+        ["Ab#1", "Ab3", "B3", "Eb4"],
+        ["Bb#1", "F3", "Bb3", "Db4"],
+    ];
+
+    musicBox.notes.length = 0;
+    if (n1 > 5) {
+        // major
+        n2 = randomInt(0, major.length - 1);
+        for (let i = 0; i < major[n2].length; i++) {
+            musicBox.notes.push(major[n2][i]);
+        }
+        musicBox.chordType = "major";
+    } else {
+        // minor
+        n2 = randomInt(0, minor.length - 1);
+        for (let i = 0; i < minor[n2].length; i++) {
+            musicBox.notes.push(minor[n2][i]);
+        }
+        musicBox.chordType = "minor";
+    }
+}
+
+function randomSequence(notes) {
     let n = 0;
     const sequences = [
         ["C4", "E4", "G4"],

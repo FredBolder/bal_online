@@ -22,6 +22,14 @@ export function drawFilledCircle(canvas, xc, yc, radius, color) {
   canvas.fill();
 }
 
+export function drawFilledEllipse(canvas, xc, yc, radiusX, radiusY, color) {
+  canvas.fillStyle = color;
+  canvas.beginPath();
+  // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise)
+  canvas.ellipse(Math.round(xc), Math.round(yc), Math.round(radiusX - 0.5), Math.round(radiusY - 0.5), 0, 0, 2 * Math.PI, false);
+  canvas.fill();
+}
+
 export function drawLine(canvas, x1, y1, x2, y2, color) {
   canvas.strokeStyle = color;
   canvas.beginPath();

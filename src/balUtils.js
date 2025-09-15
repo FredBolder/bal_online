@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty() {
-  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179];
+  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187];
 }
 
 function canMoveAlone(gameData, gameInfo, x, y) {
@@ -579,6 +579,12 @@ export function charToNumber(c) {
       break;
     case "З":
       result = 185;
+      break;
+    case "ш":
+      result = 186;
+      break;
+    case "щ":
+      result = 187;
       break;
     case "|":
       result = 1000;
@@ -1486,6 +1492,12 @@ export function numberToChar(n) {
     case 185:
       result = "З";
       break;
+    case 186:
+      result = "ш";
+      break;
+    case 187:
+      result = "щ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1871,6 +1883,12 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 179:
       result.message = "The code for the hidden mini series 1 is: " + numberToCode(getHiddenMiniStart());
+      break;
+    case 186:
+      result.major = true;
+      break;
+    case 187:
+      result.minor = true;
       break;
     default:
       break;

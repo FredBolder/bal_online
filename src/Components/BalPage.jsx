@@ -1045,7 +1045,9 @@ function BalPage() {
       action: "",
       eating: false,
       freezeTime: 0,
+      major: false,
       message: "",
+      minor: false,
       player: false,
       slowDownYellow: false,
       sound: "",
@@ -1261,8 +1263,14 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "freezeTime")) {
       info.freezeTime = 0;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "major")) {
+      info.major = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "message")) {
       info.message = "";
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "minor")) {
+      info.minor = false;
     }
     if (!Object.prototype.hasOwnProperty.call(info, "player")) {
       info.player = false;
@@ -1306,6 +1314,21 @@ function BalPage() {
         break;
       default:
         break;
+    }
+
+    if (info.major || info.minor) {
+      if (gameVars.lastChord !== null) {
+        // gameVars.lastChord is a musicBox object
+        if ((info.major && !info.minor && (gameVars.lastChord.chordType === "major")) || (info.minor && !info.major && (gameVars.lastChord.chordType === "minor"))) {
+          gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
+          gameVars.lastChord = null;
+        } else {
+          gameVars.gameOver = true;
+          //console.log(gameVars.lastChord.notes);
+        }
+      } else {
+        gameVars.gameOver = true;
+      }
     }
 
     // Game over must be checked before checking if the level is solved
@@ -1504,7 +1527,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3204;
+        gameVars.currentLevel = 3205;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -2221,7 +2244,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

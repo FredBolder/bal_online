@@ -282,6 +282,11 @@ function drawLevel(
     drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
   }
 
+  function drawChordType(chordType) {
+    drawFilledCircle(ctx, xc, yc, w1 * 0.5, "green");
+    drawText(ctx, xc, yc, chordType, "middle", "white", w2 * 0.7, w1 * 0.7, "white", 1);
+  }
+
   function drawCoilSpring(x, y) {
     let color = getFgcolor(x, y, "white");
     let d1 = w1 / 4;
@@ -1104,6 +1109,7 @@ function drawLevel(
         drawFilledBox(ctx, xmin, ymin, w1, w2, "red");
         drawText(ctx, xc, yc, "one", "middle", "yellow", w2 * 0.7, w1 * 0.8, "yellow", 1);
         break;
+      case "chord":
       case "door":
         drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
         drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
@@ -2538,6 +2544,12 @@ function drawLevel(
           break;
         case 185:
           drawGravityChangerDown(col, row);
+          break;
+        case 186:
+          drawChordType("maj");
+          break;
+        case 187:
+          drawChordType("min");
           break;
         case 1000:
           // For manual only (empty)

@@ -213,6 +213,8 @@ export function getGameInfo(backData, gameData) {
                         part: "bottom", 
                         stepsPerMeasure: 0,
                         oneOne: false,
+                        chordType: "?",
+                        chordsPlaced: false,
                         direction: "up", 
                         group: 1 
                     };
@@ -902,6 +904,7 @@ export function initGameInfo(info) {
     info.hasTravelGate = false;
     info.hasWeakStone = false;
     info.horizontalElevators = [];
+    info.lastChord = null;
     info.magnets = [];
     info.movers = [];
     info.musicBoxes = [];

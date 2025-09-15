@@ -203,6 +203,8 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
                 noteIndex: 0, 
                 stepsPerMeasure: 0,
                 oneOne: false,
+                chordType: "?",
+                chordsPlaced: false,
                 part: "bottom", 
                 direction: "up", 
                 group: 1 
