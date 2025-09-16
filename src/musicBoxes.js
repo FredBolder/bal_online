@@ -128,7 +128,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                     }
                     note = musicBox.notes[musicBox.noteIndex];
                     musicBox.noteIndex++;
-                    if ((music > 0) && (note !== "") && (note !== "-") && (note !== "_")) {
+                    if ((music > 0) && (note !== "") && (note !== "-")) {
                         // volume and music are both percentages
                         playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
                     }
@@ -171,9 +171,11 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         switch (musicBox.mode) {
                             case "chord1":
                                 randomMajorOrMinorChord(musicBox);
+                                musicBox.notes.push("_");
                                 break;
                             case "chord2":
                                 randomAugOrDimChord(musicBox);
+                                musicBox.notes.push("_");
                                 break;
                             default:
                                 break;
@@ -204,7 +206,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
                 if (!musicBox.ended) {
                     note = musicBox.notes[musicBox.noteIndex];
-                    if ((music > 0) && (note !== "") && (note !== "-") && (note !== "_")) {
+                    if ((music > 0) && (note !== "") && (note !== "-")) {
                         playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
                     }
                 }

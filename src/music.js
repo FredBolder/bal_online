@@ -29,7 +29,7 @@ export function getCymbalNoise() {
 }
 
 export function instruments() {
-  return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "harp", "harpsichord", "hihat", "kalimba",
+  return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat", "kalimba",
     "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
 }
@@ -318,7 +318,7 @@ export async function playNote(instrument, volume, musicalNote) {
   if (!convolver) {
     return;
   }
-  if ((musicalNote === "") || musicalNote.includes("-") || musicalNote.includes("_")) {
+  if ((musicalNote === "") || musicalNote.includes("-")) {
     return;
   }
 
@@ -333,10 +333,6 @@ export async function playNote(instrument, volume, musicalNote) {
   }
   const BASE = 0.6;
   maxVolume = BASE * masterVol * volumeFactor;
-
-  frequency = noteToFreq(note);
-  filter = new Filter(audioCtx);
-  filter.setFilter("highpass", 10, 10, 10, 10, 0, 5, 1000, 500);
 
   for (let i = 0; i < operatorsList.length; i++) {
     if ((operatorsList[i].instrument === instrument)) {
@@ -372,6 +368,15 @@ export async function playNote(instrument, volume, musicalNote) {
     }
   }
   combFiltersList = newCombFiltersList;
+
+  if (musicalNote === "_") {
+    return;
+  }
+
+  frequency = noteToFreq(note);
+
+  filter = new Filter(audioCtx);
+  filter.setFilter("highpass", 10, 10, 10, 10, 0, 5, 1000, 500);
 
   switch (instrument) {
     case "accordion":
@@ -527,6 +532,38 @@ export async function playNote(instrument, volume, musicalNote) {
       operators.push(new Operator(audioCtx, "pulse85", frequency, 0, maxVolume, 1, 2200, 0, 500));
       filter.setFilter("lowpass", 2000, 2000, 1600, 1600, 0, 0, 800, 600);
       break;
+    case "hammondorgan":
+      attack = 3;
+      decay = 50;
+      release = 80;
+      f1 = 1 / 3;
+      f2 = 1;
+      f3 = 0.7;
+      operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.9 * f1, attack, decay, maxVolume * 0.9 * f1 * f2, 80));
+      operators.push(new Operator(audioCtx, "sine", frequency * 2, 7, maxVolume * 0.6 * f1, attack, decay, maxVolume * 0.6 * f1 * f2, 80));
+      operators.push(new Operator(audioCtx, "sine", frequency * 3, 7, maxVolume * 0.45 * f1, attack, decay, maxVolume * 0.4 * f1 * f2, 70));
+      operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.35 * f1, attack, decay, maxVolume * 0.35 * f1 * f2, 70));
+      operators.push(new Operator(audioCtx, "sine", frequency * 5, 0, maxVolume * 0.27 * f1, attack, decay, maxVolume * 0.22 * f1 * f2, 60));
+      operators.push(new Operator(audioCtx, "sine", frequency * 6, 0, maxVolume * 0.12 * f1, attack, decay, maxVolume * 0.12 * f1 * f2, 60));
+      operators.push(new Operator(audioCtx, "sine", frequency * 7, 0, maxVolume * 0.06 * f1, attack, decay, maxVolume * 0.06 * f1 * f2, 60));
+      operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.1 * f1, attack, decay, maxVolume * 0.1 * f1 * f2, 50));
+      operators.push(new Operator(audioCtx, "sine", frequency * 9, 0, maxVolume * 0.05 * f1, attack, decay, maxVolume * 0.05 * f1 * f2, 50));
+      operators.push(new Operator(audioCtx, "sine", frequency * 10, 0, maxVolume * 0.04 * f1, attack, decay, maxVolume * 0.04 * f1 * f2, 40));
+      operators.push(new Operator(audioCtx, "sine", frequency * 11, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, 40));
+      operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, 40));
+      operators.push(new Operator(audioCtx, "noiseAndBPF", 3500, 10, maxVolume * 0.06 * f1, 0, 30, 0, 0));
+      operators[1].setLfo("dco", "sine", 5.5, 1 * f3 / 1200, 0);
+      operators[2].setLfo("dco", "sine", 5.5, 3 * f3 / 1200, 0);
+      operators[3].setLfo("dco", "sine", 5.5, 4 * f3 / 1200, 0);
+      operators[4].setLfo("dco", "sine", 5.5, 6 * f3 / 1200, 0);
+      operators[5].setLfo("dco", "sine", 5.5, 8 * f3 / 1200, 0);
+      operators[6].setLfo("dco", "sine", 5.5, 10 * f3 / 1200, 0);
+      operators[7].setLfo("dco", "sine", 5.5, 12 * f3 / 1200, 0);
+      operators[8].setLfo("dco", "sine", 5.5, 14 * f3 / 1200, 0);
+      operators[9].setLfo("dco", "sine", 5.5, 16 * f3 / 1200, 0);
+      operators[10].setLfo("dco", "sine", 5.5, 18 * f3 / 1200, 0);
+      operators[11].setLfo("dco", "sine", 5.5, 20 * f3 / 1200, 0);
+      break;
     case "harp":
       operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.4, 4, 2200, 0, 500));
       operators.push(new Operator(audioCtx, "square", frequency * 2, 0, maxVolume * 0.4, 4, 2200, 0, 500));
@@ -584,7 +621,9 @@ export async function playNote(instrument, volume, musicalNote) {
       release = 80;
       f1 = 1 / 4.82;
       f2 = 0.9;
-      operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+      f3 = 1 / 1200;
+      operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
+      operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine5", frequency * 2, 0, maxVolume * 0.85 * f1, attack, decay, maxVolume * 0.85 * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine8", frequency * 3, 0, maxVolume * 0.65 * f1, attack, decay, maxVolume * 0.65 * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine4", frequency * 4, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * 0.5 * f1 * f2, release));
@@ -596,6 +635,7 @@ export async function playNote(instrument, volume, musicalNote) {
       operators.push(new Operator(audioCtx, "sine2", frequency * 10, 0, maxVolume * 0.04 * f1, attack, decay, maxVolume * 0.04 * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine1", frequency * 11, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, release));
       operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.01 * f1, attack, decay, maxVolume * 0.01 * f1 * f2, release));
+      operators[1].setPitchEnv(f3, 50, f3);
       break;
     case "ridecymbal":
       switch (note) {

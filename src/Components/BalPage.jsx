@@ -1540,7 +1540,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3205;
+        gameVars.currentLevel = 3206;
       }
       initLevel(gameVars.currentLevel);
     }
