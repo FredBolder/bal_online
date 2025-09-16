@@ -1,19 +1,19 @@
-$musicbox: 8, 2, chord, 5
-$instrument: 8, 2, piano, 90
-$musicbox: 14, 2, chord, 5
-$instrument: 14, 2, piano, 90
-$musicbox: 12, 5, chord, 5
-$instrument: 12, 5, piano, 90
-$musicbox: 6, 5, chord, 5
-$instrument: 6, 5, piano, 90
-$musicbox: 12, 8, chord, 5
-$instrument: 12, 8, piano, 90
-$musicbox: 6, 18, chord, 5
-$instrument: 6, 18, piano, 90
-$musicbox: 10, 15, chord, 5
-$instrument: 10, 15, piano, 90
-$musicbox: 14, 18, chord, 5
-$instrument: 14, 18, piano, 90
+$musicbox: 8, 2, chord1, 5
+$instrument: 8, 2, guitar, 90
+$musicbox: 14, 2, chord1, 5
+$instrument: 14, 2, guitar, 90
+$musicbox: 12, 5, chord1, 5
+$instrument: 12, 5, guitar, 90
+$musicbox: 6, 5, chord1, 5
+$instrument: 6, 5, guitar, 90
+$musicbox: 12, 8, chord1, 5
+$instrument: 12, 8, guitar, 90
+$musicbox: 6, 18, chord1, 5
+$instrument: 6, 18, guitar, 90
+$musicbox: 10, 15, chord1, 5
+$instrument: 10, 15, guitar, 90
+$musicbox: 14, 18, chord1, 5
+$instrument: 14, 18, guitar, 90
 $group: 5, 10, 2
 $pistonmode: 5, 10, momentary
 $sticky: 5, 10, yes

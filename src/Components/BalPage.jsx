@@ -1043,6 +1043,8 @@ function BalPage() {
   async function handleKeyDown(e) {
     let info = {
       action: "",
+      aug: false,
+      dim: false,
       eating: false,
       freezeTime: 0,
       major: false,
@@ -1257,6 +1259,12 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "action")) {
       info.action = "";
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "aug")) {
+      info.aug = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "dim")) {
+      info.dim = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
     }
@@ -1316,10 +1324,15 @@ function BalPage() {
         break;
     }
 
-    if (info.major || info.minor) {
+    if (info.major || info.minor || info.aug || info.dim) {
       if (gameVars.lastChord !== null) {
         // gameVars.lastChord is a musicBox object
-        if ((info.major && !info.minor && (gameVars.lastChord.chordType === "major")) || (info.minor && !info.major && (gameVars.lastChord.chordType === "minor"))) {
+        if (
+          (info.major && !info.minor && !info.aug && !info.dim && (gameVars.lastChord.chordType === "major")) ||
+          (info.minor && !info.major && !info.aug && !info.dim && (gameVars.lastChord.chordType === "minor")) ||
+          (info.aug && !info.dim && !info.minor && !info.major && (gameVars.lastChord.chordType === "augmented")) ||
+          (info.dim && !info.aug && !info.minor && !info.major && (gameVars.lastChord.chordType === "diminished"))
+        ) {
           gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
           gameVars.lastChord = null;
         } else {
@@ -2244,7 +2257,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

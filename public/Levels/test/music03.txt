@@ -114,7 +114,7 @@ $musicbox: 9, 11, keyboard, 5
 $notes: 9, 11, B4
 $instrument: 9, 11, piano, 90
 $part: 9, 11, middle
-$musicbox: 12, 13, chord, 5
+$musicbox: 12, 13, chord2, 5
 $notes: 12, 13, G4, E4, C4, -, -, -
 $instrument: 12, 13, piano, 90
 $musicbox: 10, 11, keyboard, 5
