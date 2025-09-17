@@ -1053,6 +1053,8 @@ function BalPage() {
       player: false,
       slowDownYellow: false,
       sound: "",
+      sus2: false,
+      sus4: false,
       update: false,
     };
 
@@ -1289,6 +1291,12 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "sound")) {
       info.sound = "";
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "sus2")) {
+      info.sus2 = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "sus4")) {
+      info.sus4 = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "update")) {
       info.update = false;
     }
@@ -1324,14 +1332,16 @@ function BalPage() {
         break;
     }
 
-    if (info.major || info.minor || info.aug || info.dim) {
+    if (info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4) {
       if (gameVars.lastChord !== null) {
         // gameVars.lastChord is a musicBox object
         if (
-          (info.major && !info.minor && !info.aug && !info.dim && (gameVars.lastChord.chordType === "major")) ||
-          (info.minor && !info.major && !info.aug && !info.dim && (gameVars.lastChord.chordType === "minor")) ||
-          (info.aug && !info.dim && !info.minor && !info.major && (gameVars.lastChord.chordType === "augmented")) ||
-          (info.dim && !info.aug && !info.minor && !info.major && (gameVars.lastChord.chordType === "diminished"))
+          (info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "major")) ||
+          (info.minor && !info.major && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "minor")) ||
+          (info.aug && !info.dim && !info.minor && !info.major && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "augmented")) ||
+          (info.dim && !info.aug && !info.minor && !info.major && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "diminished")) ||
+          (info.sus2 && !info.sus4 && !info.major && !info.minor && !info.aug && !info.dim && (gameVars.lastChord.chordType === "suspended second")) ||
+          (info.sus4 && !info.sus2 && !info.major && !info.minor && !info.aug && !info.dim && (gameVars.lastChord.chordType === "suspended fourth"))
         ) {
           gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
           gameVars.lastChord = null;
@@ -2257,7 +2267,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

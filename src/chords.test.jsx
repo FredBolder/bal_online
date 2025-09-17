@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { augmentedChords, diminishedChords, majorChords, minorChords } from "./chords.js";
+import { augmentedChords, diminishedChords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 
 describe("chords", () => {
     const notes = [
@@ -39,6 +39,12 @@ describe("chords", () => {
                     break;
                 case "minor":
                     idx = [fixIndex(root), fixIndex(root + 3), fixIndex(root + 7)];
+                    break;
+                case "sus2":
+                    idx = [fixIndex(root), fixIndex(root + 2), fixIndex(root + 7)];
+                    break;
+                case "sus4":
+                    idx = [fixIndex(root), fixIndex(root + 5), fixIndex(root + 7)];
                     break;
                 default:
                     idx = [fixIndex(root), fixIndex(root + 4), fixIndex(root + 7)];
@@ -80,4 +86,16 @@ describe("chords", () => {
         });
     });
 
+    sus2Chords().forEach((chord, i) => {
+        it(`sus2Chords ${i + 1}`, () => {
+            expect(checkChord(chord, "sus2")).toBe(true);
+        });
+    });
+
+    sus4Chords().forEach((chord, i) => {
+        it(`sus4Chords ${i + 1}`, () => {
+            expect(checkChord(chord, "sus4")).toBe(true);
+        });
+    });
+    
 });

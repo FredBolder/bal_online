@@ -1,22 +1,31 @@
-$musicbox: 5, 18, chord2, 5
-$instrument: 5, 18, hammondorgan, 90
+$musicbox: 8, 3, chord2, 5
+$instrument: 8, 3, hammondorgan, 90
+$musicbox: 13, 6, chord2, 5
+$instrument: 13, 6, hammondorgan, 90
+$musicbox: 16, 13, chord2, 5
+$instrument: 16, 13, hammondorgan, 90
+$musicbox: 3, 13, chord2, 5
+$instrument: 3, 13, hammondorgan, 90
+$musicbox: 14, 16, chord2, 5
+$instrument: 14, 16, hammondorgan, 90
 11111111111111111111
-13                 1
+113     1          1
+11      1          1
+11  2   M    p     1
+11111111111111111 11
+11 3         1     1
+11      p    M     1
+11   111111111111111
+11                81
+11                81
+11FFFFFFFFFFFFFFFF11
+18       1 1      81
+1111     1 1    1111
+11 M     < >    M 11
+11 111^111F111111 11
+11     p     31    1
+11 p11111  55 M    1
+13       β 111111111
 1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-11111111111111111111
-1    1             1
-12   M             1
+1        β        81
 11111111111111111111

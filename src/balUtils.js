@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty() {
-  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189];
+  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191];
 }
 
 function canMoveAlone(gameData, gameInfo, x, y) {
@@ -591,6 +591,12 @@ export function charToNumber(c) {
       break;
     case "Ч":
       result = 189;
+      break;
+    case "И":
+      result = 190;
+      break;
+    case "Й":
+      result = 191;
       break;
     case "|":
       result = 1000;
@@ -1510,6 +1516,12 @@ export function numberToChar(n) {
     case 189:
       result = "Ч";
       break;
+    case 190:
+      result = "И";
+      break;
+    case 191:
+      result = "Й";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1907,6 +1919,12 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 189:
       result.dim = true;
+      break;
+    case 190:
+      result.sus2 = true;
+      break;
+    case 191:
+      result.sus4 = true;
       break;
     default:
       break;
