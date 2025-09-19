@@ -212,7 +212,7 @@ export function getGameInfo(backData, gameData) {
                         noteIndex: 0, 
                         part: "bottom", 
                         stepsPerMeasure: 0,
-                        oneOne: false,
+                        onOne: false,
                         chordType: "?",
                         chordsPlaced: false,
                         direction: "up", 

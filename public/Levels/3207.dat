@@ -1,6 +1,6 @@
 $hint: The music in this level has 5 beats per measure.
 $musicbox: 19, 2, chord3, 5
-$instrument: 19, 2, hammondorgan, 90
+$instrument: 19, 2, piano, 90
 $group: 19, 2, 10
 $musicbox: 14, 3, firstcount, 5
 $notes: 14, 3, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -
@@ -20,7 +20,7 @@ $notes: 2, 8, C4, -, E4, C4, C4, -, E4, -
 $instrument: 2, 8, drums, 90
 $group: 2, 8, 11
 $musicbox: 6, 8, chord3, 5
-$instrument: 6, 8, hammondorgan, 90
+$instrument: 6, 8, piano, 90
 $group: 6, 8, 10
 $musicbox: 27, 10, firstcount, 5
 $notes: 27, 10, C3, -, -, C3, -, G2, -, -, G2, -, G2, -, -, G2, -, C3, -, -, C3, -, C3, -, -, C3, -, G2, -, -, G2, -, G2, -
@@ -29,7 +29,7 @@ $addnotes: 27, 10, F2, -, -, A2, -, G2, -, -, B2, -, C3, -, -, -, -
 $instrument: 27, 10, bass, 90
 $stepspermeasure: 27, 10, 5
 $musicbox: 4, 11, chord3, 5
-$instrument: 4, 11, hammondorgan, 90
+$instrument: 4, 11, piano, 90
 $group: 4, 11, 10
 $musicbox: 14, 18, firstcount, 5
 $notes: 14, 18, E4, E4, E4, D4, E4, F4, D4, -, -, -, D4, D4, D4, C4, D4, E4, -, -, -, -, E4, E4, E4, D4, E4, F4, D4, -, -, -, D4, D4

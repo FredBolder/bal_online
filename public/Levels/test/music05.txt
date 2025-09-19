@@ -1,0 +1,82 @@
+$musicbox: 13, 16, keyboard, 5
+$instrument: 13, 16, piano, 90
+$musicbox: 14, 16, keyboard, 5
+$notes: 14, 16, D4
+$instrument: 14, 16, piano, 90
+$musicbox: 15, 16, keyboard, 5
+$notes: 15, 16, E4
+$instrument: 15, 16, piano, 90
+$musicbox: 16, 16, keyboard, 5
+$notes: 16, 16, F4
+$instrument: 16, 16, piano, 90
+$musicbox: 17, 16, keyboard, 5
+$notes: 17, 16, G4
+$instrument: 17, 16, piano, 90
+$musicbox: 18, 16, keyboard, 5
+$notes: 18, 16, A4
+$instrument: 18, 16, piano, 90
+$musicbox: 19, 16, keyboard, 5
+$notes: 19, 16, B4
+$instrument: 19, 16, piano, 90
+$musicbox: 20, 16, keyboard, 5
+$notes: 20, 16, C5
+$instrument: 20, 16, piano, 90
+$musicbox: 21, 16, keyboard, 5
+$notes: 21, 16, D5
+$instrument: 21, 16, piano, 90
+$musicbox: 22, 16, keyboard, 5
+$notes: 22, 16, E5
+$instrument: 22, 16, piano, 90
+$musicbox: 23, 16, keyboard, 5
+$notes: 23, 16, F5
+$instrument: 23, 16, piano, 90
+$musicbox: 24, 16, keyboard, 5
+$notes: 24, 16, G5
+$instrument: 24, 16, piano, 90
+$musicbox: 25, 16, keyboard, 5
+$notes: 25, 16, A5
+$instrument: 25, 16, piano, 90
+$musicbox: 26, 16, keyboard, 5
+$notes: 26, 16, B5
+$instrument: 26, 16, piano, 90
+$musicbox: 12, 16, keyboard, 5
+$notes: 12, 16, B3
+$instrument: 12, 16, piano, 90
+$musicbox: 11, 16, keyboard, 5
+$notes: 11, 16, A3
+$instrument: 11, 16, piano, 90
+$musicbox: 10, 16, keyboard, 5
+$notes: 10, 16, G3
+$instrument: 10, 16, piano, 90
+$musicbox: 9, 16, keyboard, 5
+$notes: 9, 16, F3
+$instrument: 9, 16, piano, 90
+$musicbox: 8, 16, keyboard, 5
+$notes: 8, 16, E3
+$instrument: 8, 16, piano, 90
+$musicbox: 7, 16, keyboard, 5
+$notes: 7, 16, D3
+$instrument: 7, 16, piano, 90
+$musicbox: 6, 16, keyboard, 5
+$notes: 6, 16, C3
+$instrument: 6, 16, piano, 90
+1111111111111111111111111111111
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1                             1
+1     MMMMMMMMMMMMMMMMMMMMM   1
+13                            1
+1            2                1
+1111111111111111111111111111111

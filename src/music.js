@@ -82,6 +82,7 @@ export async function playNote(instrument, volume, musicalNote) {
   let decayFactorNoise = 500;
   let decayFactorOsc1 = 500;
   let decayFactorOsc2 = 500;
+  let filterCutoff = 2000;
   let filterResonance = 0;
   let filterResonanceFactor = 1;
   let freqNoise = 1000;
@@ -628,17 +629,16 @@ export async function playNote(instrument, volume, musicalNote) {
         }
         break;
       case "piano":
-        f1 = 1 / 2.4;
-        f2 = 1.7;
-        f3 = 0.2;
-        detune = 5;
-        operators.push(new Operator(audioCtx, "sine", frequency, detune, maxVolume * 1 * f1, 2, 1000 * f2, 0, 1000 * f3));
-        operators.push(new Operator(audioCtx, "sine", frequency * 2, detune, maxVolume * 0.5 * f1, 2, 800 * f2, 0, 800 * f3));
-        operators.push(new Operator(audioCtx, "cosine", frequency * 3, detune, maxVolume * 0.3 * f1, 2, 700 * f2, 0, 700 * f3));
-        operators.push(new Operator(audioCtx, "cosine", frequency * 4, detune, maxVolume * 0.2 * f1, 2, 500 * f2, 0, 500 * f3));
-        operators.push(new Operator(audioCtx, "cosine", frequency * 5, detune, maxVolume * 0.2 * f1, 2, 500 * f2, 0, 500 * f3));
-        operators.push(new Operator(audioCtx, "sine", frequency * 6, detune, maxVolume * 0.2 * f1, 2, 500 * f2, 0, 500 * f3));
-        filter.setFilter("lowpass", 3000, 3000, 1200, 1200, 0, 0, 300, 300 * f3);
+        decayFactorOsc1 = 2;
+        filterCutoff = 200;
+        f1 = 1 / 1.62;
+        operators.push(new Operator(audioCtx, "sine", frequency * 1, 5, maxVolume * f1 * 0.9, 4, 900 * decayFactorOsc1, 0, 500));
+        operators.push(new Operator(audioCtx, "triangle", frequency * 2, 5, maxVolume * f1 * 0.34, 3, 700 * decayFactorOsc1, 0, 420));
+        operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * f1 * 0.14, 3, 500, 0, 300));
+        operators.push(new Operator(audioCtx, "sine", frequency * 3.02, 0, maxVolume * f1 * 0.06, 2, 160, 0, 180));
+        operators.push(new Operator(audioCtx, "triangle", frequency * 5.3, 0, maxVolume * f1 * 0.08, 2, 140, 0, 160));
+        operators.push(new Operator(audioCtx, "pulse10", frequency * 1, 0, maxVolume * f1 * 0.1, 1, 45, 0, 80));
+        filter.setFilter("highpass", filterCutoff, filterCutoff, filterCutoff, filterCutoff, 5, 0, 800, 600);
         break;
       case "pipeorgan":
         attack = 3;
@@ -769,7 +769,7 @@ export async function playNote(instrument, volume, musicalNote) {
         }
         break;
       case "vibraphone":
-        f1 = 1;
+        f1 = 1.2;
         operators.push(new Operator(audioCtx, "sine", frequency, 0, maxVolume * 0.5, 5, 1000 * f1, 0, 500 * f1));
         operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.3, 5, 750 * f1, 0, 375 * f1));
         operators.push(new Operator(audioCtx, "sine", frequency * 10, 0, maxVolume * 0.2, 5, 400 * f1, 0, 200 * f1));
