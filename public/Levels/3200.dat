@@ -1,5 +1,5 @@
 $musicbox: 32, 2, door, 10
-$notes: 32, 2, C4, E4, G4, -, -, -
+$notes: 32, 2, C4
 $direction: 32, 2, up
 $musicbox: 9, 7, keyboard, 5
 $part: 9, 7, top

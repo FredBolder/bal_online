@@ -136,7 +136,6 @@ function drawLevel(
     for (let i = 0; i < gameInfo.teleports.length; i++) {
       ctx.lineWidth = 3;
       const teleport = gameInfo.teleports[i];
-      console.log(teleport);
       const xmin = teleport.x * size1 + leftMargin;
       const xmax = xmin + size1 - 1;
       const ymin = teleport.y * size1 + topMargin;

@@ -315,6 +315,11 @@ export async function playNote(instrument, volume, musicalNote) {
     operators[1].setPitchEnv(pitchStart, pitchDecay, 0);
   }
 
+  if (typeof window === "undefined") {
+    // Testing
+    return;
+  }
+
   const convolver = reverb.getConvolver();
 
   if (!convolver) {

@@ -1,8 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  jump,
-  zeroArray,
-} from "./balUtils.js";
+import { jump, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { copy2dArray } from "./utils.js";
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { checkLevel } from "./levels.js";
 
-describe("levels", async () => {
+describe("levels", () => {
 
     let data01a = [
         "1111111111",

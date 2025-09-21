@@ -7,9 +7,3 @@ export const globalVars = {
     playedNotes: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     thisWorldGreen: -1
 }
-
-export function clearPlayedNotes() {
-    for (let i = 0; i < 32; i++) {
-        globalVars.playedNotes[i] = "";
-    }
-}

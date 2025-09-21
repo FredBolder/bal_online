@@ -30,12 +30,12 @@ import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
-import { clearPlayedNotes, globalVars } from "../glob.js";
+import { globalVars } from "../glob.js";
 import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
-import { changeMusicBoxProperty, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
+import { changeMusicBoxProperty, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
@@ -226,6 +226,7 @@ function BalPage() {
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
         await clickLoadFromMemory(3);
         clearPlayedNotes();
+        fixDoors(gameInfo);
         return;
       } else {
         initLevel(gameVars.currentLevel);
@@ -573,7 +574,6 @@ function BalPage() {
           level = 200;
           break;
       }
-      clearPlayedNotes();
       initLevel(level);
     }
   }
@@ -642,12 +642,12 @@ function BalPage() {
   async function clickImportLevel() {
     const result = await importLevel();
 
-    if (result.error) {
-      showMessage("Error", result.error);
-      return;
-    }
-
     if (result !== null) {
+      if (result.error) {
+        showMessage("Error", result.error);
+        return;
+      }
+
       if (createLevel) {
         saveUndo("Import level", "level");
       }
@@ -668,6 +668,7 @@ function BalPage() {
       gameVars.laser = null;
       gameVars.gameOver = false;
       gameVars.currentLevel = 9999;
+      fixDoors(gameInfo);
       updateGameCanvas();
       updateGreen();
       setLevelNumber(gameVars.currentLevel);
@@ -819,6 +820,7 @@ function BalPage() {
       saveToMemory(gameData, backData, gameInfo, gameVars, 3);
     }
     clearPlayedNotes();
+    fixDoors(gameInfo);
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
     updateMenuItemsDisplay();
@@ -1017,6 +1019,7 @@ function BalPage() {
       loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
       gameVars.laser = null;
       gameVars.gameOver = false;
+      fixDoors(gameInfo);
       updateGameCanvas();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
@@ -1136,6 +1139,10 @@ function BalPage() {
         }
         break;
       }
+      case "t":
+      case "T":
+        tryAgain();
+        break;
       default:
         break;
     }
@@ -1491,6 +1498,7 @@ function BalPage() {
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
         await clickLoadFromMemory(3);
         clearPlayedNotes();
+        fixDoors(gameInfo);
       } else {
         initLevel(gameVars.currentLevel);
       }

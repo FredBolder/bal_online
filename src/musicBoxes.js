@@ -7,6 +7,16 @@ import { schedulerTime } from "./scheduler.js";
 import { getSettings } from "./settings.js";
 import { randomInt } from "./utils.js";
 
+function addPlayedNote(group, note) {
+    if (note.startsWith("*") || note.startsWith(".")) {
+        note = note.slice(1);
+    }
+    globalVars.playedNotes[group] += note;
+    if (globalVars.playedNotes[group].length > 100) {
+        globalVars.playedNotes[group] = globalVars.playedNotes[group].slice(globalVars.playedNotes[group].length - 100);
+    }
+}
+
 function blueBallIsCloseToXY(gameData, x, y) {
     let result = false;
     const xmax = gameData[0].length - 1;
@@ -151,9 +161,6 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                     }
                 }
                 if (musicBox.mode === "door") {
-                    if (musicBox.notes.length < 2) {
-                        randomSequence(musicBox.notes);
-                    }
                     sequence = "";
                     for (let j = 0; j < musicBox.notes.length; j++) {
                         note = musicBox.notes[j];
@@ -257,13 +264,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 if (!musicBox.active && validNotesForKeyboardMode(musicBox.notes) && (gameData[y][x] === 2)) {
                     note = musicBox.notes[0];
                     playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
-                    if (note.startsWith("*") || note.startsWith(".")) {
-                        note = note.slice(1);
-                    }
-                    globalVars.playedNotes[musicBox.group - 1] += note;
-                    if (globalVars.playedNotes[musicBox.group - 1].length > 100) {
-                        globalVars.playedNotes[musicBox.group - 1] = globalVars.playedNotes[musicBox.group - 1].slice(globalVars.playedNotes[musicBox.group - 1].length - 100);
-                    }
+                    addPlayedNote(musicBox.group - 1, note);
                     musicBox.active = true;
                 }
                 if (gameData[y][x] === 0) {
@@ -273,6 +274,39 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
         }
     }
     return update;
+}
+
+export function clearPlayedNotes() {
+    for (let i = 0; i < 32; i++) {
+        globalVars.playedNotes[i] = "";
+    }
+}
+
+export function fixDoors(gameInfo) {
+    let found = false;
+
+    for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+        const musicBox = gameInfo.musicBoxes[i];
+        if (musicBox.mode === "door") {
+            found = false;
+            for (let j = 0; j < i; j++) {
+                const mb = gameInfo.musicBoxes[j];
+                // More doors in the same group
+                if ((mb.mode === "door") && (mb.group === musicBox.group)) {
+                    found = true;
+                    musicBox.notes.length = 0;
+                    musicBox.notes = [];
+                    for (let k = 0; k < mb.notes.length; k++) {
+                        musicBox.notes.push(mb.notes[k]);
+                    }
+                    break;
+                }
+            }
+            if (!found && (musicBox.notes.length < 2)) {
+                randomSequence(musicBox.notes);
+            }
+        }
+    }
 }
 
 export function musicBoxModes() {
