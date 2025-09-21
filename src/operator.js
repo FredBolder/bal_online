@@ -360,18 +360,18 @@ class Operator {
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
 
-        const noise = ["blueNoise", "brownNoise", "metalNoise", "metalNoiseAndBPF", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", "violetNoise"].includes(waveform);
+        const isBuffer = ["blueNoise", "brownNoise", "metalNoise", "metalNoiseAndBPF", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", "violetNoise"].includes(waveform);
         let oscillator = null;
 
-        if (!noise && (detuneOrResonance !== 0)) {
+        if (!isBuffer && (detuneOrResonance !== 0)) {
             nOscillators = 3;
         } else {
             nOscillators = 1;
         }
         for (let i = 0; i < nOscillators; i++) {
-            if (noise) {
+            if (isBuffer) {
                 oscillator = audioContext.createBufferSource();
-                // Noise type
+                // Buffer
                 switch (waveform) {
                     case "blueNoise":
                         oscillator.buffer = createBlueNoiseBuffer(audioContext, 2);
