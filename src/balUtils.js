@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty() {
-  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191];
+  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192];
 }
 
 function canMoveAlone(gameData, gameInfo, x, y) {
@@ -598,6 +598,9 @@ export function charToNumber(c) {
     case "Й":
       result = 191;
       break;
+    case "б":
+      result = 192;
+      break;
     case "|":
       result = 1000;
       break;
@@ -812,6 +815,28 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
     }
   }
 
+  return result;
+}
+
+export function dropWhiteBall(gameData, gameInfo) {
+  let result = { update: false };
+  let x = gameInfo.blueBall.x;
+  let y = gameInfo.blueBall.y;
+
+  if (!gameInfo.hasWhiteBall) {
+    return result;
+  }
+  result.update = true;
+  if (gameData[y][x + 1] === 0) {
+    gameData[y][x + 1] = 4;
+  } else if (gameData[y][x - 1] === 0) {
+    gameData[y][x - 1] = 4;
+  } else {
+    result.update = false;
+  }
+  if (result.update) {
+    gameInfo.hasWhiteBall = false;
+  }
   return result;
 }
 
@@ -1522,6 +1547,9 @@ export function numberToChar(n) {
     case 191:
       result = "Й";
       break;
+    case 192:
+      result = "б";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1925,6 +1953,15 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 191:
       result.sus4 = true;
+      break;
+    case 192:
+      if (!gameInfo.hasWhiteBall) {
+        result.message = "You have now one white ball that you can drop at the right of you by pressing the Space bar or the A button. ";
+        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
+        result.message += "It is also possible to drop the ball after using a teleport or a travel gate. When you have a white ball, "
+        result.message += "you can not use telekinetic power."
+        gameInfo.hasWhiteBall = true;
+      }
       break;
     default:
       break;

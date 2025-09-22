@@ -903,6 +903,7 @@ export function initGameInfo(info) {
     info.hasTelekineticPower = false;
     info.hasTravelGate = false;
     info.hasWeakStone = false;
+    info.hasWhiteBall = false;
     info.horizontalElevators = [];
     info.lastChord = null;
     info.magnets = [];

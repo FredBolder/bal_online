@@ -134,6 +134,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: weakstone`;
         lines.push(line);
     }
+    if (gameInfo.hasWhiteBall) {
+        line = `$has: whiteball`;
+        lines.push(line);
+    }
 
     for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
         const conveyorBelt = gameInfo.conveyorBelts[i];

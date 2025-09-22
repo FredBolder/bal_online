@@ -7,6 +7,7 @@ import {
   changeGroup,
   changeDirection,
   changeIntelligence,
+  dropWhiteBall,
   inWater,
   jump,
   jumpLeftOrRight,
@@ -192,6 +193,7 @@ function BalPage() {
     let savePropeller = false;
     let saveTelekineticPower = false;
     let saveWeakStone = false;
+    let saveWhiteBall = false;
 
     function loadItems() {
       gameInfo.hasCoilSpring = saveCoilSpring;
@@ -202,6 +204,7 @@ function BalPage() {
       gameInfo.hasPropeller = savePropeller;
       gameInfo.hasTelekineticPower = saveTelekineticPower;
       gameInfo.hasWeakStone = saveWeakStone;
+      gameInfo.hasWhiteBall = saveWhiteBall;
     }
 
     function saveItems() {
@@ -213,6 +216,7 @@ function BalPage() {
       savePropeller = gameInfo.hasPropeller;
       saveTelekineticPower = gameInfo.hasTelekineticPower;
       saveWeakStone = gameInfo.hasWeakStone;
+      saveWhiteBall = gameInfo.hasWhiteBall;
     }
 
 
@@ -778,6 +782,9 @@ function BalPage() {
     if (gameInfo.hasWeakStone) {
       addItem("weak stone");
     }
+    if (gameInfo.hasWhiteBall) {
+      addItem("white ball");
+    }
 
     if (msg === "") {
       msg = "You have nothing!";
@@ -880,8 +887,8 @@ function BalPage() {
             break;
           case 4:
             // Balls
-            arr1 = [2, 3, 140, 168, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047, 105];
-            arr2 = [95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
+            arr1 = [2, 3, 140, 168, 192, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047];
+            arr2 = [105, 95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
             break;
           case 5:
             // Yellow balls
@@ -1126,7 +1133,9 @@ function BalPage() {
 
     switch (e.key) {
       case " ": {
-        if (gameInfo.hasTelekineticPower) {
+        if (gameInfo.hasWhiteBall) {
+          info = dropWhiteBall(gameData, gameInfo);
+        } else if (gameInfo.hasTelekineticPower) {
           info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
         }
         break;
@@ -1558,7 +1567,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3205;
+        gameVars.currentLevel = 2004;
       }
       initLevel(gameVars.currentLevel);
     }

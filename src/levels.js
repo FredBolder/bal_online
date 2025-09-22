@@ -1017,6 +1017,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasPropeller = false;
               gameInfo.hasTelekineticPower = false;
               gameInfo.hasWeakStone = false;
+              gameInfo.hasWhiteBall = false;
               break;
             case "coilspring":
               gameInfo.hasCoilSpring = true;
@@ -1041,6 +1042,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "weakstone":
               gameInfo.hasWeakStone = true;
+              break;
+            case "whiteball":
+              gameInfo.hasWhiteBall = true;
               break;
             default:
               break;

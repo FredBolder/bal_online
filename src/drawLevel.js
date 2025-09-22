@@ -1678,7 +1678,7 @@ function drawLevel(
   }
 
   function drawSmallSilverBall() {
-    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#C0C0C0");
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#B0B0B0");
   }
 
   function drawSmallWeakStone() {
@@ -1686,6 +1686,10 @@ function drawLevel(
       bitmapWeakStone = createWeakStoneBitmap(32);
     }
     ctx.drawImage(bitmapWeakStone, xmin + (w1 / 4), ymin, w1 / 2, w2 / 2);
+  }
+
+  function drawSmallWhiteBall() {
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "white");
   }
 
   function drawSpike(x, y, direction) {
@@ -2563,6 +2567,9 @@ function drawLevel(
           break;
         case 191:
           drawChordType("sus4");
+          break;
+        case 192:
+          drawSmallWhiteBall();
           break;
         case 1000:
           // For manual only (empty)
