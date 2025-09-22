@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { augmentedChords, diminishedChords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
+import { noteToFreq } from "./music.js";
 
 describe("chords", () => {
     const notes = [
@@ -62,39 +63,72 @@ describe("chords", () => {
         return false;
     }
 
+    function increasingPitch(chord) {
+        let freq1 = 0;
+        let freq2 = 0;
+        let increasing = true;        
+        for (let i = 0; i < chord.length; i++) {
+            freq1 = noteToFreq(chord[i]);
+            if ((i > 0) && (freq1 < freq2)) {
+                increasing = false;
+                break;
+            }
+            freq2 = freq1;
+        }
+        return increasing;
+    }
+
     augmentedChords().forEach((chord, i) => {
-        it(`augmentedChords ${i + 1}`, () => {
+        it(`augmentedChords notes ${i + 1}`, () => {
             expect(checkChord(chord, "augmented")).toBe(true);
+        });
+        it(`augmentedChords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
         });
     });
 
     diminishedChords().forEach((chord, i) => {
-        it(`diminishedChords ${i + 1}`, () => {
+        it(`diminishedChords notes ${i + 1}`, () => {
             expect(checkChord(chord, "diminished")).toBe(true);
+        });
+        it(`diminishedChords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
         });
     });
 
     majorChords().forEach((chord, i) => {
-        it(`majorChords ${i + 1}`, () => {
+        it(`majorChords notes ${i + 1}`, () => {
             expect(checkChord(chord, "major")).toBe(true);
+        });
+        it(`majorChords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
         });
     });
 
     minorChords().forEach((chord, i) => {
-        it(`minorChords ${i + 1}`, () => {
+        it(`minorChords notes ${i + 1}`, () => {
             expect(checkChord(chord, "minor")).toBe(true);
+        });
+        it(`minorChords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
         });
     });
 
     sus2Chords().forEach((chord, i) => {
-        it(`sus2Chords ${i + 1}`, () => {
+        it(`sus2Chords notes ${i + 1}`, () => {
             expect(checkChord(chord, "sus2")).toBe(true);
+        });
+        it(`sus2Chords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
         });
     });
 
     sus4Chords().forEach((chord, i) => {
-        it(`sus4Chords ${i + 1}`, () => {
+        it(`sus4Chords notes ${i + 1}`, () => {
             expect(checkChord(chord, "sus4")).toBe(true);
+        });
+        it(`sus4Chords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
         });
     });
     

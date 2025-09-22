@@ -1,32 +1,20 @@
-import { createMetalNoiseBuffer, getPreDelay, Operator } from "./operator.js";
+import { getPreDelay, Operator } from "./operator.js";
 import { CombFilter } from "./combFilter.js";
 import { Filter } from "./filter.js";
+import { getMetalNoiseBuffer } from "./noise.js";
 import { Reverb } from "./reverb.js";
 let audioCtx = null;
-let cymbalNoise = null;
 let reverb = null;
 
 if (typeof window !== "undefined") {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
-  cymbalNoise = createMetalNoiseBuffer(audioCtx, 2, {
-    brightness: 0.7, // 0.7
-    combCount: 6, // 6
-    decay: 1, // 1
-    partialCount: 40, // 40
-    scrapeLevel: 0.6, // 0.6
-    seed: 12345, // 12345
-    strikeTime: 0.02, // 0.02
-  });
+  getMetalNoiseBuffer(audioCtx); // Preload
 }
 
 let combFiltersList = [];
 let filtersList = [];
 let operatorsList = [];
-
-export function getCymbalNoise() {
-  return cymbalNoise;
-}
 
 export function instruments() {
   return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat", "kalimba",
@@ -278,8 +266,8 @@ export async function playNote(instrument, volume, musicalNote) {
   }
 
   function createTom(variation = 0) {
-    decayFactorNoise = 1;
-    decayFactorOsc1 = 1;
+    decayFactorNoise = 1.1;
+    decayFactorOsc1 = 1.1;
     decayFactorOsc2 = 1;
     freqOsc1 = 165;
     levelFactorNoise = 0.2;
@@ -290,18 +278,18 @@ export async function playNote(instrument, volume, musicalNote) {
     ratio1 = 1.92;
     switch (variation) {
       case 1:
-        decayFactorNoise = 1.1;
-        decayFactorOsc1 = 1.1;
+        decayFactorNoise = 1.2;
+        decayFactorOsc1 = 1.2;
         freqOsc1 = 124;
         break;
       case 2:
-        decayFactorNoise = 1.2;
-        decayFactorOsc1 = 1.2;
+        decayFactorNoise = 1.3;
+        decayFactorOsc1 = 1.3;
         freqOsc1 = 92.5;
         break;
       case 3:
-        decayFactorNoise = 1.3;
-        decayFactorOsc1 = 1.3;
+        decayFactorNoise = 1.4;
+        decayFactorOsc1 = 1.4;
         freqOsc1 = 69.3;
         break;
       default:
@@ -560,8 +548,8 @@ export async function playNote(instrument, volume, musicalNote) {
         }
         break;
       case "guitar":
-        operators.push(new Operator(audioCtx, "pulse75", frequency, 0, maxVolume, 1, 2200, 0, 500));
-        filter.setFilter("lowpass", 2000, 2000, 1600, 1600, 0, 0, 800, 600);
+        operators.push(new Operator(audioCtx, "pulse75", frequency, 0, maxVolume * 0.8, 2, 2200, 0, 500));
+        filter.setFilter("lowpass", 1500, 1500, 1100, 1100, 10, 0, 800, 600);
         break;
       case "hammondorgan":
         attack = 3;
