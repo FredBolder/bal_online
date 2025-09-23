@@ -16,7 +16,7 @@ const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
 const series5Start = 3300;
-const series5End = 3300;
+const series5End = 3301;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
@@ -339,7 +339,9 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "pickaxe", "propeller", "telekineticpower", "weakstone"].includes(valuesLowerCase[0])) {
+              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "pickaxe", "propeller", 
+                "selfdestructingteleportscreator", "telekineticpower", "teleportscreator", "whiteball", 
+                "weakstone"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
               break;

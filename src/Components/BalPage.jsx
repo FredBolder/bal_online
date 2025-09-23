@@ -27,10 +27,10 @@ import {
 } from "../colorUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
-import { checkGameOver } from "../gameOver.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
+import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
 import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
 import { checkMagnets } from "../magnets.js";

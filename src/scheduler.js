@@ -203,10 +203,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         if (gameVars.explosionCounter > 0) {
             gameVars.explosionCounter--;
         } else {
-            gameVars.explosionCounter = 2;
             info = checkDetonator(backData, gameData, gameInfo, gameVars, false);
             if (info.explosion) {
                 playSounds.push("explosion");
+                gameVars.explosionCounter = 2;
             }
             if (info.updated) {
                 updateCanvas = true;
