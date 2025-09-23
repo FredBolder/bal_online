@@ -191,9 +191,9 @@ function BalPage() {
     let saveLadder = false;
     let savePickaxe = false;
     let savePropeller = false;
-    let saveSelfDestructingTeleportCreator = false;
+    let saveSelfDestructingTeleportsCreator = false;
     let saveTelekineticPower = false;
-    let saveTeleportCreator = false;
+    let saveTeleportsCreator = false;
     let saveWeakStone = false;
     let saveWhiteBall = false;
 
@@ -204,9 +204,9 @@ function BalPage() {
       gameInfo.hasLadder = saveLadder;
       gameInfo.hasPickaxe = savePickaxe;
       gameInfo.hasPropeller = savePropeller;
-      gameInfo.hasSelfDestructingTeleportCreator = saveSelfDestructingTeleportCreator;
+      gameInfo.hasSelfDestructingTeleportsCreator = saveSelfDestructingTeleportsCreator;
       gameInfo.hasTelekineticPower = saveTelekineticPower;
-      gameInfo.hasTeleportCreator = saveTeleportCreator;
+      gameInfo.hasTeleportsCreator = saveTeleportsCreator;
       gameInfo.hasWeakStone = saveWeakStone;
       gameInfo.hasWhiteBall = saveWhiteBall;
     }
@@ -218,9 +218,9 @@ function BalPage() {
       saveLadder = gameInfo.hasLadder;
       savePickaxe = gameInfo.hasPickaxe;
       savePropeller = gameInfo.hasPropeller;
-      saveSelfDestructingTeleportCreator = gameInfo.hasSelfDestructingTeleportCreator;
+      saveSelfDestructingTeleportsCreator = gameInfo.hasSelfDestructingTeleportsCreator;
       saveTelekineticPower = gameInfo.hasTelekineticPower;
-      saveTeleportCreator = gameInfo.hasTeleportCreator;
+      saveTeleportsCreator = gameInfo.hasTeleportsCreator;
       saveWeakStone = gameInfo.hasWeakStone;
       saveWhiteBall = gameInfo.hasWhiteBall;
     }
@@ -779,14 +779,14 @@ function BalPage() {
     if (gameInfo.hasLadder) {
       addItem("ladder");
     }
-    if (gameInfo.hasSelfDestructingTeleportCreator) {
-      addItem("self-destructing teleport creator");
+    if (gameInfo.hasSelfDestructingTeleportsCreator) {
+      addItem("self-destructing teleports creator");
     }
     if (gameInfo.hasTelekineticPower) {
       addItem("telekinetic power");
     }
-    if (gameInfo.hasTeleportCreator) {
-      addItem("teleport creator");
+    if (gameInfo.hasTeleportsCreator) {
+      addItem("teleports creator");
     }
     if (gameInfo.hasPickaxe) {
       addItem("pickaxe");
@@ -1239,10 +1239,10 @@ function BalPage() {
     switch (e.key) {
       case " ": {
         actions = [];
-        if (gameInfo.hasTeleportCreator) {
+        if (gameInfo.hasTeleportsCreator) {
           actions.push("Create teleports");
         }
-        if (gameInfo.hasSelfDestructingTeleportCreator) {
+        if (gameInfo.hasSelfDestructingTeleportsCreator) {
           actions.push("Create self-destructing teleports");
         }
         if (gameInfo.hasWhiteBall) {

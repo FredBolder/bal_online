@@ -1975,17 +1975,17 @@ function take(gameData, gameInfo, result, x, y) {
       }
       break;
     case 193:
-      if (!gameInfo.hasTeleportCreator) {
+      if (!gameInfo.hasTeleportsCreator) {
         result.message = "You have now a teleports creator. You can create teleports by pressing the Space bar or the A button and ";
         result.message += "after that pressing a move key or button to indicate the direction (for example the right arrow key)."
-        gameInfo.hasTeleportCreator = true;
+        gameInfo.hasTeleportsCreator = true;
       }
       break;
     case 194:
-      if (!gameInfo.hasSelfDestructingTeleportCreator) {
+      if (!gameInfo.hasSelfDestructingTeleportsCreator) {
         result.message = "You have now a self-destructing teleports creator. You can create self-destructing teleports by pressing the Space ";
         result.message += "bar or the A button and after that pressing a move key or button to indicate the direction (for example the right arrow key)."
-        gameInfo.hasSelfDestructingTeleportCreator = true;
+        gameInfo.hasSelfDestructingTeleportsCreator = true;
       }
       break;
     default:

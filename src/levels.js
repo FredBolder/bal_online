@@ -1024,9 +1024,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasLadder = false;
               gameInfo.hasPickaxe = false;
               gameInfo.hasPropeller = false;
-              gameInfo.hasSelfDestructingTeleportCreator = false;
+              gameInfo.hasSelfDestructingTeleportsCreator = false;
               gameInfo.hasTelekineticPower = false;
-              gameInfo.hasTeleportCreator = false;
+              gameInfo.hasTeleportsCreator = false;
               gameInfo.hasWeakStone = false;
               gameInfo.hasWhiteBall = false;
               break;
@@ -1048,14 +1048,14 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             case "propeller":
               gameInfo.hasPropeller = true;
               break;
-            case "selfdestructingteleportcreator":
-              gameInfo.hasSelfDestructingTeleportCreator = true;
+            case "selfdestructingteleportscreator":
+              gameInfo.hasSelfDestructingTeleportsCreator = true;
               break;
             case "telekineticpower":
               gameInfo.hasTelekineticPower = true;
               break;
-            case "teleportcreator":
-              gameInfo.hasTeleportCreator = true;
+            case "teleportscreator":
+              gameInfo.hasTeleportsCreator = true;
               break;
             case "weakstone":
               gameInfo.hasWeakStone = true;

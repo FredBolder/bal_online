@@ -899,9 +899,9 @@ export function initGameInfo(info) {
     info.hasLadder = false;
     info.hasPickaxe = false;
     info.hasPropeller = false;
-    info.hasSelfDestructingTeleportCreator = false;
+    info.hasSelfDestructingTeleportsCreator = false;
     info.hasTelekineticPower = false;
-    info.hasTeleportCreator = false;
+    info.hasTeleportsCreator = false;
     info.hasTravelGate = false;
     info.hasWeakStone = false;
     info.hasWhiteBall = false;
