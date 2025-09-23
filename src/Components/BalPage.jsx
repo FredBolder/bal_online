@@ -43,7 +43,7 @@ import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { playSound } from "../sound.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
-import { deleteIfPurpleTeleport } from "../teleports.js";
+import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
 import { removeChar, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -191,7 +191,9 @@ function BalPage() {
     let saveLadder = false;
     let savePickaxe = false;
     let savePropeller = false;
+    let saveSelfDestructingTeleportCreator = false;
     let saveTelekineticPower = false;
+    let saveTeleportCreator = false;
     let saveWeakStone = false;
     let saveWhiteBall = false;
 
@@ -202,7 +204,9 @@ function BalPage() {
       gameInfo.hasLadder = saveLadder;
       gameInfo.hasPickaxe = savePickaxe;
       gameInfo.hasPropeller = savePropeller;
+      gameInfo.hasSelfDestructingTeleportCreator = saveSelfDestructingTeleportCreator;
       gameInfo.hasTelekineticPower = saveTelekineticPower;
+      gameInfo.hasTeleportCreator = saveTeleportCreator;
       gameInfo.hasWeakStone = saveWeakStone;
       gameInfo.hasWhiteBall = saveWhiteBall;
     }
@@ -214,7 +218,9 @@ function BalPage() {
       saveLadder = gameInfo.hasLadder;
       savePickaxe = gameInfo.hasPickaxe;
       savePropeller = gameInfo.hasPropeller;
+      saveSelfDestructingTeleportCreator = gameInfo.hasSelfDestructingTeleportCreator;
       saveTelekineticPower = gameInfo.hasTelekineticPower;
+      saveTeleportCreator = gameInfo.hasTeleportCreator;
       saveWeakStone = gameInfo.hasWeakStone;
       saveWhiteBall = gameInfo.hasWhiteBall;
     }
@@ -541,7 +547,7 @@ function BalPage() {
     const value = await showSelect(
       "Load level",
       "Load the first level of series:",
-      ["1", "2", "3", "4", "Small", "Easy", "Extreme", "Music", "Chronia Polla"],
+      ["1", "2", "3", "4", "5", "Small", "Easy", "Extreme", "Music", "Chronia Polla"],
       0
     );
 
@@ -558,6 +564,9 @@ function BalPage() {
           break;
         case "4":
           level = 700;
+          break;
+        case "5":
+          level = 3300;
           break;
         case "Small":
           level = 750;
@@ -770,8 +779,14 @@ function BalPage() {
     if (gameInfo.hasLadder) {
       addItem("ladder");
     }
+    if (gameInfo.hasSelfDestructingTeleportCreator) {
+      addItem("self-destructing teleport creator");
+    }
     if (gameInfo.hasTelekineticPower) {
       addItem("telekinetic power");
+    }
+    if (gameInfo.hasTeleportCreator) {
+      addItem("teleport creator");
     }
     if (gameInfo.hasPickaxe) {
       addItem("pickaxe");
@@ -813,7 +828,7 @@ function BalPage() {
     createLevel = cbCreateLevel.current.checked;
     if (createLevel) {
       if (memoryIsEmpty(3)) {
-        clickNewLevel(true);
+        await clickNewLevel(true);
       } else {
         await clickLoadFromMemory(3);
       }
@@ -857,7 +872,7 @@ function BalPage() {
         arr0 = [2083, 2084, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 31, 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -902,8 +917,8 @@ function BalPage() {
             break;
           case 7:
             // Elevators
-            arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 31, 92, 170];
-            arr2 = [81, 178, 2133];
+            arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81, 178, 2133];
+            arr2 = [0];
             break;
           case 8:
             // Conveyor belts
@@ -960,6 +975,11 @@ function BalPage() {
             arr2 = [0];
             break;
           case 3:
+            // Teleports
+            arr1 = [31, 92, 170, 193, 194];
+            arr2 = [0];
+            break;
+          case 4:
             // Music box
             arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
@@ -1068,7 +1088,10 @@ function BalPage() {
       update: false,
     };
 
+    let action = "";
+    let actions = null;
     let codes = "";
+    let direction = "";
     const gravityDown = (gameVars.gravity === "down");
     let isJumping = false;
 
@@ -1131,12 +1154,127 @@ function BalPage() {
       return;
     }
 
+    if (gameInfo.action !== "") {
+      direction = "";
+      if (e.shiftKey) {
+        switch (e.key) {
+          case "ArrowLeft":
+            direction = "upleft";
+            break;
+          case "ArrowRight":
+            direction = "upright";
+            break;
+          default:
+            break;
+        }
+      } else {
+        switch (e.key) {
+          case "ArrowLeft":
+          case "a":
+          case "A":
+          case "4":
+            direction = "left";
+            break;
+          case "ArrowRight":
+          case "d":
+          case "D":
+          case "6":
+            direction = "right";
+            break;
+          case "ArrowUp":
+          case "w":
+          case "W":
+          case "8":
+            direction = "up";
+            break;
+          case "q":
+          case "Q":
+          case "7":
+            direction = "upleft";
+            break;
+          case "e":
+          case "E":
+          case "9":
+            direction = "upright";
+            break;
+          case "ArrowDown":
+          case "s":
+          case "S":
+          case "2":
+            direction = "down";
+            break;
+          case "y":
+          case "Y":
+          case "1":
+            direction = "downleft";
+            break;
+          case "c":
+          case "C":
+          case "3":
+            direction = "downright";
+            break;
+          default:
+            break;
+        }
+      }
+      if (direction !== "") {
+        switch (gameInfo.action) {
+          case "createTeleports":
+            createTeleports(backData, gameData, gameInfo, false, direction);
+            updateGameCanvas();
+            break;
+          case "createSelfDestructingTeleports":
+            createTeleports(backData, gameData, gameInfo, true, direction);
+            updateGameCanvas();
+            break;
+          default:
+            break;
+        }
+      }
+      gameInfo.action = "";
+      return;
+    }
+
+
     switch (e.key) {
       case " ": {
+        actions = [];
+        if (gameInfo.hasTeleportCreator) {
+          actions.push("Create teleports");
+        }
+        if (gameInfo.hasSelfDestructingTeleportCreator) {
+          actions.push("Create self-destructing teleports");
+        }
         if (gameInfo.hasWhiteBall) {
-          info = dropWhiteBall(gameData, gameInfo);
-        } else if (gameInfo.hasTelekineticPower) {
-          info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
+          actions.push("Drop white ball");
+        }
+        if (gameInfo.hasTelekineticPower) {
+          actions.push("Use telekinetic power");
+        }
+        action = "";
+        if (actions.length === 1) {
+          action = actions[0];
+        } else if (actions.length > 1) {
+          action = await showSelect("Action", "Select action", actions, 0);
+          if (action === null) {
+            action = "";
+          }
+        }
+        switch (action) {
+          case "Create teleports":
+            gameInfo.action = "createTeleports";
+            break;
+          case "Create self-destructing teleports":
+            gameInfo.action = "createSelfDestructingTeleports";
+            break;
+          case "Drop white ball":
+            info = dropWhiteBall(gameData, gameInfo);
+            break;
+          case "Use telekinetic power":
+            info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
+            break;
+          default:
+            break;
         }
         break;
       }

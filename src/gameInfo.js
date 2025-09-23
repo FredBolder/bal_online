@@ -188,8 +188,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 132:
-                    result.travelGate.x = j;
-                    result.travelGate.y = i;
+                    result.travelGate = { x: j, y: i };
                     result.hasTravelGate = true;
                     break;
                 case 136: {
@@ -879,6 +878,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
 }
 
 export function initGameInfo(info) {
+    info.action = "";
     info.blueBall1 = { x: -1, y: -1 };
     info.blueBall2 = { x: -1, y: -1 };
     info.blueBall = info.blueBall1;
@@ -893,14 +893,15 @@ export function initGameInfo(info) {
     info.elevators = [];
     info.forces = [];
     info.greenBalls = 0;
-    info.has = [];
     info.hasCoilSpring = false;
     info.hasDivingGlasses = false;
     info.hasKey = false;
     info.hasLadder = false;
     info.hasPickaxe = false;
     info.hasPropeller = false;
+    info.hasSelfDestructingTeleportCreator = false;
     info.hasTelekineticPower = false;
+    info.hasTeleportCreator = false;
     info.hasTravelGate = false;
     info.hasWeakStone = false;
     info.hasWhiteBall = false;

@@ -101,12 +101,6 @@ export const ModalProvider = ({ children }) => {
           autoFocus
           defaultValue={options[safeIndex]}
           onChange={(e) => (selectValue = e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              close(selectValue);
-            }
-          }}
         >
           {options.map((option, index) => (
             <option key={index} value={option}>

@@ -1767,6 +1767,20 @@ function drawLevel(
     }
   }
 
+  function drawTeleportsCreator(selfDestructing) {
+    const d1 = w1 * 0.1;
+    const d2 = w1 * 0.2;
+    ctx.lineWidth = 2;
+    if (selfDestructing) {
+      ctx.setLineDash([2, 2]);
+    } else {
+      ctx.setLineDash([]);
+    }
+    drawBox(ctx, xc - d2, ymin + d1, d2 * 2, d2 * 2, "white");
+    ctx.lineWidth = 1;
+    ctx.setLineDash([]);
+  }
+
   function drawTimeBomb(x, y) {
     const sticks = 4;
     drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
@@ -2570,6 +2584,12 @@ function drawLevel(
           break;
         case 192:
           drawSmallWhiteBall();
+          break;
+        case 193:
+          drawTeleportsCreator(false);
+          break;
+        case 194:
+          drawTeleportsCreator(true);
           break;
         case 1000:
           // For manual only (empty)

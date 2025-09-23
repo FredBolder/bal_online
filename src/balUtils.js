@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty() {
-  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192];
+  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194];
 }
 
 function canMoveAlone(gameData, gameInfo, x, y) {
@@ -600,6 +600,12 @@ export function charToNumber(c) {
       break;
     case "б":
       result = 192;
+      break;
+    case "Я":
+      result = 193;
+      break;
+    case "я":
+      result = 194;
       break;
     case "|":
       result = 1000;
@@ -1550,6 +1556,12 @@ export function numberToChar(n) {
     case 192:
       result = "б";
       break;
+    case 193:
+      result = "Я";
+      break;
+    case 194:
+      result = "я";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1958,9 +1970,22 @@ function take(gameData, gameInfo, result, x, y) {
       if (!gameInfo.hasWhiteBall) {
         result.message = "You have now one white ball that you can drop at the right of you by pressing the Space bar or the A button. ";
         result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
-        result.message += "It is also possible to drop the ball after using a teleport or a travel gate. When you have a white ball, "
-        result.message += "you can not use telekinetic power."
+        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
         gameInfo.hasWhiteBall = true;
+      }
+      break;
+    case 193:
+      if (!gameInfo.hasTeleportCreator) {
+        result.message = "You have now a teleports creator. You can create teleports by pressing the Space bar or the A button and ";
+        result.message += "after that pressing a move key or button to indicate the direction (for example the right arrow key)."
+        gameInfo.hasTeleportCreator = true;
+      }
+      break;
+    case 194:
+      if (!gameInfo.hasSelfDestructingTeleportCreator) {
+        result.message = "You have now a self-destructing teleports creator. You can create self-destructing teleports by pressing the Space ";
+        result.message += "bar or the A button and after that pressing a move key or button to indicate the direction (for example the right arrow key)."
+        gameInfo.hasSelfDestructingTeleportCreator = true;
       }
       break;
     default:

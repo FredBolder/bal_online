@@ -126,8 +126,16 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: propeller`;
         lines.push(line);
     }
+    if (gameInfo.hasSelfDestructingTeleportCreator) {
+        line = `$has: selfdestructingteleportcreator`;
+        lines.push(line);
+    }
     if (gameInfo.hasTelekineticPower) {
         line = `$has: telekineticpower`;
+        lines.push(line);
+    }
+    if (gameInfo.hasTeleportCreator) {
+        line = `$has: teleportcreator`;
         lines.push(line);
     }
     if (gameInfo.hasWeakStone) {

@@ -279,8 +279,11 @@ export function menuToNumber(s) {
                 case "select":
                     result = 2;
                     break;
-                case "musicboxes":
+                case "teleports":
                     result = 3;
+                    break;
+                case "musicboxes":
+                    result = 4;
                     break;
                 case "info":
                     result = 15;

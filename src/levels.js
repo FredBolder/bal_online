@@ -15,6 +15,8 @@ const series3Start = 400;
 const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
+const series5Start = 3300;
+const series5End = 3300;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
@@ -720,6 +722,9 @@ export function getAllLevels() {
   for (let i = series4Start; i <= series4End; i++) {
     levels.push(i);
   }
+  for (let i = series5Start; i <= series5End; i++) {
+    levels.push(i);
+  }
   for (let i = seriesSmallStart; i <= seriesSmallEnd; i++) {
     levels.push(i);
   }
@@ -767,6 +772,7 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= series2Start && n <= series2End) ||
     (n >= series3Start && n <= series3End) ||
     (n >= series4Start && n <= series4End) ||
+    (n >= series5Start && n <= series5End) ||
     (n >= seriesSmallStart && n <= seriesSmallEnd) ||
     (n >= seriesEasyStart && n <= seriesEasyEnd) ||
     (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
@@ -796,6 +802,9 @@ export function getRandomLevel(currentLevel) {
     levels.push(i);
   }
   for (let i = series4Start + 1; i <= series4End; i++) {
+    levels.push(i);
+  }
+  for (let i = series5Start + 1; i <= series5End; i++) {
     levels.push(i);
   }
   for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
@@ -1015,7 +1024,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasLadder = false;
               gameInfo.hasPickaxe = false;
               gameInfo.hasPropeller = false;
+              gameInfo.hasSelfDestructingTeleportCreator = false;
               gameInfo.hasTelekineticPower = false;
+              gameInfo.hasTeleportCreator = false;
               gameInfo.hasWeakStone = false;
               gameInfo.hasWhiteBall = false;
               break;
@@ -1037,8 +1048,14 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             case "propeller":
               gameInfo.hasPropeller = true;
               break;
+            case "selfdestructingteleportcreator":
+              gameInfo.hasSelfDestructingTeleportCreator = true;
+              break;
             case "telekineticpower":
               gameInfo.hasTelekineticPower = true;
+              break;
+            case "teleportcreator":
+              gameInfo.hasTeleportCreator = true;
               break;
             case "weakstone":
               gameInfo.hasWeakStone = true;
