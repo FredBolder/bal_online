@@ -118,12 +118,20 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: ladder`;
         lines.push(line);
     }
+    if (gameInfo.hasLightBlueBall) {
+        line = `$has: lightblueball`;
+        lines.push(line);
+    }
     if (gameInfo.hasPickaxe) {
         line = `$has: pickaxe`;
         lines.push(line);
     }
     if (gameInfo.hasPropeller) {
         line = `$has: propeller`;
+        lines.push(line);
+    }
+    if (gameInfo.hasPurpleBall) {
+        line = `$has: purpleball`;
         lines.push(line);
     }
     if (gameInfo.hasSelfDestructingTeleportsCreator) {
@@ -144,6 +152,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     }
     if (gameInfo.hasWhiteBall) {
         line = `$has: whiteball`;
+        lines.push(line);
+    }
+    if (gameInfo.hasYellowBall) {
+        line = `$has: yellowball`;
         lines.push(line);
     }
 

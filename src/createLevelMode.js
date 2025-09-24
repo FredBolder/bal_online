@@ -233,25 +233,25 @@ export function menuToNumber(s) {
                 case "balls":
                     result = 4;
                     break;
-                case "yellowballs":
+                case "redballs":
                     result = 5;
                     break;
-                case "pistons":
+                case "yellowballs":
                     result = 6;
                     break;
-                case "elevators":
+                case "pistons":
                     result = 7;
                     break;
-                case "conveyorbelts":
+                case "elevators":
                     result = 8;
                     break;
-                case "doors":
+                case "conveyorbelts":
                     result = 9;
                     break;
-                case "water":
+                case "doors":
                     result = 10;
                     break;
-                case "misc":
+                case "water":
                     result = 11;
                     break;
                 case "groups":
@@ -284,6 +284,9 @@ export function menuToNumber(s) {
                     break;
                 case "musicboxes":
                     result = 4;
+                    break;
+                case "misc":
+                    result = 5;
                     break;
                 case "info":
                     result = 15;

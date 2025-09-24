@@ -1660,8 +1660,8 @@ function drawLevel(
     }
   }
 
-  function drawSmallBlueBall() {
-    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "blue");
+  function drawSmallBall(color) {
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, color);
   }
 
   function drawSmallGreenBall() {
@@ -1677,19 +1677,11 @@ function drawLevel(
     drawLine(ctx, xc - d1, yc - d2, xc + d1, yc - d2, "white");
   }
 
-  function drawSmallSilverBall() {
-    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "#B0B0B0");
-  }
-
   function drawSmallWeakStone() {
     if (bitmapWeakStone === null) {
       bitmapWeakStone = createWeakStoneBitmap(32);
     }
     ctx.drawImage(bitmapWeakStone, xmin + (w1 / 4), ymin, w1 / 2, w2 / 2);
-  }
-
-  function drawSmallWhiteBall() {
-    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, "white");
   }
 
   function drawSpike(x, y, direction) {
@@ -2429,7 +2421,7 @@ function drawLevel(
           drawDirectionChanger5();
           break;
         case 140:
-          drawSmallSilverBall();
+          drawSmallBall("#B0B0B0");
           break;
         case 141:
           drawQuarterCircleStoneBottomLeft(col, row);
@@ -2513,7 +2505,7 @@ function drawLevel(
           drawDelay();
           break;
         case 168:
-          drawSmallBlueBall();
+          drawSmallBall("blue");
           break;
         case 169:
           drawDoor();
@@ -2583,13 +2575,22 @@ function drawLevel(
           drawChordType("sus4");
           break;
         case 192:
-          drawSmallWhiteBall();
+          drawSmallBall("white");
           break;
         case 193:
           drawTeleportsCreator(false);
           break;
         case 194:
           drawTeleportsCreator(true);
+          break;
+        case 195:
+          drawSmallBall("#90D5FF");
+          break;
+        case 196:
+          drawSmallBall("yellow");
+          break;
+        case 197:
+          drawSmallBall("#800080");
           break;
         case 1000:
           // For manual only (empty)

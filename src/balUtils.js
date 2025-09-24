@@ -15,8 +15,25 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
-function canBeTakenOrIsEmpty() {
-  return [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194];
+function canBeTakenOrIsEmpty(gameInfo, object) {
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197].includes(object);
+  switch (object) {
+    case 192:
+      result = !gameInfo.hasWhiteBall;
+      break;
+    case 195:
+      result = !gameInfo.hasLightBlueBall;
+      break;
+    case 196:
+      result = !gameInfo.hasYellowBall;
+      break;
+    case 197:
+      result = !gameInfo.hasPurpleBall;
+      break;
+    default:
+      break;
+  }
+  return result;
 }
 
 function canMoveAlone(gameData, gameInfo, x, y) {
@@ -607,6 +624,15 @@ export function charToNumber(c) {
     case "я":
       result = 194;
       break;
+    case "Б":
+      result = 195;
+      break;
+    case "Л":
+      result = 196;
+      break;
+    case "Ъ":
+      result = 197;
+      break;
     case "|":
       result = 1000;
       break;
@@ -824,24 +850,51 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
   return result;
 }
 
-export function dropWhiteBall(gameData, gameInfo) {
+export function dropObject(gameData, gameInfo, object) {
   let result = { update: false };
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
+  let xTarget = -1;
+  let yTarget = -1;
 
-  if (!gameInfo.hasWhiteBall) {
+  if (((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) || 
+  ((object === "purpleBall") && !gameInfo.hasPurpleBall) || 
+  ((object === "whiteBall") && !gameInfo.hasWhiteBall) || 
+  ((object === "yellowBall") && !gameInfo.hasYellowBall)){
     return result;
   }
   result.update = true;
   if (gameData[y][x + 1] === 0) {
-    gameData[y][x + 1] = 4;
+    xTarget = x + 1;
+    yTarget = y;
   } else if (gameData[y][x - 1] === 0) {
-    gameData[y][x - 1] = 4;
+    xTarget = x - 1;
+    yTarget = y;
   } else {
     result.update = false;
   }
   if (result.update) {
-    gameInfo.hasWhiteBall = false;
+    switch (object) {
+      case "lightBlueBall":
+        gameData[yTarget][xTarget] = 5;
+        gameInfo.hasLightBlueBall = false;
+        break;
+      case "purpleBall":
+        gameData[yTarget][xTarget] = 28;
+        gameInfo.hasPurpleBall = false;
+        break;
+      case "whiteBall":
+        gameData[yTarget][xTarget] = 4;
+        gameInfo.hasWhiteBall = false;
+        break;
+      case "yellowBall":
+        gameData[yTarget][xTarget] = 9;
+        gameInfo.yellowBalls.push({ x: xTarget, y: yTarget, direction: "none" });
+        gameInfo.hasYellowBall = false;
+        break;
+      default:
+        break;
+    }
   }
   return result;
 }
@@ -1562,6 +1615,15 @@ export function numberToChar(n) {
     case 194:
       result = "я";
       break;
+    case 195:
+      result = "Б";
+      break;
+    case 196:
+      result = "Л";
+      break;
+    case 197:
+      result = "Ъ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1988,6 +2050,30 @@ function take(gameData, gameInfo, result, x, y) {
         gameInfo.hasSelfDestructingTeleportsCreator = true;
       }
       break;
+    case 195:
+      if (!gameInfo.hasLightBlueBall) {
+        result.message = "You have now one light blue ball that you can drop at the right of you by pressing the Space bar or the A button. ";
+        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
+        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        gameInfo.hasLightBlueBall = true;
+      }
+      break;
+    case 196:
+      if (!gameInfo.hasYellowBall) {
+        result.message = "You have now one yellow ball that you can drop at the right of you by pressing the Space bar or the A button. ";
+        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
+        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        gameInfo.hasYellowBall = true;
+      }
+      break;
+    case 197:
+      if (!gameInfo.hasPurpleBall) {
+        result.message = "You have now one purple ball that you can drop at the right of you by pressing the Space bar or the A button. ";
+        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
+        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        gameInfo.hasPurpleBall = true;
+      }
+      break;
     default:
       break;
   }
@@ -2045,7 +2131,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
 
   if (x > 0) {
     // empty space, green ball, diving glasses, key etc.
-    if (!result.player && (canBeTakenOrIsEmpty().includes(row[x - 1]) ||
+    if (!result.player && (canBeTakenOrIsEmpty(gameInfo, row[x - 1]) ||
       (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
       result.sound = "take";
       take(gameData, gameInfo, result, x - 1, y);
@@ -2257,7 +2343,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   maxX = gameData[0].length - 1;
   if (x < maxX) {
     // empty space, green ball, diving glasses, key etc.
-    if (!result.player && (canBeTakenOrIsEmpty().includes(row[x + 1]) ||
+    if (!result.player && (canBeTakenOrIsEmpty(gameInfo, row[x + 1]) ||
       (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
       result.sound = "take";
       take(gameData, gameInfo, result, x + 1, y);
@@ -2503,7 +2589,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
         if (((i !== 0) || ((gameData[y + dy1][x] === 0))) &&
           ((i !== 0) || ((![25, 137, 90].includes(backData[y + dy1][x])) && (![25, 137, 90].includes(backData[y][x])))) &&
           (![80].includes(backData[y + dy2][x]))) {
-          if (canBeTakenOrIsEmpty().includes(gameData[y + dy2][x]) ||
+          if (canBeTakenOrIsEmpty(gameInfo, gameData[y + dy2][x]) ||
             ((i !== 0) && [12, 35].includes(gameData[y + dy1][x]) && gameInfo.hasPickaxe)
           ) {
             result.sound = "take";
@@ -2738,7 +2824,7 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
     if (!result.player && ((i !== 0) || gameInfo.hasCoilSpring)) {
       if ((x > 0) && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
         if ((gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && ![80].includes(backData[y + dy2][x + dx])) {
-          if (canBeTakenOrIsEmpty().includes(gameData[y + dy2][x + dx])) {
+          if (canBeTakenOrIsEmpty(gameInfo, gameData[y + dy2][x + dx])) {
             result.sound = "take";
             take(gameData, gameInfo, result, x + dx, y + dy2);
             if (gameData[y + dy2][x + dx] === 168) {

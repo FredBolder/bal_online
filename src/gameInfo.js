@@ -897,14 +897,17 @@ export function initGameInfo(info) {
     info.hasDivingGlasses = false;
     info.hasKey = false;
     info.hasLadder = false;
+    info.hasLightBlueBall = false;
     info.hasPickaxe = false;
     info.hasPropeller = false;
+    info.hasPurpleBall = false;
     info.hasSelfDestructingTeleportsCreator = false;
     info.hasTelekineticPower = false;
     info.hasTeleportsCreator = false;
     info.hasTravelGate = false;
     info.hasWeakStone = false;
     info.hasWhiteBall = false;
+    info.hasYellowBall = false;
     info.horizontalElevators = [];
     info.lastChord = null;
     info.magnets = [];

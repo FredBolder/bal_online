@@ -7,7 +7,7 @@ import {
   changeGroup,
   changeDirection,
   changeIntelligence,
-  dropWhiteBall,
+  dropObject,
   inWater,
   jump,
   jumpLeftOrRight,
@@ -189,26 +189,32 @@ function BalPage() {
     let saveDivingGlasses = false;
     let saveKey = false;
     let saveLadder = false;
+    let saveLightBlueBall = false;
     let savePickaxe = false;
     let savePropeller = false;
+    let savePurpleBall = false;
     let saveSelfDestructingTeleportsCreator = false;
     let saveTelekineticPower = false;
     let saveTeleportsCreator = false;
     let saveWeakStone = false;
     let saveWhiteBall = false;
+    let saveYellowBall = false;
 
     function loadItems() {
       gameInfo.hasCoilSpring = saveCoilSpring;
       gameInfo.hasDivingGlasses = saveDivingGlasses;
       gameInfo.hasKey = saveKey;
       gameInfo.hasLadder = saveLadder;
+      gameInfo.hasLightBlueBall = saveLightBlueBall;
       gameInfo.hasPickaxe = savePickaxe;
       gameInfo.hasPropeller = savePropeller;
+      gameInfo.hasPurpleBall = savePurpleBall;
       gameInfo.hasSelfDestructingTeleportsCreator = saveSelfDestructingTeleportsCreator;
       gameInfo.hasTelekineticPower = saveTelekineticPower;
       gameInfo.hasTeleportsCreator = saveTeleportsCreator;
       gameInfo.hasWeakStone = saveWeakStone;
       gameInfo.hasWhiteBall = saveWhiteBall;
+      gameInfo.hasYellowBall = saveYellowBall;
     }
 
     function saveItems() {
@@ -216,13 +222,16 @@ function BalPage() {
       saveDivingGlasses = gameInfo.hasDivingGlasses;
       saveKey = gameInfo.hasKey;
       saveLadder = gameInfo.hasLadder;
+      saveLightBlueBall = gameInfo.hasLightBlueBall;
       savePickaxe = gameInfo.hasPickaxe;
       savePropeller = gameInfo.hasPropeller;
+      savePurpleBall = gameInfo.hasPurpleBall;
       saveSelfDestructingTeleportsCreator = gameInfo.hasSelfDestructingTeleportsCreator;
       saveTelekineticPower = gameInfo.hasTelekineticPower;
       saveTeleportsCreator = gameInfo.hasTeleportsCreator;
       saveWeakStone = gameInfo.hasWeakStone;
       saveWhiteBall = gameInfo.hasWhiteBall;
+      saveYellowBall = gameInfo.hasYellowBall;
     }
 
 
@@ -779,6 +788,9 @@ function BalPage() {
     if (gameInfo.hasLadder) {
       addItem("ladder");
     }
+    if (gameInfo.hasLightBlueBall) {
+      addItem("light blue ball");
+    }
     if (gameInfo.hasSelfDestructingTeleportsCreator) {
       addItem("self-destructing teleports creator");
     }
@@ -794,11 +806,17 @@ function BalPage() {
     if (gameInfo.hasPropeller) {
       addItem("propeller");
     }
+    if (gameInfo.hasPurpleBall) {
+      addItem("purple ball");
+    }
     if (gameInfo.hasWeakStone) {
       addItem("weak stone");
     }
     if (gameInfo.hasWhiteBall) {
       addItem("white ball");
+    }
+    if (gameInfo.hasYellowBall) {
+      addItem("yellow ball");
     }
 
     if (msg === "") {
@@ -869,10 +887,10 @@ function BalPage() {
 
     switch (globalVars.createLevelMenuPage) {
       case 1:
-        arr0 = [2083, 2084, 1, 4, 9, 159, 6, 171, 10, 20, 91, 2033, 2050, 2051, 2097, 2101];
+        arr0 = [2083, 2084, 1, 4, 8, 9, 159, 6, 171, 10, 20, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 31, 157, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 31, 157, 91, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -902,42 +920,42 @@ function BalPage() {
             break;
           case 4:
             // Balls
-            arr1 = [2, 3, 140, 168, 192, 4, 5, 126, 127, 128, 129, 130, 8, 2045, 2046, 2047];
-            arr2 = [105, 95, 96, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40];
+            arr1 = [2, 3, 140, 168, 192, 195, 196, 197, 4, 5, 126, 127, 128, 129, 130, 40];
+            arr2 = [28, 100, 101, 102, 103, 104, 83, 82, 98];
             break;
           case 5:
+            // Red balls
+            arr1 = [8, 2045, 2046, 2047, 105, 95, 96];
+            arr2 = [0];
+            break;
+          case 6:
             // Yellow balls
             arr1 = [9, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123, 124];
             arr2 = [125];
             break;
-          case 6:
+          case 7:
             // Pistons
             arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
-          case 7:
+          case 8:
             // Elevators
             arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81, 178, 2133];
             arr2 = [0];
             break;
-          case 8:
+          case 9:
             // Conveyor belts
             arr1 = [171, 172, 173, 2092, 2133];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
-          case 9:
+          case 10:
             // Doors
             arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
             arr2 = [0];
             break;
-          case 10:
+          case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27];
-            arr2 = [0];
-            break;
-          case 11:
-            // Misc
-            arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
             arr2 = [0];
             break;
           case 12:
@@ -983,6 +1001,11 @@ function BalPage() {
             // Music box
             arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
+            break;
+          case 5:
+            // Misc
+            arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
+            arr2 = [0];
             break;
           case 15:
             // Info
@@ -1239,6 +1262,12 @@ function BalPage() {
     switch (e.key) {
       case " ": {
         actions = [];
+        if (gameInfo.hasLightBlueBall) {
+          actions.push("Drop light blue ball");
+        }
+        if (gameInfo.hasPurpleBall) {
+          actions.push("Drop purple ball");
+        }
         if (gameInfo.hasTeleportsCreator) {
           actions.push("Create teleports");
         }
@@ -1247,6 +1276,9 @@ function BalPage() {
         }
         if (gameInfo.hasWhiteBall) {
           actions.push("Drop white ball");
+        }
+        if (gameInfo.hasYellowBall) {
+          actions.push("Drop yellow ball");
         }
         if (gameInfo.hasTelekineticPower) {
           actions.push("Use telekinetic power");
@@ -1267,8 +1299,17 @@ function BalPage() {
           case "Create self-destructing teleports":
             gameInfo.action = "createSelfDestructingTeleports";
             break;
+          case "Drop light blue ball":
+            info = dropObject(gameData, gameInfo, "lightBlueBall");
+            break;
+          case "Drop purple ball":
+            info = dropObject(gameData, gameInfo, "purpleBall");
+            break;
           case "Drop white ball":
-            info = dropWhiteBall(gameData, gameInfo);
+            info = dropObject(gameData, gameInfo, "whiteBall");
+            break;
+          case "Drop yellow ball":
+            info = dropObject(gameData, gameInfo, "yellowBall");
             break;
           case "Use telekinetic power":
             info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
@@ -2091,7 +2132,7 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("balls")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
+              if ((createLevelMenu === menuToNumber("redballs")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
                 if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a red ball to set the intelligence.");

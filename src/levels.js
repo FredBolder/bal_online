@@ -16,7 +16,7 @@ const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
 const series5Start = 3300;
-const series5End = 3301;
+const series5End = 3302;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
@@ -339,9 +339,9 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "pickaxe", "propeller", 
-                "selfdestructingteleportscreator", "telekineticpower", "teleportscreator", "whiteball", 
-                "weakstone"].includes(valuesLowerCase[0])) {
+              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "pickaxe", "propeller", 
+                "purpleball", "selfdestructingteleportscreator", "telekineticpower", "teleportscreator", "whiteball", 
+                "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
               break;
@@ -1024,13 +1024,16 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasDivingGlasses = false;
               gameInfo.hasKey = false;
               gameInfo.hasLadder = false;
+              gameInfo.hasLightBlueBall = false;
               gameInfo.hasPickaxe = false;
               gameInfo.hasPropeller = false;
+              gameInfo.hasPurpleBall = false;
               gameInfo.hasSelfDestructingTeleportsCreator = false;
               gameInfo.hasTelekineticPower = false;
               gameInfo.hasTeleportsCreator = false;
               gameInfo.hasWeakStone = false;
               gameInfo.hasWhiteBall = false;
+              gameInfo.hasYellowBall = false;
               break;
             case "coilspring":
               gameInfo.hasCoilSpring = true;
@@ -1044,11 +1047,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             case "ladder":
               gameInfo.hasLadder = true;
               break;
+            case "lightblueball":
+              gameInfo.hasLightBlueBall = true;
+              break;
             case "pickaxe":
               gameInfo.hasPickaxe = true;
               break;
             case "propeller":
               gameInfo.hasPropeller = true;
+              break;
+            case "purpleball":
+              gameInfo.hasPurpleBall = true;
               break;
             case "selfdestructingteleportscreator":
               gameInfo.hasSelfDestructingTeleportsCreator = true;
@@ -1064,6 +1073,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "whiteball":
               gameInfo.hasWhiteBall = true;
+              break;
+            case "yellowball":
+              gameInfo.hasYellowBall = true;
               break;
             default:
               break;
