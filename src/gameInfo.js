@@ -844,6 +844,42 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     case 185:
                         info = `Gravity changer down`;
                         break;
+                    case 186:
+                        info = `Major chord`;
+                        break;
+                    case 187:
+                        info = `Minor chord`;
+                        break;
+                    case 188:
+                        info = `Augmented chord`;
+                        break;
+                    case 189:
+                        info = `Diminished chord`;
+                        break;
+                    case 190:
+                        info = `Suspended second chord`;
+                        break;
+                    case 191:
+                        info = `Suspended fourth chord`;
+                        break;
+                    case 192:
+                        info = `Small white ball`;
+                        break;
+                    case 193:
+                        info = `Teleports creator`;
+                        break;
+                    case 194:
+                        info = `Self-destructing teleports creator`;
+                        break;
+                    case 195:
+                        info = `Small light blue ball`;
+                        break;
+                    case 196:
+                        info = `Small yellow ball`;
+                        break;
+                    case 197:
+                        info = `Small purple ball`;
+                        break;
                     default:
                         break;
                 }
