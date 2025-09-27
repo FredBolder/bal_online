@@ -77,6 +77,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.disappearingStonesCountTo !== 5) {
+        line = `$gameticks: disappearingstone, ${gameVars.disappearingStonesCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.elevatorCountTo !== 5) {
         line = `$gameticks: elevator, ${gameVars.elevatorCountTo}`;
         lines.push(line);
@@ -179,6 +184,17 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         const delay = gameInfo.delays[i];
         line = `$gameticksxy: ${delay.x}, ${delay.y}, ${delay.gameTicks}`;
         lines.push(line);
+    }
+
+    for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
+        const disappearingStone = gameInfo.disappearingStones[i];
+        if (JSON.stringify(disappearingStone.pattern) !== JSON.stringify([5, 3])) {
+            line = `$pattern: ${disappearingStone.x}, ${disappearingStone.y}`;
+            for (let j = 0; j < disappearingStone.pattern.length; j++) {
+                line += ", " + disappearingStone.pattern[j].toString();
+            }
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.movers.length; i++) {

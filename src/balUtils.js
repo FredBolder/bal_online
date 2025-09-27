@@ -1761,6 +1761,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 178:
       updateObject(gameInfo.movers, oldX, oldY, newX, newY);
       break;
+    case 198:
+      updateObject(gameInfo.disappearingStones, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -1809,6 +1812,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.delays.length; i++) {
     refs.push(gameInfo.delays[i]);
+  }
+
+  for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
+    refs.push(gameInfo.disappearingStones[i]);
   }
 
   refs.push(gameInfo.detonator);

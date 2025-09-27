@@ -226,6 +226,7 @@ export function checkSettings(data, settings) {
     { name: "$musicbox", params: 4, xy: true },
     { name: "$notes", params: 0, xy: true },
     { name: "$part", params: 3, xy: true },
+    { name: "$pattern", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
@@ -315,7 +316,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "fish", "elevator"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "disappearingstone", "fish", "elevator"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -380,6 +381,14 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$pattern":
+              if (values.length < 3) {
+                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
+              }
+              if (validXY && !["Џ", 198].includes(data[y][x])) {
+                msg += `${settingNr(i)}No disappearing stone found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$pistonmode":
@@ -491,6 +500,9 @@ export function checkSettings(data, settings) {
           case "$startmessage":
           case "$startupmessage":
             msgExtra = "$startlevelmessage";
+            break;
+          case "$timing":
+            msgExtra = "$pattern";
             break;
           default:
             msgExtra = "";
@@ -986,6 +998,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 case "conveyorbelt":
                   gameVars.conveyorBeltCountTo = gameTicks;
                   break;
+                case "disappearingstone":
+                  gameVars.disappearingStonesCountTo = gameTicks;
+                  break;
                 case "elevator":
                   gameVars.elevatorCountTo = gameTicks;
                   break;
@@ -1147,6 +1162,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length === 3) {
             if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
               changeMusicBoxProperty(gameInfo, x, y, "part", valuesLowerCase[2]);
+            }
+          }
+          break;
+        case "$pattern":
+          if (values.length >= 3) {
+            if (validXY) {
+              idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+              if (idx >= 0) {
+                gameInfo.disappearingStones[idx].pattern = [];
+                gameInfo.disappearingStones[idx].patternIndex = 0;
+                for (let value = 2; value < values.length; value++) {
+                  gameInfo.disappearingStones[idx].pattern.push(tryParseInt(values[value], 1));
+                }
+              }
             }
           }
           break;

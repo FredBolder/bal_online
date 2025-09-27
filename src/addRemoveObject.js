@@ -269,7 +269,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 198: {
-            let disappearingStone = { x, y, status: 0, countDown: false };
+            let disappearingStone = { x, y, status: 0, countDown: false, pattern: [5, 3], patternIndex: 0, patternCounter: 0 };
             gameInfo.disappearingStones.push(disappearingStone);
             break;
         }
