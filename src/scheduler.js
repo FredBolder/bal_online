@@ -4,6 +4,7 @@ import { checkCopiers } from "./copiers.js";
 import { checkDamagedStones } from "./damagedStones.js";
 import { checkDelays } from "./delays.js";
 import { checkDetonator } from "./detonator.js";
+import { checkDisappearingStones } from "./disappearingStones.js";
 import { checkGameOver } from "./gameOver.js";
 import { checkForces } from "./force.js";
 import { clearBitMapLava } from "./drawLevel.js";
@@ -71,9 +72,17 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         if (info.sound === 2) {
             playSounds.push("breaking2");
         }
-        if (info.updated) {
+        if (info.update) {
             updateCanvas = true;
         }
+        if (gameVars.disappearingStonesCounter >= gameVars.disappearingStonesCountTo) {
+            gameVars.disappearingStonesCounter = 0;
+            info = checkDisappearingStones(gameData, gameInfo);
+            if (info.update) {
+                updateCanvas = true;
+            }
+        }
+        gameVars.disappearingStonesCounter++;
     }
 
     if (checkForces(gameData, gameInfo)) {

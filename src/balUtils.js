@@ -633,6 +633,9 @@ export function charToNumber(c) {
     case "Ъ":
       result = 197;
       break;
+    case "Џ":
+      result = 198;
+      break;
     case "|":
       result = 1000;
       break;
@@ -857,10 +860,10 @@ export function dropObject(gameData, gameInfo, object) {
   let xTarget = -1;
   let yTarget = -1;
 
-  if (((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) || 
-  ((object === "purpleBall") && !gameInfo.hasPurpleBall) || 
-  ((object === "whiteBall") && !gameInfo.hasWhiteBall) || 
-  ((object === "yellowBall") && !gameInfo.hasYellowBall)){
+  if (((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) ||
+    ((object === "purpleBall") && !gameInfo.hasPurpleBall) ||
+    ((object === "whiteBall") && !gameInfo.hasWhiteBall) ||
+    ((object === "yellowBall") && !gameInfo.hasYellowBall)) {
     return result;
   }
   result.update = true;
@@ -1623,6 +1626,9 @@ export function numberToChar(n) {
       break;
     case 197:
       result = "Ъ";
+      break;
+    case 198:
+      result = "Џ";
       break;
     case 1000:
       // For manual only

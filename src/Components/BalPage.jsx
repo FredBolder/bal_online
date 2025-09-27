@@ -88,7 +88,7 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -916,7 +916,7 @@ function BalPage() {
           case 3:
             // Stones
             arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-            arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 22, 36, 37, 117];
+            arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 36, 37, 117];
             break;
           case 4:
             // Balls
@@ -1746,7 +1746,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 2004;
+        gameVars.currentLevel = 3305;
       }
       initLevel(gameVars.currentLevel);
     }

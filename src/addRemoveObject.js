@@ -189,25 +189,25 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 157: {
-            let musicBox = { 
-                x, 
-                y, 
-                instrument: "xylophone", 
-                volume: 90, 
-                mode: "note", 
+            let musicBox = {
+                x,
+                y,
+                instrument: "xylophone",
+                volume: 90,
+                mode: "note",
                 active: false,
-                ended: false, 
-                delay: 5, 
-                delayCounter: 0, 
-                notes: ["C4"], 
-                noteIndex: 0, 
+                ended: false,
+                delay: 5,
+                delayCounter: 0,
+                notes: ["C4"],
+                noteIndex: 0,
                 stepsPerMeasure: 0,
                 onOne: false,
                 chordType: "?",
                 chordsPlaced: false,
-                part: "bottom", 
-                direction: "up", 
-                group: 1 
+                part: "bottom",
+                direction: "up",
+                group: 1
             };
             gameInfo.musicBoxes.push(musicBox);
             break;
@@ -266,6 +266,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
         case 178: {
             let mover = { x, y, direction: "right" };
             gameInfo.movers.push(mover);
+            break;
+        }
+        case 198: {
+            let disappearingStone = { x, y, status: 0, countDown: false };
+            gameInfo.disappearingStones.push(disappearingStone);
             break;
         }
         default:
@@ -516,6 +521,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.movers);
             if (idx >= 0) {
                 gameInfo.movers.splice(idx, 1);
+            }
+            break;
+        case 198:
+            idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+            if (idx >= 0) {
+                gameInfo.disappearingStones.splice(idx, 1);
             }
             break;
         default:

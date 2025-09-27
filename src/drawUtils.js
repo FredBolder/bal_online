@@ -10,20 +10,20 @@ export function drawCircle(canvas, xc, yc, radius, color) {
   canvas.stroke();
 }
 
-export function drawFilledBox(canvas, x, y, width, height, color) {
-  canvas.fillStyle = color;
+export function drawFilledBox(canvas, x, y, width, height, colorOrPattern) {
+  canvas.fillStyle = colorOrPattern;
   canvas.fillRect(Math.round(x - 0.5), Math.round(y), Math.round(width), Math.round(height));
 }
 
-export function drawFilledCircle(canvas, xc, yc, radius, color) {
-  canvas.fillStyle = color;
+export function drawFilledCircle(canvas, xc, yc, radius, colorOrPattern) {
+  canvas.fillStyle = colorOrPattern;
   canvas.beginPath();
   canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius - 0.5), 0, 2 * Math.PI, false);
   canvas.fill();
 }
 
-export function drawFilledEllipse(canvas, xc, yc, radiusX, radiusY, color) {
-  canvas.fillStyle = color;
+export function drawFilledEllipse(canvas, xc, yc, radiusX, radiusY, colorOrPattern) {
+  canvas.fillStyle = colorOrPattern;
   canvas.beginPath();
   // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise)
   canvas.ellipse(Math.round(xc), Math.round(yc), Math.round(radiusX - 0.5), Math.round(radiusY - 0.5), 0, 0, 2 * Math.PI, false);

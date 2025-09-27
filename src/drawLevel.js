@@ -546,6 +546,37 @@ function drawLevel(
     }
   }
 
+  function drawDisappearingStone(x, y) {
+    const color = getFgcolor(x, y, "#464646");
+    const idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+    let status = 0;
+
+    if (idx >= 0) {
+      status = gameInfo.disappearingStones[idx].status;
+    }
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
+    // status 3 = disappeared
+    if (status < 3) {
+      ctx.lineWidth = w2;
+      switch (status) {
+        case 0:
+          ctx.setLineDash([3, 1]);
+          break;
+        case 1:
+          ctx.setLineDash([2, 2]);
+          break;
+        case 2:
+          ctx.setLineDash([1, 3]);
+          break;
+        default:
+          break;
+      }
+      drawLine(ctx, xmin, yc, xmax, yc, color);
+      ctx.setLineDash([]);
+      ctx.lineWidth = 1;
+    }
+  }
+
   function drawDivingGlasses(color, scaleFactor = 1) {
     let d1 = w1 * scaleFactor / 5;
     let d2 = w1 * scaleFactor / 4.5;
@@ -2591,6 +2622,9 @@ function drawLevel(
           break;
         case 197:
           drawSmallBall("#800080");
+          break;
+        case 198:
+          drawDisappearingStone(col, row);
           break;
         case 1000:
           // For manual only (empty)

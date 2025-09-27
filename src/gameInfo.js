@@ -265,6 +265,11 @@ export function getGameInfo(backData, gameData) {
                     result.movers.push(mover);
                     break;
                 }
+                case 198: {
+                    let disappearingStone = { x: j, y: i, status: 0, countDown: false };
+                    result.disappearingStones.push(disappearingStone);
+                    break;
+                }
                 default:
                     break;
             }
@@ -880,6 +885,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     case 197:
                         info = `Small purple ball`;
                         break;
+                    case 198:
+                        idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+                        if (idx >= 0) {
+                            obj = gameInfo.disappearingStones[idx];
+                            extraInfo = `Status: ${obj.status}`;
+                        }
+                        info = `Disappearing stone, ` + extraInfo;
+                        break;
                     default:
                         break;
                 }
@@ -921,6 +934,7 @@ export function initGameInfo(info) {
     info.conveyorBelts = [];
     info.copiers = [];
     info.damagedStones = [];
+    info.disappearingStones = [];
     info.delays = [];
     info.detonator = { x: -1, y: -1 };
     info.electricity = [];
@@ -976,6 +990,8 @@ export function initGameVars(vars) {
     vars.conveyorBeltCounter = 0;
     vars.conveyorBeltCountTo = 5;
     vars.currentLevel = 200;
+    vars.disappearingStonesCounter = 0;
+    vars.disappearingStonesCountTo = 10;
     vars.elecActiveSaved = false;
     vars.electricityCounter = 0;
     vars.elevatorCounter = 0;
