@@ -952,6 +952,7 @@ export function initGameInfo(info) {
     info.hasPropeller = false;
     info.hasPurpleBall = false;
     info.hasSelfDestructingTeleportsCreator = false;
+    info.hasShrinker = false;
     info.hasTelekineticPower = false;
     info.hasTeleportsCreator = false;
     info.hasTravelGate = false;

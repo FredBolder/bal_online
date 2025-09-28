@@ -143,6 +143,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: selfdestructingteleportscreator`;
         lines.push(line);
     }
+    if (gameInfo.hasShrinker) {
+        line = `$has: shrinker`;
+        lines.push(line);
+    }
     if (gameInfo.hasTelekineticPower) {
         line = `$has: telekineticpower`;
         lines.push(line);

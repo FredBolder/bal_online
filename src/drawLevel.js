@@ -1691,6 +1691,16 @@ function drawLevel(
     }
   }
 
+  function drawShrinker() {
+    const d1 = 0.05;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([2, 2]);
+    drawCircle(ctx, w1 * (0.25 + d1) + xmin, w1 * (0.25 + d1) + ymin, w1 * 0.25, "white");
+    ctx.setLineDash([]);
+    drawCircle(ctx, xmax - (w1 * (0.125 + d1)), w1 * (0.125 + d1) + ymin, w1 * 0.125, "white");
+    ctx.lineWidth = 1;
+  }
+
   function drawSmallBall(color) {
     drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, color);
   }
@@ -2626,6 +2636,9 @@ function drawLevel(
         case 198:
           drawDisappearingStone(col, row);
           break;
+        case 199:
+          drawShrinker();
+          break;  
         case 1000:
           // For manual only (empty)
           break;

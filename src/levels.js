@@ -16,7 +16,7 @@ const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
 const series5Start = 3300;
-const series5End = 3305;
+const series5End = 3306;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
@@ -341,7 +341,7 @@ export function checkSettings(data, settings) {
               break;
             case "$has":
               if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "pickaxe", "propeller", 
-                "purpleball", "selfdestructingteleportscreator", "telekineticpower", "teleportscreator", "whiteball", 
+                "purpleball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball", 
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
@@ -1044,6 +1044,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasPropeller = false;
               gameInfo.hasPurpleBall = false;
               gameInfo.hasSelfDestructingTeleportsCreator = false;
+              gameInfo.hasShrinker = false;
               gameInfo.hasTelekineticPower = false;
               gameInfo.hasTeleportsCreator = false;
               gameInfo.hasWeakStone = false;
@@ -1076,6 +1077,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "selfdestructingteleportscreator":
               gameInfo.hasSelfDestructingTeleportsCreator = true;
+              break;
+            case "shrinker":
+              gameInfo.hasShrinker = true;
               break;
             case "telekineticpower":
               gameInfo.hasTelekineticPower = true;

@@ -41,6 +41,7 @@ import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes
 import { gameScheduler, schedulerTime } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
+import { shrinkObject } from "../shrink.js";
 import { playSound } from "../sound.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
@@ -194,6 +195,7 @@ function BalPage() {
     let savePropeller = false;
     let savePurpleBall = false;
     let saveSelfDestructingTeleportsCreator = false;
+    let saveShrinker = false;
     let saveTelekineticPower = false;
     let saveTeleportsCreator = false;
     let saveWeakStone = false;
@@ -210,6 +212,7 @@ function BalPage() {
       gameInfo.hasPropeller = savePropeller;
       gameInfo.hasPurpleBall = savePurpleBall;
       gameInfo.hasSelfDestructingTeleportsCreator = saveSelfDestructingTeleportsCreator;
+      gameInfo.hasShrinker = saveShrinker;
       gameInfo.hasTelekineticPower = saveTelekineticPower;
       gameInfo.hasTeleportsCreator = saveTeleportsCreator;
       gameInfo.hasWeakStone = saveWeakStone;
@@ -227,6 +230,7 @@ function BalPage() {
       savePropeller = gameInfo.hasPropeller;
       savePurpleBall = gameInfo.hasPurpleBall;
       saveSelfDestructingTeleportsCreator = gameInfo.hasSelfDestructingTeleportsCreator;
+      saveShrinker = gameInfo.hasShrinker;
       saveTelekineticPower = gameInfo.hasTelekineticPower;
       saveTeleportsCreator = gameInfo.hasTeleportsCreator;
       saveWeakStone = gameInfo.hasWeakStone;
@@ -794,6 +798,9 @@ function BalPage() {
     if (gameInfo.hasSelfDestructingTeleportsCreator) {
       addItem("self-destructing teleports creator");
     }
+    if (gameInfo.hasShrinker) {
+      addItem("shrinker");
+    }
     if (gameInfo.hasTelekineticPower) {
       addItem("telekinetic power");
     }
@@ -921,7 +928,7 @@ function BalPage() {
           case 4:
             // Balls
             arr1 = [2, 3, 140, 168, 192, 195, 196, 197, 4, 5, 126, 127, 128, 129, 130, 40];
-            arr2 = [28, 100, 101, 102, 103, 104, 83, 82, 98];
+            arr2 = [28, 100, 101, 102, 103, 104, 83, 82, 98, 199];
             break;
           case 5:
             // Red balls
@@ -1250,6 +1257,10 @@ function BalPage() {
             createTeleports(backData, gameData, gameInfo, true, direction);
             updateGameCanvas();
             break;
+          case "shrink":
+            shrinkObject(gameData, gameInfo, direction);
+            updateGameCanvas();
+            break;  
           default:
             break;
         }
@@ -1279,6 +1290,9 @@ function BalPage() {
         }
         if (gameInfo.hasYellowBall) {
           actions.push("Drop yellow ball");
+        }
+        if (gameInfo.hasShrinker) {
+          actions.push("Shrink object");
         }
         if (gameInfo.hasTelekineticPower) {
           actions.push("Use telekinetic power");
@@ -1310,6 +1324,9 @@ function BalPage() {
             break;
           case "Drop yellow ball":
             info = dropObject(gameData, gameInfo, "yellowBall");
+            break;
+          case "Shrink object":
+            gameInfo.action = "shrink";
             break;
           case "Use telekinetic power":
             info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
@@ -1746,7 +1763,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3305;
+        gameVars.currentLevel = 3306;
       }
       initLevel(gameVars.currentLevel);
     }

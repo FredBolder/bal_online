@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 199].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -635,6 +635,9 @@ export function charToNumber(c) {
       break;
     case "Џ":
       result = 198;
+      break;
+    case "Љ":
+      result = 199;
       break;
     case "|":
       result = 1000;
@@ -1630,6 +1633,9 @@ export function numberToChar(n) {
     case 198:
       result = "Џ";
       break;
+    case 199:
+      result = "Љ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2085,6 +2091,13 @@ function take(gameData, gameInfo, result, x, y) {
         result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
         result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
         gameInfo.hasPurpleBall = true;
+      }
+      break;
+    case 199:
+      if (!gameInfo.hasShrinker) {
+        result.message = "You have now a shrinker. You can shrink white, light blue, yellow and purple balls by pressing the Space bar or ";
+        result.message += "the A button and after that pressing a move key or button to indicate the direction (for example the right arrow key)."
+        gameInfo.hasShrinker = true;
       }
       break;
     default:
