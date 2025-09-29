@@ -19,7 +19,7 @@ import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./t
 import { moveRedBalls } from "./redBalls.js";
 import { checkTimeBombs } from "./timeBombs.js";
 import { checkTrapDoors } from "./trapDoors.js";
-import { checkWhiteBallSynchronisers } from "./whiteBallSynchroniser.js";
+import { checkWhiteBallSynchronisers } from "./whiteBallSynchronisers.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "./yellowBalls.js";
 import { moveYellowBars } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";

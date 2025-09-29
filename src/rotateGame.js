@@ -211,6 +211,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.delay[i], rows, rotateLeft);
       }
 
+      // Disappearing stones
+      for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
+        rotateXY(gameInfo.disappearingStones[i], rows, rotateLeft);
+      }
+
       // Electricity
       for (let i = 0; i < gameInfo.electricity.length; i++) {
         rotateXY(gameInfo.electricity[i], rows, rotateLeft);
@@ -325,6 +330,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       // Trap doors
       for (let i = 0; i < gameInfo.trapDoors.length; i++) {
         rotateXY(gameInfo.trapDoors[i], rows, rotateLeft);
+      }
+
+      // White ball synchronisers
+      for (let i = 0; i < gameInfo.whiteBallSynchronisers.length; i++) {
+        rotateXY(gameInfo.whiteBallSynchronisers[i], rows, rotateLeft);
       }
 
       // Yellow balls
