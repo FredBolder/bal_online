@@ -270,6 +270,15 @@ export function getGameInfo(backData, gameData) {
                     result.disappearingStones.push(disappearingStone);
                     break;
                 }
+                case 200: {
+                    let whiteBallSynchroniser = {
+                        x: j,
+                        y: i,
+                        skip: false
+                    };
+                    result.whiteBallSynchronisers.push(whiteBallSynchroniser);
+                    break;
+                }
                 default:
                     break;
             }
@@ -893,6 +902,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                         }
                         info = `Disappearing stone, ` + extraInfo;
                         break;
+                    case 200:
+                        idx = findElementByCoordinates(x, y, gameInfo.whiteBallSynchronisers);
+                        if (idx >= 0) {
+                            obj = gameInfo.whiteBallSynchronisers[idx];
+                            extraInfo = `object information found`;
+                        }
+                        info = `White ball synchroniser, ` + extraInfo;
+                        break;
                     default:
                         break;
                 }
@@ -975,6 +992,7 @@ export function initGameInfo(info) {
     info.trapDoors = [];
     info.travelGate = { x: -1, y: -1 };
     info.twoBlue = false;
+    info.whiteBallSynchronisers = [];
     info.yellowBalls = [];
     info.yellowBallPushers = [];
     info.yellowBallPushersTriggers = [];

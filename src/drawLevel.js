@@ -210,6 +210,11 @@ function drawLevel(
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
   }
 
+  function drawBallSynchroniser(color) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, color);
+    drawText(ctx, xc, yc, "&", "middle", "black", w2 * 0.8, w1 * 0.8, "black", 1);
+  }
+
   function drawBarBottom(color) {
     drawBall(color);
     drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
@@ -2001,11 +2006,6 @@ function drawLevel(
     ctx.drawImage(elements.elementYellow, xmin, ymin, w1, w2);
   }
 
-  function drawYellowBallSynchroniser() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
-    drawText(ctx, xc, yc, "&", "middle", "black", w2 * 0.8, w1 * 0.8, "black", 1);
-  }
-
   function drawYellowPauser(x, y) {
     let d1 = w1 / 4;
     let d2 = w2 / 1.9;
@@ -2507,7 +2507,7 @@ function drawLevel(
           drawStonePattern(col, row, 2);
           break;
         case 155:
-          drawYellowBallSynchroniser();
+          drawBallSynchroniser("yellow");
           break;
         case 156:
           drawYellowSlowdowner();
@@ -2639,6 +2639,9 @@ function drawLevel(
         case 199:
           drawShrinker();
           break;  
+        case 200:
+          drawBallSynchroniser("white");
+          break;
         case 1000:
           // For manual only (empty)
           break;

@@ -19,6 +19,7 @@ import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./t
 import { moveRedBalls } from "./redBalls.js";
 import { checkTimeBombs } from "./timeBombs.js";
 import { checkTrapDoors } from "./trapDoors.js";
+import { checkWhiteBallSynchronisers } from "./whiteBallSynchroniser.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "./yellowBalls.js";
 import { moveYellowBars } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -83,6 +84,11 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             }
         }
         gameVars.disappearingStonesCounter++;
+
+        info = checkWhiteBallSynchronisers(backData, gameData, gameInfo, gameVars);
+        if (info.update) {
+            updateCanvas = true;
+        }
     }
 
     if (checkForces(gameData, gameInfo)) {

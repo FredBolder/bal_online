@@ -42,7 +42,7 @@ function canMoveAlone(gameData, gameInfo, x, y) {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178].includes(el)) {
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -638,6 +638,9 @@ export function charToNumber(c) {
       break;
     case "Љ":
       result = 199;
+      break;
+    case "Ѩ":
+      result = 200;
       break;
     case "|":
       result = 1000;
@@ -1636,6 +1639,9 @@ export function numberToChar(n) {
     case 199:
       result = "Љ";
       break;
+    case 200:
+      result = "Ѩ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1770,6 +1776,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 198:
       updateObject(gameInfo.disappearingStones, oldX, oldY, newX, newY);
       break;
+    case 200:
+      updateObject(gameInfo.whiteBallSynchronisers, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -1895,6 +1904,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
   }
 
   refs.push(gameInfo.travelGate);
+
+  for (let i = 0; i < gameInfo.whiteBallSynchronisers.length; i++) {
+    refs.push(gameInfo.whiteBallSynchronisers[i]);
+  }
 
   for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
     refs.push(gameInfo.yellowBalls[i]);

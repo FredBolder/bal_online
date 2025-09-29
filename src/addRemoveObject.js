@@ -273,6 +273,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.disappearingStones.push(disappearingStone);
             break;
         }
+        case 200: {
+            let whiteBallSynchroniser = { x, y, skip: false };
+            gameInfo.whiteBallSynchronisers.push(whiteBallSynchroniser);
+            break;
+        }
         default:
             break;
     }
@@ -527,6 +532,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
             if (idx >= 0) {
                 gameInfo.disappearingStones.splice(idx, 1);
+            }
+            break;
+        case 200:
+            idx = findElementByCoordinates(x, y, gameInfo.whiteBallSynchronisers);
+            if (idx >= 0) {
+                gameInfo.whiteBallSynchronisers.splice(idx, 1);
             }
             break;
         default:
