@@ -16,7 +16,7 @@ export function checkPistonsDetector(gameData, gameInfo) {
         let x = -1;
         let y = -1;
         const piston = gameInfo.pistons[i];
-        if (["whiteball"].includes(piston.mode)) {
+        if (["whiteball", "orangeball", "redball"].includes(piston.mode)) {
             x = piston.x;
             y = piston.y;
             switch (piston.direction) {
@@ -37,7 +37,9 @@ export function checkPistonsDetector(gameData, gameInfo) {
             }
         }
         if ((x >= 0) && (x <= maxX) && (y >= 0) && (y <= maxY)) {
-            activate = ((gameData[y][x] === 4) && (piston.mode === "whiteball"));
+            activate = ((gameData[y][x] === 4) && (piston.mode === "whiteball")) ||
+                ((gameData[y][x] === 40) && (piston.mode === "orangeball")) ||
+                ([8, 93, 94].includes(gameData[y][x]) && (piston.mode === "redball"));
             if (activate) {
                 if (activatePiston(gameData, gameInfo, piston, piston.mode)) {
                     result.updated = true;
@@ -378,7 +380,7 @@ export function changePistonSticky(gameInfo, x, y) {
 }
 
 export function pistonModes() {
-    return ["toggle", "momentary", "repeatfast", "repeatslow", "whiteball"];
+    return ["toggle", "momentary", "repeatfast", "repeatslow", "whiteball", "orangeball", "redball"];
 }
 
 

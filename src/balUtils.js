@@ -61,7 +61,7 @@ function canMoveAlone(gameData, gameInfo, x, y) {
         idx = findElementByCoordinates(x, y, gameInfo.pistons);
         if (idx >= 0) {
           const piston = gameInfo.pistons[idx];
-          if ((piston.mode === "whiteball") && !piston.activated) {
+          if (["whiteball", "orangeball", "redball"].includes(piston.mode) && !piston.activated) {
             result = true;
           }
         }

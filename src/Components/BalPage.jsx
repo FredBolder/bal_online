@@ -2424,7 +2424,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow", "white ball"], 0);
+                newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow", "white ball", "orange ball", "red ball"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

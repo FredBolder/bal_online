@@ -1434,6 +1434,7 @@ function drawLevel(
     let group = 0;
     let inverted = false;
     let mode = "toggle";
+    let showGroup = false;
     let sticky = false;
     let triesToActivate = false;
     let triggerPressed = false;
@@ -1451,9 +1452,19 @@ function drawLevel(
     }
     switch (mode) {
       case "whiteball":
+        showGroup = false;
         color = "white";
         break;
+      case "orangeball":
+        showGroup = false;
+        color = "#ED7014";
+        break;
+      case "redball":
+        showGroup = false;
+        color = "red";
+        break;
       default:
+        showGroup = true;
         color = "gray";
         break;
     }
@@ -1486,7 +1497,7 @@ function drawLevel(
           drawFilledBox(ctx, xmin + d1, ymax - d3 + 0.5, w1 - d1 - d1, d3 + 0.5, "brown");
         }
         drawFilledBox(ctx, xc - d1, ymin + d2, d1 + d1, w2 - d2, "brown");
-        if (mode !== "whiteball") {
+        if (showGroup) {
           drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
@@ -1496,7 +1507,7 @@ function drawLevel(
           drawFilledBox(ctx, xmin, ymin + d1, d3, w2 - d1 - d1, "brown");
         }
         drawFilledBox(ctx, xmin, yc - d1, w1 - d2 - 0.5, d1 + d1, "brown");
-        if (mode !== "whiteball") {
+        if (showGroup) {
           drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
@@ -1506,7 +1517,7 @@ function drawLevel(
           drawFilledBox(ctx, xmax - d3 + 1, ymin + d1, d3 + 0.5, w2 - d1 - d1, "brown");
         }
         drawFilledBox(ctx, xmin + d2 + 0.5, yc - d1, w1 - d2, d1 + d1, "brown");
-        if (mode !== "whiteball") {
+        if (showGroup) {
           drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
@@ -1516,7 +1527,7 @@ function drawLevel(
           drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3, "brown");
         }
         drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2, "brown");
-        if (mode !== "whiteball") {
+        if (showGroup) {
           drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
