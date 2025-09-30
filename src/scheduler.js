@@ -14,7 +14,7 @@ import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
 import { checkMusicBoxes } from "./musicBoxes.js"
 import { moveOrangeBalls } from "./orangeBalls.js";
-import { checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
+import { checkPistonsDetector, checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
 import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./teleports.js";
 import { moveRedBalls } from "./redBalls.js";
 import { checkTimeBombs } from "./timeBombs.js";
@@ -244,6 +244,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     }
 
     if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0)) {
+        info = checkPistonsDetector(gameData, gameInfo);
+        if (info.updated) {
+            updateCanvas = true;
+        }
         info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, false);
         if (info.updated) {
             updateCanvas = true;

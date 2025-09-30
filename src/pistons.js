@@ -6,6 +6,52 @@ function canMove(element) {
     return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178].includes(element);
 }
 
+export function checkPistonsDetector(gameData, gameInfo) {
+    let activate = false;
+    const result = { updated: false };
+    const maxX = gameData[0].length - 1;
+    const maxY = gameData.length - 1;
+
+    for (let i = 0; i < gameInfo.pistons.length; i++) {
+        let x = -1;
+        let y = -1;
+        const piston = gameInfo.pistons[i];
+        if (["whiteball"].includes(piston.mode)) {
+            x = piston.x;
+            y = piston.y;
+            switch (piston.direction) {
+                case "up":
+                    y--;
+                    break;
+                case "down":
+                    y++;
+                    break;
+                case "left":
+                    x--;
+                    break;
+                case "right":
+                    x++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if ((x >= 0) && (x <= maxX) && (y >= 0) && (y <= maxY)) {
+            activate = ((gameData[y][x] === 4) && (piston.mode === "whiteball"));
+            if (activate) {
+                if (activatePiston(gameData, gameInfo, piston, piston.mode)) {
+                    result.updated = true;
+                }
+            } else {
+                if (deactivatePiston(gameData, gameInfo, piston, piston.mode)) {
+                    result.updated = true;
+                }
+            }
+        }
+    }
+    return result;
+}
+
 export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pushingDown) {
     let groupsWithWeight = [];
     let result = { updated: false };
@@ -302,37 +348,37 @@ function deactivatePiston(gameData, gameInfo, piston, mode) {
 }
 
 export function changePistonInverted(gameInfo, x, y) {
-  let idx = -1;
+    let idx = -1;
 
-  idx = findElementByCoordinates(x, y, gameInfo.pistons);
-  if (idx >= 0) {
-    gameInfo.pistons[idx].inverted = !gameInfo.pistons[idx].inverted;
-  }
-  return idx;
+    idx = findElementByCoordinates(x, y, gameInfo.pistons);
+    if (idx >= 0) {
+        gameInfo.pistons[idx].inverted = !gameInfo.pistons[idx].inverted;
+    }
+    return idx;
 }
 
 export function changePistonMode(gameInfo, x, y, mode) {
-  let idx = -1;
+    let idx = -1;
 
-  idx = findElementByCoordinates(x, y, gameInfo.pistons);
-  if (idx >= 0) {
-    gameInfo.pistons[idx].mode = mode;
-  }
-  return idx;
+    idx = findElementByCoordinates(x, y, gameInfo.pistons);
+    if (idx >= 0) {
+        gameInfo.pistons[idx].mode = mode;
+    }
+    return idx;
 }
 
 export function changePistonSticky(gameInfo, x, y) {
-  let idx = -1;
+    let idx = -1;
 
-  idx = findElementByCoordinates(x, y, gameInfo.pistons);
-  if (idx >= 0) {
-    gameInfo.pistons[idx].sticky = !gameInfo.pistons[idx].sticky;
-  }
-  return idx;
+    idx = findElementByCoordinates(x, y, gameInfo.pistons);
+    if (idx >= 0) {
+        gameInfo.pistons[idx].sticky = !gameInfo.pistons[idx].sticky;
+    }
+    return idx;
 }
 
 export function pistonModes() {
-    return ["toggle", "momentary", "repeatfast", "repeatslow"];
+    return ["toggle", "momentary", "repeatfast", "repeatslow", "whiteball"];
 }
 
 

@@ -4,6 +4,7 @@ import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { moversDirections } from "./movers.js";
 import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
+import { pistonModes } from "./pistons.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
@@ -16,7 +17,7 @@ const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
 const series5Start = 3300;
-const series5End = 3306;
+const series5End = 3307;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
@@ -392,7 +393,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$pistonmode":
-              if (!["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2])) {
+              if (!pistonModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid piston mode ${values[2]}.\n`;
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
@@ -1185,7 +1186,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$pistonmode":
           if (values.length === 3) {
-            if (validXY && (["momentary", "repeatfast", "repeatslow", "toggle"].includes(valuesLowerCase[2]))) {
+            if (validXY && (pistonModes().includes(valuesLowerCase[2]))) {
               idx = findElementByCoordinates(x, y, gameInfo.pistons);
               if (idx >= 0) {
                 gameInfo.pistons[idx].mode = valuesLowerCase[2];

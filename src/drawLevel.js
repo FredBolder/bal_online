@@ -1425,6 +1425,7 @@ function drawLevel(
   }
 
   function drawPiston(x, y, direction) {
+    let color = "gray";
     let d1 = w1 * 0.1;
     let d2 = w2 * 0.8;
     let d3 = w2 * 0.1;
@@ -1447,6 +1448,14 @@ function drawLevel(
       inverted = gameInfo.pistons[idx].inverted;
       mode = gameInfo.pistons[idx].mode;
       sticky = gameInfo.pistons[idx].sticky;
+    }
+    switch (mode) {
+      case "whiteball":
+        color = "white";
+        break;
+      default:
+        color = "gray";
+        break;
     }
     if ((mode === "toggle") && (gameVars.pistonGroupsActivated[group - 1] !== inverted)) {
       triesToActivate = true;
@@ -1472,36 +1481,44 @@ function drawLevel(
     }
     switch (direction) {
       case "down":
-        drawFilledBox(ctx, xmin, ymin, w1, d2, "gray");
+        drawFilledBox(ctx, xmin, ymin, w1, d2, color);
         if (!activated) {
           drawFilledBox(ctx, xmin + d1, ymax - d3 + 0.5, w1 - d1 - d1, d3 + 0.5, "brown");
         }
         drawFilledBox(ctx, xc - d1, ymin + d2, d1 + d1, w2 - d2, "brown");
-        drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        if (mode !== "whiteball") {
+          drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
         break;
       case "left":
-        drawFilledBox(ctx, xmax - d2 + 1, ymin, d2, w2, "gray");
+        drawFilledBox(ctx, xmax - d2 + 1, ymin, d2, w2, color);
         if (!activated) {
           drawFilledBox(ctx, xmin, ymin + d1, d3, w2 - d1 - d1, "brown");
         }
         drawFilledBox(ctx, xmin, yc - d1, w1 - d2 - 0.5, d1 + d1, "brown");
-        drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        if (mode !== "whiteball") {
+          drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
         break;
       case "right":
-        drawFilledBox(ctx, xmin, ymin, d2, w2, "gray");
+        drawFilledBox(ctx, xmin, ymin, d2, w2, color);
         if (!activated) {
           drawFilledBox(ctx, xmax - d3 + 1, ymin + d1, d3 + 0.5, w2 - d1 - d1, "brown");
         }
         drawFilledBox(ctx, xmin + d2 + 0.5, yc - d1, w1 - d2, d1 + d1, "brown");
-        drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        if (mode !== "whiteball") {
+          drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
         break;
       case "up":
-        drawFilledBox(ctx, xmin, ymax - d2 + 1, w1, d2, "gray");
+        drawFilledBox(ctx, xmin, ymax - d2 + 1, w1, d2, color);
         if (!activated) {
           drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3, "brown");
         }
         drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2, "brown");
-        drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        if (mode !== "whiteball") {
+          drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+        }
         break;
       default:
         break;
@@ -2638,7 +2655,7 @@ function drawLevel(
           break;
         case 199:
           drawShrinker();
-          break;  
+          break;
         case 200:
           drawBallSynchroniser("white");
           break;

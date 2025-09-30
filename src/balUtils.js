@@ -54,6 +54,18 @@ function canMoveAlone(gameData, gameInfo, x, y) {
           }
         }
         break;
+      case 159:
+      case 161:
+      case 163:
+      case 165:
+        idx = findElementByCoordinates(x, y, gameInfo.pistons);
+        if (idx >= 0) {
+          const piston = gameInfo.pistons[idx];
+          if ((piston.mode === "whiteball") && !piston.activated) {
+            result = true;
+          }
+        }
+        break;
       default:
         break;
     }
@@ -2225,6 +2237,12 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
         case 157:
           updateObject(gameInfo.musicBoxes, x - 1, y, x - 2, y);
           break;
+        case 159:
+        case 161:
+        case 163:
+        case 165:
+          updateObject(gameInfo.pistons, x - 1, y, x - 2, y);
+          break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x - 1, y, x - 2, y);
           break;
@@ -2436,6 +2454,12 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
           break;
         case 157:
           updateObject(gameInfo.musicBoxes, x + 1, y, x + 2, y);
+          break;
+        case 159:
+        case 161:
+        case 163:
+        case 165:
+          updateObject(gameInfo.pistons, x + 1, y, x + 2, y);
           break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x + 1, y, x + 2, y);
@@ -2703,6 +2727,12 @@ export function jump(backData, gameData, gameInfo, gameVars) {
         case 157:
           updateObject(gameInfo.musicBoxes, x, y + dy1, x, y + dy2);
           break;
+        case 159:
+        case 161:
+        case 163:
+        case 165:
+          updateObject(gameInfo.pistons, x, y + dy1, x, y + dy2);
+          break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x, y + dy1, x, y + dy2);
           break;
@@ -2959,6 +2989,12 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
           break;
         case 157:
           updateObject(gameInfo.musicBoxes, x, y + dy1, x, y + dy2);
+          break;
+        case 159:
+        case 161:
+        case 163:
+        case 165:
+          updateObject(gameInfo.pistons, x, y + dy1, x, y + dy2);
           break;
         case 171:
           updateObject(gameInfo.conveyorBelts, x, y + dy1, x, y + dy2);
