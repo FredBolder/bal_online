@@ -1450,21 +1450,30 @@ function drawLevel(
       mode = gameInfo.pistons[idx].mode;
       sticky = gameInfo.pistons[idx].sticky;
     }
+    showGroup = !mode.includes("ball");
     switch (mode) {
+      case "blueball":
+        color = "blue";
+        break;
       case "whiteball":
-        showGroup = false;
         color = "white";
         break;
-      case "orangeball":
-        showGroup = false;
-        color = "#ED7014";
+      case "lightblueball":
+        color = "#90D5FF";
+        break;
+      case "yellowball":
+        color = "yellow";
         break;
       case "redball":
-        showGroup = false;
         color = "red";
         break;
+      case "purpleball":
+        color = "#800080";
+        break;
+      case "orangeball":
+        color = "#ED7014";
+        break;
       default:
-        showGroup = true;
         color = "gray";
         break;
     }

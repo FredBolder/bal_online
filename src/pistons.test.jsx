@@ -331,7 +331,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
-            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "whiteball", group: 1 }],
+            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -352,7 +352,7 @@ describe("Pistons", () => {
         let info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
-        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: true, direction: "right", mode: "whiteball", group: 1 }]);
+        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }]);
     });
 
     it("checkPistonsDetector B", () => {
@@ -360,7 +360,7 @@ describe("Pistons", () => {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             orangeBalls: [{ x: 4, y: 3, direction: "none" }],
-            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "whiteball", group: 1 }],
+            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -374,7 +374,7 @@ describe("Pistons", () => {
         let info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false });
-        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "whiteball", group: 1 }]);
+        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }]);
     });
 
     it("checkPistonsDetector C", () => {
@@ -382,7 +382,7 @@ describe("Pistons", () => {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             orangeBalls: [{ x: 4, y: 3, direction: "none" }],
-            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "orangeball", group: 1 }],
+            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "orangeball", group: 1 }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -403,11 +403,39 @@ describe("Pistons", () => {
         let info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
-        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: true, direction: "right", mode: "orangeball", group: 1 }]);
+        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "orangeball", group: 1 }]);
         expect(gameInfo.orangeBalls).toEqual([{ x: 5, y: 3, direction: "none" }]);
     });
 
-
+    it("checkPistonsDetector D", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            redBalls: [{ x: 4, y: 3, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }],
+            pistons: [{ x: 5, y: 3, activated: false, sticky: false, inverted: false, direction: "left", mode: "redball", group: 1 }],
+        }
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 93, 163, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 93, 164, 163, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkPistonsDetector(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true });
+        expect(gameInfo.pistons).toEqual([{ x: 5, y: 3, activated: true, sticky: false, inverted: false, direction: "left", mode: "redball", group: 1 }]);
+        expect(gameInfo.redBalls).toEqual([{ x: 3, y: 3, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }]);
+    });
 
     // Insert new tests here
 });
