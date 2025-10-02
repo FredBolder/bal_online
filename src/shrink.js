@@ -53,15 +53,31 @@ export function shrinkObject(gameData, gameInfo, direction) {
         case 5:
             gameData[yTarget][xTarget] = 195;
             break;
+        case 8:
+        case 93:
+        case 94:
+            gameData[yTarget][xTarget] = 201;
+            idx = findElementByCoordinates(xTarget, yTarget, gameInfo.redBalls);
+            if (idx >= 0) {
+                gameInfo.redBalls.splice(idx, 1);
+            }
+            break;
         case 9:
             gameData[yTarget][xTarget] = 196;
-            idx = findElementByCoordinates(x, y, gameInfo.yellowBalls);
+            idx = findElementByCoordinates(xTarget, yTarget, gameInfo.yellowBalls);
             if (idx >= 0) {
                 gameInfo.yellowBalls.splice(idx, 1);
             }
             break;
         case 28:
             gameData[yTarget][xTarget] = 197;
+            break;
+        case 40:
+            gameData[yTarget][xTarget] = 202;
+            idx = findElementByCoordinates(xTarget, yTarget, gameInfo.orangeBalls);
+            if (idx >= 0) {
+                gameInfo.orangeBalls.splice(idx, 1);
+            }
             break;
         default:
             break;

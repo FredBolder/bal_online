@@ -1745,6 +1745,16 @@ function drawLevel(
 
   function drawSmallBall(color) {
     drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, color);
+    if (color === "red") {
+      const d1 = w1 * 0.09;
+      const d2 = w1 * 0.22;
+      const d3 = w1 * 0.05;
+      const d4 = w1 * 0.12;
+      const d5 = w1 * 0.35;
+      drawFilledCircle(ctx, xc - d1, ymin + d2, d3, "white");
+      drawFilledCircle(ctx, xc + d1, ymin + d2, d3, "white");
+      drawLine(ctx, xc - d4, ymin + d5, xc + d4, ymin + d5, "white");
+    }
   }
 
   function drawSmallGreenBall() {
@@ -2678,6 +2688,12 @@ function drawLevel(
           break;
         case 200:
           drawBallSynchroniser("white");
+          break;
+        case 201:
+          drawSmallBall("red");
+          break;
+        case 202:
+          drawSmallBall("#ED7014");
           break;
         case 1000:
           // For manual only (empty)

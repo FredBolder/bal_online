@@ -965,9 +965,11 @@ export function initGameInfo(info) {
     info.hasKey = false;
     info.hasLadder = false;
     info.hasLightBlueBall = false;
+    info.hasOrangeBall = false;
     info.hasPickaxe = false;
     info.hasPropeller = false;
     info.hasPurpleBall = false;
+    info.hasRedBall = false;
     info.hasSelfDestructingTeleportsCreator = false;
     info.hasShrinker = false;
     info.hasTelekineticPower = false;

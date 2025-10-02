@@ -127,6 +127,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: lightblueball`;
         lines.push(line);
     }
+    if (gameInfo.hasOrangeBall) {
+        line = `$has: orangeball`;
+        lines.push(line);
+    }
     if (gameInfo.hasPickaxe) {
         line = `$has: pickaxe`;
         lines.push(line);
@@ -137,6 +141,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     }
     if (gameInfo.hasPurpleBall) {
         line = `$has: purpleball`;
+        lines.push(line);
+    }
+    if (gameInfo.hasRedBall) {
+        line = `$has: redball`;
         lines.push(line);
     }
     if (gameInfo.hasSelfDestructingTeleportsCreator) {

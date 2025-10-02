@@ -1041,9 +1041,11 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasKey = false;
               gameInfo.hasLadder = false;
               gameInfo.hasLightBlueBall = false;
+              gameInfo.hasOrangeBall = false;
               gameInfo.hasPickaxe = false;
               gameInfo.hasPropeller = false;
               gameInfo.hasPurpleBall = false;
+              gameInfo.hasRedBall = false;
               gameInfo.hasSelfDestructingTeleportsCreator = false;
               gameInfo.hasShrinker = false;
               gameInfo.hasTelekineticPower = false;
@@ -1067,6 +1069,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             case "lightblueball":
               gameInfo.hasLightBlueBall = true;
               break;
+            case "orangeball":
+              gameInfo.hasOrangeBall = true;
+              break;
             case "pickaxe":
               gameInfo.hasPickaxe = true;
               break;
@@ -1075,6 +1080,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "purpleball":
               gameInfo.hasPurpleBall = true;
+              break;
+            case "redball":
+              gameInfo.hasRedBall = true;
               break;
             case "selfdestructingteleportscreator":
               gameInfo.hasSelfDestructingTeleportsCreator = true;

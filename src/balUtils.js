@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 199].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 199, 201, 202].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -29,6 +29,12 @@ function canBeTakenOrIsEmpty(gameInfo, object) {
       break;
     case 197:
       result = !gameInfo.hasPurpleBall;
+      break;
+    case 201:
+      result = !gameInfo.hasRedBall;
+      break;
+    case 202:
+      result = !gameInfo.hasOrangeBall;
       break;
     default:
       break;
@@ -654,6 +660,12 @@ export function charToNumber(c) {
     case "Ѩ":
       result = 200;
       break;
+    case "Ӭ":
+      result = 201;
+      break;
+    case "ӭ":
+      result = 202;
+      break;
     case "|":
       result = 1000;
       break;
@@ -879,7 +891,9 @@ export function dropObject(gameData, gameInfo, object) {
   let yTarget = -1;
 
   if (((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) ||
+    ((object === "orangeBall") && !gameInfo.hasOrangeBall) ||
     ((object === "purpleBall") && !gameInfo.hasPurpleBall) ||
+    ((object === "redBall") && !gameInfo.hasRedBall) ||
     ((object === "whiteBall") && !gameInfo.hasWhiteBall) ||
     ((object === "yellowBall") && !gameInfo.hasYellowBall)) {
     return result;
@@ -900,9 +914,19 @@ export function dropObject(gameData, gameInfo, object) {
         gameData[yTarget][xTarget] = 5;
         gameInfo.hasLightBlueBall = false;
         break;
+      case "orangeBall":
+        gameData[yTarget][xTarget] = 40;
+        gameInfo.orangeBalls.push({ x: xTarget, y: yTarget, direction: "none" });
+        gameInfo.hasOrangeBall = false;
+        break;
       case "purpleBall":
         gameData[yTarget][xTarget] = 28;
         gameInfo.hasPurpleBall = false;
+        break;
+      case "redBall":
+        gameData[yTarget][xTarget] = 8;
+        gameInfo.redBalls.push({ x: xTarget, y: yTarget, smart: 0, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 });
+        gameInfo.hasRedBall = false;
         break;
       case "whiteBall":
         gameData[yTarget][xTarget] = 4;
@@ -1654,6 +1678,12 @@ export function numberToChar(n) {
     case 200:
       result = "Ѩ";
       break;
+    case 201:
+      result = "Ӭ";
+      break;
+    case 202:
+      result = "ӭ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -1984,7 +2014,16 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
 function take(gameData, gameInfo, result, x, y) {
   let idx = -1;
-  switch (gameData[y][x]) {
+  const obj = gameData[y][x];
+
+  function smallBallText(color) {
+    let msg = `You have now one ${color} ball that you can drop at the right of you by pressing the Space bar or the A button. `;
+    msg += "If there is no space on the right, the ball is dropped on the left if there is space there. ";
+    msg += "It is also possible to drop the ball after using a teleport or a travel gate.";
+    return msg;
+  }
+
+  switch (obj) {
     case 0:
       result.sound = "";
       break;
@@ -2074,9 +2113,7 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 192:
       if (!gameInfo.hasWhiteBall) {
-        result.message = "You have now one white ball that you can drop at the right of you by pressing the Space bar or the A button. ";
-        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
-        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        result.message = smallBallText("white");
         gameInfo.hasWhiteBall = true;
       }
       break;
@@ -2096,33 +2133,39 @@ function take(gameData, gameInfo, result, x, y) {
       break;
     case 195:
       if (!gameInfo.hasLightBlueBall) {
-        result.message = "You have now one light blue ball that you can drop at the right of you by pressing the Space bar or the A button. ";
-        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
-        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        result.message = smallBallText("light blue");
         gameInfo.hasLightBlueBall = true;
       }
       break;
     case 196:
       if (!gameInfo.hasYellowBall) {
-        result.message = "You have now one yellow ball that you can drop at the right of you by pressing the Space bar or the A button. ";
-        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
-        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        result.message = smallBallText("yellow");
         gameInfo.hasYellowBall = true;
       }
       break;
     case 197:
       if (!gameInfo.hasPurpleBall) {
-        result.message = "You have now one purple ball that you can drop at the right of you by pressing the Space bar or the A button. ";
-        result.message += "If there is no space on the right, the ball is dropped on the left if there is space there. "
-        result.message += "It is also possible to drop the ball after using a teleport or a travel gate."
+        result.message = smallBallText("purple");
         gameInfo.hasPurpleBall = true;
       }
       break;
     case 199:
       if (!gameInfo.hasShrinker) {
-        result.message = "You have now a shrinker. You can shrink white, light blue, yellow and purple balls by pressing the Space bar or ";
+        result.message = "You have now a shrinker. You can shrink white, light blue, red, yellow, purple and orange balls by pressing the Space bar or ";
         result.message += "the A button and after that pressing a move key or button to indicate the direction (for example the right arrow key)."
         gameInfo.hasShrinker = true;
+      }
+      break;
+    case 201:
+      if (!gameInfo.hasRedBall) {
+        result.message = smallBallText("red");
+        gameInfo.hasRedBall = true;
+      }
+      break;
+    case 202:
+      if (!gameInfo.hasOrangeBall) {
+        result.message = smallBallText("orange");
+        gameInfo.hasOrangeBall = true;
       }
       break;
     default:

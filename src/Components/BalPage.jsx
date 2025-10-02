@@ -89,7 +89,7 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -191,9 +191,11 @@ function BalPage() {
     let saveKey = false;
     let saveLadder = false;
     let saveLightBlueBall = false;
+    let saveOrangeBall = false;
     let savePickaxe = false;
     let savePropeller = false;
     let savePurpleBall = false;
+    let saveRedBall = false;
     let saveSelfDestructingTeleportsCreator = false;
     let saveShrinker = false;
     let saveTelekineticPower = false;
@@ -208,9 +210,11 @@ function BalPage() {
       gameInfo.hasKey = saveKey;
       gameInfo.hasLadder = saveLadder;
       gameInfo.hasLightBlueBall = saveLightBlueBall;
+      gameInfo.hasOrangeBall = saveOrangeBall;
       gameInfo.hasPickaxe = savePickaxe;
       gameInfo.hasPropeller = savePropeller;
       gameInfo.hasPurpleBall = savePurpleBall;
+      gameInfo.hasRedBall = saveRedBall;
       gameInfo.hasSelfDestructingTeleportsCreator = saveSelfDestructingTeleportsCreator;
       gameInfo.hasShrinker = saveShrinker;
       gameInfo.hasTelekineticPower = saveTelekineticPower;
@@ -226,9 +230,11 @@ function BalPage() {
       saveKey = gameInfo.hasKey;
       saveLadder = gameInfo.hasLadder;
       saveLightBlueBall = gameInfo.hasLightBlueBall;
+      saveOrangeBall = gameInfo.hasOrangeBall;
       savePickaxe = gameInfo.hasPickaxe;
       savePropeller = gameInfo.hasPropeller;
       savePurpleBall = gameInfo.hasPurpleBall;
+      saveRedBall = gameInfo.hasRedBall;
       saveSelfDestructingTeleportsCreator = gameInfo.hasSelfDestructingTeleportsCreator;
       saveShrinker = gameInfo.hasShrinker;
       saveTelekineticPower = gameInfo.hasTelekineticPower;
@@ -795,6 +801,21 @@ function BalPage() {
     if (gameInfo.hasLightBlueBall) {
       addItem("light blue ball");
     }
+    if (gameInfo.hasOrangeBall) {
+      addItem("orange ball");
+    }
+    if (gameInfo.hasPickaxe) {
+      addItem("pickaxe");
+    }
+    if (gameInfo.hasPropeller) {
+      addItem("propeller");
+    }
+    if (gameInfo.hasPurpleBall) {
+      addItem("purple ball");
+    }
+    if (gameInfo.hasRedBall) {
+      addItem("red ball");
+    }
     if (gameInfo.hasSelfDestructingTeleportsCreator) {
       addItem("self-destructing teleports creator");
     }
@@ -806,15 +827,6 @@ function BalPage() {
     }
     if (gameInfo.hasTeleportsCreator) {
       addItem("teleports creator");
-    }
-    if (gameInfo.hasPickaxe) {
-      addItem("pickaxe");
-    }
-    if (gameInfo.hasPropeller) {
-      addItem("propeller");
-    }
-    if (gameInfo.hasPurpleBall) {
-      addItem("purple ball");
     }
     if (gameInfo.hasWeakStone) {
       addItem("weak stone");
@@ -927,12 +939,12 @@ function BalPage() {
             break;
           case 4:
             // Balls
-            arr1 = [2, 3, 140, 168, 192, 195, 196, 197, 4, 200, 5, 126, 127, 128, 129, 130];
-            arr2 = [28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 199];
+            arr1 = [2, 3, 140, 168, 192, 195, 196, 201, 197, 202, 4, 200, 5, 126, 127, 128];
+            arr2 = [129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 199];
             break;
           case 5:
             // Red balls
-            arr1 = [8, 2045, 2046, 2047, 105, 95, 96];
+            arr1 = [8, 2045, 2046, 2047, 105, 95, 96, 120];
             arr2 = [0];
             break;
           case 6:
@@ -1002,7 +1014,7 @@ function BalPage() {
           case 3:
             // Teleports
             arr1 = [31, 92, 170, 193, 194];
-            arr2 = [0];
+            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 4:
             // Music box
@@ -1273,12 +1285,6 @@ function BalPage() {
     switch (e.key) {
       case " ": {
         actions = [];
-        if (gameInfo.hasLightBlueBall) {
-          actions.push("Drop light blue ball");
-        }
-        if (gameInfo.hasPurpleBall) {
-          actions.push("Drop purple ball");
-        }
         if (gameInfo.hasTeleportsCreator) {
           actions.push("Create teleports");
         }
@@ -1288,8 +1294,20 @@ function BalPage() {
         if (gameInfo.hasWhiteBall) {
           actions.push("Drop white ball");
         }
+        if (gameInfo.hasLightBlueBall) {
+          actions.push("Drop light blue ball");
+        }
         if (gameInfo.hasYellowBall) {
           actions.push("Drop yellow ball");
+        }
+        if (gameInfo.hasRedBall) {
+          actions.push("Drop red ball");
+        }
+        if (gameInfo.hasPurpleBall) {
+          actions.push("Drop purple ball");
+        }
+        if (gameInfo.hasOrangeBall) {
+          actions.push("Drop orange ball");
         }
         if (gameInfo.hasShrinker) {
           actions.push("Shrink object");
@@ -1313,17 +1331,23 @@ function BalPage() {
           case "Create self-destructing teleports":
             gameInfo.action = "createSelfDestructingTeleports";
             break;
+          case "Drop white ball":
+            info = dropObject(gameData, gameInfo, "whiteBall");
+            break;
           case "Drop light blue ball":
             info = dropObject(gameData, gameInfo, "lightBlueBall");
+            break;
+          case "Drop yellow ball":
+            info = dropObject(gameData, gameInfo, "yellowBall");
+            break;
+          case "Drop red ball":
+            info = dropObject(gameData, gameInfo, "redBall");
             break;
           case "Drop purple ball":
             info = dropObject(gameData, gameInfo, "purpleBall");
             break;
-          case "Drop white ball":
-            info = dropObject(gameData, gameInfo, "whiteBall");
-            break;
-          case "Drop yellow ball":
-            info = dropObject(gameData, gameInfo, "yellowBall");
+          case "Drop orange ball":
+            info = dropObject(gameData, gameInfo, "orangeBall");
             break;
           case "Shrink object":
             gameInfo.action = "shrink";
@@ -2196,7 +2220,7 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("groups")) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
+              if (((createLevelMenu === menuToNumber("groups")) || (createLevelMenu === menuToNumber("teleports"))) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
                 changeGroup(gameInfo, column, row, createLevelObject - 2000);
               }
 
