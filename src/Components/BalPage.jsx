@@ -89,7 +89,7 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -1787,7 +1787,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3309;
+        gameVars.currentLevel = 3311;
       }
       initLevel(gameVars.currentLevel);
     }

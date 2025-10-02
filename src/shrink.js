@@ -4,6 +4,8 @@ export function shrinkObject(gameData, gameInfo, direction) {
     let deltaX = 0;
     let deltaY = 0;
     let idx = -1;
+    const maxX = gameData[0].length - 1;
+    const maxY = gameData.length - 1;
     const x = gameInfo.blueBall.x;
     const y = gameInfo.blueBall.y;
     let xTarget = -1;
@@ -23,20 +25,28 @@ export function shrinkObject(gameData, gameInfo, direction) {
             deltaY = 1;
             break;
         case "upleft":
-            deltaX = -1;
-            deltaY = -1;
+            if ((y > 0) && (gameData[y - 1][x] === 0)) {
+                deltaX = -1;
+                deltaY = -1;
+            }
             break;
         case "upright":
-            deltaX = 1;
-            deltaY = -1;
+            if ((y > 0) && (gameData[y - 1][x] === 0)) {
+                deltaX = 1;
+                deltaY = -1;
+            }
             break;
         case "downleft":
-            deltaX = -1;
-            deltaY = 1;
+            if ((x > 0) && (y < maxY) && (gameData[y][x - 1] === 0)) {
+                deltaX = -1;
+                deltaY = 1;
+            }
             break;
         case "downright":
-            deltaX = 1;
-            deltaY = 1;
+            if ((x < maxX) && (y < maxY) && (gameData[y][x + 1] === 0)) {
+                deltaX = 1;
+                deltaY = 1;
+            }
             break;
         default:
             break;
@@ -46,6 +56,9 @@ export function shrinkObject(gameData, gameInfo, direction) {
     }
     xTarget = x + deltaX;
     yTarget = y + deltaY;
+    if ((xTarget < 0) || (xTarget > maxX) || (yTarget < 0) || (yTarget > maxY)) {
+        return;
+    }
     switch (gameData[yTarget][xTarget]) {
         case 4:
             gameData[yTarget][xTarget] = 192;

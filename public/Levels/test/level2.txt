@@ -1,22 +1,31 @@
-$inverted: 14, 10, yes
-$sticky: 14, 10, yes
+$has: coilspring
+$has: key
+$has: lightblueball
+$has: orangeball
+$has: pickaxe
+$has: purpleball
+$has: redball
+$has: shrinker
+$has: telekineticpower
+$has: whiteball
+$has: yellowball
 11111111111111111111
-1      1      11α 81
-1      1      1   11
-1      1      18  β1
-1      1      11   1
-1      3     41    1
-1            41    1
-1      1     41    1
-1      < 5   2     1
-1      11111111ЏЏЏ11
-1           11Ì   81
-1          411ß   81
-1          4      11
-1     111111111ЏЏЏ11
-1             8   81
-1             1ѨѨѨ11
-1        111111   11
-1           3 <   11
-1             1  m11
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+13                 1
+1  2               1
 11111111111111111111
