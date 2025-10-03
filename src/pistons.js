@@ -3,7 +3,7 @@ import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
-    return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200].includes(element);
+    return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203].includes(element);
 }
 
 export function checkPistonsDetector(gameData, gameInfo) {
@@ -16,7 +16,7 @@ export function checkPistonsDetector(gameData, gameInfo) {
         let x = -1;
         let y = -1;
         const piston = gameInfo.pistons[i];
-        if (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball"].includes(piston.mode)) {
+        if (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball"].includes(piston.mode)) {
             x = piston.x;
             y = piston.y;
             switch (piston.direction) {
@@ -43,7 +43,8 @@ export function checkPistonsDetector(gameData, gameInfo) {
                 ((gameData[y][x] === 9) && (piston.mode === "yellowball")) ||
                 ([8, 93, 94].includes(gameData[y][x]) && (piston.mode === "redball")) ||
                 ((gameData[y][x] === 28) && (piston.mode === "purpleball")) ||
-                ((gameData[y][x] === 40) && (piston.mode === "orangeball"));
+                ((gameData[y][x] === 40) && (piston.mode === "orangeball")) ||
+                ((gameData[y][x] === 203) && (piston.mode === "pinkball"));
             if (activate) {
                 if (activatePiston(gameData, gameInfo, piston, piston.mode)) {
                     result.updated = true;
@@ -384,7 +385,7 @@ export function changePistonSticky(gameInfo, x, y) {
 }
 
 export function pistonModes() {
-    return ["toggle", "momentary", "repeatfast", "repeatslow", "blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball"];
+    return ["toggle", "momentary", "repeatfast", "repeatslow", "blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball"];
 }
 
 

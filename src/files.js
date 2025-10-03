@@ -135,6 +135,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: pickaxe`;
         lines.push(line);
     }
+    if (gameInfo.hasPinkBall) {
+        line = `$has: pinkball`;
+        lines.push(line);
+    }
     if (gameInfo.hasPropeller) {
         line = `$has: propeller`;
         lines.push(line);

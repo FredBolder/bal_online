@@ -16,7 +16,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 199, 201, 202].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -36,6 +36,9 @@ function canBeTakenOrIsEmpty(gameInfo, object) {
     case 202:
       result = !gameInfo.hasOrangeBall;
       break;
+    case 204:
+      result = !gameInfo.hasPinkBall;
+      break;
     default:
       break;
   }
@@ -48,7 +51,7 @@ function canMoveAlone(gameData, gameInfo, x, y) {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200].includes(el)) {
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200, 203].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -67,7 +70,7 @@ function canMoveAlone(gameData, gameInfo, x, y) {
         idx = findElementByCoordinates(x, y, gameInfo.pistons);
         if (idx >= 0) {
           const piston = gameInfo.pistons[idx];
-          if (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball"].includes(piston.mode) && !piston.activated) {
+          if (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball"].includes(piston.mode) && !piston.activated) {
             result = true;
           }
         }
@@ -666,6 +669,12 @@ export function charToNumber(c) {
     case "ӭ":
       result = 202;
       break;
+    case "Ѥ":
+      result = 203;
+      break;
+    case "ѥ":
+      result = 204;
+      break;
     case "|":
       result = 1000;
       break;
@@ -892,6 +901,7 @@ export function dropObject(gameData, gameInfo, object) {
 
   if (((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) ||
     ((object === "orangeBall") && !gameInfo.hasOrangeBall) ||
+    ((object === "pinkBall") && !gameInfo.hasPinkBall) ||
     ((object === "purpleBall") && !gameInfo.hasPurpleBall) ||
     ((object === "redBall") && !gameInfo.hasRedBall) ||
     ((object === "whiteBall") && !gameInfo.hasWhiteBall) ||
@@ -918,6 +928,11 @@ export function dropObject(gameData, gameInfo, object) {
         gameData[yTarget][xTarget] = 40;
         gameInfo.orangeBalls.push({ x: xTarget, y: yTarget, direction: "none" });
         gameInfo.hasOrangeBall = false;
+        break;
+      case "pinkBall":
+        gameData[yTarget][xTarget] = 203;
+        gameInfo.pinkBalls.push({ x: xTarget, y: yTarget });
+        gameInfo.hasPinkBall = false;
         break;
       case "purpleBall":
         gameData[yTarget][xTarget] = 28;
@@ -1684,6 +1699,12 @@ export function numberToChar(n) {
     case 202:
       result = "ӭ";
       break;
+    case 203:
+      result = "Ѥ";
+      break;
+    case 204:
+      result = "ѥ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2166,6 +2187,12 @@ function take(gameData, gameInfo, result, x, y) {
       if (!gameInfo.hasOrangeBall) {
         result.message = smallBallText("orange");
         gameInfo.hasOrangeBall = true;
+      }
+      break;
+    case 204:
+      if (!gameInfo.hasPinkBall) {
+        result.message = smallBallText("pink");
+        gameInfo.hasPinkBall = true;
       }
       break;
     default:

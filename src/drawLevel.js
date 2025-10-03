@@ -1424,6 +1424,10 @@ function drawLevel(
     ctx.stroke();
   }
 
+  function drawPinkBall() {
+    ctx.drawImage(elements.elementPink, xmin, ymin, w1, w2);
+  }
+
   function drawPiston(x, y, direction) {
     let color = "gray";
     let d1 = w1 * 0.1;
@@ -1472,6 +1476,9 @@ function drawLevel(
         break;
       case "orangeball":
         color = "#ED7014";
+        break;
+      case "pinkball":
+        color = "#FF69B4";
         break;
       default:
         color = "gray";
@@ -2694,6 +2701,12 @@ function drawLevel(
           break;
         case 202:
           drawSmallBall("#ED7014");
+          break;
+        case 203:
+          drawPinkBall();
+          break;
+        case 204:
+          drawSmallBall("#FF69B4");
           break;
         case 1000:
           // For manual only (empty)

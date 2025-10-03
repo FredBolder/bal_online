@@ -55,6 +55,7 @@ import imgGreen from "../Images/green_ball.svg";
 import imgLightBlue from "../Images/light_blue_ball.svg";
 import imgMusicNote from "../Images/music_note.svg";
 import imgOrange from "../Images/orange_ball.svg";
+import imgPink from "../Images/pink_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
 import imgRed from "../Images/red_ball.svg";
 import imgRedFishLeft from "../Images/red_fish_left.png";
@@ -89,7 +90,7 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -134,6 +135,7 @@ function BalPage() {
   const elementGameButtons = useRef(null);
   const elementMusicNote = useRef(null);
   const elementOrange = useRef(null);
+  const elementPink = useRef(null);
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
   const elementRedFishLeft = useRef(null);
@@ -193,6 +195,7 @@ function BalPage() {
     let saveLightBlueBall = false;
     let saveOrangeBall = false;
     let savePickaxe = false;
+    let savePinkBall = false;
     let savePropeller = false;
     let savePurpleBall = false;
     let saveRedBall = false;
@@ -212,6 +215,7 @@ function BalPage() {
       gameInfo.hasLightBlueBall = saveLightBlueBall;
       gameInfo.hasOrangeBall = saveOrangeBall;
       gameInfo.hasPickaxe = savePickaxe;
+      gameInfo.hasPinkBall = savePinkBall;
       gameInfo.hasPropeller = savePropeller;
       gameInfo.hasPurpleBall = savePurpleBall;
       gameInfo.hasRedBall = saveRedBall;
@@ -232,6 +236,7 @@ function BalPage() {
       saveLightBlueBall = gameInfo.hasLightBlueBall;
       saveOrangeBall = gameInfo.hasOrangeBall;
       savePickaxe = gameInfo.hasPickaxe;
+      savePinkBall = gameInfo.hasPinkBall;
       savePropeller = gameInfo.hasPropeller;
       savePurpleBall = gameInfo.hasPurpleBall;
       saveRedBall = gameInfo.hasRedBall;
@@ -807,6 +812,9 @@ function BalPage() {
     if (gameInfo.hasPickaxe) {
       addItem("pickaxe");
     }
+    if (gameInfo.hasPinkBall) {
+      addItem("pink ball");
+    }
     if (gameInfo.hasPropeller) {
       addItem("propeller");
     }
@@ -939,8 +947,8 @@ function BalPage() {
             break;
           case 4:
             // Balls
-            arr1 = [2, 3, 140, 168, 192, 195, 196, 201, 197, 202, 4, 200, 5, 126, 127, 128];
-            arr2 = [129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 199];
+            arr1 = [2, 3, 140, 168, 192, 195, 196, 201, 197, 202, 204, 4, 200, 5, 126, 127];
+            arr2 = [128, 129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 199];
             break;
           case 5:
             // Red balls
@@ -1309,6 +1317,9 @@ function BalPage() {
         if (gameInfo.hasOrangeBall) {
           actions.push("Drop orange ball");
         }
+        if (gameInfo.hasPinkBall) {
+          actions.push("Drop pink ball");
+        }
         if (gameInfo.hasShrinker) {
           actions.push("Shrink object");
         }
@@ -1348,6 +1359,9 @@ function BalPage() {
             break;
           case "Drop orange ball":
             info = dropObject(gameData, gameInfo, "orangeBall");
+            break;
+          case "Drop pink ball":
+            info = dropObject(gameData, gameInfo, "pinkBall");
             break;
           case "Shrink object":
             gameInfo.action = "shrink";
@@ -1868,6 +1882,7 @@ function BalPage() {
       elementLightBlue: elementLightBlue.current,
       elementMusicNote: elementMusicNote.current,
       elementOrange: elementOrange.current,
+      elementPink: elementPink.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
       elementRedFishLeft: elementRedFishLeft.current,
@@ -1918,6 +1933,7 @@ function BalPage() {
       elementLightBlue: elementLightBlue.current,
       elementMusicNote: elementMusicNote.current,
       elementOrange: elementOrange.current,
+      elementPink: elementPink.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
       elementRedFishLeft: elementRedFishLeft.current,
@@ -2874,6 +2890,9 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementOrange} src={imgOrange} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementPink} src={imgPink} />
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementPurple} src={imgPurple} />

@@ -341,7 +341,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "propeller", 
+              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller", 
                 "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball", 
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
@@ -1043,6 +1043,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasLightBlueBall = false;
               gameInfo.hasOrangeBall = false;
               gameInfo.hasPickaxe = false;
+              gameInfo.hasPinkBall = false;
               gameInfo.hasPropeller = false;
               gameInfo.hasPurpleBall = false;
               gameInfo.hasRedBall = false;
@@ -1074,6 +1075,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "pickaxe":
               gameInfo.hasPickaxe = true;
+              break;
+            case "pinkball":
+              gameInfo.hasPinkBall = true;
               break;
             case "propeller":
               gameInfo.hasPropeller = true;

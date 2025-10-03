@@ -64,20 +64,12 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 9: {
-                    let yellowBall = {
-                        x: j,
-                        y: i,
-                        direction: "none"
-                    };
+                    let yellowBall = { x: j, y: i, direction: "none" };
                     result.yellowBalls.push(yellowBall);
                     break;
                 }
                 case 40: {
-                    let orangeBall = {
-                        x: j,
-                        y: i,
-                        direction: "none"
-                    };
+                    let orangeBall = { x: j, y: i, direction: "none" };
                     result.orangeBalls.push(orangeBall);
                     break;
                 }
@@ -197,25 +189,25 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 157: {
-                    let musicBox = { 
-                        x: j, 
-                        y: i, 
-                        instrument: "xylophone", 
-                        volume: 90, 
-                        mode: "note", 
-                        active: false, 
+                    let musicBox = {
+                        x: j,
+                        y: i,
+                        instrument: "xylophone",
+                        volume: 90,
+                        mode: "note",
+                        active: false,
                         ended: false,
-                        delay: 5, 
-                        delayCounter: 0, 
-                        notes: ["C4"], 
-                        noteIndex: 0, 
-                        part: "bottom", 
+                        delay: 5,
+                        delayCounter: 0,
+                        notes: ["C4"],
+                        noteIndex: 0,
+                        part: "bottom",
                         stepsPerMeasure: 0,
                         onOne: false,
                         chordType: "?",
                         chordsPlaced: false,
-                        direction: "up", 
-                        group: 1 
+                        direction: "up",
+                        group: 1
                     };
                     result.musicBoxes.push(musicBox);
                     break;
@@ -277,6 +269,11 @@ export function getGameInfo(backData, gameData) {
                         skip: false
                     };
                     result.whiteBallSynchronisers.push(whiteBallSynchroniser);
+                    break;
+                }
+                case 203: {
+                    let pinkBall = { x: j, y: i };
+                    result.pinkBalls.push(pinkBall);
                     break;
                 }
                 default:
@@ -910,6 +907,23 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                         }
                         info = `White ball synchroniser, ` + extraInfo;
                         break;
+                    case 203:
+                        idx = findElementByCoordinates(x, y, gameInfo.pinkBalls);
+                        if (idx >= 0) {
+                            obj = gameInfo.pinkBalls[idx];
+                            extraInfo = `object information found`;
+                        }
+                        info = `Pink ball, ` + extraInfo;
+                        break;
+                    case 201:
+                        info = `Small red ball`;
+                        break;
+                    case 202:
+                        info = `Small orange ball`;
+                        break;
+                    case 204:
+                        info = `Small pink ball`;
+                        break;
                     default:
                         break;
                 }
@@ -967,6 +981,7 @@ export function initGameInfo(info) {
     info.hasLightBlueBall = false;
     info.hasOrangeBall = false;
     info.hasPickaxe = false;
+    info.hasPinkBall = false;
     info.hasPropeller = false;
     info.hasPurpleBall = false;
     info.hasRedBall = false;
@@ -984,6 +999,7 @@ export function initGameInfo(info) {
     info.movers = [];
     info.musicBoxes = [];
     info.orangeBalls = [];
+    info.pinkBalls = [];
     info.pistons = [];
     info.pistonsTriggers = [];
     info.player = 1;

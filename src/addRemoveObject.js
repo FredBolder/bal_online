@@ -278,6 +278,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.whiteBallSynchronisers.push(whiteBallSynchroniser);
             break;
         }
+        case 203: {
+            let pinkBall = { x, y };
+            gameInfo.pinkBalls.push(pinkBall);
+            break;
+        }
         default:
             break;
     }
@@ -538,6 +543,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.whiteBallSynchronisers);
             if (idx >= 0) {
                 gameInfo.whiteBallSynchronisers.splice(idx, 1);
+            }
+            break;
+        case 203:
+            idx = findElementByCoordinates(x, y, gameInfo.pinkBalls);
+            if (idx >= 0) {
+                gameInfo.pinkBalls.splice(idx, 1);
             }
             break;
         default:

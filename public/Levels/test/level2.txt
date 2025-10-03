@@ -1,31 +1,21 @@
-$has: coilspring
-$has: key
-$has: lightblueball
-$has: orangeball
-$has: pickaxe
-$has: purpleball
-$has: redball
-$has: shrinker
-$has: telekineticpower
-$has: whiteball
-$has: yellowball
-11111111111111111111
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-1                  1
-13                 1
-1  2               1
-11111111111111111111
+$has: pinkball
+11111111111111111111111111111111
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+13            Љ                1
+1                 2    Ѥ       1
+11111111111111111111111111111111
