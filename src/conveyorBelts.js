@@ -9,6 +9,7 @@ function moveableByConveyorBelt(gameInfo, n) {
         case 40:
         case 93:
         case 94:
+        case 203:
             result = true;
             break;
         case 2:

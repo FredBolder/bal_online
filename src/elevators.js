@@ -9,6 +9,7 @@ function moveableByElevator(gameInfo, n) {
     case 40:
     case 93:
     case 94:
+    case 203:
       result = true;
       break;
     case 2:
@@ -105,7 +106,6 @@ export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
 
 export function moveElevators(gameData, gameInfo, gameVars) {
   const gravityDown = (gameVars.gravity === "down");
-  let stop = false;
   let updated = false;
 
   for (let i = 0; i < gameInfo.elevators.length; i++) {
@@ -121,14 +121,13 @@ export function moveElevators(gameData, gameInfo, gameVars) {
     // Check in which directions it is possible to move
     emptyUp = -1;
     upPossible = true;
-    for (let j = elevator.y - 1; ((j >= 0) && (emptyUp === -1)); j--) {
-      if (emptyUp === -1 && gameData[j][elevator.x] === 0) {
+    for (let j = elevator.y - 1; j >= 0; j--) {
+      if (gameData[j][elevator.x] === 0) {
         emptyUp = j;
+        break;
       }
-      if (emptyUp === -1) {
-        if (!moveableByElevator(gameInfo, gameData[j][elevator.x])) {
-          upPossible = false;
-        }
+      if (!moveableByElevator(gameInfo, gameData[j][elevator.x])) {
+        upPossible = false;
       }
     }
     if (emptyUp === -1) {
@@ -137,14 +136,13 @@ export function moveElevators(gameData, gameInfo, gameVars) {
 
     emptyDown = -1;
     downPossible = true;
-    for (let j = elevator.y + 1; ((j < gameData.length) && (emptyDown === -1)); j++) {
-      if (emptyDown === -1 && gameData[j][elevator.x] === 0) {
+    for (let j = elevator.y + 1; j < gameData.length; j++) {
+      if (gameData[j][elevator.x] === 0) {
         emptyDown = j;
+        break;
       }
-      if (emptyDown === -1) {
-        if (!moveableByElevator(gameInfo, gameData[j][elevator.x])) {
-          downPossible = false;
-        }
+      if (!moveableByElevator(gameInfo, gameData[j][elevator.x])) {
+        downPossible = false;
       }
     }
     if (emptyDown === -1) {
@@ -176,45 +174,43 @@ export function moveElevators(gameData, gameInfo, gameVars) {
       if (elevator.up) {
         // Move up
         if (upPossible) {
-          elevator.y = y - 1;
-          gameData[y][x] = 0;
+          gameData[elevator.y][elevator.x] = 0;
+          elevator.y--;
           updated = true;
           if (gravityDown) {
             for (let j = emptyUp; j < y - 1; j++) {
               moveObject(gameData, gameInfo, x, j + 1, x, j);
             }
           } else {
-            stop = false;
-            for (let j = y + 1; ((j < gameData.length) && !stop); j++) {
-              if (!stop && (gameData[j - 1][x] === 0) && moveableByElevator(gameInfo, gameData[j][x])) {
+            for (let j = y + 1; j < gameData.length; j++) {
+              if ((gameData[j - 1][x] === 0) && moveableByElevator(gameInfo, gameData[j][x])) {
                 moveObject(gameData, gameInfo, x, j, x, j - 1);
               } else {
-                stop = true;
+                break;
               }
             }
           }
-          gameData[y - 1][x] = 106;
+          gameData[elevator.y][elevator.x] = 106;
         }
       } else {
         // Move down
         if (downPossible) {
-          gameData[y][x] = 0;
-          elevator.y = y + 1;
+          gameData[elevator.y][elevator.x] = 0;
+          elevator.y++;
           if (gravityDown) {
-            stop = false;
-            for (let j = y - 1; ((j >= 0) && !stop); j--) {
-              if (!stop && (gameData[j + 1][x] === 0) && moveableByElevator(gameInfo, gameData[j][x])) {
+            for (let j = y - 1; j >= 0; j--) {
+              if ((gameData[j + 1][x] === 0) && moveableByElevator(gameInfo, gameData[j][x])) {
                 moveObject(gameData, gameInfo, x, j, x, j + 1);
               } else {
-                stop = true;
+                break;
               }
             }
           } else {
-            for (let j = emptyDown; j > y; j--) {
+            for (let j = emptyDown; j > y + 1; j--) {
               moveObject(gameData, gameInfo, x, j - 1, x, j);
             }
           }
-          gameData[y + 1][x] = 6;
+          gameData[elevator.y][elevator.x] = 6;
           updated = true;
         }
       }

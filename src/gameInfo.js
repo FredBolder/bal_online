@@ -1,4 +1,5 @@
 import { findElementByCoordinates } from "./balUtils.js";
+import { skipFallingTicks } from "./pinkBalls.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
 export function getGameInfo(backData, gameData) {
@@ -272,7 +273,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 203: {
-                    let pinkBall = { x: j, y: i };
+                    let pinkBall = { x: j, y: i, delete: false, skipFalling: skipFallingTicks() };
                     result.pinkBalls.push(pinkBall);
                     break;
                 }
@@ -1043,6 +1044,8 @@ export function initGameVars(vars) {
     vars.hint = "";
     vars.laser = null;
     vars.orangeCounter = 0;
+    vars.pinkCounter = 0;
+    vars.pinkCountTo = 5;
     vars.pistonGroupsActivated = [];
     for (let i = 0; i < 32; i++) {
         vars.pistonGroupsActivated.push(false);

@@ -14,6 +14,7 @@ import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
 import { checkMusicBoxes } from "./musicBoxes.js"
 import { moveOrangeBalls } from "./orangeBalls.js";
+import { movePinkBalls } from "./pinkBalls.js";
 import { checkPistonsDetector, checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
 import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./teleports.js";
 import { moveRedBalls } from "./redBalls.js";
@@ -339,6 +340,14 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             gameVars.elecActiveSaved = gameInfo.electricityActive;
             gameVars.electricityCounter++;
         }
+
+        if (gameVars.pinkCounter >= gameVars.pinkCountTo) {
+            gameVars.pinkCounter = 0;
+            if (movePinkBalls(backData, gameData, gameInfo, gameVars)) {
+                updateCanvas = true;
+            }
+        }
+        gameVars.pinkCounter++;
 
         info = checkFalling(backData, gameData, gameInfo, gameVars);
         if (info.update) {

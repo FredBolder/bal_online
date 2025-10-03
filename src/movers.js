@@ -7,7 +7,7 @@ export function checkMovers(gameData, gameInfo) {
         const mover = gameInfo.movers[i];
         if (mover.y > 0) {
             const el = gameData[mover.y - 1][mover.x];
-            if ([2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173].includes(el)) {
+            if ([2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203].includes(el)) {
                 switch (mover.direction) {
                     case "left":
                         if (mover.x > 0) {

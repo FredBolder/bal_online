@@ -1,6 +1,6 @@
 import { moveObject } from "./balUtils.js";
 
-const moveableOrEmpty = [0, 2, 4, 8, 40, 93, 94];
+const moveableOrEmpty = [0, 2, 4, 8, 40, 93, 94, 203];
 
 export function checkForces(gameData, gameInfo) {
     let elBottom = -1;
