@@ -19,6 +19,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                     if (elementUnder === 22) {
                         // lava
                         pinkBall.delete = true;
+                        gameData[pinkBall.y][pinkBall.x] = 0;
                         update = true;
                     }
 

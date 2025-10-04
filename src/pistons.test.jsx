@@ -437,5 +437,35 @@ describe("Pistons", () => {
         expect(gameInfo.redBalls).toEqual([{ x: 3, y: 3, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }]);
     });
 
+    it("checkPistonsDetector E", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            pinkBalls: [{ x: 4, y: 3, delete: false, skipFalling: 0 }],
+            pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "pinkball", group: 1 }],
+        }
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 165, 203, 0, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 165, 166, 203, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkPistonsDetector(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true });
+        expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "pinkball", group: 1 }]);
+        expect(gameInfo.pinkBalls).toEqual([{ x: 5, y: 3, delete: false, skipFalling: 0 }]);
+    });
+
     // Insert new tests here
 });
