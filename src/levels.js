@@ -17,7 +17,7 @@ const series3End = 426;
 const series4Start = 700;
 const series4End = 749;
 const series5Start = 3300;
-const series5End = 3311;
+const series5End = 3313;
 const seriesSmallStart = 750;
 const seriesSmallEnd = 764;
 const seriesExtremeStart = 901;
@@ -317,7 +317,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "disappearingstone", "fish", "elevator"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "pinkball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -1007,6 +1007,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   break;
                 case "fish":
                   gameVars.fishCountTo = gameTicks;
+                  break;
+                case "pinkball":
+                  gameVars.pinkCountTo = gameTicks;
                   break;
                 default:
                   break;

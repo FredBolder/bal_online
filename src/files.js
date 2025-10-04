@@ -92,6 +92,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.pinkCountTo !== 5) {
+        line = `$gameticks: pinkball, ${gameVars.pinkCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.hint !== "") {
         line = `$hint: ${gameVars.hint}`;
         lines.push(line);

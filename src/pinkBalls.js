@@ -5,7 +5,6 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
     let update = false;
     let forceDown = false;
     let forceUp = false;
-
     // Depending on the gravity direction, falling has another meaning
 
     // GRAVITY DOWN (NORMAL)

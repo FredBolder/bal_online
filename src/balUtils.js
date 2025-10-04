@@ -2053,6 +2053,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
     refs.push(gameInfo.orangeBalls[i]);
   }
 
+  for (let i = 0; i < gameInfo.pinkBalls.length; i++) {
+    refs.push(gameInfo.pinkBalls[i]);
+  }
+
   for (let i = 0; i < gameInfo.pistons.length; i++) {
     refs.push(gameInfo.pistons[i]);
   }
