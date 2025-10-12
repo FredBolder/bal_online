@@ -320,10 +320,10 @@ export function checkSettings(data, settings) {
             case "$displaysize":
               w = tryParseInt(values[0], -1);
               h = tryParseInt(values[1], -1);
-              if (w < 1) {
+              if (w < 10) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for columns.\n`;
               }
-              if (h < 1) {
+              if (h < 10) {
                 msg += `${settingNr(i)}Invalid value ${values[1]} for rows.\n`;
               }
               break;
@@ -1009,7 +1009,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$displaysize":
           w = tryParseInt(values[0], -1);
           h = tryParseInt(values[1], -1);
-          if ((w > 0) && (h > 0)) {
+          if ((w >= 10) && (h >= 10)) {
             gameVars.displaySize.columns = w;
             gameVars.displaySize.rows = h;
           }

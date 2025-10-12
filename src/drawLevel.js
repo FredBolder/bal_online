@@ -939,6 +939,8 @@ function drawLevel(
   function drawLaser(laser) {
     let isMirror1 = 0;
     let isMirror2 = 0;
+    let maxX = 0;
+    let maxY = 0;
     let temp = 0;
     let x1 = 0;
     let y1 = 0;
@@ -953,10 +955,10 @@ function drawLevel(
       for (let i = 1; i < laser.length; i++) {
         isMirror1 = booleanToInt(i !== 1);
         isMirror2 = booleanToInt(i !== (laser.length - 1));
-        x1 = laser[i - 1].x;
-        y1 = laser[i - 1].y;
-        x2 = laser[i].x;
-        y2 = laser[i].y;
+        x1 = laser[i - 1].x - gameVars.scroll.x;
+        y1 = laser[i - 1].y - gameVars.scroll.y;
+        x2 = laser[i].x - gameVars.scroll.x;
+        y2 = laser[i].y - gameVars.scroll.y;
         if (x1 > x2) {
           temp = x1;
           x1 = x2;
@@ -973,20 +975,34 @@ function drawLevel(
           isMirror1 = isMirror2;
           isMirror2 = temp;
         }
-        if (y1 === y2) {
-          // Horizontal line
-          xp1 = leftMargin + (x1 * size1) + size1 - (0.5 * size1 * isMirror1);
-          xp2 = leftMargin + (x2 * size1) + (0.5 * size1 * isMirror2);
-          yp1 = Math.round(topMargin + (y1 * size1) + (0.5 * size1));
-          yp2 = yp1;
-        } else {
-          // Vertical line
-          xp1 = leftMargin + (x1 * size1) + (0.5 * size1);
-          xp2 = xp1;
-          yp1 = Math.round(topMargin + (y1 * size1) + size1 - (0.5 * size1 * isMirror1));
-          yp2 = Math.round(topMargin + (y2 * size1) + (0.5 * size1 * isMirror2));
+        if (((x1 >= 0) && (y1 >= 0) && (x1 < columns) && (y1 < rows)) ||
+          ((x2 >= 0) && (y2 >= 0) && (x2 < columns) && (y2 < rows))) {
+          // At least one point in displayed area
+          if (y1 === y2) {
+            // Horizontal line
+            xp1 = leftMargin + (x1 * size1) + size1 - (0.5 * size1 * isMirror1);
+            xp2 = leftMargin + (x2 * size1) + (0.5 * size1 * isMirror2);
+            yp1 = Math.round(topMargin + (y1 * size1) + (0.5 * size1));
+            yp2 = yp1;
+          } else {
+            // Vertical line
+            xp1 = leftMargin + (x1 * size1) + (0.5 * size1);
+            xp2 = xp1;
+            yp1 = Math.round(topMargin + (y1 * size1) + size1 - (0.5 * size1 * isMirror1));
+            yp2 = Math.round(topMargin + (y2 * size1) + (0.5 * size1 * isMirror2));
+          }
+          if (xp1 < leftMargin) {xp1 = leftMargin}
+          if (yp1 < topMargin) {yp1 = topMargin}
+          if (xp2 < leftMargin) {xp2 = leftMargin}
+          if (yp2 < topMargin) {yp2 = topMargin}
+          maxX = leftMargin + (columns * size1);
+          maxY = topMargin + (rows * size1);
+          if (xp1 > maxX) {xp1 = maxX}
+          if (yp1 > maxY) {yp1 = maxY}
+          if (xp2 > maxX) {xp2 = maxX}
+          if (yp2 > maxY) {yp2 = maxY}
+          drawLine(ctx, xp1, yp1, xp2, yp2, "yellow");
         }
-        drawLine(ctx, xp1, yp1, xp2, yp2, "yellow");
       }
     }
   }
@@ -1063,10 +1079,10 @@ function drawLevel(
       ctx.arc(Math.round(xc), Math.round(yc), Math.round(d2), 0 * Math.PI, 1 * Math.PI, true);
       ctx.lineTo(Math.round(xc - d1), Math.round(yc));
       ctx.fill();
-      drawFilledBox(ctx, xc - d1, yc, d1 - d2 - 0.5, d3, "red");
-      drawFilledBox(ctx, xc + d2, yc, d1 - d2 - 0.5, d3, "red");
-      drawFilledBox(ctx, xc - d1, yc + d3, d1 - d2 - 0.5, d4, "silver");
-      drawFilledBox(ctx, xc + d2, yc + d3, d1 - d2 - 0.5, d4, "silver");
+      drawFilledBox(ctx, xc - d1 + 0.5, yc, d1 - d2, d3, "red");
+      drawFilledBox(ctx, xc + d2 + 0.5, yc, d1 - d2, d3, "red");
+      drawFilledBox(ctx, xc - d1 + 0.5, yc + d3, d1 - d2, d4, "silver");
+      drawFilledBox(ctx, xc + d2 + 0.5, yc + d3, d1 - d2, d4, "silver");
     }
   }
 
@@ -2169,10 +2185,6 @@ function drawLevel(
   ) {
     return false;
   }
-
-  // TODO: TEST (Remove when publishing)
-  gameVars.displaySize.rows = 10;
-  gameVars.displaySize.columns = 10;
 
   const gameRows = gameData.length;
   const gameColumns = gameData[0].length;

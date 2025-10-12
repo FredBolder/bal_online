@@ -89,7 +89,7 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
+let fred = true; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
