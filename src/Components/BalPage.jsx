@@ -89,7 +89,7 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = true; // TODO: Set to false when publishing
+let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -1282,7 +1282,7 @@ function BalPage() {
           case "shrink":
             shrinkObject(gameData, gameInfo, direction);
             updateGameCanvas();
-            break;  
+            break;
           default:
             break;
         }
@@ -1803,7 +1803,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3314;
+        gameVars.currentLevel = 994;
       }
       initLevel(gameVars.currentLevel);
     }
@@ -2016,9 +2016,14 @@ function BalPage() {
       return;
     }
 
-    const rows = gameData.length;
-    const columns = gameData[0].length;
-
+    const gameRows = gameData.length;
+    const gameColumns = gameData[0].length;
+    let rows = gameRows;
+    let columns = gameColumns;
+    if (!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) {
+      rows = gameVars.displaySize.rows;
+      columns = gameVars.displaySize.columns;
+    }
     let size1 = gameCanvas.current.width / columns;
     let size2 = gameCanvas.current.height / rows;
 
@@ -2042,10 +2047,10 @@ function BalPage() {
     let xmax = -1;
     let ymax = -1;
 
-    let column = Math.floor(x / size1);
-    let row = Math.floor(y / size1);
+    let column = Math.floor(x / size1) + gameVars.scroll.x;
+    let row = Math.floor(y / size1) + gameVars.scroll.y;
 
-    if ((column < 0) || (column >= columns) || (row < 0) || (row >= rows)) {
+    if ((column < 0) || (column >= gameColumns) || (row < 0) || (row >= gameRows)) {
       return;
     }
 

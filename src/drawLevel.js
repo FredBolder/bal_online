@@ -2193,17 +2193,11 @@ function drawLevel(
   if (!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) {
     rows = gameVars.displaySize.rows;
     columns = gameVars.displaySize.columns;
-    if (gameInfo.blueBall.x - 3 < gameVars.scroll.x) {
-      gameVars.scroll.x = Math.max(0, gameVars.scroll.x - 5);
+    if ((gameInfo.blueBall.x - 3 < gameVars.scroll.x) || (gameInfo.blueBall.x + 3 > columns - 1 + gameVars.scroll.x)) {
+      gameVars.scroll.x = Math.min(gameColumns - columns, Math.max(0, gameInfo.blueBall.x - (columns / 2)));
     }
-    if (gameInfo.blueBall.y - 3 < gameVars.scroll.y) {
-      gameVars.scroll.y = Math.max(0, gameVars.scroll.y - 5);
-    }
-    if (gameInfo.blueBall.x + 3 > columns - 1 + gameVars.scroll.x) {
-      gameVars.scroll.x = Math.min(gameColumns - columns, gameVars.scroll.x + 5);
-    }
-    if (gameInfo.blueBall.y + 3 > columns - 1 + gameVars.scroll.y) {
-      gameVars.scroll.y = Math.min(gameRows - rows, gameVars.scroll.y + 5);
+    if ((gameInfo.blueBall.y - 3 < gameVars.scroll.y) || (gameInfo.blueBall.y + 3 > rows - 1 + gameVars.scroll.y)) {
+      gameVars.scroll.y = Math.min(gameRows - rows, Math.max(0, gameInfo.blueBall.y - (rows / 2)));
     }
   } else {
     gameVars.scroll.x = 0;
