@@ -116,43 +116,49 @@ function drawLevel(
   function drawAllRedFish() {
     for (let i = 0; i < gameInfo.redFish.length; i++) {
       const fish = gameInfo.redFish[i];
-      xmin = fish.x * size1 + leftMargin;
-      xmax = xmin + size1 - 1;
-      ymin = fish.y * size1 + topMargin;
-      ymax = ymin + size1 - 1;
-      w1 = xmax - xmin + 1;
-      w2 = ymax - ymin + 1;
-      xc = Math.round((xmax + xmin) / 2);
-      yc = Math.round((ymax + ymin) / 2);
-      if (fish.direction == 4) {
-        ctx.drawImage(elements.elementRedFishLeft, xmin, ymin, w1, w2);
-      } else {
-        ctx.drawImage(elements.elementRedFishRight, xmin, ymin, w1, w2);
+      const x = fish.x - gameVars.scroll.x;
+      const y = fish.y - gameVars.scroll.y;
+      if ((x >= 0) && (x < columns) && (y >= 0) && (y < rows)) {
+        const xmin = x * size1 + leftMargin;
+        const xmax = xmin + size1 - 1;
+        const ymin = y * size1 + topMargin;
+        const ymax = ymin + size1 - 1;
+        const w1 = xmax - xmin + 1;
+        const w2 = ymax - ymin + 1;
+        if (fish.direction == 4) {
+          ctx.drawImage(elements.elementRedFishLeft, xmin, ymin, w1, w2);
+        } else {
+          ctx.drawImage(elements.elementRedFishRight, xmin, ymin, w1, w2);
+        }
       }
     }
   }
 
   function drawAllTeleports() {
     for (let i = 0; i < gameInfo.teleports.length; i++) {
-      ctx.lineWidth = 3;
       const teleport = gameInfo.teleports[i];
-      const xmin = teleport.x * size1 + leftMargin;
-      const xmax = xmin + size1 - 1;
-      const ymin = teleport.y * size1 + topMargin;
-      const ymax = ymin + size1 - 1;
-      const xc = Math.round((xmax + xmin) / 2);
-      const yc = Math.round((ymax + ymin) / 2);
+      const x = teleport.x - gameVars.scroll.x;
+      const y = teleport.y - gameVars.scroll.y;
+      if ((x >= 0) && (x < columns) && (y >= 0) && (y < rows)) {
+        const xmin = x * size1 + leftMargin;
+        const xmax = xmin + size1 - 1;
+        const ymin = y * size1 + topMargin;
+        const ymax = ymin + size1 - 1;
+        const xc = Math.round((xmax + xmin) / 2);
+        const yc = Math.round((ymax + ymin) / 2);
 
-      if (teleport.selfDestructing) {
-        ctx.setLineDash([2, 2]);
-      } else {
+        ctx.lineWidth = 3;
+        if (teleport.selfDestructing) {
+          ctx.setLineDash([2, 2]);
+        } else {
+          ctx.setLineDash([]);
+        }
+        drawBox(ctx, xmin + 1, ymin + 1, size1 - 2, size1 - 2, teleport.color);
         ctx.setLineDash([]);
-      }
-      drawBox(ctx, xmin + 1, ymin + 1, size1 - 2, size1 - 2, teleport.color);
-      ctx.setLineDash([]);
-      ctx.lineWidth = 1;
-      if ([0, 31, 92].includes(gameData[teleport.y][teleport.x])) {
-        drawText(ctx, xc, yc, teleport.group.toString(), "middle", teleport.color, w2 * 0.7, w1 * 0.8, teleport.color, 1);
+        ctx.lineWidth = 1;
+        if ([0, 31, 92].includes(gameData[teleport.y][teleport.x])) {
+          drawText(ctx, xc, yc, teleport.group.toString(), "middle", teleport.color, w2 * 0.7, w1 * 0.8, teleport.color, 1);
+        }
       }
     }
   }
@@ -2164,8 +2170,33 @@ function drawLevel(
     return false;
   }
 
-  const rows = gameData.length;
-  const columns = gameData[0].length;
+  // TODO: TEST (Remove when publishing)
+  gameVars.displaySize.rows = 10;
+  gameVars.displaySize.columns = 10;
+
+  const gameRows = gameData.length;
+  const gameColumns = gameData[0].length;
+  let rows = gameRows;
+  let columns = gameColumns;
+  if (!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) {
+    rows = gameVars.displaySize.rows;
+    columns = gameVars.displaySize.columns;
+    if (gameInfo.blueBall.x - 3 < gameVars.scroll.x) {
+      gameVars.scroll.x = Math.max(0, gameVars.scroll.x - 5);
+    }
+    if (gameInfo.blueBall.y - 3 < gameVars.scroll.y) {
+      gameVars.scroll.y = Math.max(0, gameVars.scroll.y - 5);
+    }
+    if (gameInfo.blueBall.x + 3 > columns - 1 + gameVars.scroll.x) {
+      gameVars.scroll.x = Math.min(gameColumns - columns, gameVars.scroll.x + 5);
+    }
+    if (gameInfo.blueBall.y + 3 > columns - 1 + gameVars.scroll.y) {
+      gameVars.scroll.y = Math.min(gameRows - rows, gameVars.scroll.y + 5);
+    }
+  } else {
+    gameVars.scroll.x = 0;
+    gameVars.scroll.y = 0;
+  }
 
   let size1 = canvas.width / columns;
   let size2 = canvas.height / rows;
@@ -2208,12 +2239,14 @@ function drawLevel(
       xc = Math.round((xmax + xmin) / 2);
       yc = Math.round((ymax + ymin) / 2);
 
-      const backgroundColor = getBgcolor(col, row, "");
+      const currentCol = col + gameVars.scroll.x;
+      const currentRow = row + gameVars.scroll.y;
+      const bd = backData[currentRow][currentCol];
+      const gd = gameData[currentRow][currentCol];
+      const backgroundColor = getBgcolor(currentCol, currentRow, "");
       if (backgroundColor !== "") {
         drawFilledBox(ctx, xmin, ymin, w1, w2, backgroundColor);
       }
-      const bd = backData[row][col];
-      const gd = gameData[row][col];
       switch (bd) {
         case 20:
           drawWaterSurface();
@@ -2222,7 +2255,7 @@ function drawLevel(
           drawWater();
           break;
         case 25:
-          drawLadder(col, row);
+          drawLadder(currentCol, currentRow);
           break;
         case 80:
           drawHorizontalRope()
@@ -2231,7 +2264,7 @@ function drawLevel(
           drawVerticalRope()
           break;
         case 90:
-          drawHorizontalLadder(col, row);
+          drawHorizontalLadder(currentCol, currentRow);
           break;
         case 170:
           // Teleport - will be drawn later
@@ -2245,7 +2278,7 @@ function drawLevel(
           // empty
           break;
         case 1:
-          drawStone(col, row);
+          drawStone(currentCol, currentRow);
           break;
         case 2:
           drawBlueBall();
@@ -2274,13 +2307,13 @@ function drawLevel(
           drawYellowBall();
           break;
         case 10:
-          drawOneDirectionRight(col, row);
+          drawOneDirectionRight(currentCol, currentRow);
           break;
         case 11:
-          drawOneDirectionLeft(col, row);
+          drawOneDirectionLeft(currentCol, currentRow);
           break;
         case 12:
-          drawDamagedStone(col, row);
+          drawDamagedStone(currentCol, currentRow);
           break;
         case 13:
           drawTrapDoor();
@@ -2289,16 +2322,16 @@ function drawLevel(
           drawTrapDoorHalfOpen();
           break;
         case 15:
-          drawTriangleStoneBottomLeft(col, row);
+          drawTriangleStoneBottomLeft(currentCol, currentRow);
           break;
         case 16:
-          drawTriangleStoneBottomRight(col, row);
+          drawTriangleStoneBottomRight(currentCol, currentRow);
           break;
         case 17:
-          drawTriangleStoneTopLeft(col, row);
+          drawTriangleStoneTopLeft(currentCol, currentRow);
           break;
         case 18:
-          drawTriangleStoneTopRight(col, row);
+          drawTriangleStoneTopRight(currentCol, currentRow);
           break;
         case 21:
           drawPalmTreeTrunkPart();
@@ -2319,31 +2352,31 @@ function drawLevel(
           drawPurpleBall();
           break;
         case 29:
-          drawKey(col, row);
+          drawKey(currentCol, currentRow);
           break;
         case 30:
-          drawLockedDoor(col, row);
+          drawLockedDoor(currentCol, currentRow);
           break;
         case 31:
           // Teleport - will be drawn later
           break;
         case 34:
-          drawPickaxe(col, row);
+          drawPickaxe(currentCol, currentRow);
           break;
         case 35:
           drawWeakStone();
           break;
         case 36:
-          drawBomb(col, row);
+          drawBomb(currentCol, currentRow);
           break;
         case 37:
-          drawDetonator(col, row);
+          drawDetonator(currentCol, currentRow);
           break;
         case 38:
           drawExplosion();
           break;
         case 39:
-          drawElevatorEntranceAndExit(col, row);
+          drawElevatorEntranceAndExit(currentCol, currentRow);
           break;
         case 40:
           drawOrangeBall();
@@ -2367,16 +2400,16 @@ function drawLevel(
           drawDirectionChanger3();
           break;
         case 87:
-          drawOneDirectionUp(col, row);
+          drawOneDirectionUp(currentCol, currentRow);
           break;
         case 88:
-          drawOneDirectionDown(col, row);
+          drawOneDirectionDown(currentCol, currentRow);
           break;
         case 89:
           drawGameRotator();
           break;
         case 91:
-          drawElectricity(col, row);
+          drawElectricity(currentCol, currentRow);
           break;
         case 92:
           // Teleport - will be drawn later
@@ -2438,28 +2471,28 @@ function drawLevel(
           drawForceLeft();
           break;
         case 113:
-          drawWaterSurfaceLeftOrRight(col, row, false);
+          drawWaterSurfaceLeftOrRight(currentCol, currentRow, false);
           break;
         case 114:
-          drawWaterSurfaceLeftOrRight(col, row, true);
+          drawWaterSurfaceLeftOrRight(currentCol, currentRow, true);
           break;
         case 115:
           drawYellowPusher();
           break;
         case 116:
-          drawYellowPushersTrigger(col, row);
+          drawYellowPushersTrigger(currentCol, currentRow);
           break;
         case 117:
-          drawTimeBomb(col, row);
+          drawTimeBomb(currentCol, currentRow);
           break;
         case 118:
-          drawCoilSpring(col, row);
+          drawCoilSpring(currentCol, currentRow);
           break;
         case 119:
           drawMagnet();
           break;
         case 120:
-          drawTimeFreezer(col, row);
+          drawTimeFreezer(currentCol, currentRow);
           break;
         case 121:
           drawBarLeft("yellow");
@@ -2492,7 +2525,7 @@ function drawLevel(
           drawBarBottom("deepskyblue");
           break;
         case 131:
-          drawYellowStopper(col, row);
+          drawYellowStopper(currentCol, currentRow);
           break;
         case 132:
           // Travel gate - will be drawn later
@@ -2507,7 +2540,7 @@ function drawLevel(
           drawDiamant("red");
           break;
         case 136:
-          drawYellowPauser(col, row);
+          drawYellowPauser(currentCol, currentRow);
           break;
         case 138:
           drawDirectionChanger4();
@@ -2519,46 +2552,46 @@ function drawLevel(
           drawSmallBall("#B0B0B0");
           break;
         case 141:
-          drawQuarterCircleStoneBottomLeft(col, row);
+          drawQuarterCircleStoneBottomLeft(currentCol, currentRow);
           break;
         case 142:
-          drawQuarterCircleStoneBottomRight(col, row);
+          drawQuarterCircleStoneBottomRight(currentCol, currentRow);
           break;
         case 143:
-          drawQuarterCircleStoneTopLeft(col, row);
+          drawQuarterCircleStoneTopLeft(currentCol, currentRow);
           break;
         case 144:
-          drawQuarterCircleStoneTopRight(col, row);
+          drawQuarterCircleStoneTopRight(currentCol, currentRow);
           break;
         case 145:
-          drawHalfStone(col, row, "left");
+          drawHalfStone(currentCol, currentRow, "left");
           break;
         case 146:
-          drawHalfStone(col, row, "right");
+          drawHalfStone(currentCol, currentRow, "right");
           break;
         case 147:
-          drawHalfStone(col, row, "top");
+          drawHalfStone(currentCol, currentRow, "top");
           break;
         case 148:
-          drawHalfStone(col, row, "bottom");
+          drawHalfStone(currentCol, currentRow, "bottom");
           break;
         case 149:
-          drawQuarterStone(col, row, "bottomLeft");
+          drawQuarterStone(currentCol, currentRow, "bottomLeft");
           break;
         case 150:
-          drawQuarterStone(col, row, "bottomRight");
+          drawQuarterStone(currentCol, currentRow, "bottomRight");
           break;
         case 151:
-          drawQuarterStone(col, row, "topLeft");
+          drawQuarterStone(currentCol, currentRow, "topLeft");
           break;
         case 152:
-          drawQuarterStone(col, row, "topRight");
+          drawQuarterStone(currentCol, currentRow, "topRight");
           break;
         case 153:
-          drawStonePattern(col, row, 1);
+          drawStonePattern(currentCol, currentRow, 1);
           break;
         case 154:
-          drawStonePattern(col, row, 2);
+          drawStonePattern(currentCol, currentRow, 2);
           break;
         case 155:
           drawBallSynchroniser("yellow");
@@ -2567,31 +2600,31 @@ function drawLevel(
           drawYellowSlowdowner();
           break;
         case 157:
-          drawMusicBox(col, row);
+          drawMusicBox(currentCol, currentRow);
           break;
         case 158:
-          drawPistonsTrigger(col, row);
+          drawPistonsTrigger(currentCol, currentRow);
           break;
         case 159:
-          drawPiston(col, row, "up");
+          drawPiston(currentCol, currentRow, "up");
           break;
         case 160:
           drawPistonExtendedPart("up");
           break;
         case 161:
-          drawPiston(col, row, "down");
+          drawPiston(currentCol, currentRow, "down");
           break;
         case 162:
           drawPistonExtendedPart("down");
           break;
         case 163:
-          drawPiston(col, row, "left");
+          drawPiston(currentCol, currentRow, "left");
           break;
         case 164:
           drawPistonExtendedPart("left");
           break;
         case 165:
-          drawPiston(col, row, "right");
+          drawPiston(currentCol, currentRow, "right");
           break;
         case 166:
           drawPistonExtendedPart("right");
@@ -2606,28 +2639,28 @@ function drawLevel(
           drawDoor();
           break;
         case 171:
-          drawConveyorBelt(col, row, "left");
+          drawConveyorBelt(currentCol, currentRow, "left");
           break;
         case 172:
-          drawConveyorBelt(col, row, "middle");
+          drawConveyorBelt(currentCol, currentRow, "middle");
           break;
         case 173:
-          drawConveyorBelt(col, row, "right");
+          drawConveyorBelt(currentCol, currentRow, "right");
           break;
         case 174:
-          drawSpike(col, row, "up");
+          drawSpike(currentCol, currentRow, "up");
           break;
         case 175:
-          drawSpike(col, row, "down");
+          drawSpike(currentCol, currentRow, "down");
           break;
         case 176:
-          drawSpike(col, row, "right");
+          drawSpike(currentCol, currentRow, "right");
           break;
         case 177:
-          drawSpike(col, row, "left");
+          drawSpike(currentCol, currentRow, "left");
           break;
         case 178:
-          drawMover(col, row);
+          drawMover(currentCol, currentRow);
           break;
         case 179:
           drawStar("yellow");
@@ -2646,10 +2679,10 @@ function drawLevel(
           drawGameRotator(true);
           break;
         case 184:
-          drawGravityChangerUp(col, row);
+          drawGravityChangerUp(currentCol, currentRow);
           break;
         case 185:
-          drawGravityChangerDown(col, row);
+          drawGravityChangerDown(currentCol, currentRow);
           break;
         case 186:
           drawChordType("maj");
@@ -2688,7 +2721,7 @@ function drawLevel(
           drawSmallBall("#800080");
           break;
         case 198:
-          drawDisappearingStone(col, row);
+          drawDisappearingStone(currentCol, currentRow);
           break;
         case 199:
           drawShrinker();
@@ -2864,7 +2897,7 @@ function drawLevel(
 
       // Foreground
       if ((gameInfo.travelGate.x === col) && (gameInfo.travelGate.y === row)) {
-        drawTravelGate(col, row);
+        drawTravelGate(currentCol, currentRow);
       }
       if (raster !== null) {
         if (raster.dash.length > 0) {
@@ -2875,9 +2908,9 @@ function drawLevel(
         ctx.setLineDash([]);
       }
 
-      highlightBlueBall(col, row);
-      highlightSelectedCell(col, row);
-      highlightTelekinesisObject(col, row);
+      highlightBlueBall(currentCol, currentRow);
+      highlightSelectedCell(currentCol, currentRow);
+      highlightTelekinesisObject(currentCol, currentRow);
 
       xmin += size1;
     }

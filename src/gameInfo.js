@@ -1030,6 +1030,7 @@ export function initGameVars(vars) {
     vars.currentLevel = 200;
     vars.disappearingStonesCounter = 0;
     vars.disappearingStonesCountTo = 5;
+    vars.displaySize = { columns: 0, rows: 0 };
     vars.elecActiveSaved = false;
     vars.electricityCounter = 0;
     vars.elevatorCounter = 0;
@@ -1059,6 +1060,7 @@ export function initGameVars(vars) {
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
+    vars.scroll = { x: 0, y: 0 };
     vars.skipFalling = 0;
     vars.soundLava = "default";
     vars.startlevelmessage = "";

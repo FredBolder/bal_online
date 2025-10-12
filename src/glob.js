@@ -1,4 +1,5 @@
 export const globalVars = {
+    createLevel: false,
     createLevelColorPage: 1,
     createLevelMenuPage: 1,
     isInOtherWorld: false,

@@ -216,6 +216,7 @@ export function checkSettings(data, settings) {
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$conveyorbeltmode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
+    { name: "$displaysize", params: 2, xy: false },
     { name: "$fgcolor", params: 5, xy: true },
     { name: "$gameticks", params: 2, xy: false },
     { name: "$gameticksxy", params: 3, xy: true },
@@ -316,6 +317,16 @@ export function checkSettings(data, settings) {
                   break;
               }
               break;
+            case "$displaysize":
+              w = tryParseInt(values[0], -1);
+              h = tryParseInt(values[1], -1);
+              if (w < 1) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for columns.\n`;
+              }
+              if (h < 1) {
+                msg += `${settingNr(i)}Invalid value ${values[1]} for rows.\n`;
+              }
+              break;
             case "$gameticks":
               if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "pinkball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
@@ -341,8 +352,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller", 
-                "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball", 
+              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
+                "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball",
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
@@ -462,6 +473,10 @@ export function checkSettings(data, settings) {
           case "$conveyerbandmode":
           case "$conveyermode":
             msgExtra = "$conveyorbeltmode";
+            break;
+          case "$size":
+          case "$maxsize":
+            msgExtra = "$displaysize";
             break;
           case "$delay":
           case "$ticks":
@@ -989,6 +1004,14 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
               changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
             }
+          }
+          break;
+        case "$displaysize":
+          w = tryParseInt(values[0], -1);
+          h = tryParseInt(values[1], -1);
+          if ((w > 0) && (h > 0)) {
+            gameVars.displaySize.columns = w;
+            gameVars.displaySize.rows = h;
           }
           break;
         case "$gameticks":

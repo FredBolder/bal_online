@@ -78,7 +78,6 @@ const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
 const msgNoCellSelected = "There is no cell selected. Hold the Shift button and click on a cell to select a cell.";
 let kPressed = false;
-let createLevel = false;
 let createLevelColorPages = 2;
 let createLevelDirection = "";
 let createLevelSelectedCell = null;
@@ -251,7 +250,7 @@ function BalPage() {
 
 
 
-    if (modalOpen || createLevel || globalVars.loading || !gameData || !backData || !gameVars || !gameInfo) {
+    if (modalOpen || globalVars.createLevel || globalVars.loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
 
@@ -334,7 +333,7 @@ function BalPage() {
     let msg = "";
     let value = "";
 
-    if (createLevel) {
+    if (globalVars.createLevel) {
       value = await showInput("Hint", "Enter the hint for this level.", gameVars.hint);
       if (value !== null) {
         gameVars.hint = value.trim();
@@ -631,7 +630,7 @@ function BalPage() {
 
   async function clickLoadFromMemory(idx) {
     async function load() {
-      if ((idx === 0) && createLevel) {
+      if ((idx === 0) && globalVars.createLevel) {
         saveUndo("Load from memory", "level");
       }
       const data = loadFromMemory(idx);
@@ -688,7 +687,7 @@ function BalPage() {
         return;
       }
 
-      if (createLevel) {
+      if (globalVars.createLevel) {
         saveUndo("Import level", "level");
       }
       clearMemory(1);
@@ -873,8 +872,8 @@ function BalPage() {
     let msg = "";
 
     createLevelSelectedCell = null;
-    createLevel = cbCreateLevel.current.checked;
-    if (createLevel) {
+    globalVars.createLevel = cbCreateLevel.current.checked;
+    if (globalVars.createLevel) {
       if (memoryIsEmpty(3)) {
         await clickNewLevel(true);
       } else {
@@ -1181,7 +1180,7 @@ function BalPage() {
       }
     }
 
-    if (createLevel) {
+    if (globalVars.createLevel) {
       if (!e.shiftKey) {
         let direction = "";
         switch (e.key) {
@@ -1828,11 +1827,11 @@ function BalPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateCreateLevelCanvasDisplay() {
-    createLevelCanvas.current.style.display = createLevel ? "block" : "none";
+    createLevelCanvas.current.style.display = globalVars.createLevel ? "block" : "none";
   }
 
   function updateGameButtonsDisplay() {
-    elementGameButtons.current.style.display = (getSettings().arrowButtons && !createLevel) ? "block" : "none";
+    elementGameButtons.current.style.display = (getSettings().arrowButtons && !globalVars.createLevel) ? "block" : "none";
     arrowButtonDownLeft.current.style.display = (gameVars.gravity === "up") ? "inline" : "none";
     arrowButtonDownRight.current.style.display = (gameVars.gravity === "up") ? "inline" : "none";
     arrowButtonUpLeft.current.style.display = (gameVars.gravity === "down") ? "inline" : "none";
@@ -1840,18 +1839,18 @@ function BalPage() {
   }
 
   function updateMenuItemsDisplay() {
-    levelSetting.current.style.display = (createLevel) ? "block" : "none";
-    newLevel.current.style.display = (createLevel) ? "block" : "none";
-    insertColumn.current.style.display = (createLevel) ? "block" : "none";
-    insertRow.current.style.display = (createLevel) ? "block" : "none";
-    deleteColumn.current.style.display = (createLevel) ? "block" : "none";
-    deleteRow.current.style.display = (createLevel) ? "block" : "none";
-    undo.current.style.display = (createLevel) ? "block" : "none";
-    redo.current.style.display = (createLevel) ? "block" : "none";
+    levelSetting.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    newLevel.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    insertColumn.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    insertRow.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    deleteColumn.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    deleteRow.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    undo.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    redo.current.style.display = (globalVars.createLevel) ? "block" : "none";
 
-    loadRandom.current.style.display = (!createLevel) ? "block" : "none";
-    loadLevel.current.style.display = (!createLevel) ? "block" : "none";
-    tryAgainButton.current.style.display = (!createLevel) ? "block" : "none";
+    loadRandom.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+    loadLevel.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+    tryAgainButton.current.style.display = (!globalVars.createLevel) ? "block" : "none";
   }
 
   function updateGreen() {
@@ -1960,7 +1959,7 @@ function BalPage() {
       status,
       gameInfo,
       gameVars,
-      (createLevel && createLevelRaster) ? { color: "#777777", dash: [2, 2] } : null,
+      (globalVars.createLevel && createLevelRaster) ? { color: "#777777", dash: [2, 2] } : null,
       createLevelSelectedCell
     );
   }
@@ -2050,7 +2049,7 @@ function BalPage() {
       return;
     }
 
-    if (createLevel) {
+    if (globalVars.createLevel) {
       // CREATE
       if (!e.altKey && !e.ctrlKey && (e.shiftKey || (createLevelObject === -2))) {
         // SELECT
@@ -2362,7 +2361,7 @@ function BalPage() {
   }
 
   async function handleCreateLevelCanvasClick(e) {
-    if (!createLevel || !gameDataMenu || (gameDataMenu.length < 1)) {
+    if (!globalVars.createLevel || !gameDataMenu || (gameDataMenu.length < 1)) {
       return false;
     }
 

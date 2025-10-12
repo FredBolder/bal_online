@@ -82,6 +82,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if ((gameVars.displaySize.columns > 0) || (gameVars.displaySize.rows > 0)) {
+        line = `$displaysize: ${gameVars.displaySize.columns}, ${gameVars.displaySize.rows}`;
+        lines.push(line);
+    }
+
     if (gameVars.elevatorCountTo !== 5) {
         line = `$gameticks: elevator, ${gameVars.elevatorCountTo}`;
         lines.push(line);
