@@ -116,6 +116,21 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
     }
 }
 
+export function fixScroll(gameData, gameVars, columns, rows) {
+  const gameRows = gameData.length;
+  const gameColumns = gameData[0].length;
+
+  if ((columns > 0) && (rows > 0) && (columns <= gameColumns) && (rows <= gameRows)) {
+    if (gameVars.scroll.x < 0) {gameVars.scroll.x = 0}
+    if (gameVars.scroll.y < 0) {gameVars.scroll.y = 0}
+    if (gameVars.scroll.x > gameColumns - columns) {gameVars.scroll.x = gameColumns - columns}
+    if (gameVars.scroll.y > gameRows - rows) {gameVars.scroll.y = gameRows - rows}
+  } else {
+    gameVars.scroll.x = 0;
+    gameVars.scroll.y = 0;    
+  }
+}
+
 function getObjectInfo(gameInfo, x, y, n) {
     let idx = -1;
 

@@ -8,6 +8,7 @@ import {
   drawLine,
   drawText,
 } from "./drawUtils.js";
+import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
 import { globalVars } from "./glob.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
@@ -32,6 +33,7 @@ function drawLevel(
   gameVars,
   raster,
   selectedCell,
+  isMenu
 ) {
   let wave = gameVars.wave2;
   let bgcolor = gameVars.bgcolor;
@@ -991,16 +993,16 @@ function drawLevel(
             yp1 = Math.round(topMargin + (y1 * size1) + size1 - (0.5 * size1 * isMirror1));
             yp2 = Math.round(topMargin + (y2 * size1) + (0.5 * size1 * isMirror2));
           }
-          if (xp1 < leftMargin) {xp1 = leftMargin}
-          if (yp1 < topMargin) {yp1 = topMargin}
-          if (xp2 < leftMargin) {xp2 = leftMargin}
-          if (yp2 < topMargin) {yp2 = topMargin}
+          if (xp1 < leftMargin) { xp1 = leftMargin }
+          if (yp1 < topMargin) { yp1 = topMargin }
+          if (xp2 < leftMargin) { xp2 = leftMargin }
+          if (yp2 < topMargin) { yp2 = topMargin }
           maxX = leftMargin + (columns * size1);
           maxY = topMargin + (rows * size1);
-          if (xp1 > maxX) {xp1 = maxX}
-          if (yp1 > maxY) {yp1 = maxY}
-          if (xp2 > maxX) {xp2 = maxX}
-          if (yp2 > maxY) {yp2 = maxY}
+          if (xp1 > maxX) { xp1 = maxX }
+          if (yp1 > maxY) { yp1 = maxY }
+          if (xp2 > maxX) { xp2 = maxX }
+          if (yp2 > maxY) { yp2 = maxY }
           drawLine(ctx, xp1, yp1, xp2, yp2, "yellow");
         }
       }
@@ -2190,14 +2192,21 @@ function drawLevel(
   const gameColumns = gameData[0].length;
   let rows = gameRows;
   let columns = gameColumns;
-  if (!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) {
-    rows = gameVars.displaySize.rows;
-    columns = gameVars.displaySize.columns;
-    if ((gameInfo.blueBall.x - 3 < gameVars.scroll.x) || (gameInfo.blueBall.x + 3 > columns - 1 + gameVars.scroll.x)) {
-      gameVars.scroll.x = Math.min(gameColumns - columns, Math.max(0, gameInfo.blueBall.x - (columns / 2)));
-    }
-    if ((gameInfo.blueBall.y - 3 < gameVars.scroll.y) || (gameInfo.blueBall.y + 3 > rows - 1 + gameVars.scroll.y)) {
-      gameVars.scroll.y = Math.min(gameRows - rows, Math.max(0, gameInfo.blueBall.y - (rows / 2)));
+  if (!isMenu && ((!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) ||
+    (globalVars.createLevel && (globalVars.createLevelZoom > 0)))) {
+    if (globalVars.createLevel) {
+      rows = Math.ceil(gameRows / Math.pow(2, globalVars.createLevelZoom));
+      columns = Math.ceil(gameColumns / Math.pow(2, globalVars.createLevelZoom));
+      fixScroll(gameData, gameVars, columns, rows);
+    } else {
+      rows = gameVars.displaySize.rows;
+      columns = gameVars.displaySize.columns;
+      if ((gameInfo.blueBall.x - 3 < gameVars.scroll.x) || (gameInfo.blueBall.x + 3 > columns - 1 + gameVars.scroll.x)) {
+        gameVars.scroll.x = Math.min(gameColumns - columns, Math.max(0, gameInfo.blueBall.x - (columns / 2)));
+      }
+      if ((gameInfo.blueBall.y - 3 < gameVars.scroll.y) || (gameInfo.blueBall.y + 3 > rows - 1 + gameVars.scroll.y)) {
+        gameVars.scroll.y = Math.min(gameRows - rows, Math.max(0, gameInfo.blueBall.y - (rows / 2)));
+      }
     }
   } else {
     gameVars.scroll.x = 0;
@@ -2887,6 +2896,25 @@ function drawLevel(
           break;
         case 2133:
           drawDirections()
+          break;
+        case 2134:
+          drawAbbreviation("zoom");
+          break;
+        case 2135:
+          // Pan left
+          drawAbbreviation("⇦");
+          break;
+        case 2136:
+          // Pan up
+          drawAbbreviation("⇧");
+          break;
+        case 2137:
+          // Pan down
+          drawAbbreviation("⇩");
+          break;
+        case 2138:
+          // Pan right
+          drawAbbreviation("⇨");
           break;
         default:
           if (gd < 2000) {

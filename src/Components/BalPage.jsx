@@ -26,7 +26,7 @@ import {
   insertColorsAtColumn, insertColorsAtRow, moveColor
 } from "../colorUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
-import { copyCell, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
+import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
@@ -401,6 +401,7 @@ function BalPage() {
       if (!silent) {
         saveUndo("New level", "level");
       }
+      globalVars.createLevelZoom = 0;
       await initLevel(level);
       // 9999 has a special meaning
       gameVars.currentLevel = 9999;
@@ -695,6 +696,7 @@ function BalPage() {
       globalVars.isInOtherWorld = false;
       globalVars.otherWorldGreen = -1;
       globalVars.loading = true;
+      globalVars.createLevelZoom = 0;
       clearPlayedNotes();
       initGameVars(gameVars);
       backData = null;
@@ -1000,7 +1002,7 @@ function BalPage() {
             break;
           case 15:
             // Info
-            arr1 = [2097, 2098, 2099];
+            arr1 = [2097, 2098, 2099, 2134, 2135, 2136, 2137, 2138];
             arr2 = [0];
             break;
           default:
@@ -1038,7 +1040,7 @@ function BalPage() {
             break;
           case 15:
             // Info
-            arr1 = [2097, 2098, 2099];
+            arr1 = [2097, 2098, 2099, 2134, 2135, 2136, 2137, 2138];
             arr2 = [0];
             break;
           default:
@@ -1909,7 +1911,8 @@ function BalPage() {
       gameInfoMenu,
       gameVarsMenu,
       { color: "white", dash: [] },
-      null
+      null,
+      true
     );
   }
 
@@ -1960,7 +1963,8 @@ function BalPage() {
       gameInfo,
       gameVars,
       (globalVars.createLevel && createLevelRaster) ? { color: "#777777", dash: [2, 2] } : null,
-      createLevelSelectedCell
+      createLevelSelectedCell,
+      false
     );
   }
 
@@ -2020,10 +2024,23 @@ function BalPage() {
     const gameColumns = gameData[0].length;
     let rows = gameRows;
     let columns = gameColumns;
+    if ((!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) ||
+      (globalVars.createLevel && (globalVars.createLevelZoom > 0))) {
+      if (globalVars.createLevel) {
+        rows = Math.ceil(gameRows / Math.pow(2, globalVars.createLevelZoom));
+        columns = Math.ceil(gameColumns / Math.pow(2, globalVars.createLevelZoom));
+      } else {
+        rows = gameVars.displaySize.rows;
+        columns = gameVars.displaySize.columns;
+      }
+    }
+
     if (!globalVars.createLevel && (gameVars.displaySize.columns > 0) && (gameVars.displaySize.rows > 0) && (gameVars.displaySize.columns <= gameColumns) && (gameVars.displaySize.rows <= gameRows)) {
       rows = gameVars.displaySize.rows;
       columns = gameVars.displaySize.columns;
     }
+
+
     let size1 = gameCanvas.current.width / columns;
     let size2 = gameCanvas.current.height / rows;
 
@@ -2458,6 +2475,42 @@ function BalPage() {
             case 2097:
               if (row > 0) {
                 createLevelRaster = !createLevelRaster;
+                updateGameCanvas();
+              }
+              break;
+            case 2134:
+              if (row > 0) {
+                globalVars.createLevelZoom++;
+                if (globalVars.createLevelZoom > 2) {
+                  globalVars.createLevelZoom = 0;
+                }
+                updateGameCanvas();
+              }
+              break;
+            case 2135:
+            case 2136:
+            case 2137:
+            case 2138:
+              if (globalVars.createLevelZoom > 0) {
+                const displayRows = Math.ceil(gameData.length / Math.pow(2, globalVars.createLevelZoom));
+                const displayColumns = Math.ceil(gameData[0].length / Math.pow(2, globalVars.createLevelZoom));
+                switch (createLevelObject) {
+                  case 2135:
+                    gameVars.scroll.x -= Math.ceil(displayColumns / 2);
+                    break;
+                  case 2136:
+                    gameVars.scroll.y -= Math.ceil(displayRows / 2);
+                    break;
+                  case 2137:
+                    gameVars.scroll.y += Math.ceil(displayRows / 2);
+                    break;
+                  case 2138:
+                    gameVars.scroll.x += Math.ceil(displayColumns / 2);
+                    break;
+                  default:
+                    break;
+                }
+                fixScroll(gameData, gameVars, displayColumns, displayRows);
                 updateGameCanvas();
               }
               break;
