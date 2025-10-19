@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { checkCopiers } from "./copiers.js";
+import { skipFallingTicks } from "./pinkBalls.js";
 import { copy2dArray } from "./utils.js";
 
 
@@ -8,74 +9,142 @@ describe("Copiers", () => {
     const defaultGameInfo = {};
     initGameInfo(defaultGameInfo);
 
-    let gameInfo01a = { ...defaultGameInfo, blueBall: { x: 1, y: 3 }, copiers: [{ x: 5, y: 3 }] };
-    let input01a = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 4, 0, 0, 1],
-        [1, 2, 0, 0, 0, 97, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput01a = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 0, 97, 0, 4, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01a = checkCopiers(input01a, gameInfo01a);
     it("checkCopiers A", () => {
-        expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
-    });
-    it("checkCopiers A info", () => {
-        expect(JSON.stringify(info01a)).toBe(JSON.stringify({ updated: true }));
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            copiers: [{ x: 5, y: 3 }],
+            greenBalls: 1,
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 4, 0, 0, 1],
+            [1, 2, 0, 0, 0, 97, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 97, 0, 4, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkCopiers(input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: true }));
     });
 
-    let gameInfo01b = { ...defaultGameInfo, blueBall: { x: 1, y: 3 }, copiers: [{ x: 5, y: 3 }] };
-    gameInfo01b.redBalls.push({ smart: 1, x: 5, y: 2, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 });
-
-    let input01b = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 93, 0, 0, 1],
-        [1, 2, 0, 4, 0, 97, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput01b = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 93, 97, 0, 93, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01b = checkCopiers(input01b, gameInfo01b);
     it("checkCopiers B", () => {
-        expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
-    });
-    it("checkCopiers B info", () => {
-        expect(JSON.stringify(info01b)).toBe(JSON.stringify({ updated: true }));
-    });
-    it("checkCopiers B red balls", () => {
-        expect(gameInfo01b.redBalls.length).toBe(2);
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            copiers: [{ x: 5, y: 3 }],
+            greenBalls: 1,
+        };
+        gameInfo.redBalls.push({ smart: 1, x: 5, y: 2, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 });
+
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 93, 0, 0, 1],
+            [1, 2, 0, 4, 0, 97, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 93, 97, 0, 93, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkCopiers(input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: true }));
+        expect(gameInfo.redBalls.length).toBe(2);
     });
 
-    let gameInfo01c = { ...defaultGameInfo, blueBall: { x: 1, y: 3 }, copiers: [{ x: 5, y: 3 }] };
-    let input01c = [
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 4, 0, 0, 1],
-        [1, 2, 0, 0, 4, 97, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput01c = copy2dArray(input01c);
-    let info01c = checkCopiers(input01c, gameInfo01c);
     it("checkCopiers C", () => {
-        expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
-    });
-    it("checkCopiers C info", () => {
-        expect(JSON.stringify(info01c)).toBe(JSON.stringify({ updated: false }));
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            copiers: [{ x: 5, y: 3 }],
+            greenBalls: 1,
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 4, 0, 0, 1],
+            [1, 2, 0, 0, 4, 97, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = copy2dArray(input);
+        const info = checkCopiers(input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: false }));
     });
 
+    it("checkCopiers D", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            copiers: [{ x: 5, y: 3 }],
+            greenBalls: 1,
+            pinkBalls: [{ x: 5, y: 2, delete: false, skipFalling: skipFallingTicks() }],
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 203, 0, 0, 1],
+            [1, 2, 0, 0, 0, 97, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 203, 0, 97, 0, 203, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkCopiers(input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: true }));
+        expect(JSON.stringify(gameInfo.pinkBalls)).toBe(JSON.stringify([
+            { x: 3, y: 3, delete: false, skipFalling: skipFallingTicks() }, 
+            { x: 7, y: 3, delete: false, skipFalling: skipFallingTicks() }
+        ]));
+    });
+
+    it("checkCopiers E", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            copiers: [{ x: 5, y: 3 }],
+            greenBalls: 1,
+            orangeBalls: [{ x: 5, y: 2, direction: "none" }],
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 40, 0, 0, 1],
+            [1, 2, 0, 0, 0, 97, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 40, 0, 97, 0, 40, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkCopiers(input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: true }));
+        expect(JSON.stringify(gameInfo.orangeBalls)).toBe(JSON.stringify([
+            { x: 3, y: 3, direction: "none" }, 
+            { x: 7, y: 3, direction: "none" }
+        ]));
+    });
 
     // Insert new tests here
 });

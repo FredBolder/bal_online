@@ -301,6 +301,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         gameInfo.orangeBalls[i].direction = rotateDirection(gameInfo.orangeBalls[i].direction, rotateLeft);
       }
 
+      // Pink balls
+      for (let i = 0; i < gameInfo.pinkBalls.length; i++) {
+        rotateXY(gameInfo.pinkBalls[i], rows, rotateLeft);
+      }
+
       // Pistons
       for (let i = 0; i < gameInfo.pistons.length; i++) {
         rotateXY(gameInfo.pistons[i], rows, rotateLeft);
