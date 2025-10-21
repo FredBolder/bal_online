@@ -97,6 +97,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.iceCountTo !== 250) {
+        line = `$gameticks: ice, ${gameVars.iceCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.pinkCountTo !== 5) {
         line = `$gameticks: pinkball, ${gameVars.pinkCountTo}`;
         lines.push(line);
@@ -123,6 +128,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     }
     if (gameInfo.hasDivingGlasses) {
         line = `$has: divingglasses`;
+        lines.push(line);
+    }
+    if (gameInfo.hasFreezeGun) {
+        line = `$has: freezegun`;
         lines.push(line);
     }
     if (gameInfo.hasKey) {

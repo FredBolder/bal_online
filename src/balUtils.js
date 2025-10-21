@@ -17,7 +17,7 @@ import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -676,6 +676,12 @@ export function charToNumber(c) {
     case "ѥ":
       result = 204;
       break;
+    case "Ж":
+      result = 205;
+      break;
+    case "ж":
+      result = 206;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1130,6 +1136,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 203:
       result = gameInfo.pinkBalls;
+      break;
+    case 206:
+      result = gameInfo.waterWithIceObjects;
       break;
     default:
       result = null;
@@ -1817,6 +1826,12 @@ export function numberToChar(n) {
     case 204:
       result = "ѥ";
       break;
+    case 205:
+      result = "Ж";
+      break;
+    case 206:
+      result = "ж";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2087,6 +2102,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   refs.push(gameInfo.travelGate);
 
+  for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
+    refs.push(gameInfo.waterWithIceObjects[i]);
+  }
+
   for (let i = 0; i < gameInfo.whiteBallSynchronisers.length; i++) {
     refs.push(gameInfo.whiteBallSynchronisers[i]);
   }
@@ -2312,6 +2331,13 @@ function take(gameData, gameInfo, result, x, y) {
       if (!gameInfo.hasPinkBall) {
         result.message = smallBallText("pink");
         gameInfo.hasPinkBall = true;
+      }
+      break;
+    case 205:
+      if (!gameInfo.hasFreezeGun) {
+        result.message = "You have now a freeze gun. You can freeze the surface of water by pressing the Space bar or ";
+        result.message += "the A button and after that pressing a move key or button to indicate the direction (for example the right arrow key)."
+        gameInfo.hasFreezeGun = true;
       }
       break;
     default:
@@ -3274,6 +3300,7 @@ export function moveDiagonal(backData, gameData, gameInfo, gameVars, direction) 
       result.player = true;
     }
   }
+  return result;
 }
 
 

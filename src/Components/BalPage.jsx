@@ -29,6 +29,7 @@ import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
+import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
@@ -50,6 +51,7 @@ import { removeChar, tryParseInt } from "../utils.js";
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
+import imgFreezeGun from "../Images/freeze_gun.svg";
 import imgGray from "../Images/gray_ball.svg";
 import imgGreen from "../Images/green_ball.svg";
 import imgLightBlue from "../Images/light_blue_ball.svg";
@@ -114,6 +116,7 @@ function BalPage() {
   const { showMessage, showConfirm, showInput, showSelect } = useModal();
   const { modalState } = useContext(ModalContext);
 
+  const actionButtonRef = useRef(null);
   const arrowButtonDownLeft = useRef(null);
   const arrowButtonDownRight = useRef(null);
   const arrowButtonUpLeft = useRef(null);
@@ -127,6 +130,7 @@ function BalPage() {
   const deleteColumn = useRef(null);
   const deleteRow = useRef(null);
   const elementDiving = useRef(null);
+  const elementFreezeGun = useRef(null);
   const elementGray = useRef(null);
   const elementGreen = useRef(null);
   const elementHappy = useRef(null);
@@ -189,6 +193,7 @@ function BalPage() {
   async function runGameScheduler(checkAll = true) {
     let saveCoilSpring = false;
     let saveDivingGlasses = false;
+    let saveFreezeGun = false;
     let saveKey = false;
     let saveLadder = false;
     let saveLightBlueBall = false;
@@ -209,6 +214,7 @@ function BalPage() {
     function loadItems() {
       gameInfo.hasCoilSpring = saveCoilSpring;
       gameInfo.hasDivingGlasses = saveDivingGlasses;
+      gameInfo.hasFreezeGun = saveFreezeGun;
       gameInfo.hasKey = saveKey;
       gameInfo.hasLadder = saveLadder;
       gameInfo.hasLightBlueBall = saveLightBlueBall;
@@ -230,6 +236,7 @@ function BalPage() {
     function saveItems() {
       saveCoilSpring = gameInfo.hasCoilSpring;
       saveDivingGlasses = gameInfo.hasDivingGlasses;
+      saveFreezeGun = gameInfo.hasFreezeGun;
       saveKey = gameInfo.hasKey;
       saveLadder = gameInfo.hasLadder;
       saveLightBlueBall = gameInfo.hasLightBlueBall;
@@ -801,6 +808,9 @@ function BalPage() {
     if (gameInfo.hasDivingGlasses) {
       addItem("diving glasses");
     }
+    if (gameInfo.hasFreezeGun) {
+      addItem("freeze gun");
+    }
     if (gameInfo.hasKey) {
       addItem("key");
     }
@@ -986,7 +996,7 @@ function BalPage() {
             break;
           case 11:
             // Water
-            arr1 = [23, 20, 113, 114, 26, 27];
+            arr1 = [23, 20, 113, 114, 26, 27, 205, 206];
             arr2 = [0];
             break;
           case 12:
@@ -1285,11 +1295,16 @@ function BalPage() {
             shrinkObject(gameData, gameInfo, direction);
             updateGameCanvas();
             break;
+          case "freeze":
+            freezeWater(backData, gameData, gameInfo, direction);
+            updateGameCanvas();
+            break;
           default:
             break;
         }
       }
       gameInfo.action = "";
+      updateGameButtonsDisplay();
       return;
     }
 
@@ -1326,6 +1341,9 @@ function BalPage() {
         }
         if (gameInfo.hasShrinker) {
           actions.push("Shrink object");
+        }
+        if (gameInfo.hasFreezeGun) {
+          actions.push("Freeze water");
         }
         if (gameInfo.hasTelekineticPower) {
           actions.push("Use telekinetic power");
@@ -1370,12 +1388,16 @@ function BalPage() {
           case "Shrink object":
             gameInfo.action = "shrink";
             break;
+          case "Freeze water":
+            gameInfo.action = "freeze";
+            break;
           case "Use telekinetic power":
             info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
             break;
           default:
             break;
         }
+        updateGameButtonsDisplay();
         break;
       }
       case "b":
@@ -1834,10 +1856,11 @@ function BalPage() {
 
   function updateGameButtonsDisplay() {
     elementGameButtons.current.style.display = (getSettings().arrowButtons && !globalVars.createLevel) ? "block" : "none";
-    arrowButtonDownLeft.current.style.display = (gameVars.gravity === "up") ? "inline" : "none";
-    arrowButtonDownRight.current.style.display = (gameVars.gravity === "up") ? "inline" : "none";
-    arrowButtonUpLeft.current.style.display = (gameVars.gravity === "down") ? "inline" : "none";
-    arrowButtonUpRight.current.style.display = (gameVars.gravity === "down") ? "inline" : "none";
+    actionButtonRef.current.style.display = (gameInfo.action === "") ? "inline" : "none";
+    arrowButtonDownLeft.current.style.display = ((gameVars.gravity === "up") || (gameInfo.action !== "")) ? "inline" : "none";
+    arrowButtonDownRight.current.style.display = ((gameVars.gravity === "up") || (gameInfo.action !== "")) ? "inline" : "none";
+    arrowButtonUpLeft.current.style.display = ((gameVars.gravity === "down") || (gameInfo.action !== "")) ? "inline" : "none";
+    arrowButtonUpRight.current.style.display = ((gameVars.gravity === "down") || (gameInfo.action !== "")) ? "inline" : "none";
   }
 
   function updateMenuItemsDisplay() {
@@ -1880,6 +1903,7 @@ function BalPage() {
     ctx = createLevelCanvas.current.getContext("2d");
     const elements = {
       elementDiving: elementDiving.current,
+      elementFreezeGun: elementFreezeGun.current,
       elementGray: elementGray.current,
       elementGreen: elementGreen.current,
       elementHappy: elementHappy.current,
@@ -1932,6 +1956,7 @@ function BalPage() {
     ctx = gameCanvas.current.getContext("2d");
     const elements = {
       elementDiving: elementDiving.current,
+      elementFreezeGun: elementFreezeGun.current,
       elementGray: elementGray.current,
       elementGreen: elementGreen.current,
       elementHappy: elementHappy.current,
@@ -2909,7 +2934,7 @@ function BalPage() {
                 <button ref={arrowButtonDownRight} className="gameButton" onClick={buttonDownRight}>
                   <img src={arrowDownRight} alt="Arrow Down Right button" />
                 </button>
-                <button className="gameButton" onClick={buttonAction}>
+                <button ref={actionButtonRef} className="gameButton" onClick={buttonAction}>
                   <img src={actionButton} alt="Action button" />
                 </button>
                 <button className="gameButton" onClick={buttonSelect}>
@@ -2941,6 +2966,9 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementRedFishRight} src={imgRedFishRight} />
+          </div>
+          <div style={{ display: "none" }}>
+            <img ref={elementFreezeGun} src={imgFreezeGun} />
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementGray} src={imgGray} />

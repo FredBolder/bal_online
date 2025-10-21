@@ -788,6 +788,10 @@ function drawLevel(
     }
   }
 
+  function drawFreezeGun() {
+    ctx.drawImage(elements.elementFreezeGun, xmin + (0.1 * w1), ymin, w1 * 0.8, w2 * 0.8);
+  }
+
   function drawGameOver() {
     // let x = leftMargin + gameWidth / 2;
     // let y = gameHeight / 2 + topMargin;
@@ -2069,6 +2073,26 @@ function drawLevel(
     }
   }
 
+  function drawWaterWithIce(x) {
+    const d1 = Math.round(w2 * 0.4);
+    const d2 = Math.round(w1 * 0.1);
+    const d3 = Math.round(w1 * 0.4);
+    const d4 = Math.round(w1 * 0.6);
+    const d5 = Math.round(w1 * 0.9);
+    const d6 = Math.round(w1 * 0.2);
+    const d7 = Math.round(w1 * 0.5);
+    drawFilledBox(ctx, xmin, ymin + d1, w1, w2 - d1, "#00005A");
+    drawFilledBox(ctx, xmin, ymin, w1, d1, "#D6FFFA");
+    ctx.lineWidth = 3;
+    if (x % 2 == 0) {
+      drawLine(ctx, xmin + d2, ymin + d1, xmin + d3, ymin + d1, "#D6FFFA");
+      drawLine(ctx, xmin + d4, ymin + d1, xmin + d5, ymin + d1, "#00005A");
+    } else {
+      drawLine(ctx, xmin + d6, ymin + d1, xmin + d7, ymin + d1, "#D6FFFA");
+    }
+    ctx.lineWidth = 1;
+  }
+
   function drawWeakStone() {
     if (bitmapWeakStone === null) {
       bitmapWeakStone = createWeakStoneBitmap(32);
@@ -2755,6 +2779,12 @@ function drawLevel(
           break;
         case 204:
           drawSmallBall("#FF69B4");
+          break;
+        case 205:
+          drawFreezeGun();
+          break;
+        case 206:
+          drawWaterWithIce(currentCol);
           break;
         case 1000:
           // For manual only (empty)

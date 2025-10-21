@@ -10,6 +10,7 @@ import { checkForces } from "./force.js";
 import { clearBitMapLava } from "./drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "./elevators.js";
 import { moveFish } from "./fish.js";
+import { checkIce } from "./freeze.js";
 import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
 import { checkMusicBoxes } from "./musicBoxes.js"
@@ -85,6 +86,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             }
         }
         gameVars.disappearingStonesCounter++;
+
+        if (checkIce(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
+        }
 
         info = checkWhiteBallSynchronisers(backData, gameData, gameInfo, gameVars);
         if (info.update) {

@@ -284,6 +284,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.pinkBalls.push(pinkBall);
             break;
         }
+        case 206: {
+            let waterWithIce = { x, y, status: 0 };
+            gameInfo.waterWithIceObjects.push(waterWithIce);
+            break;
+        }
         default:
             break;
     }
@@ -550,6 +555,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.pinkBalls);
             if (idx >= 0) {
                 gameInfo.pinkBalls.splice(idx, 1);
+            }
+            break;
+        case 206:
+            idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
+            if (idx >= 0) {
+                gameInfo.waterWithIceObjects.splice(idx, 1);
             }
             break;
         default:

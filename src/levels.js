@@ -328,7 +328,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "pinkball"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "pinkball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -352,7 +352,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
+              if (!["nothing", "coilspring", "divingglasses", "freezegun", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
                 "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball",
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
@@ -1031,6 +1031,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 case "fish":
                   gameVars.fishCountTo = gameTicks;
                   break;
+                case "ice":
+                  gameVars.iceCountTo = gameTicks;
+                  break;
                 case "pinkball":
                   gameVars.pinkCountTo = gameTicks;
                   break;
@@ -1064,6 +1067,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             case "nothing":
               gameInfo.hasCoilSpring = false;
               gameInfo.hasDivingGlasses = false;
+              gameInfo.hasFreezeGun = false;
               gameInfo.hasKey = false;
               gameInfo.hasLadder = false;
               gameInfo.hasLightBlueBall = false;
@@ -1086,6 +1090,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "divingglasses":
               gameInfo.hasDivingGlasses = true;
+              break;
+            case "freezegun":
+              gameInfo.hasFreezeGun = true;
               break;
             case "key":
               gameInfo.hasKey = true;

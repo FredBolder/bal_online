@@ -337,6 +337,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.trapDoors[i], rows, rotateLeft);
       }
 
+      // Water with ice
+      for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
+        rotateXY(gameInfo.waterWithIceObjects[i], rows, rotateLeft);
+      }
+
       // White ball synchronisers
       for (let i = 0; i < gameInfo.whiteBallSynchronisers.length; i++) {
         rotateXY(gameInfo.whiteBallSynchronisers[i], rows, rotateLeft);

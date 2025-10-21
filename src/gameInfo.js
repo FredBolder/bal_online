@@ -277,6 +277,11 @@ export function getGameInfo(backData, gameData) {
                     result.pinkBalls.push(pinkBall);
                     break;
                 }
+                case 206: {
+                    let waterWithIce = { x: j, y: i, status: 0 };
+                    result.waterWithIceObjects.push(waterWithIce);
+                    break;
+                }
                 default:
                     break;
             }
@@ -925,6 +930,17 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     case 204:
                         info = `Small pink ball`;
                         break;
+                    case 205:
+                        info = `Freeze gun`;
+                        break;
+                    case 206:
+                        idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
+                        if (idx >= 0) {
+                            obj = gameInfo.waterWithIceObjects[idx];
+                            extraInfo = `Status: ${obj.status}`;
+                        }
+                        info = `Water with a layer of ice on top, ` + extraInfo;
+                        break;
                     default:
                         break;
                 }
@@ -977,6 +993,7 @@ export function initGameInfo(info) {
     info.greenBalls = 0;
     info.hasCoilSpring = false;
     info.hasDivingGlasses = false;
+    info.hasFreezeGun = false;
     info.hasKey = false;
     info.hasLadder = false;
     info.hasLightBlueBall = false;
@@ -1011,6 +1028,7 @@ export function initGameInfo(info) {
     info.trapDoors = [];
     info.travelGate = { x: -1, y: -1 };
     info.twoBlue = false;
+    info.waterWithIceObjects = [];
     info.whiteBallSynchronisers = [];
     info.yellowBalls = [];
     info.yellowBallPushers = [];
@@ -1043,6 +1061,7 @@ export function initGameVars(vars) {
     vars.gateTravelling = 0;
     vars.gravity = "down";
     vars.hint = "";
+    vars.iceCountTo = 250;
     vars.laser = null;
     vars.orangeCounter = 0;
     vars.pinkCounter = 0;
