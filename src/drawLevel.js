@@ -2073,7 +2073,9 @@ function drawLevel(
     }
   }
 
-  function drawWaterWithIce(x) {
+  function drawWaterWithIce(x, y) {
+    let idx = -1;
+    let objectNumber = 20;
     const d1 = Math.round(w2 * 0.4);
     const d2 = Math.round(w1 * 0.1);
     const d3 = Math.round(w1 * 0.4);
@@ -2081,6 +2083,12 @@ function drawLevel(
     const d5 = Math.round(w1 * 0.9);
     const d6 = Math.round(w1 * 0.2);
     const d7 = Math.round(w1 * 0.5);
+
+    idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
+    if (idx >= 0) {
+      objectNumber = gameInfo.waterWithIceObjects[idx].objectNumber;
+    }
+
     drawFilledBox(ctx, xmin, ymin + d1, w1, w2 - d1, "#00005A");
     drawFilledBox(ctx, xmin, ymin, w1, d1, "#D6FFFA");
     ctx.lineWidth = 3;
@@ -2091,6 +2099,12 @@ function drawLevel(
       drawLine(ctx, xmin + d6, ymin + d1, xmin + d7, ymin + d1, "#D6FFFA");
     }
     ctx.lineWidth = 1;
+    if (objectNumber === 113) {
+      drawTriangleStoneBottomLeft(x, y);
+    }
+    if (objectNumber === 114) {
+      drawTriangleStoneBottomRight(x, y);
+    }
   }
 
   function drawWeakStone() {
@@ -2784,7 +2798,7 @@ function drawLevel(
           drawFreezeGun();
           break;
         case 206:
-          drawWaterWithIce(currentCol);
+          drawWaterWithIce(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

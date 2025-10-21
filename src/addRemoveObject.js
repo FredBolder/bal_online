@@ -285,7 +285,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 206: {
-            let waterWithIce = { x, y, status: 0 };
+            let waterWithIce = { x, y, status: 0, objectNumber: 20 };
             gameInfo.waterWithIceObjects.push(waterWithIce);
             break;
         }

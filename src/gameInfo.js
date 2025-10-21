@@ -278,7 +278,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 206: {
-                    let waterWithIce = { x: j, y: i, status: 0 };
+                    let waterWithIce = { x: j, y: i, status: 0, objectNumber: 20 };
                     result.waterWithIceObjects.push(waterWithIce);
                     break;
                 }
@@ -937,7 +937,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                         idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
                         if (idx >= 0) {
                             obj = gameInfo.waterWithIceObjects[idx];
-                            extraInfo = `Status: ${obj.status}`;
+                            extraInfo = `Status: ${obj.status}, Object number: ${obj.objectNumber}`;
                         }
                         info = `Water with a layer of ice on top, ` + extraInfo;
                         break;

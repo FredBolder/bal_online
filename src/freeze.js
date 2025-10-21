@@ -10,8 +10,13 @@ export function checkIce(backData, gameData, gameInfo, gameVars) {
             keep.push(waterWithIce);
             waterWithIce.status++;
         } else {
-            backData[waterWithIce.y][waterWithIce.x] = 20;
-            gameData[waterWithIce.y][waterWithIce.x] = 0;
+            if ([20].includes(waterWithIce.objectNumber)) {
+                backData[waterWithIce.y][waterWithIce.x] = waterWithIce.objectNumber;
+                gameData[waterWithIce.y][waterWithIce.x] = 0;
+            } else {
+                backData[waterWithIce.y][waterWithIce.x] = 0;
+                gameData[waterWithIce.y][waterWithIce.x] = waterWithIce.objectNumber;
+            }
             update = true;
         }
     }
@@ -83,17 +88,32 @@ export function freezeWater(backData, gameData, gameInfo, direction) {
     if ((xTarget < 0) || (xTarget > maxX) || (yTarget < 0) || (yTarget > maxY)) {
         return;
     }
-    if (backData[yTarget][xTarget] === 20) {
-        if (gameData[yTarget][xTarget] === 0) {
+
+    switch (gameData[yTarget][xTarget]) {
+        case 113:
+        case 114:
+            gameInfo.waterWithIceObjects.push({ x: xTarget, y: yTarget, status: 0, objectNumber: gameData[yTarget][xTarget] });
             backData[yTarget][xTarget] = 0;
             gameData[yTarget][xTarget] = 206;
-            gameInfo.waterWithIceObjects.push({ x: xTarget, y: yTarget, status: 0 });
-        }
-    } else if (gameData[yTarget][xTarget] === 206) {
-        idx = findElementByCoordinates(xTarget, yTarget, gameInfo.waterWithIceObjects);
-        if (idx >= 0) {
-            gameInfo.waterWithIceObjects[idx].status = 0;
-        }
-
+            break;
+        case 206:
+            idx = findElementByCoordinates(xTarget, yTarget, gameInfo.waterWithIceObjects);
+            if (idx >= 0) {
+                gameInfo.waterWithIceObjects[idx].status = 0;
+            }
+            break;
+        default:
+            break;
+    }
+    switch (backData[yTarget][xTarget]) {
+        case 20:
+            if (gameData[yTarget][xTarget] === 0) {
+                gameInfo.waterWithIceObjects.push({ x: xTarget, y: yTarget, status: 0, objectNumber: backData[yTarget][xTarget] });
+                backData[yTarget][xTarget] = 0;
+                gameData[yTarget][xTarget] = 206;
+            }
+            break;
+        default:
+            break;
     }
 }
