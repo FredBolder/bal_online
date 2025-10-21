@@ -2171,7 +2171,7 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
   }
 }
 
-function take(gameData, gameInfo, result, x, y) {
+function take(backData, gameData, gameInfo, gameVars, result, x, y) {
   let idx = -1;
   const obj = gameData[y][x];
 
@@ -2340,6 +2340,13 @@ function take(gameData, gameInfo, result, x, y) {
         gameInfo.hasFreezeGun = true;
       }
       break;
+    case 206:
+      backData[y][x] = 20;
+      gameInfo.waterWithIceObjects.splice(0, gameInfo.waterWithIceObjects.length,
+        ...gameInfo.waterWithIceObjects.filter(obj => ((obj.x !== x) || (obj.y !== y)))
+      );
+      result.sound = "pickaxe";
+      break;
     default:
       break;
   }
@@ -2441,9 +2448,9 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   if (x > 0) {
     // empty space, green ball, diving glasses, key etc.
     if (!result.player && (canBeTakenOrIsEmpty(gameInfo, row[x - 1]) ||
-      (((row[x - 1] === 12) || (row[x - 1] === 35)) && gameInfo.hasPickaxe))) {
+      ([12, 35, 206].includes(row[x - 1]) && gameInfo.hasPickaxe))) {
       result.sound = "take";
-      take(gameData, gameInfo, result, x - 1, y);
+      take(backData, gameData, gameInfo, gameVars, result, x - 1, y);
       if (row[x - 1] === 168) {
         row[x] = 2;
         gameInfo.blueBall2.x = gameInfo.blueBall1.x;
@@ -2623,9 +2630,9 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   if (x < maxX) {
     // empty space, green ball, diving glasses, key etc.
     if (!result.player && (canBeTakenOrIsEmpty(gameInfo, row[x + 1]) ||
-      (((row[x + 1] === 12) || (row[x + 1] === 35)) && gameInfo.hasPickaxe))) {
+      ([12, 35, 206].includes(row[x + 1]) && gameInfo.hasPickaxe))) {
       result.sound = "take";
-      take(gameData, gameInfo, result, x + 1, y);
+      take(backData, gameData, gameInfo, gameVars, result, x + 1, y);
       if (row[x + 1] === 168) {
         row[x] = 2;
         gameInfo.blueBall2.x = gameInfo.blueBall1.x;
@@ -2843,10 +2850,10 @@ export function jump(backData, gameData, gameInfo, gameVars) {
           ((i !== 0) || ((![25, 137, 90].includes(backData[y + dy1][x])) && (![25, 137, 90].includes(backData[y][x])))) &&
           (![80].includes(backData[y + dy2][x]))) {
           if (canBeTakenOrIsEmpty(gameInfo, gameData[y + dy2][x]) ||
-            ((i !== 0) && [12, 35].includes(gameData[y + dy1][x]) && gameInfo.hasPickaxe)
+            ((i !== 0) && [12, 35, 206].includes(gameData[y + dy1][x]) && gameInfo.hasPickaxe)
           ) {
             result.sound = "take";
-            take(gameData, gameInfo, result, x, y + dy2);
+            take(backData, gameData, gameInfo, gameVars, result, x, y + dy2);
             if (gameData[y + dy2][x] === 168) {
               gameData[y][x] = 2;
               gameInfo.blueBall2.x = gameInfo.blueBall1.x;
@@ -3054,7 +3061,7 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
         if ((gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && ![80].includes(backData[y + dy2][x + dx])) {
           if (canBeTakenOrIsEmpty(gameInfo, gameData[y + dy2][x + dx])) {
             result.sound = "take";
-            take(gameData, gameInfo, result, x + dx, y + dy2);
+            take(backData, gameData, gameInfo, gameVars, result, x + dx, y + dy2);
             if (gameData[y + dy2][x + dx] === 168) {
               gameData[y][x] = 2;
               gameInfo.blueBall2.x = gameInfo.blueBall1.x;
@@ -3176,12 +3183,18 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       gameInfo.blueBall.y = y + dy1;
       result.player = true;
     }
-    if (!result.player && ((gameData[y + dy1][x] === 12) || (gameData[y + dy1][x] === 35)) && gameInfo.hasPickaxe) {
+    if (!result.player && [12, 35, 206].includes(gameData[y + dy1][x]) && gameInfo.hasPickaxe) {
       if (gameData[y + dy1][x] === 12) {
         idx = findElementByCoordinates(x, y + dy1, gameInfo.damagedStones);
         if (idx >= 0) {
           gameInfo.damagedStones[idx].status = -1;
         }
+      }
+      if (gameData[y + dy1][x] === 206) {
+        backData[y + dy1][x] = 20;
+        gameInfo.waterWithIceObjects.splice(0, gameInfo.waterWithIceObjects.length,
+          ...gameInfo.waterWithIceObjects.filter(obj => ((obj.x !== x) || (obj.y !== (y + dy1))))
+        );
       }
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
