@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { checkCopiers } from "./copiers.js";
 import { skipFallingTicks } from "./pinkBalls.js";
@@ -6,8 +6,12 @@ import { copy2dArray } from "./utils.js";
 
 
 describe("Copiers", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
+    let defaultGameInfo;
+ 
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+    });  
 
     it("checkCopiers A", () => {
         const gameInfo = {
