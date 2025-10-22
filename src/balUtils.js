@@ -2238,7 +2238,7 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       gameInfo.hasTelekineticPower = true;
       result.message = "You have now telekinetic power! By pressing the Space bar or the A button you can move the ";
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
-      result.message += "purple ball, moveable gray ball, orange ball, direction changer, time bomb, conveyor belt part, ";
+      result.message += "purple ball, moveable gray ball, orange ball, pink ball, direction changer, time bomb, conveyor belt part, ";
       result.message += "mover";
       break;
     case 156:

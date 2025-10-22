@@ -1,14 +1,20 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { checkPistonsDetector, checkPistonsTriggers } from "./pistons.js";
 import { copy2dArray } from "./utils.js";
 
 describe("Pistons", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
-    const defaultGameVars = {};
-    initGameVars(defaultGameVars);
+    let defaultGameInfo;
+    let defaultGameVars;
+ 
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+        defaultGameVars = {};
+        initGameVars(defaultGameVars);
+    });    
+
     const defaultPistonGroupsActivated = [];
     for (let i = 0; i < 32; i++) {
         defaultPistonGroupsActivated.push(false);

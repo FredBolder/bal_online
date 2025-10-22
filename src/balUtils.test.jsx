@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import {
   charToNumber,
   hasWeightAbove,
@@ -11,10 +11,15 @@ import {
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 
 describe("balUtils", () => {
-  const defaultGameInfo = {};
-  initGameInfo(defaultGameInfo);
-  const defaultGameVars = {};
-  initGameVars(defaultGameVars);
+    let defaultGameInfo;
+    let defaultGameVars;
+ 
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+        defaultGameVars = {};
+        initGameVars(defaultGameVars);
+    });    
 
   const inputBack_7_7 = zeroArray(7, 7);
 

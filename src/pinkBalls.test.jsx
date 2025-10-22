@@ -1,14 +1,19 @@
-import { describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { movePinkBalls } from "./pinkBalls.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { copy2dArray } from "./utils.js";
 
 describe("Pink balls", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
-    const defaultGameVars = {};
-    initGameVars(defaultGameVars);
+    let defaultGameInfo;
+    let defaultGameVars;
+ 
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+        defaultGameVars = {};
+        initGameVars(defaultGameVars);
+    });    
 
     test("movePinkBalls A", () => {
         const inputBack = zeroArray(6, 7);

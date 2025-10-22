@@ -1,12 +1,17 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { shrinkObject } from "./shrink.js";
 
 describe("Shrinker", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
-    const defaultGameVars = {};
-    initGameVars(defaultGameVars);
+    let defaultGameInfo;
+    let defaultGameVars;
+ 
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+        defaultGameVars = {};
+        initGameVars(defaultGameVars);
+    });    
 
     it("shrinkObject A", () => {
         let gameInfo = {

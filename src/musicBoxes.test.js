@@ -1,17 +1,21 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { jump, moveLeft, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { clearPlayedNotes } from "./musicBoxes.js";
 import { gameScheduler } from "./scheduler.js";
 
 describe("music boxes", () => {
-    // Use only one "it" for a sequence of tests in one test to test in the right order
-    it("plays the melody step-by-step", async () => {
-        const defaultGameInfo = {};
+    let defaultGameInfo;
+    let defaultGameVars;
+ 
+    beforeEach(() => {
+        defaultGameInfo = {};
         initGameInfo(defaultGameInfo);
-        const defaultGameVars = {};
+        defaultGameVars = {};
         initGameVars(defaultGameVars);
+    });    
 
+    it("plays the melody step-by-step", async () => {
         clearPlayedNotes();
         const inputBack01_5_13 = zeroArray(5, 15);
         const gameInfo01a = {
