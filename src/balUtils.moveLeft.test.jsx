@@ -1,13 +1,18 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { moveLeft, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { copy2dArray } from "./utils.js";
 
 describe("balUtils moveLeft", () => {
-  const defaultGameInfo = {};
-  initGameInfo(defaultGameInfo);
-  const defaultGameVars = {};
-  initGameVars(defaultGameVars);
+  let defaultGameInfo;
+  let defaultGameVars;
+
+  beforeEach(() => {
+    defaultGameInfo = {};
+    initGameInfo(defaultGameInfo);
+    defaultGameVars = {};
+    initGameVars(defaultGameVars);
+  });
 
   const inputBack01_3_6 = zeroArray(3, 6);
   const inputBack01_8_6 = zeroArray(8, 6);

@@ -1,18 +1,22 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
 import { rotateGame } from "./rotateGame.js";
 
 describe("Rotate game", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
-    const defaultGameVars = {};
-    initGameVars(defaultGameVars);
+    let defaultGameInfo;
+    let defaultGameVars;
+
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+        defaultGameVars = {};
+        initGameVars(defaultGameVars);
+    });
 
     // ROTATE RIGHT
 
     it("rotateGame right A", () => {
-        initGameInfo(defaultGameInfo);
         const inputBack = zeroArray(6, 6);
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -59,7 +63,6 @@ describe("Rotate game", () => {
     });
 
     it("rotateGame right B", () => {
-        initGameInfo(defaultGameInfo);
         const inputBack = zeroArray(7, 7);
         const input = [
             [1, 1, 1, 1, 1, 1, 1],
@@ -95,7 +98,6 @@ describe("Rotate game", () => {
     });
 
     it("rotateGame right C", () => {
-        initGameInfo(defaultGameInfo);
         const inputBack = zeroArray(6, 6);
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -142,7 +144,6 @@ describe("Rotate game", () => {
     // ROTATE LEFT
 
     it("rotateGame left A", () => {
-        initGameInfo(defaultGameInfo);
         const inputBack = zeroArray(6, 6);
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -189,7 +190,6 @@ describe("Rotate game", () => {
     });
 
     it("rotateGame left B", () => {
-        initGameInfo(defaultGameInfo);
         const inputBack = zeroArray(7, 7);
         const input = [
             [1, 1, 1, 1, 1, 1, 1],
@@ -225,7 +225,6 @@ describe("Rotate game", () => {
     });
 
     it("rotateGame left C", () => {
-        initGameInfo(defaultGameInfo);
         const inputBack = zeroArray(7, 7);
         const input = [
             [1, 1, 1, 1, 1, 1, 1],

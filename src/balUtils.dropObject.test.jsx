@@ -1,11 +1,15 @@
-import { describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { dropObject } from "./balUtils.js";
 import { initGameInfo } from "./gameInfo.js";
 import { copy2dArray } from "./utils.js";
 
 describe("balUtils dropObject", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
+    let defaultGameInfo;
+
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+    });
 
     test("dropObject A", () => {
         const gameInfo = { ...defaultGameInfo, hasWhiteBall: true, blueBall: { x: 2, y: 3 } };
