@@ -961,8 +961,8 @@ function BalPage() {
             break;
           case 4:
             // Balls
-            arr1 = [2, 3, 140, 168, 192, 195, 196, 201, 197, 202, 204, 4, 200, 5, 126, 127];
-            arr2 = [128, 129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 199];
+            arr1 = [2, 3, 140, 168, 192, 195, 201, 197, 202, 204, 4, 200, 5, 126, 127, 128];
+            arr2 = [129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 199, 207];
             break;
           case 5:
             // Red balls
@@ -1827,7 +1827,7 @@ function BalPage() {
       gameVars.currentLevel = 200;
       loadProgress();
       if (fred) {
-        gameVars.currentLevel = 3319;
+        gameVars.currentLevel = 3320;
       }
       initLevel(gameVars.currentLevel);
     }

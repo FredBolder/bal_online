@@ -1064,6 +1064,7 @@ export function initGameVars(vars) {
     vars.iceCountTo = 250;
     vars.laser = null;
     vars.orangeCounter = 0;
+    vars.phaseTicks = 250;
     vars.pinkCounter = 0;
     vars.pinkCountTo = 5;
     vars.pistonGroupsActivated = [];
@@ -1079,6 +1080,7 @@ export function initGameVars(vars) {
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
+    vars.remainingPhaseTicks = 0;
     vars.scroll = { x: 0, y: 0 };
     vars.skipFalling = 0;
     vars.soundLava = "default";

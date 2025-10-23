@@ -38,6 +38,9 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     let updateLevelNumber = false;
 
     if (checkAll) {
+        if (gameVars.remainingPhaseTicks > 0) {
+            gameVars.remainingPhaseTicks--;
+        }
         if (gameVars.timeFreezer > 0) {
             gameVars.timeFreezer--;
         }

@@ -273,6 +273,22 @@ function drawLevel(
     if (gameInfo.hasPropeller) {
       drawPropeller(-w2 * 0.17);
     }
+    if (gameVars.remainingPhaseTicks > 0) {
+      ctx.save();
+      // Clip to the circular area of the ball
+      const radius = (w1 * scaleFactor) / 2;
+      ctx.beginPath();
+      ctx.arc(xc, (ymin + offsetY) + (w2 * scaleFactor * 0.5), radius, 0, Math.PI * 2);
+      ctx.clip();
+
+      const stripeWidth = Math.max(1, Math.round((w1 * scaleFactor) / 15));
+      const phase = (performance.now() / 50) % (stripeWidth * 2);
+      for (let x = xmin - phase; x < xmin + w1; x += stripeWidth * 2) {
+        ctx.fillStyle = "black";
+        ctx.fillRect(x, ymin, stripeWidth, w2);
+      }
+      ctx.restore();
+    }
 
     if (gameVars.gravity === "up") {
       ctx.restore();
@@ -1437,6 +1453,29 @@ function drawLevel(
     drawLine(ctx, xc, y, xc + d5, y + d5, "white");
   }
 
+  function drawPhaseAbility() {
+    const patternCanvas = document.createElement("canvas");
+    const width = Math.max(1, Math.round(w1 / 15));
+    patternCanvas.width = width * 2;
+    patternCanvas.height = width * 2;
+    const pctx = patternCanvas.getContext("2d");
+    pctx.fillStyle = "blue";
+    pctx.fillRect(0, 0, width, width * 2);
+    const pattern = ctx.createPattern(patternCanvas, "repeat");
+
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, pattern);
+    const d1 = w1 * 0.09;
+    const d2 = w1 * 0.22;
+    const d3 = w1 * 0.05;
+    drawFilledCircle(ctx, xc - d1, ymin + d2, d3, "white");
+    drawFilledCircle(ctx, xc + d1, ymin + d2, d3, "white");
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
+    ctx.ellipse(xc, ymin + (w2 * 0.17), w1 * 0.2, w1 * 0.2, 0, 0.3 * Math.PI, 0.7 * Math.PI, false);
+    ctx.stroke();
+  }
+
   function drawPickaxe(x, y) {
     let color = getFgcolor(x, y, "silver");
     let d1 = w1 / 4;
@@ -1445,7 +1484,7 @@ function drawLevel(
     ctx.lineWidth = 3;
     drawLine(ctx, xmin + d1, ymin + d1, xmax - d2, ymax - d2, color);
     ctx.lineWidth = 1;
-    canvas.strokeStyle = color;
+    ctx.strokeStyle = color;
     ctx.beginPath();
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.ellipse(xc + d3, yc + d3, w1 * 0.7, w2 * 0.7, 0, 1.1 * Math.PI, 1.4 * Math.PI, false);
@@ -2799,6 +2838,9 @@ function drawLevel(
           break;
         case 206:
           drawWaterWithIce(currentCol, currentRow);
+          break;
+        case 207:
+          drawPhaseAbility();
           break;
         case 1000:
           // For manual only (empty)

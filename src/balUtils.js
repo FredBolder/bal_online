@@ -16,8 +16,10 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
+const phaseThroughObjects = [1, 10, 11, 12, 15, 16, 17, 18, 21, 30, 35, 87, 88, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 169, 198];
+
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205, 207].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -681,6 +683,9 @@ export function charToNumber(c) {
       break;
     case "ж":
       result = 206;
+      break;
+    case "Ѫ":
+      result = 207;
       break;
     case "|":
       result = 1000;
@@ -1832,6 +1837,9 @@ export function numberToChar(n) {
     case 206:
       result = "ж";
       break;
+    case 207:
+      result = "Ѫ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2347,6 +2355,9 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       );
       result.sound = "pickaxe";
       break;
+    case 207:
+      gameVars.remainingPhaseTicks = gameVars.phaseTicks;
+      break;
     default:
       break;
   }
@@ -2493,6 +2504,12 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
       if (row[x - 1] === 30) {
         result.sound = "unlock";
       }
+    }
+    if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(row[x - 1]) && (row[x - 2] === 0)) {
+      row[x - 2] = 2;
+      row[x] = element;
+      gameInfo.blueBall.x = x - 2;
+      result.player = true;
     }
     if (!result.player && [89, 183, 184, 185].includes(row[x - 1]) && (row[x - 2] === 0)) {
       row[x - 2] = 2;
@@ -2675,6 +2692,12 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
       if (row[x + 1] === 30) {
         result.sound = "unlock";
       }
+    }
+    if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(row[x + 1]) && (row[x + 2] === 0)) {
+      row[x + 2] = 2;
+      row[x] = element;
+      gameInfo.blueBall.x = x + 2;
+      result.player = true;
     }
     if (!result.player && [89, 183, 184, 185].includes(row[x + 1]) && (row[x + 2] === 0)) {
       row[x + 2] = 2;
@@ -2910,16 +2933,19 @@ export function jump(backData, gameData, gameInfo, gameVars) {
       }
       result.player = true;
     }
-    if (
-      !result.player &&
-      gameData[y + dy1][x] === oneDirection &&
-      gameData[y + dy2][x] === 0
-    ) {
+    if (!result.player && (gameData[y + dy1][x] === oneDirection) && (gameData[y + dy2][x] === 0)) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
+    if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(gameData[y + dy1][x]) && (gameData[y + dy2][x]) === 0) {
+      gameData[y + dy2][x] = 2;
+      gameData[y][x] = element;
+      gameInfo.blueBall.y = y + dy2;
+      result.player = true;
+    }
+
     // Horizontal rope
     if (!result.player && (gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && (backData[y + dy1][x] === 80)) {
       gameData[y + dy2][x] = 2;
@@ -3143,17 +3169,18 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       }
       result.player = true;
     }
-    if (
-      !result.player &&
-      gameData[y + dy1][x] === oneDirection &&
-      gameData[y + dy2][x] === 0
-    ) {
+    if (!result.player && (gameData[y + dy1][x] === oneDirection) && (gameData[y + dy2][x] === 0)) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
-
+    if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(gameData[y + dy1][x]) && (gameData[y + dy2][x]) === 0) {
+      gameData[y + dy2][x] = 2;
+      gameData[y][x] = element;
+      gameInfo.blueBall.y = y + dy2;
+      result.player = true;
+    }
     // Horizontal rope
     if (!result.player && (gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && (backData[y + dy1][x] === 80)) {
       gameData[y + dy2][x] = 2;
