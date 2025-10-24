@@ -1,194 +1,218 @@
-import { describe, it, expect } from "vitest";
+import { beforeEach, describe, it, expect } from "vitest";
 import { checkMovers, moverCanMoveBlueBall } from "./movers.js";
 import { initGameInfo } from "./gameInfo.js";
 import { copy2dArray } from "./utils.js";
 
 describe("movers", () => {
-    const defaultGameInfo = {};
-    initGameInfo(defaultGameInfo);
+    let defaultGameInfo;
+
+    beforeEach(() => {
+        defaultGameInfo = {};
+        initGameInfo(defaultGameInfo);
+    });
 
     // checkMovers
 
-    let gameInfo01a = {
-        ...defaultGameInfo,
-        blueBall: { x: 1, y: 4 },
-        movers: [
-            { x: 1, y: 5, direction: "right" },
-            { x: 3, y: 5, direction: "right" },
-            { x: 5, y: 5, direction: "right" }
-        ]
-    };
-    let input01a = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 0, 5, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput01a = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 2, 0, 4, 0, 5, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01a = checkMovers(input01a, gameInfo01a);
     it("checkMovers A", () => {
-        expect(JSON.stringify(input01a)).toBe(JSON.stringify(expectedOutput01a));
-    });
-    it("checkMovers A info", () => {
-        expect(info01a).toBe(true);
-    });
-    it("checkMovers A blueBall", () => {
-        expect(JSON.stringify(gameInfo01a.blueBall)).toBe(JSON.stringify({ x: 2, y: 4 }));
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 5, direction: "right" },
+                { x: 3, y: 5, direction: "right" },
+                { x: 5, y: 5, direction: "right" }
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 5, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 2, 0, 4, 0, 5, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 2, y: 4 });
     });
 
-    let gameInfo01b = {
-        ...defaultGameInfo,
-        blueBall: { x: 1, y: 4 },
-        yellowBalls: [{ x: 5, y: 4, direction: "none" }],
-        movers: [
-            { x: 1, y: 5, direction: "left" },
-            { x: 3, y: 5, direction: "left" },
-            { x: 5, y: 5, direction: "upleft" }
-        ]
-    };
-    let input01b = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 0, 9, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput01b = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 9, 0, 0, 1],
-        [1, 2, 4, 0, 0, 0, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01b = checkMovers(input01b, gameInfo01b);
     it("checkMovers B", () => {
-        expect(JSON.stringify(input01b)).toBe(JSON.stringify(expectedOutput01b));
-    });
-    it("checkMovers B info", () => {
-        expect(info01b).toBe(true);
-    });
-    it("checkMovers B blueBall", () => {
-        expect(JSON.stringify(gameInfo01b.blueBall)).toBe(JSON.stringify({ x: 1, y: 4 }));
-    });
-    it("checkMovers B yellowBalls", () => {
-        expect(JSON.stringify(gameInfo01b.yellowBalls)).toBe(JSON.stringify([{ x: 4, y: 3, direction: "none" }]));
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 5, direction: "left" },
+                { x: 3, y: 5, direction: "left" },
+                { x: 5, y: 5, direction: "upleft" }
+            ],
+            yellowBalls: [{ x: 5, y: 4, direction: "none" }]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 9, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 9, 0, 0, 1],
+            [1, 2, 4, 0, 0, 0, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
+        expect(gameInfo.yellowBalls).toEqual([{ x: 4, y: 3, direction: "none" }]);
     });
 
-    let gameInfo01c = {
-        ...defaultGameInfo,
-        blueBall: { x: 1, y: 3 },
-        movers: [
-            { x: 1, y: 4, direction: "down" },
-            { x: 3, y: 4, direction: "down" },
-            { x: 5, y: 4, direction: "up" }
-        ]
-    };
-    let input01c = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 0, 5, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput01c = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 5, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 2, 0, 4, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let info01c = checkMovers(input01c, gameInfo01c);
     it("checkMovers C", () => {
-        expect(JSON.stringify(input01c)).toBe(JSON.stringify(expectedOutput01c));
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 4, direction: "down" },
+                { x: 3, y: 4, direction: "down" },
+                { x: 5, y: 4, direction: "up" }
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 5, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 5, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 2, 0, 4, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });
     });
-    it("checkMovers C info", () => {
-        expect(info01c).toBe(true);
-    });
-    it("checkMovers C blueBall", () => {
-        expect(JSON.stringify(gameInfo01c.blueBall)).toBe(JSON.stringify({ x: 1, y: 5 }));
+
+    it("checkMovers D", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 4, direction: "upright" },
+                { x: 3, y: 4, direction: "down" },
+                { x: 5, y: 4, direction: "down" }
+            ],
+            pinkBalls: [{ x: 5, y: 3, delete: false, skipFalling: 0 }]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 203, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 2, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 0, 0, 4, 0, 203, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 2, y: 2 });
+        expect(gameInfo.pinkBalls).toEqual([{ x: 5, y: 5, delete: false, skipFalling: 0 }]);
     });
 
     // moverCanMoveBlueBall
 
-    let gameInfo02a = {
-        ...defaultGameInfo,
-        blueBall: { x: 1, y: 4 },
-        movers: [
-            { x: 1, y: 5, direction: "right" },
-            { x: 3, y: 5, direction: "right" },
-            { x: 5, y: 5, direction: "right" }
-        ]
-    };
-    let input02a = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 0, 5, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput02a = copy2dArray(input02a);
-
-    let info02a = moverCanMoveBlueBall(input02a, gameInfo02a);
     it("moverCanMoveBlueBall A", () => {
-        expect(JSON.stringify(input02a)).toBe(JSON.stringify(expectedOutput02a));
-    });
-    it("moverCanMoveBlueBall A info", () => {
-        expect(info02a).toBe(true);
-    });
-    it("moverCanMoveBlueBall A blueBall", () => {
-        expect(JSON.stringify(gameInfo02a.blueBall)).toBe(JSON.stringify({ x: 1, y: 4 }));
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 5, direction: "right" },
+                { x: 3, y: 5, direction: "right" },
+                { x: 5, y: 5, direction: "right" }
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 5, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = copy2dArray(input);
+
+        let info = moverCanMoveBlueBall(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
 
-    let gameInfo02b = {
-        ...defaultGameInfo,
-        blueBall: { x: 1, y: 4 },
-        movers: [
-            { x: 1, y: 5, direction: "left" },
-            { x: 3, y: 5, direction: "right" },
-            { x: 5, y: 5, direction: "right" }
-        ]
-    };
-    let input02b = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 3, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 1],
-        [1, 2, 0, 4, 0, 5, 0, 1],
-        [1, 178, 1, 178, 1, 178, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1],
-    ];
-    let expectedOutput02b = copy2dArray(input02b);
-
-    let info02b = moverCanMoveBlueBall(input02b, gameInfo02b);
     it("moverCanMoveBlueBall B", () => {
-        expect(JSON.stringify(input02b)).toBe(JSON.stringify(expectedOutput02b));
-    });
-    it("moverCanMoveBlueBall B info", () => {
-        expect(info02b).toBe(false);
-    });
-    it("moverCanMoveBlueBall B blueBall", () => {
-        expect(JSON.stringify(gameInfo02b.blueBall)).toBe(JSON.stringify({ x: 1, y: 4 }));
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 5, direction: "left" },
+                { x: 3, y: 5, direction: "right" },
+                { x: 5, y: 5, direction: "right" }
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 5, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = copy2dArray(input);
+
+        let info = moverCanMoveBlueBall(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(false);
+        expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
 
     // Insert new tests here
