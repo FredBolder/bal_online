@@ -296,6 +296,12 @@ tr:nth-child(even) td {
     display: block;
 }
 
+#progress {
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
 /* GAME CANVAS AND ARROW BUTTONS */
 
 .canvasAndButtons {
@@ -347,6 +353,19 @@ tr:nth-child(even) td {
 .gameButton img {
     width: 10px;
     height: 10px;
+}
+
+/* OVERVIEW PAGE */
+
+.seriesList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;    
 }
 
 /* MEDIA QUERIES */

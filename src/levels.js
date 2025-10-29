@@ -8,30 +8,30 @@ import { pistonModes } from "./pistons.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
-const series1Start = 200;
-const series1End = 224;
-const series2Start = 300;
-const series2End = 327;
-const series3Start = 400;
-const series3End = 426;
-const series4Start = 700;
-const series4End = 749;
-const series5Start = 3300;
-const series5End = 3321;
-const seriesSmallStart = 750;
-const seriesSmallEnd = 764;
-const seriesExtremeStart = 901;
-const seriesExtremeEnd = 905;
-const seriesChoniaPollaStart = 990;
-const seriesChoniaPollaEnd = 993;
-const seriesSecretStart = 2000;
-const seriesSecretEnd = 2016;
-const seriesEasyStart = 3000;
-const seriesEasyEnd = 3022;
-const hiddenMiniSeries1Start = 3100;
-const hiddenMiniSeries1End = 3106;
-const seriesMusicStart = 3200;
-const seriesMusicEnd = 3207;
+export const series1Start = 200;
+export const series1End = 224;
+export const series2Start = 300;
+export const series2End = 327;
+export const series3Start = 400;
+export const series3End = 426;
+export const series4Start = 700;
+export const series4End = 749;
+export const series5Start = 3300;
+export const series5End = 3321;
+export const seriesSmallStart = 750;
+export const seriesSmallEnd = 764;
+export const seriesExtremeStart = 901;
+export const seriesExtremeEnd = 905;
+export const seriesChoniaPollaStart = 990;
+export const seriesChoniaPollaEnd = 993;
+export const seriesSecretStart = 2000;
+export const seriesSecretEnd = 2016;
+export const seriesEasyStart = 3000;
+export const seriesEasyEnd = 3022;
+export const hiddenMiniSeries1Start = 3100;
+export const hiddenMiniSeries1End = 3106;
+export const seriesMusicStart = 3200;
+export const seriesMusicEnd = 3207;
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
@@ -856,6 +856,10 @@ export function getRandomLevel(currentLevel) {
     result = levels[randomInt(0, levels.length - 1)];
   }
   return result;
+}
+
+export function isChroniaPolla(n) {
+  return ((n >= seriesChoniaPollaStart) && (n <= seriesChoniaPollaEnd));
 }
 
 async function loadFromFile(n, gateTravelling = false) {

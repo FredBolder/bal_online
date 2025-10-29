@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { dropObject } from "./balUtils.js";
 import { initGameInfo } from "./gameInfo.js";
+import { skipFallingTicks } from "./pinkBalls.js";
 import { copy2dArray } from "./utils.js";
 
 describe("balUtils dropObject", () => {
@@ -198,6 +199,7 @@ describe("balUtils dropObject", () => {
         expect(input).toEqual(expectedOutput);
         expect(info.update).toBe(true);
         expect(gameInfo.hasPinkBall).toBe(false);
+        expect(gameInfo.pinkBalls).toEqual([{ x: 1, y: 3, delete: false, skipFalling: skipFallingTicks() }]);
     });
 
     // Insert new tests here

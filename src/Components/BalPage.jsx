@@ -1,8 +1,10 @@
 import { useContext, useRef, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useModal } from "./useModal.js";
 import { ModalContext } from "./ModalContext";
 
+import { actionKeys, actionList, hasAction } from "../actions.js";
+import { addObject, removeObject } from "../addRemoveObject.js";
 import {
   changeGroup,
   changeDirection,
@@ -19,7 +21,6 @@ import {
   stringArrayToNumberArray,
   zeroArray,
 } from "../balUtils.js";
-import { addObject, removeObject } from "../addRemoveObject.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
 import {
   changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
@@ -39,6 +40,7 @@ import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../mem
 import { instruments } from "../music.js";
 import { changeMusicBoxProperty, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
+import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -79,6 +81,8 @@ import selectButton from "../Images/select_button.png";
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
 const msgNoCellSelected = "There is no cell selected. Hold the Shift button and click on a cell to select a cell.";
+
+let dropPressed = false;
 let kPressed = false;
 let createLevelColorPages = 2;
 let createLevelDirection = "";
@@ -113,6 +117,9 @@ let gameVarsMenu = {};
 initGameVars(gameVarsMenu);
 
 function BalPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const clickedLevel = searchParams.get("level");
   const { showMessage, showConfirm, showInput, showSelect } = useModal();
   const { modalState } = useContext(ModalContext);
 
@@ -147,19 +154,22 @@ function BalPage() {
   const elementSlowDownYellow = useRef(null);
   const elementWhite = useRef(null);
   const elementYellow = useRef(null);
+  const exportProgressRef = useRef(null);
   const gameCanvas = useRef(null);
+  const importProgressRef = useRef(null);
   const insertColumn = useRef(null);
   const insertRow = useRef(null);
   const levelSetting = useRef(null);
   const loadLevel = useRef(null);
   const loadRandom = useRef(null);
   const newLevel = useRef(null);
+  const overview = useRef(null);
   const redo = useRef(null);
   const tryAgainButton = useRef(null);
   const undo = useRef(null);
   const [green, setGreen] = useState(0);
   const [levelNumber, setLevelNumber] = useState(0);
-
+  const [progressText, setProgressText] = useState("");
 
   const modalStateRef = useRef(null);
 
@@ -178,17 +188,6 @@ function BalPage() {
     document.addEventListener("keydown", handleKeyDownEvent);
     return () => document.removeEventListener("keydown", handleKeyDownEvent);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  function loadProgress() {
-    let level = -1;
-    const levelStr = localStorage.getItem("lastSolvedLevel");
-    if (levelStr !== null) {
-      level = tryParseInt(levelStr, -1);
-      if (level !== -1) {
-        gameVars.currentLevel = level;
-      }
-    }
-  }
 
   async function runGameScheduler(checkAll = true) {
     let saveCoilSpring = false;
@@ -330,10 +329,6 @@ function BalPage() {
     if (info.updateLevelNumber) {
       setLevelNumber(gameVars.currentLevel);
     }
-  }
-
-  function saveProgress() {
-    localStorage.setItem("lastSolvedLevel", gameVars.currentLevel.toString());
   }
 
   async function hint(gameVars) {
@@ -581,7 +576,7 @@ function BalPage() {
     const value = await showSelect(
       "Load level",
       "Load the first level of series:",
-      ["1", "2", "3", "4", "5", "Small", "Easy", "Extreme", "Music", "Chronia Polla"],
+      ["1", "2", "3", "4", "5", "Small", "Easy", "Extreme", "Music"],
       0
     );
 
@@ -615,6 +610,7 @@ function BalPage() {
           level = 3200;
           break;
         case "Chronia Polla":
+          // Not public
           level = 990;
           break;
         default:
@@ -725,6 +721,24 @@ function BalPage() {
       }
       globalVars.loading = false;
     }
+  }
+
+  async function clickExportProgress() {
+    const ok = await exportProgress(progressLevel(), solvedLevels);
+    if (!ok) {
+      console.log("Error while exporting progress");
+    }
+  }
+
+  async function clickImportProgress() {
+    const result = await importProgress();
+
+    if (!result) {
+      showMessage("Error", "Invalid progress data");
+      return;
+    }
+
+    updateProgressText();
   }
 
   async function clickRedo() {
@@ -1153,11 +1167,13 @@ function BalPage() {
     };
 
     let action = "";
+    let actionIndex = -1;
     let actions = null;
     let codes = "";
     let direction = "";
     const gravityDown = (gameVars.gravity === "down");
     let isJumping = false;
+    let index = -1;
 
     if (modalOpen) {
       return;
@@ -1167,10 +1183,6 @@ function BalPage() {
     if (["Alt", "Ctrl", "Shift"].includes(e.key)) {
       return;
     }
-    if (e.altKey || e.ctrlKey) {
-      return;
-    }
-
 
     if (globalVars.loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
       return;
@@ -1193,7 +1205,7 @@ function BalPage() {
     }
 
     if (globalVars.createLevel) {
-      if (!e.shiftKey) {
+      if (!e.altKey && !e.ctrlKey && !e.shiftKey) {
         let direction = "";
         switch (e.key) {
           case "ArrowLeft":
@@ -1215,6 +1227,37 @@ function BalPage() {
           moveSelectedObject(createLevelSelectedCell, direction, null, true);
         }
       }
+
+      if (!e.altKey && !e.ctrlKey && e.shiftKey) {
+        switch (e.key) {
+          case "C":
+            clickInsertColumn();
+            break;
+          case "R":
+            clickInsertRow();
+            break;
+          default:
+            break;
+        }
+      }
+
+      if (!e.altKey && e.ctrlKey && !e.shiftKey) {
+        switch (e.key) {
+          case "y":
+            clickRedo();
+            break;
+          case "z":
+            clickUndo();
+            break;
+          default:
+            break;
+        }
+      }
+
+      return;
+    }
+
+    if (e.altKey || e.ctrlKey) {
       return;
     }
 
@@ -1236,45 +1279,37 @@ function BalPage() {
           case "ArrowLeft":
           case "a":
           case "A":
-          case "4":
             direction = "left";
             break;
           case "ArrowRight":
           case "d":
           case "D":
-          case "6":
             direction = "right";
             break;
           case "ArrowUp":
           case "w":
           case "W":
-          case "8":
             direction = "up";
             break;
           case "q":
           case "Q":
-          case "7":
             direction = "upleft";
             break;
           case "e":
           case "E":
-          case "9":
             direction = "upright";
             break;
           case "ArrowDown":
           case "s":
           case "S":
-          case "2":
             direction = "down";
             break;
           case "y":
           case "Y":
-          case "1":
             direction = "downleft";
             break;
           case "c":
           case "C":
-          case "3":
             direction = "downright";
             break;
           default:
@@ -1308,98 +1343,156 @@ function BalPage() {
       return;
     }
 
+    actionIndex = -1;
+
+    if ("1234567890".includes(e.key)) {
+      index = parseInt(e.key);
+      if (index === 0) {
+        index = 10;
+      }
+      index--;
+      index = actionKeys[index];
+      if (hasAction(gameInfo, index)) {
+        actionIndex = index;
+      }
+    }
+
+    if (dropPressed) {
+      switch (e.key) {
+        case "w":
+        case "W":
+          actionIndex = 2;
+          break;
+        case "l":
+        case "L":
+          actionIndex = 3;
+          break;
+        case "y":
+        case "Y":
+          actionIndex = 4;
+          break;
+        case "r":
+        case "R":
+          actionIndex = 5;
+          break;
+        case "p":
+        case "P":
+          if (e.shiftKey) {
+            actionIndex = 8; // pink
+          } else {
+            actionIndex = 6; // purple
+          }
+          break;
+        case "o":
+        case "O":
+          actionIndex = 7;
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (e.key === " ") {
+      actions = [];
+      for (let i = 0; i < actionList.length; i++) {
+        if (hasAction(gameInfo, i)) {
+          actions.push(actionList[i]);
+        }
+      }
+      action = "";
+      if (actions.length === 1) {
+        action = actions[0];
+      } else if (actions.length > 1) {
+        action = await showSelect("Action", "Select action", actions, 0);
+        if (action === null) {
+          action = "";
+        }
+      }
+      switch (action) {
+        case "Create teleports":
+          actionIndex = 0;
+          break;
+        case "Create self-destructing teleports":
+          actionIndex = 1;
+          break;
+        case "Drop white ball":
+          actionIndex = 2;
+          break;
+        case "Drop light blue ball":
+          actionIndex = 3;
+          break;
+        case "Drop yellow ball":
+          actionIndex = 4;
+          break;
+        case "Drop red ball":
+          actionIndex = 5;
+          break;
+        case "Drop purple ball":
+          actionIndex = 6;
+          break;
+        case "Drop orange ball":
+          actionIndex = 7;
+          break;
+        case "Drop pink ball":
+          actionIndex = 8;
+          break;
+        case "Shrink object":
+          actionIndex = 9;
+          break;
+        case "Freeze water":
+          actionIndex = 10;
+          break;
+        case "Use telekinetic power":
+          actionIndex = 11;
+          break;
+        default:
+          break;
+      }
+      updateGameButtonsDisplay();
+    }
+
+    switch (actionIndex) {
+      case 0:
+        gameInfo.action = "createTeleports";
+        break;
+      case 1:
+        gameInfo.action = "createSelfDestructingTeleports";
+        break;
+      case 2:
+        info = dropObject(gameData, gameInfo, "whiteBall");
+        break;
+      case 3:
+        info = dropObject(gameData, gameInfo, "lightBlueBall");
+        break;
+      case 4:
+        info = dropObject(gameData, gameInfo, "yellowBall");
+        break;
+      case 5:
+        info = dropObject(gameData, gameInfo, "redBall");
+        break;
+      case 6:
+        info = dropObject(gameData, gameInfo, "purpleBall");
+        break;
+      case 7:
+        info = dropObject(gameData, gameInfo, "orangeBall");
+        break;
+      case 8:
+        info = dropObject(gameData, gameInfo, "pinkBall");
+        break;
+      case 9:
+        gameInfo.action = "shrink";
+        break;
+      case 10:
+        gameInfo.action = "freeze";
+        break;
+      case 11:
+        info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
+        break;
+      default:
+        break;
+    }
 
     switch (e.key) {
-      case " ": {
-        actions = [];
-        if (gameInfo.hasTeleportsCreator) {
-          actions.push("Create teleports");
-        }
-        if (gameInfo.hasSelfDestructingTeleportsCreator) {
-          actions.push("Create self-destructing teleports");
-        }
-        if (gameInfo.hasWhiteBall) {
-          actions.push("Drop white ball");
-        }
-        if (gameInfo.hasLightBlueBall) {
-          actions.push("Drop light blue ball");
-        }
-        if (gameInfo.hasYellowBall) {
-          actions.push("Drop yellow ball");
-        }
-        if (gameInfo.hasRedBall) {
-          actions.push("Drop red ball");
-        }
-        if (gameInfo.hasPurpleBall) {
-          actions.push("Drop purple ball");
-        }
-        if (gameInfo.hasOrangeBall) {
-          actions.push("Drop orange ball");
-        }
-        if (gameInfo.hasPinkBall) {
-          actions.push("Drop pink ball");
-        }
-        if (gameInfo.hasShrinker) {
-          actions.push("Shrink object");
-        }
-        if (gameInfo.hasFreezeGun) {
-          actions.push("Freeze water");
-        }
-        if (gameInfo.hasTelekineticPower) {
-          actions.push("Use telekinetic power");
-        }
-        action = "";
-        if (actions.length === 1) {
-          action = actions[0];
-        } else if (actions.length > 1) {
-          action = await showSelect("Action", "Select action", actions, 0);
-          if (action === null) {
-            action = "";
-          }
-        }
-        switch (action) {
-          case "Create teleports":
-            gameInfo.action = "createTeleports";
-            break;
-          case "Create self-destructing teleports":
-            gameInfo.action = "createSelfDestructingTeleports";
-            break;
-          case "Drop white ball":
-            info = dropObject(gameData, gameInfo, "whiteBall");
-            break;
-          case "Drop light blue ball":
-            info = dropObject(gameData, gameInfo, "lightBlueBall");
-            break;
-          case "Drop yellow ball":
-            info = dropObject(gameData, gameInfo, "yellowBall");
-            break;
-          case "Drop red ball":
-            info = dropObject(gameData, gameInfo, "redBall");
-            break;
-          case "Drop purple ball":
-            info = dropObject(gameData, gameInfo, "purpleBall");
-            break;
-          case "Drop orange ball":
-            info = dropObject(gameData, gameInfo, "orangeBall");
-            break;
-          case "Drop pink ball":
-            info = dropObject(gameData, gameInfo, "pinkBall");
-            break;
-          case "Shrink object":
-            gameInfo.action = "shrink";
-            break;
-          case "Freeze water":
-            gameInfo.action = "freeze";
-            break;
-          case "Use telekinetic power":
-            info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
-            break;
-          default:
-            break;
-        }
-        updateGameButtonsDisplay();
-        break;
-      }
       case "b":
       case "B": {
         if (gameInfo.twoBlue) {
@@ -1418,7 +1511,7 @@ function BalPage() {
     if (e.shiftKey) {
       switch (e.key) {
         case "R":
-          if (!kPressed) {
+          if (!kPressed && !dropPressed) {
             randomLevel();
           }
           break;
@@ -1436,31 +1529,29 @@ function BalPage() {
         case "ArrowLeft":
         case "a":
         case "A":
-        case "4":
           info = moveLeft(backData, gameData, gameInfo, gameVars);
           break;
         case "ArrowRight":
         case "d":
         case "D":
-        case "6":
           info = moveRight(backData, gameData, gameInfo, gameVars);
           break;
         case "ArrowUp":
         case "w":
         case "W":
-        case "8":
-          if (gravityDown) {
-            info = jump(backData, gameData, gameInfo, gameVars);
-            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
-              isJumping = true;
+          if (!dropPressed || (e.key === "ArrowUp")) {
+            if (gravityDown) {
+              info = jump(backData, gameData, gameInfo, gameVars);
+              if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+                isJumping = true;
+              }
+            } else {
+              info = pushObject(backData, gameData, gameInfo, gameVars);
             }
-          } else {
-            info = pushObject(backData, gameData, gameInfo, gameVars);
           }
           break;
         case "q":
         case "Q":
-        case "7":
           if (gravityDown) {
             info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
@@ -1472,7 +1563,6 @@ function BalPage() {
           break;
         case "e":
         case "E":
-        case "9":
           if (gravityDown) {
             info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
@@ -1485,7 +1575,6 @@ function BalPage() {
         case "ArrowDown":
         case "s":
         case "S":
-        case "2":
           if (gravityDown) {
             info = pushObject(backData, gameData, gameInfo, gameVars);
           } else {
@@ -1497,20 +1586,20 @@ function BalPage() {
           break;
         case "y":
         case "Y":
-        case "1":
-          if (gravityDown) {
-            info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
-          } else {
-            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
-            if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
-              isJumping = true;
+          if (!dropPressed) {
+            if (gravityDown) {
+              info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
+            } else {
+              info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+              if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
+                isJumping = true;
+              }
             }
           }
           break;
         case "c":
         case "C":
-        case "3":
-          if (!kPressed || (e.key === "3")) {
+          if (!kPressed) {
             if (gravityDown) {
               info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
             } else {
@@ -1667,8 +1756,9 @@ function BalPage() {
           initLevel(gameVars.currentLevel);
         } else {
           showMessage("Congratulations!", `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`);
-          initLevel(gameVars.currentLevel + 1);
-          saveProgress();
+          await initLevel(gameVars.currentLevel + 1);
+          await saveProgress(gameVars.currentLevel);
+          updateProgressText();
         }
       }
     }
@@ -1751,6 +1841,8 @@ function BalPage() {
     }
     kPressed = ((e.key === "k") || (e.key === "K"));
 
+    dropPressed = (e.shiftKey && (e.key.toUpperCase() === "D"));
+
     // Extra check
     if (checkMagnets(gameInfo)) {
       playSound("magnet");
@@ -1811,44 +1903,54 @@ function BalPage() {
     undoBuffer.push(undoItem);
   }
 
-  //const myRef = useRef(document);
-
-
   useEffect(() => {
     if (!gameCanvas.current) return;
-    if (!initialized) {
-      initialized = true;
-      loadSettings();
-      cbArrowButtons.current.checked = getSettings().arrowButtons;
-      cbCreateLevel.current.checked = false;
-      cbQuestions.current.checked = getSettings().lessQuestions;
-      cbMusic.current.value = getSettings().music.toString();
-      cbSound.current.value = getSettings().sound.toString();
-      gameVars.currentLevel = 200;
-      loadProgress();
-      if (fred) {
-        gameVars.currentLevel = 3321;
+
+    let mounted = true;
+
+    (async () => {
+      try {
+        const db = await initDB();
+        if (!mounted) return;
+
+        if (!initialized) {
+          initialized = true;
+          loadSettings();
+          cbArrowButtons.current.checked = getSettings().arrowButtons;
+          cbCreateLevel.current.checked = false;
+          cbQuestions.current.checked = getSettings().lessQuestions;
+          cbMusic.current.value = getSettings().music.toString();
+          cbSound.current.value = getSettings().sound.toString();
+          gameVars.currentLevel = 200;
+          await loadProgress(gameVars);
+          if (fred) {
+            gameVars.currentLevel = 3321;
+          }
+          initLevel(gameVars.currentLevel);
+          updateProgressText();
+        }
+        if (clickedLevel) {
+          initLevel(clickedLevel);
+        }
+
+        updateGameButtonsDisplay();
+        updateCreateLevelCanvasDisplay();
+        updateMenuItemsDisplay();
+        updateGameCanvas();
+        setLevelNumber(gameVars.currentLevel);
+        updateGreen();
+      } catch (err) {
+        console.error('Initialization failed', err);
       }
-      initLevel(gameVars.currentLevel);
-    }
+    })();
 
-    updateGameButtonsDisplay();
-    updateCreateLevelCanvasDisplay();
-    updateMenuItemsDisplay();
-    updateGameCanvas();
-    setLevelNumber(gameVars.currentLevel);
-    updateGreen();
-
-    //const el = myRef.current;
-    //el.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
     gameInterval = setInterval(runGameScheduler, schedulerTime());
     return () => {
-      //el.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
       clearInterval(gameInterval);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [clickedLevel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateCreateLevelCanvasDisplay() {
     createLevelCanvas.current.style.display = globalVars.createLevel ? "block" : "none";
@@ -1873,9 +1975,16 @@ function BalPage() {
     undo.current.style.display = (globalVars.createLevel) ? "block" : "none";
     redo.current.style.display = (globalVars.createLevel) ? "block" : "none";
 
-    loadRandom.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+    overview.current.style.display = (!globalVars.createLevel) ? "block" : "none";
     loadLevel.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+    loadRandom.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+    exportProgressRef.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+    importProgressRef.current.style.display = (!globalVars.createLevel) ? "block" : "none";
     tryAgainButton.current.style.display = (!globalVars.createLevel) ? "block" : "none";
+  }
+
+  function updateProgressText() {
+    setProgressText(`${solvedLevels.length} of ${getAllLevels().length} levels solved`);
   }
 
   function updateGreen() {
@@ -1998,35 +2107,35 @@ function BalPage() {
   }
 
   function buttonDown() {
-    handleKeyDown({ key: "2", shiftKey: false });
+    handleKeyDown({ key: "s", shiftKey: false });
   }
 
   function buttonDownLeft() {
-    handleKeyDown({ key: "1", shiftKey: false });
+    handleKeyDown({ key: "y", shiftKey: false });
   }
 
   function buttonDownRight() {
-    handleKeyDown({ key: "3", shiftKey: false });
+    handleKeyDown({ key: "c", shiftKey: false });
   }
 
   function buttonLeft() {
-    handleKeyDown({ key: "4", shiftKey: false });
+    handleKeyDown({ key: "a", shiftKey: false });
   }
 
   function buttonRight() {
-    handleKeyDown({ key: "6", shiftKey: false });
+    handleKeyDown({ key: "d", shiftKey: false });
   }
 
   function buttonUp() {
-    handleKeyDown({ key: "8", shiftKey: false });
+    handleKeyDown({ key: "w", shiftKey: false });
   }
 
   function buttonUpLeft() {
-    handleKeyDown({ key: "7", shiftKey: false });
+    handleKeyDown({ key: "q", shiftKey: false });
   }
 
   function buttonUpRight() {
-    handleKeyDown({ key: "9", shiftKey: false });
+    handleKeyDown({ key: "e", shiftKey: false });
   }
 
   function buttonSelect() {
@@ -2804,6 +2913,9 @@ function BalPage() {
                   <label>Redo</label>
                 </div>
 
+                <div ref={overview} onClick={() => { navigate("/overview") }}>
+                  <label>Overview</label>
+                </div>
                 <div ref={loadLevel} onClick={() => { clickLoadLevel() }}>
                   <label>Load level</label>
                 </div>
@@ -2821,6 +2933,12 @@ function BalPage() {
                 </div>
                 <div onClick={clickImportLevel}>
                   <label>Import level</label>
+                </div>
+                <div ref={exportProgressRef} onClick={clickExportProgress}>
+                  <label>Export progress</label>
+                </div>
+                <div ref={importProgressRef}  onClick={clickImportProgress}>
+                  <label>Import progress</label>
                 </div>
               </div>
             </div>
@@ -2897,6 +3015,7 @@ function BalPage() {
               </div>
             </div>
           </div>
+          <div id="progress">{progressText}</div>
           <div className="canvasAndButtons">
             <canvas
               className="gameCanvas"

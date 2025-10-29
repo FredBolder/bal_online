@@ -943,7 +943,7 @@ export function dropObject(gameData, gameInfo, object) {
         break;
       case "pinkBall":
         gameData[yTarget][xTarget] = 203;
-        gameInfo.pinkBalls.push({ x: xTarget, y: yTarget });
+        gameInfo.pinkBalls.push({ x: xTarget, y: yTarget, delete: false, skipFalling: skipFallingTicks() });
         gameInfo.hasPinkBall = false;
         break;
       case "purpleBall":
