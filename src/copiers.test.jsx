@@ -1,7 +1,6 @@
 import { beforeEach, describe, it, expect } from "vitest";
 import { initGameInfo } from "./gameInfo.js";
 import { checkCopiers } from "./copiers.js";
-import { skipFallingTicks } from "./pinkBalls.js";
 import { copy2dArray } from "./utils.js";
 
 
@@ -94,7 +93,7 @@ describe("Copiers", () => {
             blueBall: { x: 1, y: 3 },
             copiers: [{ x: 5, y: 3 }],
             greenBalls: 1,
-            pinkBalls: [{ x: 5, y: 2, delete: false, skipFalling: skipFallingTicks() }],
+            pinkBalls: [{ x: 5, y: 2, delete: false, counter: 0 }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -114,8 +113,8 @@ describe("Copiers", () => {
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: true }));
         expect(JSON.stringify(gameInfo.pinkBalls)).toBe(JSON.stringify([
-            { x: 3, y: 3, delete: false, skipFalling: skipFallingTicks() }, 
-            { x: 7, y: 3, delete: false, skipFalling: skipFallingTicks() }
+            { x: 3, y: 3, delete: false, counter: 0 }, 
+            { x: 7, y: 3, delete: false, counter: 0 }
         ]));
     });
 

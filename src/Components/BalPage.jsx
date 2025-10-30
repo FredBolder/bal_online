@@ -96,6 +96,7 @@ let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
 let gameInterval;
+let ignoreGravity = true;
 let initialized = false;
 let modalOpen = false;
 let redoPossible = false;
@@ -1541,7 +1542,7 @@ function BalPage() {
         case "w":
         case "W":
           if (!dropPressed || (e.key === "ArrowUp")) {
-            if (gravityDown) {
+            if (gravityDown || ignoreGravity) {
               info = jump(backData, gameData, gameInfo, gameVars);
               if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
                 isJumping = true;
@@ -1553,7 +1554,7 @@ function BalPage() {
           break;
         case "q":
         case "Q":
-          if (gravityDown) {
+          if (gravityDown || ignoreGravity) {
             info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
               isJumping = true;
@@ -1564,7 +1565,7 @@ function BalPage() {
           break;
         case "e":
         case "E":
-          if (gravityDown) {
+          if (gravityDown || ignoreGravity) {
             info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
               isJumping = true;
@@ -1576,7 +1577,7 @@ function BalPage() {
         case "ArrowDown":
         case "s":
         case "S":
-          if (gravityDown) {
+          if (gravityDown || ignoreGravity) {
             info = pushObject(backData, gameData, gameInfo, gameVars);
           } else {
             info = jump(backData, gameData, gameInfo, gameVars);
@@ -1590,7 +1591,7 @@ function BalPage() {
         case "z":
         case "Z":
           if (!dropPressed) {
-            if (gravityDown) {
+            if (gravityDown || ignoreGravity) {
               info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
             } else {
               info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
@@ -1603,7 +1604,7 @@ function BalPage() {
         case "c":
         case "C":
           if (!kPressed) {
-            if (gravityDown) {
+            if (gravityDown || ignoreGravity) {
               info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
             } else {
               info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
@@ -1779,7 +1780,7 @@ function BalPage() {
 
     if (kPressed) {
       if (globalVars.fred && (e.key === "!")) {
-        e.preventDefault(); 
+        e.preventDefault();
         const add = await showInput("Add solved levels", "Levels", "");
         if (add !== null) {
           addSolvedLevels(add);
@@ -1972,10 +1973,17 @@ function BalPage() {
   function updateGameButtonsDisplay() {
     elementGameButtons.current.style.display = (getSettings().arrowButtons && !globalVars.createLevel) ? "block" : "none";
     actionButtonRef.current.style.display = (gameInfo.action === "") ? "inline" : "none";
-    arrowButtonDownLeft.current.style.display = ((gameVars.gravity === "up") || (gameInfo.action !== "")) ? "inline" : "none";
-    arrowButtonDownRight.current.style.display = ((gameVars.gravity === "up") || (gameInfo.action !== "")) ? "inline" : "none";
-    arrowButtonUpLeft.current.style.display = ((gameVars.gravity === "down") || (gameInfo.action !== "")) ? "inline" : "none";
-    arrowButtonUpRight.current.style.display = ((gameVars.gravity === "down") || (gameInfo.action !== "")) ? "inline" : "none";
+    if (ignoreGravity) {
+      arrowButtonDownLeft.current.style.display = (gameInfo.action !== "") ? "inline" : "none";
+      arrowButtonDownRight.current.style.display = (gameInfo.action !== "") ? "inline" : "none";
+      arrowButtonUpLeft.current.style.display = "inline";
+      arrowButtonUpRight.current.style.display = "inline";
+    } else {
+      arrowButtonDownLeft.current.style.display = ((gameVars.gravity === "up") || (gameInfo.action !== "")) ? "inline" : "none";
+      arrowButtonDownRight.current.style.display = ((gameVars.gravity === "up") || (gameInfo.action !== "")) ? "inline" : "none";
+      arrowButtonUpLeft.current.style.display = ((gameVars.gravity === "down") || (gameInfo.action !== "")) ? "inline" : "none";
+      arrowButtonUpRight.current.style.display = ((gameVars.gravity === "down") || (gameInfo.action !== "")) ? "inline" : "none";
+    }
   }
 
   function updateMenuItemsDisplay() {

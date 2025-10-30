@@ -1,5 +1,4 @@
 import { findElementByCoordinates } from "./balUtils.js";
-import { skipFallingTicks } from "./pinkBalls.js";
 
 export function checkCopiers(arr, gameInfo) {
     let element = 0;
@@ -56,7 +55,7 @@ export function checkCopiers(arr, gameInfo) {
                             pinkBall1 = gameInfo.pinkBalls[idx];
                             pinkBall1.x = x;
                             pinkBall1.y = copier.y;
-                            pinkBall1.skipFalling = skipFallingTicks();
+                            pinkBall1.counter = 0;
                         }
                         break;    
                     default:
@@ -84,7 +83,7 @@ export function checkCopiers(arr, gameInfo) {
                         gameInfo.redBalls.push(redBall2);
                         break;
                     case 203:
-                        pinkBall2 = { x: x, y: copier.y, delete: false, skipFalling: skipFallingTicks() };
+                        pinkBall2 = { x: x, y: copier.y, delete: false, counter: 0 };
                         gameInfo.pinkBalls.push(pinkBall2);
                         break;
                     default:

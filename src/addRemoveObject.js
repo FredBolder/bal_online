@@ -1,5 +1,4 @@
 import { findElementByCoordinates } from "./balUtils.js";
-import { skipFallingTicks } from "./pinkBalls.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
 export function addObject(backData, gameData, gameInfo, x, y, obj) {
@@ -280,7 +279,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 203: {
-            let pinkBall = { x, y, delete: false, skipFalling: skipFallingTicks() };
+            let pinkBall = { x, y, delete: false, counter: 0 };
             gameInfo.pinkBalls.push(pinkBall);
             break;
         }

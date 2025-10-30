@@ -349,13 +349,9 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             gameVars.electricityCounter++;
         }
 
-        if (gameVars.pinkCounter >= gameVars.pinkCountTo) {
-            gameVars.pinkCounter = 0;
-            if (movePinkBalls(backData, gameData, gameInfo, gameVars)) {
-                updateCanvas = true;
-            }
+        if (movePinkBalls(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
         }
-        gameVars.pinkCounter++;
 
         info = checkFalling(backData, gameData, gameInfo, gameVars);
         if (info.update) {

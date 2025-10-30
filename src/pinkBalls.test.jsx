@@ -7,23 +7,24 @@ import { copy2dArray } from "./utils.js";
 describe("Pink balls", () => {
     let defaultGameInfo;
     let defaultGameVars;
- 
+
     beforeEach(() => {
         defaultGameInfo = {};
         initGameInfo(defaultGameInfo);
         defaultGameVars = {};
         initGameVars(defaultGameVars);
-    });    
+    });
 
     test("movePinkBalls A", () => {
         const inputBack = zeroArray(6, 7);
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
+            greenBalls: 0,
             pinkBalls: [
-                { x: 3, y: 2, delete: false, skipFalling: 0 },
-                { x: 3, y: 3, delete: false, skipFalling: 0 },
-                { x: 4, y: 3, delete: false, skipFalling: 0 },
+                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
             ],
         };
         const input = [
@@ -46,9 +47,9 @@ describe("Pink balls", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
-            { x: 3, y: 3, delete: false, skipFalling: 0 },
-            { x: 3, y: 4, delete: false, skipFalling: 0 },
-            { x: 4, y: 4, delete: false, skipFalling: 0 },
+            { x: 3, y: 3, delete: false, counter: 0 },
+            { x: 3, y: 4, delete: false, counter: 0 },
+            { x: 4, y: 4, delete: false, counter: 0 },
         ]);
     });
 
@@ -57,10 +58,11 @@ describe("Pink balls", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 0,
             pinkBalls: [
-                { x: 3, y: 2, delete: false, skipFalling: 0 },
-                { x: 3, y: 3, delete: false, skipFalling: 0 },
-                { x: 4, y: 3, delete: false, skipFalling: 0 },
+                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
             ],
         };
         const input = [
@@ -83,7 +85,7 @@ describe("Pink balls", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
-            { x: 3, y: 3, delete: false, skipFalling: 0 },
+            { x: 3, y: 3, delete: false, counter: 0 },
         ]);
     });
 
@@ -92,10 +94,11 @@ describe("Pink balls", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 1 },
+            greenBalls: 0,
             pinkBalls: [
-                { x: 3, y: 2, delete: false, skipFalling: 0 },
-                { x: 3, y: 3, delete: false, skipFalling: 0 },
-                { x: 4, y: 3, delete: false, skipFalling: 0 },
+                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
             ],
         };
         const input = [
@@ -118,9 +121,9 @@ describe("Pink balls", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
-            { x: 3, y: 1, delete: false, skipFalling: 0 },
-            { x: 3, y: 2, delete: false, skipFalling: 0 },
-            { x: 4, y: 2, delete: false, skipFalling: 0 },
+            { x: 3, y: 1, delete: false, counter: 0 },
+            { x: 3, y: 2, delete: false, counter: 0 },
+            { x: 4, y: 2, delete: false, counter: 0 },
         ]);
     });
 
@@ -129,10 +132,11 @@ describe("Pink balls", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
+            greenBalls: 0,
             pinkBalls: [
-                { x: 3, y: 2, delete: false, skipFalling: 0 },
-                { x: 3, y: 3, delete: false, skipFalling: 0 },
-                { x: 4, y: 3, delete: false, skipFalling: 0 },
+                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
             ],
         };
         const input = [
@@ -155,9 +159,9 @@ describe("Pink balls", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
-            { x: 3, y: 3, delete: false, skipFalling: 0 },
-            { x: 3, y: 4, delete: false, skipFalling: 0 },
-            { x: 4, y: 3, delete: false, skipFalling: 0 },
+            { x: 3, y: 3, delete: false, counter: 0 },
+            { x: 3, y: 4, delete: false, counter: 0 },
+            { x: 4, y: 3, delete: false, counter: 0 },
         ]);
     });
 
@@ -166,10 +170,11 @@ describe("Pink balls", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
+            greenBalls: 0,
             pinkBalls: [
-                { x: 3, y: 2, delete: false, skipFalling: 1 },
-                { x: 3, y: 3, delete: false, skipFalling: 1 },
-                { x: 4, y: 3, delete: false, skipFalling: 1 },
+                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo - 2 },
+                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo - 2 },
+                { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo - 2 },
             ],
         };
         const input = [
@@ -185,9 +190,81 @@ describe("Pink balls", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.pinkBalls).toEqual([
-            { x: 3, y: 2, delete: false, skipFalling: 0 },
-            { x: 3, y: 3, delete: false, skipFalling: 0 },
-            { x: 4, y: 3, delete: false, skipFalling: 0 },
+            { x: 3, y: 2, delete: false, counter: 0 },
+            { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo - 1 },
+            { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo - 1 },
+        ]);
+    });
+
+    test("movePinkBalls F", () => {
+        const inputBack = zeroArray(6, 7);
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 4 },
+            greenBalls: 0,
+            pinkBalls: [
+                { x: 4, y: 1, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo },
+            ],
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 203, 0, 1],
+            [1, 0, 0, 203, 15, 0, 1],
+            [1, 0, 0, 16, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 15, 203, 1],
+            [1, 0, 203, 16, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars });
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.pinkBalls).toEqual([
+            { x: 5, y: 2, delete: false, counter: 1 },
+            { x: 2, y: 3, delete: false, counter: 1 },
+        ]);
+    });
+
+    test("movePinkBalls G", () => {
+        const inputBack = zeroArray(6, 7);
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 1 },
+            greenBalls: 0,
+            pinkBalls: [
+                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
+                { x: 4, y: 4, delete: false, counter: defaultGameVars.pinkCountTo },
+            ],
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 0, 0, 0, 0, 1],
+            [1, 0, 0, 18, 0, 0, 1],
+            [1, 0, 0, 203, 17, 0, 1],
+            [1, 3, 0, 0, 203, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 0, 0, 0, 0, 1],
+            [1, 0, 203, 18, 0, 0, 1],
+            [1, 0, 0, 0, 17, 203, 1],
+            [1, 3, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.pinkBalls).toEqual([
+            { x: 2, y: 2, delete: false, counter: 1 },
+            { x: 5, y: 3, delete: false, counter: 1 },
         ]);
     });
 

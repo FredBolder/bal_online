@@ -5,7 +5,6 @@ import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
 import { moverCanMoveBlueBall, moversDirections } from "./movers.js";
 import { moveOrangeBallInDirection, updateOrangeBall } from "./orangeBalls.js";
-import { skipFallingTicks } from "./pinkBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
@@ -943,7 +942,7 @@ export function dropObject(gameData, gameInfo, object) {
         break;
       case "pinkBall":
         gameData[yTarget][xTarget] = 203;
-        gameInfo.pinkBalls.push({ x: xTarget, y: yTarget, delete: false, skipFalling: skipFallingTicks() });
+        gameInfo.pinkBalls.push({ x: xTarget, y: yTarget, delete: false, counter: 0 });
         gameInfo.hasPinkBall = false;
         break;
       case "purpleBall":
@@ -2402,9 +2401,6 @@ export function updateObjectByObjectNumber(gameInfo, objectNumber, x1, y1, x2, y
           break;
         case 117:
           list[i].status = getTimeBombsTime();
-          break;
-        case 203:
-          list[i].skipFalling = skipFallingTicks();
           break;
         default:
           break;
