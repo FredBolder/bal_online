@@ -5,6 +5,7 @@ import { moversDirections } from "./movers.js";
 import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
+import { solvedLevels } from "./progress.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
@@ -32,6 +33,40 @@ export const hiddenMiniSeries1Start = 3100;
 export const hiddenMiniSeries1End = 3106;
 export const seriesMusicStart = 3200;
 export const seriesMusicEnd = 3207;
+
+export function addSolvedLevels(levelStr) {
+  let level = -1;
+  let levelStart = -1;
+  let levelEnd = -1;
+  const list = levelStr.split(",");
+  let pFirst = -1;
+  let pLast = -1;
+  let s = "";
+  for (let i = 0; i < list.length; i++) {
+    s = list[i].trim();
+    pFirst = s.indexOf("-");
+    if (pFirst >= 0) {
+      pLast = s.lastIndexOf("-");
+      if (pFirst === pLast) {
+        levelStart = tryParseInt(s.slice(0, pFirst).trim(), -1);
+        levelEnd = tryParseInt(s.slice(pFirst + 1).trim(), -1);
+        if ((levelStart !== -1) && (levelEnd !== -1) && (levelEnd >= levelStart)) {
+          for (let j = levelStart; j <= levelEnd; j++) {
+            level = j;
+            if ((level !== -1) && !solvedLevels.includes(level)) {
+              solvedLevels.push(level);
+            }
+          }
+        }
+      }
+    } else {
+      level = tryParseInt(s, -1);
+      if ((level !== -1) && !solvedLevels.includes(level)) {
+        solvedLevels.push(level);
+      }
+    }
+  }
+}
 
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
@@ -537,6 +572,11 @@ export function checkSettings(data, settings) {
   return msg;
 }
 
+export function firstOfSeries(level) {
+  return [series1Start, series2Start, series3Start, series4Start, series5Start,
+    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart].includes(level)
+}
+
 export function fixLevel(backData, gameData, gameInfo) {
   const empty = [];
   const gravityChangerPositions = [];
@@ -822,36 +862,26 @@ export function getRandomLevel(currentLevel) {
   let levels = [];
   let result = currentLevel;
 
-  for (let i = series1Start + 1; i <= series1End; i++) {
-    levels.push(i);
-  }
-  for (let i = series2Start + 1; i <= series2End; i++) {
-    levels.push(i);
-  }
-  for (let i = series3Start + 1; i <= series3End; i++) {
-    levels.push(i);
-  }
-  for (let i = series4Start + 1; i <= series4End; i++) {
-    levels.push(i);
-  }
-  for (let i = series5Start + 1; i <= series5End; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesSmallStart + 1; i <= seriesSmallEnd; i++) {
-    levels.push(i);
-  }
-  for (let i = seriesMusicStart + 1; i <= seriesMusicEnd; i++) {
-    levels.push(i);
-  }
-  // Exclude levels
-  const exclude = [220, 221, 222, 223, 734, 735, 736, 737, 738];
-  for (let i = 0; i < exclude.length; i++) {
-    const level = exclude[i];
-    const idx = levels.indexOf(level);
-    if (idx >= 0) {
-      levels.splice(idx, 1);
+  levels.push(series1Start);
+  levels.push(series2Start);
+  levels.push(series3Start);
+  levels.push(series4Start);
+  levels.push(series5Start);
+  levels.push(seriesSmallStart);
+  levels.push(seriesEasyStart);
+  levels.push(seriesExtremeStart);
+  levels.push(seriesMusicStart);
+
+  for (let i = 0; i < solvedLevels.length; i++) {
+    const level = solvedLevels[i];
+    if (!levels.includes(level)) {
+      levels.push(level);
+    }
+    if (!levels.includes(level + 1)) {
+      levels.push(level + 1);
     }
   }
+
   while (result === currentLevel) {
     result = levels[randomInt(0, levels.length - 1)];
   }
@@ -1294,6 +1324,22 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
       }
     }
   }
+}
+
+export function numberOfLevels() {
+  let n = 0;
+  n += (series1End - series1Start) + 1;
+  n += (series2End - series2Start) + 1;
+  n += (series3End - series3Start) + 1;
+  n += (series4End - series4Start) + 1;
+  n += (series5End - series5Start) + 1;
+  n += (seriesSmallEnd - seriesSmallStart) + 1;
+  n += (seriesEasyEnd - seriesEasyStart) + 1;
+  n += (seriesExtremeEnd - seriesExtremeStart) + 1;
+  n += (seriesMusicEnd - seriesMusicStart) + 1;
+  n += (seriesSecretEnd - seriesSecretStart) + 1;
+  n += (hiddenMiniSeries1End - hiddenMiniSeries1Start) + 1;
+  return n;
 }
 
 function settingNr(index) {

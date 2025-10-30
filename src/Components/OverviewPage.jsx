@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { globalVars } from "../glob.js";
+import { firstOfSeries } from "../levels.js";
 import {
   series1Start, series1End,
   series2Start, series2End,
@@ -10,14 +12,11 @@ import {
   seriesSmallStart, seriesSmallEnd,
   seriesEasyStart, seriesEasyEnd,
   seriesExtremeStart, seriesExtremeEnd,
-  seriesMusicStart, seriesMusicEnd
+  seriesMusicStart, seriesMusicEnd,
+  seriesSecretStart, seriesSecretEnd,
+  hiddenMiniSeries1Start, hiddenMiniSeries1End
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
-
-function firstOfSeries(level) {
-  return [series1Start, series2Start, series3Start, series4Start, series5Start,
-    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart].includes(level)
-}
 
 function levelNumberColor(level) {
   let color = "gray";
@@ -32,6 +31,17 @@ function levelNumberColor(level) {
   return color;
 }
 
+function levelNumberCursor(level) {
+  let cursor = "auto";
+
+  if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) || globalVars.fred) {
+    cursor = "pointer";
+  } else {
+    cursor = "auto";
+  }
+  return cursor;
+}
+
 function OverviewPage() {
   const navigate = useNavigate();
   const [series1List, setSeries1List] = useState([]);
@@ -43,9 +53,11 @@ function OverviewPage() {
   const [seriesEasyList, setSeriesEasyList] = useState([]);
   const [seriesExtremeList, setSeriesExtremeList] = useState([]);
   const [seriesMusicList, setSeriesMusicList] = useState([]);
+  const [seriesSecretList, setSeriesSecretList] = useState([]);
+  const [hiddenMiniSeries1List, setHiddenMiniSeries1List] = useState([]);
 
   function handleClick(level) {
-    if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level)) {
+    if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) || globalVars.fred) {
       navigate(`/bal?level=${level}`);
     }
   }
@@ -106,6 +118,18 @@ function OverviewPage() {
       listMusic.push(i);
     }
     setSeriesMusicList(listMusic);
+
+    const listSecret = [];
+    for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
+      listSecret.push(i);
+    }
+    setSeriesSecretList(listSecret);
+
+    const listHidden1 = [];
+    for (let i = hiddenMiniSeries1Start; i <= hiddenMiniSeries1End; i++) {
+      listHidden1.push(i);
+    }
+    setHiddenMiniSeries1List(listHidden1);
   }
 
   useEffect(() => {
@@ -130,14 +154,15 @@ function OverviewPage() {
           <div className="textBox">
             The green numbers are the levels that you solved, the white numbers are the unlocked levels and
             the gray numbers are the locked levels.
-            You can click on a white or a green number to play that level.
+            You can click on a white or a green number to play that level.<br/>
+            IMPORTANT: If you delete your site data, you might loose your progress. You can export your
+            progress to a file, so you can later import your progress (also on another device).
           </div>
-
           <h2>Series 1</h2>
           <div className="seriesList">
             {series1List.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -147,7 +172,7 @@ function OverviewPage() {
           <div className="seriesList">
             {series2List.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -157,7 +182,7 @@ function OverviewPage() {
           <div className="seriesList">
             {series3List.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -167,7 +192,7 @@ function OverviewPage() {
           <div className="seriesList">
             {series4List.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -177,7 +202,7 @@ function OverviewPage() {
           <div className="seriesList">
             {series5List.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -187,7 +212,7 @@ function OverviewPage() {
           <div className="seriesList">
             {seriesSmallList.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -197,7 +222,7 @@ function OverviewPage() {
           <div className="seriesList">
             {seriesEasyList.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -207,7 +232,7 @@ function OverviewPage() {
           <div className="seriesList">
             {seriesExtremeList.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}
@@ -217,7 +242,27 @@ function OverviewPage() {
           <div className="seriesList">
             {seriesMusicList.map((level) => (<div
               key={level}
-              style={{ color: levelNumberColor(level) }}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {level}
+            </div>))}
+          </div>
+
+          <h2>Secret series</h2>
+          <div className="seriesList">
+            {seriesSecretList.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {level}
+            </div>))}
+          </div>
+
+          <h2>Hidden mini series 1</h2>
+          <div className="seriesList">
+            {hiddenMiniSeries1List.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
               {level}
             </div>))}

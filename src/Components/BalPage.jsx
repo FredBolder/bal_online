@@ -34,7 +34,7 @@ import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
-import { checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings } from "../levels.js";
+import { addSolvedLevels, checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
@@ -95,7 +95,6 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let fred = false; // TODO: Set to false when publishing
 let gameInterval;
 let initialized = false;
 let modalOpen = false;
@@ -119,7 +118,7 @@ initGameVars(gameVarsMenu);
 function BalPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const clickedLevel = searchParams.get("level");
+  const clickedLevel = parseInt(searchParams.get("level"));
   const { showMessage, showConfirm, showInput, showSelect } = useModal();
   const { modalState } = useContext(ModalContext);
 
@@ -367,10 +366,10 @@ function BalPage() {
         initLevel(level);
       }
       if (code === getFredCode()) {
-        fred = true;
+        globalVars.fred = true;
       }
       if ((code === "") || (code.toLowerCase === "logout")) {
-        fred = false;
+        globalVars.fred = false;
       }
     }
   }
@@ -1306,6 +1305,8 @@ function BalPage() {
             break;
           case "y":
           case "Y":
+          case "z":
+          case "Z":
             direction = "downleft";
             break;
           case "c":
@@ -1586,6 +1587,8 @@ function BalPage() {
           break;
         case "y":
         case "Y":
+        case "z":
+        case "Z":
           if (!dropPressed) {
             if (gravityDown) {
               info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
@@ -1775,7 +1778,17 @@ function BalPage() {
     runGameScheduler(false);
 
     if (kPressed) {
-      if ((fred) && (e.key === "%")) {
+      if (globalVars.fred && (e.key === "!")) {
+        e.preventDefault(); 
+        const add = await showInput("Add solved levels", "Levels", "");
+        if (add !== null) {
+          addSolvedLevels(add);
+          updateProgressText();
+          saveProgress(gameVars.currentLevel);
+        }
+      }
+
+      if (globalVars.fred && (e.key === "%")) {
         codes = "";
         const allLevels = getAllLevels();
         for (let i = 0; i < allLevels.length; i++) {
@@ -1807,7 +1820,7 @@ function BalPage() {
       } else {
         switch (e.key) {
           case "C":
-            if (fred) {
+            if (globalVars.fred) {
               showMessage("Info", numberToCode(gameVars.currentLevel));
             }
             break;
@@ -1820,13 +1833,13 @@ function BalPage() {
             break;
           case "N":
             // Next level
-            if (fred) {
+            if (globalVars.fred) {
               initLevel(gameVars.currentLevel + 1);
             }
             break;
           case "P":
             // Previous level
-            if (fred) {
+            if (globalVars.fred) {
               initLevel(gameVars.currentLevel - 1);
             }
             break;
@@ -1923,16 +1936,16 @@ function BalPage() {
           cbSound.current.value = getSettings().sound.toString();
           gameVars.currentLevel = 200;
           await loadProgress(gameVars);
-          if (fred) {
-            gameVars.currentLevel = 3321;
+          if (globalVars.fred) {
+            gameVars.currentLevel = 3319;
           }
           initLevel(gameVars.currentLevel);
-          updateProgressText();
         }
         if (clickedLevel) {
           initLevel(clickedLevel);
         }
 
+        updateProgressText();
         updateGameButtonsDisplay();
         updateCreateLevelCanvasDisplay();
         updateMenuItemsDisplay();
@@ -1984,7 +1997,7 @@ function BalPage() {
   }
 
   function updateProgressText() {
-    setProgressText(`${solvedLevels.length} of ${getAllLevels().length} levels solved`);
+    setProgressText(`${solvedLevels.length} of ${numberOfLevels()} levels solved`);
   }
 
   function updateGreen() {
@@ -2111,7 +2124,7 @@ function BalPage() {
   }
 
   function buttonDownLeft() {
-    handleKeyDown({ key: "y", shiftKey: false });
+    handleKeyDown({ key: "z", shiftKey: false });
   }
 
   function buttonDownRight() {
@@ -2485,7 +2498,7 @@ function BalPage() {
       // PLAY
 
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-        info = getInfoByCoordinates(backData, gameData, gameInfo, column, row, fred);
+        info = getInfoByCoordinates(backData, gameData, gameInfo, column, row, globalVars.fred);
         if (info !== "") {
           showMessage("Info", info);
         }
@@ -2504,7 +2517,7 @@ function BalPage() {
           showMessage("Info", info);
         }
       }
-      if (fred && e.altKey && e.shiftKey && e.ctrlKey) {
+      if (globalVars.fred && e.altKey && e.shiftKey && e.ctrlKey) {
         if (gameData[row][column] === 0) {
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
           gameInfo.blueBall.x = column;
@@ -2937,7 +2950,7 @@ function BalPage() {
                 <div ref={exportProgressRef} onClick={clickExportProgress}>
                   <label>Export progress</label>
                 </div>
-                <div ref={importProgressRef}  onClick={clickImportProgress}>
+                <div ref={importProgressRef} onClick={clickImportProgress}>
                   <label>Import progress</label>
                 </div>
               </div>

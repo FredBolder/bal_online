@@ -74,7 +74,7 @@ function HelpPage() {
                             </tr>
                             <tr>
                                 <td>Swim down left</td>
-                                <td>Y</td>
+                                <td>Z or Y</td>
                                 <td>-</td>
                             </tr>
                             <tr>

@@ -360,12 +360,15 @@ tr:nth-child(even) td {
 .seriesList {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-wrap: wrap;
     column-gap: 0.5rem;
     row-gap: 0.5rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;    
+    margin-bottom: 1rem;  
+    font-size: 1rem;
+    font-weight: normal;
+    width: 100%;
+    max-width: 800px;  
 }
 
 /* MEDIA QUERIES */
