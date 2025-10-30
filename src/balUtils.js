@@ -2402,6 +2402,9 @@ export function updateObjectByObjectNumber(gameInfo, objectNumber, x1, y1, x2, y
         case 117:
           list[i].status = getTimeBombsTime();
           break;
+        case 203:
+          list[i].counter = 0;
+          break;
         default:
           break;
       }

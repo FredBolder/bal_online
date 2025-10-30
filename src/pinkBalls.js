@@ -1,10 +1,11 @@
-import { falling, inWater, moveObject } from "./balUtils.js";
+import { falling, findElementByCoordinates, inWater, moveObject } from "./balUtils.js";
 import { hasForceDown, hasForceUp } from "./force.js";
 
 export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
     let update = false;
     let forceDown = false;
     let forceUp = false;
+    let idx = -1;
     // Depending on the gravity direction, falling has another meaning
 
     // GRAVITY DOWN (NORMAL)
@@ -14,6 +15,16 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                 const pinkBall = gameInfo.pinkBalls[j];
                 if (pinkBall.y === i) {
                     let elementUnder = gameData[i + 1][pinkBall.x];
+
+                    if (elementUnder === 203) {
+                        // Fall together
+                        idx = findElementByCoordinates(pinkBall.x, i + 1, gameInfo.pinkBalls);
+                        if (idx >= 0) {
+                            if (gameInfo.pinkBalls[idx].counter > 0) {
+                                pinkBall.counter = gameInfo.pinkBalls[idx].counter;
+                            }
+                        }
+                    }
 
                     if (elementUnder === 22) {
                         // lava
@@ -85,6 +96,16 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                 if (pinkBall.y === i) {
                     let elementAbove = gameData[i - 1][pinkBall.x];
 
+                    if (elementAbove === 203) {
+                        // Fall together
+                        idx = findElementByCoordinates(pinkBall.x, i - 1, gameInfo.pinkBalls);
+                        if (idx >= 0) {
+                            if (gameInfo.pinkBalls[idx].counter > 0) {
+                                pinkBall.counter = gameInfo.pinkBalls[idx].counter;
+                            }
+                        }
+                    }
+
                     if (pinkBall.x < gameData[i].length - 1) {
                         // wall |/
                         if ((elementAbove === 17) && (gameData[i][pinkBall.x + 1] === 0) &&
@@ -146,6 +167,8 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
     gameInfo.pinkBalls.splice(0, gameInfo.pinkBalls.length,
         ...gameInfo.pinkBalls.filter(ball => !ball.delete)
     );
+
+
 
     return update;
 }
