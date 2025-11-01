@@ -1,5 +1,6 @@
-import { isChroniaPolla } from "./levels.js";
+import { getAllLevels, isChroniaPolla } from "./levels.js";
 import { reverseString } from "./utils.js";
+
 
 let initDbPromise = null;
 let progressCurrentLevel = 200;
@@ -146,7 +147,7 @@ export async function loadProgress(gameVars = null) {
                 for (let i = 0; i < (result.solvedLevels.length / 2); i++) {
                     const level = result.solvedLevels[i * 2];
                     const code = result.solvedLevels[(i * 2) + 1];
-                    if (levelNumberCode(level) === code) {
+                    if (getAllLevels().includes(level) && (levelNumberCode(level) === code)) {
                         solvedLevels.push(level);
                     }
                 }
@@ -307,7 +308,7 @@ function parseLevelText(text) {
         for (let i = 0; i < (solved.length / 2); i++) {
             level = solved[i * 2];
             code = solved[(i * 2) + 1];
-            if ((levelNumberCode(level) === code) && !solvedLevels.includes(level)) {
+            if (getAllLevels().includes(level) && (levelNumberCode(level) === code) && !solvedLevels.includes(level)) {
                 solvedLevels.push(level);
             }
         }

@@ -2,6 +2,7 @@ $gameticks: elevator, 20
 $gameticksxy: 3, 4, 200
 $inverted: 27, 11, yes
 $sticky: 27, 11, yes
+$pistonmode: 27, 11, momentary
 11111111111111111111111111111111
 1Ë4   84                 1     1
 111   BB                 1     1

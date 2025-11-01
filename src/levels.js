@@ -53,7 +53,7 @@ export function addSolvedLevels(levelStr) {
         if ((levelStart !== -1) && (levelEnd !== -1) && (levelEnd >= levelStart)) {
           for (let j = levelStart; j <= levelEnd; j++) {
             level = j;
-            if ((level !== -1) && !solvedLevels.includes(level)) {
+            if ((level !== -1) && getAllLevels().includes(level) && !solvedLevels.includes(level)) {
               solvedLevels.push(level);
             }
           }
@@ -61,7 +61,7 @@ export function addSolvedLevels(levelStr) {
       }
     } else {
       level = tryParseInt(s, -1);
-      if ((level !== -1) && !solvedLevels.includes(level)) {
+      if ((level !== -1) && getAllLevels().includes(level) && !solvedLevels.includes(level)) {
         solvedLevels.push(level);
       }
     }
