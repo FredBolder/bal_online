@@ -148,7 +148,16 @@ export function moveElevators(gameData, gameInfo, gameVars) {
     if (emptyDown === -1) {
       downPossible = false;
     }
-
+    if (gravityDown && (elevator.y < gameData.length - 1)) {
+      if ((gameData[elevator.y + 1][elevator.x] !== 0)) {
+        downPossible = false;
+      }
+    }
+    if (!gravityDown && (elevator.y > 0)) {
+      if ((gameData[elevator.y - 1][elevator.x] !== 0)) {
+        upPossible = false;
+      }
+    }
     //console.log("downPossible: ", downPossible);
     //console.log("upPossible: ", upPossible);
 

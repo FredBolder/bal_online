@@ -148,6 +148,40 @@ describe("Elevators", () => {
         expect(JSON.stringify(gameInfo.elevators)).toBe(JSON.stringify([{ x: 3, y: 2, up: true }]));
     });
 
+    it("moveElevators E", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 3, y: 3 },
+            elevators: [{ x: 3, y: 2, up: false }],
+            greenBalls: 1
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 3, 0, 6, 0, 0, 0, 1],
+            [1, 0, 0, 2, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 0, 0, 0, 0, 0, 1],
+            [1, 3, 0, 106, 0, 0, 0, 1],
+            [1, 0, 0, 2, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = moveElevators(input, gameInfo, { ...defaultGameVars });
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(info).toBe(false);
+        expect(JSON.stringify(gameInfo.blueBall)).toBe(JSON.stringify({ x: 3, y: 3 }));
+    });
+
+
     // ***** MOVE HORIZONTAL ELEVATORS *****
 
     it("moveHorizontalElevators A", () => {
@@ -289,7 +323,8 @@ describe("Elevators", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 4 },
-            horizontalElevators: [{ x: 5, y: 2, right: false }]
+            horizontalElevators: [{ x: 5, y: 2, right: false }],
+            greenBalls: 1
         };
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -322,11 +357,12 @@ describe("Elevators", () => {
         expect(JSON.stringify(gameInfo.blueBall)).toBe(JSON.stringify({ x: 4, y: 4 }));
     });
 
-    it("moveElevators Gravity Up B", () => {
+    it("moveElevators Gravity Up A", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 4 },
-            elevators: [{ x: 5, y: 2, up: false }]
+            elevators: [{ x: 5, y: 2, up: false }],
+            greenBalls: 1
         };
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -359,12 +395,13 @@ describe("Elevators", () => {
         expect(JSON.stringify(gameInfo.blueBall)).toBe(JSON.stringify({ x: 5, y: 5 }));
     });
 
-    it("moveElevators Gravity Up C", () => {
+    it("moveElevators Gravity Up B", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 4 },
             elevators: [{ x: 5, y: 2, up: false }],
-            hasPropeller: true
+            hasPropeller: true,
+            greenBalls: 1
         };
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -395,6 +432,44 @@ describe("Elevators", () => {
             JSON.stringify([{ x: 5, y: 2, up: true }])
         );
         expect(JSON.stringify(gameInfo.blueBall)).toBe(JSON.stringify({ x: 5, y: 4 }));
+    });
+
+    it("moveElevators Gravity Up C", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 5, y: 5 },
+            elevators: [{ x: 5, y: 4, up: true }],
+            greenBalls: 1
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 2, 0, 1],
+            [1, 0, 0, 0, 0, 106, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 2, 0, 1],
+            [1, 0, 0, 0, 0, 6, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = moveElevators(input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(info).toBe(false);
+        expect(JSON.stringify(gameInfo.elevators)).toBe(
+            JSON.stringify([{ x: 5, y: 4, up: false }])
+        );
+        expect(JSON.stringify(gameInfo.blueBall)).toBe(JSON.stringify({ x: 5, y: 5 }));
     });
 
 
