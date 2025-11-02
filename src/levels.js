@@ -12,7 +12,7 @@ import { randomInt, tryParseInt } from "./utils.js";
 export const series1Start = 200;
 export const series1End = 224;
 export const series2Start = 300;
-export const series2End = 327;
+export const series2End = 328;
 export const series3Start = 400;
 export const series3End = 426;
 export const series4Start = 700;
@@ -30,7 +30,7 @@ export const seriesSecretEnd = 2016;
 export const seriesEasyStart = 3000;
 export const seriesEasyEnd = 3022;
 export const hiddenMiniSeries1Start = 3100;
-export const hiddenMiniSeries1End = 3106;
+export const hiddenMiniSeries1End = 3107;
 export const seriesMusicStart = 3200;
 export const seriesMusicEnd = 3207;
 

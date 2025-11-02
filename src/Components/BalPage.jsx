@@ -1924,7 +1924,7 @@ function BalPage() {
 
     (async () => {
       try {
-        const db = await initDB();
+        await initDB();
         if (!mounted) return;
 
         if (!initialized) {
