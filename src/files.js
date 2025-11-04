@@ -102,6 +102,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.moverCountTo !== 0) {
+        line = `$gameticks: mover, ${gameVars.moverCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.phaseTicks !== 250) {
         line = `$gameticks: phaseability, ${gameVars.phaseTicks}`;
         lines.push(line);

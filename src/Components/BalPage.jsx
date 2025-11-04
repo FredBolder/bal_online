@@ -34,7 +34,7 @@ import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
-import { addSolvedLevels, checkSettings, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
+import { addSolvedLevels, checkSettings, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
@@ -734,10 +734,12 @@ function BalPage() {
     const result = await importProgress();
 
     if (!result) {
-      showMessage("Error", "Invalid progress data");
       return;
     }
-
+    if (result.error) {
+      showMessage("Error", result.error);
+      return;
+    }
     updateProgressText();
   }
 
@@ -1942,7 +1944,7 @@ function BalPage() {
           }
           initLevel(gameVars.currentLevel);
         }
-        if (clickedLevel) {
+        if (clickedLevel && (globalVars.fred || firstOfSeries(clickedLevel) || solvedLevels.includes(clickedLevel) || solvedLevels.includes(clickedLevel - 1))) {
           initLevel(clickedLevel);
         }
 

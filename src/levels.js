@@ -41,9 +41,11 @@ export function addSolvedLevels(levelStr) {
   const list = levelStr.split(",");
   let pFirst = -1;
   let pLast = -1;
+  let remove = false;
   let s = "";
   for (let i = 0; i < list.length; i++) {
     s = list[i].trim();
+    remove = false;
     pFirst = s.indexOf("-");
     if (pFirst >= 0) {
       pLast = s.lastIndexOf("-");
@@ -60,9 +62,21 @@ export function addSolvedLevels(levelStr) {
         }
       }
     } else {
+      if (s.startsWith("!")) {
+        remove = true;
+        s = s.slice(1).trim();
+      }
       level = tryParseInt(s, -1);
-      if ((level !== -1) && getAllLevels().includes(level) && !solvedLevels.includes(level)) {
-        solvedLevels.push(level);
+      if (remove) {
+        if (solvedLevels.includes(level)) {
+          solvedLevels.splice(0, solvedLevels.length,
+            ...solvedLevels.filter(el => (el !== level))
+          );
+        }
+      } else {
+        if ((level !== -1) && getAllLevels().includes(level) && !solvedLevels.includes(level)) {
+          solvedLevels.push(level);
+        }
       }
     }
   }
@@ -363,11 +377,11 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "phaseability", "pinkball"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "mover", "phaseability", "pinkball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
-              if (gameTicks < 1) {
+              if ((gameTicks < 0) || ((gameTicks < 1) && !["mover"].includes(valuesLowerCase[0]))) {
                 msg += `${settingNr(i)}Invalid value ${values[1]} for ticks.\n`;
               }
               break;
@@ -1051,7 +1065,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$gameticks":
           if (values.length === 2) {
             gameTicks = tryParseInt(values[1], -1);
-            if (gameTicks >= 1) {
+            if ((gameTicks >= 1) || ((gameTicks >= 0) && ["mover"].includes(valuesLowerCase[0]))) {
               switch (valuesLowerCase[0]) {
                 case "conveyorbelt":
                   gameVars.conveyorBeltCountTo = gameTicks;
@@ -1067,6 +1081,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   break;
                 case "ice":
                   gameVars.iceCountTo = gameTicks;
+                  break;
+                case "mover":
+                  gameVars.moverCountTo = gameTicks;
                   break;
                 case "phaseability":
                   gameVars.phaseTicks = gameTicks;

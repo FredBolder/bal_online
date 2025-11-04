@@ -1,0 +1,29 @@
+$direction: 9, 18, upright
+$direction: 10, 17, upright
+$direction: 11, 16, upright
+$direction: 12, 15, upright
+$direction: 13, 14, upright
+$direction: 18, 18, upleft
+$direction: 17, 17, upleft
+$direction: 16, 16, left
+$gameticks: mover, 5
+11111111111111111111
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1                  1
+1             ηηηη 1
+1            η     1
+1           η      1
+1          η    η  1
+13        η      η 1
+1    2ηηηη        η1
+11111111111111111111

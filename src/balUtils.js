@@ -3,7 +3,7 @@ import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
-import { moverCanMoveBlueBall, moversDirections } from "./movers.js";
+import { moverIsMovingBlueBall, moversDirections } from "./movers.js";
 import { moveOrangeBallInDirection, updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
@@ -2448,7 +2448,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   if (gameData.length <= 0) {
     return result;
   }
-  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+  if (moverIsMovingBlueBall(gameData, gameInfo, gameVars)) {
     return result;
   }
   if (fallingOrRising(x, y, backData, gameData, gameInfo, gameVars) || hasForceRight(gameData, gameInfo, x, y)) {
@@ -2635,7 +2635,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   if (gameData.length <= 0) {
     return result;
   }
-  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+  if (moverIsMovingBlueBall(gameData, gameInfo, gameVars)) {
     return result;
   }
   if (fallingOrRising(x, y, backData, gameData, gameInfo, gameVars) || hasForceLeft(gameData, gameInfo, x, y)) {
@@ -2832,7 +2832,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
   if (isWhiteTeleport(x, y, gameInfo.teleports) || isTravelGate(x, y, gameInfo.travelGate)) {
     return result;
   }
-  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+  if (moverIsMovingBlueBall(gameData, gameInfo, gameVars)) {
     return result;
   }
   if (fallingOrRising(x, y, backData, gameData, gameInfo, gameVars)) {
@@ -3036,7 +3036,7 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
   if (isWhiteTeleport(x, y, gameInfo.teleports) || isTravelGate(x, y, gameInfo.travelGate)) {
     return result;
   }
-  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+  if (moverIsMovingBlueBall(gameData, gameInfo, gameVars)) {
     return result;
   }
   if (fallingOrRising(x, y, backData, gameData, gameInfo, gameVars)) {
@@ -3309,7 +3309,7 @@ export function moveDiagonal(backData, gameData, gameInfo, gameVars, direction) 
   if (gameData.length <= 0) {
     return result;
   }
-  if (moverCanMoveBlueBall(gameData, gameInfo)) {
+  if (moverIsMovingBlueBall(gameData, gameInfo, gameVars)) {
     return result;
   }
 

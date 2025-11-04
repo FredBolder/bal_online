@@ -296,7 +296,7 @@ function parseLevelText(text) {
     const lines = text.split("\n");
     let solved = null;
 
-    if (lines.length !== 3) { return false }
+    if (lines.length !== 3) { return { error: "Invalid progress data" } }
 
     level = parseInt(lines[0]);
     code = parseInt(lines[1]);

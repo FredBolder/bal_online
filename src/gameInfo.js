@@ -253,7 +253,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 178: {
-                    let mover = { x: j, y: i, direction: "right" };
+                    let mover = { x: j, y: i, direction: "right", counter: 0 };
                     result.movers.push(mover);
                     break;
                 }
@@ -403,7 +403,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             idx = findElementByCoordinates(x, y, gameInfo.movers);
             if (idx >= 0) {
                 obj = gameInfo.movers[idx];
-                extraInfo = `Direction: ${obj.direction}`;
+                extraInfo = `Direction: ${obj.direction}, Counter: ${obj.counter}`;
             }
             info = `Mover, ` + extraInfo;
             break;
@@ -1062,6 +1062,7 @@ export function initGameVars(vars) {
     vars.hint = "";
     vars.iceCountTo = 250;
     vars.laser = null;
+    vars.moverCountTo = 0;
     vars.orangeCounter = 0;
     vars.phaseTicks = 250;
     vars.pinkCountTo = 5;

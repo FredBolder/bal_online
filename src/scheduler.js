@@ -137,7 +137,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
 
         if (gameVars.timeFreezer === 0) {
-            if (checkMovers(gameData, gameInfo)) {
+            if (checkMovers(gameData, gameInfo, gameVars)) {
                 updateCanvas = true;
             }
 
