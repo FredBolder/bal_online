@@ -117,6 +117,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.yellowSlowdownerDurationTicks !== 250) {
+        line = `$gameticks: yellowslowdowner, ${gameVars.yellowSlowdownerDurationTicks}`;
+        lines.push(line);
+    }
+
     if (gameVars.hint !== "") {
         line = `$hint: ${gameVars.hint}`;
         lines.push(line);

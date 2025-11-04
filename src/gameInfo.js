@@ -1091,6 +1091,7 @@ export function initGameVars(vars) {
     vars.yellowCounter = 0;
     vars.yellowPaused = false;
     vars.yellowSlowCounter = 0;
+    vars.yellowSlowdownerDurationTicks = 250;
 }
 
 export function switchPlayer(gameInfo) {

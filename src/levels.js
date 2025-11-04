@@ -377,7 +377,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "mover", "phaseability", "pinkball"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "mover", "phaseability", "pinkball", "yellowslowdowner"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -1090,6 +1090,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   break;
                 case "pinkball":
                   gameVars.pinkCountTo = gameTicks;
+                  break;
+                case "yellowslowdowner":
+                  gameVars.yellowSlowdownerDurationTicks = gameTicks;
                   break;
                 default:
                   break;

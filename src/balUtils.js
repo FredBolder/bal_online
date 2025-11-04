@@ -2249,7 +2249,7 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       result.message += "mover";
       break;
     case 156:
-      result.slowDownYellow = 250;
+      result.slowDownYellow = gameVars.yellowSlowdownerDurationTicks;
       break;
     case 168:
       gameInfo.twoBlue = true;
