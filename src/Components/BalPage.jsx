@@ -1930,11 +1930,12 @@ function BalPage() {
         await initDB();
         if (!mounted) return;
 
-        globalVars.stoneImg01 = await loadImage('/stone1.png');
-        globalVars.stoneImg02 = await loadImage('/stone2.png');
-
         if (!initialized) {
           initialized = true;
+          globalVars.stoneImg01 = await loadImage('/stone1.png');
+          globalVars.stoneImg02 = await loadImage('/stone2.png');
+          globalVars.stoneImg03 = await loadImage('/stone3.png');
+          globalVars.stoneImg04 = await loadImage('/stone4.png');
           loadSettings();
           cbArrowButtons.current.checked = getSettings().arrowButtons;
           cbCreateLevel.current.checked = false;

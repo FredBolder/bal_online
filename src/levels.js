@@ -491,7 +491,7 @@ export function checkSettings(data, settings) {
               break;
             case "$stonepattern":
               val_int = tryParseInt(values[0], -1);
-              if ((val_int < 0) || (val_int > 2)) {
+              if ((val_int < 0) || (val_int > 4)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for stone pattern number.\n`;
               }
               break;
@@ -1348,7 +1348,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$stonepattern":
           val_int = tryParseInt(values[0], -1);
-          if ((val_int >= 0) && (val_int <= 2)) {
+          if ((val_int >= 0) && (val_int <= 4)) {
             gameVars.stonePattern = val_int;
           }
           break;

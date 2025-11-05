@@ -10,6 +10,8 @@ export const globalVars = {
     playedNotes: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     stoneImg01: null,
     stoneImg02: null,
+    stoneImg03: null,
+    stoneImg04: null,
     stoneLayer: null,
     thisWorldGreen: -1
 }

@@ -892,21 +892,40 @@ function drawLevel(
 
   function drawHalfStone(x, y, location) {
     const color = getFgcolor(x, y, "#464646");
-    switch (location) {
-      case "left":
-        drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
-        break;
-      case "right":
-        drawFilledBox(ctx, xc, ymin, w1 / 2, w2, color);
-        break;
-      case "top":
-        drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
-        break;
-      case "bottom":
-        drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
-        break;
-      default:
-        break;
+    if (gameVars.stonePattern === 0) {
+      switch (location) {
+        case "left":
+          drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
+          break;
+        case "right":
+          drawFilledBox(ctx, xc, ymin, w1 / 2, w2, color);
+          break;
+        case "top":
+          drawFilledBox(ctx, xmin, ymin, w1, w2 / 2, color);
+          break;
+        case "bottom":
+          drawFilledBox(ctx, xmin, yc, w1, w2 / 2, color);
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (location) {
+        case "left":
+          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1 / 2, w2, xmin, ymin, w1 / 2, w2);
+          break;
+        case "right":
+          ctx.drawImage(globalVars.stoneLayer, xc - leftMargin, ymin - topMargin, w1 / 2, w2, xc, ymin, w1 / 2, w2);
+          break;
+        case "top":
+          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2 / 2, xmin, ymin, w1, w2 / 2);
+          break;
+        case "bottom":
+          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, yc - topMargin, w1, w2 / 2, xmin, yc, w1, w2 / 2);
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -1806,21 +1825,42 @@ function drawLevel(
 
   function drawQuarterStone(x, y, location) {
     const color = getFgcolor(x, y, "#464646");
-    switch (location) {
-      case "bottomLeft":
-        drawFilledBox(ctx, xmin, yc, w1 / 2, w2 / 2, color);
-        break;
-      case "bottomRight":
-        drawFilledBox(ctx, xc, yc, w1 / 2, w2 / 2, color);
-        break;
-      case "topLeft":
-        drawFilledBox(ctx, xmin, ymin, w1 / 2, w2 / 2, color);
-        break;
-      case "topRight":
-        drawFilledBox(ctx, xc, ymin, w1 / 2, w2 / 2, color);
-        break;
-      default:
-        break;
+    const half = w1 / 2;
+
+    if (gameVars.stonePattern === 0) {
+      switch (location) {
+        case "bottomLeft":
+          drawFilledBox(ctx, xmin, yc, half, half, color);
+          break;
+        case "bottomRight":
+          drawFilledBox(ctx, xc, yc, half, half, color);
+          break;
+        case "topLeft":
+          drawFilledBox(ctx, xmin, ymin, half, half, color);
+          break;
+        case "topRight":
+          drawFilledBox(ctx, xc, ymin, half, half, color);
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (location) {
+        case "bottomLeft":
+          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, yc - topMargin, half, half, xmin, yc, half, half);
+          break;
+        case "bottomRight":
+          ctx.drawImage(globalVars.stoneLayer, xc - leftMargin, yc - topMargin, half, half, xc, yc, half, half);
+          break;
+        case "topLeft":
+          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, half, half, xmin, ymin, half, half);
+          break;
+        case "topRight":
+          ctx.drawImage(globalVars.stoneLayer, xc - leftMargin, ymin - topMargin, half, half, xc, ymin, half, half);
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -2400,11 +2440,17 @@ function drawLevel(
     case 2:
       stoneImg = globalVars.stoneImg02;
       break;
+    case 3:
+      stoneImg = globalVars.stoneImg03;
+      break;
+    case 4:
+      stoneImg = globalVars.stoneImg04;
+      break;
     default:
       break;
   }
   if (stoneImg !== null) {
-    globalVars.stoneLayer = buildPatternLayer(stoneImg, columns, rows, size1, size1 / 200);
+    globalVars.stoneLayer = buildPatternLayer(stoneImg, columns, rows, size1, size1 / 100);
   }
 
   ctx.globalAlpha = 1;
