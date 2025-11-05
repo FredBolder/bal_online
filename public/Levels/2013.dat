@@ -40,6 +40,8 @@ $group: 21, 12, 3
 $pistonmode: 21, 12, toggle
 $sticky: 21, 12, yes
 
+$stonepattern: 1
+
 111111111111111111111111111111111111
 1                                 11
 1ψ                     δ          11

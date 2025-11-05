@@ -3,6 +3,7 @@ $group: 6, 1, 2
 $group: 8, 8, 2
 $group: 8, 5, 3
 $group: 3, 5, 3
+$stonepattern: 1
 1111111111
 13 τ  τ  1
 1     1  1

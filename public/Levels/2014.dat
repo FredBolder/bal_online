@@ -3,6 +3,7 @@ $direction: 6, 12, left
 $inverted: 3, 5, yes
 $pistonmode: 3, 5, momentary
 $sticky: 3, 5, yes
+$stonepattern: 1
 1111111111111111111111111111111
 1                             1
 1DE{ØØØØØØØØØØ}       4       1

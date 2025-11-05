@@ -1,4 +1,5 @@
 $hint: Move the direction changer one step to the left.
+$stonepattern: 1
 1111111111
 13       1
 1       81

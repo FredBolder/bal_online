@@ -1,5 +1,6 @@
 $gameticks: conveyorbelt, 10
 $direction: 17, 8, left
+$stonepattern: 1
 1111111111111111111111111111111111
 1       141        141           1
 1       141        141           1

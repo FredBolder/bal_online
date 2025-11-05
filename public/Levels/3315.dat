@@ -1,5 +1,6 @@
 $gameticks: pinkball, 7
 $pistonmode: 12, 1, momentary
+$stonepattern: 1
 11111111111111111111
 1C          Ö1     1
 1                  1

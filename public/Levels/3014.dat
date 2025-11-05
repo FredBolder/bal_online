@@ -1,4 +1,5 @@
 $hint: Create a staircase and move it to the right.
+$stonepattern: 1
 1111111111
 13       1
 1    p p 1

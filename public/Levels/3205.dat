@@ -18,6 +18,7 @@ $group: 5, 10, 2
 $pistonmode: 5, 10, momentary
 $sticky: 5, 10, yes
 $group: 4, 13, 2
+$stonepattern: 1
 111111111111111111111
 1       131   1    31
 1 2     M >   M  4  1

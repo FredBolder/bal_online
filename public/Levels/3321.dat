@@ -2,6 +2,7 @@ $group: 16, 11, 2
 $pistonmode: 16, 11, momentary
 $sticky: 16, 11, yes
 $group: 16, 19, 2
+$stonepattern: 1
 11111111111111111111
 11Φ               81
 111 11111111     111

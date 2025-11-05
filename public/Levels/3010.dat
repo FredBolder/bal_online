@@ -1,4 +1,5 @@
 $hint: Push the yellow ball to the right and move to the left to stop the yellow ball at the desired position when it returns.
+$stonepattern: 1
 1111111111
 13       1
 1        1

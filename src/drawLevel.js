@@ -298,11 +298,11 @@ function drawLevel(
 
   function drawBomb(x, y) {
     const sticks = 3;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     let factor = 0.1;
     let d1 = w1 / 6;
     let d2 = w2 / 2;
     let d3 = w1 / 6;
+    drawStone(x, y);
     for (let i = 0; i < sticks; i++) {
       drawFilledBox(ctx, xmin + d1, ymin + d2 + (i * w2 * factor), w1 - 2 * d1, w2 * factor, "red");
       drawBox(ctx, xmin + d1, ymin + d2 + (i * w2 * factor), w1 - 2 * d1, w2 * factor, "black");
@@ -406,7 +406,8 @@ function drawLevel(
 
   function drawDamagedStone(x, y) {
     let bgcolor = getBgcolor(x, y, "black");
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
+    drawStone(x, y);
+    ctx.lineWidth = 2;
     drawLine(ctx, xmin + (w1 * 0.75), ymin, xmin + (w1 * 0.4), ymin + (w2 * 0.35), bgcolor);
     drawLine(ctx, xmin + (w1 * 0.4), ymin + (w2 * 0.35), xc, ymin + (w2 * 0.6), bgcolor);
     drawLine(ctx, xmin + (w1 * 0.7), yc, xmin + (w1 * 0.6), ymin + (w2 * 0.8), bgcolor);
@@ -414,6 +415,7 @@ function drawLevel(
     drawLine(ctx, xmin + (w1 * 0.1), ymin, xmin + (w1 * 0.2), ymin + (w2 * 0.3), bgcolor);
     drawLine(ctx, xmin + (w1 * 0.25), ymin + (w2 * 0.6), xmin + (w1 * 0.1), ymin + (w2 * 0.7), bgcolor);
     drawLine(ctx, xmin + (w1 * 0.1), ymin + (w2 * 0.7), xmin, ymax, bgcolor);
+    ctx.lineWidth = 1;
   }
 
   function drawDelay() {
@@ -1723,46 +1725,83 @@ function drawLevel(
   }
 
   function drawQuarterCircleStoneBottomLeft(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
     // arc(x, y, radius, startAngle, endAngle, counterclockwise)
     ctx.arc(Math.round(xmin - 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 2 * Math.PI, 1.5 * Math.PI, true);
-    ctx.fill();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawQuarterCircleStoneBottomRight(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
     ctx.arc(Math.round(xmax + 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 1.5 * Math.PI, 1 * Math.PI, true);
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawQuarterCircleStoneTopLeft(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    // arc(x, y, radius, startAngle, endAngle, counterclockwise)
     ctx.arc(Math.round(xmin - 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 0.5 * Math.PI, 0 * Math.PI, true);
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawQuarterCircleStoneTopRight(x, y) {
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.arc(Math.round(xmax + 0.5), Math.round(ymin - 0.5), Math.round(w1 - 0.5), 1 * Math.PI, 0.5 * Math.PI, true);
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawQuarterStone(x, y, location) {

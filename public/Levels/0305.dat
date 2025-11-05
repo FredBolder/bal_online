@@ -1,4 +1,5 @@
 $hint: Fill the glide with white balls.
+$stonepattern: 1
 11111111111111111111111111111111
 1    3                      3  1
 1 4           44               1

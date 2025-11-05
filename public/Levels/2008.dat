@@ -9,6 +9,7 @@ $group: 16, 18, 2
 $group: 25, 18, 2
 $pistonmode: 30, 18, repeatfast
 $group: 30, 18, 3
+$stonepattern: 1
 11111111111111111111111111111111
 1 ι                           31
 1 ι                            1

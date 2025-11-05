@@ -1,5 +1,6 @@
 $pistonmode: 3, 10, repeatslow
 $sticky: 3, 10, yes
+$stonepattern: 1
 11111111111111111111
 11                 1
 11                 1

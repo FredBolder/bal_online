@@ -1,4 +1,5 @@
 $hint: A yellow ball is not an elevator. Don't jump on a yellow ball that is going up, because then the ball will stop.
+$stonepattern: 1
 11111111111111++++++111111111111
 11111111111111      111111111111
 11111111111111&&&&&&111111111111

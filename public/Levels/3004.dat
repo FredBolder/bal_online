@@ -1,4 +1,5 @@
 $hint: Use the light blue balls above to cover the hole. You can not move the white ball that is against the wall.
+$stonepattern: 1
 1111111111
 1       31
 1 2      1

@@ -1,5 +1,6 @@
 $gameticks: phaseability, 100
 $pistonmode: 4, 4, blueball
+$stonepattern: 1
 11111111111111111111
 1    C   c   Ψ    11
 1       1    9    τ1
