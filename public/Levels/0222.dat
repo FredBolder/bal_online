@@ -1,4 +1,5 @@
 $hint: This level introduces some new objects to prepare you for the next levels. You can move yellow direction changers, but only one at the time.
+$stonepattern: 1
 11111111111111111111111111111111
 1    1       3      3    k     1
 1    <                         1

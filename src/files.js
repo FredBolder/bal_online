@@ -137,6 +137,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.stonePattern !== 0) {
+        line = `$stonepattern: ${gameVars.stonePattern}`;
+        lines.push(line);
+    }
+
     if (gameInfo.hasCoilSpring) {
         line = `$has: coilspring`;
         lines.push(line);

@@ -46,6 +46,7 @@ import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { shrinkObject } from "../shrink.js";
 import { playSound } from "../sound.js";
+import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
 import { removeChar, tryParseInt } from "../utils.js";
@@ -1929,6 +1930,9 @@ function BalPage() {
         await initDB();
         if (!mounted) return;
 
+        globalVars.stoneImg01 = await loadImage('/stone1.png');
+        globalVars.stoneImg02 = await loadImage('/stone2.png');
+
         if (!initialized) {
           initialized = true;
           loadSettings();
@@ -1940,7 +1944,7 @@ function BalPage() {
           gameVars.currentLevel = 200;
           await loadProgress(gameVars);
           if (globalVars.fred) {
-            gameVars.currentLevel = 3312;
+            gameVars.currentLevel = 200;
           }
           initLevel(gameVars.currentLevel);
         }

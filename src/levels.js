@@ -282,7 +282,8 @@ export function checkSettings(data, settings) {
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
     { name: "$stepspermeasure", params: 3, xy: true },
-    { name: "$sticky", params: 3, xy: true }
+    { name: "$sticky", params: 3, xy: true },
+    { name: "$stonepattern", params: 1, xy: false }
   ];
 
   let gameTicks = 0;
@@ -486,6 +487,12 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$stonepattern":
+              val_int = tryParseInt(values[0], -1);
+              if ((val_int < 0) || (val_int > 2)) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for stone pattern number.\n`;
               }
               break;
             case "$addnotes":
@@ -1337,6 +1344,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 }
               }
             }
+          }
+          break;
+        case "$stonepattern":
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 2)) {
+            gameVars.stonePattern = val_int;
           }
           break;
         default:

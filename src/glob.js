@@ -8,5 +8,8 @@ export const globalVars = {
     loading: true,
     otherWorldGreen: -1,
     playedNotes: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    stoneImg01: null,
+    stoneImg02: null,
+    stoneLayer: null,
     thisWorldGreen: -1
 }

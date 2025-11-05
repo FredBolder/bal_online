@@ -1084,6 +1084,7 @@ export function initGameVars(vars) {
     vars.skipFalling = 0;
     vars.soundLava = "default";
     vars.startlevelmessage = "";
+    vars.stonePattern = 0;
     vars.teleporting = 0;
     vars.timeFreezer = 0;
     vars.wave1 = 0;

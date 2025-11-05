@@ -12,6 +12,7 @@ import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
 import { globalVars } from "./glob.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
+import { buildPatternLayer } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
 
@@ -1907,7 +1908,11 @@ function drawLevel(
   }
 
   function drawStone(x, y) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
+    if (gameVars.stonePattern === 0) {
+      drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
   }
 
   function drawStonePattern(x, y, n) {
@@ -1999,47 +2004,83 @@ function drawLevel(
   }
 
   function drawTriangleStoneBottomLeft(x, y) {
-    // Shape: |\, code: 15, G 
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    // Shape: |\, code: 15, G
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawTriangleStoneBottomRight(x, y) {
-    // Shape: /|, code: 16, H 
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    // Shape: /|, code: 16, H
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawTriangleStoneTopLeft(x, y) {
     // Shape: |/, code: 17, I
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
     ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawTriangleStoneTopRight(x, y) {
     // Shape: \|, code: 18, J
-    ctx.fillStyle = getFgcolor(x, y, "#464646");
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymin - 0.5));
     ctx.lineTo(Math.round(xmax + 0.5), Math.round(ymax + 0.5));
-    ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymin - 0.5));
-    ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+
+    if (gameVars.stonePattern === 0) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
   }
 
   function drawVerticalRope() {
@@ -2310,6 +2351,22 @@ function drawLevel(
   let yc = 0;
   let w1 = 0;
   let w2 = 0;
+
+  // Stone pattern
+  let stoneImg = null;
+  switch (gameVars.stonePattern) {
+    case 1:
+      stoneImg = globalVars.stoneImg01;
+      break;
+    case 2:
+      stoneImg = globalVars.stoneImg02;
+      break;
+    default:
+      break;
+  }
+  if (stoneImg !== null) {
+    globalVars.stoneLayer = buildPatternLayer(stoneImg, columns, rows, size1, size1 / 200);
+  }
 
   ctx.globalAlpha = 1;
   ctx.globalCompositeOperation = 'source-over';
@@ -3049,5 +3106,6 @@ function drawLevel(
     drawGameOver();
   }
 }
+
 
 export { clearBitMapLava, drawLevel };
