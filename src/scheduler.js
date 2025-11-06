@@ -219,7 +219,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             gameVars.orangeCounter--;
         } else {
             gameVars.orangeCounter = 1;
-            if (moveOrangeBalls(gameData, gameInfo.orangeBalls)) {
+            if (moveOrangeBalls(backData, gameData, gameInfo, gameVars)) {
                 updateCanvas = true;
             }
         }

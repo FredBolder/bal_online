@@ -155,7 +155,7 @@ function OverviewPage() {
             The green numbers are the levels that you solved, the white numbers are the unlocked levels and
             the gray numbers are the locked levels.
             You can click on a white or a green number to play that level.<br/>
-            IMPORTANT: If you delete your site data, you might loose your progress. You can export your
+            IMPORTANT: If you delete your site data, you might lose your progress. You can export your
             progress to a file, so you can later import your progress (also on another device).
           </div>
           <h2>Series 1</h2>

@@ -1,8 +1,14 @@
-export function moveOrangeBalls(gameData, orangeBalls) {
+import { fallingOrRising } from "./balUtils.js";
+
+export function moveOrangeBalls(backData, gameData, gameInfo, gameVars) {
     let update = false;
 
-    for (let i = 0; i < orangeBalls.length; i++) {
-        const orangeBall = orangeBalls[i];
+    for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
+        const orangeBall = gameInfo.orangeBalls[i];
+        if (["left", "right"].includes(orangeBall.direction) &&
+            fallingOrRising(orangeBall.x, orangeBall.y, backData, gameData, gameInfo, gameVars, true)) {
+            break;
+        }
         switch (orangeBall.direction) {
             case "left":
                 if ((orangeBall.x > 0) && (gameData[orangeBall.y][orangeBall.x - 1] === 0)) {

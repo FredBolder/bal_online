@@ -1209,7 +1209,7 @@ function isTravelGate(x, y, travelGate) {
   return ((x === travelGate.x) && (y === travelGate.y));
 }
 
-export function falling(x, y, backData, gameData, gameInfo, gameVars) {
+export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle = false) {
   const element = gameData[y][x];
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
@@ -1222,8 +1222,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars) {
     }
 
     if ((gameData[y + 1][x] === 0) ||
-      ((gameData[y + 1][x] === 15) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      ((gameData[y + 1][x] === 16) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+      (!ignoreTriangle && (gameData[y + 1][x] === 15) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      (!ignoreTriangle && (gameData[y + 1][x] === 16) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
     ) {
       result = true;
       // ladder
@@ -1266,8 +1266,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars) {
     }
 
     if ((gameData[y - 1][x] === 0) ||
-      ((gameData[y - 1][x] === 17) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      ((gameData[y - 1][x] === 18) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+      (!ignoreTriangle && (gameData[y - 1][x] === 17) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      (!ignoreTriangle && (gameData[y - 1][x] === 18) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
     ) {
       result = true;
       // ladder
@@ -1307,8 +1307,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars) {
   return result;
 }
 
-export function fallingOrRising(x, y, backData, gameData, gameInfo, gameVars) {
-  return (falling(x, y, backData, gameData, gameInfo, gameVars) || rising(x, y, gameData, gameInfo, gameVars));
+export function fallingOrRising(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle = false ) {
+  return (falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle) || rising(x, y, gameData, gameInfo, gameVars));
 }
 
 export function rising(x, y, gameData, gameInfo, gameVars) {
