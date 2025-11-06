@@ -1,41 +1,81 @@
-export function drawBox(canvas, x, y, width, height, color) {
-  canvas.strokeStyle = color;
-  canvas.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+export function drawBox(ctx, x, y, width, height, color) {
+  ctx.strokeStyle = color;
+  ctx.strokeRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 }
 
-export function drawCircle(canvas, xc, yc, radius, color) {
-  canvas.strokeStyle = color;
-  canvas.beginPath();
-  canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius), 0, 2 * Math.PI, false);
-  canvas.stroke();
+export function drawCircle(ctx, xc, yc, radius, color) {
+  ctx.strokeStyle = color;
+  ctx.beginPath();
+  ctx.arc(Math.round(xc), Math.round(yc), Math.round(radius), 0, 2 * Math.PI, false);
+  ctx.stroke();
 }
 
-export function drawFilledBox(canvas, x, y, width, height, colorOrPattern) {
-  canvas.fillStyle = colorOrPattern;
-  canvas.fillRect(Math.round(x - 0.5), Math.round(y), Math.round(width), Math.round(height));
+export function drawFilledBox(ctx, x, y, width, height, colorOrPattern, shadow = false) {
+  const rx = Math.round(x);
+  const ry = Math.round(y);
+  const rw = Math.round(width);
+  const rh = Math.round(height);
+  const inset = 0; // was 0.5
+  const drawX = rx - inset;
+  const drawY = ry - inset;
+  const drawW = rw + inset * 2;
+  const drawH = rh + inset * 2;
+
+  ctx.fillStyle = colorOrPattern;
+  ctx.fillRect(drawX, drawY, drawW, drawH);
+
+  if (!shadow) return;
+
+  const edge = Math.max(1, Math.round(Math.min(drawW, drawH) * 0.06));
+  const dark = "rgba(0,0,0,0.35)";
+  const light = "rgba(255,255,255,0.25)";
+  ctx.fillStyle = light;
+  ctx.fillRect(drawX, drawY, drawW, edge); // top
+  ctx.fillRect(drawX, drawY, edge, drawH); // left
+  ctx.fillStyle = dark;
+  ctx.fillRect(drawX, drawY + drawH - edge, drawW, edge); // bottom
+  ctx.fillRect(drawX + drawW - edge, drawY, edge, drawH); // right
 }
 
-export function drawFilledCircle(canvas, xc, yc, radius, colorOrPattern) {
-  canvas.fillStyle = colorOrPattern;
-  canvas.beginPath();
-  canvas.arc(Math.round(xc), Math.round(yc), Math.round(radius - 0.5), 0, 2 * Math.PI, false);
-  canvas.fill();
+export function drawFilledCircle(ctx, xc, yc, radius, colorOrPattern, shadow = false) {
+  const rxc = Math.round(xc);
+  const ryc = Math.round(yc);
+  const rradius = Math.round(radius);
+
+  ctx.fillStyle = colorOrPattern;
+  ctx.beginPath();
+  ctx.arc(rxc, ryc, rradius - 0.5, 0, 2 * Math.PI);
+  ctx.fill();
+
+  if (!shadow) return;
+
+  const edge = Math.max(1, Math.round(rradius * 0.2)); // was 0.06
+  const dark = "rgba(0,0,0,0.2)"; // was 0.35
+  const light = "rgba(255,255,255,0.1)"; // was 0.25
+
+  // Lighter top-left arc
+  ctx.beginPath();
+  ctx.arc(rxc, ryc, rradius - edge / 2, Math.PI * 0.75, Math.PI * 1.75);
+  ctx.lineWidth = edge;
+  ctx.strokeStyle = light;
+  ctx.stroke();
+
+  // Darker bottom-right arc
+  ctx.beginPath();
+  ctx.arc(rxc, ryc, rradius - edge / 2, Math.PI * 1.75, Math.PI * 0.75);
+  ctx.lineWidth = edge;
+  ctx.strokeStyle = dark;
+  ctx.stroke();
+
+  ctx.lineWidth = 1;
 }
 
-export function drawFilledEllipse(canvas, xc, yc, radiusX, radiusY, colorOrPattern) {
-  canvas.fillStyle = colorOrPattern;
-  canvas.beginPath();
-  // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise)
-  canvas.ellipse(Math.round(xc), Math.round(yc), Math.round(radiusX - 0.5), Math.round(radiusY - 0.5), 0, 0, 2 * Math.PI, false);
-  canvas.fill();
-}
-
-export function drawLine(canvas, x1, y1, x2, y2, color) {
-  canvas.strokeStyle = color;
-  canvas.beginPath();
-  canvas.moveTo(Math.round(x1), Math.round(y1));
-  canvas.lineTo(Math.round(x2), Math.round(y2));
-  canvas.stroke();
+export function drawLine(ctx, x1, y1, x2, y2, color) {
+  ctx.strokeStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(Math.round(x1), Math.round(y1));
+  ctx.lineTo(Math.round(x2), Math.round(y2));
+  ctx.stroke();
 }
 
 export function drawText(

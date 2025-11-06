@@ -3146,6 +3146,7 @@ function BalPage() {
 
     </div>
   );
+  
 }
 
 export default BalPage;

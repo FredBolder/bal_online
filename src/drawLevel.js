@@ -166,7 +166,7 @@ function drawLevel(
     }
   }
 
-  function drawArrow(direction, frontColor, backColor) {
+  function drawArrow(direction, frontColor, backColor, shadow = false) {
     let angle = 0;
     let d1 = w1 / 3;
     let d2 = w1 / 10;
@@ -179,7 +179,7 @@ function drawLevel(
       { x: xc + d3, y: yc + d2 },
     ];
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, backColor);
+    drawFilledBox(ctx, xmin, ymin, w1, w2, backColor, shadow);
     switch (direction) {
       case "left":
         angle = 180;
@@ -215,12 +215,12 @@ function drawLevel(
     drawLine(ctx, rotatedPoints[1].x, rotatedPoints[1].y, rotatedPoints[3].x, rotatedPoints[3].y, frontColor);
   }
 
-  function drawBall(color) {
-    drawFilledCircle(ctx, xc, yc, w1 * 0.5, color);
+  function drawBall(color, shadow = false) {
+    drawFilledCircle(ctx, xc, yc, w1 * 0.5, color, shadow);
   }
 
   function drawBallSynchroniser(color) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, color);
+    drawFilledBox(ctx, xmin, ymin, w1, w2, color, true);
     drawText(ctx, xc, yc, "&", "middle", "black", w2 * 0.8, w1 * 0.8, "black", 1);
   }
 
@@ -312,7 +312,7 @@ function drawLevel(
   }
 
   function drawChordType(chordType) {
-    drawFilledCircle(ctx, xc, yc, w1 * 0.5, "green");
+    drawFilledCircle(ctx, xc, yc, w1 * 0.5, "green", true);
     drawText(ctx, xc, yc, chordType, "middle", "white", w2 * 0.7, w1 * 0.7, "white", 1);
   }
 
@@ -400,7 +400,7 @@ function drawLevel(
   }
 
   function drawCopier() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "white", true);
     drawText(ctx, xc, yc, "2x", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
@@ -419,7 +419,7 @@ function drawLevel(
   }
 
   function drawDelay() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "white", true);
     drawText(ctx, xc, yc, "t", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
@@ -429,7 +429,7 @@ function drawLevel(
     let d2 = w2 / 2;
     let d3 = w2 / 8;
     let d4 = w1 / 6;
-    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red");
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
     drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.4, w1 * 0.54, "white", 1);
@@ -496,13 +496,13 @@ function drawLevel(
 
   function drawDirectionChanger1() {
     // Direction: /, code: 84, C
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xmin, ymax, xmax, ymin, "black");
   }
 
   function drawDirectionChanger2() {
     // Direction: \, code: 85, c
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xmin, ymin, xmax, ymax, "black");
   }
 
@@ -510,7 +510,7 @@ function drawLevel(
     // Direction: - and |, code: 86, +
     let d1 = w1 * 0.1;
     let d2 = w1 * 0.1;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, "black");
     drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, "black");
     drawLine(ctx, xmin + d1, ymin + d1 + d2, xmin + d1, ymax - d1 - d2, "black");
@@ -519,7 +519,7 @@ function drawLevel(
 
   function drawDirectionChanger4() {
     // Direction: /, code: 138, â
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xmin, ymax, xmax, ymin, "black");
     ctx.setLineDash([2, 4]);
     drawLine(ctx, xmin, ymin, xmax, ymax, "black");
@@ -528,7 +528,7 @@ function drawLevel(
 
   function drawDirectionChanger5() {
     // Direction: \, code: 139, Â
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xmin, ymin, xmax, ymax, "black");
     ctx.setLineDash([2, 4]);
     drawLine(ctx, xmin, ymax, xmax, ymin, "black");
@@ -712,7 +712,7 @@ function drawLevel(
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawLine(ctx, xc - d1, yc, xc + d1, yc, "white");
     drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "white");
     drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "white");
@@ -724,7 +724,7 @@ function drawLevel(
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawLine(ctx, xc, yc - d1, xc, yc + d1, "white");
     drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), "white";
     drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), "white";
@@ -753,7 +753,7 @@ function drawLevel(
     let d3 = w2 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     for (let i = -1; i <= 1; i++) {
       d4 = (w1 / 3) * i;
       drawLine(ctx, xc + d4, ymin + d1, xc + d4, ymax - d1, "white");
@@ -768,7 +768,7 @@ function drawLevel(
     let d3 = w1 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     for (let i = -1; i <= 1; i++) {
       d4 = (w2 / 3) * i;
       drawLine(ctx, xmin + d1, yc + d4, xmax - d1, yc + d4, "white");
@@ -783,7 +783,7 @@ function drawLevel(
     let d3 = w1 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     for (let i = -1; i <= 1; i++) {
       d4 = (w2 / 3) * i;
       drawLine(ctx, xmin + d1, yc + d4, xmax - d1, yc + d4, "white");
@@ -798,7 +798,7 @@ function drawLevel(
     let d3 = w2 / 4;
     let d4 = 0;
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     for (let i = -1; i <= 1; i++) {
       d4 = (w1 / 3) * i;
       drawLine(ctx, xc + d4, ymin + d1, xc + d4, ymax - d1, "white");
@@ -1148,7 +1148,7 @@ function drawLevel(
     if (idx >= 0) {
       direction = gameInfo.movers[idx].direction;
     }
-    drawArrow(direction, "white", "#464646");
+    drawArrow(direction, "white", "#464646", true);
   }
 
   function drawMusicBox(x, y) {
@@ -1520,8 +1520,11 @@ function drawLevel(
   function drawPiston(x, y, direction) {
     let color = "gray";
     let d1 = w1 * 0.1;
-    let d2 = w2 * 0.8;
-    let d3 = w2 * 0.1;
+    let d2 = w1 * 0.75; // Height of box
+    let d3 = w1 * 0.1;
+    let d4 = 0;
+    let d5 = 0;
+    let d6 = 0.5;
     let idx = -1;
     let activated = false;
     let group = 0;
@@ -1595,43 +1598,48 @@ function drawLevel(
     if (triesToActivate && !activated) {
       text += "!";
     }
+    if (activated) {
+      d4 = 0;
+    } else {
+      d4 = d3 * 0.5;
+    }
     switch (direction) {
       case "down":
-        drawFilledBox(ctx, xmin, ymin, w1, d2, color);
+        drawFilledBox(ctx, xmin, ymin, w1, d2, color, true);
         if (!activated) {
-          drawFilledBox(ctx, xmin + d1, ymax - d3 + 0.5, w1 - d1 - d1, d3 + 0.5, "brown");
+          drawFilledBox(ctx, xmin + d1, ymax - d3, w1 - d1 - d1, d3 + d6, "brown");
         }
-        drawFilledBox(ctx, xc - d1, ymin + d2, d1 + d1, w2 - d2, "brown");
+        drawFilledBox(ctx, xc - d1, ymin + d2 + d5, d1 + d1, w2 - (d2 + d4 + d5), "brown");
         if (showGroup) {
           drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
       case "left":
-        drawFilledBox(ctx, xmax - d2 + 1, ymin, d2, w2, color);
+        drawFilledBox(ctx, xmax - d2, ymin, d2, w2, color, true);
         if (!activated) {
-          drawFilledBox(ctx, xmin, ymin + d1, d3, w2 - d1 - d1, "brown");
+          drawFilledBox(ctx, xmin, ymin + d1, d3 + d6, w2 - d1 - d1, "brown");
         }
-        drawFilledBox(ctx, xmin, yc - d1, w1 - d2 - 0.5, d1 + d1, "brown");
+        drawFilledBox(ctx, xmin + d4, yc - d1, w1 - (d2 + d4 + d5), d1 + d1, "brown");
         if (showGroup) {
           drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
       case "right":
-        drawFilledBox(ctx, xmin, ymin, d2, w2, color);
+        drawFilledBox(ctx, xmin, ymin, d2, w2, color, true);
         if (!activated) {
-          drawFilledBox(ctx, xmax - d3 + 1, ymin + d1, d3 + 0.5, w2 - d1 - d1, "brown");
+          drawFilledBox(ctx, xmax - d3, ymin + d1, d3 + d6, w2 - d1 - d1, "brown");
         }
-        drawFilledBox(ctx, xmin + d2 + 0.5, yc - d1, w1 - d2, d1 + d1, "brown");
+        drawFilledBox(ctx, xmin + d2 + d5, yc - d1, w1 - (d2 + d4 + d5), d1 + d1, "brown");
         if (showGroup) {
           drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
         break;
       case "up":
-        drawFilledBox(ctx, xmin, ymax - d2 + 1, w1, d2, color);
+        drawFilledBox(ctx, xmin, ymax - d2, w1, d2, color, true);
         if (!activated) {
-          drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3, "brown");
+          drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d3 + d6, "brown");
         }
-        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - d2, "brown");
+        drawFilledBox(ctx, xc - d1, ymin + d4, d1 + d1, w2 - (d2 + d4 + d5), "brown");
         if (showGroup) {
           drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
         }
@@ -1643,24 +1651,25 @@ function drawLevel(
 
   function drawPistonExtendedPart(direction) {
     let d1 = w1 * 0.1;
-    let d2 = w2 * 0.1;
+    let d2 = w1 * 0.1;
+    let d3 = 0.5;
 
     switch (direction) {
       case "down":
-        drawFilledBox(ctx, xmin + d1, ymax - d2 + 0.5, w1 - d1 - d1, d2 + 0.5, "brown");
-        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2, "brown");
+        drawFilledBox(ctx, xmin + d1, ymax - d2, w1 - d1 - d1, d2 + d3, "brown");
+        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2 - (d2 * 0.5), "brown");
         break;
       case "left":
-        drawFilledBox(ctx, xmin, ymin + d1, d2, w2 - d1 - d1, "brown");
-        drawFilledBox(ctx, xmin, yc - d1, w1, d1 + d1, "brown");
+        drawFilledBox(ctx, xmin, ymin + d1, d2 + d3, w2 - d1 - d1, "brown");
+        drawFilledBox(ctx, xmin + (d2 * 0.5), yc - d1, w1 - (d2 * 0.5), d1 + d1, "brown");
         break;
       case "right":
-        drawFilledBox(ctx, xmax - d2 + 1, ymin + d1, d2 + 0.5, w2 - d1 - d1, "brown");
-        drawFilledBox(ctx, xmin, yc - d1, w1, d1 + d1, "brown");
+        drawFilledBox(ctx, xmax - d2, ymin + d1, d2 + d3, w2 - d1 - d1, "brown");
+        drawFilledBox(ctx, xmin, yc - d1, w1 - (d2 * 0.5), d1 + d1, "brown");
         break;
       case "up":
-        drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d2, "brown");
-        drawFilledBox(ctx, xc - d1, ymin, d1 + d1, w2, "brown");
+        drawFilledBox(ctx, xmin + d1, ymin, w1 - d1 - d1, d2 + d3, "brown");
+        drawFilledBox(ctx, xc - d1, ymin + (d2 * 0.5), d1 + d1, w2 - (d2 * 0.5), "brown");
         break;
       default:
         break;
@@ -1680,7 +1689,7 @@ function drawLevel(
     if (idx >= 0) {
       group = gameInfo.pistonsTriggers[idx].group;
     }
-    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "gray");
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "gray", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
     drawText(ctx, xc, ymin + w2 * 0.8, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54, "black", 1);
@@ -1898,7 +1907,7 @@ function drawLevel(
   }
 
   function drawSmallBall(color) {
-    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, color);
+    drawFilledCircle(ctx, w1 * 0.5 + xmin, w1 * 0.25 + ymin, w1 * 0.25, color, true);
     if (color === "red") {
       const d1 = w1 * 0.09;
       const d2 = w1 * 0.22;
@@ -2026,7 +2035,7 @@ function drawLevel(
 
   function drawTimeBomb(x, y) {
     const sticks = 4;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"), true);
     let factor = 0.1;
     let d1 = w1 / 6;
     let d2 = w2 / 2.5;
@@ -2294,7 +2303,7 @@ function drawLevel(
     let d1 = w1 / 2.5;
     let d2 = w1 / 10;
     let d3 = w1 / 4;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xc - d1, yc, xc + d1, yc, "black");
     drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "black");
     drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "black");
@@ -2313,7 +2322,7 @@ function drawLevel(
     let d2 = w1 / 2;
     let d3 = w1 / 8;
     let d4 = w1 / 6;
-    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "yellow");
+    drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "yellow", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
   }

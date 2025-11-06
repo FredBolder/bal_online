@@ -183,6 +183,11 @@ tr:nth-child(even) td {
 
 /* PLAY PAGE */
 
+#progress {
+  position: relative;
+  z-index: 0; /* or auto */
+}
+
 .page {
     width: 100%;
     /* Dynamic viewport height for mobile phones */
@@ -258,7 +263,7 @@ tr:nth-child(even) td {
     border: 1px solid white;
     border-radius: var(--radius-menu);
     min-width: 200px;
-    z-index: 1;
+    z-index: 10;
 }
 
 .menu-content div {
