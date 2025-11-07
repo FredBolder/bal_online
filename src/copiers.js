@@ -175,6 +175,9 @@ export function checkCopiers(gameData, gameInfo) {
                         }
                     }
                 }
+                if (copied) {
+                    info.updated = true;
+                }
                 break;
             default:
                 break;

@@ -1973,7 +1973,7 @@ function BalPage() {
       window.removeEventListener("resize", handleResize);
       clearInterval(gameInterval);
     };
-  }, [globalVars.clickedLevel]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateCreateLevelCanvasDisplay() {
     createLevelCanvas.current.style.display = globalVars.createLevel ? "block" : "none";
