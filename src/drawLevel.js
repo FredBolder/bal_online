@@ -399,8 +399,8 @@ function drawLevel(
     }
   }
 
-  function drawCopier() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "white", true);
+  function drawCopier(color) {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, color, true);
     drawText(ctx, xc, yc, "2x", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
   }
 
@@ -912,16 +912,16 @@ function drawLevel(
     } else {
       switch (location) {
         case "left":
-          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1 / 2, w2, xmin, ymin, w1 / 2, w2);
+          ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1 / 2, w2, xmin, ymin, w1 / 2, w2);
           break;
         case "right":
-          ctx.drawImage(globalVars.stoneLayer, xc - leftMargin, ymin - topMargin, w1 / 2, w2, xc, ymin, w1 / 2, w2);
+          ctx.drawImage(stoneLayer, xc - leftMargin, ymin - topMargin, w1 / 2, w2, xc, ymin, w1 / 2, w2);
           break;
         case "top":
-          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2 / 2, xmin, ymin, w1, w2 / 2);
+          ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2 / 2, xmin, ymin, w1, w2 / 2);
           break;
         case "bottom":
-          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, yc - topMargin, w1, w2 / 2, xmin, yc, w1, w2 / 2);
+          ctx.drawImage(stoneLayer, xmin - leftMargin, yc - topMargin, w1, w2 / 2, xmin, yc, w1, w2 / 2);
           break;
         default:
           break;
@@ -1766,7 +1766,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -1786,7 +1786,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -1806,7 +1806,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -1826,7 +1826,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -1856,16 +1856,16 @@ function drawLevel(
     } else {
       switch (location) {
         case "bottomLeft":
-          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, yc - topMargin, half, half, xmin, yc, half, half);
+          ctx.drawImage(stoneLayer, xmin - leftMargin, yc - topMargin, half, half, xmin, yc, half, half);
           break;
         case "bottomRight":
-          ctx.drawImage(globalVars.stoneLayer, xc - leftMargin, yc - topMargin, half, half, xc, yc, half, half);
+          ctx.drawImage(stoneLayer, xc - leftMargin, yc - topMargin, half, half, xc, yc, half, half);
           break;
         case "topLeft":
-          ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, half, half, xmin, ymin, half, half);
+          ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, half, half, xmin, ymin, half, half);
           break;
         case "topRight":
-          ctx.drawImage(globalVars.stoneLayer, xc - leftMargin, ymin - topMargin, half, half, xc, ymin, half, half);
+          ctx.drawImage(stoneLayer, xc - leftMargin, ymin - topMargin, half, half, xc, ymin, half, half);
           break;
         default:
           break;
@@ -1999,7 +1999,7 @@ function drawLevel(
     if (gameVars.stonePattern === 0) {
       drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
   }
 
@@ -2105,7 +2105,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -2125,7 +2125,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -2145,7 +2145,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -2165,7 +2165,7 @@ function drawLevel(
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
-      ctx.drawImage(globalVars.stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
     }
 
     ctx.restore();
@@ -2442,6 +2442,7 @@ function drawLevel(
 
   // Stone pattern
   let stoneImg = null;
+  let stoneLayer = null;
   switch (gameVars.stonePattern) {
     case 1:
       stoneImg = globalVars.stoneImg01;
@@ -2459,7 +2460,9 @@ function drawLevel(
       break;
   }
   if (stoneImg !== null) {
-    globalVars.stoneLayer = buildPatternLayer(stoneImg, columns, rows, size1, size1 / 100);
+    stoneLayer = buildPatternLayer(stoneImg, columns, rows, size1, size1 / 100);
+  } else {
+    gameVars.stonePattern = 0;
   }
 
   ctx.globalAlpha = 1;
@@ -2672,7 +2675,7 @@ function drawLevel(
           drawMirror(false);
           break;
         case 97:
-          drawCopier();
+          drawCopier("white");
           break;
         case 98:
           drawGrayBall(2);
@@ -2992,6 +2995,9 @@ function drawLevel(
           break;
         case 207:
           drawPhaseAbility();
+          break;
+        case 208:
+          drawCopier("yellow");
           break;
         case 1000:
           // For manual only (empty)

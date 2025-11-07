@@ -121,7 +121,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 97: {
-            let copier = { x, y };
+            let copier = { x, y, color: "white" };
             gameInfo.copiers.push(copier);
             break;
         }
@@ -288,6 +288,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.waterWithIceObjects.push(waterWithIce);
             break;
         }
+        case 208: {
+            let copier = { x, y, color: "yellow" };
+            gameInfo.copiers.push(copier);
+            break;
+        }
         default:
             break;
     }
@@ -405,6 +410,7 @@ export function removeObject(gameData, gameInfo, x, y) {
             }
             break;
         case 97:
+        case 208:
             idx = findElementByCoordinates(x, y, gameInfo.copiers);
             if (idx >= 0) {
                 gameInfo.copiers.splice(idx, 1);

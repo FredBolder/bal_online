@@ -1,4 +1,6 @@
 export const globalVars = {
+    balPageLoading: false,
+    clickedLevel: -1,
     createLevel: false,
     createLevelColorPage: 1,
     createLevelMenuPage: 1,
@@ -12,6 +14,5 @@ export const globalVars = {
     stoneImg02: null,
     stoneImg03: null,
     stoneImg04: null,
-    stoneLayer: null,
     thisWorldGreen: -1
 }

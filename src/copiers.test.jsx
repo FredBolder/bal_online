@@ -16,7 +16,7 @@ describe("Copiers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            copiers: [{ x: 5, y: 3 }],
+            copiers: [{ x: 5, y: 3, color: "white" }],
             greenBalls: 1,
         };
         const input = [
@@ -42,7 +42,7 @@ describe("Copiers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            copiers: [{ x: 5, y: 3 }],
+            copiers: [{ x: 5, y: 3, color: "white" }],
             greenBalls: 1,
         };
         gameInfo.redBalls.push({ smart: 1, x: 5, y: 2, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 });
@@ -71,7 +71,7 @@ describe("Copiers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            copiers: [{ x: 5, y: 3 }],
+            copiers: [{ x: 5, y: 3, color: "white" }],
             greenBalls: 1,
         };
         const input = [
@@ -91,7 +91,7 @@ describe("Copiers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            copiers: [{ x: 5, y: 3 }],
+            copiers: [{ x: 5, y: 3, color: "white" }],
             greenBalls: 1,
             pinkBalls: [{ x: 5, y: 2, delete: false, counter: 0 }],
         };
@@ -122,7 +122,7 @@ describe("Copiers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            copiers: [{ x: 5, y: 3 }],
+            copiers: [{ x: 5, y: 3, color: "white" }],
             greenBalls: 1,
             orangeBalls: [{ x: 5, y: 2, direction: "none" }],
         };

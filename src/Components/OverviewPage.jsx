@@ -58,7 +58,8 @@ function OverviewPage() {
 
   function handleClick(level) {
     if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) || globalVars.fred) {
-      navigate(`/bal?level=${level}`);
+      globalVars.clickedLevel = level;
+      navigate(`/bal`);
     }
   }
 

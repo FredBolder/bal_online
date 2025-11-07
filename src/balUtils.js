@@ -686,6 +686,9 @@ export function charToNumber(c) {
     case "Ѫ":
       result = 207;
       break;
+    case "Ѳ":
+      result = 208;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1081,6 +1084,7 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       result = gameInfo.electricity;
       break;
     case 97:
+    case 208:
       result = gameInfo.copiers;
       break;
     case 109:
@@ -1150,6 +1154,21 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
   }
 
   return result;
+}
+
+export function getGameDataValue(gameData, x, y) {
+    let result =  -1;
+
+    if (gameData.length === 0) {
+        return result;
+    }
+    if (gameData[0].length === 0) {
+        return result;
+    }
+    if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
+        result = gameData[y][x];
+    }
+    return result;
 }
 
 export function inWater(x, y, backData) {
@@ -1838,6 +1857,9 @@ export function numberToChar(n) {
       break;
     case 207:
       result = "Ѫ";
+      break;
+    case 208:
+      result = "Ѳ";
       break;
     case 1000:
       // For manual only

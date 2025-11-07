@@ -120,7 +120,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 97: {
-                    let copier = { x: j, y: i };
+                    let copier = { x: j, y: i, color: "white" };
                     result.copiers.push(copier);
                     break;
                 }
@@ -279,6 +279,11 @@ export function getGameInfo(backData, gameData) {
                 case 206: {
                     let waterWithIce = { x: j, y: i, status: 0, objectNumber: 20 };
                     result.waterWithIceObjects.push(waterWithIce);
+                    break;
+                }
+                case 208: {
+                    let copier = { x: j, y: i, color: "yellow" };
+                    result.copiers.push(copier);
                     break;
                 }
                 default:
@@ -611,7 +616,13 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                         info = `Mirror 2`;
                         break;
                     case 97:
-                        info = `Copier`;
+                    case 208:
+                        idx = findElementByCoordinates(x, y, gameInfo.copiers);
+                        if (idx >= 0) {
+                            obj = gameInfo.copiers[idx];
+                            extraInfo = `Color: ${obj.color}`;
+                        }
+                        info = `Copier, ` + extraInfo;
                         break;
                     case 98:
                         info = `Gray ball two moves`;
@@ -939,6 +950,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                             extraInfo = `Status: ${obj.status}, Object number: ${obj.objectNumber}`;
                         }
                         info = `Water with a layer of ice on top, ` + extraInfo;
+                        break;
+                    case 207:
+                        info = `Phase ability`;
                         break;
                     default:
                         break;

@@ -40,11 +40,11 @@ export function drawFilledBox(ctx, x, y, width, height, colorOrPattern, shadow =
 export function drawFilledCircle(ctx, xc, yc, radius, colorOrPattern, shadow = false) {
   const rxc = Math.round(xc);
   const ryc = Math.round(yc);
-  const rradius = Math.round(radius);
+  const rradius = Math.max(1, Math.round(radius) - 0.5);
 
   ctx.fillStyle = colorOrPattern;
   ctx.beginPath();
-  ctx.arc(rxc, ryc, rradius - 0.5, 0, 2 * Math.PI);
+  ctx.arc(rxc, ryc, rradius, 0, 2 * Math.PI);
   ctx.fill();
 
   if (!shadow) return;

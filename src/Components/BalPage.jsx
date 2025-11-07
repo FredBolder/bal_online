@@ -1,5 +1,5 @@
 import { useContext, useRef, useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useModal } from "./useModal.js";
 import { ModalContext } from "./ModalContext";
 
@@ -119,8 +119,6 @@ initGameVars(gameVarsMenu);
 
 function BalPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const clickedLevel = parseInt(searchParams.get("level"));
   const { showMessage, showConfirm, showInput, showSelect } = useModal();
   const { modalState } = useContext(ModalContext);
 
@@ -269,7 +267,7 @@ function BalPage() {
         fixDoors(gameInfo);
         return;
       } else {
-        initLevel(gameVars.currentLevel);
+        await initLevel(gameVars.currentLevel);
         return;
       }
     }
@@ -365,7 +363,7 @@ function BalPage() {
         }
       }
       if (level > 0) {
-        initLevel(level);
+        await initLevel(level);
       }
       if (code === getFredCode()) {
         globalVars.fred = true;
@@ -618,7 +616,7 @@ function BalPage() {
           level = 200;
           break;
       }
-      initLevel(level);
+      await initLevel(level);
     }
   }
 
@@ -805,7 +803,7 @@ function BalPage() {
   async function randomLevel() {
     const confirm = await showConfirm("Question", "Load a random level?");
     if (confirm === "YES") {
-      initLevel(getRandomLevel(gameVars.currentLevel));
+      await initLevel(getRandomLevel(gameVars.currentLevel));
     }
   }
 
@@ -989,7 +987,7 @@ function BalPage() {
           case 6:
             // Yellow balls
             arr1 = [9, 196, 84, 85, 86, 138, 139, 155, 115, 116, 131, 136, 156, 121, 122, 123];
-            arr2 = [124, 125];
+            arr2 = [124, 125, 208];
             break;
           case 7:
             // Pistons
@@ -1062,7 +1060,7 @@ function BalPage() {
             break;
           case 5:
             // Misc
-            arr1 = [91, 119, 120, 97, 157, 167, 89, 183, 184, 185];
+            arr1 = [91, 119, 120, 97, 208, 157, 167, 89, 183, 184, 185];
             arr2 = [0];
             break;
           case 15:
@@ -1760,7 +1758,7 @@ function BalPage() {
       ) {
         if (gameVars.currentLevel === 9999) {
           showMessage("Congratulations!", "You have solved the level!");
-          initLevel(gameVars.currentLevel);
+          await initLevel(gameVars.currentLevel);
         } else {
           showMessage("Congratulations!", `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`);
           await initLevel(gameVars.currentLevel + 1);
@@ -1838,13 +1836,13 @@ function BalPage() {
           case "N":
             // Next level
             if (globalVars.fred) {
-              initLevel(gameVars.currentLevel + 1);
+              await initLevel(gameVars.currentLevel + 1);
             }
             break;
           case "P":
             // Previous level
             if (globalVars.fred) {
-              initLevel(gameVars.currentLevel - 1);
+              await initLevel(gameVars.currentLevel - 1);
             }
             break;
           case "R":
@@ -1878,7 +1876,7 @@ function BalPage() {
         clearPlayedNotes();
         fixDoors(gameInfo);
       } else {
-        initLevel(gameVars.currentLevel);
+        await initLevel(gameVars.currentLevel);
       }
     }
 
@@ -1921,8 +1919,8 @@ function BalPage() {
   }
 
   useEffect(() => {
-    if (!gameCanvas.current) return;
-
+    if (globalVars.balPageLoading || !gameCanvas.current) return;
+    globalVars.balPageLoading = true;
     let mounted = true;
 
     (async () => {
@@ -1947,10 +1945,12 @@ function BalPage() {
           if (globalVars.fred) {
             gameVars.currentLevel = 200;
           }
-          initLevel(gameVars.currentLevel);
+          await initLevel(gameVars.currentLevel);
         }
-        if (clickedLevel && (globalVars.fred || firstOfSeries(clickedLevel) || solvedLevels.includes(clickedLevel) || solvedLevels.includes(clickedLevel - 1))) {
-          initLevel(clickedLevel);
+        if ((globalVars.clickedLevel > 0) && (globalVars.fred || firstOfSeries(globalVars.clickedLevel) ||
+          solvedLevels.includes(globalVars.clickedLevel) || solvedLevels.includes(globalVars.clickedLevel - 1))) {
+          await initLevel(globalVars.clickedLevel);
+          globalVars.clickedLevel = -1;
         }
 
         updateProgressText();
@@ -1960,18 +1960,20 @@ function BalPage() {
         updateGameCanvas();
         setLevelNumber(gameVars.currentLevel);
         updateGreen();
+        window.addEventListener("resize", handleResize);
+        gameInterval = setInterval(runGameScheduler, schedulerTime());
       } catch (err) {
-        console.error('Initialization failed', err);
+        console.error('Loading Bal page failed', err);
+      } finally {
+        globalVars.balPageLoading = false;
       }
     })();
 
-    window.addEventListener("resize", handleResize);
-    gameInterval = setInterval(runGameScheduler, schedulerTime());
     return () => {
       window.removeEventListener("resize", handleResize);
       clearInterval(gameInterval);
     };
-  }, [clickedLevel]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [globalVars.clickedLevel]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function updateCreateLevelCanvasDisplay() {
     createLevelCanvas.current.style.display = globalVars.createLevel ? "block" : "none";
@@ -3146,7 +3148,7 @@ function BalPage() {
 
     </div>
   );
-  
+
 }
 
 export default BalPage;
