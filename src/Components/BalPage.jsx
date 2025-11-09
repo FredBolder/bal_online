@@ -1948,6 +1948,7 @@ function BalPage() {
           await initLevel(gameVars.currentLevel);
         }
         if ((globalVars.clickedLevel > 0) && (globalVars.fred || firstOfSeries(globalVars.clickedLevel) ||
+          (globalVars.userP && solvedLevels.includes(globalVars.clickedLevel - 2)) ||
           solvedLevels.includes(globalVars.clickedLevel) || solvedLevels.includes(globalVars.clickedLevel - 1))) {
           await initLevel(globalVars.clickedLevel);
           globalVars.clickedLevel = -1;

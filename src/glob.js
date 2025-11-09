@@ -5,7 +5,7 @@ export const globalVars = {
     createLevelColorPage: 1,
     createLevelMenuPage: 1,
     createLevelZoom: 0,
-    fred: false,  // TODO: Set to false when publishing
+    fred: true,  // TODO: Set to false when publishing
     isInOtherWorld: false,
     loading: true,
     otherWorldGreen: -1,
@@ -14,5 +14,6 @@ export const globalVars = {
     stoneImg02: null,
     stoneImg03: null,
     stoneImg04: null,
-    thisWorldGreen: -1
+    thisWorldGreen: -1,
+    userP: false
 }

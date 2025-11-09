@@ -14,7 +14,8 @@ import {
   seriesExtremeStart, seriesExtremeEnd,
   seriesMusicStart, seriesMusicEnd,
   seriesSecretStart, seriesSecretEnd,
-  hiddenMiniSeries1Start, hiddenMiniSeries1End
+  hiddenMiniSeries1Start, hiddenMiniSeries1End,
+  extraSeries1Start, extraSeries1End,
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
 
@@ -23,7 +24,7 @@ function levelNumberColor(level) {
 
   if (solvedLevels.includes(level)) {
     color = "green";
-  } else if (solvedLevels.includes(level - 1) || firstOfSeries(level)) {
+  } else if (solvedLevels.includes(level - 1) || firstOfSeries(level) || (globalVars.userP && solvedLevels.includes(level - 2))) {
     color = "white";
   } else {
     color = "gray";
@@ -34,7 +35,8 @@ function levelNumberColor(level) {
 function levelNumberCursor(level) {
   let cursor = "auto";
 
-  if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) || globalVars.fred) {
+  if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
+    (globalVars.userP && solvedLevels.includes(level - 2)) || globalVars.fred) {
     cursor = "pointer";
   } else {
     cursor = "auto";
@@ -55,9 +57,11 @@ function OverviewPage() {
   const [seriesMusicList, setSeriesMusicList] = useState([]);
   const [seriesSecretList, setSeriesSecretList] = useState([]);
   const [hiddenMiniSeries1List, setHiddenMiniSeries1List] = useState([]);
+  const [extraSeries1List, setExtraSeries1List] = useState([]);
 
   function handleClick(level) {
-    if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) || globalVars.fred) {
+    if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
+      (globalVars.userP && solvedLevels.includes(level - 2)) || globalVars.fred) {
       globalVars.clickedLevel = level;
       navigate(`/bal`);
     }
@@ -131,6 +135,12 @@ function OverviewPage() {
       listHidden1.push(i);
     }
     setHiddenMiniSeries1List(listHidden1);
+
+    const listExtra1 = [];
+    for (let i = extraSeries1Start; i <= extraSeries1End; i++) {
+      listExtra1.push(i);
+    }
+    setExtraSeries1List(listExtra1);
   }
 
   useEffect(() => {
@@ -155,7 +165,7 @@ function OverviewPage() {
           <div className="textBox">
             The green numbers are the levels that you solved, the white numbers are the unlocked levels and
             the gray numbers are the locked levels.
-            You can click on a white or a green number to play that level.<br/>
+            You can click on a white or a green number to play that level.<br />
             IMPORTANT: If you delete your site data, you might lose your progress. You can export your
             progress to a file, so you can later import your progress (also on another device).
           </div>
@@ -268,6 +278,18 @@ function OverviewPage() {
               {level}
             </div>))}
           </div>
+
+          {(globalVars.userP || globalVars.fred) && <div>
+            <h2>Extra series 1</h2>
+            <div className="seriesList">
+              {extraSeries1List.map((level) => (<div
+                key={level}
+                style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+                onClick={() => handleClick(level)} >
+                {level}
+              </div>))}
+            </div>
+          </div>}
 
         </div>
       </main>
