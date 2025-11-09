@@ -17,7 +17,7 @@ function AboutPage() {
             <h1>Bal - About</h1>
           </div>
           <div className="textBox">
-            The first Bal game was programmed by Fred Bolder in Turbo Pascal. Later it was converted by Fred Bolder to C# and
+            The first Bal game was programmed by Fred Bolder in Turbo Pascal. Later it was converted by Fred Bolder to C# for Windows and
             many levels and new objects were added. During a webdevelopment course, Fred Bolder made together with Michał Kotkowicz,
             Donnie Avant and Diana Sahlean the web site Games From Scratch including the game Bal.
             Bal was totally rewritten for JavaScript. The series 1 levels were copied from the C# bal game, but most of the other levels
