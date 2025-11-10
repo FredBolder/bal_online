@@ -35,7 +35,7 @@ export const hiddenMiniSeries1End = 3107;
 export const seriesMusicStart = 3200;
 export const seriesMusicEnd = 3207;
 export const extraSeries1Start = 5000;
-export const extraSeries1End = 5000;
+export const extraSeries1End = 5001;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -269,6 +269,7 @@ export function checkSettings(data, settings) {
     { name: "$conveyorbeltmode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
     { name: "$displaysize", params: 2, xy: false },
+    { name: "$extra", params: 1, xy: false },
     { name: "$fgcolor", params: 5, xy: true },
     { name: "$gameticks", params: 2, xy: false },
     { name: "$gameticksxy", params: 3, xy: true },
@@ -378,6 +379,12 @@ export function checkSettings(data, settings) {
               }
               if (h < 10) {
                 msg += `${settingNr(i)}Invalid value ${values[1]} for rows.\n`;
+              }
+              break;
+            case "$extra":
+              val_int = tryParseInt(values[0], -1);
+              if ((val_int < 0) || (val_int < 1)) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for extra.\n`;
               }
               break;
             case "$gameticks":
@@ -1076,6 +1083,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if ((w >= 10) && (h >= 10)) {
             gameVars.displaySize.columns = w;
             gameVars.displaySize.rows = h;
+          }
+          break;
+        case "$extra":
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 1)) {
+            gameVars.extra = val_int;
           }
           break;
         case "$gameticks":

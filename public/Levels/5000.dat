@@ -1,3 +1,4 @@
+$extra: 1
 $stonepattern: 1
 $inverted: 18, 1, yes
 $pistonmode: 18, 1, momentary

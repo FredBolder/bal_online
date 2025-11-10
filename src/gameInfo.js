@@ -1067,6 +1067,7 @@ export function initGameVars(vars) {
     vars.elevatorCounter = 0;
     vars.elevatorCountTo = 5;
     vars.explosionCounter = 0;
+    vars.extra = 0;
     vars.fgcolor = [];
     vars.fishCounter = 0;
     vars.fishCountTo = 12;

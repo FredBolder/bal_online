@@ -92,6 +92,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.extra !== 0) {
+        line = `$extra: ${gameVars.extra}`;
+        lines.push(line);
+    }
+
     if (gameVars.fishCountTo !== 12) {
         line = `$gameticks: fish, ${gameVars.fishCountTo}`;
         lines.push(line);

@@ -96,7 +96,6 @@ let createLevelTranspose = 0;
 let createLevelObject = -1;
 let createLevelRaster = false;
 let ctx;
-let gameInterval;
 let ignoreGravity = true;
 let initialized = false;
 let modalOpen = false;
@@ -1123,6 +1122,9 @@ function BalPage() {
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
+      if ((gameVars.extra > 0) && !globalVars.fred && !globalVars.userP) {
+        await initLevel(200, false);
+      }
       gameVars.laser = null;
       gameVars.gameOver = false;
       fixDoors(gameInfo);
@@ -1921,12 +1923,13 @@ function BalPage() {
   useEffect(() => {
     if (globalVars.balPageLoading || !gameCanvas.current) return;
     globalVars.balPageLoading = true;
-    let mounted = true;
+    const abortCtrl = new AbortController();
+    const intervalRef = { current: null };
 
     (async () => {
       try {
         await initDB();
-        if (!mounted) return;
+        if (abortCtrl.signal.aborted) return;
 
         if (!initialized) {
           initialized = true;
@@ -1962,17 +1965,19 @@ function BalPage() {
         setLevelNumber(gameVars.currentLevel);
         updateGreen();
         window.addEventListener("resize", handleResize);
-        gameInterval = setInterval(runGameScheduler, schedulerTime());
+        intervalRef.current = setInterval(runGameScheduler, schedulerTime());
       } catch (err) {
         console.error('Loading Bal page failed', err);
       } finally {
-        globalVars.balPageLoading = false;
+         globalVars.balPageLoading = false;
       }
     })();
 
     return () => {
+      abortCtrl.abort();
+      globalVars.balPageLoading = false;
       window.removeEventListener("resize", handleResize);
-      clearInterval(gameInterval);
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -1,3 +1,4 @@
+$extra: 1
 $pistonmode: 1, 9, momentary
 $group: 13, 18, 2
 $pistonmode: 13, 18, momentary
