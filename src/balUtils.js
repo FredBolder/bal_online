@@ -53,7 +53,7 @@ function canMoveAlone(gameData, gameInfo, x, y) {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200].includes(el)) {
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200, 209].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -93,6 +93,12 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
       idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
       if (idx >= 0) {
         gameInfo.musicBoxes[idx].direction = direction;
+      }
+    }
+    if (idx === -1) {
+      idx = findElementByCoordinates(x, y, gameInfo.pushers);
+      if (idx >= 0) {
+        gameInfo.pushers[idx].direction = direction;
       }
     }
   }
@@ -164,6 +170,12 @@ export function changeGroup(gameInfo, x, y, group) {
     idx = findElementByCoordinates(x, y, gameInfo.pistons);
     if (idx >= 0) {
       gameInfo.pistons[idx].group = group;
+    }
+  }
+  if (idx === -1) {
+    idx = findElementByCoordinates(x, y, gameInfo.pushers);
+    if (idx >= 0) {
+      gameInfo.pushers[idx].group = group;
     }
   }
   if (idx === -1) {
@@ -689,6 +701,9 @@ export function charToNumber(c) {
     case "Ѳ":
       result = 208;
       break;
+    case "њ":
+      result = 209;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1148,6 +1163,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
     case 206:
       result = gameInfo.waterWithIceObjects;
       break;
+    case 209:
+      result = gameInfo.pushers;
+      break;
     default:
       result = null;
       break;
@@ -1157,18 +1175,18 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
 }
 
 export function getGameDataValue(gameData, x, y) {
-    let result =  -1;
+  let result = -1;
 
-    if (gameData.length === 0) {
-        return result;
-    }
-    if (gameData[0].length === 0) {
-        return result;
-    }
-    if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
-        result = gameData[y][x];
-    }
+  if (gameData.length === 0) {
     return result;
+  }
+  if (gameData[0].length === 0) {
+    return result;
+  }
+  if ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length)) {
+    result = gameData[y][x];
+  }
+  return result;
 }
 
 export function inWater(x, y, backData) {
@@ -1326,7 +1344,7 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
   return result;
 }
 
-export function fallingOrRising(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle = false ) {
+export function fallingOrRising(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle = false) {
   return (falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle) || rising(x, y, gameData, gameInfo, gameVars));
 }
 
@@ -1861,6 +1879,9 @@ export function numberToChar(n) {
     case 208:
       result = "Ѳ";
       break;
+    case 209:
+      result = "њ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2001,6 +2022,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 203:
       updateObject(gameInfo.pinkBalls, oldX, oldY, newX, newY);
       break;
+    case 209:
+      updateObject(gameInfo.pushers, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -2107,6 +2131,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
     refs.push(gameInfo.pistonsTriggers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.pushers.length; i++) {
+    refs.push(gameInfo.pushers[i]);
   }
 
   for (let i = 0; i < gameInfo.redBalls.length; i++) {

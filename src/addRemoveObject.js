@@ -293,7 +293,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.copiers.push(copier);
             break;
         }
-        default:
+        case 209: {
+            let pusher = { x, y, direction: "right", group: 1 };
+            gameInfo.pushers.push(pusher);
+            break;
+        } default:
             break;
     }
     switch (obj) {
@@ -566,6 +570,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
             if (idx >= 0) {
                 gameInfo.waterWithIceObjects.splice(idx, 1);
+            }
+            break;
+        case 209:
+            idx = findElementByCoordinates(x, y, gameInfo.pushers);
+            if (idx >= 0) {
+                gameInfo.pushers.splice(idx, 1);
             }
             break;
         default:

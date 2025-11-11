@@ -335,6 +335,18 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    for (let i = 0; i < gameInfo.pushers.length; i++) {
+        const pusher = gameInfo.pushers[i];
+        if (pusher.group > 1) {
+            line = `$group: ${pusher.x}, ${pusher.y}, ${pusher.group}`;
+            lines.push(line);
+        }
+        if (pusher.direction !== "right") {
+            line = `$direction: ${pusher.x}, ${pusher.y}, ${pusher.direction}`;
+            lines.push(line);
+        }
+    }
+
     for (let i = 0; i < gameInfo.teleports.length; i++) {
         const teleport = gameInfo.teleports[i];
         if (teleport.group > 1) {

@@ -1,5 +1,6 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
+import { movePusher } from "./pushers.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
@@ -88,6 +89,15 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                     const conveyorBelt = gameInfo.conveyorBelts[j];
                     if (conveyorBelt.group === pistonsTrigger.group) {
                         nextConveyorBeltDirection(conveyorBelt);
+                        result.updated = true;
+                    }
+                }
+                for (let j = 0; j < gameInfo.pushers.length; j++) {
+                    const pusher = gameInfo.pushers[j];
+                    if (pusher.group === pistonsTrigger.group) {
+                        if (movePusher(gameData, gameInfo, pusher)) {
+                            result.updated = true;
+                        }
                     }
                 }
             }

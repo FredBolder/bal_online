@@ -366,8 +366,14 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
+                case "њ":
+                case 209:
+                  if (!["left", "right", "up", "down"].includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No conveyor belt, mover or music box found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No conveyor belt, mover, music box or pusher found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;

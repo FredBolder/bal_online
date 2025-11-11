@@ -252,7 +252,8 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
     }
 
-    if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0)) {
+    if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0) ||
+        (gameInfo.pushers.length > 0)) {
         info = checkPistonsDetector(gameData, gameInfo);
         if (info.updated) {
             updateCanvas = true;

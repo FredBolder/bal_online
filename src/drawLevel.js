@@ -1752,6 +1752,164 @@ function drawLevel(
     ctx.drawImage(elements.elementPurple, xmin, ymin, w1, w2);
   }
 
+  function drawPusher(x, y) {
+    let fillColor = "#464646";
+    let direction = "right";
+    let group = 1;
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.pushers);
+    if (idx >= 0) {
+      direction = gameInfo.pushers[idx].direction;
+      group = gameInfo.pushers[idx].group;
+    }
+
+    const width = w1;
+    const height = w2;
+    const radius = Math.max(1, Math.round(Math.min(width, height) / 2) - 0.5);
+
+    switch (direction) {
+      case "left":
+        drawFilledBox(ctx, xc, ymin, width / 2, height, fillColor, false);
+        ctx.fillStyle = fillColor;
+        ctx.beginPath();
+        // arc(x, y, radius, startAngle, endAngle, counterclockwise)
+        ctx.arc(xc, yc, radius, 0.5 * Math.PI, 1.5 * Math.PI);
+        ctx.fill();
+        break;
+      case "right":
+        drawFilledBox(ctx, xmin, ymin, width / 2, height, fillColor, false);
+        ctx.beginPath();
+        ctx.arc(xc, yc, radius, 1.5 * Math.PI, 0.5 * Math.PI);
+        ctx.fill();
+        break;
+      case "up":
+        drawFilledBox(ctx, xmin, yc, width, height / 2, fillColor, false);
+        ctx.beginPath();
+        ctx.arc(xc, yc, radius, 1 * Math.PI, 2 * Math.PI);
+        ctx.fill();
+        break;
+      case "down":
+        drawFilledBox(ctx, xmin, ymin, width, height / 2, fillColor, false);
+        ctx.beginPath();
+        ctx.arc(xc, yc, radius, 2 * Math.PI, 1 * Math.PI);
+        ctx.fill();
+        break;
+      default:
+        drawFilledBox(ctx, xmin, ymin, width, height, fillColor, true);
+        break;
+    }
+
+    // Draw shadows
+
+    const edge = Math.max(1, Math.round(Math.min(w1, w2) * 0.06));
+
+    // base colours (box / arc)
+    const lightBox = "rgba(255,255,255,0.25)";
+    const darkBox = "rgba(0,0,0,0.35)";
+    const lightArc = "rgba(255,255,255,0.10)";
+    const darkArc = "rgba(0,0,0,0.20)";
+
+    let rectX = 0, rectY = 0, rectW = 0, rectH = 0;
+    let a1 = 0, a2 = 0;
+    switch (direction) {
+      case "left":
+        rectX = Math.round(xc); rectY = Math.round(ymin); rectW = Math.round(width / 2); rectH = Math.round(height);
+        a1 = Math.PI / 2; a2 = Math.PI * 1.5;
+        break;
+      case "right":
+        rectX = Math.round(xmin); rectY = Math.round(ymin); rectW = Math.round(width / 2); rectH = Math.round(height);
+        a1 = -Math.PI / 2; a2 = Math.PI / 2;
+        break;
+      case "up":
+        rectX = Math.round(xmin); rectY = Math.round(yc); rectW = Math.round(width); rectH = Math.round(height / 2);
+        a1 = Math.PI; a2 = Math.PI * 2;
+        break;
+      case "down":
+        rectX = Math.round(xmin); rectY = Math.round(ymin); rectW = Math.round(width); rectH = Math.round(height / 2);
+        a1 = 0; a2 = Math.PI;
+        break;
+      default:
+        rectW = rectH = 0;
+        break;
+    }
+
+    let seamSide = null;
+    if (direction === "left") seamSide = "left";
+    if (direction === "right") seamSide = "right";
+    if (direction === "up") seamSide = "top";
+    if (direction === "down") seamSide = "bottom";
+
+    let rectTopCol = lightBox;
+    let rectLeftCol = lightBox;
+    let rectBottomCol = darkBox;
+    let rectRightCol = darkBox;
+    let arcLightCol = lightArc;
+    let arcDarkCol = darkArc;
+
+    if (direction === "left") {
+      const tmp = rectTopCol; rectTopCol = arcLightCol; arcLightCol = tmp;
+    }
+    if (direction === "up") {
+      const tmp = rectLeftCol; rectLeftCol = arcLightCol; arcLightCol = tmp;
+    }
+    if (direction === "down") {
+      const tmp = rectRightCol; rectRightCol = arcDarkCol; arcDarkCol = tmp;
+    }
+
+    // Rectangle shadows
+    if (rectW > 0 && rectH > 0) {
+      if (seamSide !== "top") {
+        ctx.fillStyle = rectTopCol;
+        ctx.fillRect(rectX, rectY, rectW, edge);
+      }
+      if (seamSide !== "left") {
+        ctx.fillStyle = rectLeftCol;
+        ctx.fillRect(rectX, rectY, edge, rectH);
+      }
+      if (seamSide !== "bottom") {
+        ctx.fillStyle = rectBottomCol;
+        ctx.fillRect(rectX, rectY + rectH - edge, rectW, edge);
+      }
+      if (seamSide !== "right") {
+        ctx.fillStyle = rectRightCol;
+        ctx.fillRect(rectX + rectW - edge, rectY, edge, rectH);
+      }
+    }
+
+    // Semicircle shadows
+    const lightStart = Math.PI * 0.75;  // 135°
+    const lightEnd = Math.PI * 1.75;  // 315°
+    const darkStart = lightEnd;
+    const darkEnd = lightStart + Math.PI * 2; // wrap-around
+    const rStroke = Math.max(0.5, radius - edge / 2 - 0.5);
+
+    // clip to semicircle
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(xc, yc, Math.max(0.5, radius - 0.5), a1, a2, false); // outer semicircle path
+    ctx.lineTo(xc, yc);
+    ctx.closePath();
+    ctx.clip();
+
+    ctx.beginPath();
+    ctx.arc(xc, yc, rStroke, lightStart, lightEnd, false);
+    ctx.lineWidth = edge;
+    ctx.strokeStyle = arcLightCol;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(xc, yc, rStroke, darkStart, darkEnd, false);
+    ctx.lineWidth = edge;
+    ctx.strokeStyle = arcDarkCol;
+    ctx.stroke();
+
+    ctx.restore();
+
+    ctx.lineWidth = 1;
+    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+  }
+
   function drawQuarterCircleStoneBottomLeft(x, y) {
     ctx.save();
     ctx.beginPath();
@@ -2998,6 +3156,9 @@ function drawLevel(
           break;
         case 208:
           drawCopier("yellow");
+          break;
+        case 209:
+          drawPusher(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

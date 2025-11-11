@@ -286,6 +286,11 @@ export function getGameInfo(backData, gameData) {
                     result.copiers.push(copier);
                     break;
                 }
+                case 209: {
+                    let pusher = { x: j, y: i, direction: "right", group: 1 };
+                    result.pushers.push(pusher);
+                    break;
+                }
                 default:
                     break;
             }
@@ -954,6 +959,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     case 207:
                         info = `Phase ability`;
                         break;
+                    case 209:
+                        idx = findElementByCoordinates(x, y, gameInfo.pushers);
+                        if (idx >= 0) {
+                            obj = gameInfo.pushers[idx];
+                            extraInfo = `Direction: ${obj.direction}, group: ${obj.group}`;
+                        }
+                        info = `Pusher, ` + extraInfo;
+                        break;
                     default:
                         break;
                 }
@@ -1034,6 +1047,7 @@ export function initGameInfo(info) {
     info.pistons = [];
     info.pistonsTriggers = [];
     info.player = 1;
+    info.pushers = [];
     info.redBalls = [];
     info.redFish = [];
     info.teleports = [];
