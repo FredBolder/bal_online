@@ -28,6 +28,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
@@ -56,9 +57,10 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            yellowBalls: [{ x: 4, y: 3, direction: "none" }],
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
+            yellowBalls: [{ x: 4, y: 3, direction: "none" }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -86,9 +88,10 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
-            yellowBalls: [{ x: 5, y: 2, direction: "none" }],
+            greenBalls: 1,
             pistons: [{ x: 7, y: 2, activated: false, sticky: false, inverted: false, direction: "left", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
+            yellowBalls: [{ x: 5, y: 2, direction: "none" }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -116,10 +119,11 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
-            yellowBalls: [{ x: 6, y: 2, direction: "none" }],
+            greenBalls: 1,
             pistons: [{ x: 6, y: 1, activated: false, sticky: false, inverted: false, direction: "down", mode: "toggle", group: 1 },
             { x: 3, y: 6, activated: false, sticky: false, inverted: false, direction: "up", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }],
+            yellowBalls: [{ x: 6, y: 2, direction: "none" }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -151,6 +155,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
@@ -172,6 +177,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
+            greenBalls: 1,
             pistons: [{ x: 6, y: 1, activated: false, sticky: false, inverted: false, direction: "down", mode: "toggle", group: 2 },
             { x: 3, y: 6, activated: false, sticky: false, inverted: false, direction: "up", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }, { x: 7, y: 6, pressed: false, group: 2 }],
@@ -205,6 +211,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: true, sticky: true, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
@@ -235,6 +242,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
@@ -265,6 +273,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "momentary", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
@@ -293,6 +302,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "momentary", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
@@ -337,6 +347,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }],
         }
         let input = [
@@ -365,6 +376,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
             orangeBalls: [{ x: 4, y: 3, direction: "none" }],
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }],
         }
@@ -387,6 +399,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
             orangeBalls: [{ x: 4, y: 3, direction: "none" }],
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "orangeball", group: 1 }],
         }
@@ -417,8 +430,9 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
-            redBalls: [{ x: 4, y: 3, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }],
+            greenBalls: 1,
             pistons: [{ x: 5, y: 3, activated: false, sticky: false, inverted: false, direction: "left", mode: "redball", group: 1 }],
+            redBalls: [{ x: 4, y: 3, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }],
         }
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -447,6 +461,7 @@ describe("Pistons", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
             pinkBalls: [{ x: 4, y: 3, delete: false, skipFalling: 0 }],
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "pinkball", group: 1 }],
         }

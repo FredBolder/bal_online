@@ -1,3 +1,4 @@
+$extra: 1
 $stonepattern: 1
 $group: 1, 7, 5
 $pistonmode: 1, 7, momentary
