@@ -31,7 +31,7 @@ describe("balUtils jump left", () => {
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jumpLeftOrRight(inputBack, input, gameInfo, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, gameInfo, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -54,7 +54,7 @@ describe("balUtils jump left", () => {
       [1, 0, 0, 4, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
@@ -76,7 +76,7 @@ describe("balUtils jump left", () => {
       [1, 1, 0, 4, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -98,7 +98,7 @@ describe("balUtils jump left", () => {
       [1, 1, 2, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
@@ -120,7 +120,7 @@ describe("balUtils jump left", () => {
       [1, 1, 2, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
@@ -143,7 +143,7 @@ describe("balUtils jump left", () => {
       [1, 1, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jumpLeftOrRight(inputBack, input, gameInfo, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, gameInfo, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
@@ -161,7 +161,7 @@ describe("balUtils jump left", () => {
       [1, 1, 1, 1, 1],
     ];
     let expectedOutput = copy2dArray(input);
-    let info = jumpLeftOrRight(inputBack, input, gameInfo, { ...defaultGameVars }, "left");
+    let info = jumpLeftOrRight(inputBack, input, gameInfo, defaultGameVars, "left");
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);

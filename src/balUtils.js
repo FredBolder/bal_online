@@ -3066,7 +3066,9 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
   let dx = 0;
   let dy1 = 0;
   let dy2 = 0;
+  let minX = 0;
   let minY = 0;
+  let maxX = 0;
   let maxY = 0;
   const x = gameInfo.blueBall.x;
   const y = gameInfo.blueBall.y;
@@ -3100,9 +3102,13 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
   switch (direction) {
     case "left":
       dx = -1;
+      minX = 1;
+      maxX = gameData[0].length - 1;
       break;
     case "right":
       dx = 1;
+      minX = 0;
+      maxX = gameData[0].length - 2;
       break;
     default:
       break;
@@ -3132,7 +3138,7 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
     }
     // Skip the first time if the blue ball has no coil spring
     if (!result.player && ((i !== 0) || gameInfo.hasCoilSpring)) {
-      if ((x > 0) && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
+      if ((x >= minX) && (x <= maxX) && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
         if ((gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && ![80].includes(backData[y + dy2][x + dx])) {
           if (canBeTakenOrIsEmpty(gameInfo, gameData[y + dy2][x + dx])) {
             result.sound = "take";
