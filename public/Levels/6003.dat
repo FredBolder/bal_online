@@ -1,17 +1,17 @@
 $extra: 1
-$bgcolor: 0, 0, 20, 20, #87CEFA
-$bgcolor: 7, 7, 1, 1, #006400
-$fgcolor: 0, 19, 14, 1, #FCDE9C
-$fgcolor: 3, 6, 8, 2, #006400
-$fgcolor: 5, 8, 2, 3, #006400
-$fgcolor: 8, 8, 1, 4, #006400
-$fgcolor: 7, 7, 1, 1, #87CEFA
-$fgcolor: 6, 18, 1, 1, #303030
+$bgcolor: 0, 0, 20, 19, #87CEFA
+$bgcolor: 7, 6, 1, 1, #006400
+$fgcolor: 0, 18, 14, 1, #FCDE9C
+$fgcolor: 0, 19, 20, 1, #FCDE9C
+$fgcolor: 3, 5, 8, 2, #006400
+$fgcolor: 5, 7, 2, 3, #006400
+$fgcolor: 8, 7, 1, 4, #006400
+$fgcolor: 7, 6, 1, 1, #87CEFA
+$fgcolor: 6, 17, 1, 1, #303030
 $hint: Wait under the yellow ball to stop it from falling on the beach.
-$gameticksxy: 6, 9, 50
+$gameticksxy: 6, 8, 50
 0Ψ000000000000000000
 09                 0
-0                  0
 0                  0
 0                  0
 0                  0
@@ -29,3 +29,4 @@ X      P           0
 0      P           0
 0  42 ψP           0
 1111111111111ςWWWWWW
+11111111111111111111
