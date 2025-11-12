@@ -36,6 +36,8 @@ export const seriesMusicStart = 3200;
 export const seriesMusicEnd = 3207;
 export const extraSeries1Start = 5000;
 export const extraSeries1End = 5002;
+export const extraSeriesEasyStart = 6000;
+export const extraSeriesEasyEnd = 6002;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -611,7 +613,7 @@ export function checkSettings(data, settings) {
 
 export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
-    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart, extraSeries1Start].includes(level)
+    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart, extraSeries1Start, extraSeriesEasyStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -853,6 +855,9 @@ export function getAllLevels() {
   for (let i = extraSeries1Start; i <= extraSeries1End; i++) {
     levels.push(i);
   }
+  for (let i = extraSeriesEasyStart; i <= extraSeriesEasyEnd; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -890,9 +895,10 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
     (n >= hiddenMiniSeries1Start && n <= hiddenMiniSeries1End) ||
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
-    ((globalVars.fred || globalVars.userP) &&
-      (n >= extraSeries1Start && n <= extraSeries1End)
-    ) ||
+    ((globalVars.fred || globalVars.userP) && (
+      (n >= extraSeries1Start && n <= extraSeries1End) ||
+      (n >= extraSeriesEasyStart && n <= extraSeriesEasyEnd)
+    )) ||
     (n >= 9997) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
   } else {
@@ -1401,6 +1407,7 @@ export function numberOfLevels() {
   n += (seriesSecretEnd - seriesSecretStart) + 1;
   n += (hiddenMiniSeries1End - hiddenMiniSeries1Start) + 1;
   n += (extraSeries1End - extraSeries1Start) + 1;
+  n += (extraSeriesEasyEnd - extraSeriesEasyStart) + 1;
   return n;
 }
 

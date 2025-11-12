@@ -1,0 +1,14 @@
+$extra: 1
+$startlevelmessage: If you don't know what to do, press the ? button for a hint. For all levels in the Extra Easy series, there is a hint available.
+$hint: First eat the green ball at the bottom right.
+$stonepattern: 1
+1111111111
+11     T11
+11   4 111
+13   4   1
+1  2 4   1
+11 1111 11
+18    1 31
+11       1
+11       T
+1111111111

@@ -16,6 +16,7 @@ import {
   seriesSecretStart, seriesSecretEnd,
   hiddenMiniSeries1Start, hiddenMiniSeries1End,
   extraSeries1Start, extraSeries1End,
+  extraSeriesEasyStart, extraSeriesEasyEnd,
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
 
@@ -58,6 +59,7 @@ function OverviewPage() {
   const [seriesSecretList, setSeriesSecretList] = useState([]);
   const [hiddenMiniSeries1List, setHiddenMiniSeries1List] = useState([]);
   const [extraSeries1List, setExtraSeries1List] = useState([]);
+  const [extraEasyList, setExtraEasyList] = useState([]);
 
   function handleClick(level) {
     if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
@@ -141,6 +143,12 @@ function OverviewPage() {
       listExtra1.push(i);
     }
     setExtraSeries1List(listExtra1);
+
+    const listExtraEasy = [];
+    for (let i = extraSeriesEasyStart; i <= extraSeriesEasyEnd; i++) {
+      listExtraEasy.push(i);
+    }
+    setExtraEasyList(listExtraEasy);
   }
 
   useEffect(() => {
@@ -283,6 +291,15 @@ function OverviewPage() {
             <h2>Extra series 1</h2>
             <div className="seriesList">
               {extraSeries1List.map((level) => (<div
+                key={level}
+                style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+                onClick={() => handleClick(level)} >
+                {level}
+              </div>))}
+            </div>
+            <h2>Extra Easy</h2>
+            <div className="seriesList">
+              {extraEasyList.map((level) => (<div
                 key={level}
                 style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
                 onClick={() => handleClick(level)} >
