@@ -26,8 +26,13 @@ export function initDB() {
     if (initDbPromise) return initDbPromise;
 
     initDbPromise = (async () => {
-        const db = await initProgressDB();
-        return db;
+        try {
+            const db = await initProgressDB();
+            return db;
+        } catch (err) {
+            console.warn("Error while initializing indexedDB", err);
+            return null;
+        }
     })();
 
     return initDbPromise;
@@ -36,8 +41,18 @@ export function initDB() {
 async function initProgressDB(dbName = 'game-db') {
     let firstRun = false;
 
+    if (typeof indexedDB === 'undefined') {
+        throw new Error("IndexedDB not supported or not available in this context");
+    }
+
     // Open once to check current DB and possibly create it if DB doesn't exist
-    const openReq = indexedDB.open(dbName);
+    let openReq;
+    try {
+        openReq = indexedDB.open(dbName);
+    } catch (err) {
+        console.warn("Error while opening indexedDB", err);
+        throw err;
+    }
 
     openReq.onupgradeneeded = (ev) => {
         // This runs when DB didn't exist or an upgrade is required
@@ -75,37 +90,26 @@ async function initProgressDB(dbName = 'game-db') {
         });
 
         // replace db with upgradedDb for return and further use
-        return await (async () => {
-            // request persistent storage if we created the store now
-            if (firstRun && navigator.storage && navigator.storage.persist) {
-                try {
-                    const already = await navigator.storage.persisted();
-                    if (!already) {
-                        const granted = await navigator.storage.persist(); // best-effort
-                        console.log('persist() granted?', granted);
-                    }
-                } catch (err) {
-                    console.warn('persist() failed', err);
-                }
-            }
-            return upgradedDb;
-        })();
+        await ensurePersistence(firstRun);
+        return upgradedDb;
     }
 
-    // If we reach here, either the store already existed, or it was just created in the first open.
+    await ensurePersistence(firstRun);
+    return db;
+}
+
+async function ensurePersistence(firstRun) {
     if (firstRun && navigator.storage && navigator.storage.persist) {
         try {
             const already = await navigator.storage.persisted();
             if (!already) {
-                const granted = await navigator.storage.persist(); // best-effort
-                console.log('persist() granted?', granted);
+                const granted = await navigator.storage.persist();
+                console.log("persist() granted?", granted);
             }
         } catch (err) {
-            console.warn('persist() failed', err);
+            console.warn("persist() failed", err);
         }
     }
-
-    return db;
 }
 
 export async function saveProgress(currentLevel) {
@@ -119,40 +123,53 @@ export async function saveProgress(currentLevel) {
         solvedLevelsDB.push(solvedLevels[i]);
         solvedLevelsDB.push(levelNumberCode(solvedLevels[i]));
     }
-    const db = await initDB();
-    const tx = db.transaction('progress', 'readwrite');
 
-    tx.objectStore('progress').put({ id: 'player1', currentLevel, currentLevelCode: levelNumberCode(currentLevel), solvedLevels: solvedLevelsDB });
-    await new Promise((r, e) => { tx.oncomplete = r; tx.onerror = e; });
+    const db = await initDB();
+    if (!db) return;
+
+    try {
+        const tx = db.transaction('progress', 'readwrite');
+        tx.objectStore('progress').put({ id: 'player1', currentLevel, currentLevelCode: levelNumberCode(currentLevel), solvedLevels: solvedLevelsDB });
+        await new Promise((r, e) => { tx.oncomplete = r; tx.onerror = e; });
+    } catch (error) {
+        console.warn("Saving progress failed", error);
+    }
 }
 
 export async function loadProgress(gameVars = null) {
     const db = await initDB();
-    const tx = db.transaction('progress', 'readonly');
-    const getReq = tx.objectStore('progress').get('player1');
-    const result = await new Promise((r, e) => { getReq.onsuccess = () => r(getReq.result); getReq.onerror = e; });
-    if (result !== undefined) {
-        if (Object.prototype.hasOwnProperty.call(result, "currentLevel") &&
-            Object.prototype.hasOwnProperty.call(result, "currentLevelCode")) {
-            if (result.currentLevelCode === levelNumberCode(result.currentLevel)) {
-                progressCurrentLevel = result.currentLevel;
-                if (gameVars !== null) {
-                    gameVars.currentLevel = result.currentLevel;
+
+    if (!db) return;
+
+    try {
+        const tx = db.transaction('progress', 'readonly');
+        const getReq = tx.objectStore('progress').get('player1');
+        const result = await new Promise((r, e) => { getReq.onsuccess = () => r(getReq.result); getReq.onerror = e; });
+        if (result !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(result, "currentLevel") &&
+                Object.prototype.hasOwnProperty.call(result, "currentLevelCode")) {
+                if (result.currentLevelCode === levelNumberCode(result.currentLevel)) {
+                    progressCurrentLevel = result.currentLevel;
+                    if (gameVars !== null) {
+                        gameVars.currentLevel = result.currentLevel;
+                    }
                 }
             }
-        }
-        if (Object.prototype.hasOwnProperty.call(result, "solvedLevels")) {
-            solvedLevels.length = 0;
-            if ((result.solvedLevels.length % 2) === 0) {
-                for (let i = 0; i < (result.solvedLevels.length / 2); i++) {
-                    const level = result.solvedLevels[i * 2];
-                    const code = result.solvedLevels[(i * 2) + 1];
-                    if (getAllLevels().includes(level) && (levelNumberCode(level) === code)) {
-                        solvedLevels.push(level);
+            if (Object.prototype.hasOwnProperty.call(result, "solvedLevels")) {
+                solvedLevels.length = 0;
+                if ((result.solvedLevels.length % 2) === 0) {
+                    for (let i = 0; i < (result.solvedLevels.length / 2); i++) {
+                        const level = result.solvedLevels[i * 2];
+                        const code = result.solvedLevels[(i * 2) + 1];
+                        if (getAllLevels().includes(level) && (levelNumberCode(level) === code)) {
+                            solvedLevels.push(level);
+                        }
                     }
                 }
             }
         }
+    } catch (error) {
+        console.warn("Loading progress failed", error);
     }
 }
 
