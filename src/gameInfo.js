@@ -1090,6 +1090,7 @@ export function initGameVars(vars) {
     vars.gravity = "down";
     vars.hint = "";
     vars.iceCountTo = 250;
+    vars.ignorePattern = [];
     vars.laser = null;
     vars.moverCountTo = 0;
     vars.orangeCounter = 0;

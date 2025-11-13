@@ -233,7 +233,7 @@ export function indexToColor(palette, idx) {
 export function moveColor(colors, x1, y1, x2, y2) {
     for (let i = 0; i < colors.length; i++) {
         const colorObj = colors[i];
-        if ((colorObj.x === x1) && (colorObj.y === y1)) {
+        if ((colorObj.x === x1) && (colorObj.y === y1) && (colorObj.w === 1) && (colorObj.h === 1)) {
             colorObj.x = x2;
             colorObj.y = y2;
         }

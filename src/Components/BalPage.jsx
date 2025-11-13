@@ -42,6 +42,9 @@ import { changeMusicBoxProperty, clearPlayedNotes, fixDoors, musicBoxModes, tran
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
+import { changeIgnoreByArea, changeIgnoreByCell, deleteIgnoreAtColumn, deleteIgnoreAtRow, insertIgnoreAtColumn, 
+  insertIgnoreAtRow, maxStonePatterns, moveIgnore 
+} from "../stonePatterns.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
 import { shrinkObject } from "../shrink.js";
@@ -60,6 +63,7 @@ import imgGreen from "../Images/green_ball.svg";
 import imgLightBlue from "../Images/light_blue_ball.svg";
 import imgMusicNote from "../Images/music_note.svg";
 import imgOrange from "../Images/orange_ball.svg";
+import imgPattern from "../Images/pattern.png";
 import imgPink from "../Images/pink_ball.svg";
 import imgPurple from "../Images/purple_ball.svg";
 import imgRed from "../Images/red_ball.svg";
@@ -88,6 +92,7 @@ let kPressed = false;
 let createLevelColorPages = 2;
 let createLevelDirection = "";
 let createLevelSelectedCell = null;
+let createLevelStonesPages = 2;
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
 let createLevelMode = "";
@@ -143,6 +148,7 @@ function BalPage() {
   const elementGameButtons = useRef(null);
   const elementMusicNote = useRef(null);
   const elementOrange = useRef(null);
+  const elementPattern = useRef(null);
   const elementPink = useRef(null);
   const elementPurple = useRef(null);
   const elementRed = useRef(null);
@@ -420,6 +426,7 @@ function BalPage() {
       }
       deleteColorsAtColumn(gameVars.fgcolor, createLevelSelectedCell.x);
       deleteColorsAtColumn(gameVars.bgcolor, createLevelSelectedCell.x);
+      deleteIgnoreAtColumn(gameVars, createLevelSelectedCell.x);
       moveObjects(gameInfo, "deleteColumn", createLevelSelectedCell.x, 0, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
@@ -453,6 +460,7 @@ function BalPage() {
       backData.splice(createLevelSelectedCell.y, 1);
       deleteColorsAtRow(gameVars.fgcolor, createLevelSelectedCell.y);
       deleteColorsAtRow(gameVars.bgcolor, createLevelSelectedCell.y);
+      deleteIgnoreAtRow(gameVars, createLevelSelectedCell.y);
       moveObjects(gameInfo, "deleteRow", 0, createLevelSelectedCell.y, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
@@ -491,6 +499,7 @@ function BalPage() {
       }
       insertColorsAtColumn(gameVars.fgcolor, createLevelSelectedCell.x);
       insertColorsAtColumn(gameVars.bgcolor, createLevelSelectedCell.x);
+      insertIgnoreAtColumn(gameVars, createLevelSelectedCell.x);
       moveObjects(gameInfo, "insertColumn", createLevelSelectedCell.x, 0, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
@@ -529,6 +538,7 @@ function BalPage() {
       backData.splice(createLevelSelectedCell.y, 0, newRowBackData);
       insertColorsAtRow(gameVars.fgcolor, createLevelSelectedCell.y);
       insertColorsAtRow(gameVars.bgcolor, createLevelSelectedCell.y);
+      insertIgnoreAtRow(gameVars, createLevelSelectedCell.y);
       moveObjects(gameInfo, "insertRow", 0, createLevelSelectedCell.y, 0, 0);
       createLevelSelectedCell = null;
       updateGameCanvas();
@@ -788,6 +798,12 @@ function BalPage() {
               gameVars.fgcolor = obj.colors;
             }
             break;
+          case "ignorepattern":
+            if (obj !== null) {
+              gameVars.ignorePattern.length = 0;
+              gameVars.ignorePattern = obj.list;
+            }
+            break;
           default:
             break;
         }
@@ -960,7 +976,7 @@ function BalPage() {
         switch (n) {
           case 1:
             // Delete
-            arr1 = [2050, 2051];
+            arr1 = [2050, 2051, 2140];
             arr2 = [0];
             break;
           case 2:
@@ -970,8 +986,17 @@ function BalPage() {
             break;
           case 3:
             // Stones
-            arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-            arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 36, 37, 117];
+            switch (globalVars.createLevelStonesPage) {
+              case 2:
+                arr1 = [36, 37, 117, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2139, 2140, 2141, 2101];
+                break;
+              default:
+                // page 1
+                arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
+                arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 0, 0, 2101];
+                break;
+            }
             break;
           case 4:
             // Balls
@@ -1039,7 +1064,7 @@ function BalPage() {
         switch (n) {
           case 1:
             // Delete
-            arr1 = [2050, 2051];
+            arr1 = [2050, 2051, 2140];
             arr2 = [0];
             break;
           case 2:
@@ -1894,7 +1919,7 @@ function BalPage() {
 
   function saveUndo(action, type, obj = null) {
     // type
-    // bgcolors, fgcolors, level, move, single
+    // bgcolors, fgcolors, ignorepattern, level, move, single
     let idx = -1;
     redoPossible = false;
     if (type === "level") {
@@ -1937,6 +1962,7 @@ function BalPage() {
           globalVars.stoneImg02 = await loadImage('/stone2.png');
           globalVars.stoneImg03 = await loadImage('/stone3.png');
           globalVars.stoneImg04 = await loadImage('/stone4.png');
+          globalVars.stoneImg05 = await loadImage('/stone5.png');
           loadSettings();
           cbArrowButtons.current.checked = getSettings().arrowButtons;
           cbCreateLevel.current.checked = false;
@@ -1969,7 +1995,7 @@ function BalPage() {
       } catch (err) {
         console.error('Loading Bal page failed', err);
       } finally {
-         globalVars.balPageLoading = false;
+        globalVars.balPageLoading = false;
       }
     })();
 
@@ -2055,6 +2081,7 @@ function BalPage() {
       elementLightBlue: elementLightBlue.current,
       elementMusicNote: elementMusicNote.current,
       elementOrange: elementOrange.current,
+      elementPattern: elementPattern.current,
       elementPink: elementPink.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
@@ -2108,6 +2135,7 @@ function BalPage() {
       elementLightBlue: elementLightBlue.current,
       elementMusicNote: elementMusicNote.current,
       elementOrange: elementOrange.current,
+      elementPattern: elementPattern.current,
       elementPink: elementPink.current,
       elementPurple: elementPurple.current,
       elementRed: elementRed.current,
@@ -2312,6 +2340,11 @@ function BalPage() {
                 singleCellAction = false;
               }
               break;
+            case 2140:
+            case 2141:
+              // Ignore stone pattern
+              singleCellAction = false;
+              break;
             default:
               break;
           }
@@ -2347,6 +2380,18 @@ function BalPage() {
               saveUndo("Change foreground colors", "fgcolors", { colors: gameVars.fgcolor });
               changeColors(gameVars.fgcolor, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1, createLevelObject - 2052);
             }
+            updateGameCanvas();
+            return;
+          }
+          if (createLevelMenu === menuToNumber("stones") && (createLevelObject === 2140)) {
+            saveUndo("Ignore stone pattern by area", "ignorepattern", { list: gameVars.ignorePattern });
+            changeIgnoreByArea(gameVars, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1, true);
+            updateGameCanvas();
+            return;
+          }
+          if (createLevelMenu === menuToNumber("stones") && (createLevelObject === 2141)) {
+            saveUndo("Remove ignore stone pattern by area", "ignorepattern", { list: gameVars.ignorePattern });
+            changeIgnoreByArea(gameVars, xmin, ymin, xmax - xmin + 1, ymax - ymin + 1, false);
             updateGameCanvas();
             return;
           }
@@ -2498,6 +2543,17 @@ function BalPage() {
                   deleteColorAtPosition(gameVars.bgcolor, column, row);
                 }
               }
+
+              if (createLevelMenu === menuToNumber("stones")) {
+                if (createLevelObject === 2140) {
+                  saveUndo("Ignore stone pattern by cell", "ignorepattern", { list: gameVars.ignorePattern });
+                  changeIgnoreByCell(gameVars, column, row, true);
+                }
+                if (createLevelObject === 2141) {
+                  saveUndo("Remove ignore stone pattern by cell", "ignorepattern", { list: gameVars.ignorePattern });
+                  changeIgnoreByCell(gameVars, column, row, false);
+                }
+              }
             } else if (createLevelObject > 0) {
               deleteIfPurpleTeleport(backData, gameInfo, column, row);
               addObject(backData, gameData, gameInfo, column, row, createLevelObject);
@@ -2611,6 +2667,16 @@ function BalPage() {
                 gameVars.bgcolor = [];
                 updateGameCanvas();
               }
+              break;
+            case 2140:
+              confirm = await showConfirm("Question", "Clear ignore stone pattern list?");
+              if (confirm === "YES") {
+                saveUndo("Clear ignore stone pattern list", "ignorepattern", { list: gameVars.ignorePattern });
+                gameVars.ignorePattern.length = 0;
+                gameVars.ignorePattern = [];
+                updateGameCanvas();
+              }
+              createLevelObject = -1;
               break;
             default:
               break;
@@ -2822,6 +2888,14 @@ function BalPage() {
               }
               updateCreateLevelCanvas();
               createLevelObject = -1;
+            } else if (createLevelMenu === menuToNumber("stones")) {
+              globalVars.createLevelStonesPage++;
+              if (globalVars.createLevelStonesPage > createLevelStonesPages) {
+                globalVars.createLevelStonesPage = 1;
+              }
+              fillMenu(menuToNumber("stones"));
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
             }
             break;
           case 2133:
@@ -2849,6 +2923,15 @@ function BalPage() {
               createLevelDirection = "";
               createLevelObject = -1;
             }
+            break;
+          case 2139:
+            // Next stone pattern
+            if (gameVars.stonePattern < maxStonePatterns) {
+              gameVars.stonePattern++;
+            } else {
+              gameVars.stonePattern = 0;
+            }
+            updateGameCanvas();
             break;
           default:
             break;
@@ -2897,6 +2980,7 @@ function BalPage() {
           backData[cell.y][cell.x] = 0;
           moveColor(gameVars.bgcolor, cell.x, cell.y, xNew, yNew);
           moveColor(gameVars.fgcolor, cell.x, cell.y, xNew, yNew);
+          moveIgnore(gameVars, cell.x, cell.y, xNew, yNew);
           moveObjects(gameInfo, "moveCell", cell.x, cell.y, xNew, yNew);
           cell.x = xNew;
           cell.y = yNew;
@@ -3103,53 +3187,22 @@ function BalPage() {
           </div>
           <div style={{ display: "none" }}>
             <img ref={elementDiving} src={imgBlueDiving} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementHappy} src={imgBlueHappy} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementSad} src={imgBlueSad} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementLightBlue} src={imgLightBlue} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementMusicNote} src={imgMusicNote} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementRed} src={imgRed} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementRedFishLeft} src={imgRedFishLeft} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementRedFishRight} src={imgRedFishRight} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementFreezeGun} src={imgFreezeGun} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementGray} src={imgGray} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementGreen} src={imgGreen} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementOrange} src={imgOrange} />
-          </div>
-          <div style={{ display: "none" }}>
+            <img ref={elementPattern} src={imgPattern} />
             <img ref={elementPink} src={imgPink} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementPurple} src={imgPurple} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementSlowDownYellow} src={imgSlowDownYellow} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementWhite} src={imgWhite} />
-          </div>
-          <div style={{ display: "none" }}>
             <img ref={elementYellow} src={imgYellow} />
           </div>
         </main>

@@ -7,6 +7,7 @@ import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
+import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
@@ -278,6 +279,7 @@ export function checkSettings(data, settings) {
     { name: "$group", params: 3, xy: true },
     { name: "$has", params: 1, xy: false },
     { name: "$hint", params: 0, xy: false },
+    { name: "$ignorepattern", params: 4, xy: true },
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
@@ -328,6 +330,7 @@ export function checkSettings(data, settings) {
             case "$background":
             case "$bgcolor":
             case "$fgcolor":
+            case "$ignorepattern":
               w = tryParseInt(values[2], -1);
               h = tryParseInt(values[3], -1);
               if (w < 1) {
@@ -509,7 +512,7 @@ export function checkSettings(data, settings) {
               break;
             case "$stonepattern":
               val_int = tryParseInt(values[0], -1);
-              if ((val_int < 0) || (val_int > 4)) {
+              if ((val_int < 0) || (val_int > maxStonePatterns)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for stone pattern number.\n`;
               }
               break;
@@ -573,6 +576,11 @@ export function checkSettings(data, settings) {
             break;
           case "$help":
             msgExtra = "$hint";
+            break;
+          case "$ignorestonepattern":
+          case "$nopattern":
+          case "$nostonepattern":
+            msgExtra = "$ignorepattern";
             break;
           case "$invert":
           case "$reverse":
@@ -1068,9 +1076,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             color = values[4];
             if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
               if (name === "$bgcolor") {
-                gameVars.bgcolor.push({ x, y, w, h, color })
+                gameVars.bgcolor.push({ x, y, w, h, color });
               } else {
-                gameVars.fgcolor.push({ x, y, w, h, color })
+                gameVars.fgcolor.push({ x, y, w, h, color });
               }
             }
           }
@@ -1247,6 +1255,15 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$hint":
           gameVars.hint = value;
           break;
+        case "$ignorepattern":
+          if (values.length === 4) {
+            w = tryParseInt(values[2], -1);
+            h = tryParseInt(values[3], -1);
+            if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0)) {
+              gameVars.ignorePattern.push({ x, y, w, h })
+            }
+          }
+          break;
         case "$instrument":
           if (values.length >= 4) {
             instrument = valuesLowerCase[2];
@@ -1382,7 +1399,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$stonepattern":
           val_int = tryParseInt(values[0], -1);
-          if ((val_int >= 0) && (val_int <= 4)) {
+          if ((val_int >= 0) && (val_int <= maxStonePatterns)) {
             gameVars.stonePattern = val_int;
           }
           break;

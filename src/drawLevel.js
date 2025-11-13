@@ -12,7 +12,7 @@ import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
 import { globalVars } from "./glob.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
-import { buildPatternLayer } from "./stonePatterns.js";
+import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
 
@@ -892,7 +892,7 @@ function drawLevel(
 
   function drawHalfStone(x, y, location) {
     const color = getFgcolor(x, y, "#464646");
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       switch (location) {
         case "left":
           drawFilledBox(ctx, xmin, ymin, w1 / 2, w2, color);
@@ -1920,7 +1920,7 @@ function drawLevel(
     ctx.arc(Math.round(xmin - 0.5), Math.round(ymax + 0.5), Math.round(w1 - 0.5), 2 * Math.PI, 1.5 * Math.PI, true);
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -1940,7 +1940,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -1960,7 +1960,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -1980,7 +1980,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -1994,7 +1994,7 @@ function drawLevel(
     const color = getFgcolor(x, y, "#464646");
     const half = w1 / 2;
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       switch (location) {
         case "bottomLeft":
           drawFilledBox(ctx, xmin, yc, half, half, color);
@@ -2154,7 +2154,7 @@ function drawLevel(
   }
 
   function drawStone(x, y) {
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     } else {
       ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
@@ -2175,6 +2175,28 @@ function drawLevel(
       default:
         break;
     }
+  }
+
+  function drawStonePatternIcon(icon) {
+    const d1 = w1 * 0.25;
+    const d2 = w1 * 0.2;
+    const d3 = w1 * 0.1;
+
+    ctx.drawImage(elements.elementPattern, xmin, ymin, w1, w2);
+    ctx.lineWidth = 3;
+    switch (icon) {
+      case "ignore":
+        drawLine(ctx, xmin + d1, ymin + d1, xmax - d1, ymax - d1, "white");
+        drawLine(ctx, xmax - d1, ymin + d1, xmin + d1, ymax - d1, "white");
+        break;
+      case "next":
+        drawLine(ctx, xc - d3, ymin + d2, xmax - d2 - d3, yc, "white");
+        drawLine(ctx, xmax - d2 - d3, yc, xc - d3, ymax - d2, "white");
+        break;
+      default:
+        break;
+    }
+    ctx.lineWidth = 1;
   }
 
   function drawTeleportsCreator(selfDestructing) {
@@ -2259,7 +2281,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -2279,7 +2301,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -2299,7 +2321,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -2319,7 +2341,7 @@ function drawLevel(
     ctx.closePath();
     ctx.clip();
 
-    if (gameVars.stonePattern === 0) {
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
       ctx.fillStyle = getFgcolor(x, y, "#464646");
       ctx.fill();
     } else {
@@ -2613,6 +2635,9 @@ function drawLevel(
       break;
     case 4:
       stoneImg = globalVars.stoneImg04;
+      break;
+    case 5:
+      stoneImg = globalVars.stoneImg05;
       break;
     default:
       break;
@@ -3319,6 +3344,15 @@ function drawLevel(
         case 2138:
           // Pan right
           drawAbbreviation("⇨");
+          break;
+        case 2139:
+          drawStonePatternIcon("next");
+          break;
+        case 2140:
+          drawStonePatternIcon("ignore");
+          break;
+        case 2141:
+          drawStonePatternIcon("");
           break;
         default:
           if (gd < 2000) {

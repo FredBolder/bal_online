@@ -72,6 +72,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    if (gameVars.ignorePattern !== null) {
+        for (let i = 0; i < gameVars.ignorePattern.length; i++) {
+            const ip = gameVars.ignorePattern[i];
+            line = `$ignorepattern: ${ip.x}, ${ip.y}, ${ip.w}, ${ip.h}`;
+            lines.push(line);
+        }
+    }
+
     if (gameVars.conveyorBeltCountTo !== 5) {
         line = `$gameticks: conveyorbelt, ${gameVars.conveyorBeltCountTo}`;
         lines.push(line);
