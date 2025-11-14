@@ -9,7 +9,7 @@ $fgcolor: 8, 7, 1, 4, #006400
 $fgcolor: 7, 6, 1, 1, #87CEFA
 $fgcolor: 6, 17, 1, 1, #303030
 $hint: Wait under the yellow ball to stop it from falling on the beach.
-$gameticksxy: 6, 8, 50
+$gameticksxy: 6, 8, 75
 0Ψ000000000000000000
 09                 0
 0                  0

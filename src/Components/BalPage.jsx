@@ -42,8 +42,9 @@ import { changeMusicBoxProperty, clearPlayedNotes, fixDoors, musicBoxModes, tran
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
-import { changeIgnoreByArea, changeIgnoreByCell, deleteIgnoreAtColumn, deleteIgnoreAtRow, insertIgnoreAtColumn, 
-  insertIgnoreAtRow, maxStonePatterns, moveIgnore 
+import {
+  changeIgnoreByArea, changeIgnoreByCell, deleteIgnoreAtColumn, deleteIgnoreAtRow, insertIgnoreAtColumn,
+  insertIgnoreAtRow, maxStonePatterns, moveIgnore
 } from "../stonePatterns.js";
 import { rotateGame } from "../rotateGame.js";
 import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
@@ -988,8 +989,8 @@ function BalPage() {
             // Stones
             switch (globalVars.createLevelStonesPage) {
               case 2:
-                arr1 = [36, 37, 117, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2139, 2140, 2141, 2101];
+                arr1 = [214, 210, 220, 224, 213, 221, 223, 215, 0, 0, 0, 0, 0, 36, 37, 117];
+                arr2 = [222, 218, 212, 216, 217, 225, 219, 211, 0, 0, 0, 0, 2139, 2140, 2141, 2101];
                 break;
               default:
                 // page 1

@@ -2199,6 +2199,100 @@ function drawLevel(
     ctx.lineWidth = 1;
   }
 
+  function drawStoneShape(x, y, shape) {
+    let points = null;
+    const x_c = xc;
+    const y_c = yc;
+    const x_min = Math.round(xmin - 0.5);
+    const y_min = Math.round(ymin - 0.5);
+    const x_max = Math.round(xmax + 0.5);
+    const y_max = Math.round(ymax + 0.5);
+
+    switch (shape) {
+      case -1:
+        // For making new shapes
+        points = [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }];
+        break;
+      case 210:
+        points = [{ x: x_min, y: y_max }, { x: x_min, y: y_min }, { x: x_c, y: y_max }];
+        break;
+      case 211:
+        points = [{ x: x_min, y: y_min }, { x: x_max, y: y_min }, { x: x_min, y: y_c }];
+        break;
+      case 212:
+        points = [{ x: x_max, y: y_min }, { x: x_max, y: y_max }, { x: x_c, y: y_min }];
+        break;
+      case 213:
+        points = [{ x: x_max, y: y_max }, { x: x_min, y: y_max }, { x: x_max, y: y_c }];
+        break;
+      case 214:
+        points = [{ x: x_max, y: y_max }, { x: x_c, y: y_max }, { x: x_max, y: y_min }];
+        break;
+      case 215:
+        points = [{ x: x_min, y: y_max }, { x: x_min, y: y_c }, { x: x_max, y: y_max }];
+        break;
+      case 216:
+        points = [{ x: x_min, y: y_min }, { x: x_c, y: y_min }, { x: x_min, y: y_max }];
+        break;
+      case 217:
+        points = [{ x: x_max, y: y_min }, { x: x_max, y: y_c }, { x: x_min, y: y_min }];
+        break;
+      case 218:
+        points = [{ x: x_min, y: y_max }, { x: x_min, y: y_min }, { x: x_c, y: y_min }, { x: x_max, y: y_max }];
+        break;
+      case 219:
+        points = [{ x: x_min, y: y_min }, { x: x_max, y: y_min }, { x: x_max, y: y_c }, { x: x_min, y: y_max }];
+        break;
+      case 220:
+        points = [{ x: x_max, y: y_min }, { x: x_max, y: y_max }, { x: x_c, y: y_max }, { x: x_min, y: y_min }];
+        break;
+      case 221:
+        points = [{ x: x_max, y: y_max }, { x: x_min, y: y_max }, { x: x_min, y: y_c }, { x: x_max, y: y_min }];
+        break;
+      case 222:
+        points = [{ x: x_max, y: y_max }, { x: x_min, y: y_max }, { x: x_c, y: y_min }, { x: x_max, y: y_min }];
+        break;
+      case 223:
+        points = [{ x: x_min, y: y_max }, { x: x_min, y: y_min }, { x: x_max, y: y_c }, { x: x_max, y: y_max }];
+        break;
+      case 224:
+        points = [{ x: x_min, y: y_min }, { x: x_max, y: y_min }, { x: x_c, y: y_max }, { x: x_min, y: y_max }];
+        break;
+      case 225:
+        points = [{ x: x_max, y: y_min }, { x: x_max, y: y_max }, { x: x_min, y: y_c }, { x: x_min, y: y_min }];
+        break;
+      default:
+        points = null;
+        break;
+    }
+
+    if (!points) {
+      return;
+    }
+
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i < points.length; i++) {
+      const pt = points[i];
+      if (i === 0) {
+        ctx.moveTo(pt.x, pt.y);
+      } else {
+        ctx.lineTo(pt.x, pt.y);
+      }
+    }
+    ctx.closePath();
+    ctx.clip();
+
+    if ((gameVars.stonePattern === 0) || ignorePatternForCell(gameVars, x, y)) {
+      ctx.fillStyle = getFgcolor(x, y, "#464646");
+      ctx.fill();
+    } else {
+      ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
+    }
+
+    ctx.restore();
+  }
+
   function drawTeleportsCreator(selfDestructing) {
     const d1 = w1 * 0.1;
     const d2 = w1 * 0.2;
@@ -3355,7 +3449,7 @@ function drawLevel(
           drawStonePatternIcon("");
           break;
         default:
-          if (gd < 2000) {
+          if (gd < 210) {
             drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           }
           break;
@@ -3365,6 +3459,9 @@ function drawLevel(
       }
       if ((gd >= 2052) && (gd <= 2081)) {
         drawColor(gd - 2052);
+      }
+      if ((gd >= 210) && (gd <= 225)) {
+        drawStoneShape(currentCol, currentRow, gd);
       }
 
       // Foreground

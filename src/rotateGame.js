@@ -126,7 +126,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
               149: 150, 150: 152, 151: 149, 152: 151,
               159: 163, 161: 165, 163: 161, 165: 159,
               160: 164, 162: 166, 164: 162, 166: 160,
-              174: 177, 175: 176, 176: 174, 177: 175
+              174: 177, 175: 176, 176: 174, 177: 175,
+              213: 212, 212: 211, 211: 210, 210: 213,
+              217: 216, 216: 215, 215: 214, 214: 217,
+              221: 220, 220: 219, 219: 218, 218: 221,
+              225: 224, 224: 223, 223: 222, 222: 225,
             };
 
             bdMap = {
@@ -154,7 +158,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
               149: 151, 150: 149, 151: 152, 152: 150,
               159: 165, 161: 163, 163: 159, 165: 161,
               160: 166, 162: 164, 164: 160, 166: 162,
-              174: 176, 175: 177, 176: 175, 177: 174
+              174: 176, 175: 177, 176: 175, 177: 174,
+              210: 211, 211: 212, 212: 213, 213: 210,
+              214: 215, 215: 216, 216: 217, 217: 214,
+              218: 219, 219: 220, 220: 221, 221: 218,
+              222: 223, 223: 224, 224: 225, 225: 222,
             };
 
             bdMap = {
@@ -310,6 +318,12 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       for (let i = 0; i < gameInfo.pistons.length; i++) {
         rotateXY(gameInfo.pistons[i], rows, rotateLeft);
         gameInfo.pistons[i].direction = rotateDirection(gameInfo.pistons[i].direction, rotateLeft);
+      }
+
+      // Pushers
+      for (let i = 0; i < gameInfo.pushers.length; i++) {
+        rotateXY(gameInfo.pushers[i], rows, rotateLeft);
+        gameInfo.pushers[i].direction = rotateDirection(gameInfo.pushers[i].direction, rotateLeft);
       }
 
       // Red balls

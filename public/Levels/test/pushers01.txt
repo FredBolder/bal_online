@@ -1,5 +1,5 @@
-$direction: 4, 4, left
 $direction: 5, 3, up
+$direction: 4, 4, left
 $direction: 5, 5, down
 1111111111
 1 t      1

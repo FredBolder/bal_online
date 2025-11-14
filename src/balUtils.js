@@ -9,6 +9,7 @@ import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
+import { isTriangleBottomLeft, isTriangleBottomRight, isTriangleTopLeft, isTriangleTopRight } from "./triangleStones.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -704,6 +705,54 @@ export function charToNumber(c) {
     case "њ":
       result = 209;
       break;
+    case "Ѭ":
+      result = 210;
+      break;
+    case "ѭ":
+      result = 211;
+      break;
+    case "Ѯ":
+      result = 212;
+      break;
+    case "ѯ":
+      result = 213;
+      break;
+    case "Ѵ":
+      result = 214;
+      break;
+    case "ѵ":
+      result = 215;
+      break;
+    case "Ѷ":
+      result = 216;
+      break;
+    case "ѷ":
+      result = 217;
+      break;
+    case "Ѹ":
+      result = 218;
+      break;
+    case "ѹ":
+      result = 219;
+      break;
+    case "Ѻ":
+      result = 220;
+      break;
+    case "ѻ":
+      result = 221;
+      break;
+    case "Ѽ":
+      result = 222;
+      break;
+    case "ѽ":
+      result = 223;
+      break;
+    case "Ѿ":
+      result = 224;
+      break;
+    case "ѿ":
+      result = 225;
+      break;
     case "|":
       result = 1000;
       break;
@@ -776,7 +825,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j < gameData[i].length - 1) {
           if (
             // wall |\
-            element2 === 15 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            isTriangleBottomLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -794,7 +843,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j >= 1) {
           if (
             // wall /|
-            element2 === 16 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            isTriangleBottomRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -852,7 +901,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j < gameData[i].length - 1) {
           if (
             // wall |/
-            element2 === 17 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            isTriangleTopLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j + 1] === 0 && gameData[i - 1][j + 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -870,7 +919,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j >= 1) {
           if (
             // wall \|
-            element2 === 18 && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            isTriangleTopRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j - 1] === 0 && gameData[i - 1][j - 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -1259,8 +1308,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
     }
 
     if ((gameData[y + 1][x] === 0) ||
-      (!ignoreTriangle && (gameData[y + 1][x] === 15) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      (!ignoreTriangle && (gameData[y + 1][x] === 16) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+      (!ignoreTriangle && isTriangleBottomLeft(gameData[y + 1][x]) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      (!ignoreTriangle && isTriangleBottomRight(gameData[y + 1][x]) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
     ) {
       result = true;
       // ladder
@@ -1303,8 +1352,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
     }
 
     if ((gameData[y - 1][x] === 0) ||
-      (!ignoreTriangle && (gameData[y - 1][x] === 17) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      (!ignoreTriangle && (gameData[y - 1][x] === 18) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+      (!ignoreTriangle && isTriangleTopLeft(gameData[y - 1][x]) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      (!ignoreTriangle && isTriangleTopRight(gameData[y - 1][x]) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
     ) {
       result = true;
       // ladder
@@ -1881,6 +1930,54 @@ export function numberToChar(n) {
       break;
     case 209:
       result = "њ";
+      break;
+    case 210:
+      result = "Ѭ";
+      break;
+    case 211:
+      result = "ѭ";
+      break;
+    case 212:
+      result = "Ѯ";
+      break;
+    case 213:
+      result = "ѯ";
+      break;
+    case 214:
+      result = "Ѵ";
+      break;
+    case 215:
+      result = "ѵ";
+      break;
+    case 216:
+      result = "Ѷ";
+      break;
+    case 217:
+      result = "ѷ";
+      break;
+    case 218:
+      result = "Ѹ";
+      break;
+    case 219:
+      result = "ѹ";
+      break;
+    case 220:
+      result = "Ѻ";
+      break;
+    case 221:
+      result = "ѻ";
+      break;
+    case 222:
+      result = "Ѽ";
+      break;
+    case 223:
+      result = "ѽ";
+      break;
+    case 224:
+      result = "Ѿ";
+      break;
+    case 225:
+      result = "ѿ";
       break;
     case 1000:
       // For manual only
@@ -3167,11 +3264,12 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
   let dy1 = 0;
   let dy2 = 0;
   let el = 0;
+  let element1 = -1;
+  let element2 = -1;
   let idx = -1;
   let info = null;
   let minY = 0;
   let maxY = 0;
-  let objectNumber = 0;
   let oneDirection = 0;
   let x = gameInfo.blueBall.x;
   let y = gameInfo.blueBall.y;
@@ -3203,15 +3301,16 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     dy2 = -2;
     oneDirection = 87;
   }
+  element1 = getGameDataValue(gameData, x, y + dy1);
+  element2 = getGameDataValue(gameData, x, y + dy2);
 
   if ((gravityUp && (y >= minY) && !hasForceDown(gameData, gameInfo, x, y + dy1)) || (gravityDown && (y <= maxY) && !hasForceUp(gameData, gameInfo, x, y + dy1))) {
-    objectNumber = gameData[y + dy1][x];
-    if (!result.player && (canMoveAlone(gameData, gameInfo, x, y + dy1) && ![109, 178].includes(objectNumber)) && gameData[y + dy2][x] === 0) {
-      gameData[y + dy2][x] = gameData[y + dy1][x];
+    if (!result.player && (canMoveAlone(gameData, gameInfo, x, y + dy1) && ![109, 178].includes(element1)) && (element2 === 0)) {
+      gameData[y + dy2][x] = element1;
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy1;
-      switch (objectNumber) {
+      switch (element1) {
         case 82:
           gameData[y + dy2][x] = 83;
           break;
@@ -3219,32 +3318,32 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
           gameData[y + dy2][x] = 82;
           break;
         default:
-          updateObjectByObjectNumber(gameInfo, objectNumber, x, y + dy1, x, y + dy2);
+          updateObjectByObjectNumber(gameInfo, element1, x, y + dy1, x, y + dy2);
           break;
       }
       result.player = true;
     }
-    if (!result.player && (gameData[y + dy1][x] === oneDirection) && (gameData[y + dy2][x] === 0)) {
+    if (!result.player && (element1 === oneDirection) && (element2 === 0)) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
-    if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(gameData[y + dy1][x]) && (gameData[y + dy2][x]) === 0) {
+    if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(element1) && (element2) === 0) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
     // Horizontal rope
-    if (!result.player && (gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && (backData[y + dy1][x] === 80)) {
+    if (!result.player && (element1 === 0) && (element2 === 0) && (backData[y + dy1][x] === 80)) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
     }
     if (y > 0) {
-      if (!result.player && (gameData[y + dy1][x] === 0) && (backData[y - dy1][x] === 80)) {
+      if (!result.player && (element1 === 0) && (backData[y - dy1][x] === 80)) {
         gameData[y + dy1][x] = 2;
         gameData[y][x] = element;
         gameInfo.blueBall.y = y + dy1;
@@ -3265,14 +3364,14 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       gameInfo.blueBall.y = y + dy1;
       result.player = true;
     }
-    if (!result.player && [12, 35, 206].includes(gameData[y + dy1][x]) && gameInfo.hasPickaxe) {
-      if (gameData[y + dy1][x] === 12) {
+    if (!result.player && [12, 35, 206].includes(element1) && gameInfo.hasPickaxe) {
+      if (element1 === 12) {
         idx = findElementByCoordinates(x, y + dy1, gameInfo.damagedStones);
         if (idx >= 0) {
           gameInfo.damagedStones[idx].status = -1;
         }
       }
-      if (gameData[y + dy1][x] === 206) {
+      if (element1 === 206) {
         backData[y + dy1][x] = 20;
         gameInfo.waterWithIceObjects.splice(0, gameInfo.waterWithIceObjects.length,
           ...gameInfo.waterWithIceObjects.filter(obj => ((obj.x !== x) || (obj.y !== (y + dy1))))
@@ -3285,7 +3384,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       result.sound = "pickaxe";
     }
     el = gravityDown ? 103 : 104;
-    if (!result.player && ([100, 101, 102, el].includes(gameData[y + dy1][x]))) {
+    if (!result.player && ([100, 101, 102, el].includes(element1))) {
       if (movePurpleBar(backData, gameData, gameInfo, gameVars, direction)) {
         // Blue ball is updated in movePurpleBar when moving down
         result.player = true;
@@ -3295,7 +3394,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       }
     }
     el = gravityDown ? 124 : 125;
-    if (!result.player && ([121, 122, 123, el].includes(gameData[y + dy1][x]))) {
+    if (!result.player && ([121, 122, 123, el].includes(element1))) {
       if (moveYellowBar(gameInfo.blueBall.x, gameInfo.blueBall.y, backData, gameData, gameInfo, gameVars, direction, -1)) {
         // Blue ball is updated in moveYellowBar when moving down
         result.player = true;
@@ -3305,7 +3404,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       }
     }
     el = gravityDown ? 129 : 130;
-    if (!result.player && ([el].includes(gameData[y + dy1][x]))) {
+    if (!result.player && ([el].includes(element1))) {
       if (moveLightBlueBar(backData, gameData, gameInfo, gameVars, direction)) {
         // Blue ball is updated in moveLightBlueBar when moving down
         result.player = true;
@@ -3314,10 +3413,10 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
         }
       }
     }
-    if (!result.player && gravityDown && [37, 116, 131, 136, 158].includes(gameData[y + dy1][x])) {
+    if (!result.player && gravityDown && [37, 116, 131, 136, 158].includes(element1)) {
       if (!hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + dy1, false)) {
         result.player = true;
-        switch (gameData[y + dy1][x]) {
+        switch (element1) {
           case 37:
             info = checkDetonator(backData, gameData, gameInfo, gameVars, true);
             if (info.explosion) {
