@@ -4,7 +4,7 @@ import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.j
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
 import { moverIsMovingBlueBall, moversDirections } from "./movers.js";
-import { moveOrangeBallInDirection, updateOrangeBall } from "./orangeBalls.js";
+import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
@@ -830,12 +830,9 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
             result.update = true;
+            moveObject(gameData, gameInfo, j, i, j + 1, i);
             if (element1 === 40) {
-              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downright", true);
-              gameData[i][j + 1] = gameData[i][j];
-              gameData[i][j] = 0;
-            } else {
-              moveObject(gameData, gameInfo, j, i, j + 1, i);
+              updateOrangeBall(gameInfo.orangeBalls, j + 1, i, j + 1, i, "downright");
             }
           }
         }
@@ -848,12 +845,9 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
             result.update = true;
+            moveObject(gameData, gameInfo, j, i, j - 1, i);
             if (element1 === 40) {
-              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "downleft", true);
-              gameData[i][j - 1] = gameData[i][j];
-              gameData[i][j] = 0;
-            } else {
-              moveObject(gameData, gameInfo, j, i, j - 1, i);
+              updateOrangeBall(gameInfo.orangeBalls, j - 1, i, j - 1, i, "downleft");
             }
           }
         }
@@ -876,9 +870,25 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
           } else {
             result.update = true;
             if (element1 === 40) {
-              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "down", true);
-              gameData[i + 1][j] = gameData[i][j];
-              gameData[i][j] = 0;
+              idx = findElementByCoordinates(j, i, gameInfo.orangeBalls);
+              if (idx >= 0) {
+                const orangeBall = gameInfo.orangeBalls[idx];
+                switch (orangeBall.direction) {
+                  case "downright":
+                    orangeBall.direction = "right";
+                    break;
+                  case "downleft":
+                    orangeBall.direction = "left";
+                    break;
+                  default:
+                    orangeBall.direction = "down";
+                    break;
+                }
+                gameData[orangeBall.y][orangeBall.x] = 0;
+                orangeBall.x = j;
+                orangeBall.y = i + 1;
+                gameData[orangeBall.y][orangeBall.x] = 40;
+              }
             } else {
               moveObject(gameData, gameInfo, j, i, j, i + 1);
             }
@@ -906,12 +916,9 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
             result.update = true;
+            moveObject(gameData, gameInfo, j, i, j + 1, i);
             if (element1 === 40) {
-              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "upright", true);
-              gameData[i][j + 1] = gameData[i][j];
-              gameData[i][j] = 0;
-            } else {
-              moveObject(gameData, gameInfo, j, i, j + 1, i);
+              updateOrangeBall(gameInfo.orangeBalls, j + 1, i, j + 1, i, "upright");
             }
           }
         }
@@ -924,12 +931,9 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
             result.update = true;
+            moveObject(gameData, gameInfo, j, i, j - 1, i);
             if (element1 === 40) {
-              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "upleft", true);
-              gameData[i][j - 1] = gameData[i][j];
-              gameData[i][j] = 0;
-            } else {
-              moveObject(gameData, gameInfo, j, i, j - 1, i);
+              updateOrangeBall(gameInfo.orangeBalls, j - 1, i, j - 1, i, "upleft");
             }
           }
         }
@@ -952,9 +956,25 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
           } else {
             result.update = true;
             if (element1 === 40) {
-              moveOrangeBallInDirection(gameInfo.orangeBalls, j, i, "up", true);
-              gameData[i - 1][j] = gameData[i][j];
-              gameData[i][j] = 0;
+              idx = findElementByCoordinates(j, i, gameInfo.orangeBalls);
+              if (idx >= 0) {
+                const orangeBall = gameInfo.orangeBalls[idx];
+                switch (orangeBall.direction) {
+                  case "upright":
+                    orangeBall.direction = "right";
+                    break;
+                  case "upleft":
+                    orangeBall.direction = "left";
+                    break;
+                  default:
+                    orangeBall.direction = "up";
+                    break;
+                }
+                gameData[orangeBall.y][orangeBall.x] = 0;
+                orangeBall.x = j;
+                orangeBall.y = i - 1;
+                gameData[orangeBall.y][orangeBall.x] = 40;
+              }
             } else {
               moveObject(gameData, gameInfo, j, i, j, i - 1);
             }

@@ -381,6 +381,6 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
 }
 
 export function schedulerTime() {
-    return 50;
+    return 50; // was 50
 }
 

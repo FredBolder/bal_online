@@ -5,8 +5,7 @@ export function moveOrangeBalls(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
         const orangeBall = gameInfo.orangeBalls[i];
-        if (["left", "right"].includes(orangeBall.direction) &&
-            fallingOrRising(orangeBall.x, orangeBall.y, backData, gameData, gameInfo, gameVars, true)) {
+        if (fallingOrRising(orangeBall.x, orangeBall.y, backData, gameData, gameInfo, gameVars, true)) {
             break;
         }
         switch (orangeBall.direction) {
@@ -16,40 +15,6 @@ export function moveOrangeBalls(backData, gameData, gameInfo, gameVars) {
                     gameData[orangeBall.y][orangeBall.x - 1] = 40;
                     orangeBall.x--;
                     update = true;
-                } else {
-                    orangeBall.direction = "none";
-                }
-                break;
-            case "downleft":
-                if ((orangeBall.x > 0) && (gameData[orangeBall.y][orangeBall.x - 1] === 0)) {
-                    gameData[orangeBall.y][orangeBall.x] = 0;
-                    update = true;
-                    if ((orangeBall.y < gameData.length - 1) && (gameData[orangeBall.y + 1][orangeBall.x - 1] === 0)) {
-                        gameData[orangeBall.y + 1][orangeBall.x - 1] = 40;
-                        orangeBall.x--;
-                        orangeBall.y++;
-                    } else {
-                        gameData[orangeBall.y][orangeBall.x - 1] = 40;
-                        orangeBall.x--;
-                        orangeBall.direction = "left";
-                    }
-                } else {
-                    orangeBall.direction = "none";
-                }
-                break;
-            case "upleft":
-                if ((orangeBall.x > 0) && (gameData[orangeBall.y][orangeBall.x - 1] === 0)) {
-                    gameData[orangeBall.y][orangeBall.x] = 0;
-                    update = true;
-                    if ((orangeBall.y > 0) && (gameData[orangeBall.y - 1][orangeBall.x - 1] === 0)) {
-                        gameData[orangeBall.y - 1][orangeBall.x - 1] = 40;
-                        orangeBall.x--;
-                        orangeBall.y--;
-                    } else {
-                        gameData[orangeBall.y][orangeBall.x - 1] = 40;
-                        orangeBall.x--;
-                        orangeBall.direction = "left";
-                    }
                 } else {
                     orangeBall.direction = "none";
                 }
@@ -64,90 +29,11 @@ export function moveOrangeBalls(backData, gameData, gameInfo, gameVars) {
                     orangeBall.direction = "none";
                 }
                 break;
-            case "downright":
-                if ((orangeBall.x < gameData[0].length - 1) && (gameData[orangeBall.y][orangeBall.x + 1] === 0)) {
-                    gameData[orangeBall.y][orangeBall.x] = 0;
-                    update = true;
-                    if ((orangeBall.y < gameData.length - 1) && (gameData[orangeBall.y + 1][orangeBall.x + 1] === 0)) {
-                        gameData[orangeBall.y + 1][orangeBall.x + 1] = 40;
-                        orangeBall.x++;
-                        orangeBall.y++;
-                    } else {
-                        gameData[orangeBall.y][orangeBall.x + 1] = 40;
-                        orangeBall.x++;
-                        orangeBall.direction = "right";
-                    }
-                } else {
-                    orangeBall.direction = "none";
-                }
-                break;
-            case "upright":
-                if ((orangeBall.x < gameData[0].length - 1) && (gameData[orangeBall.y][orangeBall.x + 1] === 0)) {
-                    gameData[orangeBall.y][orangeBall.x] = 0;
-                    update = true;
-                    if ((orangeBall.y > 0) && (gameData[orangeBall.y - 1][orangeBall.x + 1] === 0)) {
-                        gameData[orangeBall.y - 1][orangeBall.x + 1] = 40;
-                        orangeBall.x++;
-                        orangeBall.y--;
-                    } else {
-                        gameData[orangeBall.y][orangeBall.x + 1] = 40;
-                        orangeBall.x++;
-                        orangeBall.direction = "right";
-                    }
-                } else {
-                    orangeBall.direction = "none";
-                }
-                break;
             default:
                 break;
         }
     }
     return update;
-}
-
-export function moveOrangeBallInDirection(orangeBalls, x, y, direction, continueInDirection) {
-    for (let i = 0; i < orangeBalls.length; i++) {
-        const orangeBall = orangeBalls[i];
-        if ((orangeBall.x === x) && (orangeBall.y === y)) {
-            if (continueInDirection) {
-                orangeBall.direction = direction;
-            } else {
-                orangeBall.direction = "none";
-            }
-            switch (direction) {
-                case "down":
-                    orangeBall.y++;
-                    break;
-                case "left":
-                    orangeBall.x--;
-                    break;
-                case "right":
-                    orangeBall.x++;
-                    break;
-                case "downleft":
-                    orangeBall.x--;
-                    orangeBall.y++;
-                    break;
-                case "upleft":
-                    orangeBall.x--;
-                    orangeBall.y--;
-                    break;
-                case "up":
-                    orangeBall.y--;
-                    break;
-                case "downright":
-                    orangeBall.x++;
-                    orangeBall.y++;
-                    break;
-                case "upright":
-                    orangeBall.x++;
-                    orangeBall.y--;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 }
 
 export function updateOrangeBall(orangeBalls, x1, y1, x2, y2, direction) {

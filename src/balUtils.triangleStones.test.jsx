@@ -1,7 +1,6 @@
 import { beforeEach, describe, it, expect } from "vitest";
 import { checkFalling, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { moveOrangeBalls } from "./orangeBalls.js";
 import { copy2dArray } from "./utils.js";
 
 describe("balUtils Triangle stones", () => {
@@ -167,38 +166,10 @@ describe("balUtils Triangle stones", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ update: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 5, y: 1 });
-        expect(gameInfo.orangeBalls).toEqual([{ x: 3, y: 1, direction: "upright" }]);
+        expect(gameInfo.orangeBalls).toEqual([{ x: 3, y: 1, direction: "right" }]);
     });
 
     it("Triangle stone Gravity Up B", () => {
-        let gameInfo = {
-            ...defaultGameInfo,
-            blueBall: { x: 5, y: 1 },
-            greenBalls: 1,
-            orangeBalls: [{ x: 3, y: 1, direction: "upright" }]
-        };
-        let inputBack = zeroArray(5, 8);
-        let input = [
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 17, 40, 0, 2, 18, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-        ];
-        let expectedOutput = [
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 17, 0, 40, 2, 18, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-        ];
-        let info = moveOrangeBalls(inputBack, input, gameInfo, defaultGameVars);
-        expect(input).toEqual(expectedOutput);
-        expect(info).toBe(true);
-        expect(gameInfo.orangeBalls).toEqual([{ x: 4, y: 1, direction: "right" }]);
-    });
-
-    it("Triangle stone Gravity Up C", () => {
         let gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
@@ -224,38 +195,10 @@ describe("balUtils Triangle stones", () => {
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ update: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 1 });
-        expect(gameInfo.orangeBalls).toEqual([{ x: 5, y: 1, direction: "upleft" }]);
+        expect(gameInfo.orangeBalls).toEqual([{ x: 5, y: 1, direction: "left" }]);
     });
 
-    it("Triangle stone Gravity Up D", () => {
-        let gameInfo = {
-            ...defaultGameInfo,
-            blueBall: { x: 3, y: 1 },
-            greenBalls: 1,
-            orangeBalls: [{ x: 5, y: 1, direction: "upleft" }]
-        };
-        let inputBack = zeroArray(5, 8);
-        let input = [
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 17, 2, 0, 40, 18, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-        ];
-        let expectedOutput = [
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 17, 2, 40, 0, 18, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-        ];
-        let info = moveOrangeBalls(inputBack, input, gameInfo, defaultGameVars);
-        expect(input).toEqual(expectedOutput);
-        expect(info).toBe(true);
-        expect(gameInfo.orangeBalls).toEqual([{ x: 4, y: 1, direction: "left" }]);
-    });
-
-    it("Triangle stone Gravity Up E", () => {
+    it("Triangle stone Gravity Up C", () => {
         let inputBack = zeroArray(5, 8);
 
         let gameInfo = {
