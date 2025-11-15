@@ -1,6 +1,6 @@
 import { falling, findElementByCoordinates, inWater, moveObject } from "./balUtils.js";
 import { hasForceDown, hasForceUp } from "./force.js";
-import { isTriangleBottomLeft, isTriangleBottomRight, isTriangleTopLeft, isTriangleTopRight } from "./triangleStones.js";
+import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
 
 export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
     let update = false;
@@ -36,7 +36,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
 
                     if (pinkBall.x < gameData[i].length - 1) {
                         // wall |\
-                        if (isTriangleBottomLeft(elementUnder) && (gameData[i][pinkBall.x + 1] === 0) &&
+                        if (hasTopGlideLeftToRight(elementUnder) && (gameData[i][pinkBall.x + 1] === 0) &&
                             (gameData[i + 1][pinkBall.x + 1] === 0) && !inWater(pinkBall.x, i, backData)) {
                             if (pinkBall.counter < gameVars.pinkCountTo) {
                                 pinkBall.counter++;
@@ -50,7 +50,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
 
                     if (pinkBall.x >= 1) {
                         // wall /|
-                        if (isTriangleBottomRight(elementUnder) && (gameData[i][pinkBall.x - 1]) === 0 &&
+                        if (hasTopGlideRightToLeft(elementUnder) && (gameData[i][pinkBall.x - 1]) === 0 &&
                             (gameData[i + 1][pinkBall.x - 1] === 0) && !inWater(pinkBall.x, i, backData)) {
                             if (pinkBall.counter < gameVars.pinkCountTo) {
                                 pinkBall.counter++;
@@ -80,7 +80,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                             update = true;
                         }
                     } else {
-                        if (!isTriangleBottomLeft(elementUnder) && !isTriangleBottomRight(elementUnder)) {
+                        if (!hasTopGlideLeftToRight(elementUnder) && !hasTopGlideRightToLeft(elementUnder)) {
                             pinkBall.counter = 0;
                         }
                     }
@@ -109,7 +109,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
 
                     if (pinkBall.x < gameData[i].length - 1) {
                         // wall |/
-                        if (isTriangleTopLeft(elementAbove) && (gameData[i][pinkBall.x + 1] === 0) &&
+                        if (hasBottomGlideLeftToRight(elementAbove) && (gameData[i][pinkBall.x + 1] === 0) &&
                             (gameData[i - 1][pinkBall.x + 1] === 0) && !inWater(pinkBall.x, i, backData)
                         ) {
                             if (pinkBall.counter < gameVars.pinkCountTo) {
@@ -125,7 +125,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                     if (pinkBall.x >= 1) {
                         // wall \|
                         if (
-                            isTriangleTopRight(elementAbove) && (gameData[i][pinkBall.x - 1] === 0) &&
+                            hasBottomGlideRightToLeft(elementAbove) && (gameData[i][pinkBall.x - 1] === 0) &&
                             (gameData[i - 1][pinkBall.x - 1] === 0) && !inWater(pinkBall.x, i, backData)) {
                             if (pinkBall.counter < gameVars.pinkCountTo) {
                                 pinkBall.counter++;
@@ -155,7 +155,7 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                             update = true;
                         }
                     } else {
-                        if (!isTriangleTopLeft(elementAbove) && !isTriangleTopRight(elementAbove)) {
+                        if (!hasBottomGlideLeftToRight(elementAbove) && !hasBottomGlideRightToLeft(elementAbove)) {
                             pinkBall.counter = 0;
                         }
                     }

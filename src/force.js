@@ -1,4 +1,9 @@
 import { moveObject } from "./balUtils.js";
+import {
+    hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasLeftGlideBottomToTop, hasLeftGlideTopToBottom,
+    hasRightGlideBottomToTop, hasRightGlideTopToBottom, hasTopGlideLeftToRight, hasTopGlideRightToLeft
+} from "./triangleStones.js";
+
 
 const moveableOrEmpty = [0, 2, 4, 8, 40, 93, 94, 203];
 
@@ -38,37 +43,32 @@ export function checkForces(gameData, gameInfo) {
                         elTop = (j > 0) ? gameData[j - 1][force.x] : -1;
                         elTopLeft = ((j > 0) && (force.x > 0)) ? gameData[j - 1][force.x - 1] : -1;
                         elTopRight = ((j > 0) && (force.x < maxX)) ? gameData[j - 1][force.x + 1] : -1;
-                        switch (element) {
-                            case 0:
-                                if (emptyOrTriangle === -1) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                }
-                                break;
-                            case 15:
-                                if ((elRight === 0) && (elTopRight === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            case 16:
-                                if ((elLeft === 0) && (elTopLeft === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            default:
-                                if (!moveableOrEmpty.includes(element)) {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
+                        if (element === 0) {
+                            if (emptyOrTriangle === -1) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            }
+                        } else if (hasTopGlideLeftToRight(element)) {
+                            if ((elRight === 0) && (elTopRight === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else if (hasTopGlideRightToLeft(element)) {
+                            if ((elLeft === 0) && (elTopLeft === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else {
+                            if (!moveableOrEmpty.includes(element)) {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
                         }
                     }
 
@@ -77,17 +77,11 @@ export function checkForces(gameData, gameInfo) {
                             if (gameData[j - 1][force.x] > 0) {
                                 newX = force.x;
                                 newY = j;
-                                switch (gameData[newY][newX]) {
-                                    case 0:
-                                        break;
-                                    case 15:
-                                        newX++;
-                                        break;
-                                    case 16:
-                                        newX--;
-                                        break;
-                                    default:
-                                        break;
+                                if (hasTopGlideLeftToRight(gameData[newY][newX])) {
+                                    newX++;
+                                }
+                                if (hasTopGlideRightToLeft(gameData[newY][newX])) {
+                                    newX--;
                                 }
                                 moveObject(gameData, gameInfo, force.x, j - 1, newX, newY);
                                 updated = true;
@@ -106,37 +100,32 @@ export function checkForces(gameData, gameInfo) {
                         elTop = (force.y > 0) ? gameData[force.y - 1][j] : -1;
                         elTopLeft = ((force.y > 0) && (j > 0)) ? gameData[force.y - 1][j - 1] : -1;
                         elTopRight = ((force.y > 0) && (j < maxX)) ? gameData[force.y - 1][j + 1] : -1;
-                        switch (element) {
-                            case 0:
-                                if (emptyOrTriangle === -1) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                }
-                                break;
-                            case 15:
-                                if ((elTop === 0) && (elTopRight === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            case 17:
-                                if ((elBottom === 0) && (elBottomRight === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            default:
-                                if (!moveableOrEmpty.includes(element)) {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
+                        if (element === 0) {
+                            if (emptyOrTriangle === -1) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            }
+                        } else if (hasRightGlideBottomToTop(element)) {
+                            if ((elTop === 0) && (elTopRight === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else if (hasRightGlideTopToBottom(element)) {
+                            if ((elBottom === 0) && (elBottomRight === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else {
+                            if (!moveableOrEmpty.includes(element)) {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
                         }
                     }
 
@@ -145,17 +134,11 @@ export function checkForces(gameData, gameInfo) {
                             if (gameData[force.y][j + 1] > 0) {
                                 newX = j;
                                 newY = force.y;
-                                switch (gameData[newY][newX]) {
-                                    case 0:
-                                        break;
-                                    case 15:
-                                        newY--;
-                                        break;
-                                    case 17:
-                                        newY++;
-                                        break;
-                                    default:
-                                        break;
+                                if (hasRightGlideBottomToTop(gameData[newY][newX])) {
+                                    newY--;
+                                }
+                                if (hasRightGlideTopToBottom(gameData[newY][newX])) {
+                                    newY++;
                                 }
                                 moveObject(gameData, gameInfo, j + 1, force.y, newX, newY);
                                 updated = true;
@@ -174,37 +157,32 @@ export function checkForces(gameData, gameInfo) {
                         elTop = (force.y > 0) ? gameData[force.y - 1][j] : -1;
                         elTopLeft = ((force.y > 0) && (j > 0)) ? gameData[force.y - 1][j - 1] : -1;
                         elTopRight = ((force.y > 0) && (j < maxX)) ? gameData[force.y - 1][j + 1] : -1;
-                        switch (element) {
-                            case 0:
-                                if (emptyOrTriangle === -1) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                }
-                                break;
-                            case 16:
-                                if ((elTop === 0) && (elTopLeft === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            case 18:
-                                if ((elBottom === 0) && (elBottomLeft === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            default:
-                                if (!moveableOrEmpty.includes(element)) {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
+                        if (element === 0) {
+                            if (emptyOrTriangle === -1) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            }
+                        } else if (hasLeftGlideBottomToTop(element)) {
+                            if ((elTop === 0) && (elTopLeft === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else if (hasLeftGlideTopToBottom(element)) {
+                            if ((elBottom === 0) && (elBottomLeft === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else {
+                            if (!moveableOrEmpty.includes(element)) {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
                         }
                     }
 
@@ -213,17 +191,11 @@ export function checkForces(gameData, gameInfo) {
                             if (gameData[force.y][j - 1] > 0) {
                                 newX = j;
                                 newY = force.y;
-                                switch (gameData[newY][newX]) {
-                                    case 0:
-                                        break;
-                                    case 16:
-                                        newY--;
-                                        break;
-                                    case 18:
-                                        newY++;
-                                        break;
-                                    default:
-                                        break;
+                                if (hasLeftGlideBottomToTop(gameData[newY][newX])) {
+                                    newY--;
+                                }
+                                if (hasLeftGlideTopToBottom(gameData[newY][newX])) {
+                                    newY++;
                                 }
                                 moveObject(gameData, gameInfo, j - 1, force.y, newX, newY);
                                 updated = true;
@@ -242,37 +214,32 @@ export function checkForces(gameData, gameInfo) {
                         elTop = (j > 0) ? gameData[j - 1][force.x] : -1;
                         elTopLeft = ((j > 0) && (force.x > 0)) ? gameData[j - 1][force.x - 1] : -1;
                         elTopRight = ((j > 0) && (force.x < maxX)) ? gameData[j - 1][force.x + 1] : -1;
-                        switch (element) {
-                            case 0:
-                                if (emptyOrTriangle === -1) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                }
-                                break;
-                            case 17:
-                                if ((elRight === 0) && (elBottomRight === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            case 18:
-                                if ((elLeft === 0) && (elBottomLeft === 0)) {
-                                    emptyOrTriangle = j;
-                                    possible = true;
-                                } else {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
-                            default:
-                                if (!moveableOrEmpty.includes(element)) {
-                                    possible = false;
-                                    emptyOrTriangle = -1;
-                                }
-                                break;
+                        if (element === 0) {
+                            if (emptyOrTriangle === -1) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            }
+                        } else if (hasBottomGlideLeftToRight(element)) {
+                            if ((elRight === 0) && (elBottomRight === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else if (hasBottomGlideRightToLeft(element)) {
+                            if ((elLeft === 0) && (elBottomLeft === 0)) {
+                                emptyOrTriangle = j;
+                                possible = true;
+                            } else {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
+                        } else {
+                            if (!moveableOrEmpty.includes(element)) {
+                                possible = false;
+                                emptyOrTriangle = -1;
+                            }
                         }
                     }
 
@@ -281,17 +248,11 @@ export function checkForces(gameData, gameInfo) {
                             if (gameData[j + 1][force.x] > 0) {
                                 newX = force.x;
                                 newY = j;
-                                switch (gameData[newY][newX]) {
-                                    case 0:
-                                        break;
-                                    case 17:
-                                        newX++;
-                                        break;
-                                    case 18:
-                                        newX--;
-                                        break;
-                                    default:
-                                        break;
+                                if (hasBottomGlideLeftToRight(gameData[newY][newX])) {
+                                    newX++;
+                                }
+                                if (hasBottomGlideRightToLeft(gameData[newY][newX])) {
+                                    newX--;
                                 }
                                 moveObject(gameData, gameInfo, force.x, j + 1, newX, newY);
                                 updated = true;

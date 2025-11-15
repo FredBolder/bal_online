@@ -413,6 +413,35 @@ describe("Force", () => {
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 4 });
     });
 
+    it("Force right G", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 4, y: 4 },
+            forces: [{ x: 1, y: 4, direction: "right" }],
+            greenBalls: 1
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 111, 0, 4, 2, 214, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 2, 0, 0, 1],
+            [1, 111, 0, 0, 4, 214, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkForces(input, gameInfo);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 5, y: 3 });
+    });
+
     // ***** Force left *****
 
     it("Force left A", () => {

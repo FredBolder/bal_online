@@ -9,7 +9,7 @@ import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
-import { isTriangleBottomLeft, isTriangleBottomRight, isTriangleTopLeft, isTriangleTopRight } from "./triangleStones.js";
+import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -825,7 +825,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j < gameData[i].length - 1) {
           if (
             // wall |\
-            isTriangleBottomLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasTopGlideLeftToRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -843,7 +843,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j >= 1) {
           if (
             // wall /|
-            isTriangleBottomRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasTopGlideRightToLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -901,7 +901,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j < gameData[i].length - 1) {
           if (
             // wall |/
-            isTriangleTopLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasBottomGlideLeftToRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j + 1] === 0 && gameData[i - 1][j + 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -919,7 +919,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j >= 1) {
           if (
             // wall \|
-            isTriangleTopRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasBottomGlideRightToLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
             gameData[i][j - 1] === 0 && gameData[i - 1][j - 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -1308,8 +1308,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
     }
 
     if ((gameData[y + 1][x] === 0) ||
-      (!ignoreTriangle && isTriangleBottomLeft(gameData[y + 1][x]) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      (!ignoreTriangle && isTriangleBottomRight(gameData[y + 1][x]) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+      (!ignoreTriangle && hasTopGlideLeftToRight(gameData[y + 1][x]) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      (!ignoreTriangle && hasTopGlideRightToLeft(gameData[y + 1][x]) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
     ) {
       result = true;
       // ladder
@@ -1352,8 +1352,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
     }
 
     if ((gameData[y - 1][x] === 0) ||
-      (!ignoreTriangle && isTriangleTopLeft(gameData[y - 1][x]) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      (!ignoreTriangle && isTriangleTopRight(gameData[y - 1][x]) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+      (!ignoreTriangle && hasBottomGlideLeftToRight(gameData[y - 1][x]) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
+      (!ignoreTriangle && hasBottomGlideRightToLeft(gameData[y - 1][x]) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
     ) {
       result = true;
       // ladder

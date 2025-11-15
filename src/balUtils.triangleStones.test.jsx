@@ -15,53 +15,49 @@ describe("balUtils Triangle stones", () => {
         initGameVars(defaultGameVars);
     });
 
-    it("Triangled Walls A", () => {
+    it("Triangle stone A", () => {
         let inputBack = zeroArray(5, 7);
         let input = [
             [1, 1, 1, 1, 1, 1, 1],
-            [1, 2, 0, 0, 0, 0, 1],
-            [1, 15, 0, 0, 0, 0, 1],
-            [1, 1, 0, 0, 0, 0, 1],
+            [1, 2, 0, 4, 0, 0, 1],
+            [1, 15, 0, 210, 0, 0, 1],
+            [1, 1, 0, 1, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
         let expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
-            [1, 15, 2, 0, 0, 0, 1],
-            [1, 1, 0, 0, 0, 0, 1],
+            [1, 15, 2, 210, 4, 0, 1],
+            [1, 1, 0, 1, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
         let info = checkFalling(inputBack, input, defaultGameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: true, sound: "" })
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
     });
 
-    it("Triangled Walls B", () => {
+    it("Triangle stone B", () => {
         let inputBack = zeroArray(5, 7);
         let input = [
             [1, 1, 1, 1, 1, 1, 1],
-            [1, 0, 0, 0, 0, 2, 1],
-            [1, 0, 0, 0, 0, 16, 1],
-            [1, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 4, 0, 2, 1],
+            [1, 0, 0, 214, 0, 16, 1],
+            [1, 0, 0, 1, 0, 1, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
         let expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 2, 16, 1],
-            [1, 0, 0, 0, 0, 1, 1],
+            [1, 0, 4, 214, 2, 16, 1],
+            [1, 0, 0, 1, 0, 1, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
         let info = checkFalling(inputBack, input, defaultGameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: true, sound: "" })
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
     });
 
-    it("Triangled Walls C", () => {
+    it("Triangle stone C", () => {
         let inputBack = zeroArray(5, 7);
         let input = [
             [1, 1, 1, 1, 1, 1, 1],
@@ -72,13 +68,11 @@ describe("balUtils Triangle stones", () => {
         ];
         let expectedOutput = copy2dArray(input);
         let info = checkFalling(inputBack, input, defaultGameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: false, sound: "" })
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: false, sound: "" });
     });
 
-    it("Triangled Walls D", () => {
+    it("Triangle stone D", () => {
         let inputBack = zeroArray(5, 7);
         let input = [
             [1, 1, 1, 1, 1, 1, 1],
@@ -95,13 +89,11 @@ describe("balUtils Triangle stones", () => {
             [1, 1, 1, 1, 1, 1, 1],
         ];
         let info = checkFalling(inputBack, input, defaultGameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: true, sound: "" })
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
     });
 
-    it("Triangled Walls E", () => {
+    it("Triangle stone E", () => {
         let inputBack = zeroArray(5, 7);
         let input = [
             [1, 1, 1, 1, 1, 1, 1],
@@ -112,13 +104,11 @@ describe("balUtils Triangle stones", () => {
         ];
         let expectedOutput = copy2dArray(input);
         let info = checkFalling(inputBack, input, defaultGameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: false, sound: "" })
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: false, sound: "" });
     });
 
-    it("Triangled Walls F", () => {
+    it("Triangle stone F", () => {
         let input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 2, 0, 0, 0, 3, 1],
@@ -144,18 +134,21 @@ describe("balUtils Triangle stones", () => {
         for (let i = 0; i < 5; i++) {
             info = checkFalling(inputBack, input, defaultGameInfo, defaultGameVars);
         }
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: true, sound: "" })
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
     });
 
     // GRAVITY UP
 
-    it("Triangled Walls Gravity Up A", () => {
+    it("Triangle stone Gravity Up A", () => {
         let inputBack = zeroArray(5, 8);
 
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 6, y: 2 }, orangeBalls: [{ x: 2, y: 2, direction: "none" }] };
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 6, y: 2 },
+            greenBalls: 1,
+            orangeBalls: [{ x: 2, y: 2, direction: "none" }]
+        };
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 17, 0, 0, 0, 18, 1],
@@ -171,21 +164,19 @@ describe("balUtils Triangle stones", () => {
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
         let info = checkFalling(inputBack, input, gameInfo, { ...defaultGameVars, gravity: "up" });
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: true, sound: "" })
-        );
-        expect(JSON.stringify(gameInfo.blueBall)).toBe(
-            JSON.stringify({ x: 5, y: 1 })
-        );
-        expect(JSON.stringify(gameInfo.orangeBalls)).toBe(
-            JSON.stringify([{ x: 3, y: 1, direction: "upright" }])
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
+        expect(gameInfo.blueBall).toEqual({ x: 5, y: 1 });
+        expect(gameInfo.orangeBalls).toEqual([{ x: 3, y: 1, direction: "upright" }]);
     });
 
-    // Orange ball continues after 
-    it("Triangled Walls Gravity Up B", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 1 }, orangeBalls: [{ x: 3, y: 1, direction: "upright" }] };
+    it("Triangle stone Gravity Up B", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 5, y: 1 },
+            greenBalls: 1,
+            orangeBalls: [{ x: 3, y: 1, direction: "upright" }]
+        };
         let inputBack = zeroArray(5, 8);
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -202,15 +193,18 @@ describe("balUtils Triangle stones", () => {
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
         let info = moveOrangeBalls(inputBack, input, gameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
-        expect(JSON.stringify(gameInfo.orangeBalls)).toBe(
-            JSON.stringify([{ x: 4, y: 1, direction: "right" }])
-        );
+        expect(gameInfo.orangeBalls).toEqual([{ x: 4, y: 1, direction: "right" }]);
     });
 
-    it("Triangled Walls Gravity Up C", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 2 }, orangeBalls: [{ x: 6, y: 2, direction: "none" }] };
+    it("Triangle stone Gravity Up C", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 2 },
+            greenBalls: 1,
+            orangeBalls: [{ x: 6, y: 2, direction: "none" }]
+        };
         let inputBack = zeroArray(5, 8);
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -227,21 +221,19 @@ describe("balUtils Triangle stones", () => {
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
         let info = checkFalling(inputBack, input, gameInfo, { ...defaultGameVars, gravity: "up" });
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(info)).toBe(
-            JSON.stringify({ update: true, sound: "" })
-        );
-        expect(JSON.stringify(gameInfo.blueBall)).toBe(
-            JSON.stringify({ x: 3, y: 1 })
-        );
-        expect(JSON.stringify(gameInfo.orangeBalls)).toBe(
-            JSON.stringify([{ x: 5, y: 1, direction: "upleft" }])
-        );
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
+        expect(gameInfo.blueBall).toEqual({ x: 3, y: 1 });
+        expect(gameInfo.orangeBalls).toEqual([{ x: 5, y: 1, direction: "upleft" }]);
     });
 
-    // Orange ball continues after 
-    it("Triangled Walls Gravity Up D", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 3, y: 1 }, orangeBalls: [{ x: 5, y: 1, direction: "upleft" }] };
+    it("Triangle stone Gravity Up D", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 3, y: 1 },
+            greenBalls: 1,
+            orangeBalls: [{ x: 5, y: 1, direction: "upleft" }]
+        };
         let inputBack = zeroArray(5, 8);
         let input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -258,11 +250,37 @@ describe("balUtils Triangle stones", () => {
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
         let info = moveOrangeBalls(inputBack, input, gameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
-        expect(JSON.stringify(gameInfo.orangeBalls)).toBe(
-            JSON.stringify([{ x: 4, y: 1, direction: "left" }])
-        );
+        expect(gameInfo.orangeBalls).toEqual([{ x: 4, y: 1, direction: "left" }]);
+    });
+
+    it("Triangle stone Gravity Up E", () => {
+        let inputBack = zeroArray(5, 8);
+
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 6, y: 2 },
+            greenBalls: 1,
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 216, 0, 0, 0, 217, 1],
+            [1, 0, 4, 0, 0, 0, 2, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 216, 4, 0, 2, 217, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkFalling(inputBack, input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ update: true, sound: "" });
+        expect(gameInfo.blueBall).toEqual({ x: 5, y: 1 });
     });
 
     // Insert new tests here
