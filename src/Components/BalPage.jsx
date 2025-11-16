@@ -385,21 +385,24 @@ function BalPage() {
     let value = null;
 
     if (silent) {
-      value = "Normal (32 x 20)";
+      value = "32 x 20 (Landscape)";
     } else {
-      value = await showSelect("New level", "Size", ["Normal (32 x 20)", "Small (10 x 10)", "Square (20 x 20)"], 0);
+      value = await showSelect("New level", "Size", ["32 x 20 (Landscape)", "10 x 10 (Square)", "15 x 15 (Square)", "20 x 20 (Square)"], 0);
     }
     if (value !== null) {
       createLevelSelectedCell = null;
       switch (value) {
-        case "Normal (32 x 20)":
+        case "32 x 20 (Landscape)":
           level = 9999;
           break;
-        case "Small (10 x 10)":
+        case "20 x 20 (Square)":
           level = 9998;
           break;
-        case "Square (20 x 20)":
+        case "15 x 15 (Square)":
           level = 9997;
+          break;
+        case "10 x 10 (Square)":
+          level = 9996;
           break;
         default:
           level = 9999;

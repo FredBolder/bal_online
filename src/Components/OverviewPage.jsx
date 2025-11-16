@@ -23,6 +23,10 @@ import { loadProgress, solvedLevels } from "../progress.js";
 function levelNumberColor(level) {
   let color = "gray";
 
+  if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
+    return color;
+  }
+
   if (solvedLevels.includes(level)) {
     color = "green";
   } else if (solvedLevels.includes(level - 1) || firstOfSeries(level) || (globalVars.userP && solvedLevels.includes(level - 2))) {
@@ -35,6 +39,10 @@ function levelNumberColor(level) {
 
 function levelNumberCursor(level) {
   let cursor = "auto";
+
+  if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
+    return cursor;
+  }
 
   if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
     (globalVars.userP && solvedLevels.includes(level - 2)) || globalVars.fred) {
@@ -62,6 +70,10 @@ function OverviewPage() {
   const [extraEasyList, setExtraEasyList] = useState([]);
 
   function handleClick(level) {
+    if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
+      return;
+    }
+
     if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
       (globalVars.userP && solvedLevels.includes(level - 2)) || globalVars.fred) {
       globalVars.clickedLevel = level;
@@ -287,26 +299,24 @@ function OverviewPage() {
             </div>))}
           </div>
 
-          {(globalVars.userP || globalVars.fred) && <div>
-            <h2>Extra series 1</h2>
-            <div className="seriesList">
-              {extraSeries1List.map((level) => (<div
-                key={level}
-                style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
-                onClick={() => handleClick(level)} >
-                {level}
-              </div>))}
-            </div>
-            <h2>Extra Easy</h2>
-            <div className="seriesList">
-              {extraEasyList.map((level) => (<div
-                key={level}
-                style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
-                onClick={() => handleClick(level)} >
-                {level}
-              </div>))}
-            </div>
-          </div>}
+          <h2>Extra series 1</h2>
+          <div className="seriesList">
+            {extraSeries1List.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {level}
+            </div>))}
+          </div>
+          <h2>Extra Easy</h2>
+          <div className="seriesList">
+            {extraEasyList.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {level}
+            </div>))}
+          </div>
 
         </div>
       </main>

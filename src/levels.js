@@ -38,7 +38,7 @@ export const seriesMusicEnd = 3207;
 export const extraSeries1Start = 5000;
 export const extraSeries1End = 5002;
 export const extraSeriesEasyStart = 6000;
-export const extraSeriesEasyEnd = 6003;
+export const extraSeriesEasyEnd = 6004;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -907,7 +907,7 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= extraSeries1Start && n <= extraSeries1End) ||
       (n >= extraSeriesEasyStart && n <= extraSeriesEasyEnd)
     )) ||
-    (n >= 9997) && n <= 9999) {
+    (n >= 9996) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
   } else {
     result = await loadFromFile(1000, false);
