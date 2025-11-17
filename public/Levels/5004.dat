@@ -1,0 +1,44 @@
+$stonepattern: 1
+$pistonmode: 1, 9, momentary
+$group: 4, 9, 2
+$pistonmode: 4, 9, momentary
+$group: 7, 9, 3
+$pistonmode: 7, 9, momentary
+$group: 1, 11, 4
+$pistonmode: 1, 11, momentary
+$group: 4, 11, 5
+$pistonmode: 4, 11, momentary
+$group: 7, 11, 4
+$pistonmode: 7, 11, momentary
+$group: 2, 12, 4
+$group: 5, 12, 5
+$group: 8, 12, 4
+$group: 15, 6, 2
+$group: 13, 6, 3
+$group: 16, 14, 4
+$group: 16, 18, 6
+$group: 9, 15, 4
+$group: 11, 16, 5
+$direction: 11, 16, up
+$group: 13, 14, 6
+$direction: 13, 14, up
+11111111111111111111
+13        44     3 1
+1         44       1
+1         44   24  1
+11Џ11Џ11Џ111111111 1
+11 11 11 11        1
+11 11 11 11 1m1m1m11
+11 11 11 11 11111111
+11 11 11 11     3  1
+1Ë5 Ë5 Ë5 1        1
+11 11 11 1111      1
+1Ë  Ë  Ë  1 1  111=1
+11m 1m 1m 1 5  1  =1
+111V11V11V1 1  1  =1
+11111111111 1њ 1m =1
+1        њ  111111=1
+1          њ   1  =1
+1              1  =1
+1              1m =1
+11111111111111111111

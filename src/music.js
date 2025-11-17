@@ -46,7 +46,7 @@ export function noteToFreq(note) {
   return freq;
 }
 
-export async function playNote(instrument, volume, musicalNote) {
+export async function playNote(instrument, volume, musicalNote, noteOverride = "none") {
   let attack = 5;
   let decay = 500;
   let release = 100;
@@ -360,6 +360,10 @@ export async function playNote(instrument, volume, musicalNote) {
 
   for (let noteIndex = 0; noteIndex < notes.length; noteIndex++) {
     note = notes[noteIndex].trim();
+    
+    if (noteOverride.toLowerCase() !== "none") {
+      note = noteOverride;
+    }
 
     if (note === "") {
       break;

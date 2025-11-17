@@ -658,6 +658,7 @@ function BalPage() {
           showMessage("Info", "No level in memory.");
         }
       } else {
+        clearPlayedNotes();
         gameData = null;
         gameData = data.gameData;
         backData = null;

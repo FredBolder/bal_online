@@ -201,6 +201,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
                 delayCounter: 0,
                 notes: ["C4"],
                 noteIndex: 0,
+                noteOverride: "none",
                 stepsPerMeasure: 0,
                 onOne: false,
                 chordType: "?",

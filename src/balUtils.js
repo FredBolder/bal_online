@@ -2124,6 +2124,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 117:
       updateTimeBomb(gameInfo.timeBombs, oldX, oldY, newX, newY);
       break;
+    case 157:
+      updateObject(gameInfo.musicBoxes, oldX, oldY, newX, newY);
+      break;
     case 171:
       updateObject(gameInfo.conveyorBelts, oldX, oldY, newX, newY);
       break;

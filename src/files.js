@@ -313,6 +313,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${musicBox.x}, ${musicBox.y}, ${musicBox.group}`;
             lines.push(line);
         }
+        if (musicBox.noteOverride !== "none") {
+            line = `$noteoverride: ${musicBox.x}, ${musicBox.y}, ${musicBox.noteOverride}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.pistons.length; i++) {

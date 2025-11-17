@@ -36,9 +36,11 @@ export const hiddenMiniSeries1End = 3107;
 export const seriesMusicStart = 3200;
 export const seriesMusicEnd = 3207;
 export const extraSeries1Start = 5000;
-export const extraSeries1End = 5002;
+export const extraSeries1End = 5006;
 export const extraSeriesEasyStart = 6000;
-export const extraSeriesEasyEnd = 6006;
+export const extraSeriesEasyEnd = 6007;
+export const extraSeriesMusicStart = 6200;
+export const extraSeriesMusicEnd = 6200;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -283,6 +285,7 @@ export function checkSettings(data, settings) {
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
+    { name: "$noteoverride", params: 3, xy: true },
     { name: "$notes", params: 0, xy: true },
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
@@ -525,6 +528,19 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
+            case "$noteoverride":
+              switch (data[y][x]) {
+                case "M":
+                case 157:
+                  if (values[2].trim() === "") {
+                    msg += `${settingNr(i)}Empty value for note override.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
             default:
               break;
           }
@@ -621,7 +637,8 @@ export function checkSettings(data, settings) {
 
 export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
-    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart, extraSeries1Start, extraSeriesEasyStart].includes(level)
+    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart, extraSeries1Start, 
+    extraSeriesEasyStart, extraSeriesMusicStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -866,6 +883,9 @@ export function getAllLevels() {
   for (let i = extraSeriesEasyStart; i <= extraSeriesEasyEnd; i++) {
     levels.push(i);
   }
+  for (let i = extraSeriesMusicStart; i <= extraSeriesMusicEnd; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -905,7 +925,8 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
     ((globalVars.fred || globalVars.userP) && (
       (n >= extraSeries1Start && n <= extraSeries1End) ||
-      (n >= extraSeriesEasyStart && n <= extraSeriesEasyEnd)
+      (n >= extraSeriesEasyStart && n <= extraSeriesEasyEnd) ||
+      (n >= extraSeriesMusicStart && n <= extraSeriesMusicEnd)
     )) ||
     (n >= 9996) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
@@ -1305,6 +1326,16 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               if (idx >= 0) {
                 gameInfo.musicBoxes[idx].mode = mode;
                 gameInfo.musicBoxes[idx].delay = gameTicks;
+              }
+            }
+          }
+          break;
+        case "$noteoverride":
+          if (values.length === 3) {
+            if (validXY) {
+              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+              if (idx >= 0) {
+                gameInfo.musicBoxes[idx].noteOverride = values[2];
               }
             }
           }

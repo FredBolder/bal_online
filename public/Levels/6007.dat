@@ -1,0 +1,25 @@
+$hint: First take the small blue ball to duplicate yourself.
+$stonepattern: 1
+$pistonmode: 4, 10, momentary
+$group: 13, 8, 2
+$group: 6, 6, 2
+$direction: 6, 6, up
+$group: 8, 6, 2
+$direction: 8, 6, up
+$group: 7, 6, 2
+$direction: 7, 6, up
+111111111111111
+1131111τ1111111
+11            1
+11            1
+111111      4 1
+11       111111
+11    њњњ     1
+11            1
+1τ           m1
+111111   111111
+1111Ì11 1111  1
+1%11511^1113  1
+1        2    1
+11111111111m111
+111111111111111

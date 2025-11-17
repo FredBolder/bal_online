@@ -17,6 +17,7 @@ import {
   hiddenMiniSeries1Start, hiddenMiniSeries1End,
   extraSeries1Start, extraSeries1End,
   extraSeriesEasyStart, extraSeriesEasyEnd,
+  extraSeriesMusicStart, extraSeriesMusicEnd,
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
 
@@ -68,6 +69,7 @@ function OverviewPage() {
   const [hiddenMiniSeries1List, setHiddenMiniSeries1List] = useState([]);
   const [extraSeries1List, setExtraSeries1List] = useState([]);
   const [extraEasyList, setExtraEasyList] = useState([]);
+  const [extraMusicList, setExtraMusicList] = useState([]);
 
   function handleClick(level) {
     if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
@@ -161,6 +163,12 @@ function OverviewPage() {
       listExtraEasy.push(i);
     }
     setExtraEasyList(listExtraEasy);
+
+    const listExtraMusic = [];
+    for (let i = extraSeriesMusicStart; i <= extraSeriesMusicEnd; i++) {
+      listExtraMusic.push(i);
+    }
+    setExtraMusicList(listExtraMusic);
   }
 
   useEffect(() => {
@@ -311,6 +319,15 @@ function OverviewPage() {
           <h2>Extra Easy</h2>
           <div className="seriesList">
             {extraEasyList.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {level}
+            </div>))}
+          </div>
+          <h2>Extra Music</h2>
+          <div className="seriesList">
+            {extraMusicList.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >

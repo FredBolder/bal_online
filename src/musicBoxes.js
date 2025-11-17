@@ -141,7 +141,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                     musicBox.noteIndex++;
                     if ((music > 0) && (note !== "") && (note !== "-")) {
                         // volume and music are both percentages
-                        playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
+                        playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note, musicBox.noteOverride);
                     }
                 }
             }
@@ -233,7 +233,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 if (!musicBox.ended) {
                     note = musicBox.notes[musicBox.noteIndex];
                     if ((music > 0) && (note !== "") && (note !== "-")) {
-                        playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
+                        playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note, musicBox.noteOverride);
                     }
                 }
             }
@@ -261,9 +261,9 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                     default:
                         break;
                 }
-                if (!musicBox.active && validNotesForKeyboardMode(musicBox.notes) && (gameData[y][x] === 2)) {
+                if (!musicBox.active && validNotesForKeyboardMode(musicBox.notes) && [2, 5].includes(gameData[y][x])) {
                     note = musicBox.notes[0];
-                    playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note);
+                    playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note, musicBox.noteOverride);
                     addPlayedNote(musicBox.group - 1, note);
                     musicBox.active = true;
                 }

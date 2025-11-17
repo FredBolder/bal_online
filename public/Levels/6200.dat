@@ -1,5 +1,5 @@
-$sound: 22, player
 $startlevelmessage: Only one sound is played at a time in the required rhythm.
+$sound: 22, player
 $stonepattern: 1
 $gameticksxy: 17, 7, 3
 $musicbox: 14, 2, door, 5
@@ -7,18 +7,18 @@ $notes: 14, 2, C4, .G4, E4, .G4, .G4, C4, E4, .G4
 $instrument: 14, 2, drums, 90
 $musicbox: 4, 3, keyboard, 5
 $instrument: 4, 3, bassdrum, 90
-$direction: 4, 3, right
 $noteoverride: 4, 3, C4
+$direction: 4, 3, right
 $musicbox: 8, 3, keyboard, 5
 $notes: 8, 3, E4
 $instrument: 8, 3, snaredrum, 90
-$direction: 8, 3, right
 $noteoverride: 8, 3, C4
+$direction: 8, 3, right
 $musicbox: 12, 3, keyboard, 5
 $notes: 12, 3, G4
 $instrument: 12, 3, hihat, 80
-$direction: 12, 3, right
 $noteoverride: 12, 3, C4
+$direction: 12, 3, right
 $group: 18, 5, 2
 $pistonmode: 18, 5, momentary
 $pistonmode: 18, 9, momentary
@@ -27,23 +27,23 @@ $direction: 4, 2, down
 $direction: 8, 2, down
 $direction: 12, 2, down
 111111111111111111111
-1            2      1
+1          2        1
 1=11њ=11њ=11њ1M1m1111
-1=1 M=1 M=1 M1 11444φ
-1= 5 =5  = 5 1 114141
+1=1 M=1 M=1 M1 11  4φ
+1=5  =5  =5  1 11 141
 1=1  =1  =1  1 1 5Ö41
-1=5  =5  = 5 1 11 141
+1=5  =5  =5  1 11 141
 1=1  =1  =1  1 11)141
-1=5  = 5 = 5 1 11 141
+1=5  =5  =5  1 11 141
 1=1  =1  =1  1 1  Ö41
-1=5  =5  = 5 1 1 m141
+1=5  =5  =5  1 1 m141
 1=1  =1  =1  1 1V1141
-1=5  =5  = 5 1 111141
+1=5  =5  =5  1 111141
 1=1  =1  =1  1   3141
-1= 5 =5  = 5 1    141
+1=5  =5  =5  1    141
 1=1  =1  =1  1 4  141
-1=5  = 5 = 5 1111 1 1
-1=1  =1  =1  1111 1 1
-1=5  =5  = 5 13 1 1 1
+1=5  =5  =5  1111 141
+1=1  =1  =1  1111 141
+1=5  =5  =5  13 1 141
 1=1  =1  =1  1    1Ω1
 111111111111111111111
