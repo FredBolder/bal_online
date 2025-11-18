@@ -2005,6 +2005,7 @@ function BalPage() {
     })();
 
     return () => {
+      initialized = false;
       abortCtrl.abort();
       globalVars.balPageLoading = false;
       window.removeEventListener("resize", handleResize);

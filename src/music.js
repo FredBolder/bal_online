@@ -17,8 +17,8 @@ let filtersList = [];
 let operatorsList = [];
 
 export function instruments() {
-  return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat", "kalimba",
-    "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
+  return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat",
+    "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
 }
 
@@ -71,7 +71,6 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
   let decayFactorOsc1 = 500;
   let decayFactorOsc2 = 500;
   let filterCutoff = 2000;
-  let filterResonance = 0;
   let filterResonanceFactor = 1;
   let freqNoise = 1000;
   let freqOsc1 = 500;
@@ -133,20 +132,50 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
   }
 
   function createHiHat(variation = 0) {
-    decayFactorOsc1 = 1;
-    filterResonance = 15;
+    let decayFactor = 1;
+    let highPassFrequency = 1500;
+    let highPassResonance = 1500;
+    let metalVolume = 0.7;
+    let noiseVolume = 0.1;
+
     switch (variation) {
       case 1:
-        decayFactorOsc1 = 5;
-        filterResonance = 50;
+        // Open hi-hat 1
+        decayFactor = 5;
+        highPassFrequency = 1500;
+        highPassResonance = 50;
+        metalVolume = 0.5;
+        noiseVolume = 0.1;
+        break;
+      case 2:
+        // Closed hi-hat 2
+        decayFactor = 0.9;
+        highPassFrequency = 6000;
+        highPassResonance = 15;
+        metalVolume = 0.5;
+        noiseVolume = 0.3;
+        break;
+      case 3:
+        // Open hi-hat 2
+        decayFactor = 3;
+        highPassFrequency = 6000;
+        highPassResonance = 50;
+        metalVolume = 0.5;
+        noiseVolume = 0.3;
         break;
       default:
+        // Closed hi-hat 1
+        decayFactor = 1;
+        highPassFrequency = 1500;
+        highPassResonance = 15;
+        metalVolume = 0.5;
+        noiseVolume = 0.1;
         break;
     }
     // Frequency is only used for noiseAndBPF, noiseAndHPF and noiseAndLPF
-    operators.push(new Operator(audioCtx, "metalNoise", 1000, 0, maxVolume * 0.7, 0, 200 * decayFactorOsc1, 0, 50));
-    operators.push(new Operator(audioCtx, "noise", 1000, 0, maxVolume * 0.1, 0, 200 * decayFactorOsc1, 0, 50));
-    filter.setFilter("highpass", 1500, 1500, 1500, 1500, filterResonance, 0, 200 * decayFactorOsc1, 250);
+    operators.push(new Operator(audioCtx, "metalNoise", 1000, 0, maxVolume * metalVolume, 0, 200 * decayFactor, 0, 50));
+    operators.push(new Operator(audioCtx, "noise", 1000, 0, maxVolume * noiseVolume, 0, 200 * decayFactor, 0, 50));
+    filter.setFilter("highpass", highPassFrequency, highPassFrequency, highPassFrequency, highPassFrequency, highPassResonance, 0, 200 * decayFactorOsc1, 250);
     combFilter = new CombFilter(audioCtx);
     combFilter.setWet(0.5);
     combFilter.setDelayTime(2.2); // was 2.2
@@ -360,7 +389,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
 
   for (let noteIndex = 0; noteIndex < notes.length; noteIndex++) {
     note = notes[noteIndex].trim();
-    
+
     if (noteOverride.toLowerCase() !== "none") {
       note = noteOverride;
     }
@@ -547,6 +576,12 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
           case "F6":
             createRideCymbal(1);
             break;
+          case "G6":
+            createHiHat(2);
+            break;
+          case "A6":
+            createHiHat(3);
+            break;
           default:
             break;
         }
@@ -604,6 +639,12 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
             break;
           case "D4":
             createHiHat(1);
+            break;
+          case "E4":
+            createHiHat(2);
+            break;
+          case "F4":
+            createHiHat(3);
             break;
           default:
             break;

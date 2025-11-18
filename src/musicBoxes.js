@@ -302,8 +302,12 @@ export function fixDoors(gameInfo) {
                     break;
                 }
             }
-            if (!found && (musicBox.notes.length < 2)) {
-                randomSequence(musicBox.notes);
+            if (!found) {
+                if (musicBox.notes.length < 2) {
+                    randomSequence(musicBox.notes);
+                } else if (musicBox.notes.includes("|")) {
+                    randomUserSequence(musicBox.notes);
+                }
             }
         }
     }
@@ -462,6 +466,26 @@ function randomSequence(notes) {
         ["D4", "F4", "E4", "G4", "F4", "A4"],
         ["C4", "E4", "G4", "C5", "G4", "E4", "C4"],
     ];
+    n = randomInt(0, sequences.length - 1);
+    notes.length = 0;
+    for (let i = 0; i < sequences[n].length; i++) {
+        notes.push(sequences[n][i]);
+    }
+}
+
+function randomUserSequence(notes) {
+    let n = 0;
+    const sequences = [];
+
+    for (let i = 0; i < notes.length; i++) {
+        const note = notes[i];
+        if ((i === 0) || ((sequences.length > 0) && (note === "|") && (sequences[sequences.length - 1].length > 0))) {
+            sequences.push([]);
+        }
+        if (note !== "|") {
+            sequences[sequences.length - 1].push(note);
+        }
+    }
     n = randomInt(0, sequences.length - 1);
     notes.length = 0;
     for (let i = 0; i < sequences[n].length; i++) {

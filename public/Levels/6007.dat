@@ -1,3 +1,4 @@
+$extra: 1
 $hint: First take the small blue ball to duplicate yourself.
 $stonepattern: 1
 $pistonmode: 4, 10, momentary

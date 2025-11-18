@@ -1,3 +1,4 @@
+$extra: 1
 $hint: Make sure that the pushers are next to each other, but with pusher 2 at the left side, so you can move them together to the left and to the right.
 $stonepattern: 1
 $group: 1, 14, 2
