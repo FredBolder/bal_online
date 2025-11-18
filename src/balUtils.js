@@ -2113,6 +2113,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       gameData[newY][newX] = 82;
       break;
     case 97:
+    case 208:
       updateObject(gameInfo.copiers, oldX, oldY, newX, newY);
       break;
     case 109:

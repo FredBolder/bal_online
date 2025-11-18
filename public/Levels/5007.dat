@@ -1,3 +1,4 @@
+$extra: 1
 $stonepattern: 1
 $pistonmode: 19, 12, momentary
 $sticky: 19, 12, yes
@@ -20,9 +21,9 @@ $direction: 14, 17, left
 1 = 1 c   .   c    1
 1 = 1              1
 11=m1              1
-1 =11   Ѳ          1
+1 =11              1
 1 =1               Ö
-1m=1  њњ      C  ψ11
+1m=1  њњѲ     C  ψ11
 11=1            1111
 1 =1            1111
 1 =1       111111111

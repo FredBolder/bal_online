@@ -1,5 +1,6 @@
 $extra: 1
 $hint: Move the direction changers so that the yellow ball can keep moving.
+$stonepattern: 1
 11111111111
 11  =    11
 1C  =    c1
