@@ -20,6 +20,7 @@ import {
   extraSeriesMusicStart, extraSeriesMusicEnd,
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
+import { loadSettings } from "../settings.js";
 
 function levelNumberColor(level) {
   let color = "gray";
@@ -84,6 +85,7 @@ function OverviewPage() {
   }
 
   async function init() {
+    loadSettings();
     await loadProgress();
 
     const list1 = [];
