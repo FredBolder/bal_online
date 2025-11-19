@@ -134,3 +134,56 @@ export function secretSeriesCodePart(n) {
     s = numberCharToLetter(s[2], true) + numberCharToLetter(s[0], true) + numberCharToLetter(s[1], true) + extraChar;
     return s;
 }
+
+export function stringToCode(str) {
+    let n = 0;
+    let s = "";
+
+    if (str.length < 3) {
+        return s;
+    }
+    for (let i = 0; i < str.length; i++) {
+        n += str.charCodeAt(i);
+    }
+    if (n % 2 === 0) {
+        n += 10;
+    } else {
+        n += 20;
+    }
+    n = n % 256;
+    s += n.toString(); 
+    if (n > 200) {
+        s += "r";
+    } else if (n > 150) {
+        s += "T";
+    } else if (n > 100) {
+        s += "c";
+    } else if (n > 50) {
+        s += "B";
+    } else {
+        s += "k";
+    }
+    if (s.length % 2 === 0) {
+        s += "q";
+    } else {
+        s += "W";
+    }
+    s += str[1].toUpperCase();
+    n = 0;
+    for (let i = 0; i < s.length; i++) {
+        n += s.charCodeAt(i);
+    }
+    if (n % 2 === 0) {
+        n += 5;
+    } else {
+        n += 7;
+    }
+    n = n % 256;
+    s += reverseString(n.toString()); 
+    if (n > 111) {
+        s += "6";
+    } else {
+        s += "3";
+    }
+    return s;
+}

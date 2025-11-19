@@ -21,7 +21,7 @@ import {
   stringArrayToNumberArray,
   zeroArray,
 } from "../balUtils.js";
-import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart } from "../codes.js";
+import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart, stringToCode } from "../codes.js";
 import {
   changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
   insertColorsAtColumn, insertColorsAtRow, moveColor
@@ -47,7 +47,7 @@ import {
   insertIgnoreAtRow, maxStonePatterns, moveIgnore
 } from "../stonePatterns.js";
 import { rotateGame } from "../rotateGame.js";
-import { getSettings, loadSettings, saveSettings, setSettings } from "../settings.js";
+import { getSettings, loadSettings, saveSettings, setSettings, settings } from "../settings.js";
 import { shrinkObject } from "../shrink.js";
 import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
@@ -357,28 +357,43 @@ function BalPage() {
   async function clickCode() {
     let code = 0;
     let level = 0;
+    let p = -1;
+    let s1 = "";
+    let s2 = "";
 
     code = await showInput("Code", "Enter the code for the level that you want to play.", "");
-    if (code !== null) {
-      code = code.trim();
-      if (code.length === 5) {
-        level = codeToNumber(code);
-      } else {
-        if (code === (secretSeriesCodePart(1) + secretSeriesCodePart(2) + secretSeriesCodePart(3))) {
-          level = getSecretStart();
-        }
+    if (code === null) { return }
+
+    code = code.trim();
+    p = code.indexOf(",");
+    if (code.startsWith("!") && globalVars.fred) {
+      showMessage("Info", stringToCode(code.slice(1).trim()));
+    } else if (p >= 0) {
+      s1 = code.slice(0, p).trim();
+      s2 = code.slice(p + 1).trim();
+      if ((s1.length >= 3) && (s2.length > 0) && (s2 === stringToCode(s1))) {
+        globalVars.userP = true;
+        settings.user = code;
+        saveSettings();
       }
-      if (level > 0) {
-        await initLevel(level);
-      }
-      if (code === getFredCode()) {
-        globalVars.fred = true;
-      }
-      if ((code === "") || (code.toLowerCase === "logout")) {
-        globalVars.fred = false;
+    } else if (code.length === 5) {
+      level = codeToNumber(code);
+    } else {
+      if (code === (secretSeriesCodePart(1) + secretSeriesCodePart(2) + secretSeriesCodePart(3))) {
+        level = getSecretStart();
       }
     }
+    if (level > 0) {
+      await initLevel(level);
+    }
+    if (code === getFredCode()) {
+      globalVars.fred = true;
+    }
+    if ((code === "") || (code.toLowerCase === "logout")) {
+      globalVars.fred = false;
+    }
   }
+
 
   async function clickNewLevel(silent = false) {
     let level = 9999;

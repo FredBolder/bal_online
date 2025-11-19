@@ -1,3 +1,4 @@
+$extra: 1
 $hint: Make a bridge with the yellow balls by using the pusher.
 $stonepattern: 1
 $direction: 11, 3, left
