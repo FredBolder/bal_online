@@ -676,7 +676,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
         const fVolume = 0.55;
         if ((frequency > fStart) && (frequency < fEnd)) {
           f1 = f1 * ((fVolume * (Math.abs(frequency - fCenter) / (fCenter - fStart))) + (1 - fVolume));
-          console.log((Math.abs(frequency - fCenter) / (fCenter - fStart)));
+          // console.log((Math.abs(frequency - fCenter) / (fCenter - fStart)));
         }
         operators.push(new Operator(audioCtx, "sine", frequency * 1, 5, maxVolume * f1 * 0.9, 4, 900 * decayFactorOsc1, 0, 500));
         operators.push(new Operator(audioCtx, "triangle", frequency * 2, 5, maxVolume * f1 * 0.34, 3, 700 * decayFactorOsc1, 0, 420));

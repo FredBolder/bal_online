@@ -968,6 +968,12 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                         }
                         info = `Pusher, ` + extraInfo;
                         break;
+                    case 226:
+                        info = `Dominant seventh chord`;
+                        break;
+                    case 227:
+                        info = `Major seventh chord`;
+                        break;
                     default:
                         break;
                 }

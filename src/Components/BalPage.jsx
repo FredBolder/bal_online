@@ -1201,8 +1201,10 @@ function BalPage() {
       action: "",
       aug: false,
       dim: false,
+      dom7: false,
       eating: false,
       freezeTime: 0,
+      maj7: false,
       major: false,
       message: "",
       minor: false,
@@ -1684,11 +1686,17 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "dim")) {
       info.dim = false;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "dom7")) {
+      info.dom7 = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "eating")) {
       info.eating = false;
     }
     if (!Object.prototype.hasOwnProperty.call(info, "freezeTime")) {
       info.freezeTime = 0;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "maj7")) {
+      info.maj7 = false;
     }
     if (!Object.prototype.hasOwnProperty.call(info, "major")) {
       info.major = false;
@@ -1749,16 +1757,18 @@ function BalPage() {
         break;
     }
 
-    if (info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4) {
+    if (info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
       if (gameVars.lastChord !== null) {
         // gameVars.lastChord is a musicBox object
         if (
-          (info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "major")) ||
-          (info.minor && !info.major && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "minor")) ||
-          (info.aug && !info.dim && !info.minor && !info.major && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "augmented")) ||
-          (info.dim && !info.aug && !info.minor && !info.major && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "diminished")) ||
-          (info.sus2 && !info.sus4 && !info.major && !info.minor && !info.aug && !info.dim && (gameVars.lastChord.chordType === "suspended second")) ||
-          (info.sus4 && !info.sus2 && !info.major && !info.minor && !info.aug && !info.dim && (gameVars.lastChord.chordType === "suspended fourth"))
+          (info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "major")) ||
+          (info.minor && !info.major && !info.aug && !info.dim && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "minor")) ||
+          (info.aug && !info.dim && !info.minor && !info.major && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "augmented")) ||
+          (info.dim && !info.aug && !info.minor && !info.major && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "diminished")) ||
+          (info.sus2 && !info.sus4 && !info.major && !info.minor && !info.aug && !info.dim && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "suspended second")) ||
+          (info.sus4 && !info.sus2 && !info.major && !info.minor && !info.aug && !info.dim && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "suspended fourth")) ||
+          (info.dom7 && !info.maj7 && !info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "dominant seventh")) ||
+          (info.maj7 && !info.dom7 && !info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "major seventh"))
         ) {
           gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
           gameVars.lastChord = null;
@@ -2837,7 +2847,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

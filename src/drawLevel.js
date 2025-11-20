@@ -1213,6 +1213,7 @@ function drawLevel(
       case "chord1":
       case "chord2":
       case "chord3":
+      case "chord4":
       case "door":
         drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
         drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
@@ -3278,6 +3279,12 @@ function drawLevel(
           break;
         case 209:
           drawPusher(currentCol, currentRow);
+          break;
+        case 226:
+          drawChordType("7");
+          break;
+        case 227:
+          drawChordType("maj7");
           break;
         case 1000:
           // For manual only (empty)

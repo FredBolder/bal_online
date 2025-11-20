@@ -17,5 +17,5 @@ export const globalVars = {
     stoneImg04: null,
     stoneImg05: null,
     thisWorldGreen: -1,
-    userP: false
+    userP: false  // TODO: Set to false when publishing
 }

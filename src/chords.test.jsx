@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { augmentedChords, diminishedChords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
+import { augmentedChords, diminishedChords, dom7Chords, maj7Chords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 import { noteToFreq } from "./music.js";
 
 describe("chords", () => {
@@ -34,6 +34,12 @@ describe("chords", () => {
                     break;
                 case "diminished":
                     idx = [fixIndex(root), fixIndex(root + 3), fixIndex(root + 6)];
+                    break;
+                case "dom7":
+                    idx = [fixIndex(root), fixIndex(root + 4), fixIndex(root + 7), fixIndex(root + 10)];
+                    break;
+                case "maj7":
+                    idx = [fixIndex(root), fixIndex(root + 4), fixIndex(root + 7), fixIndex(root + 11)];
                     break;
                 case "major":
                     idx = [fixIndex(root), fixIndex(root + 4), fixIndex(root + 7)];
@@ -92,6 +98,24 @@ describe("chords", () => {
             expect(checkChord(chord, "diminished")).toBe(true);
         });
         it(`diminishedChords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
+        });
+    });
+
+    dom7Chords().forEach((chord, i) => {
+        it(`dom7Chords notes ${i + 1}`, () => {
+            expect(checkChord(chord, "dom7")).toBe(true);
+        });
+        it(`dom7Chords increasing pitch ${i + 1}`, () => {
+            expect(increasingPitch(chord)).toBe(true);
+        });
+    });
+
+    maj7Chords().forEach((chord, i) => {
+        it(`maj7Chords notes ${i + 1}`, () => {
+            expect(checkChord(chord, "maj7")).toBe(true);
+        });
+        it(`maj7Chords increasing pitch ${i + 1}`, () => {
             expect(increasingPitch(chord)).toBe(true);
         });
     });
