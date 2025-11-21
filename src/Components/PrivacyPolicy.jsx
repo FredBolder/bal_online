@@ -17,8 +17,9 @@ function PrivacyPolicy() {
             <h1>Bal - Privacy Policy</h1>
           </div>
           <div className="textBox">
-            This site does not collect or store any personal information.
-            For your convenience, only the last solved level and your preferences are saved in the local storage of your device.
+            For your convenience, the solved levels and your preferences are saved in your device.
+            When you buy a membership, your email address is saved in our administration and on your device.
+            Your email address is not shared.
             This site contains links to other websites, which may collect personal
             data according to their own privacy policies. We recommend reviewing those policies
             before interacting with their content.

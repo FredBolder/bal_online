@@ -29,18 +29,19 @@ export const seriesChoniaPollaStart = 990;
 export const seriesChoniaPollaEnd = 993;
 export const seriesSecretStart = 2000;
 export const seriesSecretEnd = 2016;
-export const seriesEasyStart = 3000;
-export const seriesEasyEnd = 3022;
+export const seriesEasy1Start = 3000;
+export const seriesEasy1End = 3022;
 export const hiddenMiniSeries1Start = 3100;
 export const hiddenMiniSeries1End = 3107;
-export const seriesMusicStart = 3200;
-export const seriesMusicEnd = 3207;
-export const extraSeries1Start = 5000;
-export const extraSeries1End = 5007;
-export const extraSeriesEasyStart = 6000;
-export const extraSeriesEasyEnd = 6012;
-export const extraSeriesMusicStart = 6200;
-export const extraSeriesMusicEnd = 6202;
+export const seriesMusic1Start = 3200;
+export const seriesMusic1End = 3207;
+// Extra
+export const series6Start = 5000;
+export const series6End = 5007;
+export const seriesEasy2Start = 6000;
+export const seriesEasy2End = 6012;
+export const seriesMusic2Start = 6200;
+export const seriesMusic2End = 6202;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -635,10 +636,89 @@ export function checkSettings(data, settings) {
   return msg;
 }
 
+export function displayLevelNumber(level, addInfo = false) {
+  let current = -1;
+  let result = "?";
+  let series = "?";
+  let total = 0;
+
+  if ((level >= series1Start) && (level <= series1End)) {
+    current = (level - series1Start) + 1;
+    total = (series1End - series1Start) + 1;
+    series = "Series 1";
+  } else if ((level >= series2Start) && (level <= series2End)) {
+    current = (level - series2Start) + 1;
+    total = (series2End - series2Start) + 1;
+    series = "Series 2";
+  } else if ((level >= series3Start) && (level <= series3End)) {
+    current = (level - series3Start) + 1;
+    total = (series3End - series3Start) + 1;
+    series = "Series 3";
+  } else if ((level >= series4Start) && (level <= series4End)) {
+    current = (level - series4Start) + 1;
+    total = (series4End - series4Start) + 1;
+    series = "Series 4";
+  } else if ((level >= series5Start) && (level <= series5End)) {
+    current = (level - series5Start) + 1;
+    total = (series5End - series5Start) + 1;
+    series = "Series 5";
+  } else if ((level >= seriesSmallStart) && (level <= seriesSmallEnd)) {
+    current = (level - seriesSmallStart) + 1;
+    total = (seriesSmallEnd - seriesSmallStart) + 1;
+    series = "Small";
+  } else if ((level >= seriesEasy1Start) && (level <= seriesEasy1End)) {
+    current = (level - seriesEasy1Start) + 1;
+    total = (seriesEasy1End - seriesEasy1Start) + 1;
+    series = "Easy 1";
+  } else if ((level >= seriesExtremeStart) && (level <= seriesExtremeEnd)) {
+    current = (level - seriesExtremeStart) + 1;
+    total = (seriesExtremeEnd - seriesExtremeStart) + 1;
+    series = "Extreme";
+  } else if ((level >= seriesMusic1Start) && (level <= seriesMusic1End)) {
+    current = (level - seriesMusic1Start) + 1;
+    total = (seriesMusic1End - seriesMusic1Start) + 1;
+    series = "Music 1";
+  } else if ((level >= seriesSecretStart) && (level <= seriesSecretEnd)) {
+    current = (level - seriesSecretStart) + 1;
+    total = (seriesSecretEnd - seriesSecretStart) + 1;
+    series = "Secret series";
+  } else if ((level >= hiddenMiniSeries1Start) && (level <= hiddenMiniSeries1End)) {
+    current = (level - hiddenMiniSeries1Start) + 1;
+    total = (hiddenMiniSeries1End - hiddenMiniSeries1Start) + 1;
+    series = "Hidden mini series 1";
+  } else if ((level >= series6Start) && (level <= series6End)) {
+    current = (level - series6Start) + 1;
+    total = (series6End - series6Start) + 1;
+    series = "Series 6";
+  } else if ((level >= seriesEasy2Start) && (level <= seriesEasy2End)) {
+    current = (level - seriesEasy2Start) + 1;
+    total = (seriesEasy2End - seriesEasy2Start) + 1;
+    series = "Easy 2";
+  } else if ((level >= seriesMusic2Start) && (level <= seriesMusic2End)) {
+    current = (level - seriesMusic2Start) + 1;
+    total = (seriesMusic2End - seriesMusic2Start) + 1;
+    series = "Music 2";
+  }
+
+  if (current === -1) {
+    return "?";
+  }
+
+  result = "";
+  if (addInfo) {
+    result += series + " - ";
+  }
+  result += current.toString();
+  if (addInfo) {
+    result += " of " + total.toString();
+  }
+  return result;
+}
+
 export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
-    seriesSmallStart, seriesEasyStart, seriesExtremeStart, seriesMusicStart, extraSeries1Start, 
-    extraSeriesEasyStart, extraSeriesMusicStart].includes(level)
+    seriesSmallStart, seriesEasy1Start, seriesExtremeStart, seriesMusic1Start, series6Start,
+    seriesEasy2Start, seriesMusic2Start].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -868,22 +948,22 @@ export function getAllLevels() {
   for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
     levels.push(i);
   }
-  for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
+  for (let i = seriesEasy1Start; i <= seriesEasy1End; i++) {
     levels.push(i);
   }
   for (let i = hiddenMiniSeries1Start; i <= hiddenMiniSeries1End; i++) {
     levels.push(i);
   }
-  for (let i = seriesMusicStart; i <= seriesMusicEnd; i++) {
+  for (let i = seriesMusic1Start; i <= seriesMusic1End; i++) {
     levels.push(i);
   }
-  for (let i = extraSeries1Start; i <= extraSeries1End; i++) {
+  for (let i = series6Start; i <= series6End; i++) {
     levels.push(i);
   }
-  for (let i = extraSeriesEasyStart; i <= extraSeriesEasyEnd; i++) {
+  for (let i = seriesEasy2Start; i <= seriesEasy2End; i++) {
     levels.push(i);
   }
-  for (let i = extraSeriesMusicStart; i <= extraSeriesMusicEnd; i++) {
+  for (let i = seriesMusic2Start; i <= seriesMusic2End; i++) {
     levels.push(i);
   }
   return levels;
@@ -917,16 +997,16 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= series4Start && n <= series4End) ||
     (n >= series5Start && n <= series5End) ||
     (n >= seriesSmallStart && n <= seriesSmallEnd) ||
-    (n >= seriesEasyStart && n <= seriesEasyEnd) ||
+    (n >= seriesEasy1Start && n <= seriesEasy1End) ||
     (n >= seriesExtremeStart && n <= seriesExtremeEnd) ||
-    (n >= seriesMusicStart && n <= seriesMusicEnd) ||
+    (n >= seriesMusic1Start && n <= seriesMusic1End) ||
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
     (n >= hiddenMiniSeries1Start && n <= hiddenMiniSeries1End) ||
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
     ((globalVars.fred || globalVars.userP) && (
-      (n >= extraSeries1Start && n <= extraSeries1End) ||
-      (n >= extraSeriesEasyStart && n <= extraSeriesEasyEnd) ||
-      (n >= extraSeriesMusicStart && n <= extraSeriesMusicEnd)
+      (n >= series6Start && n <= series6End) ||
+      (n >= seriesEasy2Start && n <= seriesEasy2End) ||
+      (n >= seriesMusic2Start && n <= seriesMusic2End)
     )) ||
     (n >= 9996) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
@@ -946,9 +1026,9 @@ export function getRandomLevel(currentLevel) {
   levels.push(series4Start);
   levels.push(series5Start);
   levels.push(seriesSmallStart);
-  levels.push(seriesEasyStart);
+  levels.push(seriesEasy1Start);
   levels.push(seriesExtremeStart);
-  levels.push(seriesMusicStart);
+  levels.push(seriesMusic1Start);
 
   for (let i = 0; i < solvedLevels.length; i++) {
     const level = solvedLevels[i];
@@ -968,6 +1048,16 @@ export function getRandomLevel(currentLevel) {
 
 export function isChroniaPolla(n) {
   return ((n >= seriesChoniaPollaStart) && (n <= seriesChoniaPollaEnd));
+}
+
+export function isExtra(n) {
+  return (
+    ((n >= series4Start) && (n <= series4End)) ||
+    ((n >= series5Start) && (n <= series5End)) ||
+    ((n >= series6Start) && (n <= series6End)) ||
+    ((n >= seriesEasy2Start) && (n <= seriesEasy2End)) ||
+    ((n >= seriesMusic2Start) && (n <= seriesMusic2End))
+  )
 }
 
 async function loadFromFile(n, gateTravelling = false) {
@@ -1449,13 +1539,13 @@ export function numberOfLevels() {
   n += (series4End - series4Start) + 1;
   n += (series5End - series5Start) + 1;
   n += (seriesSmallEnd - seriesSmallStart) + 1;
-  n += (seriesEasyEnd - seriesEasyStart) + 1;
+  n += (seriesEasy1End - seriesEasy1Start) + 1;
   n += (seriesExtremeEnd - seriesExtremeStart) + 1;
-  n += (seriesMusicEnd - seriesMusicStart) + 1;
+  n += (seriesMusic1End - seriesMusic1Start) + 1;
   n += (seriesSecretEnd - seriesSecretStart) + 1;
   n += (hiddenMiniSeries1End - hiddenMiniSeries1Start) + 1;
-  n += (extraSeries1End - extraSeries1Start) + 1;
-  n += (extraSeriesEasyEnd - extraSeriesEasyStart) + 1;
+  n += (series6End - series6Start) + 1;
+  n += (seriesEasy2End - seriesEasy2Start) + 1;
   return n;
 }
 

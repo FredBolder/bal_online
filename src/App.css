@@ -1,16 +1,22 @@
 /* RESET */
 
-*, *::before, *::after {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 * {
-  margin: 0;
+    margin: 0;
 }
 
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
 }
 
 
@@ -184,8 +190,9 @@ tr:nth-child(even) td {
 /* PLAY PAGE */
 
 #progress {
-  position: relative;
-  z-index: 0; /* or auto */
+    position: relative;
+    z-index: 0;
+    /* or auto */
 }
 
 .page {
@@ -304,7 +311,7 @@ tr:nth-child(even) td {
 #progress {
     display: flex;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
 }
 
 /* GAME CANVAS AND ARROW BUTTONS */
@@ -362,6 +369,12 @@ tr:nth-child(even) td {
 
 /* OVERVIEW PAGE */
 
+.paypal-wrapper {
+    display: block;
+    flex-shrink: 0;
+    width: 300px;
+}
+
 .seriesList {
     display: flex;
     justify-content: center;
@@ -369,11 +382,11 @@ tr:nth-child(even) td {
     column-gap: 0.5rem;
     row-gap: 0.5rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;  
+    margin-bottom: 1rem;
     font-size: 1rem;
     font-weight: normal;
     width: 100%;
-    max-width: 800px;  
+    max-width: 800px;
 }
 
 /* MEDIA QUERIES */

@@ -34,7 +34,7 @@ import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
-import { addSolvedLevels, checkSettings, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
+import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { instruments } from "../music.js";
@@ -173,7 +173,6 @@ function BalPage() {
   const tryAgainButton = useRef(null);
   const undo = useRef(null);
   const [green, setGreen] = useState(0);
-  const [levelNumber, setLevelNumber] = useState(0);
   const [progressText, setProgressText] = useState("");
 
   const modalStateRef = useRef(null);
@@ -332,7 +331,7 @@ function BalPage() {
       updateGreen();
     }
     if (info.updateLevelNumber) {
-      setLevelNumber(gameVars.currentLevel);
+      updateProgressText();
     }
   }
 
@@ -430,7 +429,7 @@ function BalPage() {
       await initLevel(level);
       // 9999 has a special meaning
       gameVars.currentLevel = 9999;
-      setLevelNumber(9999);
+      updateProgressText();
     }
   }
 
@@ -687,7 +686,7 @@ function BalPage() {
         }
         gameVars = null;
         gameVars = data.gameVars;
-        setLevelNumber(gameVars.currentLevel);
+        updateProgressText();
         updateGameCanvas();
         updateGreen();
       }
@@ -743,7 +742,7 @@ function BalPage() {
       fixDoors(gameInfo);
       updateGameCanvas();
       updateGreen();
-      setLevelNumber(gameVars.currentLevel);
+      updateProgressText();
       if (gameVars.startlevelmessage !== "") {
         showMessage("Message", gameVars.startlevelmessage);
       }
@@ -1152,7 +1151,6 @@ function BalPage() {
       globalVars.loading = true;
       initGameVars(gameVars);
       gameVars.currentLevel = n;
-      setLevelNumber(n);
       gameInfo.blueBall.x = -1;
       gameInfo.blueBall.y = -1;
       data = await getLevel(gameVars.currentLevel, gateTravelling);
@@ -1173,6 +1171,7 @@ function BalPage() {
       gameVars.laser = null;
       gameVars.gameOver = false;
       fixDoors(gameInfo);
+      updateProgressText();
       updateGameCanvas();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
@@ -1888,7 +1887,7 @@ function BalPage() {
         switch (e.key) {
           case "C":
             if (globalVars.fred) {
-              showMessage("Info", numberToCode(gameVars.currentLevel));
+              showMessage("Info", `Level ${gameVars.currentLevel}: ${numberToCode(gameVars.currentLevel)}`);
             }
             break;
           case "H":
@@ -2026,7 +2025,6 @@ function BalPage() {
         updateCreateLevelCanvasDisplay();
         updateMenuItemsDisplay();
         updateGameCanvas();
-        setLevelNumber(gameVars.currentLevel);
         updateGreen();
         window.addEventListener("resize", handleResize);
         intervalRef.current = setInterval(runGameScheduler, schedulerTime());
@@ -2085,7 +2083,7 @@ function BalPage() {
   }
 
   function updateProgressText() {
-    setProgressText(`${solvedLevels.length} of ${numberOfLevels()} levels solved`);
+    setProgressText(`${displayLevelNumber(gameVars.currentLevel, true)} (Solved: ${solvedLevels.length} of ${numberOfLevels()})`);
   }
 
   function updateGreen() {
@@ -3037,7 +3035,7 @@ function BalPage() {
           <div className="balPanel">
             <Link className="menuButton" to="/">Back</Link>
             <div className="menu">
-              <button className="menuButton">Level: {levelNumber}</button>
+              <button className="menuButton">Level</button>
               <div className="menu-content">
                 <div>
                   <input

@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PayPalButton from "./PayPalButton.jsx";
 
 import { globalVars } from "../glob.js";
 import { firstOfSeries } from "../levels.js";
 import {
+  displayLevelNumber, isExtra, numberOfLevels,
   series1Start, series1End,
   series2Start, series2End,
   series3Start, series3End,
   series4Start, series4End,
   series5Start, series5End,
   seriesSmallStart, seriesSmallEnd,
-  seriesEasyStart, seriesEasyEnd,
+  seriesEasy1Start, seriesEasy1End,
   seriesExtremeStart, seriesExtremeEnd,
-  seriesMusicStart, seriesMusicEnd,
+  seriesMusic1Start, seriesMusic1End,
   seriesSecretStart, seriesSecretEnd,
   hiddenMiniSeries1Start, hiddenMiniSeries1End,
-  extraSeries1Start, extraSeries1End,
-  extraSeriesEasyStart, extraSeriesEasyEnd,
-  extraSeriesMusicStart, extraSeriesMusicEnd,
+  // Extra
+  series6Start, series6End,
+  seriesEasy2Start, seriesEasy2End,
+  seriesMusic2Start, seriesMusic2End,
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
 import { loadSettings } from "../settings.js";
@@ -25,7 +28,7 @@ import { loadSettings } from "../settings.js";
 function levelNumberColor(level) {
   let color = "gray";
 
-  if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
+  if (isExtra(level) && !globalVars.userP && !globalVars.fred) {
     return color;
   }
 
@@ -42,7 +45,7 @@ function levelNumberColor(level) {
 function levelNumberCursor(level) {
   let cursor = "auto";
 
-  if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
+  if (isExtra(level) && !globalVars.userP && !globalVars.fred) {
     return cursor;
   }
 
@@ -63,17 +66,19 @@ function OverviewPage() {
   const [series4List, setSeries4List] = useState([]);
   const [series5List, setSeries5List] = useState([]);
   const [seriesSmallList, setSeriesSmallList] = useState([]);
-  const [seriesEasyList, setSeriesEasyList] = useState([]);
+  const [seriesEasy1List, setSeriesEasy1List] = useState([]);
   const [seriesExtremeList, setSeriesExtremeList] = useState([]);
-  const [seriesMusicList, setSeriesMusicList] = useState([]);
+  const [seriesMusic1List, setSeriesMusic1List] = useState([]);
   const [seriesSecretList, setSeriesSecretList] = useState([]);
   const [hiddenMiniSeries1List, setHiddenMiniSeries1List] = useState([]);
-  const [extraSeries1List, setExtraSeries1List] = useState([]);
-  const [extraEasyList, setExtraEasyList] = useState([]);
-  const [extraMusicList, setExtraMusicList] = useState([]);
+  const [series6List, setSeries6List] = useState([]);
+  const [seriesEasy2List, setSeriesEasy2List] = useState([]);
+  const [seriesMusic2List, setSeriesMusic2List] = useState([]);
+
+  const [progressText, setProgressText] = useState("");
 
   function handleClick(level) {
-    if ((level >= 5000) && !globalVars.userP && !globalVars.fred) {
+    if (isExtra(level) && !globalVars.userP && !globalVars.fred) {
       return;
     }
 
@@ -87,6 +92,7 @@ function OverviewPage() {
   async function init() {
     loadSettings();
     await loadProgress();
+    updateProgressText();
 
     const list1 = [];
     for (let i = series1Start; i <= series1End; i++) {
@@ -124,11 +130,11 @@ function OverviewPage() {
     }
     setSeriesSmallList(listSmall);
 
-    const listEasy = [];
-    for (let i = seriesEasyStart; i <= seriesEasyEnd; i++) {
-      listEasy.push(i);
+    const listEasy1 = [];
+    for (let i = seriesEasy1Start; i <= seriesEasy1End; i++) {
+      listEasy1.push(i);
     }
-    setSeriesEasyList(listEasy);
+    setSeriesEasy1List(listEasy1);
 
     const listExtreme = [];
     for (let i = seriesExtremeStart; i <= seriesExtremeEnd; i++) {
@@ -136,11 +142,11 @@ function OverviewPage() {
     }
     setSeriesExtremeList(listExtreme);
 
-    const listMusic = [];
-    for (let i = seriesMusicStart; i <= seriesMusicEnd; i++) {
-      listMusic.push(i);
+    const listMusic1 = [];
+    for (let i = seriesMusic1Start; i <= seriesMusic1End; i++) {
+      listMusic1.push(i);
     }
-    setSeriesMusicList(listMusic);
+    setSeriesMusic1List(listMusic1);
 
     const listSecret = [];
     for (let i = seriesSecretStart; i <= seriesSecretEnd; i++) {
@@ -154,23 +160,27 @@ function OverviewPage() {
     }
     setHiddenMiniSeries1List(listHidden1);
 
-    const listExtra1 = [];
-    for (let i = extraSeries1Start; i <= extraSeries1End; i++) {
-      listExtra1.push(i);
+    const list6 = [];
+    for (let i = series6Start; i <= series6End; i++) {
+      list6.push(i);
     }
-    setExtraSeries1List(listExtra1);
+    setSeries6List(list6);
 
-    const listExtraEasy = [];
-    for (let i = extraSeriesEasyStart; i <= extraSeriesEasyEnd; i++) {
-      listExtraEasy.push(i);
+    const listEasy2 = [];
+    for (let i = seriesEasy2Start; i <= seriesEasy2End; i++) {
+      listEasy2.push(i);
     }
-    setExtraEasyList(listExtraEasy);
+    setSeriesEasy2List(listEasy2);
 
-    const listExtraMusic = [];
-    for (let i = extraSeriesMusicStart; i <= extraSeriesMusicEnd; i++) {
-      listExtraMusic.push(i);
+    const listMusic2 = [];
+    for (let i = seriesMusic2Start; i <= seriesMusic2End; i++) {
+      listMusic2.push(i);
     }
-    setExtraMusicList(listExtraMusic);
+    setSeriesMusic2List(listMusic2);
+  }
+
+  function updateProgressText() {
+    setProgressText(`${solvedLevels.length} of ${numberOfLevels()} levels solved`);
   }
 
   useEffect(() => {
@@ -192,11 +202,12 @@ function OverviewPage() {
           <div className="pageTitle">
             <h1>Bal - Overview</h1>
           </div>
+          <div id="progress">{progressText}</div>
           <div className="textBox">
             The green numbers are the levels that you solved, the white numbers are the unlocked levels and
             the gray numbers are the locked levels.
             You can click on a white or a green number to play that level.<br />
-            IMPORTANT: If you delete your site data, you might lose your progress. You can export your
+            IMPORTANT: If you delete your browser data, you might lose your progress. You can export your
             progress to a file, so you can later import your progress (also on another device).
           </div>
           <h2>Series 1</h2>
@@ -205,7 +216,7 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
@@ -215,7 +226,7 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
@@ -225,27 +236,7 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
-            </div>))}
-          </div>
-
-          <h2>Series 4</h2>
-          <div className="seriesList">
-            {series4List.map((level) => (<div
-              key={level}
-              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
-              onClick={() => handleClick(level)} >
-              {level}
-            </div>))}
-          </div>
-
-          <h2>Series 5</h2>
-          <div className="seriesList">
-            {series5List.map((level) => (<div
-              key={level}
-              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
-              onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
@@ -255,17 +246,17 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
-          <h2>Easy</h2>
+          <h2>Easy 1</h2>
           <div className="seriesList">
-            {seriesEasyList.map((level) => (<div
+            {seriesEasy1List.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
@@ -275,17 +266,17 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
-          <h2>Music</h2>
+          <h2>Music 1</h2>
           <div className="seriesList">
-            {seriesMusicList.map((level) => (<div
+            {seriesMusic1List.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
@@ -295,7 +286,7 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
@@ -305,35 +296,70 @@ function OverviewPage() {
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 
-          <h2>Extra series 1</h2>
+          <h1>Extra levels for members</h1>
+          <div className="textBox">
+            For only 5 euro you can become a member and play the following levels (more to come).
+            For members there are also 2 levels unlocked after a solved level, so if you can not solve the level after the solved one,
+            you can continue with the next level.
+            If you have any questions, please feel free to contact Fred Bolder by sending a message to&nbsp;
+            <a className="link" href="mailto:fgh.bolder@gmail.com">
+              fgh.bolder@gmail.com
+            </a>
+          </div>
+
+          <div className="paypal-wrapper">
+            <PayPalButton />
+          </div>
+
+          <h2>Series 4</h2>
           <div className="seriesList">
-            {extraSeries1List.map((level) => (<div
+            {series4List.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
-          <h2>Extra Easy</h2>
+
+          <h2>Series 5</h2>
           <div className="seriesList">
-            {extraEasyList.map((level) => (<div
+            {series5List.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
             </div>))}
           </div>
-          <h2>Extra Music</h2>
+
+          <h2>Series 6</h2>
           <div className="seriesList">
-            {extraMusicList.map((level) => (<div
+            {series6List.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >
-              {level}
+              {displayLevelNumber(level)}
+            </div>))}
+          </div>
+          <h2>Easy 2</h2>
+          <div className="seriesList">
+            {seriesEasy2List.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {displayLevelNumber(level)}
+            </div>))}
+          </div>
+          <h2>Music 2</h2>
+          <div className="seriesList">
+            {seriesMusic2List.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {displayLevelNumber(level)}
             </div>))}
           </div>
 

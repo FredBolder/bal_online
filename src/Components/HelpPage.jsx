@@ -98,13 +98,11 @@ function HelpPage() {
                         </tbody>
                     </table>
                     <div className="textBox">
-                        If you see for example a
-                        level number 750, it doesn&apos;t mean that there are 750 or even more
-                        levels. The number depends also on the series and on the original Bal game.
                         At the moment there are {numberOfLevelsText} levels.
                         When you solve a level, you will get a code that gives you access
                         to the next level whenever you want by pressing the Code button, so
-                        it is important to write down the code.
+                        it is important to write down the code. If you don&apos;t delete your
+                        browser data, you can also use the Overview page.
                         Some levels are very difficult. If you can&apos;t solve a certain
                         level, you can press the ? button for a hint (if available) or
                         start with another series.
