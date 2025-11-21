@@ -19,7 +19,7 @@ import { checkYellowStoppers } from "./yellowStoppers.js";
 const phaseThroughObjects = [1, 10, 11, 12, 15, 16, 17, 18, 21, 30, 35, 87, 88, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 169, 198];
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205, 207, 226, 227].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205, 207, 226, 227, 228, 229].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -758,6 +758,12 @@ export function charToNumber(c) {
       break;
     case "ґ":
       result = 227;
+      break;
+    case "Ҡ":
+      result = 228;
+      break;
+    case "ҡ":
+      result = 229;
       break;
     case "|":
       result = 1000;
@@ -2011,6 +2017,12 @@ export function numberToChar(n) {
     case 227:
       result = "ґ";
       break;
+    case 228:
+      result = "Ҡ";
+      break;
+    case 229:
+      result = "ҡ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2465,6 +2477,12 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       break;
     case 227:
       result.maj7 = true;
+      break;
+    case 228:
+      result.intervalP5 = true;
+      break;
+    case 229:
+      result.intervalP8 = true;
       break;
     case 192:
       if (!gameInfo.hasWhiteBall) {

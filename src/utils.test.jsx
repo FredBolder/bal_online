@@ -1,35 +1,49 @@
 import { describe, it, expect } from "vitest";
-import { polar, randomInt, reverseString } from "./utils.js";
+import { onlyOneIsTrue, polar, randomInt, reverseString } from "./utils.js";
 
 describe("utils", () => {
-  const input1a = "Hello";
-  const expectedOutput1a = "olleH";
-  const output1a = reverseString(input1a);
-  it("reverseString", () => {
-    expect(output1a).toBe(expectedOutput1a);
+  it("onlyOneIsTrue A", () => {
+    const input = [false, false, true, false];
+    const expectedOutput = true;
+    const output = onlyOneIsTrue(input);
+    expect(output).toBe(expectedOutput);
   });
 
-  const input2a = { x: 100, y: 50 };
-  const expectedOutput2a = { x: 150, y: 50 };
-  const output2a = polar(input2a.x, input2a.y, 0, 50);
+  it("onlyOneIsTrue B", () => {
+    const input = [true, false, true, false];
+    const expectedOutput = false;
+    const output = onlyOneIsTrue(input);
+    expect(output).toBe(expectedOutput);
+  });
+
   it("polar", () => {
-    expect(JSON.stringify(output2a)).toBe(JSON.stringify(expectedOutput2a));
+    const input = { x: 100, y: 50 };
+    const expectedOutput = { x: 150, y: 50 };
+    const output = polar(input.x, input.y, 0, 50);
+    expect(output).toEqual(expectedOutput);
   });
 
-  const input3aMin = 1;
-  const input3aMax = 3;
-  let output3a = randomInt(input3aMin, input3aMax);
-  let output3aOk = output3a >= input3aMin && output3a <= input3aMax;
   it("randomInt 1 - 3", () => {
-    expect(output3aOk).toBe(true);
+    const inputMin = 1;
+    const inputMax = 3;
+    let output = randomInt(inputMin, inputMax);
+    let outputOk = output >= inputMin && output <= inputMax;
+    expect(outputOk).toBe(true);
   });
 
-  const input3bMin = -2;
-  const input3bMax = 2;
-  let output3b = randomInt(input3bMin, input3bMax);
-  let output3bOk = output3b >= input3bMin && output3b <= input3bMax;
   it("randomInt -2 - 2", () => {
-    expect(output3bOk).toBe(true);
+    const inputMin = -2;
+    const inputMax = 2;
+    let output = randomInt(inputMin, inputMax);
+    let outputOk = output >= inputMin && output <= inputMax;
+    expect(outputOk).toBe(true);
+  });
+
+  it("reverseString", () => {
+    const input = "Hello";
+    const expectedOutput = "olleH";
+    const output = reverseString(input);
+    expect(output).toBe(expectedOutput);
   });
 
 });

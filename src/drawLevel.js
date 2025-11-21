@@ -113,7 +113,7 @@ function drawLevel(
 
   function drawAbbreviation(s) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
-    drawText(ctx, xc, yc, s, "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+    drawText(ctx, xc, yc, s, "middle", "white", w2 * 0.7, w1 * 0.8);
   }
 
   function drawAllRedFish() {
@@ -160,7 +160,7 @@ function drawLevel(
         ctx.setLineDash([]);
         ctx.lineWidth = 1;
         if ([0, 31, 92].includes(gameData[teleport.y][teleport.x])) {
-          drawText(ctx, xc, yc, teleport.group.toString(), "middle", teleport.color, w2 * 0.7, w1 * 0.8, teleport.color, 1);
+          drawText(ctx, xc, yc, teleport.group.toString(), "middle", teleport.color, w2 * 0.7, w1 * 0.8);
         }
       }
     }
@@ -221,7 +221,7 @@ function drawLevel(
 
   function drawBallSynchroniser(color) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, color, true);
-    drawText(ctx, xc, yc, "&", "middle", "black", w2 * 0.8, w1 * 0.8, "black", 1);
+    drawText(ctx, xc, yc, "&", "middle", "black", w2 * 0.8, w1 * 0.8);
   }
 
   function drawBarBottom(color) {
@@ -311,9 +311,9 @@ function drawLevel(
     drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
   }
 
-  function drawChordType(chordType) {
+  function drawChordTypeOrInterval(chordTypeOrInterval) {
     drawFilledCircle(ctx, xc, yc, w1 * 0.5, "green", true);
-    drawText(ctx, xc, yc, chordType, "middle", "white", w2 * 0.7, w1 * 0.7, "white", 1);
+    drawText(ctx, xc, yc, chordTypeOrInterval, "middle", "white", w2 * 0.7, w1 * 0.7);
   }
 
   function drawCoilSpring(x, y) {
@@ -378,7 +378,7 @@ function drawLevel(
               break;
           }
           if (txt !== "") {
-            drawText(ctx, xc, yCenter, txt, "middle", "white", w2 * 0.4, w1 * 0.5, "white", 1, angle);
+            drawText(ctx, xc, yCenter, txt, "middle", "white", w2 * 0.4, w1 * 0.5, null, 1, angle);
           }
         }
         break;
@@ -401,7 +401,7 @@ function drawLevel(
 
   function drawCopier(color) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, color, true);
-    drawText(ctx, xc, yc, "2x", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+    drawText(ctx, xc, yc, "2x", "middle", "black", w2 * 0.7, w1 * 0.8);
   }
 
   function drawDamagedStone(x, y) {
@@ -420,7 +420,7 @@ function drawLevel(
 
   function drawDelay() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white", true);
-    drawText(ctx, xc, yc, "t", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+    drawText(ctx, xc, yc, "t", "middle", "black", w2 * 0.7, w1 * 0.8);
   }
 
   function drawDetonator(x, y) {
@@ -432,7 +432,7 @@ function drawLevel(
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
-    drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.4, w1 * 0.54, "white", 1);
+    drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.4, w1 * 0.54);
   }
 
   function drawDiamant(color) {
@@ -886,7 +886,7 @@ function drawLevel(
   function drawGrayBall(moves) {
     ctx.drawImage(elements.elementGray, xmin, ymin, w1, w2);
     if (moves > 0) {
-      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+      drawText(ctx, xc, yc, moves.toString(), "middle", "black", w2 * 0.7, w1 * 0.8);
     }
   }
 
@@ -1108,8 +1108,8 @@ function drawLevel(
       d2 = w2 / 2.3;
       drawFilledBox(ctx, xc - (d1 * 0.5), yc - d2, d1, d2, "blue");
       drawFilledBox(ctx, xc - (d1 * 0.5), yc, d1, d2, "red");
-      drawText(ctx, xc, yc - (d2 * 0.5), "S", "middle", "black", d2 * 0.7, d1 * 0.9, "black", 1);
-      drawText(ctx, xc, yc + (d2 * 0.5), "N", "middle", "black", d2 * 0.7, d1 * 0.9, "black", 1);
+      drawText(ctx, xc, yc - (d2 * 0.5), "S", "middle", "black", d2 * 0.7, d1 * 0.9);
+      drawText(ctx, xc, yc + (d2 * 0.5), "N", "middle", "black", d2 * 0.7, d1 * 0.9);
     } else {
       d1 = w1 * 0.4; // Outer radius
       d2 = w1 * 0.1; // Inner radius
@@ -1208,15 +1208,16 @@ function drawLevel(
         break;
       case "firstcount":
         drawFilledBox(ctx, xmin, ymin, w1, w2, "red");
-        drawText(ctx, xc, yc, "one", "middle", "yellow", w2 * 0.7, w1 * 0.8, "yellow", 1);
+        drawText(ctx, xc, yc, "one", "middle", "yellow", w2 * 0.7, w1 * 0.8);
         break;
       case "chord1":
       case "chord2":
       case "chord3":
       case "chord4":
+      case "interval1":
       case "door":
         drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
-        drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+        drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8);
         break;
       case "keyboard":
         if (notes.length === 1) {
@@ -1388,7 +1389,7 @@ function drawLevel(
 
   function drawNumber(n) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
-    drawText(ctx, xc, yc, n.toString(), "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+    drawText(ctx, xc, yc, n.toString(), "middle", "white", w2 * 0.7, w1 * 0.8);
   }
 
   function drawOneDirectionDown(x, y) {
@@ -1438,7 +1439,7 @@ function drawLevel(
 
   function drawPanagiotis() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
-    drawText(ctx, xc, yc, "π", "middle", "black", w2 * 0.7, w1 * 0.8, "black", 1);
+    drawText(ctx, xc, yc, "π", "middle", "black", w2 * 0.7, w1 * 0.8);
   }
 
   function drawPart(part) {
@@ -1612,7 +1613,7 @@ function drawLevel(
         }
         drawFilledBox(ctx, xc - d1, ymin + d2 + d5, d1 + d1, w2 - (d2 + d4 + d5), "brown");
         if (showGroup) {
-          drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+          drawText(ctx, xc, yc - d3, text, "middle", "black", textHeight, textMaxWidth);
         }
         break;
       case "left":
@@ -1622,7 +1623,7 @@ function drawLevel(
         }
         drawFilledBox(ctx, xmin + d4, yc - d1, w1 - (d2 + d4 + d5), d1 + d1, "brown");
         if (showGroup) {
-          drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+          drawText(ctx, xc + d3, yc, text, "middle", "black", textHeight, textMaxWidth);
         }
         break;
       case "right":
@@ -1632,7 +1633,7 @@ function drawLevel(
         }
         drawFilledBox(ctx, xmin + d2 + d5, yc - d1, w1 - (d2 + d4 + d5), d1 + d1, "brown");
         if (showGroup) {
-          drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+          drawText(ctx, xc - d3, yc, text, "middle", "black", textHeight, textMaxWidth);
         }
         break;
       case "up":
@@ -1642,7 +1643,7 @@ function drawLevel(
         }
         drawFilledBox(ctx, xc - d1, ymin + d4, d1 + d1, w2 - (d2 + d4 + d5), "brown");
         if (showGroup) {
-          drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth, "black", 1);
+          drawText(ctx, xc, yc + d3, text, "middle", "black", textHeight, textMaxWidth);
         }
         break;
       default:
@@ -1693,7 +1694,7 @@ function drawLevel(
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "gray", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
-    drawText(ctx, xc, ymin + w2 * 0.8, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54, "black", 1);
+    drawText(ctx, xc, ymin + w2 * 0.8, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54);
   }
 
   function drawPrevious() {
@@ -1908,7 +1909,7 @@ function drawLevel(
     ctx.restore();
 
     ctx.lineWidth = 1;
-    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.7, w1 * 0.8, "white", 1);
+    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.7, w1 * 0.8);
   }
 
   function drawQuarterCircleStoneBottomLeft(x, y) {
@@ -3209,22 +3210,22 @@ function drawLevel(
           drawGravityChangerDown(currentCol, currentRow);
           break;
         case 186:
-          drawChordType("maj");
+          drawChordTypeOrInterval("maj");
           break;
         case 187:
-          drawChordType("min");
+          drawChordTypeOrInterval("min");
           break;
         case 188:
-          drawChordType("aug");
+          drawChordTypeOrInterval("aug");
           break;
         case 189:
-          drawChordType("dim");
+          drawChordTypeOrInterval("dim");
           break;
         case 190:
-          drawChordType("sus2");
+          drawChordTypeOrInterval("sus2");
           break;
         case 191:
-          drawChordType("sus4");
+          drawChordTypeOrInterval("sus4");
           break;
         case 192:
           drawSmallBall("white");
@@ -3281,10 +3282,16 @@ function drawLevel(
           drawPusher(currentCol, currentRow);
           break;
         case 226:
-          drawChordType("7");
+          drawChordTypeOrInterval("7");
           break;
         case 227:
-          drawChordType("maj7");
+          drawChordTypeOrInterval("maj7");
+          break;
+        case 228:
+          drawChordTypeOrInterval("P5");
+          break;
+        case 229:
+          drawChordTypeOrInterval("P8");
           break;
         case 1000:
           // For manual only (empty)

@@ -53,7 +53,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { removeChar, tryParseInt } from "../utils.js";
+import { onlyOneIsTrue, removeChar, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -1695,6 +1695,12 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "freezeTime")) {
       info.freezeTime = 0;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "intervalP5")) {
+      info.intervalP5 = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "intervalP8")) {
+      info.intervalP8 = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "maj7")) {
       info.maj7 = false;
     }
@@ -1757,19 +1763,21 @@ function BalPage() {
         break;
     }
 
-    if (info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
+    if (info.intervalP5 || info.intervalP8 || info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
       if (gameVars.lastChord !== null) {
         // gameVars.lastChord is a musicBox object
-        if (
-          (info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "major")) ||
-          (info.minor && !info.major && !info.aug && !info.dim && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "minor")) ||
-          (info.aug && !info.dim && !info.minor && !info.major && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "augmented")) ||
-          (info.dim && !info.aug && !info.minor && !info.major && !info.sus2 && !info.sus4 && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "diminished")) ||
-          (info.sus2 && !info.sus4 && !info.major && !info.minor && !info.aug && !info.dim && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "suspended second")) ||
-          (info.sus4 && !info.sus2 && !info.major && !info.minor && !info.aug && !info.dim && !info.dom7 && !info.maj7 && (gameVars.lastChord.chordType === "suspended fourth")) ||
-          (info.dom7 && !info.maj7 && !info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "dominant seventh")) ||
-          (info.maj7 && !info.dom7 && !info.major && !info.minor && !info.aug && !info.dim && !info.sus2 && !info.sus4 && (gameVars.lastChord.chordType === "major seventh"))
-        ) {
+        if (onlyOneIsTrue([info.intervalP5, info.intervalP8, info.major, info.minor, info.aug, info.dim, info.sus2, info.sus4, info.dom7, info.maj7]) && (
+          (info.major && (gameVars.lastChord.chordTypeOrInterval === "major")) ||
+          (info.minor && (gameVars.lastChord.chordTypeOrInterval === "minor")) ||
+          (info.aug && (gameVars.lastChord.chordTypeOrInterval === "augmented")) ||
+          (info.dim && (gameVars.lastChord.chordTypeOrInterval === "diminished")) ||
+          (info.sus2 && (gameVars.lastChord.chordTypeOrInterval === "suspended second")) ||
+          (info.sus4 && (gameVars.lastChord.chordTypeOrInterval === "suspended fourth")) ||
+          (info.dom7 && (gameVars.lastChord.chordTypeOrInterval === "dominant seventh")) ||
+          (info.maj7 && (gameVars.lastChord.chordTypeOrInterval === "major seventh")) ||
+          (info.intervalP5 && (gameVars.lastChord.chordTypeOrInterval === "interval P5")) ||
+          (info.intervalP8 && (gameVars.lastChord.chordTypeOrInterval === "interval P8"))
+        )) {
           gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
           gameVars.lastChord = null;
         } else {
@@ -2847,7 +2855,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

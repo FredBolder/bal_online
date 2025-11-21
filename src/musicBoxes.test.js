@@ -26,52 +26,52 @@ describe("music boxes", () => {
                 {
                     x: 1, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["C4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 2, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["D4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 3, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["E4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 4, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["F4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 5, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["G4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 6, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["A4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 7, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["B4"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 8, y: 2, instrument: "xylophone", volume: 90, mode: "keyboard", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["C5"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 10, y: 4, instrument: "xylophone", volume: 90, mode: "door", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["G4", "E4", "C4", "-"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
                 {
                     x: 12, y: 4, instrument: "xylophone", volume: 90, mode: "door", active: false, ended: false,
                     delay: 5, delayCounter: 0, notes: ["G4", "E4", "C4", "-"], noteIndex: 0, part: "bottom", stepsPerMeasure: 0,
-                    onOne: false, chordType: "?", chordsPlaced: false, direction: "up", group: 1
+                    onOne: false, chordTypeOrInterval: "?", chordsPlaced: false, direction: "up", group: 1
                 },
             ]
         };

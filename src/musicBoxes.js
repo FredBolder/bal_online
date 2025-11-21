@@ -1,6 +1,7 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { augmentedChords, diminishedChords, dom7Chords, maj7Chords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 import { globalVars } from "./glob.js";
+import { intervalP5, intervalP8 } from "./intervals.js";
 import { instruments, playNote, transpose } from "./music.js";
 import { getPreDelay } from "./operator.js";
 import { schedulerTime } from "./scheduler.js";
@@ -146,7 +147,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (["chord1", "chord2", "chord3", "chord4", "door"].includes(musicBox.mode)) {
+        if (["chord1", "chord2", "chord3", "chord4", "interval1", "door"].includes(musicBox.mode)) {
             if (gameData[musicBox.y][musicBox.x] === 157) {
                 if (!musicBox.active) {
                     if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
@@ -175,7 +176,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         gameData[musicBox.y][musicBox.x] = 0;
                     }
                 } else {
-                    if (musicBox.chordType === "?") {
+                    if (musicBox.chordTypeOrInterval === "?") {
                         switch (musicBox.mode) {
                             case "chord1":
                                 randomMajorOrMinorChord(musicBox);
@@ -188,6 +189,9 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                                 break;
                             case "chord4":
                                 randomSeventhChord(musicBox);
+                                break;
+                            case "interval1":
+                                randomP5OrP8Interval(musicBox);
                                 break;
                             default:
                                 break;
@@ -213,16 +217,16 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
+        if (["chord1", "chord2", "chord3", "chord4", "interval1", "door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;
                 if (musicBox.noteIndex >= musicBox.notes.length) {
                     musicBox.noteIndex = 0;
-                    if (["chord1", "chord2", "chord3", "chord4", "door"].includes(musicBox.mode)) {
+                    if (["chord1", "chord2", "chord3", "chord4", "interval1", "door"].includes(musicBox.mode)) {
                         musicBox.ended = true;
                     }
-                    if (musicBox.ended && ["chord1", "chord2", "chord3", "chord4"].includes(musicBox.mode) && !musicBox.chordsPlaced) {
+                    if (musicBox.ended && ["chord1", "chord2", "chord3", "chord4", "interval1"].includes(musicBox.mode) && !musicBox.chordsPlaced) {
                         musicBox.chordsPlaced = true;
                         gameVars.lastChord = musicBox;
                         placeChordObjects(gameData, gameInfo, musicBox);
@@ -317,7 +321,7 @@ export function fixDoors(gameInfo) {
 }
 
 export function musicBoxModes() {
-    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "keyboard", "note", "song"];
+    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "keyboard", "note", "song"];
 }
 
 function placeChordObjects(gameData, gameInfo, musicBox) {
@@ -365,6 +369,10 @@ function placeChordObjects(gameData, gameInfo, musicBox) {
                     gameData[y][x1] = 226;
                     gameData[y][x2] = 227;
                     break;
+                case "interval1":
+                    gameData[y][x1] = 228;
+                    gameData[y][x2] = 229;
+                    break;
                 default:
                     break;
             }
@@ -385,14 +393,38 @@ function randomAugOrDimChord(musicBox) {
         for (let i = 0; i < aug[n2].length; i++) {
             musicBox.notes.push(aug[n2][i]);
         }
-        musicBox.chordType = "augmented";
+        musicBox.chordTypeOrInterval = "augmented";
     } else {
         // diminished
         n2 = randomInt(0, dim.length - 1);
         for (let i = 0; i < dim[n2].length; i++) {
             musicBox.notes.push(dim[n2][i]);
         }
-        musicBox.chordType = "diminished";
+        musicBox.chordTypeOrInterval = "diminished";
+    }
+}
+
+function randomP5OrP8Interval(musicBox) {
+    const P5 = intervalP5();
+    const P8 = intervalP8();
+    const n1 = randomInt(1, 10);
+    let n2 = 0;
+
+    musicBox.notes.length = 0;
+    if (n1 > 5) {
+        // perfect fifth
+        n2 = randomInt(0, P5.length - 1);
+        for (let i = 0; i < P5[n2].length; i++) {
+            musicBox.notes.push(P5[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "interval P5";
+    } else {
+        // perfect eighth
+        n2 = randomInt(0, P8.length - 1);
+        for (let i = 0; i < P8[n2].length; i++) {
+            musicBox.notes.push(P8[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "interval P8";
     }
 }
 
@@ -409,14 +441,14 @@ function randomMajorOrMinorChord(musicBox) {
         for (let i = 0; i < major[n2].length; i++) {
             musicBox.notes.push(major[n2][i]);
         }
-        musicBox.chordType = "major";
+        musicBox.chordTypeOrInterval = "major";
     } else {
         // minor
         n2 = randomInt(0, minor.length - 1);
         for (let i = 0; i < minor[n2].length; i++) {
             musicBox.notes.push(minor[n2][i]);
         }
-        musicBox.chordType = "minor";
+        musicBox.chordTypeOrInterval = "minor";
     }
 }
 
@@ -433,14 +465,14 @@ function randomSeventhChord(musicBox) {
         for (let i = 0; i < dom7[n2].length; i++) {
             musicBox.notes.push(dom7[n2][i]);
         }
-        musicBox.chordType = "dominant seventh";
+        musicBox.chordTypeOrInterval = "dominant seventh";
     } else {
         // maj7
         n2 = randomInt(0, maj7.length - 1);
         for (let i = 0; i < maj7[n2].length; i++) {
             musicBox.notes.push(maj7[n2][i]);
         }
-        musicBox.chordType = "major seventh";
+        musicBox.chordTypeOrInterval = "major seventh";
     }
 }
 
@@ -457,14 +489,14 @@ function randomSuspendedChord(musicBox) {
         for (let i = 0; i < sus2[n2].length; i++) {
             musicBox.notes.push(sus2[n2][i]);
         }
-        musicBox.chordType = "suspended second";
+        musicBox.chordTypeOrInterval = "suspended second";
     } else {
         // sus4
         n2 = randomInt(0, sus4.length - 1);
         for (let i = 0; i < sus4[n2].length; i++) {
             musicBox.notes.push(sus4[n2][i]);
         }
-        musicBox.chordType = "suspended fourth";
+        musicBox.chordTypeOrInterval = "suspended fourth";
     }
 }
 

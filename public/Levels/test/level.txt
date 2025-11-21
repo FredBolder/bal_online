@@ -1,39 +1,19 @@
-$stonepattern: 1
-$musicbox: 3, 2, chord4, 5
-$instrument: 3, 2, piano, 90
-$musicbox: 17, 2, chord4, 5
-$instrument: 17, 2, piano, 90
-$musicbox: 9, 9, chord4, 5
-$instrument: 9, 9, piano, 90
-$musicbox: 11, 9, chord4, 5
-$instrument: 11, 9, piano, 90
-$musicbox: 3, 12, chord4, 5
-$instrument: 3, 12, piano, 90
-$musicbox: 17, 12, chord4, 5
-$instrument: 17, 12, piano, 90
-$pistonmode: 1, 4, whiteball
-$pistonmode: 19, 5, whiteball
-$pistonmode: 19, 17, whiteball
-$pistonmode: 8, 16, momentary
-111111111111111111111
-11 1     1 13    1  1
-11 M   4 <2> 4   M  1
-11 111111111111111=11
-1Ë     3     3   1=11
-11             1  =Ö1
-1111111Џ11 1111111=11
-11       1 1      = 1
-11       111      = 1
-11       M M      = 1
-1111111111 1111111111
-11 1     1 13    1  1
-11 M   4 < > 4   M  1
-11 111111111111111=11
-11 13         44 <=11
-11 1  1 111 111111=11
-11 1111 Ë 5     φ1=11
-11 1 31111 1111   =Ö1
-11 <          1Ω11=11
-111111111m111 1111=11
-1111111111111      11
-111111111111111111111
+$musicbox: 4, 13, interval1, 10
+$instrument: 4, 13, piano, 90
+$musicbox: 10, 13, interval1, 5
+$instrument: 10, 13, piano, 90
+111111111111111
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+13            1
+1   M   2 M   1
+111111111111111

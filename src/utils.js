@@ -28,6 +28,17 @@ export function minMax(value, min, max) {
   return result;
 }
 
+export function onlyOneIsTrue(arr) {
+  let n = 0;
+
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      n++;
+    }
+  }
+  return (n === 1);
+}
+
 export function polar(x, y, angle, dist) {
   let result = { x: x, y: y };
   result.x = dist * Math.cos((angle / 180) * Math.PI) + x;

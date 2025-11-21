@@ -205,7 +205,7 @@ export function getGameInfo(backData, gameData) {
                         part: "bottom",
                         stepsPerMeasure: 0,
                         onOne: false,
-                        chordType: "?",
+                        chordTypeOrInterval: "?",
                         chordsPlaced: false,
                         direction: "up",
                         group: 1
@@ -318,6 +318,7 @@ export function getGameInfo(backData, gameData) {
 
 export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
     let backInfo = "";
+    let element = 0;
     let extraBackInfo = "Additional object information not found!";
     let extraInfo = "Additional object information not found!";
     let firstNote = "";
@@ -326,6 +327,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
     let obj = null;
     let result = "";
 
+    element = gameData[y][x];
     if (all) {
         switch (backData[y][x]) {
             case 20:
@@ -360,7 +362,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
         }
     }
 
-    switch (gameData[y][x]) {
+    switch (element) {
         case 157:
             idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
             if (idx >= 0) {
@@ -419,567 +421,584 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             info = `Mover, ` + extraInfo;
             break;
         default:
-            if (all) {
-                switch (gameData[y][x]) {
-                    case 1:
-                        info = `Stone`;
-                        break;
-                    case 2:
-                        info = `Blue ball (player)`;
-                        break;
-                    case 3:
-                        info = `Small green ball`;
-                        break;
-                    case 4:
-                        info = `White ball`;
-                        break;
-                    case 5:
-                        info = `Light blue ball`;
-                        break;
-                    case 6:
-                    case 106:
-                        idx = findElementByCoordinates(x, y, gameInfo.elevators);
-                        if (idx >= 0) {
-                            obj = gameInfo.elevators[idx];
-                            extraInfo = `Up: ${obj.up}`;
-                        }
-                        info = `Elevator, ` + extraInfo;
-                        break;
-                    case 7:
-                    case 107:
-                        idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
-                        if (idx >= 0) {
-                            obj = gameInfo.horizontalElevators[idx];
-                            extraInfo = `Right: ${obj.right}`;
-                        }
-                        info = `Horizontal elevator, ` + extraInfo;
-                        break;
-                    case 8:
-                    case 93:
-                    case 94:
-                        idx = findElementByCoordinates(x, y, gameInfo.redBalls);
-                        if (idx >= 0) {
-                            obj = gameInfo.redBalls[idx];
-                            extraInfo = `Smart: ${obj.smart}, Direction: ${obj.direction}, Skip elevator count: ${obj.skipElevatorCount}, Skip follow count: ${obj.skipFollowCount}`;
-                        }
-                        info = `Red ball, ` + extraInfo;
-                        break;
-                    case 9:
-                        idx = findElementByCoordinates(x, y, gameInfo.yellowBalls);
-                        if (idx >= 0) {
-                            obj = gameInfo.yellowBalls[idx];
-                            extraInfo = `Direction: ${obj.direction}`;
-                        }
-                        info = `Yellow ball, ` + extraInfo;
-                        break;
-                    case 10:
-                        info = `One direction port right`;
-                        break;
-                    case 11:
-                        info = `One direction port left`;
-                        break;
-                    case 12:
-                        idx = findElementByCoordinates(x, y, gameInfo.damagedStones);
-                        if (idx >= 0) {
-                            obj = gameInfo.damagedStones[idx];
-                            extraInfo = `Status: ${obj.status}`;
-                        }
-                        info = `Damaged stone, ` + extraInfo;
-                        break;
-                    case 13:
-                        idx = findElementByCoordinates(x, y, gameInfo.trapDoors);
-                        if (idx >= 0) {
-                            obj = gameInfo.trapDoors[idx];
-                            extraInfo = `Status: ${obj.status}`;
-                        }
-                        info = `Trap door, ` + extraInfo;
-                        break;
-                    case 14:
-                        info = `Trap door half open`;
-                        break;
-                    case 15:
-                        info = `Triangle stone bottom left`;
-                        break;
-                    case 16:
-                        info = `Triangle stone bottom right`;
-                        break;
-                    case 17:
-                        info = `Triangle stone top left`;
-                        break;
-                    case 18:
-                        info = `Triangle stone top right`;
-                        break;
-                    case 21:
-                        info = `Palm tree trunk part`;
-                        break;
-                    case 22:
-                        info = `Lava`;
-                        break;
-                    case 24:
-                        info = `Panagiotis (creator of this level)`;
-                        break;
-                    case 26:
-                        info = `Diving glasses`;
-                        break;
-                    case 27:
-                        idx = findElementByCoordinates(x, y, gameInfo.redFish);
-                        if (idx >= 0) {
-                            obj = gameInfo.redFish[idx];
-                            extraInfo = `Direction: ${obj.direction}, Dead: ${obj.isDead}`;
-                        }
-                        info = `Red fish, ` + extraInfo;
-                        break;
-                    case 28:
-                        info = `Purple ball`;
-                        break;
-                    case 29:
-                        info = `Key`;
-                        break;
-                    case 30:
-                        info = `Locked door`;
-                        break;
-                    case 31:
-                        idx = findElementByCoordinates(x, y, gameInfo.teleports);
-                        if (idx >= 0) {
-                            obj = gameInfo.teleports[idx];
-                            extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
-                        }
-                        info = `Teleport, ` + extraInfo;
-                        break;
-                    case 34:
-                        info = `Pickaxe`;
-                        break;
-                    case 35:
-                        info = `Weak stone`;
-                        break;
-                    case 36:
-                        info = `Bomb`;
-                        break;
-                    case 37:
-                        info = `Detonator`;
-                        break;
-                    case 38:
-                        info = `Explosion`;
-                        break;
-                    case 39:
-                        idx = findElementByCoordinates(x, y, gameInfo.elevatorInOuts);
-                        if (idx >= 0) {
-                            obj = gameInfo.elevatorInOuts[idx];
-                            extraInfo = `Player: ${obj.player}, Status: ${obj.status}`;
-                        }
-                        info = `Elevator entrance and exit, ` + extraInfo;
-                        break;
-                    case 40:
-                        idx = findElementByCoordinates(x, y, gameInfo.orangeBalls);
-                        if (idx >= 0) {
-                            obj = gameInfo.orangeBalls[idx];
-                            extraInfo = `Direction: ${obj.direction}`;
-                        }
-                        info = `Orange ball, ` + extraInfo;
-                        break;
-                    case 81:
-                        info = `Propeller`;
-                        break;
-                    case 82:
-                        info = `Gray ball one move`;
-                        break;
-                    case 83:
-                        info = `Gray ball`;
-                        break;
-                    case 84:
-                        info = `Direction changer 1`;
-                        break;
-                    case 85:
-                        info = `Direction changer 2`;
-                        break;
-                    case 86:
-                        info = `Direction changer 3`;
-                        break;
-                    case 87:
-                        info = `One direction port up`;
-                        break;
-                    case 88:
-                        info = `One direction port down`;
-                        break;
-                    case 89:
-                        info = `Game rotator right`;
-                        break;
-                    case 91:
-                        info = `Electricity`;
-                        break;
-                    case 92:
-                        idx = findElementByCoordinates(x, y, gameInfo.teleports);
-                        if (idx >= 0) {
-                            obj = gameInfo.teleports[idx];
-                            extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
-                        }
-                        info = `Self-destructing teleport, ` + extraInfo;
-                        break;
-                    case 95:
-                        info = `Mirror 1`;
-                        break;
-                    case 96:
-                        info = `Mirror 2`;
-                        break;
-                    case 97:
-                    case 208:
-                        idx = findElementByCoordinates(x, y, gameInfo.copiers);
-                        if (idx >= 0) {
-                            obj = gameInfo.copiers[idx];
-                            extraInfo = `Color: ${obj.color}`;
-                        }
-                        info = `Copier, ` + extraInfo;
-                        break;
-                    case 98:
-                        info = `Gray ball two moves`;
-                        break;
-                    case 99:
-                        info = `Small weak stone`;
-                        break;
-                    case 100:
-                        info = `Purple bar left`;
-                        break;
-                    case 101:
-                        info = `Purple bar right`;
-                        break;
-                    case 102:
-                        info = `Purple bar middle`;
-                        break;
-                    case 103:
-                        info = `Purple bar top`;
-                        break;
-                    case 104:
-                        info = `Purple bar bottom`;
-                        break;
-                    case 105:
-                        info = `Light bulb`;
-                        break;
-                    case 108:
-                        info = `Small ladder`;
-                        break;
-                    case 109:
-                    case 110:
-                    case 111:
-                    case 112:
-                        idx = findElementByCoordinates(x, y, gameInfo.forces);
-                        if (idx >= 0) {
-                            obj = gameInfo.forces[idx];
-                            extraInfo = `Direction: ${obj.direction}`;
-                        }
-                        info = `Force, ` + extraInfo;
-                        break;
-                    case 113:
-                        info = `Water surface right`;
-                        break;
-                    case 114:
-                        info = `Water surface left`;
-                        break;
-                    case 115:
-                        info = `Yellow pusher`;
-                        break;
-                    case 116:
-                        idx = findElementByCoordinates(x, y, gameInfo.yellowBallPushersTriggers);
-                        if (idx >= 0) {
-                            obj = gameInfo.yellowBallPushersTriggers[idx];
-                            extraInfo = `Pressed: ${obj.pressed}`;
-                        }
-                        info = `Yellow pushers trigger, ` + extraInfo;
-                        break;
-                    case 117:
-                        idx = findElementByCoordinates(x, y, gameInfo.timeBombs);
-                        if (idx >= 0) {
-                            obj = gameInfo.timeBombs[idx];
-                            extraInfo = `Status: ${obj.status}`;
-                        }
-                        info = `Time bomb, ` + extraInfo;
-                        break;
-                    case 118:
-                        info = `Coil spring`;
-                        break;
-                    case 119:
-                        info = `Magnet`;
-                        break;
-                    case 120:
-                        info = `Time freezer`;
-                        break;
-                    case 121:
-                    case 124:
-                        idx = findElementByCoordinates(x, y, gameInfo.yellowBars);
-                        if (idx >= 0) {
-                            obj = gameInfo.yellowBars[idx];
-                            extraInfo = `Direction: ${obj.direction}`;
-                        }
-                        info = `Yellow bar, ` + extraInfo;
-                        break;
-                    case 122:
-                        info = `Yellow bar right`;
-                        break;
-                    case 123:
-                        info = `Yellow bar middle`;
-                        break;
-                    case 125:
-                        info = `Yellow bar bottom`;
-                        break;
-                    case 126:
-                        info = `Light blue bar left`;
-                        break;
-                    case 127:
-                        info = `Light blue bar right`;
-                        break;
-                    case 128:
-                        info = `Light blue bar middle`;
-                        break;
-                    case 129:
-                        info = `Light blue bar top`;
-                        break;
-                    case 130:
-                        info = `Light blue bar bottom`;
-                        break;
-                    case 131:
-                        idx = findElementByCoordinates(x, y, gameInfo.yellowStoppers);
-                        if (idx >= 0) {
-                            obj = gameInfo.yellowStoppers[idx];
-                            extraInfo = `Pressed: ${obj.pressed}`;
-                        }
-                        info = `Yellow stopper, ` + extraInfo;
-                        break;
-                    case 132:
-                        info = `Travel gate`;
-                        break;
-                    case 133:
-                        info = `Yellow diamant`;
-                        break;
-                    case 134:
-                        info = `Blue diamant`;
-                        break;
-                    case 135:
-                        info = `Red diamant`;
-                        break;
-                    case 136:
-                        idx = findElementByCoordinates(x, y, gameInfo.yellowPausers);
-                        if (idx >= 0) {
-                            obj = gameInfo.yellowPausers[idx];
-                            extraInfo = `Pressed: ${obj.pressed}`;
-                        }
-                        info = `Yellow pauser, ` + extraInfo;
-                        break;
-                    case 138:
-                        info = `Direction changer 4`;
-                        break;
-                    case 139:
-                        info = `Direction changer 5`;
-                        break;
-                    case 140:
-                        info = `Small silver ball`;
-                        break;
-                    case 141:
-                        info = `Quarter circle stone bottom left`;
-                        break;
-                    case 142:
-                        info = `Quarter circle stone bottom right`;
-                        break;
-                    case 143:
-                        info = `Quarter circle stone top left`;
-                        break;
-                    case 144:
-                        info = `Quarter circle stone top right`;
-                        break;
-                    case 145:
-                        info = `Half stone left`;
-                        break;
-                    case 146:
-                        info = `Half stone right`;
-                        break;
-                    case 147:
-                        info = `Half stone top`;
-                        break;
-                    case 148:
-                        info = `Half stone bottom`;
-                        break;
-                    case 149:
-                        info = `Quarter stone bottom left`;
-                        break;
-                    case 150:
-                        info = `Quarter stone bottom right`;
-                        break;
-                    case 151:
-                        info = `Quarter stone top left`;
-                        break;
-                    case 152:
-                        info = `Quarter stone top right`;
-                        break;
-                    case 153:
-                        info = `Stone pattern 1`;
-                        break;
-                    case 154:
-                        info = `Stone pattern 2`;
-                        break;
-                    case 155:
-                        info = `Yellow ball synchroniser`;
-                        break;
-                    case 156:
-                        info = `Yellow slowdowner`;
-                        break;
-                    case 160:
-                        info = `Piston up extended part`;
-                        break;
-                    case 162:
-                        info = `Piston down extended part`;
-                        break;
-                    case 164:
-                        info = `Piston left extended part`;
-                        break;
-                    case 166:
-                        info = `Piston right extended part`;
-                        break;
-                    case 168:
-                        info = `Small blue ball`;
-                        break;
-                    case 169:
-                        info = `Door`;
-                        break;
-                    case 172:
-                        info = `Conveyor belt middle`;
-                        break;
-                    case 173:
-                        info = `Conveyor belt right`;
-                        break;
-                    case 174:
-                        info = `Spike up`;
-                        break;
-                    case 175:
-                        info = `Spike down`;
-                        break;
-                    case 176:
-                        info = `Spike right`;
-                        break;
-                    case 177:
-                        info = `Spike left`;
-                        break;
-                    case 179:
-                        info = `Yellow star`;
-                        break;
-                    case 180:
-                        info = `Blue star`;
-                        break;
-                    case 181:
-                        info = `Silver star`;
-                        break;
-                    case 182:
-                        info = `Red star`;
-                        break;
-                    case 183:
-                        info = `Game rotator left`;
-                        break;
-                    case 184:
-                        info = `Gravity changer up`;
-                        break;
-                    case 185:
-                        info = `Gravity changer down`;
-                        break;
-                    case 186:
-                        info = `Major chord`;
-                        break;
-                    case 187:
-                        info = `Minor chord`;
-                        break;
-                    case 188:
-                        info = `Augmented chord`;
-                        break;
-                    case 189:
-                        info = `Diminished chord`;
-                        break;
-                    case 190:
-                        info = `Suspended second chord`;
-                        break;
-                    case 191:
-                        info = `Suspended fourth chord`;
-                        break;
-                    case 192:
-                        info = `Small white ball`;
-                        break;
-                    case 193:
-                        info = `Teleports creator`;
-                        break;
-                    case 194:
-                        info = `Self-destructing teleports creator`;
-                        break;
-                    case 195:
-                        info = `Small light blue ball`;
-                        break;
-                    case 196:
-                        info = `Small yellow ball`;
-                        break;
-                    case 197:
-                        info = `Small purple ball`;
-                        break;
-                    case 198:
-                        idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
-                        if (idx >= 0) {
-                            obj = gameInfo.disappearingStones[idx];
-                            extraInfo = `Status: ${obj.status}, Pattern: ${JSON.stringify(obj.pattern)}`;
-                        }
-                        info = `Disappearing stone, ` + extraInfo;
-                        break;
-                    case 200:
-                        idx = findElementByCoordinates(x, y, gameInfo.whiteBallSynchronisers);
-                        if (idx >= 0) {
-                            obj = gameInfo.whiteBallSynchronisers[idx];
-                            extraInfo = `object information found`;
-                        }
-                        info = `White ball synchroniser, ` + extraInfo;
-                        break;
-                    case 203:
-                        idx = findElementByCoordinates(x, y, gameInfo.pinkBalls);
-                        if (idx >= 0) {
-                            obj = gameInfo.pinkBalls[idx];
-                            extraInfo = `Delete: ${obj.delete}, Counter:  ${obj.counter}`;
-                        }
-                        info = `Pink ball, ` + extraInfo;
-                        break;
-                    case 201:
-                        info = `Small red ball`;
-                        break;
-                    case 202:
-                        info = `Small orange ball`;
-                        break;
-                    case 204:
-                        info = `Small pink ball`;
-                        break;
-                    case 205:
-                        info = `Freeze gun`;
-                        break;
-                    case 206:
-                        idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
-                        if (idx >= 0) {
-                            obj = gameInfo.waterWithIceObjects[idx];
-                            extraInfo = `Status: ${obj.status}, Object number: ${obj.objectNumber}`;
-                        }
-                        info = `Water with a layer of ice on top, ` + extraInfo;
-                        break;
-                    case 207:
-                        info = `Phase ability`;
-                        break;
-                    case 209:
-                        idx = findElementByCoordinates(x, y, gameInfo.pushers);
-                        if (idx >= 0) {
-                            obj = gameInfo.pushers[idx];
-                            extraInfo = `Direction: ${obj.direction}, group: ${obj.group}`;
-                        }
-                        info = `Pusher, ` + extraInfo;
-                        break;
-                    case 226:
-                        info = `Dominant seventh chord`;
-                        break;
-                    case 227:
-                        info = `Major seventh chord`;
-                        break;
-                    default:
-                        break;
-                }
-            }
             break;
     }
+
+    if (all) {
+        if (element >= 210 && element <= 225) {
+            element = -10;
+        }
+        switch (element) {
+            case -10:
+                info = `Stone shape`;
+                break;
+            case 1:
+                info = `Stone`;
+                break;
+            case 2:
+                info = `Blue ball (player)`;
+                break;
+            case 3:
+                info = `Small green ball`;
+                break;
+            case 4:
+                info = `White ball`;
+                break;
+            case 5:
+                info = `Light blue ball`;
+                break;
+            case 6:
+            case 106:
+                idx = findElementByCoordinates(x, y, gameInfo.elevators);
+                if (idx >= 0) {
+                    obj = gameInfo.elevators[idx];
+                    extraInfo = `Up: ${obj.up}`;
+                }
+                info = `Elevator, ` + extraInfo;
+                break;
+            case 7:
+            case 107:
+                idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
+                if (idx >= 0) {
+                    obj = gameInfo.horizontalElevators[idx];
+                    extraInfo = `Right: ${obj.right}`;
+                }
+                info = `Horizontal elevator, ` + extraInfo;
+                break;
+            case 8:
+            case 93:
+            case 94:
+                idx = findElementByCoordinates(x, y, gameInfo.redBalls);
+                if (idx >= 0) {
+                    obj = gameInfo.redBalls[idx];
+                    extraInfo = `Smart: ${obj.smart}, Direction: ${obj.direction}, Skip elevator count: ${obj.skipElevatorCount}, Skip follow count: ${obj.skipFollowCount}`;
+                }
+                info = `Red ball, ` + extraInfo;
+                break;
+            case 9:
+                idx = findElementByCoordinates(x, y, gameInfo.yellowBalls);
+                if (idx >= 0) {
+                    obj = gameInfo.yellowBalls[idx];
+                    extraInfo = `Direction: ${obj.direction}`;
+                }
+                info = `Yellow ball, ` + extraInfo;
+                break;
+            case 10:
+                info = `One direction port right`;
+                break;
+            case 11:
+                info = `One direction port left`;
+                break;
+            case 12:
+                idx = findElementByCoordinates(x, y, gameInfo.damagedStones);
+                if (idx >= 0) {
+                    obj = gameInfo.damagedStones[idx];
+                    extraInfo = `Status: ${obj.status}`;
+                }
+                info = `Damaged stone, ` + extraInfo;
+                break;
+            case 13:
+                idx = findElementByCoordinates(x, y, gameInfo.trapDoors);
+                if (idx >= 0) {
+                    obj = gameInfo.trapDoors[idx];
+                    extraInfo = `Status: ${obj.status}`;
+                }
+                info = `Trap door, ` + extraInfo;
+                break;
+            case 14:
+                info = `Trap door half open`;
+                break;
+            case 15:
+                info = `Triangle stone bottom left`;
+                break;
+            case 16:
+                info = `Triangle stone bottom right`;
+                break;
+            case 17:
+                info = `Triangle stone top left`;
+                break;
+            case 18:
+                info = `Triangle stone top right`;
+                break;
+            case 21:
+                info = `Palm tree trunk part`;
+                break;
+            case 22:
+                info = `Lava`;
+                break;
+            case 24:
+                info = `Panagiotis (creator of this level)`;
+                break;
+            case 26:
+                info = `Diving glasses`;
+                break;
+            case 27:
+                idx = findElementByCoordinates(x, y, gameInfo.redFish);
+                if (idx >= 0) {
+                    obj = gameInfo.redFish[idx];
+                    extraInfo = `Direction: ${obj.direction}, Dead: ${obj.isDead}`;
+                }
+                info = `Red fish, ` + extraInfo;
+                break;
+            case 28:
+                info = `Purple ball`;
+                break;
+            case 29:
+                info = `Key`;
+                break;
+            case 30:
+                info = `Locked door`;
+                break;
+            case 31:
+                idx = findElementByCoordinates(x, y, gameInfo.teleports);
+                if (idx >= 0) {
+                    obj = gameInfo.teleports[idx];
+                    extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
+                }
+                info = `Teleport, ` + extraInfo;
+                break;
+            case 34:
+                info = `Pickaxe`;
+                break;
+            case 35:
+                info = `Weak stone`;
+                break;
+            case 36:
+                info = `Bomb`;
+                break;
+            case 37:
+                info = `Detonator`;
+                break;
+            case 38:
+                info = `Explosion`;
+                break;
+            case 39:
+                idx = findElementByCoordinates(x, y, gameInfo.elevatorInOuts);
+                if (idx >= 0) {
+                    obj = gameInfo.elevatorInOuts[idx];
+                    extraInfo = `Player: ${obj.player}, Status: ${obj.status}`;
+                }
+                info = `Elevator entrance and exit, ` + extraInfo;
+                break;
+            case 40:
+                idx = findElementByCoordinates(x, y, gameInfo.orangeBalls);
+                if (idx >= 0) {
+                    obj = gameInfo.orangeBalls[idx];
+                    extraInfo = `Direction: ${obj.direction}`;
+                }
+                info = `Orange ball, ` + extraInfo;
+                break;
+            case 81:
+                info = `Propeller`;
+                break;
+            case 82:
+                info = `Gray ball one move`;
+                break;
+            case 83:
+                info = `Gray ball`;
+                break;
+            case 84:
+                info = `Direction changer 1`;
+                break;
+            case 85:
+                info = `Direction changer 2`;
+                break;
+            case 86:
+                info = `Direction changer 3`;
+                break;
+            case 87:
+                info = `One direction port up`;
+                break;
+            case 88:
+                info = `One direction port down`;
+                break;
+            case 89:
+                info = `Game rotator right`;
+                break;
+            case 91:
+                info = `Electricity`;
+                break;
+            case 92:
+                idx = findElementByCoordinates(x, y, gameInfo.teleports);
+                if (idx >= 0) {
+                    obj = gameInfo.teleports[idx];
+                    extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
+                }
+                info = `Self-destructing teleport, ` + extraInfo;
+                break;
+            case 95:
+                info = `Mirror 1`;
+                break;
+            case 96:
+                info = `Mirror 2`;
+                break;
+            case 97:
+            case 208:
+                idx = findElementByCoordinates(x, y, gameInfo.copiers);
+                if (idx >= 0) {
+                    obj = gameInfo.copiers[idx];
+                    extraInfo = `Color: ${obj.color}`;
+                }
+                info = `Copier, ` + extraInfo;
+                break;
+            case 98:
+                info = `Gray ball two moves`;
+                break;
+            case 99:
+                info = `Small weak stone`;
+                break;
+            case 100:
+                info = `Purple bar left`;
+                break;
+            case 101:
+                info = `Purple bar right`;
+                break;
+            case 102:
+                info = `Purple bar middle`;
+                break;
+            case 103:
+                info = `Purple bar top`;
+                break;
+            case 104:
+                info = `Purple bar bottom`;
+                break;
+            case 105:
+                info = `Light bulb`;
+                break;
+            case 108:
+                info = `Small ladder`;
+                break;
+            case 109:
+            case 110:
+            case 111:
+            case 112:
+                idx = findElementByCoordinates(x, y, gameInfo.forces);
+                if (idx >= 0) {
+                    obj = gameInfo.forces[idx];
+                    extraInfo = `Direction: ${obj.direction}`;
+                }
+                info = `Force, ` + extraInfo;
+                break;
+            case 113:
+                info = `Water surface right`;
+                break;
+            case 114:
+                info = `Water surface left`;
+                break;
+            case 115:
+                info = `Yellow pusher`;
+                break;
+            case 116:
+                idx = findElementByCoordinates(x, y, gameInfo.yellowBallPushersTriggers);
+                if (idx >= 0) {
+                    obj = gameInfo.yellowBallPushersTriggers[idx];
+                    extraInfo = `Pressed: ${obj.pressed}`;
+                }
+                info = `Yellow pushers trigger, ` + extraInfo;
+                break;
+            case 117:
+                idx = findElementByCoordinates(x, y, gameInfo.timeBombs);
+                if (idx >= 0) {
+                    obj = gameInfo.timeBombs[idx];
+                    extraInfo = `Status: ${obj.status}`;
+                }
+                info = `Time bomb, ` + extraInfo;
+                break;
+            case 118:
+                info = `Coil spring`;
+                break;
+            case 119:
+                info = `Magnet`;
+                break;
+            case 120:
+                info = `Time freezer`;
+                break;
+            case 121:
+            case 124:
+                idx = findElementByCoordinates(x, y, gameInfo.yellowBars);
+                if (idx >= 0) {
+                    obj = gameInfo.yellowBars[idx];
+                    extraInfo = `Direction: ${obj.direction}`;
+                }
+                info = `Yellow bar, ` + extraInfo;
+                break;
+            case 122:
+                info = `Yellow bar right`;
+                break;
+            case 123:
+                info = `Yellow bar middle`;
+                break;
+            case 125:
+                info = `Yellow bar bottom`;
+                break;
+            case 126:
+                info = `Light blue bar left`;
+                break;
+            case 127:
+                info = `Light blue bar right`;
+                break;
+            case 128:
+                info = `Light blue bar middle`;
+                break;
+            case 129:
+                info = `Light blue bar top`;
+                break;
+            case 130:
+                info = `Light blue bar bottom`;
+                break;
+            case 131:
+                idx = findElementByCoordinates(x, y, gameInfo.yellowStoppers);
+                if (idx >= 0) {
+                    obj = gameInfo.yellowStoppers[idx];
+                    extraInfo = `Pressed: ${obj.pressed}`;
+                }
+                info = `Yellow stopper, ` + extraInfo;
+                break;
+            case 132:
+                info = `Travel gate`;
+                break;
+            case 133:
+                info = `Yellow diamant`;
+                break;
+            case 134:
+                info = `Blue diamant`;
+                break;
+            case 135:
+                info = `Red diamant`;
+                break;
+            case 136:
+                idx = findElementByCoordinates(x, y, gameInfo.yellowPausers);
+                if (idx >= 0) {
+                    obj = gameInfo.yellowPausers[idx];
+                    extraInfo = `Pressed: ${obj.pressed}`;
+                }
+                info = `Yellow pauser, ` + extraInfo;
+                break;
+            case 138:
+                info = `Direction changer 4`;
+                break;
+            case 139:
+                info = `Direction changer 5`;
+                break;
+            case 140:
+                info = `Small silver ball`;
+                break;
+            case 141:
+                info = `Quarter circle stone bottom left`;
+                break;
+            case 142:
+                info = `Quarter circle stone bottom right`;
+                break;
+            case 143:
+                info = `Quarter circle stone top left`;
+                break;
+            case 144:
+                info = `Quarter circle stone top right`;
+                break;
+            case 145:
+                info = `Half stone left`;
+                break;
+            case 146:
+                info = `Half stone right`;
+                break;
+            case 147:
+                info = `Half stone top`;
+                break;
+            case 148:
+                info = `Half stone bottom`;
+                break;
+            case 149:
+                info = `Quarter stone bottom left`;
+                break;
+            case 150:
+                info = `Quarter stone bottom right`;
+                break;
+            case 151:
+                info = `Quarter stone top left`;
+                break;
+            case 152:
+                info = `Quarter stone top right`;
+                break;
+            case 153:
+                info = `Stone pattern 1`;
+                break;
+            case 154:
+                info = `Stone pattern 2`;
+                break;
+            case 155:
+                info = `Yellow ball synchroniser`;
+                break;
+            case 156:
+                info = `Yellow slowdowner`;
+                break;
+            case 160:
+                info = `Piston up extended part`;
+                break;
+            case 162:
+                info = `Piston down extended part`;
+                break;
+            case 164:
+                info = `Piston left extended part`;
+                break;
+            case 166:
+                info = `Piston right extended part`;
+                break;
+            case 168:
+                info = `Small blue ball`;
+                break;
+            case 169:
+                info = `Door`;
+                break;
+            case 172:
+                info = `Conveyor belt middle`;
+                break;
+            case 173:
+                info = `Conveyor belt right`;
+                break;
+            case 174:
+                info = `Spike up`;
+                break;
+            case 175:
+                info = `Spike down`;
+                break;
+            case 176:
+                info = `Spike right`;
+                break;
+            case 177:
+                info = `Spike left`;
+                break;
+            case 179:
+                info = `Yellow star`;
+                break;
+            case 180:
+                info = `Blue star`;
+                break;
+            case 181:
+                info = `Silver star`;
+                break;
+            case 182:
+                info = `Red star`;
+                break;
+            case 183:
+                info = `Game rotator left`;
+                break;
+            case 184:
+                info = `Gravity changer up`;
+                break;
+            case 185:
+                info = `Gravity changer down`;
+                break;
+            case 186:
+                info = `Major chord`;
+                break;
+            case 187:
+                info = `Minor chord`;
+                break;
+            case 188:
+                info = `Augmented chord`;
+                break;
+            case 189:
+                info = `Diminished chord`;
+                break;
+            case 190:
+                info = `Suspended second chord`;
+                break;
+            case 191:
+                info = `Suspended fourth chord`;
+                break;
+            case 192:
+                info = `Small white ball`;
+                break;
+            case 193:
+                info = `Teleports creator`;
+                break;
+            case 194:
+                info = `Self-destructing teleports creator`;
+                break;
+            case 195:
+                info = `Small light blue ball`;
+                break;
+            case 196:
+                info = `Small yellow ball`;
+                break;
+            case 197:
+                info = `Small purple ball`;
+                break;
+            case 198:
+                idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+                if (idx >= 0) {
+                    obj = gameInfo.disappearingStones[idx];
+                    extraInfo = `Status: ${obj.status}, Pattern: ${JSON.stringify(obj.pattern)}`;
+                }
+                info = `Disappearing stone, ` + extraInfo;
+                break;
+            case 199:    
+                info = `Shrinker`;
+                break;
+            case 200:
+                idx = findElementByCoordinates(x, y, gameInfo.whiteBallSynchronisers);
+                if (idx >= 0) {
+                    obj = gameInfo.whiteBallSynchronisers[idx];
+                    extraInfo = `object information found`;
+                }
+                info = `White ball synchroniser, ` + extraInfo;
+                break;
+            case 203:
+                idx = findElementByCoordinates(x, y, gameInfo.pinkBalls);
+                if (idx >= 0) {
+                    obj = gameInfo.pinkBalls[idx];
+                    extraInfo = `Delete: ${obj.delete}, Counter:  ${obj.counter}`;
+                }
+                info = `Pink ball, ` + extraInfo;
+                break;
+            case 201:
+                info = `Small red ball`;
+                break;
+            case 202:
+                info = `Small orange ball`;
+                break;
+            case 204:
+                info = `Small pink ball`;
+                break;
+            case 205:
+                info = `Freeze gun`;
+                break;
+            case 206:
+                idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
+                if (idx >= 0) {
+                    obj = gameInfo.waterWithIceObjects[idx];
+                    extraInfo = `Status: ${obj.status}, Object number: ${obj.objectNumber}`;
+                }
+                info = `Water with a layer of ice on top, ` + extraInfo;
+                break;
+            case 207:
+                info = `Phase ability`;
+                break;
+            case 209:
+                idx = findElementByCoordinates(x, y, gameInfo.pushers);
+                if (idx >= 0) {
+                    obj = gameInfo.pushers[idx];
+                    extraInfo = `Direction: ${obj.direction}, group: ${obj.group}`;
+                }
+                info = `Pusher, ` + extraInfo;
+                break;
+            case 226:
+                info = `Dominant seventh chord`;
+                break;
+            case 227:
+                info = `Major seventh chord`;
+                break;
+            case 228:
+                info = `Perfect fifth interval`;
+                break;
+            case 229:
+                info = `Perfect eighth interval`;
+                break;
+            default:
+                break;
+        }
+    }
+
 
     if (backInfo !== "") {
         backInfo = "Background object: " + backInfo;
