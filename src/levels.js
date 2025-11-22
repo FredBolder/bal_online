@@ -17,10 +17,6 @@ export const series2Start = 300;
 export const series2End = 328;
 export const series3Start = 400;
 export const series3End = 426;
-export const series4Start = 700;
-export const series4End = 749;
-export const series5Start = 3300;
-export const series5End = 3323;
 export const seriesSmallStart = 750;
 export const seriesSmallEnd = 764;
 export const seriesExtremeStart = 901;
@@ -36,12 +32,16 @@ export const hiddenMiniSeries1End = 3107;
 export const seriesMusic1Start = 3200;
 export const seriesMusic1End = 3207;
 // Extra
+export const series4Start = 700;
+export const series4End = 749;
+export const series5Start = 3300;
+export const series5End = 3323;
 export const series6Start = 5000;
 export const series6End = 5007;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6012;
 export const seriesMusic2Start = 6200;
-export const seriesMusic2End = 6202;
+export const seriesMusic2End = 6203;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;

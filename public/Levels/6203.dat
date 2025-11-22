@@ -1,0 +1,43 @@
+$extra: 1
+$stonepattern: 1
+$musicbox: 4, 2, interval1, 8
+$instrument: 4, 2, piano, 90
+$musicbox: 16, 2, interval1, 8
+$instrument: 16, 2, piano, 90
+$musicbox: 4, 5, interval1, 8
+$instrument: 4, 5, piano, 90
+$musicbox: 16, 5, interval1, 8
+$instrument: 16, 5, piano, 90
+$musicbox: 4, 8, interval1, 8
+$instrument: 4, 8, piano, 90
+$musicbox: 16, 8, interval1, 8
+$instrument: 16, 8, piano, 90
+$group: 12, 10, 3
+$pistonmode: 12, 10, blueball
+$sticky: 8, 12, yes
+$group: 8, 13, 2
+$inverted: 8, 13, yes
+$sticky: 8, 13, yes
+$group: 10, 16, 3
+$pistonmode: 10, 16, blueball
+$group: 19, 18, 2
+111111111111111111111
+1   1   =       1   1
+1 4 M   =2      M 4 1
+11111111=111111111111
+1   1   =       1   1
+1 4 M   =       M 4 1
+11111111=111111111111
+1   1   =       1   1
+1 4 M   =       M 4 1
+11111111111Џ111111111
+1 Ѩ φ1= T   Ö111Φ Ѩ 1
+1 Ѩ φ1=11   1111Φ Ѩ 1
+1 Ѩ φ1=5Ö      TΦ Ѩ 1
+1 Ѩ φ1=5Ö      1Φ Ѩ 1
+1 Ѩ φ1=1I  Δ   1Φ Ѩ 1
+1 Ѩ φ1=   H1G  31 1 1
+1 1 11=   Ö11   1 1 1
+1 1 11111 111 111 1 1
+1m1       φ1Φ     1m1
+111Ω1111111111111Ω111

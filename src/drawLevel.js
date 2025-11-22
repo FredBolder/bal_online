@@ -3293,6 +3293,9 @@ function drawLevel(
         case 229:
           drawChordTypeOrInterval("P8");
           break;
+        case 230:
+          drawChordTypeOrInterval("P4");
+          break;
         case 1000:
           // For manual only (empty)
           break;

@@ -1,7 +1,7 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { augmentedChords, diminishedChords, dom7Chords, maj7Chords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 import { globalVars } from "./glob.js";
-import { intervalP5, intervalP8 } from "./intervals.js";
+import { intervalP4, intervalP5, intervalP8 } from "./intervals.js";
 import { instruments, playNote, transpose } from "./music.js";
 import { getPreDelay } from "./operator.js";
 import { schedulerTime } from "./scheduler.js";
@@ -191,7 +191,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                                 randomSeventhChord(musicBox);
                                 break;
                             case "interval1":
-                                randomP5OrP8Interval(musicBox);
+                                randomP4OrP5OrP8Interval(musicBox);
                                 break;
                             default:
                                 break;
@@ -217,20 +217,22 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (["chord1", "chord2", "chord3", "chord4", "interval1", "door", "firstcount", "song"].includes(musicBox.mode) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
+        if ((isChordOrIntervalMode(musicBox.mode) || ["door", "firstcount", "song"].includes(musicBox.mode)) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;
                 if (musicBox.noteIndex >= musicBox.notes.length) {
                     musicBox.noteIndex = 0;
-                    if (["chord1", "chord2", "chord3", "chord4", "interval1", "door"].includes(musicBox.mode)) {
+                    if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door")) {
                         musicBox.ended = true;
                     }
-                    if (musicBox.ended && ["chord1", "chord2", "chord3", "chord4", "interval1"].includes(musicBox.mode) && !musicBox.chordsPlaced) {
-                        musicBox.chordsPlaced = true;
+                    if (musicBox.ended && isChordOrIntervalMode(musicBox.mode)) {
                         gameVars.lastChord = musicBox;
-                        placeChordObjects(gameData, gameInfo, musicBox);
-                        update = true;
+                        if (!musicBox.chordsPlaced) {
+                            musicBox.chordsPlaced = true;
+                            placeChordObjects(gameData, gameInfo, musicBox);
+                            update = true;
+                        }
                     }
                 }
                 if (musicBox.notes.length === 0) {
@@ -320,6 +322,10 @@ export function fixDoors(gameInfo) {
     }
 }
 
+function isChordOrIntervalMode(mode) {
+    return ["chord1", "chord2", "chord3", "chord4", "interval1"].includes(mode);
+}
+
 export function musicBoxModes() {
     return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "keyboard", "note", "song"];
 }
@@ -329,7 +335,9 @@ function placeChordObjects(gameData, gameInfo, musicBox) {
     let x = 0;
     let x1 = -1;
     let x2 = -1;
+    let x3 = -1;
     let y = 0;
+    const isInterval = (["interval1"].includes(musicBox.mode));
 
     if (gameInfo.blueBall.x < musicBox.x) {
         f1 = -1;
@@ -351,7 +359,15 @@ function placeChordObjects(gameData, gameInfo, musicBox) {
             }
             x += f1;
         }
-        if ((x1 >= 0) && (x2 >= 0)) {
+        if (isInterval) {
+            while ((x3 === -1) && (x >= 0) && (x < gameData[0].length)) {
+                if (gameData[y][x] === 0) {
+                    x3 = x;
+                }
+                x += f1;
+            }
+        }
+        if ((x1 >= 0) && (x2 >= 0) && ((x3 >= 0) || !isInterval)) {
             switch (musicBox.mode) {
                 case "chord1":
                     gameData[y][x1] = 186;
@@ -370,8 +386,9 @@ function placeChordObjects(gameData, gameInfo, musicBox) {
                     gameData[y][x2] = 227;
                     break;
                 case "interval1":
-                    gameData[y][x1] = 228;
-                    gameData[y][x2] = 229;
+                    gameData[y][x1] = 230;
+                    gameData[y][x2] = 228;
+                    gameData[y][x3] = 229;
                     break;
                 default:
                     break;
@@ -404,14 +421,22 @@ function randomAugOrDimChord(musicBox) {
     }
 }
 
-function randomP5OrP8Interval(musicBox) {
+function randomP4OrP5OrP8Interval(musicBox) {
+    const P4 = intervalP4();
     const P5 = intervalP5();
     const P8 = intervalP8();
-    const n1 = randomInt(1, 10);
+    const n1 = randomInt(1, 15);
     let n2 = 0;
 
     musicBox.notes.length = 0;
-    if (n1 > 5) {
+    if (n1 > 10) {
+        // perfect fourth
+        n2 = randomInt(0, P4.length - 1);
+        for (let i = 0; i < P4[n2].length; i++) {
+            musicBox.notes.push(P4[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "interval P4";
+    } else if (n1 > 5) {
         // perfect fifth
         n2 = randomInt(0, P5.length - 1);
         for (let i = 0; i < P5[n2].length; i++) {

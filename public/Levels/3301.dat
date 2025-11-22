@@ -1,3 +1,4 @@
+$extra: 1
 $pistonmode: 3, 10, repeatslow
 $sticky: 3, 10, yes
 $stonepattern: 1

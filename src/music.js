@@ -23,6 +23,15 @@ export function instruments() {
 }
 
 export function noteToFreq(note) {
+  const noteNumber = noteToNumber(note);
+  // A4 is semitone number 9 + 4*12 = 57; referenceFreq = 440 Hz
+  const A4_NOTE_NUMBER = 9 + (4 * 12);
+  const semitoneDiff = noteNumber - A4_NOTE_NUMBER;
+  const freq = 440 * Math.pow(2, semitoneDiff / 12);
+  return freq;
+}
+
+export function noteToNumber(note) {
   const LETTER_SEMITONES = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 
   const match = note.match(/^([A-G])([#b]*)(-?\d+)$/i);
@@ -39,11 +48,7 @@ export function noteToFreq(note) {
     else if (char === 'b') semitone -= 1;
   }
   const noteNumber = semitone + octave * 12;
-  // A4 is semitone number 9 + 4*12 = 57; referenceFreq = 440 Hz
-  const A4_NOTE_NUMBER = 9 + 4 * 12;
-  const semitoneDiff = noteNumber - A4_NOTE_NUMBER;
-  const freq = 440 * Math.pow(2, semitoneDiff / 12);
-  return freq;
+  return noteNumber;
 }
 
 export async function playNote(instrument, volume, musicalNote, noteOverride = "none") {

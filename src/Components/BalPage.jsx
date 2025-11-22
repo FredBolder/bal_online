@@ -1694,6 +1694,9 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "freezeTime")) {
       info.freezeTime = 0;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "intervalP4")) {
+      info.intervalP4 = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "intervalP5")) {
       info.intervalP5 = false;
     }
@@ -1762,10 +1765,10 @@ function BalPage() {
         break;
     }
 
-    if (info.intervalP5 || info.intervalP8 || info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
+    if (info.intervalP4 || info.intervalP5 || info.intervalP8 || info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
       if (gameVars.lastChord !== null) {
         // gameVars.lastChord is a musicBox object
-        if (onlyOneIsTrue([info.intervalP5, info.intervalP8, info.major, info.minor, info.aug, info.dim, info.sus2, info.sus4, info.dom7, info.maj7]) && (
+        if (onlyOneIsTrue([info.intervalP4, info.intervalP5, info.intervalP8, info.major, info.minor, info.aug, info.dim, info.sus2, info.sus4, info.dom7, info.maj7]) && (
           (info.major && (gameVars.lastChord.chordTypeOrInterval === "major")) ||
           (info.minor && (gameVars.lastChord.chordTypeOrInterval === "minor")) ||
           (info.aug && (gameVars.lastChord.chordTypeOrInterval === "augmented")) ||
@@ -1774,6 +1777,7 @@ function BalPage() {
           (info.sus4 && (gameVars.lastChord.chordTypeOrInterval === "suspended fourth")) ||
           (info.dom7 && (gameVars.lastChord.chordTypeOrInterval === "dominant seventh")) ||
           (info.maj7 && (gameVars.lastChord.chordTypeOrInterval === "major seventh")) ||
+          (info.intervalP4 && (gameVars.lastChord.chordTypeOrInterval === "interval P4")) ||
           (info.intervalP5 && (gameVars.lastChord.chordTypeOrInterval === "interval P5")) ||
           (info.intervalP8 && (gameVars.lastChord.chordTypeOrInterval === "interval P8"))
         )) {

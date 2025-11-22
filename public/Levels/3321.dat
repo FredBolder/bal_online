@@ -1,3 +1,4 @@
+$extra: 1
 $group: 16, 11, 2
 $pistonmode: 16, 11, momentary
 $sticky: 16, 11, yes
