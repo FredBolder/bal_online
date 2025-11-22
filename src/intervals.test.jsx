@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { intervalP4, intervalP5, intervalP8 } from "./intervals.js";
+import { intervalMajor2, intervalMajor3, intervalMinor3, intervalP4, intervalP5, intervalP8 } from "./intervals.js";
 import { noteToNumber } from "./music.js"
 
 describe("intervals", () => {
@@ -9,6 +9,15 @@ describe("intervals", () => {
         const noteNumber2 = noteToNumber(intervalToCheck[1]);
         let steps = 0;
         switch (interval) {
+            case "M2":
+                steps = 2;
+                break;
+            case "m3":
+                steps = 3;
+                break;
+            case "M3":
+                steps = 4;
+                break;
             case "P4":
                 steps = 5;
                 break;
@@ -25,6 +34,24 @@ describe("intervals", () => {
         return (Math.abs(noteNumber2 - noteNumber1) === steps);
     }
 
+    intervalMajor2().forEach((interval, i) => {
+        it(`intervalMajor2 notes ${i + 1}`, () => {
+            expect(checkInterval(interval, "M2")).toBe(true);
+        });
+    });
+    
+    intervalMajor3().forEach((interval, i) => {
+        it(`intervalMajor3 notes ${i + 1}`, () => {
+            expect(checkInterval(interval, "M3")).toBe(true);
+        });
+    });
+    
+    intervalMinor3().forEach((interval, i) => {
+        it(`intervalMinor3 notes ${i + 1}`, () => {
+            expect(checkInterval(interval, "m3")).toBe(true);
+        });
+    });
+    
     intervalP4().forEach((interval, i) => {
         it(`intervalP4 notes ${i + 1}`, () => {
             expect(checkInterval(interval, "P4")).toBe(true);

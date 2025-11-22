@@ -1,7 +1,7 @@
 import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
 import { augmentedChords, diminishedChords, dom7Chords, maj7Chords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 import { globalVars } from "./glob.js";
-import { intervalP4, intervalP5, intervalP8 } from "./intervals.js";
+import { intervalMajor2, intervalMajor3, intervalMinor3, intervalP4, intervalP5, intervalP8 } from "./intervals.js";
 import { instruments, playNote, transpose } from "./music.js";
 import { getPreDelay } from "./operator.js";
 import { schedulerTime } from "./scheduler.js";
@@ -147,7 +147,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (["chord1", "chord2", "chord3", "chord4", "interval1", "door"].includes(musicBox.mode)) {
+        if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door")) {
             if (gameData[musicBox.y][musicBox.x] === 157) {
                 if (!musicBox.active) {
                     if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
@@ -192,6 +192,9 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                                 break;
                             case "interval1":
                                 randomP4OrP5OrP8Interval(musicBox);
+                                break;
+                            case "interval2":
+                                randomMajor2OrMinor3OrMajor3Interval(musicBox);
                                 break;
                             default:
                                 break;
@@ -323,11 +326,11 @@ export function fixDoors(gameInfo) {
 }
 
 function isChordOrIntervalMode(mode) {
-    return ["chord1", "chord2", "chord3", "chord4", "interval1"].includes(mode);
+    return ["chord1", "chord2", "chord3", "chord4", "interval1", "interval2"].includes(mode);
 }
 
 export function musicBoxModes() {
-    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "keyboard", "note", "song"];
+    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard", "note", "song"];
 }
 
 function placeChordObjects(gameData, gameInfo, musicBox) {
@@ -337,7 +340,7 @@ function placeChordObjects(gameData, gameInfo, musicBox) {
     let x2 = -1;
     let x3 = -1;
     let y = 0;
-    const isInterval = (["interval1"].includes(musicBox.mode));
+    const isInterval = (["interval1", "interval2"].includes(musicBox.mode));
 
     if (gameInfo.blueBall.x < musicBox.x) {
         f1 = -1;
@@ -390,6 +393,11 @@ function placeChordObjects(gameData, gameInfo, musicBox) {
                     gameData[y][x2] = 228;
                     gameData[y][x3] = 229;
                     break;
+                case "interval2":
+                    gameData[y][x1] = 231;
+                    gameData[y][x2] = 232;
+                    gameData[y][x3] = 233;
+                    break;
                 default:
                     break;
             }
@@ -418,6 +426,62 @@ function randomAugOrDimChord(musicBox) {
             musicBox.notes.push(dim[n2][i]);
         }
         musicBox.chordTypeOrInterval = "diminished";
+    }
+}
+
+function randomMajor2OrMinor3OrMajor3Interval(musicBox) {
+    const major2 = intervalMajor2();
+    const minor3 = intervalMinor3();
+    const major3 = intervalMajor3();
+    const n1 = randomInt(1, 15);
+    let n2 = 0;
+
+    musicBox.notes.length = 0;
+    if (n1 > 10) {
+        // major second
+        n2 = randomInt(0, major2.length - 1);
+        for (let i = 0; i < major2[n2].length; i++) {
+            musicBox.notes.push(major2[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "interval M2";
+    } else if (n1 > 5) {
+        // minor third
+        n2 = randomInt(0, minor3.length - 1);
+        for (let i = 0; i < minor3[n2].length; i++) {
+            musicBox.notes.push(minor3[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "interval m3";
+    } else {
+        // major third
+        n2 = randomInt(0, major3.length - 1);
+        for (let i = 0; i < major3[n2].length; i++) {
+            musicBox.notes.push(major3[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "interval M3";
+    }
+}
+
+function randomMajorOrMinorChord(musicBox) {
+    const major = majorChords();
+    const minor = minorChords();
+    const n1 = randomInt(1, 10);
+    let n2 = 0;
+
+    musicBox.notes.length = 0;
+    if (n1 > 5) {
+        // major
+        n2 = randomInt(0, major.length - 1);
+        for (let i = 0; i < major[n2].length; i++) {
+            musicBox.notes.push(major[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "major";
+    } else {
+        // minor
+        n2 = randomInt(0, minor.length - 1);
+        for (let i = 0; i < minor[n2].length; i++) {
+            musicBox.notes.push(minor[n2][i]);
+        }
+        musicBox.chordTypeOrInterval = "minor";
     }
 }
 
@@ -450,30 +514,6 @@ function randomP4OrP5OrP8Interval(musicBox) {
             musicBox.notes.push(P8[n2][i]);
         }
         musicBox.chordTypeOrInterval = "interval P8";
-    }
-}
-
-function randomMajorOrMinorChord(musicBox) {
-    const major = majorChords();
-    const minor = minorChords();
-    const n1 = randomInt(1, 10);
-    let n2 = 0;
-
-    musicBox.notes.length = 0;
-    if (n1 > 5) {
-        // major
-        n2 = randomInt(0, major.length - 1);
-        for (let i = 0; i < major[n2].length; i++) {
-            musicBox.notes.push(major[n2][i]);
-        }
-        musicBox.chordTypeOrInterval = "major";
-    } else {
-        // minor
-        n2 = randomInt(0, minor.length - 1);
-        for (let i = 0; i < minor[n2].length; i++) {
-            musicBox.notes.push(minor[n2][i]);
-        }
-        musicBox.chordTypeOrInterval = "minor";
     }
 }
 

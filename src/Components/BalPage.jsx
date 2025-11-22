@@ -1694,6 +1694,15 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "freezeTime")) {
       info.freezeTime = 0;
     }
+    if (!Object.prototype.hasOwnProperty.call(info, "intervalMajor2")) {
+      info.intervalMajor2 = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "intervalMinor3")) {
+      info.intervalMinor3 = false;
+    }
+    if (!Object.prototype.hasOwnProperty.call(info, "intervalMajor3")) {
+      info.intervalMajor3 = false;
+    }
     if (!Object.prototype.hasOwnProperty.call(info, "intervalP4")) {
       info.intervalP4 = false;
     }
@@ -1765,22 +1774,27 @@ function BalPage() {
         break;
     }
 
-    if (info.intervalP4 || info.intervalP5 || info.intervalP8 || info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
+    if (info.intervalMajor2 || info.intervalMinor3 || info.intervalMajor3 || info.intervalP4 || info.intervalP5 ||
+      info.intervalP8 || info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
       if (gameVars.lastChord !== null) {
         // gameVars.lastChord is a musicBox object
-        if (onlyOneIsTrue([info.intervalP4, info.intervalP5, info.intervalP8, info.major, info.minor, info.aug, info.dim, info.sus2, info.sus4, info.dom7, info.maj7]) && (
-          (info.major && (gameVars.lastChord.chordTypeOrInterval === "major")) ||
-          (info.minor && (gameVars.lastChord.chordTypeOrInterval === "minor")) ||
-          (info.aug && (gameVars.lastChord.chordTypeOrInterval === "augmented")) ||
-          (info.dim && (gameVars.lastChord.chordTypeOrInterval === "diminished")) ||
-          (info.sus2 && (gameVars.lastChord.chordTypeOrInterval === "suspended second")) ||
-          (info.sus4 && (gameVars.lastChord.chordTypeOrInterval === "suspended fourth")) ||
-          (info.dom7 && (gameVars.lastChord.chordTypeOrInterval === "dominant seventh")) ||
-          (info.maj7 && (gameVars.lastChord.chordTypeOrInterval === "major seventh")) ||
-          (info.intervalP4 && (gameVars.lastChord.chordTypeOrInterval === "interval P4")) ||
-          (info.intervalP5 && (gameVars.lastChord.chordTypeOrInterval === "interval P5")) ||
-          (info.intervalP8 && (gameVars.lastChord.chordTypeOrInterval === "interval P8"))
-        )) {
+        if (onlyOneIsTrue([info.intervalMajor2, info.intervalMinor3, info.intervalMajor3, info.intervalP4, info.intervalP5,
+        info.intervalP8, info.major, info.minor, info.aug, info.dim, info.sus2, info.sus4, info.dom7, info.maj7]) && (
+            (info.major && (gameVars.lastChord.chordTypeOrInterval === "major")) ||
+            (info.minor && (gameVars.lastChord.chordTypeOrInterval === "minor")) ||
+            (info.aug && (gameVars.lastChord.chordTypeOrInterval === "augmented")) ||
+            (info.dim && (gameVars.lastChord.chordTypeOrInterval === "diminished")) ||
+            (info.sus2 && (gameVars.lastChord.chordTypeOrInterval === "suspended second")) ||
+            (info.sus4 && (gameVars.lastChord.chordTypeOrInterval === "suspended fourth")) ||
+            (info.dom7 && (gameVars.lastChord.chordTypeOrInterval === "dominant seventh")) ||
+            (info.maj7 && (gameVars.lastChord.chordTypeOrInterval === "major seventh")) ||
+            (info.intervalMajor2 && (gameVars.lastChord.chordTypeOrInterval === "interval M2")) ||
+            (info.intervalMinor3 && (gameVars.lastChord.chordTypeOrInterval === "interval m3")) ||
+            (info.intervalMajor3 && (gameVars.lastChord.chordTypeOrInterval === "interval M3")) ||
+            (info.intervalP4 && (gameVars.lastChord.chordTypeOrInterval === "interval P4")) ||
+            (info.intervalP5 && (gameVars.lastChord.chordTypeOrInterval === "interval P5")) ||
+            (info.intervalP8 && (gameVars.lastChord.chordTypeOrInterval === "interval P8"))
+          )) {
           gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
           gameVars.lastChord = null;
         } else {
@@ -2857,7 +2871,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "interval 2", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

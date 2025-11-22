@@ -997,6 +997,15 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             case 230:
                 info = `Perfect fourth interval`;
                 break;
+            case 231:
+                info = `Major second interval`;
+                break;
+            case 232:
+                info = `Minor third interval`;
+                break;
+            case 233:
+                info = `Major third interval`;
+                break;
             default:
                 break;
         }

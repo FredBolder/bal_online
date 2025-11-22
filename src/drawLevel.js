@@ -1215,6 +1215,7 @@ function drawLevel(
       case "chord3":
       case "chord4":
       case "interval1":
+      case "interval2":
       case "door":
         drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
         drawText(ctx, xc, yc, "♫", "middle", "white", w2 * 0.7, w1 * 0.8);
@@ -3295,6 +3296,15 @@ function drawLevel(
           break;
         case 230:
           drawChordTypeOrInterval("P4");
+          break;
+        case 231:
+          drawChordTypeOrInterval("M2");
+          break;
+        case 232:
+          drawChordTypeOrInterval("m3");
+          break;
+        case 233:
+          drawChordTypeOrInterval("M3");
           break;
         case 1000:
           // For manual only (empty)
