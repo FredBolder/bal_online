@@ -360,7 +360,7 @@ function BalPage() {
     let s1 = "";
     let s2 = "";
 
-    code = await showInput("Code", "Enter the code for the level that you want to play.", "");
+    code = await showInput(reverseString("edoC"), reverseString(".yalp ot tnaw uoy taht level eht rof edoc eht retnE"), "");
     if (code === null) { return }
 
     code = code.trim();
@@ -385,10 +385,7 @@ function BalPage() {
     if (level > 0) {
       await initLevel(level);
     }
-    if (code === getFredCode()) {
-      globalVars.uf = true;
-    }
-    if ((code === "") || (code.toLowerCase === "logout")) {
+    if ((code === "") || (code.toLowerCase === reverseString("tuogol"))) {
       globalVars.uf = false;
     }
   }
@@ -1245,6 +1242,16 @@ function BalPage() {
       return;
     }
 
+    if (globalVars.reading) {
+      if (e.key === "$") {
+        globalVars.reading = false;
+        globalVars.uf = (globalVars.input === getFredCode());
+      } else {
+        globalVars.input += e.key;
+      }
+      return;
+    }
+
     if (globalVars.loading || gameVars.gameOver || gameVars.teleporting > 0 || gameVars.gateTravelling > 0) {
       return;
     }
@@ -1846,15 +1853,18 @@ function BalPage() {
     if (info.eating) {
       gameInfo.greenBalls--;
       updateGreen();
-      playSound("eat");
+      playSound(reverseString("tae"));
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
         ((globalVars.thisWorldGreen === 0) && (globalVars.otherWorldGreen === 0)))
       ) {
         if (gameVars.currentLevel === 9999) {
-          showMessage("Congratulations!", "You have solved the level!");
+          showMessage(reverseString("!snoitalutargnoC"), reverseString("!level eht devlos evah uoY"));
           await initLevel(gameVars.currentLevel);
         } else {
-          showMessage("Congratulations!", `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${displayLevelNumber(gameVars.currentLevel + 1)} whenever you want.`);
+          let msg = reverseString(" edoc eht nwod etirW") + numberToCode(gameVars.currentLevel + 1);
+          msg += reverseString(" level ot og ot ") + displayLevelNumber(gameVars.currentLevel + 1);
+          msg += reverseString(" .tnaw uoy revenehw ");
+          showMessage(reverseString("!snoitalutargnoC"), msg);
           await initLevel(gameVars.currentLevel + 1);
           await saveProgress(gameVars.currentLevel);
           updateProgressText();
@@ -1874,6 +1884,11 @@ function BalPage() {
     runGameScheduler(false);
 
     if (kPressed) {
+      if (e.key === "$") {
+        globalVars.input = "";
+        globalVars.reading = true;
+      }
+
       if (globalVars.uf && (e.key === "!")) {
         e.preventDefault();
         const add = await showInput("Add solved levels", "Levels", "");

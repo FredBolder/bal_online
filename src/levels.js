@@ -37,9 +37,9 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5007;
+export const series6End = 5008;
 export const seriesEasy2Start = 6000;
-export const seriesEasy2End = 6012;
+export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6203;
 

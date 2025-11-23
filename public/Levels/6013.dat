@@ -1,0 +1,19 @@
+$extra: 1
+$hint: Use the pink balls to hide yourself from the red ball.
+$stonepattern: 1
+$direction: 6, 6, left
+111111111111111
+1             1
+1     2 ѤѤ    1
+1   11111111 11
+1             1
+1             1
+1     {ØØØØØØ}1
+1     111111111
+1            81
+1            11
+1     11111  11
+1       1    11
+1   5   1    31
+1 4 4   1     1
+111111111111111
