@@ -1010,7 +1010,7 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
     (n >= hiddenMiniSeries1Start && n <= hiddenMiniSeries1End) ||
     (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
-    ((globalVars.fred || globalVars.userP) && (
+    ((globalVars.uf || globalVars.up) && (
       (n >= series6Start && n <= series6End) ||
       (n >= seriesEasy2Start && n <= seriesEasy2End) ||
       (n >= seriesMusic2Start && n <= seriesMusic2End)

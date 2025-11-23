@@ -28,13 +28,13 @@ import { loadSettings } from "../settings.js";
 function levelNumberColor(level) {
   let color = "gray";
 
-  if (isExtra(level) && !globalVars.userP && !globalVars.fred) {
+  if (isExtra(level) && !globalVars.up && !globalVars.uf) {
     return color;
   }
 
   if (solvedLevels.includes(level)) {
     color = "green";
-  } else if (solvedLevels.includes(level - 1) || firstOfSeries(level) || (globalVars.userP && solvedLevels.includes(level - 2))) {
+  } else if (solvedLevels.includes(level - 1) || firstOfSeries(level) || (globalVars.up && solvedLevels.includes(level - 2))) {
     color = "white";
   } else {
     color = "gray";
@@ -45,12 +45,12 @@ function levelNumberColor(level) {
 function levelNumberCursor(level) {
   let cursor = "auto";
 
-  if (isExtra(level) && !globalVars.userP && !globalVars.fred) {
+  if (isExtra(level) && !globalVars.up && !globalVars.uf) {
     return cursor;
   }
 
   if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
-    (globalVars.userP && solvedLevels.includes(level - 2)) || globalVars.fred) {
+    (globalVars.up && solvedLevels.includes(level - 2)) || globalVars.uf) {
     cursor = "pointer";
   } else {
     cursor = "auto";
@@ -78,12 +78,12 @@ function OverviewPage() {
   const [progressText, setProgressText] = useState("");
 
   function handleClick(level) {
-    if (isExtra(level) && !globalVars.userP && !globalVars.fred) {
+    if (isExtra(level) && !globalVars.up && !globalVars.uf) {
       return;
     }
 
     if (solvedLevels.includes(level) || solvedLevels.includes(level - 1) || firstOfSeries(level) ||
-      (globalVars.userP && solvedLevels.includes(level - 2)) || globalVars.fred) {
+      (globalVars.up && solvedLevels.includes(level - 2)) || globalVars.uf) {
       globalVars.clickedLevel = level;
       navigate(`/bal`);
     }

@@ -365,13 +365,13 @@ function BalPage() {
 
     code = code.trim();
     p = code.indexOf(",");
-    if (code.startsWith("!") && globalVars.fred) {
+    if (code.startsWith("!") && globalVars.uf) {
       showMessage("Info", stringToCode(code.slice(1).trim()));
     } else if (p >= 0) {
       s1 = code.slice(0, p).trim();
       s2 = code.slice(p + 1).trim();
       if ((s1.length >= 3) && (s2.length > 0) && (s2 === stringToCode(s1))) {
-        globalVars.userP = true;
+        globalVars.up = true;
         settings.user = code;
         saveSettings();
       }
@@ -386,10 +386,10 @@ function BalPage() {
       await initLevel(level);
     }
     if (code === getFredCode()) {
-      globalVars.fred = true;
+      globalVars.uf = true;
     }
     if ((code === "") || (code.toLowerCase === "logout")) {
-      globalVars.fred = false;
+      globalVars.uf = false;
     }
   }
 
@@ -1177,7 +1177,7 @@ function BalPage() {
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
-      if ((gameVars.extra > 0) && !globalVars.fred && !globalVars.userP) {
+      if ((gameVars.extra > 0) && !globalVars.uf && !globalVars.up) {
         await initLevel(200, false);
       }
       gameVars.laser = null;
@@ -1874,7 +1874,7 @@ function BalPage() {
     runGameScheduler(false);
 
     if (kPressed) {
-      if (globalVars.fred && (e.key === "!")) {
+      if (globalVars.uf && (e.key === "!")) {
         e.preventDefault();
         const add = await showInput("Add solved levels", "Levels", "");
         if (add !== null) {
@@ -1884,7 +1884,7 @@ function BalPage() {
         }
       }
 
-      if (globalVars.fred && (e.key === "%")) {
+      if (globalVars.uf && (e.key === "%")) {
         codes = "";
         const allLevels = getAllLevels();
         for (let i = 0; i < allLevels.length; i++) {
@@ -1916,7 +1916,7 @@ function BalPage() {
       } else {
         switch (e.key) {
           case "C":
-            if (globalVars.fred) {
+            if (globalVars.uf) {
               showMessage("Info", `Level ${gameVars.currentLevel}: ${numberToCode(gameVars.currentLevel)}`);
             }
             break;
@@ -1929,13 +1929,13 @@ function BalPage() {
             break;
           case "N":
             // Next level
-            if (globalVars.fred) {
+            if (globalVars.uf) {
               await initLevel(gameVars.currentLevel + 1);
             }
             break;
           case "P":
             // Previous level
-            if (globalVars.fred) {
+            if (globalVars.uf) {
               await initLevel(gameVars.currentLevel - 1);
             }
             break;
@@ -2038,13 +2038,13 @@ function BalPage() {
           cbSound.current.value = getSettings().sound.toString();
           gameVars.currentLevel = 200;
           await loadProgress(gameVars);
-          if (globalVars.fred) {
+          if (globalVars.uf) {
             gameVars.currentLevel = 200;
           }
           await initLevel(gameVars.currentLevel);
         }
-        if ((globalVars.clickedLevel > 0) && (globalVars.fred || firstOfSeries(globalVars.clickedLevel) ||
-          (globalVars.userP && solvedLevels.includes(globalVars.clickedLevel - 2)) ||
+        if ((globalVars.clickedLevel > 0) && (globalVars.uf || firstOfSeries(globalVars.clickedLevel) ||
+          (globalVars.up && solvedLevels.includes(globalVars.clickedLevel - 2)) ||
           solvedLevels.includes(globalVars.clickedLevel) || solvedLevels.includes(globalVars.clickedLevel - 1))) {
           await initLevel(globalVars.clickedLevel);
           globalVars.clickedLevel = -1;
@@ -2644,7 +2644,7 @@ function BalPage() {
       // PLAY
 
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
-        info = getInfoByCoordinates(backData, gameData, gameInfo, column, row, globalVars.fred);
+        info = getInfoByCoordinates(backData, gameData, gameInfo, column, row, globalVars.uf);
         if (info !== "") {
           showMessage("Info", info);
         }
@@ -2663,7 +2663,7 @@ function BalPage() {
           showMessage("Info", info);
         }
       }
-      if (globalVars.fred && e.altKey && e.shiftKey && e.ctrlKey) {
+      if (globalVars.uf && e.altKey && e.shiftKey && e.ctrlKey) {
         if (gameData[row][column] === 0) {
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
           gameInfo.blueBall.x = column;

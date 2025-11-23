@@ -40,7 +40,7 @@ export function loadSettings() {
                 const s1 = settings.user.slice(0, p).trim();
                 const s2 = settings.user.slice(p + 1).trim();
                 if ((s1.length >= 3) && (s2.length > 0) && (s2 === stringToCode(s1))) {
-                    globalVars.userP = true;
+                    globalVars.up = true;
                 }
             }
         }
