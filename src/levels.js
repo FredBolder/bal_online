@@ -291,6 +291,7 @@ export function checkSettings(data, settings) {
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
+    { name: "$restorepoint", params: 1, xy: false },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
     { name: "$stepspermeasure", params: 3, xy: true },
@@ -398,7 +399,7 @@ export function checkSettings(data, settings) {
               break;
             case "$extra":
               val_int = tryParseInt(values[0], -1);
-              if ((val_int < 0) || (val_int < 1)) {
+              if ((val_int < 0) || (val_int > 1)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for extra.\n`;
               }
               break;
@@ -484,6 +485,12 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$restorepoint":
+              val_int = tryParseInt(values[0], -1);
+              if ((val_int < 0) || (val_int > 1)) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for restore point.\n`;
               }
               break;
             case "$sound":
@@ -1475,6 +1482,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$restorepoint":
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 1)) {
+            gameVars.restorePoint = val_int;
+          }
+          break;
         case "$sound":
           if (values.length === 2) {
             element = tryParseInt(values[0], -1);
@@ -1536,16 +1549,18 @@ export function numberOfLevels() {
   n += (series1End - series1Start) + 1;
   n += (series2End - series2Start) + 1;
   n += (series3End - series3Start) + 1;
-  n += (series4End - series4Start) + 1;
-  n += (series5End - series5Start) + 1;
   n += (seriesSmallEnd - seriesSmallStart) + 1;
   n += (seriesEasy1End - seriesEasy1Start) + 1;
   n += (seriesExtremeEnd - seriesExtremeStart) + 1;
   n += (seriesMusic1End - seriesMusic1Start) + 1;
   n += (seriesSecretEnd - seriesSecretStart) + 1;
   n += (hiddenMiniSeries1End - hiddenMiniSeries1Start) + 1;
+  // Extra
+  n += (series4End - series4Start) + 1;
+  n += (series5End - series5Start) + 1;
   n += (series6End - series6Start) + 1;
   n += (seriesEasy2End - seriesEasy2Start) + 1;
+  n += (seriesMusic2End - seriesMusic2Start) + 1;
   return n;
 }
 

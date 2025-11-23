@@ -53,7 +53,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { onlyOneIsTrue, removeChar, tryParseInt } from "../utils.js";
+import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -267,7 +267,7 @@ function BalPage() {
     if (gameVars.gameOver) {
       await showMessage("GAME OVER!", "You can try again.");
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
-        await clickLoadFromMemory(3);
+        await handleLoadFromMemory(3);
         clearPlayedNotes();
         fixDoors(gameInfo);
         return;
@@ -295,13 +295,13 @@ function BalPage() {
             globalVars.isInOtherWorld = false;
             saveToMemory(gameData, backData, gameInfo, gameVars, 2);
             saveItems();
-            await clickLoadFromMemory(1);
+            await handleLoadFromMemory(1);
             loadItems();
           } else {
             globalVars.isInOtherWorld = true;
             saveToMemory(gameData, backData, gameInfo, gameVars, 1);
             saveItems();
-            await clickLoadFromMemory(2);
+            await handleLoadFromMemory(2);
             loadItems();
           }
           gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
@@ -648,6 +648,10 @@ function BalPage() {
   }
 
   async function clickSaveToMemory() {
+    if (gameVars.restorePoint === 0) {
+      showMessage("Info", reverseString(".level siht rof dewolla ton si yromem ot gnivaS"));
+      return;
+    }
     if (getSettings().lessQuestions) {
       saveToMemory(gameData, backData, gameInfo, gameVars, 0);
     } else {
@@ -658,7 +662,15 @@ function BalPage() {
     }
   }
 
-  async function clickLoadFromMemory(idx) {
+  async function clickLoadFromMemory() {
+    if (gameVars.restorePoint === 0) {
+      showMessage("Info", reverseString(".level siht rof dewolla ton si yromem morf gnidaoL"));
+      return;
+    }
+    handleLoadFromMemory(0);
+  }
+
+  async function handleLoadFromMemory(idx) {
     async function load() {
       if ((idx === 0) && globalVars.createLevel) {
         saveUndo("Load from memory", "level");
@@ -776,7 +788,7 @@ function BalPage() {
       if (confirm === "YES") {
         saveUndo("Redo", "level", null);
         redoPossible = false;
-        clickLoadFromMemory(5);
+        handleLoadFromMemory(5);
         updateGameCanvas();
         updateGreen();
       }
@@ -795,7 +807,7 @@ function BalPage() {
         const obj = JSON.parse(undoItem.objString);
         switch (undoItem.type) {
           case "level":
-            clickLoadFromMemory(4);
+            handleLoadFromMemory(4);
             break;
           case "single":
             loadCellForUndo(backData, gameData, gameInfo, obj);
@@ -938,7 +950,7 @@ function BalPage() {
       if (memoryIsEmpty(3)) {
         await clickNewLevel(true);
       } else {
-        await clickLoadFromMemory(3);
+        await handleLoadFromMemory(3);
       }
       fillMenu(1);
     } else {
@@ -1842,7 +1854,7 @@ function BalPage() {
           showMessage("Congratulations!", "You have solved the level!");
           await initLevel(gameVars.currentLevel);
         } else {
-          showMessage("Congratulations!", `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${gameVars.currentLevel + 1} whenever you want.`);
+          showMessage("Congratulations!", `Write down the code ${numberToCode(gameVars.currentLevel + 1)} to go to level ${displayLevelNumber(gameVars.currentLevel + 1)} whenever you want.`);
           await initLevel(gameVars.currentLevel + 1);
           await saveProgress(gameVars.currentLevel);
           updateProgressText();
@@ -1954,7 +1966,7 @@ function BalPage() {
   async function tryAgain() {
     async function again() {
       if ((gameVars.currentLevel === 9999) && !memoryIsEmpty(3)) {
-        await clickLoadFromMemory(3);
+        await handleLoadFromMemory(3);
         clearPlayedNotes();
         fixDoors(gameInfo);
       } else {
@@ -3103,7 +3115,7 @@ function BalPage() {
                 <div onClick={clickSaveToMemory}>
                   <label>Save to memory</label>
                 </div>
-                <div onClick={() => { clickLoadFromMemory(0) }}>
+                <div onClick={() => { clickLoadFromMemory() }}>
                   <label>Load from memory</label>
                 </div>
                 <div onClick={clickExportLevel}>

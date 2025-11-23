@@ -1,3 +1,4 @@
+$restorepoint: 0
 $hint: The music in this level has 5 beats per measure.
 $musicbox: 19, 2, chord3, 5
 $instrument: 19, 2, piano, 90

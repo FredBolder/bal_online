@@ -1148,6 +1148,7 @@ export function initGameVars(vars) {
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
     vars.remainingPhaseTicks = 0;
+    vars.restorePoint = 1;
     vars.scroll = { x: 0, y: 0 };
     vars.skipFalling = 0;
     vars.soundLava = "default";

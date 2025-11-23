@@ -140,6 +140,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.restorePoint !== 1) {
+        line = `$restorepoint: ${gameVars.restorePoint}`;
+        lines.push(line);
+    }
+
     if (gameVars.soundLava !== "default") {
         line = `$sound: 22, ${gameVars.soundLava}`;
         lines.push(line);

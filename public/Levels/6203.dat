@@ -1,4 +1,5 @@
 $extra: 1
+$restorepoint: 0
 $stonepattern: 1
 $musicbox: 4, 2, interval1, 8
 $instrument: 4, 2, piano, 90
