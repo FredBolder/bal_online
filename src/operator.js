@@ -1,13 +1,98 @@
 import { percentageToBoost, resonancePercentToQ } from "./filter.js";
-import { 
-    getBlueNoiseBuffer, 
-    getBrownNoiseBuffer, 
+import {
+    getBlueNoiseBuffer,
+    getBrownNoiseBuffer,
     getMetalNoiseBuffer,
     getPinkNoiseBuffer,
     getVioletNoiseBuffer,
-    getWhiteNoiseBuffer 
+    getWhiteNoiseBuffer
 } from "./noise.js";
 import { tryParseInt } from "./utils.js";
+
+function createDistortionCurve({
+    type = "tanh",       // "tanh", "greek", "tube", "hard"
+    k = 5,
+    maxAmplitude = 1.0,
+    samples = 1024
+}) {
+    const curve = new Float32Array(samples);
+
+    for (let i = 0; i < samples; i++) {
+        const x = (i * 2 / samples) - 1; // -1..1
+
+        let y;
+
+        switch (type) {
+
+            // ---------------------------------------------------
+            // 1. Soft clipping (your original tanh)
+            // ---------------------------------------------------
+            case "tanh":
+                y = Math.tanh(x * k);
+                break;
+
+            // ---------------------------------------------------
+            // 2. Greek "TZOUK" bouzouki curve
+            //    Asymmetric bright clipping + slight gate
+            // ---------------------------------------------------
+            case "greek": {
+                const gate = 0.12;   // low-amplitude suppression
+                let s = x;
+
+                // Apply "string buzz" deadzone
+                if (Math.abs(s) < gate) {
+                    s = 0.7 * s; // slightly muted low levels
+                }
+
+                // Asymmetric processing
+                if (s >= 0) {
+                    // Positive side: exponential soft knee → bright
+                    y = 1 - Math.exp(-k * s);
+                } else {
+                    // Negative side: harder cubic knee → odd harmonics
+                    y = -(Math.pow(-s * k, 3) / (1 + Math.pow(-s * k, 3)));
+                }
+
+                break;
+            }
+
+            // ---------------------------------------------------
+            // 3. Tube saturation (smooth, musical)
+            // ---------------------------------------------------
+            case "tube":
+                y = x / (1 + Math.abs(k * x));
+                break;
+
+            // ---------------------------------------------------
+            // 4. Hard clip (near square, but normalized)
+            // ---------------------------------------------------
+            case "hard":
+                y = Math.max(-1, Math.min(1, x * k));
+                break;
+
+            default:
+                y = x;
+        }
+
+        curve[i] = y;
+    }
+
+    // Normalize to maxAmplitude
+    let max = 0;
+    for (let i = 0; i < samples; i++) {
+        const a = Math.abs(curve[i]);
+        if (a > max) max = a;
+    }
+    if (max < 0.00001) return curve;
+
+    for (let i = 0; i < samples; i++) {
+        curve[i] = (curve[i] / max) * maxAmplitude;
+    }
+
+    return curve;
+}
+
+
 
 function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 5, phaseDeg = 0) {
     const real = new Float32Array(harmonics + 1);
@@ -54,6 +139,7 @@ class Operator {
         this.startTime = null;
         this.stopped = false;
         this.stopScheduled = false;
+        this.waveShaper = null;
         let freq = 440;
         let nOscillators = 1;
         let phase = 0;
@@ -76,11 +162,16 @@ class Operator {
         const isBuffer = ["blueNoise", "brownNoise", "metalNoise", "metalNoiseAndBPF", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", "violetNoise"].includes(waveform);
         let oscillator = null;
 
+        nOscillators = 1;
         if (!isBuffer && (detuneOrResonance !== 0)) {
-            nOscillators = 3;
-        } else {
-            nOscillators = 1;
+            if (detuneOrResonance > 0) {
+                nOscillators = 3;
+            } else {
+                // Negative detune means only two oscillators
+                nOscillators = 2;
+            }
         }
+
         for (let i = 0; i < nOscillators; i++) {
             if (isBuffer) {
                 oscillator = audioContext.createBufferSource();
@@ -169,86 +260,207 @@ class Operator {
                 } else {
                     oscillator.type = waveform;
                 }
+                let detune = Math.abs(detuneOrResonance) / 1200;
+                if (nOscillators === 2) {
+                    detune = detune / 2;
+                }
                 switch (i) {
                     case 1:
-                        freq = this.dcoSettings.frequency * Math.pow(2, -detuneOrResonance / 1200);
+                        freq = this.dcoSettings.frequency * Math.pow(2, detune);
                         break;
                     case 2:
-                        freq = this.dcoSettings.frequency * Math.pow(2, detuneOrResonance / 1200);
+                        freq = this.dcoSettings.frequency * Math.pow(2, -detune);
                         break;
                     default:
-                        freq = this.dcoSettings.frequency;
+                        if (nOscillators === 2) {
+                            freq = this.dcoSettings.frequency * Math.pow(2, -detune);
+                        } else {
+                            freq = this.dcoSettings.frequency;
+                        }
                         break;
                 }
                 oscillator.frequency.value = freq;
-
-            }
-            if (this.filter !== null) {
-                oscillator.connect(this.filter);
                 if (postFilterGain !== null) {
                     this.postGain = audioContext.createGain();
                     this.postGain.gain.value = postFilterGain;
-                    this.filter.connect(this.postGain);
-                    this.postGain.connect(this.amp);
-                } else {
-                    this.filter.connect(this.amp);
                 }
-            } else {
-                oscillator.connect(this.amp);
             }
-            this.oscList.push(oscillator);
+            const oscGain = audioContext.createGain();
+            oscGain.gain.value = 1 / nOscillators;
+            this.oscList.push({ osc: oscillator, gain: oscGain });
         }
+        this.makeConnections();
+    }
+
+    makeConnections() {
+        // --- 1. Disconnect audio nodes ---
+
+        for (const { osc, gain } of this.oscList) {
+            try {
+                osc.disconnect();
+            }
+            catch {
+                // error
+            }
+            try {
+                gain.disconnect();
+            }
+            catch {
+                // error
+            }
+        }
+        try {
+            this.waveShaper?.disconnect();
+        }
+        catch {
+            // error
+        }
+        try {
+            this.filter?.disconnect();
+        }
+        catch {
+            // error
+        }
+        try {
+            this.postGain?.disconnect();
+        }
+        catch {
+            // error
+        }
+        try {
+            this.amp.disconnect();
+        }
+        catch {
+            // error
+        }
+
+        // Also disconnect LFO routing
+        try {
+            this.lfo.disconnect();
+        }
+        catch {
+            // error
+        }
+        try {
+            this.lfoGain.disconnect();
+        }
+        catch {
+            // error
+        }
+        try {
+            this.tremolo.disconnect();
+        }
+        catch {
+            // error
+        }
+        try {
+            this.tremoloOffset.disconnect();
+        }
+        catch {
+            // error
+        }
+
+        // --- 2. Build audio processing chain ---
+        const chain = [];
+
+        if (this.waveShaper) chain.push(this.waveShaper);
+        if (this.filter) chain.push(this.filter);
+        if (this.postGain) chain.push(this.postGain);
+
+        chain.push(this.amp);
+
+        const firstNode = chain[0];
+
+        // --- 3. Connect OSCILLATORS to chain or to tremolo depending on LFO dest ---
+        const lfoDest = this.lfoSettings.destination;
+
+        if (lfoDest === "dca") {
+            // Tremolo path
+            for (const { osc, gain } of this.oscList) {
+                osc.connect(gain);
+                gain.connect(this.tremolo);
+            }
+            this.tremolo.connect(firstNode);
+        } else {
+            // Normal path
+            for (const { osc, gain } of this.oscList) {
+                osc.connect(gain);
+                gain.connect(firstNode);
+            }
+        }
+
+        // --- 4. Connect audio chain linearly ---
+        for (let i = 0; i < chain.length - 1; i++) {
+            chain[i].connect(chain[i + 1]);
+        }
+
+        // --- 5. LFO routing ---
+        if (lfoDest === "dco") {
+            this.lfo.connect(this.lfoGain);
+            this.lfoGain.gain.value = this.lfoSettings.depth * 1200; // cents
+
+            for (const { osc } of this.oscList) {
+                this.lfoGain.connect(osc.detune);
+            }
+        }
+
+        if (lfoDest === "dca") {
+            this.lfo.connect(this.lfoGain);
+
+            // Depth mapping: depth → amplitude reduction
+            this.lfoGain.gain.value = this.lfoSettings.depth;
+
+            // Offset keeps tremolo above 0
+            this.tremoloOffset.offset.value = 1 - this.lfoSettings.depth;
+
+            this.lfoGain.connect(this.tremolo.gain);
+            this.tremoloOffset.connect(this.tremolo.gain);
+        }
+
+        // If no LFO:
+        // nothing connected — oscillator goes straight to audio chain
+    }
+
+
+
+    setFilter(filterType, filterFrequency, filterResonance) {
+        this.filter = this.audioContext.createBiquadFilter();
+        this.filter.type = filterType;
+        this.filter.frequency.value = filterFrequency;
+        this.filter.Q.value = resonancePercentToQ(filterResonance);
+        this.makeConnections();
     }
 
     setLfo(destination, waveform, frequency, depth, delay) {
-        this.lfo.disconnect();
-        this.lfoGain.disconnect();
-        for (let i = 0; i < this.oscList.length; i++) {
-            this.oscList[i].disconnect();
-        }
-        this.tremolo.disconnect();
-        this.tremoloOffset.disconnect();
-
-        this.lfoSettings.destination = destination;
+        // Store new settings only
+        this.lfoSettings.destination = destination;  // "dco" | "dca" | "none"
         this.lfoSettings.waveform = waveform;
         this.lfoSettings.frequency = frequency;
         this.lfoSettings.depth = depth;
         this.lfoSettings.delay = delay;
 
-        this.lfo.type = this.lfoSettings.waveform;
-        this.lfo.frequency.value = this.lfoSettings.frequency;
-        if (this.lfoSettings.destination !== "none") {
-            this.lfo.connect(this.lfoGain);
-        }
-        switch (this.lfoSettings.destination) {
-            case "dco":
-                this.lfoGain.gain.value = this.lfoSettings.depth * 1200;
-                for (let i = 0; i < this.oscList.length; i++) {
-                    this.lfoGain.connect(this.oscList[i].detune);
-                    this.oscList[i].connect(this.amp);
-                }
-                break;
-            case "dca":
-                this.lfoGain.gain.value = this.lfoSettings.depth;
-                this.tremoloOffset.offset.value = 1 - this.lfoSettings.depth;
-                this.lfoGain.connect(this.tremolo.gain);
-                this.tremoloOffset.connect(this.tremolo.gain);
-                for (let i = 0; i < this.oscList.length; i++) {
-                    this.oscList[i].connect(this.tremolo).connect(this.amp);
-                }
-                break;
-            default:
-                for (let i = 0; i < this.oscList.length; i++) {
-                    this.oscList[i].connect(this.amp);
-                }
-                break;
-        }
+        // Apply basic LFO parameters (does NOT connect anything)
+        this.lfo.type = waveform;
+        this.lfo.frequency.value = frequency;
+
+        // Rebuild all routing including LFO routing
+        this.makeConnections();
     }
+
 
     setPitchEnv(start, time, end) {
         this.pitchEnvSettings.start = start;
         this.pitchEnvSettings.time = time;
         this.pitchEnvSettings.end = end;
+    }
+
+    setWaveShaper(type, k, maxAmplitude = null) {
+        if (maxAmplitude === null) {
+            maxAmplitude = this.dcaSettings.volume;
+        }
+        this.waveShaper = this.audioContext.createWaveShaper();
+        this.waveShaper.curve = createDistortionCurve(type, k, maxAmplitude);
+        this.makeConnections();
     }
 
     async start(preDelay) {
@@ -260,12 +472,12 @@ class Operator {
         const at = this.dcaSettings.attack / 1000;
         const dt = this.dcaSettings.decay / 1000;
         this.amp.gain.setValueAtTime(safeTarget(0), startTime);
-        this.amp.gain.linearRampToValueAtTime(safeTarget(this.dcaSettings.volume / this.oscList.length), startTime + at);
-        this.amp.gain.exponentialRampToValueAtTime(safeTarget(this.dcaSettings.sustain / this.oscList.length), startTime + at + dt);
+        this.amp.gain.linearRampToValueAtTime(safeTarget(this.dcaSettings.volume), startTime + at);
+        this.amp.gain.exponentialRampToValueAtTime(safeTarget(this.dcaSettings.sustain), startTime + at + dt);
         for (let i = 0; i < this.oscList.length; i++) {
-            this.oscList[i].detune.setValueAtTime(this.pitchEnvSettings.start * 1200, startTime);
-            this.oscList[i].detune.linearRampToValueAtTime(this.pitchEnvSettings.end * 1200, startTime + (this.pitchEnvSettings.time / 1000));
-            this.oscList[i].start(startTime);
+            this.oscList[i].osc.detune.setValueAtTime(this.pitchEnvSettings.start * 1200, startTime);
+            this.oscList[i].osc.detune.linearRampToValueAtTime(this.pitchEnvSettings.end * 1200, startTime + (this.pitchEnvSettings.time / 1000));
+            this.oscList[i].osc.start(startTime);
         }
         if (this.lfoSettings.destination === "dca") {
             this.tremoloOffset.start(startTime);
@@ -293,8 +505,8 @@ class Operator {
 
         if (isFirefox) {
             // Calculate current amp gain
-            const maxVolume = this.dcaSettings.volume / this.oscList.length;
-            const sustainVolume = this.dcaSettings.sustain / this.oscList.length;
+            const maxVolume = this.dcaSettings.volume;
+            const sustainVolume = this.dcaSettings.sustain;
             currentAmpGain = safeTarget(0);
             if (this.startTime !== null) {
                 const elapsed = this.audioContext.currentTime - this.startTime;
@@ -321,7 +533,7 @@ class Operator {
         }
         this.amp.gain.exponentialRampToValueAtTime(safeTarget(0), stopTime + rt);
         for (let i = 0; i < this.oscList.length; i++) {
-            this.oscList[i].stop(stopTime + rt + 0.02);
+            this.oscList[i].osc.stop(stopTime + rt + 0.02);
         }
         if (this.lfoSettings.destination !== "none") {
             this.lfo.stop(stopTime + rt + 0.02);

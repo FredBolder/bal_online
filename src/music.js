@@ -17,7 +17,7 @@ let filtersList = [];
 let operatorsList = [];
 
 export function instruments() {
-  return ["accordion", "altsax", "bass", "bassdrum", "bell", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat",
+  return ["accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat",
     "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
 }
@@ -112,6 +112,45 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
     operators.push(new Operator(audioCtx, wf, 55, 0, maxVolume * 1, 0, 400 * decayFactorOsc1, 0, 100));
     operators[0].setPitchEnv(1, pitchDecay, 0);
   }
+
+  function createBouzouki() {
+    const noteNum = noteToNumber(musicalNote);
+    const referenceNote = 48; // C4 reference
+
+    // Band-pass cutoff tracking for sawtooth oscillator
+    const cutoffBase = 2200;
+    const hzPerSemitone = 15;
+    const bandPassFrequency = Math.max(60, cutoffBase + (noteNum - referenceNote) * hzPerSemitone);
+    const bandPassResonancePercent = 40;
+
+    // Detune tracking
+    const maxDetune = 6;
+    const minDetune = 2;
+    const noteLow = 24;  // C2
+    const noteHigh = 72; // C6
+    const clampedNote = Math.min(Math.max(noteNum, noteLow), noteHigh);
+    const detuneTotal = maxDetune - (clampedNote - noteLow) / (noteHigh - noteLow) * (maxDetune - minDetune);
+
+    const decayFactor = 1;
+    const releaseFactor = 0.5;
+    const volumeFactor = 1 / 3;
+
+    operators.push(new Operator(audioCtx, "sawtooth", frequency * 1, detuneTotal, maxVolume * 1.0 * volumeFactor, 0.5, decayFactor * 1400, 0, releaseFactor * 1400));
+    operators[0].setFilter("bandpass", bandPassFrequency, bandPassResonancePercent);
+    operators[0].setPitchEnv(0.005, 15, 0);
+    operators[0].setWaveShaper("greek", 4, 0.6);
+    operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.55 * volumeFactor, 0, decayFactor * 1200, 0, releaseFactor * 1200));
+    operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * 0.35 * volumeFactor, 0, decayFactor * 1000, 0, releaseFactor * 1000));
+    operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.27 * volumeFactor, 0, decayFactor * 700, 0, releaseFactor * 700));
+    operators.push(new Operator(audioCtx, "sine", frequency * 5, 0, maxVolume * 0.19 * volumeFactor, 0, decayFactor * 450, 0, releaseFactor * 450));
+    operators.push(new Operator(audioCtx, "sine", frequency * 6, 0, maxVolume * 0.16 * volumeFactor, 0, decayFactor * 320, 0, releaseFactor * 320));
+    // Pick
+    operators.push(new Operator(audioCtx, "noiseAndBPF", 4000, 50, maxVolume * 0.18 * volumeFactor, 0, 50, 0, 8));
+    // Body resonance
+    //operators.push(new Operator(audioCtx, "sine", frequency * 0.6, 0, maxVolume * 0.003 * volumeFactor, 1, decayFactor * 2000, 0, releaseFactor * 2000));
+    //operators[operators.length - 1].setFilter("lowpass", 800, 0);
+  }
+
 
   function createCowbell(variation = 0) {
     freqOsc1 = 565;
@@ -357,7 +396,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
     }
     if (operatorsList[i].operator.stopped) {
       for (let j = 0; j < operatorsList[i].operator.oscList.length; j++) {
-        operatorsList[i].operator.oscList[j].disconnect();
+        operatorsList[i].operator.oscList[j].gain.disconnect();
       }
       operatorsList[i].operator.amp.disconnect();
     } else {
@@ -497,6 +536,9 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
         operators.push(new Operator(audioCtx, "sine", frequency * 5.4317, 0, maxVolume * 0.7 * f1, 5, decay * 0.6, 0, 500 * 0.6));
         operators.push(new Operator(audioCtx, "sine", frequency * 6.7974, 0, maxVolume * 0.65 * f1, 5, decay * 0.5, 0, 500 * 0.5));
         operators.push(new Operator(audioCtx, "sine", frequency * 8.2159, 0, maxVolume * 0.55 * f1, 5, decay * 0.4, 0, 500 * 0.4));
+        break;
+      case "bouzouki":
+        createBouzouki();
         break;
       case "clarinet":
         attack = 7;
@@ -859,9 +901,9 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
       combFilter.setLP(12000);
       combFilter.connectSource(filter.filter);
       reverb.connectSource(combFilter.combOutput);
-    } else {
+    } else {      
       reverb.connectSource(filter.filter); // With reverb
-      //filter.connect(audioCtx.destination); // Without reverb
+      //filter.filter.connect(audioCtx.destination); // Without reverb
     }
   }
 }

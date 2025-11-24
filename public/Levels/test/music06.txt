@@ -1,0 +1,479 @@
+$musicbox: 15, 16, keyboard, 5
+$notes: 15, 16, C3
+$instrument: 15, 16, bouzouki, 90
+$musicbox: 16, 16, keyboard, 5
+$notes: 16, 16, D3
+$instrument: 16, 16, bouzouki, 90
+$musicbox: 17, 16, keyboard, 5
+$notes: 17, 16, E3
+$instrument: 17, 16, bouzouki, 90
+$musicbox: 18, 16, keyboard, 5
+$notes: 18, 16, F3
+$instrument: 18, 16, bouzouki, 90
+$musicbox: 19, 16, keyboard, 5
+$notes: 19, 16, G3
+$instrument: 19, 16, bouzouki, 90
+$musicbox: 20, 16, keyboard, 5
+$notes: 20, 16, A3
+$instrument: 20, 16, bouzouki, 90
+$musicbox: 21, 16, keyboard, 5
+$notes: 21, 16, B3
+$instrument: 21, 16, bouzouki, 90
+$musicbox: 22, 16, keyboard, 5
+$instrument: 22, 16, bouzouki, 90
+$musicbox: 23, 16, keyboard, 5
+$notes: 23, 16, D4
+$instrument: 23, 16, bouzouki, 90
+$musicbox: 24, 16, keyboard, 5
+$notes: 24, 16, E4
+$instrument: 24, 16, bouzouki, 90
+$musicbox: 25, 16, keyboard, 5
+$notes: 25, 16, F4
+$instrument: 25, 16, bouzouki, 90
+$musicbox: 26, 16, keyboard, 5
+$notes: 26, 16, G4
+$instrument: 26, 16, bouzouki, 90
+$musicbox: 27, 16, keyboard, 5
+$notes: 27, 16, A4
+$instrument: 27, 16, bouzouki, 90
+$musicbox: 28, 16, keyboard, 5
+$notes: 28, 16, B4
+$instrument: 28, 16, bouzouki, 90
+$musicbox: 29, 16, keyboard, 5
+$notes: 29, 16, C5
+$instrument: 29, 16, bouzouki, 90
+$musicbox: 30, 16, keyboard, 5
+$notes: 30, 16, D5
+$instrument: 30, 16, bouzouki, 90
+$musicbox: 31, 16, keyboard, 5
+$notes: 31, 16, E5
+$instrument: 31, 16, bouzouki, 90
+$musicbox: 32, 16, keyboard, 5
+$notes: 32, 16, F5
+$instrument: 32, 16, bouzouki, 90
+$musicbox: 33, 16, keyboard, 5
+$notes: 33, 16, G5
+$instrument: 33, 16, bouzouki, 90
+$musicbox: 34, 16, keyboard, 5
+$notes: 34, 16, A5
+$instrument: 34, 16, bouzouki, 90
+$musicbox: 14, 16, keyboard, 5
+$notes: 14, 16, B2
+$instrument: 14, 16, bouzouki, 90
+$musicbox: 13, 16, keyboard, 5
+$notes: 13, 16, A2
+$instrument: 13, 16, bouzouki, 90
+$musicbox: 12, 16, keyboard, 5
+$notes: 12, 16, G2
+$instrument: 12, 16, bouzouki, 90
+$musicbox: 11, 16, keyboard, 5
+$notes: 11, 16, F2
+$instrument: 11, 16, bouzouki, 90
+$musicbox: 10, 16, keyboard, 5
+$notes: 10, 16, E2
+$instrument: 10, 16, bouzouki, 90
+$musicbox: 8, 16, keyboard, 5
+$notes: 8, 16, C2
+$instrument: 8, 16, bouzouki, 90
+$musicbox: 7, 16, keyboard, 5
+$notes: 7, 16, B1
+$instrument: 7, 16, bouzouki, 90
+$musicbox: 6, 16, keyboard, 5
+$notes: 6, 16, A1
+$instrument: 6, 16, bouzouki, 90
+$musicbox: 5, 16, keyboard, 5
+$notes: 5, 16, G1
+$instrument: 5, 16, bouzouki, 90
+$musicbox: 4, 16, keyboard, 5
+$notes: 4, 16, F1
+$instrument: 4, 16, bouzouki, 90
+$musicbox: 3, 16, keyboard, 5
+$notes: 3, 16, E1
+$instrument: 3, 16, bouzouki, 90
+$musicbox: 2, 16, keyboard, 5
+$notes: 2, 16, D1
+$instrument: 2, 16, bouzouki, 90
+$musicbox: 1, 16, keyboard, 5
+$notes: 1, 16, C1
+$instrument: 1, 16, bouzouki, 90
+$musicbox: 9, 16, keyboard, 5
+$notes: 9, 16, D2
+$instrument: 9, 16, bouzouki, 90
+$musicbox: 35, 16, keyboard, 5
+$notes: 35, 16, B5
+$instrument: 35, 16, bouzouki, 90
+$musicbox: 1, 15, keyboard, 5
+$notes: 1, 15, C1
+$instrument: 1, 15, bouzouki, 90
+$part: 1, 15, middle
+$musicbox: 1, 14, keyboard, 5
+$notes: 1, 14, C1
+$instrument: 1, 14, bouzouki, 90
+$part: 1, 14, top
+$musicbox: 2, 15, keyboard, 5
+$notes: 2, 15, D1
+$instrument: 2, 15, bouzouki, 90
+$part: 2, 15, middle
+$musicbox: 2, 14, keyboard, 5
+$notes: 2, 14, D1
+$instrument: 2, 14, bouzouki, 90
+$part: 2, 14, top
+$musicbox: 3, 15, keyboard, 5
+$notes: 3, 15, E1
+$instrument: 3, 15, bouzouki, 90
+$part: 3, 15, middle
+$musicbox: 3, 14, keyboard, 5
+$notes: 3, 14, E1
+$instrument: 3, 14, bouzouki, 90
+$part: 3, 14, top
+$musicbox: 4, 15, keyboard, 5
+$notes: 4, 15, F1
+$instrument: 4, 15, bouzouki, 90
+$part: 4, 15, middle
+$musicbox: 4, 14, keyboard, 5
+$notes: 4, 14, F1
+$instrument: 4, 14, bouzouki, 90
+$part: 4, 14, top
+$musicbox: 5, 15, keyboard, 5
+$notes: 5, 15, G1
+$instrument: 5, 15, bouzouki, 90
+$part: 5, 15, middle
+$musicbox: 5, 14, keyboard, 5
+$notes: 5, 14, G1
+$instrument: 5, 14, bouzouki, 90
+$part: 5, 14, top
+$musicbox: 6, 15, keyboard, 5
+$notes: 6, 15, A1
+$instrument: 6, 15, bouzouki, 90
+$part: 6, 15, middle
+$musicbox: 6, 14, keyboard, 5
+$notes: 6, 14, A1
+$instrument: 6, 14, bouzouki, 90
+$part: 6, 14, top
+$musicbox: 7, 15, keyboard, 5
+$notes: 7, 15, B1
+$instrument: 7, 15, bouzouki, 90
+$part: 7, 15, middle
+$musicbox: 7, 14, keyboard, 5
+$notes: 7, 14, B1
+$instrument: 7, 14, bouzouki, 90
+$part: 7, 14, top
+$musicbox: 8, 14, keyboard, 5
+$notes: 8, 14, C2
+$instrument: 8, 14, bouzouki, 90
+$part: 8, 14, top
+$musicbox: 8, 15, keyboard, 5
+$notes: 8, 15, C2
+$instrument: 8, 15, bouzouki, 90
+$part: 8, 15, middle
+$musicbox: 9, 15, keyboard, 5
+$notes: 9, 15, D2
+$instrument: 9, 15, bouzouki, 90
+$part: 9, 15, middle
+$musicbox: 9, 14, keyboard, 5
+$notes: 9, 14, D2
+$instrument: 9, 14, bouzouki, 90
+$part: 9, 14, top
+$musicbox: 10, 15, keyboard, 5
+$notes: 10, 15, E2
+$instrument: 10, 15, bouzouki, 90
+$part: 10, 15, middle
+$musicbox: 10, 14, keyboard, 5
+$notes: 10, 14, E2
+$instrument: 10, 14, bouzouki, 90
+$part: 10, 14, top
+$musicbox: 11, 15, keyboard, 5
+$notes: 11, 15, F2
+$instrument: 11, 15, bouzouki, 90
+$part: 11, 15, middle
+$musicbox: 11, 14, keyboard, 5
+$notes: 11, 14, F2
+$instrument: 11, 14, bouzouki, 90
+$part: 11, 14, top
+$musicbox: 12, 15, keyboard, 5
+$notes: 12, 15, G2
+$instrument: 12, 15, bouzouki, 90
+$part: 12, 15, middle
+$musicbox: 12, 14, keyboard, 5
+$notes: 12, 14, G2
+$instrument: 12, 14, bouzouki, 90
+$part: 12, 14, top
+$musicbox: 13, 15, keyboard, 5
+$notes: 13, 15, A2
+$instrument: 13, 15, bouzouki, 90
+$part: 13, 15, middle
+$musicbox: 13, 14, keyboard, 5
+$notes: 13, 14, A2
+$instrument: 13, 14, bouzouki, 90
+$part: 13, 14, top
+$musicbox: 14, 15, keyboard, 5
+$notes: 14, 15, B2
+$instrument: 14, 15, bouzouki, 90
+$part: 14, 15, middle
+$musicbox: 14, 14, keyboard, 5
+$notes: 14, 14, B2
+$instrument: 14, 14, bouzouki, 90
+$part: 14, 14, top
+$musicbox: 15, 15, keyboard, 5
+$notes: 15, 15, C3
+$instrument: 15, 15, bouzouki, 90
+$part: 15, 15, middle
+$musicbox: 15, 14, keyboard, 5
+$notes: 15, 14, C3
+$instrument: 15, 14, bouzouki, 90
+$part: 15, 14, top
+$musicbox: 16, 15, keyboard, 5
+$notes: 16, 15, D3
+$instrument: 16, 15, bouzouki, 90
+$part: 16, 15, middle
+$musicbox: 16, 14, keyboard, 5
+$notes: 16, 14, D3
+$instrument: 16, 14, bouzouki, 90
+$part: 16, 14, top
+$musicbox: 17, 15, keyboard, 5
+$notes: 17, 15, E3
+$instrument: 17, 15, bouzouki, 90
+$part: 17, 15, middle
+$musicbox: 17, 14, keyboard, 5
+$notes: 17, 14, E3
+$instrument: 17, 14, bouzouki, 90
+$part: 17, 14, top
+$musicbox: 18, 15, keyboard, 5
+$notes: 18, 15, F3
+$instrument: 18, 15, bouzouki, 90
+$part: 18, 15, middle
+$musicbox: 18, 14, keyboard, 5
+$notes: 18, 14, F3
+$instrument: 18, 14, bouzouki, 90
+$part: 18, 14, top
+$musicbox: 19, 15, keyboard, 5
+$notes: 19, 15, G3
+$instrument: 19, 15, bouzouki, 90
+$part: 19, 15, middle
+$musicbox: 19, 14, keyboard, 5
+$notes: 19, 14, G3
+$instrument: 19, 14, bouzouki, 90
+$part: 19, 14, top
+$musicbox: 20, 15, keyboard, 5
+$notes: 20, 15, A3
+$instrument: 20, 15, bouzouki, 90
+$part: 20, 15, middle
+$musicbox: 20, 14, keyboard, 5
+$notes: 20, 14, A3
+$instrument: 20, 14, bouzouki, 90
+$part: 20, 14, top
+$musicbox: 21, 15, keyboard, 5
+$notes: 21, 15, B3
+$instrument: 21, 15, bouzouki, 90
+$part: 21, 15, middle
+$musicbox: 21, 14, keyboard, 5
+$notes: 21, 14, B3
+$instrument: 21, 14, bouzouki, 90
+$part: 21, 14, top
+$musicbox: 22, 15, keyboard, 5
+$instrument: 22, 15, bouzouki, 90
+$part: 22, 15, middle
+$musicbox: 22, 14, keyboard, 5
+$instrument: 22, 14, bouzouki, 90
+$part: 22, 14, top
+$musicbox: 23, 15, keyboard, 5
+$notes: 23, 15, D4
+$instrument: 23, 15, bouzouki, 90
+$part: 23, 15, middle
+$musicbox: 23, 14, keyboard, 5
+$notes: 23, 14, D4
+$instrument: 23, 14, bouzouki, 90
+$part: 23, 14, top
+$musicbox: 24, 15, keyboard, 5
+$notes: 24, 15, E4
+$instrument: 24, 15, bouzouki, 90
+$part: 24, 15, middle
+$musicbox: 24, 14, keyboard, 5
+$notes: 24, 14, E4
+$instrument: 24, 14, bouzouki, 90
+$part: 24, 14, top
+$musicbox: 25, 15, keyboard, 5
+$notes: 25, 15, F4
+$instrument: 25, 15, bouzouki, 90
+$part: 25, 15, middle
+$musicbox: 25, 14, keyboard, 5
+$notes: 25, 14, F4
+$instrument: 25, 14, bouzouki, 90
+$part: 25, 14, top
+$musicbox: 26, 15, keyboard, 5
+$notes: 26, 15, G4
+$instrument: 26, 15, bouzouki, 90
+$part: 26, 15, middle
+$musicbox: 26, 14, keyboard, 5
+$notes: 26, 14, G4
+$instrument: 26, 14, bouzouki, 90
+$part: 26, 14, top
+$musicbox: 27, 15, keyboard, 5
+$notes: 27, 15, A4
+$instrument: 27, 15, bouzouki, 90
+$part: 27, 15, middle
+$musicbox: 27, 14, keyboard, 5
+$notes: 27, 14, A4
+$instrument: 27, 14, bouzouki, 90
+$part: 27, 14, top
+$musicbox: 28, 15, keyboard, 5
+$notes: 28, 15, B4
+$instrument: 28, 15, bouzouki, 90
+$part: 28, 15, middle
+$musicbox: 28, 14, keyboard, 5
+$notes: 28, 14, B4
+$instrument: 28, 14, bouzouki, 90
+$part: 28, 14, top
+$musicbox: 29, 15, keyboard, 5
+$notes: 29, 15, C5
+$instrument: 29, 15, bouzouki, 90
+$part: 29, 15, middle
+$musicbox: 29, 14, keyboard, 5
+$notes: 29, 14, C5
+$instrument: 29, 14, bouzouki, 90
+$part: 29, 14, top
+$musicbox: 30, 15, keyboard, 5
+$notes: 30, 15, D5
+$instrument: 30, 15, bouzouki, 90
+$part: 30, 15, middle
+$musicbox: 30, 14, keyboard, 5
+$notes: 30, 14, D5
+$instrument: 30, 14, bouzouki, 90
+$part: 30, 14, top
+$musicbox: 31, 15, keyboard, 5
+$notes: 31, 15, E5
+$instrument: 31, 15, bouzouki, 90
+$part: 31, 15, middle
+$musicbox: 31, 14, keyboard, 5
+$notes: 31, 14, E5
+$instrument: 31, 14, bouzouki, 90
+$part: 31, 14, top
+$musicbox: 32, 15, keyboard, 5
+$notes: 32, 15, F5
+$instrument: 32, 15, bouzouki, 90
+$part: 32, 15, middle
+$musicbox: 32, 14, keyboard, 5
+$notes: 32, 14, F5
+$instrument: 32, 14, bouzouki, 90
+$part: 32, 14, top
+$musicbox: 33, 15, keyboard, 5
+$notes: 33, 15, G5
+$instrument: 33, 15, bouzouki, 90
+$part: 33, 15, middle
+$musicbox: 33, 14, keyboard, 5
+$notes: 33, 14, G5
+$instrument: 33, 14, bouzouki, 90
+$part: 33, 14, top
+$musicbox: 34, 15, keyboard, 5
+$notes: 34, 15, A5
+$instrument: 34, 15, bouzouki, 90
+$part: 34, 15, middle
+$musicbox: 34, 14, keyboard, 5
+$notes: 34, 14, A5
+$instrument: 34, 14, bouzouki, 90
+$part: 34, 14, top
+$musicbox: 35, 15, keyboard, 5
+$notes: 35, 15, B5
+$instrument: 35, 15, bouzouki, 90
+$part: 35, 15, middle
+$musicbox: 35, 14, keyboard, 5
+$notes: 35, 14, B5
+$instrument: 35, 14, bouzouki, 90
+$part: 35, 14, top
+$musicbox: 36, 16, keyboard, 5
+$notes: 36, 16, C6
+$instrument: 36, 16, bouzouki, 90
+$musicbox: 37, 16, keyboard, 5
+$notes: 37, 16, D6
+$instrument: 37, 16, bouzouki, 90
+$musicbox: 38, 16, keyboard, 5
+$notes: 38, 16, E6
+$instrument: 38, 16, bouzouki, 90
+$musicbox: 39, 16, keyboard, 5
+$notes: 39, 16, F6
+$instrument: 39, 16, bouzouki, 90
+$musicbox: 40, 16, keyboard, 5
+$notes: 40, 16, G6
+$instrument: 40, 16, bouzouki, 90
+$musicbox: 41, 16, keyboard, 5
+$notes: 41, 16, A6
+$instrument: 41, 16, bouzouki, 90
+$musicbox: 42, 16, keyboard, 5
+$notes: 42, 16, B6
+$instrument: 42, 16, bouzouki, 90
+$musicbox: 36, 15, keyboard, 5
+$notes: 36, 15, C6
+$instrument: 36, 15, bouzouki, 90
+$part: 36, 15, middle
+$musicbox: 37, 15, keyboard, 5
+$notes: 37, 15, D6
+$instrument: 37, 15, bouzouki, 90
+$part: 37, 15, middle
+$musicbox: 38, 15, keyboard, 5
+$notes: 38, 15, E6
+$instrument: 38, 15, bouzouki, 90
+$part: 38, 15, middle
+$musicbox: 39, 15, keyboard, 5
+$notes: 39, 15, F6
+$instrument: 39, 15, bouzouki, 90
+$part: 39, 15, middle
+$musicbox: 40, 15, keyboard, 5
+$notes: 40, 15, G6
+$instrument: 40, 15, bouzouki, 90
+$part: 40, 15, middle
+$musicbox: 41, 15, keyboard, 5
+$notes: 41, 15, A6
+$instrument: 41, 15, bouzouki, 90
+$part: 41, 15, middle
+$musicbox: 42, 15, keyboard, 5
+$notes: 42, 15, B6
+$instrument: 42, 15, bouzouki, 90
+$part: 42, 15, middle
+$musicbox: 36, 14, keyboard, 5
+$notes: 36, 14, C6
+$instrument: 36, 14, bouzouki, 90
+$part: 36, 14, top
+$musicbox: 37, 14, keyboard, 5
+$notes: 37, 14, D6
+$instrument: 37, 14, bouzouki, 90
+$part: 37, 14, top
+$musicbox: 38, 14, keyboard, 5
+$notes: 38, 14, E6
+$instrument: 38, 14, bouzouki, 90
+$part: 38, 14, top
+$musicbox: 39, 14, keyboard, 5
+$notes: 39, 14, F6
+$instrument: 39, 14, bouzouki, 90
+$part: 39, 14, top
+$musicbox: 40, 14, keyboard, 5
+$notes: 40, 14, G6
+$instrument: 40, 14, bouzouki, 90
+$part: 40, 14, top
+$musicbox: 41, 14, keyboard, 5
+$notes: 41, 14, A6
+$instrument: 41, 14, bouzouki, 90
+$part: 41, 14, top
+$musicbox: 42, 14, keyboard, 5
+$notes: 42, 14, B6
+$instrument: 42, 14, bouzouki, 90
+$part: 42, 14, top
+11111111111111111111111111111111111111111111111
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+1                                             1
+11111111111111111111111111111111111111111111  1
+1MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM1  1
+1MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM1  1
+1MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM1  1
+1                                            31
+1                     2                       1
+11111111111111111111111111111111111111111111111
