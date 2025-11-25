@@ -131,6 +131,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
               217: 216, 216: 215, 215: 214, 214: 217,
               221: 220, 220: 219, 219: 218, 218: 221,
               225: 224, 224: 223, 223: 222, 222: 225,
+              234: 235, 235: 234,
             };
 
             bdMap = {
@@ -163,6 +164,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
               214: 215, 215: 216, 216: 217, 217: 214,
               218: 219, 219: 220, 220: 221, 221: 218,
               222: 223, 223: 224, 224: 225, 225: 222,
+              234: 235, 235: 234,
             };
 
             bdMap = {

@@ -123,6 +123,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                     if (!musicBox.active) {
                         musicBox.ended = false;
                         musicBox.noteIndex = -1;
+                        musicBox.tripletStart = -1;
                         musicBox.delayCounter = 0;
                     }
                     musicBox.active = true;

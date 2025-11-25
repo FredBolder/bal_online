@@ -51,7 +51,7 @@ export function noteToNumber(note) {
   return noteNumber;
 }
 
-export async function playNote(instrument, volume, musicalNote, noteOverride = "none") {
+export async function playNote(instrument, volume, musicalNote, noteOverride, delay = 0) {
   let attack = 5;
   let decay = 500;
   let release = 100;
@@ -131,19 +131,19 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
     const clampedNote = Math.min(Math.max(noteNum, noteLow), noteHigh);
     const detuneTotal = maxDetune - (clampedNote - noteLow) / (noteHigh - noteLow) * (maxDetune - minDetune);
 
-    const decayFactor = 1;
+    const decayFactor = 1.1;
     const releaseFactor = 0.5;
-    const volumeFactor = 1 / 3;
+    const volumeFactor = 1 / 2.3;
 
-    operators.push(new Operator(audioCtx, "sawtooth", frequency * 1, detuneTotal, maxVolume * 1.0 * volumeFactor, 0.5, decayFactor * 1400, 0, releaseFactor * 1400));
+    operators.push(new Operator(audioCtx, "triangle", frequency * 1, detuneTotal, maxVolume * 1.0 * volumeFactor, 1, decayFactor * 1400, 0, releaseFactor * 1400));
     operators[0].setFilter("bandpass", bandPassFrequency, bandPassResonancePercent);
     operators[0].setPitchEnv(0.005, 15, 0);
-    operators[0].setWaveShaper("greek", 4, 0.6);
-    operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.55 * volumeFactor, 0, decayFactor * 1200, 0, releaseFactor * 1200));
-    operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * 0.35 * volumeFactor, 0, decayFactor * 1000, 0, releaseFactor * 1000));
-    operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.27 * volumeFactor, 0, decayFactor * 700, 0, releaseFactor * 700));
-    operators.push(new Operator(audioCtx, "sine", frequency * 5, 0, maxVolume * 0.19 * volumeFactor, 0, decayFactor * 450, 0, releaseFactor * 450));
-    operators.push(new Operator(audioCtx, "sine", frequency * 6, 0, maxVolume * 0.16 * volumeFactor, 0, decayFactor * 320, 0, releaseFactor * 320));
+    operators[0].setWaveShaper("greek", 5, 0.6);
+    operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.55 * volumeFactor, 0.5, decayFactor * 1200, 0, releaseFactor * 1200));
+    operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * 0.35 * volumeFactor, 0.5, decayFactor * 1000, 0, releaseFactor * 1000));
+    operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.27 * volumeFactor, 0.5, decayFactor * 700, 0, releaseFactor * 700));
+    operators.push(new Operator(audioCtx, "sine", frequency * 5, 0, maxVolume * 0.19 * volumeFactor, 0.5, decayFactor * 450, 0, releaseFactor * 450));
+    operators.push(new Operator(audioCtx, "sine", frequency * 6, 0, maxVolume * 0.16 * volumeFactor, 0.5, decayFactor * 320, 0, releaseFactor * 320));
     // Pick
     operators.push(new Operator(audioCtx, "noiseAndBPF", 4000, 50, maxVolume * 0.18 * volumeFactor, 0, 50, 0, 8));
     // Body resonance
@@ -887,12 +887,12 @@ export async function playNote(instrument, volume, musicalNote, noteOverride = "
     }
 
     filtersList.push({ instrument, filter });
-    filter.start(getPreDelay());
+    filter.start(getPreDelay() + delay);
 
     for (let i = 0; i < operators.length; i++) {
       const operator = operators[i];
       operator.amp.connect(filter.filter);
-      operator.start(getPreDelay());
+      operator.start(getPreDelay() + delay);
     }
     if (combFilter !== null) {
       combFiltersList.push({ instrument, combFilter });

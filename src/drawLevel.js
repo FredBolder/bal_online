@@ -2175,6 +2175,18 @@ function drawLevel(
         drawFilledBox(ctx, xmin - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
         drawFilledBox(ctx, xc - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
         break;
+      case 3:
+        ctx.lineWidth = w2 * 0.25;
+        drawLine(ctx, xmin - 0.5, (ymin + yc) / 2, xmax + 0.5, (ymin + yc) / 2, getFgcolor(x, y, "#464646"));
+        drawLine(ctx, xmin - 0.5, (yc + ymax) / 2, xmax + 0.5, (yc + ymax) / 2, getFgcolor(x, y, "#464646"));
+        ctx.lineWidth = 1;
+        break;  
+      case 4:
+        ctx.lineWidth = w1 * 0.25;
+        drawLine(ctx, (xmin + xc) / 2, ymin - 0.5, (xmin + xc) / 2, ymax + 0.5, getFgcolor(x, y, "#464646"));
+        drawLine(ctx, (xc + xmax) / 2, ymin - 0.5, (xc + xmax) / 2, ymax + 0.5, getFgcolor(x, y, "#464646"));
+        ctx.lineWidth = 1;
+        break;  
       default:
         break;
     }
@@ -3305,6 +3317,12 @@ function drawLevel(
           break;
         case 233:
           drawChordTypeOrInterval("M3");
+          break;
+        case 234:
+          drawStonePattern(currentCol, currentRow, 3);
+          break;
+        case 235:
+          drawStonePattern(currentCol, currentRow, 4);
           break;
         case 1000:
           // For manual only (empty)

@@ -1022,7 +1022,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 153, 154, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 0, 0, 2101];
+                arr2 = [152, 153, 154, 234, 235, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 2101];
                 break;
             }
             break;
@@ -1795,30 +1795,29 @@ function BalPage() {
 
     if (info.intervalMajor2 || info.intervalMinor3 || info.intervalMajor3 || info.intervalP4 || info.intervalP5 ||
       info.intervalP8 || info.major || info.minor || info.aug || info.dim || info.sus2 || info.sus4 || info.dom7 || info.maj7) {
-      if (gameVars.lastChord !== null) {
-        // gameVars.lastChord is a musicBox object
+      if (gameVars.lastMusicBox !== null) {
         if (onlyOneIsTrue([info.intervalMajor2, info.intervalMinor3, info.intervalMajor3, info.intervalP4, info.intervalP5,
         info.intervalP8, info.major, info.minor, info.aug, info.dim, info.sus2, info.sus4, info.dom7, info.maj7]) && (
-            (info.major && (gameVars.lastChord.chordTypeOrInterval === "major")) ||
-            (info.minor && (gameVars.lastChord.chordTypeOrInterval === "minor")) ||
-            (info.aug && (gameVars.lastChord.chordTypeOrInterval === "augmented")) ||
-            (info.dim && (gameVars.lastChord.chordTypeOrInterval === "diminished")) ||
-            (info.sus2 && (gameVars.lastChord.chordTypeOrInterval === "suspended second")) ||
-            (info.sus4 && (gameVars.lastChord.chordTypeOrInterval === "suspended fourth")) ||
-            (info.dom7 && (gameVars.lastChord.chordTypeOrInterval === "dominant seventh")) ||
-            (info.maj7 && (gameVars.lastChord.chordTypeOrInterval === "major seventh")) ||
-            (info.intervalMajor2 && (gameVars.lastChord.chordTypeOrInterval === "interval M2")) ||
-            (info.intervalMinor3 && (gameVars.lastChord.chordTypeOrInterval === "interval m3")) ||
-            (info.intervalMajor3 && (gameVars.lastChord.chordTypeOrInterval === "interval M3")) ||
-            (info.intervalP4 && (gameVars.lastChord.chordTypeOrInterval === "interval P4")) ||
-            (info.intervalP5 && (gameVars.lastChord.chordTypeOrInterval === "interval P5")) ||
-            (info.intervalP8 && (gameVars.lastChord.chordTypeOrInterval === "interval P8"))
+            (info.major && (gameVars.lastMusicBox.chordTypeOrInterval === "major")) ||
+            (info.minor && (gameVars.lastMusicBox.chordTypeOrInterval === "minor")) ||
+            (info.aug && (gameVars.lastMusicBox.chordTypeOrInterval === "augmented")) ||
+            (info.dim && (gameVars.lastMusicBox.chordTypeOrInterval === "diminished")) ||
+            (info.sus2 && (gameVars.lastMusicBox.chordTypeOrInterval === "suspended second")) ||
+            (info.sus4 && (gameVars.lastMusicBox.chordTypeOrInterval === "suspended fourth")) ||
+            (info.dom7 && (gameVars.lastMusicBox.chordTypeOrInterval === "dominant seventh")) ||
+            (info.maj7 && (gameVars.lastMusicBox.chordTypeOrInterval === "major seventh")) ||
+            (info.intervalMajor2 && (gameVars.lastMusicBox.chordTypeOrInterval === "interval M2")) ||
+            (info.intervalMinor3 && (gameVars.lastMusicBox.chordTypeOrInterval === "interval m3")) ||
+            (info.intervalMajor3 && (gameVars.lastMusicBox.chordTypeOrInterval === "interval M3")) ||
+            (info.intervalP4 && (gameVars.lastMusicBox.chordTypeOrInterval === "interval P4")) ||
+            (info.intervalP5 && (gameVars.lastMusicBox.chordTypeOrInterval === "interval P5")) ||
+            (info.intervalP8 && (gameVars.lastMusicBox.chordTypeOrInterval === "interval P8"))
           )) {
-          gameData[gameVars.lastChord.y][gameVars.lastChord.x] = 0;
-          gameVars.lastChord = null;
+          gameData[gameVars.lastMusicBox.y][gameVars.lastMusicBox.x] = 0;
+          gameVars.lastMusicBox = null;
         } else {
           gameVars.gameOver = true;
-          //console.log(gameVars.lastChord.notes);
+          //console.log(gameVars.lastMusicBox.notes);
         }
       } else {
         gameVars.gameOver = true;

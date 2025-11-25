@@ -230,7 +230,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         musicBox.ended = true;
                     }
                     if (musicBox.ended && isChordOrIntervalMode(musicBox.mode)) {
-                        gameVars.lastChord = musicBox;
+                        gameVars.lastMusicBox = musicBox;
                         if (!musicBox.chordsPlaced) {
                             musicBox.chordsPlaced = true;
                             placeChordObjects(gameData, gameInfo, musicBox);
@@ -238,13 +238,68 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         }
                     }
                 }
+                if (musicBox.tripletStart >= 0) {
+                    if ((musicBox.noteIndex > (musicBox.tripletStart + 1)) || (musicBox.tripletStart > musicBox.noteIndex)) {
+                        musicBox.tripletStart = -1;
+                    }
+                }
                 if (musicBox.notes.length === 0) {
                     musicBox.notes.push("C4");
                     musicBox.noteIndex = 0;
                 }
-                if (!musicBox.ended) {
+                if (!musicBox.ended && (musicBox.tripletStart === -1)) {
                     note = musicBox.notes[musicBox.noteIndex];
-                    if ((music > 0) && (note !== "") && (note !== "-")) {
+                    if (note.startsWith("T")) {
+                        musicBox.tripletStart = musicBox.noteIndex;
+                        const notes = note.slice(1).split("&");
+                        note = "";
+                        let delay = 0;
+                        let n = notes.length;
+                        if (n > 3) {
+                            n = 3;
+                        }
+                        for (let tripletNote = 0; tripletNote < n; tripletNote++) {
+                            const thisNote = notes[tripletNote].trim();
+                            if ((music > 0) && (thisNote !== "") && (thisNote !== "-")) {
+                                setTimeout(() => {
+                                    playNote(
+                                        musicBox.instrument,
+                                        musicBox.volume * (music * 0.01),
+                                        thisNote,
+                                        musicBox.noteOverride
+                                    );
+                                }, delay);
+                            }
+                            delay += musicBox.delay * schedulerTime() * (2 / 3);
+                        }
+                    }
+                    if (note.startsWith("2") || note.startsWith("3")) {
+                        const notes = note.slice(1).split("&");
+                        let delay = 0;
+                        let n = 2;
+                        if (note.startsWith("3")) {
+                            n = 3;
+                        }
+                        note = "";
+                        for (let twoNote = 0; twoNote < n; twoNote++) {
+                            if  (twoNote >= notes.length) {
+                                break;
+                            }
+                            const thisNote = notes[twoNote].trim();
+                            if ((music > 0) && (thisNote !== "") && (thisNote !== "-")) {
+                                setTimeout(() => {
+                                    playNote(
+                                        musicBox.instrument,
+                                        musicBox.volume * (music * 0.01),
+                                        thisNote,
+                                        musicBox.noteOverride
+                                    );
+                                }, delay);
+                            }
+                            delay += musicBox.delay * schedulerTime() * (1 / n);
+                        }
+                    }
+                    if ((musicBox.tripletStart === -1) && (music > 0) && (note !== "") && (note !== "-")) {
                         playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note, musicBox.noteOverride);
                     }
                 }

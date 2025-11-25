@@ -777,6 +777,12 @@ export function charToNumber(c) {
     case "ҥ":
       result = 233;
       break;
+    case "Ҧ":
+      result = 234;
+      break;
+    case "ҧ":
+      result = 235;
+      break;
     case "|":
       result = 1000;
       break;
@@ -2046,6 +2052,12 @@ export function numberToChar(n) {
       break;
     case 233:
       result = "ҥ";
+      break;
+    case 234:
+      result = "Ҧ";
+      break;
+    case 235:
+      result = "ҧ";
       break;
     case 1000:
       // For manual only

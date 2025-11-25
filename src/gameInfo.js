@@ -202,6 +202,7 @@ export function getGameInfo(backData, gameData) {
                         notes: ["C4"],
                         noteIndex: 0,
                         noteOverride: "none",
+                        tripletStart: -1,
                         part: "bottom",
                         stepsPerMeasure: 0,
                         onOne: false,
@@ -1076,7 +1077,7 @@ export function initGameInfo(info) {
     info.hasWhiteBall = false;
     info.hasYellowBall = false;
     info.horizontalElevators = [];
-    info.lastChord = null;
+    info.lastMusicBox = null;
     info.magnets = [];
     info.movers = [];
     info.musicBoxes = [];

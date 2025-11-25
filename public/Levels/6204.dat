@@ -14,6 +14,7 @@ $fgcolor: 2, 19, 1, 1, #000000
 $fgcolor: 4, 19, 1, 1, #000000
 $fgcolor: 3, 20, 1, 1, #000000
 $fgcolor: 8, 20, 1, 1, #000000
+$fgcolor: 9, 18, 1, 1, #000000
 $fgcolor: 15, 15, 1, 1, #000000
 $extra: 1
 $hint: The music is very slow and has 9 beats per measure. It is a greek Zeibekiko.
@@ -108,7 +109,7 @@ $group: 8, 20, 2
 1   J1111ѹѭ    b                  31
 1i           11111                 1
 1τ        1M11 3 1111             11
-11111111111         11M1           1
+111111111^1         11M1           1
 12> >                              1
 111m11M1m1M1111111M11111111111M11111
 111111111111111111111111111111111111
