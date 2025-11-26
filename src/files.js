@@ -237,6 +237,12 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    for (let i = 0; i < gameInfo.answerBalls.length; i++) {
+        const answerBall = gameInfo.answerBalls[i];
+        line = `$answer: ${answerBall.x}, ${answerBall.y}, ${answerBall.answer}`;
+        lines.push(line);
+    }
+
     for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
         const conveyorBelt = gameInfo.conveyorBelts[i];
         if (conveyorBelt.direction !== "right") {
@@ -362,6 +368,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$direction: ${pusher.x}, ${pusher.y}, ${pusher.direction}`;
             lines.push(line);
         }
+    }
+
+    for (let i = 0; i < gameInfo.questionStones.length; i++) {
+        const questionStone = gameInfo.questionStones[i];
+        line = `$question: ${questionStone.x}, ${questionStone.y}, ${questionStone.question}`;
+        lines.push(line);
+        line = `$answer: ${questionStone.x}, ${questionStone.y}, ${questionStone.answer}`;
+        lines.push(line);
     }
 
     for (let i = 0; i < gameInfo.teleports.length; i++) {

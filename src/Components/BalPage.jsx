@@ -90,6 +90,7 @@ const msgNoCellSelected = "There is no cell selected. Hold the Shift button and 
 
 let dropPressed = false;
 let kPressed = false;
+let createLevelBallsPages = 2;
 let createLevelColorPages = 2;
 let createLevelDirection = "";
 let createLevelSelectedCell = null;
@@ -989,7 +990,7 @@ function BalPage() {
         arr0 = [2083, 2084, 1, 4, 8, 9, 159, 6, 171, 10, 20, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 31, 157, 91, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 31, 157, 153, 91, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -1022,18 +1023,27 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 153, 154, 234, 235, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 2101];
+                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 241, 0, 0, 0, 2101];
                 break;
             }
             break;
           case 4:
             // Balls
-            arr1 = [2, 3, 140, 168, 192, 195, 201, 197, 202, 204, 4, 200, 5, 126, 127, 128];
-            arr2 = [129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 199, 207];
+            switch (globalVars.createLevelBallsPage) {
+              case 2:
+                arr1 = [199, 207];
+                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
+                break;
+              default:
+                // page 1
+                arr1 = [2, 3, 140, 168, 192, 195, 197, 202, 204, 4, 200, 5, 126, 127, 128, 129];
+                arr2 = [130, 28, 242, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 0, 0, 2101];
+                break;
+            }
             break;
           case 5:
             // Red balls
-            arr1 = [8, 2045, 2046, 2047, 105, 95, 96, 120];
+            arr1 = [8, 201, 2045, 2046, 2047, 105, 95, 96, 120];
             arr2 = [0];
             break;
           case 6:
@@ -1111,6 +1121,11 @@ function BalPage() {
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
           case 5:
+            // Patterns
+            arr1 = [153, 154, 234, 235, 236, 237, 238, 239, 240];
+            arr2 = [0];
+            break;
+          case 6:
             // Misc
             arr1 = [91, 119, 120, 97, 208, 157, 167, 89, 183, 184, 185, 21];
             arr2 = [0];
@@ -2975,6 +2990,14 @@ function BalPage() {
                 globalVars.createLevelStonesPage = 1;
               }
               fillMenu(menuToNumber("stones"));
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
+            } else if (createLevelMenu === menuToNumber("balls")) {
+              globalVars.createLevelBallsPage++;
+              if (globalVars.createLevelBallsPage > createLevelBallsPages) {
+                globalVars.createLevelBallsPage = 1;
+              }
+              fillMenu(menuToNumber("balls"));
               updateCreateLevelCanvas();
               createLevelObject = -1;
             }

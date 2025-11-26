@@ -1478,6 +1478,83 @@ function drawLevel(
     drawLine(ctx, xc, y, xc + d5, y + d5, "white");
   }
 
+  function drawPattern(x, y, n) {
+    let color = getFgcolor(x, y, "#464646");
+    let d1 = 0;
+    let x1 = 0;
+    let y1 = 0;
+    let x2 = 0;
+    let y2 = 0;
+
+    switch (n) {
+      case 1:
+        d1 = (w1 * 0.25) + 1;
+        drawFilledBox(ctx, ((xmin + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, color);
+        drawFilledBox(ctx, ((xmax + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, color);
+        break;
+      case 2:
+        d1 = (w1 * 0.25) + 1;
+        drawFilledBox(ctx, xmin - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, color);
+        drawFilledBox(ctx, xc - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, color);
+        break;
+      case 3:
+        ctx.lineWidth = w2 * 0.25;
+        drawLine(ctx, xmin - 0.5, (ymin + yc) / 2, xmax + 0.5, (ymin + yc) / 2, color);
+        drawLine(ctx, xmin - 0.5, (yc + ymax) / 2, xmax + 0.5, (yc + ymax) / 2, color);
+        break;
+      case 4:
+        ctx.lineWidth = w1 * 0.25;
+        drawLine(ctx, (xmin + xc) / 2, ymin - 0.5, (xmin + xc) / 2, ymax + 0.5, color);
+        drawLine(ctx, (xc + xmax) / 2, ymin - 0.5, (xc + xmax) / 2, ymax + 0.5, color);
+        break;
+      case 5:
+      case 7:
+        d1 = w2 * 0.05;
+        y1 = ((ymin + yc) / 2) - d1;
+        y2 = ((ymin + yc) / 2) + d1;
+        drawLine(ctx, xmin - 0.5, y1, xmax + 0.5, y1, color);
+        drawLine(ctx, xmin - 0.5, y2, xmax + 0.5, y2, color);
+        y1 = ((yc + ymax) / 2) - d1;
+        y2 = ((yc + ymax) / 2) + d1;
+        drawLine(ctx, xmin - 0.5, y1, xmax + 0.5, y1, color);
+        drawLine(ctx, xmin - 0.5, y2, xmax + 0.5, y2, color);
+        if (n === 7) {
+          ctx.lineWidth = 2;
+          drawLine(ctx, xc, ymin - 0.5, xc, ymax + 0.5, color);
+        }
+        break;
+      case 6:
+      case 8:
+        d1 = w2 * 0.05;
+        x1 = ((xmin + xc) / 2) - d1;
+        x2 = ((xmin + xc) / 2) + d1;
+        drawLine(ctx, x1, ymin - 0.5, x1, ymax + 0.5, color);
+        drawLine(ctx, x2, ymin - 0.5, x2, ymax + 0.5, color);
+        x1 = ((xc + xmax) / 2) - d1;
+        x2 = ((xc + xmax) / 2) + d1;
+        drawLine(ctx, x1, ymin - 0.5, x1, ymax + 0.5, color);
+        drawLine(ctx, x2, ymin - 0.5, x2, ymax + 0.5, color);
+        if (n === 8) {
+          ctx.lineWidth = 2;
+          drawLine(ctx, xmin - 0.5, yc, xmax + 0.5, yc, color);
+        }
+        break;
+      case 9:
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(xc, ymin);
+        ctx.lineTo(xmax, yc);
+        ctx.lineTo(xc, ymax);
+        ctx.lineTo(xmin, yc);
+        ctx.lineTo(xc, ymin);
+        ctx.fill();
+        break;
+      default:
+        break;
+    }
+    ctx.lineWidth = 1;
+  }
+
   function drawPhaseAbility() {
     const patternCanvas = document.createElement("canvas");
     const width = Math.max(1, Math.round(w1 / 15));
@@ -1751,6 +1828,18 @@ function drawLevel(
     ctx.stroke();
   }
 
+  function drawPurpleAnswerBall(x, y) {
+    let answer = "2";
+    let idx = 0;
+
+    idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+    if (idx >= 0) {
+      answer = gameInfo.answerBalls[idx].answer;
+    }
+    drawPurpleBall();
+    drawText(ctx, xc, yc, answer, "middle", "white", w2 * 0.6, w1 * 0.7);
+  }
+
   function drawPurpleBall() {
     ctx.drawImage(elements.elementPurple, xmin, ymin, w1, w2);
   }
@@ -1952,6 +2041,18 @@ function drawLevel(
 
     ctx.restore();
   }
+
+  function drawQuestionStone(x, y) {
+    let question = "1+1";
+    let idx = 0;
+
+    idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+    if (idx >= 0) {
+      question = gameInfo.questionStones[idx].question;
+    }
+    drawStone(x, y);
+    drawText(ctx, xc, yc, question, "middle", "white", w2 * 0.7, w1 * 0.8);
+}
 
   function drawQuarterCircleStoneTopLeft(x, y) {
     ctx.save();
@@ -2161,34 +2262,6 @@ function drawLevel(
       drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "#464646"));
     } else {
       ctx.drawImage(stoneLayer, xmin - leftMargin, ymin - topMargin, w1, w2, xmin, ymin, w1, w2);
-    }
-  }
-
-  function drawStonePattern(x, y, n) {
-    let d1 = (w1 * 0.25) + 1;
-    switch (n) {
-      case 1:
-        drawFilledBox(ctx, ((xmin + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
-        drawFilledBox(ctx, ((xmax + xc) / 2) - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
-        break;
-      case 2:
-        drawFilledBox(ctx, xmin - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
-        drawFilledBox(ctx, xc - 0.5, (ymin + yc) / 2, d1, w2 * 0.75, getFgcolor(x, y, "#464646"));
-        break;
-      case 3:
-        ctx.lineWidth = w2 * 0.25;
-        drawLine(ctx, xmin - 0.5, (ymin + yc) / 2, xmax + 0.5, (ymin + yc) / 2, getFgcolor(x, y, "#464646"));
-        drawLine(ctx, xmin - 0.5, (yc + ymax) / 2, xmax + 0.5, (yc + ymax) / 2, getFgcolor(x, y, "#464646"));
-        ctx.lineWidth = 1;
-        break;  
-      case 4:
-        ctx.lineWidth = w1 * 0.25;
-        drawLine(ctx, (xmin + xc) / 2, ymin - 0.5, (xmin + xc) / 2, ymax + 0.5, getFgcolor(x, y, "#464646"));
-        drawLine(ctx, (xc + xmax) / 2, ymin - 0.5, (xc + xmax) / 2, ymax + 0.5, getFgcolor(x, y, "#464646"));
-        ctx.lineWidth = 1;
-        break;  
-      default:
-        break;
     }
   }
 
@@ -3126,10 +3199,10 @@ function drawLevel(
           drawQuarterStone(currentCol, currentRow, "topRight");
           break;
         case 153:
-          drawStonePattern(currentCol, currentRow, 1);
+          drawPattern(currentCol, currentRow, 1);
           break;
         case 154:
-          drawStonePattern(currentCol, currentRow, 2);
+          drawPattern(currentCol, currentRow, 2);
           break;
         case 155:
           drawBallSynchroniser("yellow");
@@ -3319,10 +3392,31 @@ function drawLevel(
           drawChordTypeOrInterval("M3");
           break;
         case 234:
-          drawStonePattern(currentCol, currentRow, 3);
+          drawPattern(currentCol, currentRow, 3);
           break;
         case 235:
-          drawStonePattern(currentCol, currentRow, 4);
+          drawPattern(currentCol, currentRow, 4);
+          break;
+        case 236:
+          drawPattern(currentCol, currentRow, 5);
+          break;
+        case 237:
+          drawPattern(currentCol, currentRow, 6);
+          break;
+        case 238:
+          drawPattern(currentCol, currentRow, 7);
+          break;
+        case 239:
+          drawPattern(currentCol, currentRow, 8);
+          break;
+        case 240:
+          drawPattern(currentCol, currentRow, 9);
+          break;
+        case 241:
+          drawQuestionStone(currentCol, currentRow);
+          break;
+        case 242:
+          drawPurpleAnswerBall(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

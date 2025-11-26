@@ -2,6 +2,7 @@ export const globalVars = {
     balPageLoading: false,
     clickedLevel: -1,
     createLevel: false,
+    createLevelBallsPage: 1,
     createLevelColorPage: 1,
     createLevelMenuPage: 1,
     createLevelStonesPage: 1,

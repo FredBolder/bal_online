@@ -293,6 +293,16 @@ export function getGameInfo(backData, gameData) {
                     result.pushers.push(pusher);
                     break;
                 }
+                case 241: {
+                    let questionStone = { x: j, y: i, question: "1+1", answer: "2", disappeared: false };
+                    result.questionStones.push(questionStone);
+                    break;
+                }
+                case 242: {
+                    let answerBall = { x: j, y: i, answer: "2", color: "purple" };
+                    result.answerBalls.push(answerBall);
+                    break;
+                }
                 default:
                     break;
             }
@@ -1007,6 +1017,22 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             case 233:
                 info = `Major third interval`;
                 break;
+            case 241:
+                idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+                if (idx >= 0) {
+                    obj = gameInfo.questionStones[idx];
+                    extraInfo = `Question: ${obj.question}`;
+                }
+                info = `Question stone, ` + extraInfo;
+                break;
+            case 242:
+                idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+                if (idx >= 0) {
+                    obj = gameInfo.answerBalls[idx];
+                    extraInfo = `Answer: ${obj.answer}`;
+                }
+                info = `Answer ball, ` + extraInfo;
+                break;
             default:
                 break;
         }
@@ -1041,6 +1067,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
 
 export function initGameInfo(info) {
     info.action = "";
+    info.answerBalls = [];
     info.blueBall1 = { x: -1, y: -1 };
     info.blueBall2 = { x: -1, y: -1 };
     info.blueBall = info.blueBall1;
@@ -1087,6 +1114,7 @@ export function initGameInfo(info) {
     info.pistonsTriggers = [];
     info.player = 1;
     info.pushers = [];
+    info.questionStones = [];
     info.redBalls = [];
     info.redFish = [];
     info.teleports = [];

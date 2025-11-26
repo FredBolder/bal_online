@@ -119,6 +119,23 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.pushers[idx2].group = gameInfo.pushers[idx1].group;
             }
             break;
+        case 241:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.questionStones);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.questionStones);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.questionStones[idx2].question = gameInfo.questionStones[idx1].question;
+                gameInfo.questionStones[idx2].answer = gameInfo.questionStones[idx1].answer;
+                gameInfo.questionStones[idx2].disappeared = gameInfo.questionStones[idx1].disappeared;
+            }
+            break;
+        case 242:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.answerBalls);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.answerBalls);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.answerBalls[idx2].answer = gameInfo.answerBalls[idx1].answer;
+                gameInfo.answerBalls[idx2].color = gameInfo.answerBalls[idx1].color;
+            }
+            break;
         default:
             break;
     }
@@ -214,6 +231,18 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.pushers);
             if (idx >= 0) {
                 return { arr: gameInfo.pushers, idx };
+            }
+            break;
+        case 241:
+            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+            if (idx >= 0) {
+                return { arr: gameInfo.questionStones, idx };
+            }
+            break;
+        case 242:
+            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+            if (idx >= 0) {
+                return { arr: gameInfo.answerBalls, idx };
             }
             break;
         default:
@@ -328,8 +357,11 @@ export function menuToNumber(s) {
                 case "musicboxes":
                     result = 4;
                     break;
-                case "misc":
+                case "patterns":
                     result = 5;
+                    break;
+                case "misc":
+                    result = 6;
                     break;
                 case "info":
                     result = 15;

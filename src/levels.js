@@ -42,6 +42,8 @@ export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6204;
+export const seriesMathStart = 6250;
+export const seriesMathEnd = 6250;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -270,6 +272,7 @@ export function checkSettings(data, settings) {
   // number of parameters.
   const settingsInfo = [
     { name: "$addnotes", params: 0, xy: true },
+    { name: "$answer", params: 3, xy: true },
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$conveyorbeltmode", params: 3, xy: true },
@@ -291,6 +294,7 @@ export function checkSettings(data, settings) {
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
+    { name: "$question", params: 3, xy: true },
     { name: "$restorepoint", params: 1, xy: false },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
@@ -332,6 +336,14 @@ export function checkSettings(data, settings) {
         }
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
+            case "$answer":
+              if (values[2].trim() === "") {
+                msg += `${settingNr(i)}Empty value for answer.\n`;
+              }
+              if (validXY && !["ҹ", "Ҹ", 241, 242].includes(data[y][x])) {
+                msg += `${settingNr(i)}No question stone or answer ball found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
             case "$background":
             case "$bgcolor":
             case "$fgcolor":
@@ -485,6 +497,14 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$question":
+              if (values[2].trim() === "") {
+                msg += `${settingNr(i)}Empty value for question.\n`;
+              }
+              if (validXY && !["Ҹ", 241].includes(data[y][x])) {
+                msg += `${settingNr(i)}No question stone found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$restorepoint":
@@ -705,6 +725,10 @@ export function displayLevelNumber(level, addInfo = false) {
     current = (level - seriesMusic2Start) + 1;
     total = (seriesMusic2End - seriesMusic2Start) + 1;
     series = "Music 2";
+  } else if ((level >= seriesMathStart) && (level <= seriesMathEnd)) {
+    current = (level - seriesMathStart) + 1;
+    total = (seriesMathEnd - seriesMathStart) + 1;
+    series = "Math";
   }
 
   if (current === -1) {
@@ -725,7 +749,7 @@ export function displayLevelNumber(level, addInfo = false) {
 export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
     seriesSmallStart, seriesEasy1Start, seriesExtremeStart, seriesMusic1Start, series6Start,
-    seriesEasy2Start, seriesMusic2Start].includes(level)
+    seriesEasy2Start, seriesMusic2Start, seriesMathStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -973,6 +997,9 @@ export function getAllLevels() {
   for (let i = seriesMusic2Start; i <= seriesMusic2End; i++) {
     levels.push(i);
   }
+  for (let i = seriesMathStart; i <= seriesMathEnd; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -1013,7 +1040,8 @@ export async function getLevel(n, gateTravelling = false) {
     ((globalVars.uf || globalVars.up) && (
       (n >= series6Start && n <= series6End) ||
       (n >= seriesEasy2Start && n <= seriesEasy2End) ||
-      (n >= seriesMusic2Start && n <= seriesMusic2End)
+      (n >= seriesMusic2Start && n <= seriesMusic2End) ||
+      (n >= seriesMathStart && n <= seriesMathEnd)
     )) ||
     (n >= 9996) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
@@ -1063,7 +1091,8 @@ export function isExtra(n) {
     ((n >= series5Start) && (n <= series5End)) ||
     ((n >= series6Start) && (n <= series6End)) ||
     ((n >= seriesEasy2Start) && (n <= seriesEasy2End)) ||
-    ((n >= seriesMusic2Start) && (n <= seriesMusic2End))
+    ((n >= seriesMusic2Start) && (n <= seriesMusic2End)) ||
+    ((n >= seriesMathStart) && (n <= seriesMathEnd))
   )
 }
 
@@ -1167,6 +1196,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 for (let note = 2; note < values.length; note++) {
                   gameInfo.musicBoxes[idx].notes.push(values[note]);
                 }
+              }
+            }
+          }
+          break;
+        case "$answer":
+          if (values.length === 3) {
+            if (validXY) {
+              idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+              if (idx >= 0) {
+                gameInfo.answerBalls[idx].answer = values[2];
+              }
+              idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+              if (idx >= 0) {
+                gameInfo.questionStones[idx].answer = values[2];
               }
             }
           }
@@ -1482,6 +1525,16 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$question":
+          if (values.length === 3) {
+            if (validXY) {
+              idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+              if (idx >= 0) {
+                gameInfo.questionStones[idx].question = values[2];
+              }
+            }
+          }
+          break;
         case "$restorepoint":
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= 1)) {
@@ -1561,6 +1614,7 @@ export function numberOfLevels() {
   n += (series6End - series6Start) + 1;
   n += (seriesEasy2End - seriesEasy2Start) + 1;
   n += (seriesMusic2End - seriesMusic2Start) + 1;
+  n += (seriesMathEnd - seriesMathStart) + 1;
   return n;
 }
 

@@ -54,7 +54,7 @@ function canMoveAlone(gameData, gameInfo, x, y) {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200, 209].includes(el)) {
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200, 209, 242].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -783,6 +783,27 @@ export function charToNumber(c) {
     case "ҧ":
       result = 235;
       break;
+    case "Ҩ":
+      result = 236;
+      break;
+    case "ҩ":
+      result = 237;
+      break;
+    case "Ұ":
+      result = 238;
+      break;
+    case "ұ":
+      result = 239;
+      break;
+    case "Ҵ":
+      result = 240;
+      break;
+    case "Ҹ":
+      result = 241;
+      break;
+    case "ҹ":
+      result = 242;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1264,6 +1285,12 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 209:
       result = gameInfo.pushers;
+      break;
+    case 241:
+      result = gameInfo.questionStones;
+      break;
+    case 242:
+      result = gameInfo.answerBalls;
       break;
     default:
       result = null;
@@ -2059,6 +2086,27 @@ export function numberToChar(n) {
     case 235:
       result = "ҧ";
       break;
+    case 236:
+      result = "Ҩ";
+      break;
+    case 237:
+      result = "ҩ";
+      break;
+    case 238:
+      result = "Ұ";
+      break;
+    case 239:
+      result = "ұ";
+      break;
+    case 240:
+      result = "Ҵ";
+      break;
+    case 241:
+      result = "Ҹ";
+      break;
+    case 242:
+      result = "ҹ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2206,6 +2254,12 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 209:
       updateObject(gameInfo.pushers, oldX, oldY, newX, newY);
       break;
+    case 241:
+      updateObject(gameInfo.questionStones, oldX, oldY, newX, newY);
+      break;
+    case 242:
+      updateObject(gameInfo.answerBalls, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -2239,6 +2293,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
   refs.push(gameInfo.blueBall1);
 
   refs.push(gameInfo.blueBall2);
+
+  for (let i = 0; i < gameInfo.answerBalls.length; i++) {
+    refs.push(gameInfo.answerBalls[i]);
+  }
 
   for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
     refs.push(gameInfo.conveyorBelts[i]);
@@ -2316,6 +2374,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.pushers.length; i++) {
     refs.push(gameInfo.pushers[i]);
+  }
+
+  for (let i = 0; i < gameInfo.questionStones.length; i++) {
+    refs.push(gameInfo.questionStones[i]);
   }
 
   for (let i = 0; i < gameInfo.redBalls.length; i++) {

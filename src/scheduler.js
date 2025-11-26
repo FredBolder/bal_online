@@ -17,6 +17,7 @@ import { checkMusicBoxes } from "./musicBoxes.js";
 import { moveOrangeBalls } from "./orangeBalls.js";
 import { movePinkBalls } from "./pinkBalls.js";
 import { checkPistonsDetector, checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
+import { checkQuestionStones } from "./questionStones.js";
 import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./teleports.js";
 import { moveRedBalls } from "./redBalls.js";
 import { checkTimeBombs } from "./timeBombs.js";
@@ -51,6 +52,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     }
 
     if (checkAll) {
+        if (checkQuestionStones(gameData, gameInfo)) {
+            updateCanvas = true;
+        }
+
         if (checkDelays(backData, gameData, gameInfo, gameVars)) {
             updateCanvas = true;
         }

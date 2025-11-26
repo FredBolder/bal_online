@@ -299,7 +299,18 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             let pusher = { x, y, direction: "right", group: 1 };
             gameInfo.pushers.push(pusher);
             break;
-        } default:
+        }
+        case 241: {
+            let questionStone = { x, y, question: "1+1", answer: "2", disappeared: false };
+            gameInfo.questionStones.push(questionStone);
+            break;
+        }
+        case 242: {
+            let answerBall = { x, y, answer: "2", color: "purple" };
+            gameInfo.answerBalls.push(answerBall);
+            break;
+        }
+        default:
             break;
     }
     switch (obj) {
@@ -578,6 +589,18 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.pushers);
             if (idx >= 0) {
                 gameInfo.pushers.splice(idx, 1);
+            }
+            break;
+        case 241:
+            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+            if (idx >= 0) {
+                gameInfo.questionStones.splice(idx, 1);
+            }
+            break;
+        case 242:
+            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+            if (idx >= 0) {
+                gameInfo.answerBalls.splice(idx, 1);
             }
             break;
         default:

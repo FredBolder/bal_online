@@ -152,8 +152,8 @@ describe("balUtils", () => {
 
   // charToNumber and numberToChar
 
-  // Increase 235 when there are objects with a higher number
-  for (let i = 0; i <= 235; i++) {
+  // Increase 242 when there are objects with a higher number
+  for (let i = 0; i <= 242; i++) {
     const input = i;
     const expectedOutput = input;
     const ch = numberToChar(input);

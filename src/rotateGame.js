@@ -131,7 +131,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
               217: 216, 216: 215, 215: 214, 214: 217,
               221: 220, 220: 219, 219: 218, 218: 221,
               225: 224, 224: 223, 223: 222, 222: 225,
-              234: 235, 235: 234,
+              234: 235, 235: 234, 236: 237, 237: 236, 238: 239, 239: 238,
             };
 
             bdMap = {
@@ -164,7 +164,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
               214: 215, 215: 216, 216: 217, 217: 214,
               218: 219, 219: 220, 220: 221, 221: 218,
               222: 223, 223: 224, 224: 225, 225: 222,
-              234: 235, 235: 234,
+              234: 235, 235: 234, 236: 237, 237: 236, 238: 239, 239: 238,
             };
 
             bdMap = {
@@ -193,6 +193,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         for (let j = 0; j < columns; j++) {
           gameData[i][j] = newGameData[i][j];
         }
+      }
+
+      // Answer balls
+      for (let i = 0; i < gameInfo.answerBalls.length; i++) {
+        rotateXY(gameInfo.answerBalls[i], rows, rotateLeft);
       }
 
       // Blue ball
@@ -326,6 +331,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       for (let i = 0; i < gameInfo.pushers.length; i++) {
         rotateXY(gameInfo.pushers[i], rows, rotateLeft);
         gameInfo.pushers[i].direction = rotateDirection(gameInfo.pushers[i].direction, rotateLeft);
+      }
+
+      // Question stones
+      for (let i = 0; i < gameInfo.questionStones.length; i++) {
+        rotateXY(gameInfo.questionStones[i], rows, rotateLeft);
       }
 
       // Red balls
