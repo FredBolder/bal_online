@@ -71,11 +71,41 @@ class Filter {
     async stop() {
         if (this.stopScheduled) return;
 
+        const isFirefox = typeof InstallTrigger !== "undefined";
+        let currentFreq = safeTarget(this.filterSettings.freq1);        
+
         this.stopScheduled = true;
         const stopTime = this.audioContext.currentTime;
+        const fat = this.filterSettings.attack / 1000;
+        const fdt = this.filterSettings.decay / 1000;
         const frt = this.filterSettings.release / 1000;
+
+        if (isFirefox) {
+            // Calculate current frequency
+            currentFreq = safeTarget(this.filterSettings.freq1);
+            if (this.startTime !== null) {
+                const elapsed = this.audioContext.currentTime - this.startTime;
+                if (elapsed <= fat) {
+                    currentFreq = safeTarget(this.filterSettings.freq2 * (elapsed / fat));
+                }
+                if ((elapsed > fat) && (elapsed <= (fat + fdt))) {
+                    const decayElapsed = elapsed - fat;
+                    const decayRatio = decayElapsed / fdt;
+                    currentFreq = safeTarget(this.filterSettings.freq2 * Math.pow(this.filterSettings.freq3 / this.filterSettings.freq2, decayRatio));
+                }
+                if (elapsed > (fat + fdt)) {
+                    currentFreq = safeTarget(this.filterSettings.freq3);
+                }
+            }
+        }
+
+        // exponentialRampToValueAtTime does not keep track of the current value
         this.filter.frequency.cancelScheduledValues(stopTime);
-        this.filter.frequency.setValueAtTime(this.filter.frequency.value, stopTime);
+        if (isFirefox) {
+            this.filter.frequency.setValueAtTime(currentFreq, stopTime);
+        } else {
+            this.filter.frequency.setValueAtTime(this.filter.frequency.value, stopTime); // Does not work in Firefox
+        }
         this.filter.frequency.exponentialRampToValueAtTime(safeTarget(this.filterSettings.freq4), stopTime + frt);
 
         await new Promise(resolve => setTimeout(resolve, (frt + 0.02) * 1000));

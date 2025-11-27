@@ -293,108 +293,52 @@ class Operator {
     }
 
     makeConnections() {
-        // --- 1. Disconnect audio nodes ---
-
+        // Disconnect audio nodes
         for (const { osc, gain } of this.oscList) {
-            try {
-                osc.disconnect();
-            }
-            catch {
-                // error
-            }
-            try {
-                gain.disconnect();
-            }
-            catch {
-                // error
-            }
+            try { osc.disconnect(); } catch { /* error */ }
+            try { gain.disconnect(); } catch { /* error */ }
         }
-        try {
-            this.waveShaper?.disconnect();
-        }
-        catch {
-            // error
-        }
-        try {
-            this.filter?.disconnect();
-        }
-        catch {
-            // error
-        }
-        try {
-            this.postGain?.disconnect();
-        }
-        catch {
-            // error
-        }
-        try {
-            this.amp.disconnect();
-        }
-        catch {
-            // error
-        }
+        try { this.waveShaper?.disconnect(); } catch { /* error */ }
+        try { this.filter?.disconnect(); } catch { /* error */ }
+        try { this.postGain?.disconnect(); } catch { /* error */ }
+        try { this.amp.disconnect(); } catch { /* error */ }
 
-        // Also disconnect LFO routing
-        try {
-            this.lfo.disconnect();
-        }
-        catch {
-            // error
-        }
-        try {
-            this.lfoGain.disconnect();
-        }
-        catch {
-            // error
-        }
-        try {
-            this.tremolo.disconnect();
-        }
-        catch {
-            // error
-        }
-        try {
-            this.tremoloOffset.disconnect();
-        }
-        catch {
-            // error
-        }
+        // Disconnect LFO routing
+        try { this.lfo.disconnect(); } catch { /* error */ }
+        try { this.lfoGain.disconnect(); } catch { /* error */ }
+        try { this.tremolo.disconnect(); } catch { /* error */ }
+        try { this.tremoloOffset.disconnect(); } catch { /* error */ }
 
-        // --- 2. Build audio processing chain ---
+        // Build audio processing chain ---
         const chain = [];
-
         if (this.waveShaper) chain.push(this.waveShaper);
         if (this.filter) chain.push(this.filter);
         if (this.postGain) chain.push(this.postGain);
-
         chain.push(this.amp);
-
         const firstNode = chain[0];
 
-        // --- 3. Connect OSCILLATORS to chain or to tremolo depending on LFO dest ---
+        // Connect oscillators
         const lfoDest = this.lfoSettings.destination;
 
         if (lfoDest === "dca") {
-            // Tremolo path
             for (const { osc, gain } of this.oscList) {
                 osc.connect(gain);
                 gain.connect(this.tremolo);
             }
             this.tremolo.connect(firstNode);
         } else {
-            // Normal path
             for (const { osc, gain } of this.oscList) {
                 osc.connect(gain);
                 gain.connect(firstNode);
             }
         }
 
-        // --- 4. Connect audio chain linearly ---
+        // Connect audio chain
         for (let i = 0; i < chain.length - 1; i++) {
             chain[i].connect(chain[i + 1]);
         }
 
-        // --- 5. LFO routing ---
+        // LFO routing
         if (lfoDest === "dco") {
             this.lfo.connect(this.lfoGain);
             this.lfoGain.gain.value = this.lfoSettings.depth * 1200; // cents
@@ -403,22 +347,13 @@ class Operator {
                 this.lfoGain.connect(osc.detune);
             }
         }
-
         if (lfoDest === "dca") {
             this.lfo.connect(this.lfoGain);
-
-            // Depth mapping: depth → amplitude reduction
             this.lfoGain.gain.value = this.lfoSettings.depth;
-
-            // Offset keeps tremolo above 0
             this.tremoloOffset.offset.value = 1 - this.lfoSettings.depth;
-
             this.lfoGain.connect(this.tremolo.gain);
             this.tremoloOffset.connect(this.tremolo.gain);
         }
-
-        // If no LFO:
-        // nothing connected — oscillator goes straight to audio chain
     }
 
 
@@ -432,21 +367,17 @@ class Operator {
     }
 
     setLfo(destination, waveform, frequency, depth, delay) {
-        // Store new settings only
         this.lfoSettings.destination = destination;  // "dco" | "dca" | "none"
         this.lfoSettings.waveform = waveform;
         this.lfoSettings.frequency = frequency;
         this.lfoSettings.depth = depth;
         this.lfoSettings.delay = delay;
 
-        // Apply basic LFO parameters (does NOT connect anything)
         this.lfo.type = waveform;
         this.lfo.frequency.value = frequency;
 
-        // Rebuild all routing including LFO routing
         this.makeConnections();
     }
-
 
     setPitchEnv(start, time, end) {
         this.pitchEnvSettings.start = start;
@@ -501,7 +432,7 @@ class Operator {
         const stopTime = this.audioContext.currentTime;
         const at = this.dcaSettings.attack / 1000;
         const dt = this.dcaSettings.decay / 1000;
-        let rt = this.dcaSettings.release / 1000;
+        const rt = this.dcaSettings.release / 1000;
 
         if (isFirefox) {
             // Calculate current amp gain

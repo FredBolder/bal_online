@@ -17,6 +17,7 @@ let filtersList = [];
 let operatorsList = [];
 
 export function instruments() {
+  // Add test for test sound
   return ["accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat",
     "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
@@ -336,6 +337,14 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators.push(new Operator(audioCtx, "noiseAndBPF", 10500, 85 * filterResonanceFactor, maxVolume * f1, 0, 180 * decayFactorOsc1, 0, 100, 0.39 * f2));
         break;
     }
+  }
+
+  function createTest() {
+    attack = 5;
+    decay = 500;
+    release = 250;
+    operators.push(new Operator(audioCtx, "sawtooth", frequency, 0, maxVolume, attack, decay, maxVolume * 0.8, release));
+    filter.setFilter("lowpass", 4000, 4000, 1000, 500, 0, 0, 500, 250);
   }
 
   function createTom(variation = 0) {
@@ -812,6 +821,9 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators[0].setLfo("dco", "sine", 4, 0.005, 250);
         filter.setFilter("lowpass", 2000, 2500, 2000, 2000, 0, attack, decay, release);
         break;
+      case "test":
+        createTest();
+        break;  
       case "tom":
         switch (note) {
           case "C4":
