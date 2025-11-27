@@ -37,8 +37,8 @@ import { globalVars } from "../glob.js";
 import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
-import { instruments } from "../music.js";
-import { changeMusicBoxProperty, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
+import { closeAudio, initAudio, getAudioContext, instruments } from "../music.js";
+import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
@@ -259,8 +259,6 @@ function BalPage() {
       saveYellowBall = gameInfo.hasYellowBall;
     }
 
-
-
     if (modalOpen || globalVars.createLevel || globalVars.loading || !gameData || !backData || !gameVars || !gameInfo) {
       return;
     }
@@ -334,6 +332,10 @@ function BalPage() {
     if (info.updateLevelNumber) {
       updateProgressText();
     }
+  }
+
+  async function runMusicScheduler() {
+    checkMusicBoxes(backData, gameData, gameInfo, gameVars);
   }
 
   async function hint(gameVars) {
@@ -2041,11 +2043,104 @@ function BalPage() {
     undoBuffer.push(undoItem);
   }
 
+  function startGameClock(audioCtx, runGameScheduler, intervalTimeMs) {
+    // FOR MUSIC
+    const step = intervalTimeMs / 1000;
+    let nextTime = audioCtx.currentTime + step;
+    let stopped = false;
+    console.log("startGameClock");
+
+    function tick() {
+      if (stopped) return;
+
+      const now = audioCtx.currentTime;
+
+      // Catch up missed ticks
+      while (nextTime <= now) {
+        runGameScheduler(nextTime);
+        console.log("runGameScheduler(nextTime);");
+        nextTime += step;
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+
+    // 🔥 THIS is the actual stop function:
+    return function stopGameClock() {
+      stopped = true;
+    };
+  }
+
+  function startRenderLoop(audioCtx, renderFrame, intervalMs = 50) {
+    let stopped = false;
+
+    async function loop() {
+      if (stopped) return;
+
+      const t = audioCtx.currentTime; // authoritative time
+      renderFrame(t);
+
+      // schedule next call
+      await new Promise(resolve => setTimeout(resolve, intervalMs));
+      loop();
+    }
+
+    loop();
+
+    return () => { stopped = true; };
+  }
+
+  const gameClockRef = useRef(null);
+  const renderLoopRef = useRef(null);
+
+  const schedulersRunningRef = useRef(false);
+
+  const startSchedulers = async () => {
+    if (schedulersRunningRef.current) return; // already running
+
+    const audioCtx = getAudioContext();
+    await audioCtx.resume();
+
+    // stop old loops just in case
+    if (gameClockRef.current) gameClockRef.current();
+    if (renderLoopRef.current) renderLoopRef.current();
+
+    gameClockRef.current = startGameClock(audioCtx, runMusicScheduler, schedulerTime());
+    renderLoopRef.current = startRenderLoop(audioCtx, runGameScheduler, schedulerTime());
+    schedulersRunningRef.current = true;
+  };
+
+  const stopSchedulers = () => {
+    if (gameClockRef.current) gameClockRef.current();
+    if (renderLoopRef.current) renderLoopRef.current();
+    gameClockRef.current = null;
+    renderLoopRef.current = null;
+    schedulersRunningRef.current = false;
+  };
+
   useEffect(() => {
     if (globalVars.balPageLoading || !gameCanvas.current) return;
     globalVars.balPageLoading = true;
     const abortCtrl = new AbortController();
-    const intervalRef = { current: null };
+    //const intervalRef = { current: null };
+
+    const audioCtx = initAudio();
+
+    audioCtx.resume().then(() => {
+      startSchedulers();
+    });
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopSchedulers();
+      } else {
+        startSchedulers();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     (async () => {
       try {
@@ -2086,7 +2181,7 @@ function BalPage() {
         updateGameCanvas();
         updateGreen();
         window.addEventListener("resize", handleResize);
-        intervalRef.current = setInterval(runGameScheduler, schedulerTime());
+        //intervalRef.current = setInterval(runGameScheduler, schedulerTime());
       } catch (err) {
         console.error('Loading Bal page failed', err);
       } finally {
@@ -2099,7 +2194,10 @@ function BalPage() {
       abortCtrl.abort();
       globalVars.balPageLoading = false;
       window.removeEventListener("resize", handleResize);
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      //if (intervalRef.current) clearInterval(intervalRef.current);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stopSchedulers();
+      closeAudio();
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

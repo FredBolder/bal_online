@@ -313,6 +313,10 @@ export function getBrownNoiseBuffer(audioCtx) {
     return brownNoiseBuffer;
 }
 
+export function clearMetalNoiseBuffer() {
+    metalNoiseBuffer = null;
+}
+
 export function getMetalNoiseBuffer(audioCtx) {
     if (metalNoiseBuffer === null) {
         metalNoiseBuffer = createMetalNoiseBuffer(audioCtx, 2, {

@@ -282,7 +282,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         }
                         note = "";
                         for (let twoNote = 0; twoNote < n; twoNote++) {
-                            if  (twoNote >= notes.length) {
+                            if (twoNote >= notes.length) {
                                 break;
                             }
                             const thisNote = notes[twoNote].trim();

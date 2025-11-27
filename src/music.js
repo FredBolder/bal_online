@@ -1,16 +1,40 @@
 import { getPreDelay, Operator } from "./operator.js";
 import { CombFilter } from "./combFilter.js";
 import { Filter } from "./filter.js";
-import { getMetalNoiseBuffer } from "./noise.js";
+import { clearMetalNoiseBuffer, getMetalNoiseBuffer } from "./noise.js";
 import { Reverb } from "./reverb.js";
 let audioCtx = null;
 let reverb = null;
 
-if (typeof window !== "undefined") {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
-  getMetalNoiseBuffer(audioCtx); // Preload
+export function initAudio() {
+  if (audioCtx) return audioCtx; // already initialized
+
+  if (typeof window !== "undefined") {
+    console.log("Initializing AudioContext...");
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    reverb = new Reverb(audioCtx, "/Reverb/reverb.wav");
+    getMetalNoiseBuffer(audioCtx); // Preload
+  }
+
+  return audioCtx;
 }
+
+export function getAudioContext() {
+  if (!audioCtx) initAudio();    // ensure it exists
+  return audioCtx;
+}
+
+export function closeAudio() {
+  console.log("Closing AudioContext...");
+  if (audioCtx) {
+    audioCtx.close();
+    audioCtx = null;
+  }
+  reverb = null;
+  clearMetalNoiseBuffer();
+}
+
 
 let combFiltersList = [];
 let filtersList = [];
@@ -823,7 +847,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         break;
       case "test":
         createTest();
-        break;  
+        break;
       case "tom":
         switch (note) {
           case "C4":
@@ -913,7 +937,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
       combFilter.setLP(12000);
       combFilter.connectSource(filter.filter);
       reverb.connectSource(combFilter.combOutput);
-    } else {      
+    } else {
       reverb.connectSource(filter.filter); // With reverb
       //filter.filter.connect(audioCtx.destination); // Without reverb
     }

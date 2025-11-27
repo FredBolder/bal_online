@@ -13,7 +13,7 @@ import { moveFish } from "./fish.js";
 import { checkIce } from "./freeze.js";
 import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
-import { checkMusicBoxes } from "./musicBoxes.js";
+//import { checkMusicBoxes } from "./musicBoxes.js";
 import { moveOrangeBalls } from "./orangeBalls.js";
 import { movePinkBalls } from "./pinkBalls.js";
 import { checkPistonsDetector, checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
@@ -60,9 +60,9 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
 
-        if (checkMusicBoxes(backData, gameData, gameInfo, gameVars)) {
-            updateCanvas = true;
-        }
+        // if (checkMusicBoxes(backData, gameData, gameInfo, gameVars)) {
+        //     updateCanvas = true;
+        // }
 
         if (checkPurpleTeleports(backData, gameData, gameInfo)) {
             updateCanvas = true;
