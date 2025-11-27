@@ -2,7 +2,7 @@ import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils
 import { augmentedChords, diminishedChords, dom7Chords, maj7Chords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 import { globalVars } from "./glob.js";
 import { intervalMajor2, intervalMajor3, intervalMinor3, intervalP4, intervalP5, intervalP8 } from "./intervals.js";
-import { instruments, playNote, transpose } from "./music.js";
+import { getAudioContext, instruments, playNote, transpose } from "./music.js";
 import { getPreDelay } from "./operator.js";
 import { schedulerTime } from "./scheduler.js";
 import { getSettings } from "./settings.js";
@@ -123,6 +123,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
     let x = -1;
     let y = -1;
     const music = getSettings().music;
+    const audioCtx = getAudioContext();
 
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
@@ -253,51 +254,65 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         musicBox.tripletStart = musicBox.noteIndex;
                         const notes = note.slice(1).split("&");
                         note = "";
-                        let delay = 0;
                         let n = notes.length;
                         if (n > 3) {
                             n = 3;
                         }
+                        const tripletSpacingSec = (musicBox.delay * schedulerTime() * (2 / 3)) / 1000;
+
+                        const startTime = audioCtx.currentTime;
+
                         for (let tripletNote = 0; tripletNote < n; tripletNote++) {
-                            const thisNote = notes[tripletNote].trim();
-                            if ((music > 0) && (thisNote !== "") && (thisNote !== "-")) {
+                            const note = notes[tripletNote].trim();
+                            if (music > 0 && note !== "" && note !== "-") {
+
+                                const noteTime = startTime + tripletSpacingSec * tripletNote;
+
+                                // Convert audio time to wall-clock ms
+                                const delayMs = Math.max(0, (noteTime - audioCtx.currentTime) * 1000);
+
                                 setTimeout(() => {
                                     playNote(
                                         musicBox.instrument,
                                         musicBox.volume * (music * 0.01),
-                                        thisNote,
+                                        note,
                                         musicBox.noteOverride
                                     );
-                                }, delay);
+                                }, delayMs);
                             }
-                            delay += musicBox.delay * schedulerTime() * (2 / 3);
                         }
                     }
+
                     if (note.startsWith("2") || note.startsWith("3")) {
-                        const notes = note.slice(1).split("&");
-                        let delay = 0;
-                        let n = 2;
-                        if (note.startsWith("3")) {
-                            n = 3;
+                        const notes = note.slice(1).split("&").map(s => s.trim());
+                        const audioCtx = getAudioContext();
+
+                        const n = note.startsWith("3") ? 3 : 2;
+                        const subdivision = musicBox.delay * schedulerTime() * (1 / n); // ms
+                        const subdivisionSec = subdivision / 1000;
+
+                        const startTime = audioCtx.currentTime;
+
+                        for (let i = 0; i < n; i++) {
+                            if (i >= notes.length) break;
+
+                            const thisNote = notes[i];
+                            if (music <= 0 || thisNote === "" || thisNote === "-") {
+                                continue;
+                            }
+                            const targetTime = startTime + subdivisionSec * i;
+                            const delay = Math.max(0, (targetTime - audioCtx.currentTime) * 1000);
+
+                            setTimeout(() => {
+                                playNote(
+                                    musicBox.instrument,
+                                    musicBox.volume * (music * 0.01),
+                                    thisNote,
+                                    musicBox.noteOverride
+                                );
+                            }, delay);
                         }
                         note = "";
-                        for (let twoNote = 0; twoNote < n; twoNote++) {
-                            if (twoNote >= notes.length) {
-                                break;
-                            }
-                            const thisNote = notes[twoNote].trim();
-                            if ((music > 0) && (thisNote !== "") && (thisNote !== "-")) {
-                                setTimeout(() => {
-                                    playNote(
-                                        musicBox.instrument,
-                                        musicBox.volume * (music * 0.01),
-                                        thisNote,
-                                        musicBox.noteOverride
-                                    );
-                                }, delay);
-                            }
-                            delay += musicBox.delay * schedulerTime() * (1 / n);
-                        }
                     }
                     if ((musicBox.tripletStart === -1) && (music > 0) && (note !== "") && (note !== "-")) {
                         playNote(musicBox.instrument, musicBox.volume * (music * 0.01), note, musicBox.noteOverride);
