@@ -1,4 +1,4 @@
-import { findElementByCoordinates } from "./balUtils.js";
+import { findElementByCoordinates, moveObject } from "./balUtils.js";
 
 export function checkPurpleTeleports(backData, gameData, gameInfo) {
     let found = false;
@@ -23,7 +23,7 @@ export function checkPurpleTeleports(backData, gameData, gameInfo) {
         for (let i = 0; i < gameInfo.teleports.length; i++) {
             const teleport = gameInfo.teleports[i];
             if (teleport.color === getPurpleTeleportColor()) {
-                if (gameData[teleport.y][teleport.x] === 28) {
+                if ([28, 242].includes(gameData[teleport.y][teleport.x])) {
                     group = teleport.group;
                     x1 = teleport.x;
                     y1 = teleport.y;
@@ -43,8 +43,7 @@ export function checkPurpleTeleports(backData, gameData, gameInfo) {
             if (gameData[y2][x2] === 0) {
                 found = true;
                 update = true;
-                gameData[y1][x1] = 0;
-                gameData[y2][x2] = 28;
+                moveObject(gameData, gameInfo, x1, y1, x2, y2);
                 backData[y1][x1] = 0;
                 backData[y2][x2] = 0;
                 deleteTeleports(getPurpleTeleportColor(), true, group, gameInfo);
