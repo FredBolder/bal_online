@@ -43,7 +43,7 @@ export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6204;
 export const seriesMathStart = 6250;
-export const seriesMathEnd = 6251;
+export const seriesMathEnd = 6252;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -268,11 +268,11 @@ export function checkLevel(data, settings) {
 export function checkSettings(data, settings) {
   // This function works with code 1 and code 2, so data with characters and data with numbers
 
-  // For $hint and $startlevelmessage there can be a comma in the text and $notes and $addnotes have a variable
-  // number of parameters.
+  // For $answer, $hint, $question and $startlevelmessage there can be a comma in the text and $notes and $addnotes
+  // have a variable number of parameters.
   const settingsInfo = [
     { name: "$addnotes", params: 0, xy: true },
-    { name: "$answer", params: 3, xy: true },
+    { name: "$answer", params: 0, xy: true },
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$conveyorbeltmode", params: 3, xy: true },
@@ -294,7 +294,7 @@ export function checkSettings(data, settings) {
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
-    { name: "$question", params: 3, xy: true },
+    { name: "$question", params: 0, xy: true },
     { name: "$restorepoint", params: 1, xy: false },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
@@ -310,6 +310,7 @@ export function checkSettings(data, settings) {
   let msgExtra = "";
   let p1 = -1;
   let val_int = 0;
+  let val_str = "";
   let validXY = false;
   let volume = 0;
   let h = -1;
@@ -322,6 +323,7 @@ export function checkSettings(data, settings) {
     p1 = setting.indexOf(":");
     if (p1 >= 0) {
       const name = setting.slice(0, p1).toLowerCase().trim();
+      const value = setting.slice(p1 + 1).trim();
       const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
       const valuesLowerCase = values.map(value => value.toLowerCase());
       if (values.length >= 2) {
@@ -337,7 +339,8 @@ export function checkSettings(data, settings) {
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
             case "$answer":
-              if (values[2].trim() === "") {
+              val_str = getStringAfterCoordinates(value);
+              if (val_str.trim() === "") {
                 msg += `${settingNr(i)}Empty value for answer.\n`;
               }
               if (validXY && !["ҹ", "Ҹ", 241, 242].includes(data[y][x])) {
@@ -500,7 +503,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$question":
-              if (values[2].trim() === "") {
+              val_str = getStringAfterCoordinates(value);
+              if (val_str.trim() === "") {
                 msg += `${settingNr(i)}Empty value for question.\n`;
               }
               if (validXY && !["Ҹ", 241].includes(data[y][x])) {
@@ -1081,6 +1085,21 @@ export function getRandomLevel(currentLevel) {
   return result;
 }
 
+function getStringAfterCoordinates(value) {
+  let result = "";
+  let n = 0;
+  for (let i = 0; i < value.length; i++) {
+    if (n >= 2) {
+      result += value[i];
+    }
+    if (value[i] === ",") {
+      n++;
+    }
+  }
+  result = result.trim();
+  return result;
+}
+
 export function isChroniaPolla(n) {
   return ((n >= seriesChoniaPollaStart) && (n <= seriesChoniaPollaEnd));
 }
@@ -1161,6 +1180,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
   let p1 = -1;
   let sound = "";
   let val_int = 0;
+  let val_str = "";
   let validXY = false;
   let volume = 90;
   let w = -1;
@@ -1201,16 +1221,15 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$answer":
-          if (values.length === 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-              if (idx >= 0) {
-                gameInfo.answerBalls[idx].answer = values[2];
-              }
-              idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-              if (idx >= 0) {
-                gameInfo.questionStones[idx].answer = values[2];
-              }
+          val_str = getStringAfterCoordinates(value);
+          if (validXY && (val_str !== "")) {
+            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+            if (idx >= 0) {
+              gameInfo.answerBalls[idx].answer = val_str;
+            }
+            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+            if (idx >= 0) {
+              gameInfo.questionStones[idx].answer = val_str;
             }
           }
           break;
@@ -1526,12 +1545,11 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$question":
-          if (values.length === 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-              if (idx >= 0) {
-                gameInfo.questionStones[idx].question = values[2];
-              }
+          val_str = getStringAfterCoordinates(value);
+          if (validXY && (val_str !== "")) {
+            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+            if (idx >= 0) {
+              gameInfo.questionStones[idx].question = val_str;
             }
           }
           break;

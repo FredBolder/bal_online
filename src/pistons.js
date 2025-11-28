@@ -43,7 +43,7 @@ export function checkPistonsDetector(gameData, gameInfo) {
                 ((gameData[y][x] === 5) && (piston.mode === "lightblueball")) ||
                 ((gameData[y][x] === 9) && (piston.mode === "yellowball")) ||
                 ([8, 93, 94].includes(gameData[y][x]) && (piston.mode === "redball")) ||
-                ((gameData[y][x] === 28) && (piston.mode === "purpleball")) ||
+                ([28, 242].includes(gameData[y][x]) && (piston.mode === "purpleball")) ||
                 ((gameData[y][x] === 40) && (piston.mode === "orangeball")) ||
                 ((gameData[y][x] === 203) && (piston.mode === "pinkball"));
             if (activate) {

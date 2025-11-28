@@ -1,10 +1,11 @@
+$extra: 1
 $stonepattern: 1
 $answer: 9, 3, 1, 1
 $answer: 7, 17, 2, 1
 $pistonmode: 7, 5, momentary
 $group: 17, 8, 2
 $pistonmode: 17, 8, purpleball
-$group: 18, 11, 2
+$group: 18, 11, 3
 $pistonmode: 18, 11, purpleball
 $question: 12, 7, y
 $answer: 12, 7, 2, 1
