@@ -86,6 +86,22 @@ function canMoveAlone(gameData, gameInfo, x, y) {
   return result;
 }
 
+export function changeAnswer(gameInfo, x, y, answer) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+  if (idx >= 0) {
+    gameInfo.answerBalls[idx].answer = answer;
+  }
+  if (idx === -1) {
+    idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+    if (idx >= 0) {
+      gameInfo.questionStones[idx].answer = answer;
+    }
+  }
+  return idx;
+}
+
 export function changeDirection(gameData, gameInfo, x, y, direction) {
   let idx = -1;
 
@@ -195,6 +211,16 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   if (idx >= 0) {
     gameInfo.redBalls[idx].smart = intelligence;
     gameData[y][x] = [8, 93, 94][intelligence];
+  }
+  return idx;
+}
+
+export function changeQuestion(gameInfo, x, y, question) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+  if (idx >= 0) {
+    gameInfo.questionStones[idx].question = question;
   }
   return idx;
 }
@@ -2538,8 +2564,8 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       gameInfo.hasTelekineticPower = true;
       result.message = "You have now telekinetic power! By pressing the Space bar or the A button you can move the ";
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
-      result.message += "purple ball, moveable gray ball, orange ball, pink ball, direction changer, time bomb, conveyor belt part, ";
-      result.message += "mover";
+      result.message += "purple ball, purple answer ball, moveable gray ball, orange ball, pink ball, direction changer, time bomb, ";
+      result.message += "conveyor belt part, mover";
       break;
     case 156:
       result.slowDownYellow = gameVars.yellowSlowdownerDurationTicks;

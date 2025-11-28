@@ -6,9 +6,11 @@ import { ModalContext } from "./ModalContext";
 import { actionKeys, actionList, hasAction } from "../actions.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import {
+  changeAnswer,
   changeGroup,
   changeDirection,
   changeIntelligence,
+  changeQuestion,
   dropObject,
   inWater,
   jump,
@@ -90,18 +92,20 @@ const msgNoCellSelected = "There is no cell selected. Hold the Shift button and 
 
 let dropPressed = false;
 let kPressed = false;
+let createLevelAnswer = "";
 let createLevelBallsPages = 2;
 let createLevelColorPages = 2;
 let createLevelDirection = "";
-let createLevelSelectedCell = null;
-let createLevelStonesPages = 2;
+let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
 let createLevelMode = "";
-let createLevelInstrument = "xylophone";
-let createLevelTranspose = 0;
 let createLevelObject = -1;
+let createLevelQuestion = "";
 let createLevelRaster = false;
+let createLevelSelectedCell = null;
+let createLevelStonesPages = 2;
+let createLevelTranspose = 0;
 let ctx;
 let ignoreGravity = true;
 let initialized = false;
@@ -1025,7 +1029,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 241, 0, 0, 0, 2101];
+                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 241, 2142, 2143, 0, 2101];
                 break;
             }
             break;
@@ -2622,6 +2626,21 @@ function BalPage() {
                 }
               }
 
+              if ((createLevelMenu === menuToNumber("stones")) && (createLevelObject === 2142)) {
+                if (changeQuestion(gameInfo, column, row, createLevelQuestion) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a question stone to set the question.");
+                  }
+                }
+              }
+              if ((createLevelMenu === menuToNumber("stones")) && (createLevelObject === 2143)) {
+                if (changeAnswer(gameInfo, column, row, createLevelAnswer) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a question stone or an answer ball to set the answer.");
+                  }
+                }
+              }
+
               if ((createLevelMenu === menuToNumber("redballs")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
                 if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
                   if (oneSelected) {
@@ -3040,6 +3059,35 @@ function BalPage() {
           }
         }
 
+        if ((createLevelMenu === menuToNumber("stones")) && ([2142, 2143].includes(createLevelObject))) {
+          ok = false;
+          switch (createLevelObject) {
+            case 2142:
+              if (row > 0) {
+                newValue = await showInput("Question", "Question", "");
+                if ((newValue !== null) && (newValue.trim() !== "")) {
+                  createLevelQuestion = newValue.trim();
+                  ok = true;
+                }
+              }
+              break;
+            case 2143:
+              if (row > 0) {
+                newValue = await showInput("Answer", "Answer", "");
+                if ((newValue !== null) && (newValue.trim() !== "")) {
+                  createLevelAnswer = newValue.trim();
+                  ok = true;
+                }
+              }
+              break;
+            default:
+              break;
+          }
+          if (!ok) {
+            createLevelMode = "";
+            createLevelObject = -1;
+          }
+        }
 
         switch (createLevelObject) {
           case 0:

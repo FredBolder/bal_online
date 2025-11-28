@@ -2884,9 +2884,29 @@ function drawLevel(
           // empty
           break;
       }
-      switch (gd) {
+
+      let switchNumber = -1;
+      if ((gd >= 210) && (gd <= 225)) {
+        switchNumber = -10;
+      } else if ((gd >= 2000) && (gd <= 2032)) {
+        switchNumber = -11;
+      } else if ((gd >= 2052) && (gd <= 2081)) {
+        switchNumber = -12;
+      } else {
+        switchNumber = gd;
+      }
+      switch (switchNumber) {
         case 0:
           // empty
+          break;
+        case -10:
+          drawStoneShape(currentCol, currentRow, gd);
+          break;
+        case -11:
+          drawNumber(gd - 2000);
+          break;
+        case -12:
+          drawColor(gd - 2052);
           break;
         case 1:
           drawStone(currentCol, currentRow);
@@ -3587,20 +3607,15 @@ function drawLevel(
         case 2141:
           drawStonePatternIcon("");
           break;
-        default:
-          if (gd < 210) {
-            drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
-          }
+        case 2142:
+          drawAbbreviation("Q");
           break;
-      }
-      if ((gd >= 2000) && (gd <= 2032)) {
-        drawNumber(gd - 2000);
-      }
-      if ((gd >= 2052) && (gd <= 2081)) {
-        drawColor(gd - 2052);
-      }
-      if ((gd >= 210) && (gd <= 225)) {
-        drawStoneShape(currentCol, currentRow, gd);
+        case 2143:
+          drawAbbreviation("A");
+          break;
+        default:
+          drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
+          break;
       }
 
       // Foreground

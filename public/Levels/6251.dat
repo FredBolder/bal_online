@@ -1,3 +1,5 @@
+$extra: 1
+$hint: The answers are rounded to two decimal places.
 $stonepattern: 1
 $answer: 7, 15, 1.41
 $answer: 9, 15, 1.73
@@ -15,7 +17,7 @@ $answer: 9, 8, 1.41
 $question: 9, 9, √3
 $answer: 9, 9, 1.73
 $question: 10, 3, π
-$answer: 10, 3, 2
+$answer: 10, 3, 3.14
 11111111111111111
 13        1 1   1
 1         1 1   1

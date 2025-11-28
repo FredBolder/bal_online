@@ -43,7 +43,7 @@ export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6204;
 export const seriesMathStart = 6250;
-export const seriesMathEnd = 6250;
+export const seriesMathEnd = 6251;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
