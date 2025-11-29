@@ -1,32 +1,76 @@
-$stonepattern: 2
-$answer: 11, 11, 1
-$answer: 17, 14, 0.5
-$pistonmode: 7, 15, momentary
-$question: 13, 14, sin
-$answer: 13, 14, 1
-$question: 14, 14, (90°)
-$answer: 14, 14, 1
-$question: 13, 17, sin
-$answer: 13, 17, 0.5
-$question: 14, 17, (60°)
-$answer: 14, 17, 0.5
-11111111111111111111
-1++ =1k        =  T1
-1   =1         =  11
-1&& => Π       =  31
-1   =1111111111=   1
-1   =1C      c1= 111
-1   =1 111111 1=   1
-1   =1 13111   =   1
-1   =1c  9   11=   1
-1   =11^v111111=   1
-1   =11       1=   1
-1   =1111  ҹ Π1=   1
-T  1=1111111111=   1
-1991=l    3  11=   1
-1  1=1111    ҸҸ= ҹ 1
-1^v1111Ì111m111=1111
-1   31151111111=   1
-1111         ҸҸ= 2 1
-111111111111111=1111
-11111111111111111111
+$extra: 1
+$hint: The order is changed by the mechanism.
+$stonepattern: 1
+$answer: 11, 4, ρ
+$answer: 12, 4, ά
+$answer: 13, 4, ο
+$answer: 14, 4, μ
+$answer: 15, 4, β
+$answer: 16, 4, π
+$gameticksxy: 2, 6, 25
+$pistonmode: 4, 3, momentary
+$pistonmode: 9, 6, momentary
+$group: 10, 6, 2
+$pistonmode: 10, 6, momentary
+$pistonmode: 11, 6, momentary
+$group: 12, 6, 2
+$pistonmode: 12, 6, momentary
+$pistonmode: 13, 6, momentary
+$group: 14, 6, 2
+$pistonmode: 14, 6, momentary
+$group: 7, 7, 10
+$pistonmode: 7, 7, repeatslow
+$group: 20, 7, 10
+$pistonmode: 20, 7, repeatfast
+$group: 4, 9, 2
+$pistonmode: 4, 9, momentary
+$group: 21, 11, 3
+$pistonmode: 21, 11, momentary
+$group: 21, 12, 3
+$pistonmode: 21, 12, momentary
+$group: 21, 13, 3
+$pistonmode: 21, 13, momentary
+$group: 21, 14, 3
+$pistonmode: 21, 14, momentary
+$group: 21, 15, 3
+$pistonmode: 21, 15, momentary
+$group: 21, 16, 3
+$pistonmode: 21, 16, momentary
+$pistonmode: 15, 6, momentary
+$group: 16, 6, 2
+$pistonmode: 16, 6, momentary
+$group: 3, 10, 2
+$group: 16, 12, 3
+$question: 18, 11, Μ
+$answer: 18, 11, μ
+$question: 18, 12, Π
+$answer: 18, 12, π
+$question: 18, 13, Ρ
+$answer: 18, 13, ρ
+$question: 18, 14, Α
+$answer: 18, 14, ά
+$question: 18, 15, Β
+$answer: 18, 15, β
+$question: 18, 16, Ο
+$answer: 18, 16, ο
+11111111111111111111111
+1   45 2              1
+1   1 11ЏЏЏЏЏЏЏЏЏ1111=1
+1   Ö 11             =1
+1  m1 1T ppҹҹҹҹҹҹ    =1
+18 11 11             =T
+11)11 11 ÌÌÌÌÌÌÌÌ111111
+11  1 1Ë            Ì11
+11G 1 111            11
+1   Ö 111ηηηηηηηηηηη 11
+1  m1 1111111111111α 81
+1  11             Ҹ  Ö1
+1  1111111111111m1Ҹ  Ö1
+11 111111111111111Ҹ  Ö1
+1  111111111111111Ҹ  Ö1
+1  111111111111111Ҹ  Ö1
+1  111111111111111Ҹ  Ö1
+1               31  β81
+1                1 β 81
+1                  1111
+11111111111111111111111

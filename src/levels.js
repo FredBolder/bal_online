@@ -44,7 +44,8 @@ export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6204;
 export const seriesMathStart = 6250;
 export const seriesMathEnd = 6253;
-
+export const seriesLanguageStart = 6300;
+export const seriesLanguageEnd = 6300;
 export function addSolvedLevels(levelStr) {
   let level = -1;
   let levelStart = -1;
@@ -733,6 +734,10 @@ export function displayLevelNumber(level, addInfo = false) {
     current = (level - seriesMathStart) + 1;
     total = (seriesMathEnd - seriesMathStart) + 1;
     series = "Math";
+  } else if ((level >= seriesLanguageStart) && (level <= seriesLanguageEnd)) {
+    current = (level - seriesLanguageStart) + 1;
+    total = (seriesLanguageEnd - seriesLanguageStart) + 1;
+    series = "Language";
   }
 
   if (current === -1) {
@@ -753,7 +758,7 @@ export function displayLevelNumber(level, addInfo = false) {
 export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
     seriesSmallStart, seriesEasy1Start, seriesExtremeStart, seriesMusic1Start, series6Start,
-    seriesEasy2Start, seriesMusic2Start, seriesMathStart].includes(level)
+    seriesEasy2Start, seriesMusic2Start, seriesMathStart, seriesLanguageStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -1004,6 +1009,9 @@ export function getAllLevels() {
   for (let i = seriesMathStart; i <= seriesMathEnd; i++) {
     levels.push(i);
   }
+  for (let i = seriesLanguageStart; i <= seriesLanguageEnd; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -1045,7 +1053,8 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= series6Start && n <= series6End) ||
       (n >= seriesEasy2Start && n <= seriesEasy2End) ||
       (n >= seriesMusic2Start && n <= seriesMusic2End) ||
-      (n >= seriesMathStart && n <= seriesMathEnd)
+      (n >= seriesMathStart && n <= seriesMathEnd) ||
+      (n >= seriesLanguageStart && n <= seriesLanguageEnd)
     )) ||
     (n >= 9996) && n <= 9999) {
     result = await loadFromFile(n, gateTravelling);
@@ -1111,7 +1120,8 @@ export function isExtra(n) {
     ((n >= series6Start) && (n <= series6End)) ||
     ((n >= seriesEasy2Start) && (n <= seriesEasy2End)) ||
     ((n >= seriesMusic2Start) && (n <= seriesMusic2End)) ||
-    ((n >= seriesMathStart) && (n <= seriesMathEnd))
+    ((n >= seriesMathStart) && (n <= seriesMathEnd)) ||
+    ((n >= seriesLanguageStart) && (n <= seriesLanguageEnd))
   )
 }
 
@@ -1633,6 +1643,7 @@ export function numberOfLevels() {
   n += (seriesEasy2End - seriesEasy2Start) + 1;
   n += (seriesMusic2End - seriesMusic2Start) + 1;
   n += (seriesMathEnd - seriesMathStart) + 1;
+  n += (seriesLanguageEnd - seriesLanguageStart) + 1;
   return n;
 }
 

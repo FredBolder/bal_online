@@ -10,7 +10,7 @@ export function checkMovers(gameData, gameInfo, gameVars) {
             if (el === 0) {
                 mover.counter = 0;
             }
-            if ([2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203].includes(el)) {
+            if ([2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242].includes(el)) {
                 if (mover.counter < gameVars.moverCountTo) {
                     mover.counter++;
                 } else {
