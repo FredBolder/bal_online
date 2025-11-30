@@ -18,10 +18,13 @@ $pistonmode: 12, 6, momentary
 $pistonmode: 13, 6, momentary
 $group: 14, 6, 2
 $pistonmode: 14, 6, momentary
+$pistonmode: 15, 6, momentary
+$group: 16, 6, 2
+$pistonmode: 16, 6, momentary
 $group: 7, 7, 10
 $pistonmode: 7, 7, repeatslow
-$group: 20, 7, 10
-$pistonmode: 20, 7, repeatfast
+$group: 20, 7, 11
+$pistonmode: 20, 7, purpleball
 $group: 4, 9, 2
 $pistonmode: 4, 9, momentary
 $group: 21, 11, 3
@@ -36,9 +39,6 @@ $group: 21, 15, 3
 $pistonmode: 21, 15, momentary
 $group: 21, 16, 3
 $pistonmode: 21, 16, momentary
-$pistonmode: 15, 6, momentary
-$group: 16, 6, 2
-$pistonmode: 16, 6, momentary
 $group: 3, 10, 2
 $group: 16, 12, 3
 $question: 18, 11, Μ
