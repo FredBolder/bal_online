@@ -2,8 +2,10 @@ import { percentageToBoost, resonancePercentToQ } from "./filter.js";
 import {
     getBlueNoiseBuffer,
     getBrownNoiseBuffer,
-    getMetalNoiseBuffer,
+    getCrashNoiseBuffer,
+    getHihatNoiseBuffer,
     getPinkNoiseBuffer,
+    getRideNoiseBuffer,
     getVioletNoiseBuffer,
     getWhiteNoiseBuffer
 } from "./noise.js";
@@ -25,7 +27,7 @@ function createDistortionCurve({
         switch (type) {
 
             // ---------------------------------------------------
-            // 1. Soft clipping (your original tanh)
+            // 1. Soft clipping (tanh)
             // ---------------------------------------------------
             case "tanh":
                 y = Math.tanh(x * k);
@@ -159,7 +161,9 @@ class Operator {
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
 
-        const isBuffer = ["blueNoise", "brownNoise", "metalNoise", "metalNoiseAndBPF", "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", "violetNoise"].includes(waveform);
+        const isBuffer = ["blueNoise", "brownNoise", "crashNoise", "crashNoiseAndBPF", "hihatNoise", "hihatNoiseAndBPF",
+            "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", 
+            "rideNoise", "rideNoiseAndBPF", "violetNoise"].includes(waveform);
         let oscillator = null;
 
         nOscillators = 1;
@@ -178,33 +182,41 @@ class Operator {
                 // Buffer
                 switch (waveform) {
                     case "blueNoise":
-                        oscillator.buffer = getBlueNoiseBuffer(audioContext, 2);
+                        oscillator.buffer = getBlueNoiseBuffer(audioContext);
                         break;
                     case "brownNoise":
-                        oscillator.buffer = getBrownNoiseBuffer(audioContext, 2);
+                        oscillator.buffer = getBrownNoiseBuffer(audioContext);
                         break;
-                    case "metalNoise":
-                        oscillator.buffer = getMetalNoiseBuffer(audioContext);
+                    case "crashNoise":
+                    case "crashNoiseAndBPF":
+                        oscillator.buffer = getCrashNoiseBuffer(audioContext);
                         break;
-                    case "metalNoiseAndBPF":
-                        oscillator.buffer = getMetalNoiseBuffer(audioContext);
+                    case "hihatNoise":
+                    case "hihatNoiseAndBPF":
+                        oscillator.buffer = getHihatNoiseBuffer(audioContext);
                         break;
                     case "pinkNoise":
                     case "pinkNoiseAndBPF":
-                        oscillator.buffer = getPinkNoiseBuffer(audioContext, 2);
+                        oscillator.buffer = getPinkNoiseBuffer(audioContext);
+                        break;
+                    case "rideNoise":
+                    case "rideNoiseAndBPF":
+                        oscillator.buffer = getRideNoiseBuffer(audioContext);
                         break;
                     case "violetNoise":
-                        oscillator.buffer = getVioletNoiseBuffer(audioContext, 2);
+                        oscillator.buffer = getVioletNoiseBuffer(audioContext);
                         break;
                     default:
-                        oscillator.buffer = getWhiteNoiseBuffer(audioContext, 2);
+                        oscillator.buffer = getWhiteNoiseBuffer(audioContext);
                         break;
                 }
                 // Filter
                 switch (waveform) {
+                    case "crashNoiseAndBPF":
+                    case "hihatNoiseAndBPF":
                     case "noiseAndBPF":
-                    case "metalNoiseAndBPF":
                     case "pinkNoiseAndBPF":
+                    case "rideNoiseAndBPF":
                         this.filter = audioContext.createBiquadFilter();
                         this.filter.type = "bandpass";
                         this.filter.frequency.value = frequency;

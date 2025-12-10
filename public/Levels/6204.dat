@@ -58,7 +58,7 @@ $stepspermeasure: 11, 17, 36
 $musicbox: 22, 18, firstcount, 20
 $notes: 22, 18, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -
 $addnotes: 22, 18, -, -, -, -, D4, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -
-$instrument: 22, 18, splashcymbal, 70
+$instrument: 22, 18, splashcymbal, 80
 $stepspermeasure: 22, 18, 9
 $musicbox: 6, 20, firstcount, 10
 $notes: 6, 20, C4, C4, -, -, C4, -, -, -, C4, C4, -, -, C4, -, C4, -, -, -, C4, C4, -, -, C4, -, -, -, C4, C4, -, -, C4, -
@@ -82,10 +82,10 @@ $addnotes: 18, 20, -, -, -, -, -, -, -, -, -, -
 $instrument: 18, 20, tom, 90
 $stepspermeasure: 18, 20, 18
 $musicbox: 30, 20, firstcount, 10
-$notes: 30, 20, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, F4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4
-$addnotes: 30, 20, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, F4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4
-$addnotes: 30, 20, E4, E4, E4, E4, E4, E4, E4, -, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4, F4, E4, E4, E4, E4, E4, E4, E4, E4
-$addnotes: 30, 20, E4, E4, E4, E4, E4, E4, E4, E4, E4, E4
+$notes: 30, 20, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, D4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4
+$addnotes: 30, 20, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, D4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4
+$addnotes: 30, 20, C4, C4, C4, C4, C4, C4, C4, -, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4, D4, C4, C4, C4, C4, C4, C4, C4, C4
+$addnotes: 30, 20, C4, C4, C4, C4, C4, C4, C4, C4, C4, C4
 $instrument: 30, 20, hihat, 80
 $stepspermeasure: 30, 20, 18
 $group: 16, 1, 2

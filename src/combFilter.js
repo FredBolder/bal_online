@@ -37,14 +37,14 @@ class CombFilter {
         this.combLowpass.frequency.value = this.lpCut;
         this.combLowpass.Q.value = 0.7;
 
-        // wire the loop: delay -> hp -> lp -> feedback -> delay
-        this.combDelay.connect(this.combHighpass);
-        this.combHighpass.connect(this.combLowpass);
-        this.combLowpass.connect(this.combFb);
+        // wire the loop: delay -> feedback -> delay
+        this.combDelay.connect(this.combFb);
         this.combFb.connect(this.combDelay);
 
-        // wire loop output to wet gain (tap the delay output)
-        this.combDelay.connect(this.combWet);
+        // tap the loop output
+        this.combDelay.connect(this.combHighpass);
+        this.combHighpass.connect(this.combLowpass);
+        this.combLowpass.connect(this.combWet);
 
         // mix wet + dry into combOutput (summing node)
         this.combWet.connect(this.combOutput);

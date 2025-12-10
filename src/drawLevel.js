@@ -1257,9 +1257,6 @@ function drawLevel(
               case "C":
                 black1start = xmin + (1.5 * width3div5) - blackHalfWidth;
                 black1width = w1 - (black1start - xmin);
-                if (part === "bottom") {
-                  console.log(line1y1, line2y1);
-                }
                 break;
               case "D":
                 black1start = xmin;

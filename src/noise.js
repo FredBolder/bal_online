@@ -1,11 +1,25 @@
 let blueNoiseBuffer = null;
 let brownNoiseBuffer = null;
-let metalNoiseBuffer = null;
+let crashNoiseBuffer = null;
+let hihatNoiseBuffer = null;
 let pinkNoiseBuffer = null;
+let rideNoiseBuffer = null;
 let violetNoiseBuffer = null;
 let whiteNoiseBuffer = null;
 
-function createBlueNoiseBuffer(audioCtx, durationInSeconds = 1) {
+export function clearCrashNoiseBuffer() {
+    crashNoiseBuffer = null;
+}
+
+export function clearHihatNoiseBuffer() {
+    hihatNoiseBuffer = null;
+}
+
+export function clearRideNoiseBuffer() {
+    rideNoiseBuffer = null;
+}
+
+function createBlueNoiseBuffer(audioCtx, durationInSeconds) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = durationInSeconds * sampleRate;
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
@@ -31,7 +45,7 @@ function createBlueNoiseBuffer(audioCtx, durationInSeconds = 1) {
     return buffer;
 }
 
-function createBrownNoiseBuffer(audioCtx, durationInSeconds = 1) {
+function createBrownNoiseBuffer(audioCtx, durationInSeconds) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = durationInSeconds * sampleRate;
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
@@ -47,9 +61,8 @@ function createBrownNoiseBuffer(audioCtx, durationInSeconds = 1) {
     return buffer;
 }
 
-// --- small helpers: string -> seed and Mulberry32 PRNG ---
+// --- helpers (your existing functions) ---
 function xfnv1a(str) {
-    // 32-bit FNV-1a hash (returns unsigned 32-bit int)
     let h = 2166136261 >>> 0;
     for (let i = 0; i < str.length; i++) {
         h ^= str.charCodeAt(i);
@@ -58,7 +71,6 @@ function xfnv1a(str) {
     return h >>> 0;
 }
 function mulberry32(seed) {
-    // seed should be a 32-bit integer
     let t = seed >>> 0;
     return function () {
         t += 0x6D2B79F5;
@@ -68,72 +80,126 @@ function mulberry32(seed) {
     };
 }
 
-// createMetalNoiseBuffer - generates a cymbal-like metallic noise AudioBuffer
-// audioCtx : AudioContext
-// durationInSeconds : length of buffer
-// options (optional):
-//   strikeTime: attack/decay for the initial hit (s) (default 0.02)
-//   scrapeLevel: amount of high-frequency "scrape" noise (0..1) (default 0.6)
-//   combCount: number of comb resonators (default 6)
-//   partialCount: number of decaying sine partials (default 40)
-//   brightness: (0..1) bias toward brighter (more high partials) (default 0.7)
-//   decay: overall decay multiplier for resonators (0..1) (default 1.0)
-export function createMetalNoiseBuffer(audioCtx, durationInSeconds = 1, options = {}) {
+// --- unified metal noise generator with lots of options ---
+export function createMetalNoiseBuffer(audioCtx, durationInSeconds, options = {}) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = Math.max(1, Math.floor(durationInSeconds * sampleRate));
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
     const data = buffer.getChannelData(0);
 
-    // options (defaults)
-    const strikeTime = options.strikeTime ?? 0.02;
-    const scrapeLevel = options.scrapeLevel ?? 0.6;
-    const combCount = options.combCount ?? 6;
-    const partialCount = options.partialCount ?? 40;
-    const brightness = ('brightness' in options) ? options.brightness : 0.7;
-    const overallDecay = options.decay ?? 1.0;
+    // default options (comprehensive)
+    const defaults = {
+        seed: null,
 
-    // seeded RNG (either from options.seed or fallback to Math.random)
+        // strike / hit envelope
+        strikeTime: 0.02,       // initial hit window (s)
+        noiseDecay: 0.12,       // white/noise strike decay (s)
+
+        // overall spectral control
+        brightness: 0.7,        // 0..1 : bias toward highs (1 = bright)
+        fMin: 200,              // lowest partial (Hz)
+        fMax: 14000,            // highest partial (Hz)
+
+        // component levels
+        scrapeLevel: 0.35,      // 0..1: high-frequency scrape / sizzle
+        noiseWeight: 0.9,       // how much the raw noise/strike contributes
+        combWeight: 0.6,        // weight of comb resonators
+        partialWeight: 0.9,     // weight of decaying partial sines
+        ringModDepth: 0.25,     // subtle ring modulation depth
+
+        // counts and complexity
+        combCount: 8,
+        partialCount: 60,
+
+        // comb delay range (seconds)
+        combMinDelay: 0.002,    // 0.002 ~ 500 Hz
+        combMaxDelay: 0.018,    // 0.018 ~ 55 Hz
+
+        // comb behavior ranges (feedback/damp)
+        combFeedbackMin: 0.5,
+        combFeedbackMax: 0.85,
+        combDampMin: 0.15,
+        combDampMax: 0.6,
+
+        // partial decay shaping
+        partialBaseDecayMin: 0.12,
+        partialBaseDecayMax: 1.8,
+
+        // optionally force some low modal frequencies (Hz)
+        forcedModes: [],        // e.g. [180, 330, 450]
+
+        // misc
+        overallDecay: 1.0,
+        normalize: true,
+
+        // extra color
+        ringFreqMin: 2000,
+        ringFreqMax: 8000
+    };
+
+    // merge
+    const opt = Object.assign({}, defaults, options);
+
+    // seeded RNG
     let rng;
-    if (options.seed !== undefined && options.seed !== null) {
+    if (opt.seed !== undefined && opt.seed !== null) {
         let seedInt;
-        if (typeof options.seed === 'string') {
-            seedInt = xfnv1a(options.seed.toString());
-        } else {
-            // number -> convert to 32-bit unsigned
-            seedInt = (options.seed >>> 0) || xfnv1a(String(options.seed));
-        }
+        if (typeof opt.seed === 'string') seedInt = xfnv1a(opt.seed.toString());
+        else seedInt = (opt.seed >>> 0) || xfnv1a(String(opt.seed));
         rng = mulberry32(seedInt);
     } else {
         rng = Math.random;
     }
 
-    // Precompute strike envelope (fast attack, exponential-ish decay)
-    const strikeSamples = Math.max(1, Math.floor(strikeTime * sampleRate));
+    // --- strike / envelope arrays ---
+    const strikeSamples = Math.max(1, Math.floor(opt.strikeTime * sampleRate));
     const strikeEnv = new Float32Array(bufferSize);
     for (let i = 0; i < bufferSize; i++) {
         if (i < strikeSamples) {
             const t = i / strikeSamples;
-            strikeEnv[i] = Math.exp(-t * 6);
+            strikeEnv[i] = Math.exp(-t * 6); // quick-ish burst
         } else {
             strikeEnv[i] = 0;
         }
     }
 
-    // --- Comb filter bank setup (deterministic via rng) ---
+    // optional noise longer tail envelope (for "woomph" body)
+    const noiseDecaySamples = Math.max(1, Math.floor(opt.noiseDecay * sampleRate));
+    const noiseEnv = new Float32Array(bufferSize);
+    for (let i = 0; i < bufferSize; i++) {
+        const t = i / Math.max(1, noiseDecaySamples);
+        noiseEnv[i] = Math.exp(-t * 6); // tail for raw noise
+    }
+
+    // --- comb filter bank setup ---
     const combs = [];
-    for (let c = 0; c < combCount; c++) {
-        const minDelay = 0.0006;
-        const maxDelay = 0.010;
-        // use rng instead of Math.random
-        const r = rng();
-        const delaySec = minDelay + (maxDelay - minDelay) * Math.pow(r, 0.8) * (0.5 + brightness * 0.5);
+    // include forcedModes first (if any)
+    for (let fm = 0; fm < (opt.forcedModes || []).length; fm++) {
+        const freq = opt.forcedModes[fm];
+        if (!isFinite(freq) || freq <= 0) continue;
+        const delaySec = 1 / freq;
         const delaySamples = Math.max(1, Math.floor(delaySec * sampleRate));
-        const buf = new Float32Array(delaySamples + 1);
-        const feedback = 0.65 + rng() * 0.33;
-        const damp = 0.2 + rng() * 0.6;
         combs.push({
-            buf,
-            bufLen: buf.length,
+            buf: new Float32Array(delaySamples + 1),
+            bufLen: delaySamples + 1,
+            writeIndex: 0,
+            delaySamples,
+            feedback: Math.min(0.98, opt.combFeedbackMax),
+            damp: Math.min(0.9, opt.combDampMax),
+            lastOut: 0
+        });
+    }
+
+    for (let c = 0; c < opt.combCount; c++) {
+        // bias delays slightly by brightness: brighter => slightly shorter delays (higher freq modes)
+        const r = rng();
+        const delaySec = opt.combMinDelay + (opt.combMaxDelay - opt.combMinDelay) * Math.pow(r, 0.9) * (1 - 0.35 * opt.brightness);
+        const delaySamples = Math.max(1, Math.floor(delaySec * sampleRate));
+        const feedback = opt.combFeedbackMin + rng() * (opt.combFeedbackMax - opt.combFeedbackMin);
+        const damp = opt.combDampMin + rng() * (opt.combDampMax - opt.combDampMin);
+        combs.push({
+            buf: new Float32Array(delaySamples + 1),
+            bufLen: delaySamples + 1,
             writeIndex: 0,
             delaySamples,
             feedback,
@@ -142,44 +208,61 @@ export function createMetalNoiseBuffer(audioCtx, durationInSeconds = 1, options 
         });
     }
 
-    // --- Partial (decaying sine) bank setup (deterministic) ---
+    // --- partials (decaying sines) setup ---
     const partials = [];
-    const fMin = 800;
-    const fMax = 14000;
-    for (let p = 0; p < partialCount; p++) {
+    const fMin = opt.fMin;
+    const fMax = opt.fMax;
+    for (let p = 0; p < opt.partialCount; p++) {
         const r = rng();
-        const freq = fMin + (fMax - fMin) * Math.pow(r, 0.3 + 0.7 * brightness);
+
+        // frequency distribution shaped by brightness:
+        // brightness 1 => favors highs, brightness 0 => favors lows
+        const shape = Math.max(0.01, 1.5 - opt.brightness); // 1.5..0.5
+        const freq = fMin + (fMax - fMin) * Math.pow(r, shape);
+
         const phase = rng() * Math.PI * 2;
-        const baseDecay = 0.08 + rng() * 1.4;
-        const decayTime = baseDecay * (1.2 - Math.min(1, freq / fMax));
-        const amp = (0.6 + rng() * 0.8) * (1.0 - Math.abs((freq - 4000) / 8000)) * 0.7;
+
+        // decay: slower for low frequencies
+        let baseDecay = opt.partialBaseDecayMin + rng() * (opt.partialBaseDecayMax - opt.partialBaseDecayMin);
+        if (freq < 400) baseDecay *= 2.2;
+        else if (freq < 800) baseDecay *= 1.6;
+
+        const decayTime = baseDecay * (1.4 - Math.min(1, freq / fMax)); // slightly longer for lows
         const phaseInc = 2 * Math.PI * freq / sampleRate;
         const decayPerSample = Math.exp(-1 / (decayTime * sampleRate));
+
+        // amplitude: favor low-mid body and shimmer region
+        let amp = (0.7 + rng() * 1.3);
+        if (freq < 500) amp *= 2.0;         // strong body
+        else if (freq < 1000) amp *= 1.4;   // mid body
+        // shimmer around 3-8kHz
+        amp *= 1.0 - Math.abs((freq - 5000) / 12000);
+        amp *= 0.6; // global scaling
         partials.push({
-            phase,
-            phaseInc,
-            amp,
-            decayPerSample,
-            currentAmp: amp
+            phase, phaseInc, amp, decayPerSample, currentAmp: amp
         });
     }
 
-    // Ring/modulator deterministic init
-    const ringFreq = 3000 + rng() * 8000;
+    // ring-modulator base
+    const ringFreq = opt.ringFreqMin + rng() * (opt.ringFreqMax - opt.ringFreqMin);
     let ringPhase = rng() * Math.PI * 2;
     const ringInc = 2 * Math.PI * ringFreq / sampleRate;
 
-    // Main sample loop: deterministic because we only use rng()
+    // --- main synthesis loop ---
     let maxAmp = 0;
     for (let i = 0; i < bufferSize; i++) {
         const white = rng() * 2 - 1;
-        const noiseStrike = white * strikeEnv[i];
+        const noiseStrike = white * strikeEnv[i] * noiseEnv[i];
 
-        // persistent scrape noise (deterministic)
-        const scrape = (rng() * 2 - 1) * scrapeLevel * (0.8 + 0.2 * rng()) * (1 - Math.min(1, i / (0.06 * sampleRate)));
-        const scrapeEnv = Math.exp(-i / (sampleRate * (0.6 + 0.6 * (1 - brightness))));
+        // persistent scrape noise (decays faster for lower brightness)
+        const scrape = (rng() * 2 - 1) * opt.scrapeLevel * (0.7 + 0.3 * rng());
+        // scrape envelope: faster when brightness is high, slower when darker
+        const scrapeDecaySec = 0.02 + (0.6 * (1 - opt.brightness)); // 0.02..0.62
+        const scrapeEnv = Math.exp(-i / (sampleRate * scrapeDecaySec));
+        const scrapeVal = scrape * scrapeEnv;
 
-        const input = noiseStrike + scrape * scrapeEnv;
+        // combine initial input (strike + scrape)
+        const input = noiseStrike + scrapeVal;
 
         // comb bank
         let combOutSum = 0;
@@ -187,12 +270,9 @@ export function createMetalNoiseBuffer(audioCtx, durationInSeconds = 1, options 
             const comb = combs[c];
             const readIndex = (comb.writeIndex + 1) % comb.bufLen;
             let delayed = comb.buf[readIndex];
-
             delayed = comb.lastOut * (1 - comb.damp) + delayed * comb.damp;
             comb.lastOut = delayed;
-
             combOutSum += delayed;
-
             const fbVal = input + delayed * comb.feedback;
             comb.buf[comb.writeIndex] = fbVal;
             comb.writeIndex = (comb.writeIndex + 1) % comb.bufLen;
@@ -209,14 +289,14 @@ export function createMetalNoiseBuffer(audioCtx, durationInSeconds = 1, options 
             part.currentAmp *= part.decayPerSample;
         }
 
+        // ring modulation
         const ring = Math.sin(ringPhase);
         ringPhase += ringInc;
         if (ringPhase > Math.PI * 2) ringPhase -= Math.PI * 2;
 
-        const noiseWeight = 0.9;
-        const combWeight = 0.6 * overallDecay;
-        const partialWeight = 0.9 * overallDecay;
-        const out = noiseWeight * input + (combWeight * combOutSum + partialWeight * partialSum) * (1 + 0.25 * ring);
+        const out =
+            opt.noiseWeight * input +
+            (opt.combWeight * combOutSum + opt.partialWeight * partialSum) * (1 + opt.ringModDepth * ring) * opt.overallDecay;
 
         data[i] = out;
         const absv = Math.abs(out);
@@ -224,7 +304,7 @@ export function createMetalNoiseBuffer(audioCtx, durationInSeconds = 1, options 
     }
 
     // normalize
-    if (maxAmp > 0) {
+    if (opt.normalize && maxAmp > 0) {
         const norm = 0.98 / maxAmp;
         for (let i = 0; i < bufferSize; i++) data[i] *= norm;
     }
@@ -232,7 +312,100 @@ export function createMetalNoiseBuffer(audioCtx, durationInSeconds = 1, options 
     return buffer;
 }
 
-function createPinkNoiseBuffer(audioCtx, durationInSeconds = 1) {
+export function getMetalNoisePreset(instrument = "crash", flavor = "default") {
+    const common = {
+        seed: instrument + (flavor ? "_" + flavor : ""),
+        brightness: 0.6,
+        scrapeLevel: 0.35,
+        combCount: 8,
+        partialCount: 60,
+        fMin: 200,
+        fMax: 14000,
+        combMinDelay: 0.002,
+        combMaxDelay: 0.018,
+        noiseDecay: 0.12,
+        strikeTime: 0.02,
+        overallDecay: 1.0,
+        combFeedbackMin: 0.5,
+        combFeedbackMax: 0.85,
+        combDampMin: 0.15,
+        combDampMax: 0.6,
+        forcedModes: []
+    };
+
+    const presets = {
+        hihat: {
+            ...common,
+            brightness: 0.95,
+            scrapeLevel: 0.9,
+            combCount: 4,
+            partialCount: 40,
+            fMin: 2000,
+            fMax: 14000,
+            combMinDelay: 0.0005,
+            combMaxDelay: 0.004,
+            noiseDecay: 0.06,
+            strikeTime: 0.008,
+            combFeedbackMin: 0.35,
+            combFeedbackMax: 0.6,
+            forcedModes: []
+        },
+
+        splash: {
+            ...common,
+            brightness: 0.85,
+            scrapeLevel: 0.5,
+            combCount: 6,
+            partialCount: 44,
+            fMin: 400,
+            fMax: 14000,
+            combMinDelay: 0.001,
+            combMaxDelay: 0.012,
+            noiseDecay: 0.08,
+            strikeTime: 0.01,
+            forcedModes: [300, 520]
+        },
+
+        ride: {
+            ...common,
+            brightness: 0.6,
+            scrapeLevel: 0.45,
+            combCount: 12,
+            partialCount: 80,
+            fMin: 300,
+            fMax: 12000,
+            combMinDelay: 0.002,
+            combMaxDelay: 0.02,
+            noiseDecay: 0.45,
+            strikeTime: 0.02,
+            combFeedbackMin: 0.5,
+            combFeedbackMax: 0.9,
+            forcedModes: [220, 360, 540]
+        },
+
+        crash: {
+            ...common,
+            brightness: 0.55,
+            scrapeLevel: 0.3,
+            combCount: 12,
+            partialCount: 100,
+            fMin: 200,
+            fMax: 14000,
+            combMinDelay: 0.002,
+            combMaxDelay: 0.018,
+            noiseDecay: 0.18,
+            strikeTime: 0.02,
+            combFeedbackMin: 0.55,
+            combFeedbackMax: 0.9,
+            forcedModes: [180, 330, 500]
+        }
+    };
+
+    return presets[instrument] || presets.crash;
+}
+
+
+function createPinkNoiseBuffer(audioCtx, durationInSeconds) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = durationInSeconds * sampleRate;
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
@@ -258,7 +431,7 @@ function createPinkNoiseBuffer(audioCtx, durationInSeconds = 1) {
     return buffer;
 }
 
-function createVioletNoiseBuffer(audioCtx, durationInSeconds = 1) {
+function createVioletNoiseBuffer(audioCtx, durationInSeconds) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = durationInSeconds * sampleRate;
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
@@ -287,7 +460,7 @@ function createVioletNoiseBuffer(audioCtx, durationInSeconds = 1) {
     return buffer;
 }
 
-function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
+function createWhiteNoiseBuffer(audioCtx, durationInSeconds) {
     const sampleRate = audioCtx.sampleRate;
     const bufferSize = durationInSeconds * sampleRate;
     const buffer = audioCtx.createBuffer(1, bufferSize, sampleRate);
@@ -299,56 +472,61 @@ function createWhiteNoiseBuffer(audioCtx, durationInSeconds = 1) {
     return buffer;
 }
 
-export function getBlueNoiseBuffer(audioCtx) {
+export function getBlueNoiseBuffer(audioCtx, durationInSeconds = 2) {
     if (blueNoiseBuffer === null) {
-        blueNoiseBuffer = createBlueNoiseBuffer(audioCtx);
+        blueNoiseBuffer = createBlueNoiseBuffer(audioCtx, durationInSeconds);
     }
     return blueNoiseBuffer;
 }
 
-export function getBrownNoiseBuffer(audioCtx) {
+export function getBrownNoiseBuffer(audioCtx, durationInSeconds = 2) {
     if (brownNoiseBuffer === null) {
-        brownNoiseBuffer = createBrownNoiseBuffer(audioCtx);
+        brownNoiseBuffer = createBrownNoiseBuffer(audioCtx, durationInSeconds);
     }
     return brownNoiseBuffer;
 }
 
-export function clearMetalNoiseBuffer() {
-    metalNoiseBuffer = null;
-}
-
-export function getMetalNoiseBuffer(audioCtx) {
-    if (metalNoiseBuffer === null) {
-        metalNoiseBuffer = createMetalNoiseBuffer(audioCtx, 2, {
-            brightness: 0.7, // 0.7
-            combCount: 6, // 6
-            decay: 1, // 1
-            partialCount: 40, // 40
-            scrapeLevel: 0.6, // 0.6
-            seed: 12345, // 12345
-            strikeTime: 0.02, // 0.02
-        });
+export function getCrashNoiseBuffer(audioCtx, durationInSeconds = 3) {
+    if (crashNoiseBuffer === null) {
+        const opts = getMetalNoisePreset("crash");
+        crashNoiseBuffer = createMetalNoiseBuffer(audioCtx, durationInSeconds, opts);
     }
-    return metalNoiseBuffer;
+    return crashNoiseBuffer;
 }
 
-export function getPinkNoiseBuffer(audioCtx) {
+export function getHihatNoiseBuffer(audioCtx, durationInSeconds = 1) {
+    if (hihatNoiseBuffer === null) {
+        const opts = getMetalNoisePreset("hihat");
+        hihatNoiseBuffer = createMetalNoiseBuffer(audioCtx, durationInSeconds, opts);
+    }
+    return hihatNoiseBuffer;
+}
+
+export function getPinkNoiseBuffer(audioCtx, durationInSeconds = 2) {
     if (pinkNoiseBuffer === null) {
-        pinkNoiseBuffer = createPinkNoiseBuffer(audioCtx);
+        pinkNoiseBuffer = createPinkNoiseBuffer(audioCtx, durationInSeconds);
     }
     return pinkNoiseBuffer;
 }
 
-export function getVioletNoiseBuffer(audioCtx) {
+export function getRideNoiseBuffer(audioCtx, durationInSeconds = 2) {
+    if (rideNoiseBuffer === null) {
+        const opts = getMetalNoisePreset("ride");
+        rideNoiseBuffer = createMetalNoiseBuffer(audioCtx, durationInSeconds, opts);
+    }
+    return rideNoiseBuffer;
+}
+
+export function getVioletNoiseBuffer(audioCtx, durationInSeconds = 2) {
     if (violetNoiseBuffer === null) {
-        violetNoiseBuffer = createVioletNoiseBuffer(audioCtx);
+        violetNoiseBuffer = createVioletNoiseBuffer(audioCtx, durationInSeconds);
     }
     return violetNoiseBuffer;
 }
 
-export function getWhiteNoiseBuffer(audioCtx) {
+export function getWhiteNoiseBuffer(audioCtx, durationInSeconds = 2) {
     if (whiteNoiseBuffer === null) {
-        whiteNoiseBuffer = createWhiteNoiseBuffer(audioCtx);
+        whiteNoiseBuffer = createWhiteNoiseBuffer(audioCtx, durationInSeconds);
     }
     return whiteNoiseBuffer;
 }

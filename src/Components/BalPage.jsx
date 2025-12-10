@@ -39,7 +39,7 @@ import { globalVars } from "../glob.js";
 import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
-import { closeAudio, initAudio, getAudioContext, instruments } from "../music.js";
+import { closeAudio, getAudioContext, instruments } from "../music.js";
 import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
@@ -1838,7 +1838,6 @@ function BalPage() {
           gameVars.lastMusicBox = null;
         } else {
           gameVars.gameOver = true;
-          //console.log(gameVars.lastMusicBox.notes);
         }
       } else {
         gameVars.gameOver = true;
@@ -2052,7 +2051,6 @@ function BalPage() {
     const step = intervalTimeMs / 1000;
     let nextTime = audioCtx.currentTime + step;
     let stopped = false;
-    console.log("startGameClock");
 
     function tick() {
       if (stopped) return;
@@ -2062,7 +2060,6 @@ function BalPage() {
       // Catch up missed ticks
       while (nextTime <= now) {
         runGameScheduler(nextTime);
-        console.log("runGameScheduler(nextTime);");
         nextTime += step;
       }
 
@@ -2130,7 +2127,7 @@ function BalPage() {
     const abortCtrl = new AbortController();
     //const intervalRef = { current: null };
 
-    const audioCtx = initAudio();
+    const audioCtx = getAudioContext();
 
     audioCtx.resume().then(() => {
       startSchedulers();
@@ -2167,7 +2164,7 @@ function BalPage() {
           gameVars.currentLevel = 200;
           await loadProgress(gameVars);
           if (globalVars.uf) {
-            gameVars.currentLevel = 200;
+            gameVars.currentLevel = 0;
           }
           await initLevel(gameVars.currentLevel);
         }
@@ -2194,14 +2191,16 @@ function BalPage() {
     })();
 
     return () => {
-      initialized = false;
       abortCtrl.abort();
       globalVars.balPageLoading = false;
       window.removeEventListener("resize", handleResize);
       //if (intervalRef.current) clearInterval(intervalRef.current);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       stopSchedulers();
-      closeAudio();
+      if (initialized) {
+        closeAudio();
+      }
+      initialized = false;
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

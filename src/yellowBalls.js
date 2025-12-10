@@ -59,7 +59,6 @@ export function checkSynchroniser(gameData, yellowBalls, x, y, direction) {
                 stop = true;
             }
         }
-        //console.log(`xmin: ${xmin}, ymin: ${ymin}, xmax: ${xmax}, ymax: ${ymax}`);
     }
     if ((direction === "left") || (direction === "right")) {
         stop = false;

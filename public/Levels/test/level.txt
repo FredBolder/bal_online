@@ -1,108 +1,83 @@
-$stonepattern: 1
-$answer: 19, 5, 1
-$answer: 19, 6, 2
-$answer: 19, 7, 3
-$answer: 19, 8, 4
-$answer: 19, 9, 5
-$answer: 19, 10, 6
-$answer: 19, 11, 7
-$answer: 19, 12, 8
-$answer: 19, 13, 9
-$answer: 19, 14, 10
-$group: 23, 0, 2
-$pistonmode: 23, 0, momentary
-$group: 22, 1, 3
-$pistonmode: 22, 1, momentary
-$group: 26, 12, 4
-$pistonmode: 26, 12, momentary
-$group: 2, 17, 3
-$pistonmode: 2, 17, momentary
-$group: 23, 19, 10
-$pistonmode: 23, 19, purpleball
-$group: 3, 10, 2
-$group: 3, 18, 3
-$group: 28, 18, 4
-$direction: 16, 6, left
-$direction: 16, 9, left
-$direction: 16, 12, left
-$direction: 16, 14, left
-$question: 7, 2, ο
-$answer: 7, 2, 8
-$question: 8, 2, χ
-$answer: 8, 2, 8
-$question: 9, 2, τ
-$answer: 9, 2, 8
-$question: 10, 2, ώ
-$answer: 10, 2, 8
-$question: 26, 3, τ
-$answer: 26, 3, 3
-$question: 26, 4, ρ
-$answer: 26, 4, 3
-$question: 26, 5, ί
-$answer: 26, 5, 3
-$question: 5, 6, τ
-$answer: 5, 6, 4
-$question: 6, 6, έ
-$answer: 6, 6, 4
-$question: 7, 6, σ
-$answer: 7, 6, 4
-$question: 8, 6, σ
-$answer: 8, 6, 4
-$question: 9, 6, ε
-$answer: 9, 6, 4
-$question: 10, 6, ρ
-$answer: 10, 6, 4
-$question: 11, 6, α
-$answer: 11, 6, 4
-$question: 26, 6, α
-$answer: 26, 6, 3
-$question: 5, 9, έ
-$answer: 5, 9, 6
-$question: 6, 9, ξ
-$answer: 6, 9, 6
-$question: 7, 9, ι
-$answer: 7, 9, 6
-$question: 5, 12, π
-$answer: 5, 12, 5
-$question: 6, 12, έ
-$answer: 6, 12, 5
-$question: 7, 12, ν
-$answer: 7, 12, 5
-$question: 8, 12, τ
-$answer: 8, 12, 5
-$question: 9, 12, ε
-$answer: 9, 12, 5
-$question: 5, 14, δ
-$answer: 5, 14, 10
-$question: 6, 14, έ
-$answer: 6, 14, 10
-$question: 7, 14, κ
-$answer: 7, 14, 10
-$question: 8, 14, α
-$answer: 8, 14, 10
-$question: 21, 18, δ
-$answer: 21, 18, 2
-$question: 22, 18, ύ
-$answer: 22, 18, 2
-$question: 23, 18, ο
-$answer: 23, 18, 2
-11111111111111111111111Ì111111
-1  3   1111       = =1Ìo1   31
-1      ҸҸҸҸ  2    = = o      1
-1m  1111111111Џ111=1=1 111Ҹ111
-11111      8 β  11=1=11111Ҹ111
-1   111111111   11=ҹ=11111Ҹ111
-1   4ҸҸҸҸҸҸҸ    њ1=ҹ=11111Ҹ111
-1  H111111111   11=ҹ=11111 111
-1 H1111111111   11=ҹ=11111 111
-1   4ҸҸҸ        њ1=ҹ=1111  111
-1  m111111111   11=ҹ=1111    1
-1 11111111111   11=ҹ=113111 11
-1   4ҸҸҸҸҸ      њ1=ҹ=1T 4 Ë5 1
-1  H111111111   11=ҹ=1111 1 11
-1   4ҸҸҸҸ       њ1=ҹ=13     T1
-1ѨѨѨ1111111111  11=1=1     111
-1           11  11=1=1111    1
-11Ë         11  11=1=11 1    1
-111m        11    = =ҸҸҸ5   m1
-11111111111111111111111Ù111111
+$notes: 1, 3, C3, C4, C5
+$instrument: 1, 3, altsax, 100
+$notes: 2, 3, C3, C4, C5
+$instrument: 2, 3, bass, 100
+$notes: 3, 3, C4, D4
+$instrument: 3, 3, bassdrum, 100
+$notes: 4, 3, C3, C4, C5
+$instrument: 4, 3, bell, 100
+$notes: 5, 3, C3, C4, C5
+$instrument: 5, 3, clarinet, 100
+$notes: 6, 3, C4, D4
+$instrument: 6, 3, cowbell, 100
+$notes: 7, 3, C3, C4, C5
+$instrument: 7, 3, guitar, 100
+$notes: 8, 3, C3, C4, C5
+$instrument: 8, 3, harp, 100
+$notes: 9, 3, C3, C4, C5
+$instrument: 9, 3, harpsichord, 100
+$notes: 10, 3, C4, D4, E4, F4
+$instrument: 10, 3, hihat, 100
+$notes: 11, 3, C3, C4, C5
+$instrument: 11, 3, kalimba, 100
+$notes: 12, 3, C3, C4, C5
+$instrument: 12, 3, piano, 100
+$notes: 13, 3, C4, D4
+$instrument: 13, 3, snaredrum, 100
+$notes: 14, 3, C3, C4, C5
+$instrument: 14, 3, strings, 100
+$notes: 15, 3, C3, C4, C5
+$instrument: 15, 3, trombone, 100
+$notes: 16, 3, C3, C4, C5
+$instrument: 16, 3, trumpet, 100
+$notes: 17, 3, C3, C4, C5
+$instrument: 17, 3, vibraphone, 100
+$notes: 18, 3, C3, C4, C5
+$instrument: 18, 3, xylophone, 100
+$notes: 19, 3, C3, C4, C5
+$instrument: 19, 3, accordion, 100
+$notes: 20, 3, C3, C4, C5
+$instrument: 20, 3, guitar, 100
+$notes: 21, 3, C3, C4, C5
+$instrument: 21, 3, bouzouki, 100
+$notes: 22, 3, C3, C4, C5
+$instrument: 22, 3, hammondorgan, 100
+$notes: 23, 3, C3, C4, C5
+$instrument: 23, 3, pipeorgan, 100
+$notes: 24, 3, C4, D4
+$instrument: 24, 3, ridecymbal, 100
+$notes: 25, 3, C4, D4
+$instrument: 25, 3, splashcymbal, 100
+$notes: 26, 3, C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, B5, C6, D6, E6, F6, G6, A6
+$instrument: 26, 3, drums, 100
+$notes: 27, 3, C4, D4
+$instrument: 27, 3, noisedrum, 100
+$notes: 1, 8, C3, C4, C5
+$instrument: 1, 8, squarelead, 100
+$notes: 2, 8, C4, D4, E4, F4
+$instrument: 2, 8, tom, 100
+$notes: 3, 8, C4, D4
+$instrument: 3, 8, crashcymbal, 100
+$notes: 23, 8, C4, D4
+$instrument: 23, 8, crashcymbal, 100
+11111111111111111111111111111
+1                           1
+1                           1
+1MMMMMMMMMMMMMMMMMMMMMMMMMMM1
+1                           1
+11111111111111111111111111111
+1                          31
+1                           1
+1MMM                   M    1
+1                           1
+11111111111111111111111111111
+1                           1
+1                           1
+1                           1
+1                           1
+1                           1
+1                           1
+1                           1
+1                           1
+1          2                1
+11111111111111111111111111111

@@ -46,6 +46,7 @@ export const seriesMathStart = 6250;
 export const seriesMathEnd = 6253;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6301;
+
 export function addSolvedLevels(levelStr) {
   let level = -1;
   let levelStart = -1;
@@ -1056,7 +1057,9 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= seriesMathStart && n <= seriesMathEnd) ||
       (n >= seriesLanguageStart && n <= seriesLanguageEnd)
     )) ||
-    (n >= 9996) && n <= 9999) {
+    ((n >= 9996) && (n <= 9999)) ||
+    (n === 0)
+  ) {
     result = await loadFromFile(n, gateTravelling);
   } else {
     result = await loadFromFile(1000, false);
