@@ -401,24 +401,25 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     let cf_feedback = 0.3;
     let cf_hp = 180;
     let cf_lp = 12000;
+    let decayFactor = 1;
 
     switch (variation) {
       case 2:
         // Jazz ride
-        decayFactorOsc1 = 1.6;
+        decayFactorOsc1 = 1.4;
         // Transient
         operators.push(new Operator(audioCtx, "sine", 4800, 0, maxVolume * 0.08, 2, 8, 0, 50));
         operators.push(new Operator(audioCtx, "noiseAndHPF", 4500, 0, maxVolume * 0.12, 0, 10, 0, 30, 0.22));
         // Body
-        operators.push(new Operator(audioCtx, "pinkNoiseAndBPF", 750, 52, maxVolume * 0.38, 0, 1500 * decayFactorOsc1, 0, 100, 0.30));
-        operators.push(new Operator(audioCtx, "pinkNoiseAndBPF", 1100, 58, maxVolume * 0.42, 0, 1300 * decayFactorOsc1, 0, 100, 0.44));
-        operators.push(new Operator(audioCtx, "noiseAndBPF", 1800, 62, maxVolume * 0.36, 0, 1200 * decayFactorOsc1, 0, 100, 0.40));
+        operators.push(new Operator(audioCtx, "pinkNoiseAndBPF", 750, 52, maxVolume * 0.38, 0, 1500 * decayFactor, 0, 100, 0.30));
+        operators.push(new Operator(audioCtx, "pinkNoiseAndBPF", 1100, 58, maxVolume * 0.42, 0, 1300 * decayFactor, 0, 100, 0.44));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 1800, 62, maxVolume * 0.36, 0, 1200 * decayFactor, 0, 100, 0.40));
         // Mid/high shimmer
-        operators.push(new Operator(audioCtx, "noiseAndBPF", 2600, 70, maxVolume * 0.22, 0, 1700 * decayFactorOsc1, 0, 100, 0.28));
-        operators.push(new Operator(audioCtx, "noiseAndBPF", 4200, 74, maxVolume * 0.18, 0, 1800 * decayFactorOsc1, 0, 100, 0.22));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 2600, 70, maxVolume * 0.22, 0, 1700 * decayFactor, 0, 100, 0.28));
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 4200, 74, maxVolume * 0.18, 0, 1800 * decayFactor, 0, 100, 0.22));
         // Metal partials
-        operators.push(new Operator(audioCtx, "rideNoiseAndBPF", 800, 58, maxVolume * 0.8, 0, 2000 * decayFactorOsc1, 0, 100, 0.85));
-        operators.push(new Operator(audioCtx, "rideNoiseAndBPF", 1300, 58, maxVolume * 0.7, 0, 1800 * decayFactorOsc1, 0, 100, 0.78));
+        operators.push(new Operator(audioCtx, "rideNoiseAndBPF", 800, 58, maxVolume * 0.8, 0, 2000 * decayFactor, 0, 100, 0.85));
+        operators.push(new Operator(audioCtx, "rideNoiseAndBPF", 1300, 58, maxVolume * 0.7, 0, 1800 * decayFactor, 0, 100, 0.78));
         // Comb filter
         cf_wet = 0.25;
         cf_delay = 6.5;
@@ -428,7 +429,6 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         break;
       case 1:
         // Ride bell
-        decayFactorOsc1 = 1.1;
         // Transient for bell ping
         operators.push(new Operator(audioCtx, "sine", 5200, 0, maxVolume * 0.18, 0, 12, 0, 50));
         operators.push(new Operator(audioCtx, "noiseAndHPF", 7000, 0, maxVolume * 0.22, 0, 20, 0, 22, 0.32));
@@ -448,7 +448,6 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         break;
       default:
         // Normal ride (bow)
-        decayFactorOsc1 = 1.25;
         // Transient
         operators.push(new Operator(audioCtx, "sine", 5200, 0, maxVolume * 0.14, 2, 10, 0, 40));
         operators.push(new Operator(audioCtx, "noiseAndHPF", 6000, 0, maxVolume * 0.18, 0, 14, 0, 20, 0.30));
@@ -536,11 +535,11 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
 
   function createTest() {
     attack = 5;
-    decay = 500;
+    decay = 2000;
     release = 250;
-    operators.push(new Operator(audioCtx, "noise", frequency, 0, maxVolume, attack, decay, maxVolume * 0.8, release));
-    filter1.setFilter("highpass", 590, 590, 590, 590, 590, 50, 0, 500, 5, 250);
-    filter2.setFilter("lowpass", 600, 600, 600, 600, 600, 50, 0, 500, 5, 250);
+    operators.push(new Operator(audioCtx, "rideNoise", frequency, 0, maxVolume, attack, decay, maxVolume * 0.8, release));
+    //filter1.setFilter("highpass", 590, 590, 590, 590, 590, 50, 0, 500, 5, 250);
+    //filter2.setFilter("lowpass", 600, 600, 600, 600, 600, 50, 0, 500, 5, 250);
   }
 
   function createTom(variation = 0) {
