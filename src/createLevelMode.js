@@ -99,6 +99,10 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx2 = findElementByCoordinates(x2, y2, gameInfo.movers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.movers[idx2].direction = gameInfo.movers[idx1].direction;
+                gameInfo.movers[idx2].activeSides.length = 0;
+                for (let i = 0; i < gameInfo.movers[idx1].activeSides.length; i++) {
+                    gameInfo.movers[idx2].activeSides.push(gameInfo.movers[idx1].activeSides[i]);
+                }
             }
             break;
         case 198:

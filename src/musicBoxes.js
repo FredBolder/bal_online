@@ -148,7 +148,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door")) {
+        if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door") || (musicBox.mode === "near")) {
             if (gameData[musicBox.y][musicBox.x] === 157) {
                 if (!musicBox.active) {
                     if (blueBallIsCloseToXY(gameData, musicBox.x, musicBox.y)) {
@@ -177,7 +177,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                         gameData[musicBox.y][musicBox.x] = 0;
                     }
                 } else {
-                    if (musicBox.chordTypeOrInterval === "?") {
+                    if ((musicBox.mode !== "near") && (musicBox.chordTypeOrInterval === "?")) {
                         switch (musicBox.mode) {
                             case "chord1":
                                 randomMajorOrMinorChord(musicBox);
@@ -221,7 +221,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if ((isChordOrIntervalMode(musicBox.mode) || ["door", "firstcount", "song"].includes(musicBox.mode)) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
+        if ((isChordOrIntervalMode(musicBox.mode) || ["door", "firstcount", "near", "song"].includes(musicBox.mode)) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;
@@ -400,7 +400,8 @@ function isChordOrIntervalMode(mode) {
 }
 
 export function musicBoxModes() {
-    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard", "note", "song"];
+    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard", 
+        "near", "note", "song"];
 }
 
 function placeChordObjects(gameData, gameInfo, musicBox) {

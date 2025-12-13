@@ -278,6 +278,13 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.movers.length; i++) {
         const mover = gameInfo.movers[i];
+        if (JSON.stringify(mover.activeSides) !== JSON.stringify(["top"])) {
+            line = `$activesides: ${mover.x}, ${mover.y}`;
+            for (let j = 0; j < mover.activeSides.length; j++) {
+                line += ", " + mover.activeSides[j];
+            }
+            lines.push(line);
+        }
         if (mover.direction !== "right") {
             line = `$direction: ${mover.x}, ${mover.y}, ${mover.direction}`;
             lines.push(line);

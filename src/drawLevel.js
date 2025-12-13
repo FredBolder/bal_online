@@ -166,12 +166,17 @@ function drawLevel(
     }
   }
 
-  function drawArrow(direction, frontColor, backColor, shadow = false) {
+  function drawArrow(direction, frontColor, backColor, options = {}) {
     let angle = 0;
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
 
+    const defaults = {
+      box: true,
+      shadow: false
+    }
+    const opt = Object.assign({}, defaults, options);
     const points = [
       { x: xc - d1, y: yc },
       { x: xc + d1, y: yc },
@@ -179,7 +184,9 @@ function drawLevel(
       { x: xc + d3, y: yc + d2 },
     ];
 
-    drawFilledBox(ctx, xmin, ymin, w1, w2, backColor, shadow);
+    if (opt.box) {
+      drawFilledBox(ctx, xmin, ymin, w1, w2, backColor, opt.shadow);
+    }
     switch (direction) {
       case "left":
         angle = 180;
@@ -508,8 +515,8 @@ function drawLevel(
 
   function drawDirectionChanger3() {
     // Direction: - and |, code: 86, +
-    let d1 = w1 * 0.1;
-    let d2 = w1 * 0.1;
+    const d1 = w1 * 0.1;
+    const d2 = w1 * 0.1;
     drawFilledBox(ctx, xmin, ymin, w1, w2, "yellow", true);
     drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, "black");
     drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, "black");
@@ -1141,14 +1148,32 @@ function drawLevel(
   }
 
   function drawMover(x, y) {
+    const activeColor = "#16cc16ff";
+    const d1 = w1 * 0.1;
+    const d2 = w1 * 0.1;
+    let activeSides = ["top"];
     let direction = "right";
     let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.movers);
     if (idx >= 0) {
+      activeSides = gameInfo.movers[idx].activeSides;
       direction = gameInfo.movers[idx].direction;
     }
-    drawArrow(direction, "white", "#464646", true);
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
+    if (activeSides.includes("top")) {
+      drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, activeColor);
+    }
+    if (activeSides.includes("bottom")) {
+      drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, activeColor);
+    }
+    if (activeSides.includes("left")) {
+      drawLine(ctx, xmin + d1, ymin + d1 + d2, xmin + d1, ymax - d1 - d2, activeColor);
+    }
+    if (activeSides.includes("right")) {
+      drawLine(ctx, xmax - d1, ymin + d1 + d2, xmax - d1, ymax - d1 - d2, activeColor);
+    }
+    drawArrow(direction, "white", "#464646", { box: false });
   }
 
   function drawMusicBox(x, y) {
@@ -1175,7 +1200,7 @@ function drawLevel(
 
     const musicNoteRatio = 241 / 450;
     const musicNoteMargin = 0.1;
-    const musicNoteHeight = w2 * (1 - musicNoteMargin - musicNoteMargin);
+    const musicNoteHeight = w2 * (1 - musicNoteMargin - musicNoteMargin) * 0.9;
     const musicNoteWidth = musicNoteHeight * musicNoteRatio;
 
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
@@ -1201,6 +1226,7 @@ function drawLevel(
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white");
 
     switch (mode) {
+      case "near":
       case "note":
       case "song":
         drawBox(ctx, xmin, ymin, w1, w2, "black");
@@ -2049,7 +2075,7 @@ function drawLevel(
     }
     drawStone(x, y);
     drawText(ctx, xc, yc, question, "middle", "white", w2 * 0.7, w1 * 0.8);
-}
+  }
 
   function drawQuarterCircleStoneTopLeft(x, y) {
     ctx.save();
@@ -2163,6 +2189,18 @@ function drawLevel(
     ctx.setLineDash([]);
     drawCircle(ctx, xmax - (w1 * (0.125 + d1)), w1 * (0.125 + d1) + ymin, w1 * 0.125, "white");
     ctx.lineWidth = 1;
+  }
+
+  function drawSides() {
+    const color = "white";
+    const d1 = w1 * 0.1;
+    const d2 = w1 * 0.1;
+    drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, color);
+    ctx.setLineDash([2, 2]);
+    drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, color);
+    drawLine(ctx, xmin + d1, ymin + d1 + d2, xmin + d1, ymax - d1 - d2, color);
+    drawLine(ctx, xmax - d1, ymin + d1 + d2, xmax - d1, ymax - d1 - d2, color);
+    ctx.setLineDash([]);
   }
 
   function drawSmallBall(color) {
@@ -3609,6 +3647,9 @@ function drawLevel(
           break;
         case 2143:
           drawAbbreviation("A");
+          break;
+        case 2144:
+          drawSides();
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

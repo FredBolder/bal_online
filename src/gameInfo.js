@@ -255,7 +255,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 178: {
-                    let mover = { x: j, y: i, direction: "right", counter: 0 };
+                    let mover = { x: j, y: i, direction: "right", activeSides: ["top"], counter: 0 };
                     result.movers.push(mover);
                     break;
                 }
@@ -427,7 +427,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             idx = findElementByCoordinates(x, y, gameInfo.movers);
             if (idx >= 0) {
                 obj = gameInfo.movers[idx];
-                extraInfo = `Direction: ${obj.direction}, Counter: ${obj.counter}`;
+                extraInfo = `Direction: ${obj.direction}, Active sides: ${obj.activeSides}, Counter: ${obj.counter}`;
             }
             info = `Mover, ` + extraInfo;
             break;

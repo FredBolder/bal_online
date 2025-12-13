@@ -22,9 +22,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", counter: 0 },
-                { x: 3, y: 5, direction: "right", counter: 0 },
-                { x: 5, y: 5, direction: "right", counter: 0 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 0 }
             ]
         };
         let input = [
@@ -57,9 +57,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "left", counter: 0 },
-                { x: 3, y: 5, direction: "left", counter: 0 },
-                { x: 5, y: 5, direction: "upleft", counter: 0 }
+                { x: 1, y: 5, direction: "left", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 5, direction: "left", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 5, direction: "upleft", activeSides: ["top"], counter: 0 }
             ],
             yellowBalls: [{ x: 5, y: 4, direction: "none" }]
         };
@@ -94,9 +94,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 4, direction: "down", counter: 0 },
-                { x: 3, y: 4, direction: "down", counter: 0 },
-                { x: 5, y: 4, direction: "up", counter: 0 }
+                { x: 1, y: 4, direction: "down", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 4, direction: "down", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 4, direction: "up", activeSides: ["top"], counter: 0 }
             ]
         };
         let input = [
@@ -129,9 +129,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 4, direction: "upright", counter: 0 },
-                { x: 3, y: 4, direction: "down", counter: 0 },
-                { x: 5, y: 4, direction: "down", counter: 0 }
+                { x: 1, y: 4, direction: "upright", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 4, direction: "down", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 4, direction: "down", activeSides: ["top"], counter: 0 }
             ],
             pinkBalls: [{ x: 5, y: 3, delete: false, skipFalling: 0 }]
         };
@@ -166,9 +166,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", counter: 0 },
-                { x: 3, y: 5, direction: "right", counter: 5 },
-                { x: 5, y: 5, direction: "right", counter: 3 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 5 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 3 }
             ],
             pinkBalls: [{ x: 3, y: 4, delete: false, counter: 0 }]
         };
@@ -197,6 +197,109 @@ describe("movers", () => {
         expect(gameInfo.pinkBalls).toEqual([{ x: 4, y: 4, delete: false, counter: 0 }]);
     });
 
+    it("checkMovers F", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 5 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 },
+                { x: 3, y: 4, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 }
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 2, 0, 5, 0, 5, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 0, 2, 5, 0, 0, 5, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo, defaultGameVars);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 2, y: 5 });
+    });
+
+    it("checkMovers G", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 5, y: 5 },
+            greenBalls: 1,
+            movers: [
+                { x: 4, y: 2, direction: "right", activeSides: ["right"], counter: 0 },
+                { x: 4, y: 5, direction: "left", activeSides: ["right"], counter: 0 },
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 5, 0, 0, 1],
+            [1, 0, 0, 0, 178, 5, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 178, 2, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 5, 0, 0, 1],
+            [1, 0, 0, 0, 178, 0, 5, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 2, 178, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo, defaultGameVars);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 3, y: 5 });
+    });
+
+    it("checkMovers H", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 5, y: 5 },
+            greenBalls: 1,
+            movers: [
+                { x: 4, y: 2, direction: "right", activeSides: ["right", "top"], counter: 0 },
+                { x: 4, y: 5, direction: "upleft", activeSides: ["right"], counter: 0 },
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 5, 0, 0, 1],
+            [1, 0, 0, 0, 178, 5, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 178, 2, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 5, 0, 1],
+            [1, 0, 0, 0, 178, 0, 5, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 2, 0, 0, 1],
+            [1, 0, 0, 0, 178, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let info = checkMovers(input, gameInfo, defaultGameVars);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 4, y: 4 });
+    });
+
     // moverIsMovingBlueBall
 
     it("moverIsMovingBlueBall A", () => {
@@ -205,9 +308,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", counter: 0 },
-                { x: 3, y: 5, direction: "right", counter: 0 },
-                { x: 5, y: 5, direction: "right", counter: 0 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 0 }
             ]
         };
         let input = [
@@ -233,9 +336,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "left", counter: 0 },
-                { x: 3, y: 5, direction: "right", counter: 0 },
-                { x: 5, y: 5, direction: "right", counter: 0 }
+                { x: 1, y: 5, direction: "left", activeSides: ["top"], counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 0 }
             ]
         };
         let input = [
@@ -261,9 +364,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", counter: 1 },
-                { x: 3, y: 5, direction: "right", counter: 1 },
-                { x: 5, y: 5, direction: "right", counter: 1 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 1 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 1 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 1 }
             ]
         };
         let input = [
@@ -282,6 +385,36 @@ describe("movers", () => {
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
+
+    it("moverIsMovingBlueBall D", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 5 },
+            greenBalls: 1,
+            movers: [
+                { x: 1, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 },
+                { x: 3, y: 4, direction: "right", activeSides: ["top"], counter: 0 },
+                { x: 5, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 }
+            ]
+        };
+        let input = [
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 178, 1, 178, 1, 178, 1, 1],
+            [1, 2, 0, 5, 0, 5, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        let expectedOutput = copy2dArray(input);
+
+        let info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });
+    });
+
+
 
     // Insert new tests here
 });

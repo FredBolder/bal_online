@@ -1,172 +1,150 @@
-import { findElementByCoordinates, moveObject } from "./balUtils.js";
+import { getGameDataValue, moveObject } from "./balUtils.js";
 
-export function checkMovers(gameData, gameInfo, gameVars) {
-    let update = false;
+const moveableObjects = [2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242];
+
+export function checkMovers(gameData, gameInfo, gameVars, checkBlue) {
+    const top = 0;
+    const bottom = 1;
+    const left = 2;
+    const right = 3;
+    let el = -1;
+    let elX = -1;
+    let elY = -1;
+    let gd1 = -1;
+    let gd2 = -1;
+    let newX = -1;
+    let newY = -1;
+    let sideStr = "?";
+    let result = false;
 
     for (let i = 0; i < gameInfo.movers.length; i++) {
         const mover = gameInfo.movers[i];
-        if (mover.y > 0) {
-            const el = gameData[mover.y - 1][mover.x];
-            if (el === 0) {
+        const elTop = getGameDataValue(gameData, mover.x, mover.y - 1);
+        const elBottom = getGameDataValue(gameData, mover.x, mover.y + 1);
+        const elLeft = getGameDataValue(gameData, mover.x - 1, mover.y);
+        const elRight = getGameDataValue(gameData, mover.x + 1, mover.y);
+        if (!moveableObjects.includes(elTop) && !moveableObjects.includes(elBottom) &&
+            !moveableObjects.includes(elLeft) && !moveableObjects.includes(elRight)) {
+            if (!checkBlue) {
                 mover.counter = 0;
             }
-            if ([2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242].includes(el)) {
-                if (mover.counter < gameVars.moverCountTo) {
-                    mover.counter++;
-                } else {
-                    mover.counter = 0;
-                    switch (mover.direction) {
-                        case "left":
-                            if (mover.x > 0) {
-                                if (gameData[mover.y - 1][mover.x - 1] === 0) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x - 1, mover.y - 1);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "right":
-                            if (mover.x < (gameData[0].length - 1)) {
-                                if (gameData[mover.y - 1][mover.x + 1] === 0) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x + 1, mover.y - 1);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "up":
-                            if (mover.y > 1) {
-                                if ((gameData[mover.y - 2][mover.x] === 0) && ![2, 8, 93, 94].includes(gameData[mover.y - 1][mover.x])) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x, mover.y - 2);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "down":
-                            if (mover.y < (gameData.length - 1)) {
-                                if (gameData[mover.y + 1][mover.x] === 0) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x, mover.y + 1);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "upleft":
-                            if ((mover.x > 0) && (mover.y > 1)) {
-                                if ((gameData[mover.y - 2][mover.x - 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x - 1, mover.y - 2);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "upright":
-                            if ((mover.x < (gameData[0].length - 1)) && (mover.y > 1)) {
-                                if ((gameData[mover.y - 2][mover.x + 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x + 1, mover.y - 2);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "downleft":
-                            if (mover.x > 0) {
-                                if ((gameData[mover.y][mover.x - 1] === 0) && (gameData[mover.y - 1][mover.x - 1] === 0)) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x - 1, mover.y);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        case "downright":
-                            if (mover.x < (gameData[0].length - 1)) {
-                                if ((gameData[mover.y][mover.x + 1] === 0) && (gameData[mover.y - 1][mover.x + 1] === 0)) {
-                                    moveObject(gameData, gameInfo, mover.x, mover.y - 1, mover.x + 1, mover.y);
-                                    update = true;
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
+            continue;
         }
-    }
-    return update;
-}
+        if (mover.counter < gameVars.moverCountTo) {
+            if (!checkBlue) {
+                mover.counter++;
+            }
+        } else {
+            for (let side = 0; side < 4; side++) {
+                switch (side) {
+                    case top:
+                        el = elTop;
+                        elX = mover.x;
+                        elY = mover.y - 1;
+                        sideStr = "top";
+                        break;
+                    case bottom:
+                        el = elBottom;
+                        elX = mover.x;
+                        elY = mover.y + 1;
+                        sideStr = "bottom";
+                        break;
+                    case left:
+                        el = elLeft;
+                        elX = mover.x - 1;
+                        elY = mover.y;
+                        sideStr = "left";
+                        break;
+                    case right:
+                        el = elRight;
+                        elX = mover.x + 1;
+                        elY = mover.y;
+                        sideStr = "right";
+                        break;
+                    default:
+                        break;
+                }
+                if (!mover.activeSides.includes(sideStr) || !moveableObjects.includes(el)) {
+                    continue;
+                }
 
-export function moverIsMovingBlueBall(gameData, gameInfo, gameVars) {
-    let result = false;
-    let idx = -1;
-    let x = gameInfo.blueBall.x;
-    let y = gameInfo.blueBall.y;
-
-    if (y < (gameData.length - 1)) {
-        if (gameData[y + 1][x] === 178) {
-            idx = findElementByCoordinates(x, y + 1, gameInfo.movers);
-            if (idx >= 0) {
-                const mover = gameInfo.movers[idx];
-                if (mover.counter >= gameVars.moverCountTo) {
-                    switch (mover.direction) {
-                        case "left":
-                            if (mover.x > 0) {
-                                if (gameData[mover.y - 1][mover.x - 1] === 0) {
-                                    result = true;
-                                }
+                if (!checkBlue) {
+                    mover.counter = 0;
+                }
+                newX = elX;
+                newY = elY;
+                gd1 = 0;
+                switch (mover.direction) {
+                    case "left":
+                        newX--;
+                        if (side === right) {
+                            newX--;
+                        }
+                        break;
+                    case "right":
+                        newX++;
+                        if (side === left) {
+                            newX++;
+                        }
+                        break;
+                    case "up":
+                        if ((side !== top) || ![2, 8, 93, 94].includes(el)) {
+                            newY--;
+                            if (side === bottom) {
+                                newY--;
                             }
-                            break;
-                        case "right":
-                            if (mover.x < (gameData[0].length - 1)) {
-                                if (gameData[mover.y - 1][mover.x + 1] === 0) {
-                                    result = true;
-                                }
+                        }
+                        break;
+                    case "down":
+                        newY++;
+                        if ((side !== bottom) || ![2, 8, 93, 94].includes(el)) {
+                            if (side === top) {
+                                newY++;
                             }
-                            break;
-                        case "up":
-                            if (mover.y > 1) {
-                                if ((gameData[mover.y - 2][mover.x] === 0) && ![2, 8, 93, 94].includes(gameData[mover.y - 1][mover.x])) {
-                                    result = true;
-                                }
-                            }
-                            break;
-                        case "down":
-                            if (mover.y < (gameData.length - 1)) {
-                                if (gameData[mover.y + 1][mover.x] === 0) {
-                                    result = true;
-                                }
-                            }
-                            break;
-                        case "upleft":
-                            if ((mover.x > 0) && (mover.y > 0)) {
-                                if ((gameData[mover.y - 2][mover.x - 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
-                                    result = true;
-                                }
-                            }
-                            break;
-                        case "upright":
-                            if ((mover.x < (gameData[0].length - 1)) && (mover.y > 0)) {
-                                if ((gameData[mover.y - 2][mover.x + 1] === 0) && (gameData[mover.y - 2][mover.x] === 0)) {
-                                    result = true;
-                                }
-                            }
-                            break;
-                        case "downleft":
-                            if (mover.x > 0) {
-                                if ((gameData[mover.y][mover.x - 1] === 0) && (gameData[mover.y - 1][mover.x - 1] === 0)) {
-                                    result = true;
-                                }
-                            }
-                            break;
-                        case "downright":
-                            if (mover.x < (gameData[0].length - 1)) {
-                                if ((gameData[mover.y][mover.x + 1] === 0) && (gameData[mover.y - 1][mover.x + 1] === 0)) {
-                                    result = true;
-                                }
-                            }
-                            break;
-                        default:
-                            break;
+                        }
+                        break;
+                    case "upleft":
+                        newX--;
+                        newY--;
+                        gd1 = getGameDataValue(gameData, elX, newY);
+                        break;
+                    case "upright":
+                        newX++;
+                        newY--;
+                        gd1 = getGameDataValue(gameData, elX, newY);
+                        break;
+                    case "downleft":
+                        newX--;
+                        newY++;
+                        gd1 = getGameDataValue(gameData, newX, elY);
+                        break;
+                    case "downright":
+                        newX++;
+                        newY++;
+                        gd1 = getGameDataValue(gameData, newX, elY);
+                        break;
+                    default:
+                        break;
+                }
+                gd2 = getGameDataValue(gameData, newX, newY);
+                if ((gd1 === 0) && (gd2 === 0)) {
+                    if (checkBlue) {
+                        if ((elX === gameInfo.blueBall.x) && (elY === gameInfo.blueBall.y)) {
+                            result = true;
+                        }
+                    } else {
+                        moveObject(gameData, gameInfo, elX, elY, newX, newY);
+                        result = true;
                     }
                 }
             }
         }
     }
     return result;
+}
+
+export function moverIsMovingBlueBall(gameData, gameInfo, gameVars) {
+    return checkMovers(gameData, gameInfo, gameVars, true);
 }
 
 export function moversDirections() {

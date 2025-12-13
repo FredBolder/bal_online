@@ -41,7 +41,7 @@ export const series6End = 5009;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
-export const seriesMusic2End = 6204;
+export const seriesMusic2End = 6205;
 export const seriesMathStart = 6250;
 export const seriesMathEnd = 6253;
 export const seriesLanguageStart = 6300;
@@ -270,9 +270,10 @@ export function checkLevel(data, settings) {
 export function checkSettings(data, settings) {
   // This function works with code 1 and code 2, so data with characters and data with numbers
 
-  // For $answer, $hint, $question and $startlevelmessage there can be a comma in the text and $notes and $addnotes
-  // have a variable number of parameters.
+  // For $answer, $hint, $question and $startlevelmessage there can be a comma in the text and $notes, $addnotes
+  // and $activesides have a variable number of parameters.
   const settingsInfo = [
+    { name: "$activesides", params: 0, xy: true },
     { name: "$addnotes", params: 0, xy: true },
     { name: "$answer", params: 0, xy: true },
     { name: "$background", params: 5, xy: true },
@@ -551,6 +552,14 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > maxStonePatterns)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for stone pattern number.\n`;
+              }
+              break;
+            case "$activesides":
+              if (values.length < 3) {
+                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
+              }
+              if (validXY && !["η", 178].includes(data[y][x])) {
+                msg += `${settingNr(i)}No mover found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$addnotes":
@@ -1220,6 +1229,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         validXY = ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length));
       }
       switch (name) {
+        case "$activesides":
+          if (values.length >= 3) {
+            if (validXY) {
+              idx = findElementByCoordinates(x, y, gameInfo.movers);
+              if (idx >= 0) {
+                gameInfo.movers[idx].activeSides.length = 0;
+                gameInfo.movers[idx].activeSides = [];
+                for (let side = 2; side < values.length; side++) {
+                  gameInfo.movers[idx].activeSides.push(values[side]);
+                }
+              }
+            }
+          }
+          break;
         case "$addnotes":
           if (values.length >= 3) {
             if (validXY) {
@@ -1517,6 +1540,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             if (validXY) {
               idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
               if (idx >= 0) {
+                gameInfo.musicBoxes[idx].notes.length = 0;
                 gameInfo.musicBoxes[idx].notes = [];
                 gameInfo.musicBoxes[idx].noteIndex = 0;
                 for (let note = 2; note < values.length; note++) {

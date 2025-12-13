@@ -11,6 +11,7 @@ import {
   changeDirection,
   changeIntelligence,
   changeQuestion,
+  changeSides,
   dropObject,
   inWater,
   jump,
@@ -104,6 +105,7 @@ let createLevelObject = -1;
 let createLevelQuestion = "";
 let createLevelRaster = false;
 let createLevelSelectedCell = null;
+let createLevelSides = null;
 let createLevelStonesPages = 2;
 let createLevelTranspose = 0;
 let ctx;
@@ -339,6 +341,10 @@ function BalPage() {
   }
 
   async function runMusicScheduler() {
+    if (globalVars.createLevel) {
+      return;
+    }
+    
     checkMusicBoxes(backData, gameData, gameInfo, gameVars);
   }
 
@@ -1065,7 +1071,7 @@ function BalPage() {
           case 8:
             // Elevators
             arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81, 178, 2133];
-            arr2 = [0];
+            arr2 = [2144];
             break;
           case 9:
             // Conveyor belts
@@ -2601,6 +2607,13 @@ function BalPage() {
             column = c;
 
             if (createLevelObject >= 2000) {
+              if ((createLevelObject === 2144) && (createLevelSides !== null)) {
+                if (changeSides(gameInfo, column, row, createLevelSides) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a mover to set valid sides.");
+                  }
+                }
+              }
               if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
                 if (changeDirection(gameData, gameInfo, column, row, createLevelDirection) === -1) {
                   if (oneSelected) {
@@ -3028,7 +3041,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "interval 2", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "near", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "interval 2", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;
@@ -3181,6 +3194,62 @@ function BalPage() {
               gameVars.stonePattern = 0;
             }
             updateGameCanvas();
+            break;
+          case 2144:
+            ok = false;
+            if (row > 0) {
+              newValue = null;
+              if (createLevelMenu === menuToNumber("elevators")) {
+                newValue = await showSelect("Movers", "Sides:", ["top", "bottom", "left", "right", "top and bottom",
+                  "left and right", "top, bottom, left and right", "left and top", "top and right", "left and bottom",
+                  "bottom and right"], 0);
+              }
+              if (newValue !== null) {
+                ok = true;
+                switch (newValue) {
+                  case "top":
+                    createLevelSides = ["top"];
+                    break;
+                  case "bottom":
+                    createLevelSides = ["bottom"];
+                    break;
+                  case "left":
+                    createLevelSides = ["left"];
+                    break;
+                  case "right":
+                    createLevelSides = ["right"];
+                    break;
+                  case "top and bottom":
+                    createLevelSides = ["top", "bottom"];
+                    break;
+                  case "left and right":
+                    createLevelSides = ["left", "right"];
+                    break;
+                  case "top, bottom, left and right":
+                    createLevelSides = ["top", "bottom", "left", "right"];
+                    break;
+                  case "left and top":
+                    createLevelSides = ["left", "top"];
+                    break;
+                  case "top and right":
+                    createLevelSides = ["top", "right"];
+                    break;
+                  case "left and bottom":
+                    createLevelSides = ["left", "bottom"];
+                    break;
+                  case "bottom and right":
+                    createLevelSides = ["bottom", "right"];
+                    break;
+                  default:
+                    ok = false;
+                    break;
+                }
+              }
+            }
+            if (!ok) {
+              createLevelSides = null;
+              createLevelObject = -1;
+            }
             break;
           default:
             break;

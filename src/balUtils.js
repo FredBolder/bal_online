@@ -48,22 +48,32 @@ function canBeTakenOrIsEmpty(gameInfo, object) {
   return result;
 }
 
-function canMoveAlone(gameData, gameInfo, x, y) {
+function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   // Object that can move, but not together with another object
   let result = false;
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 178, 200, 209, 242].includes(el)) {
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242].includes(el)) {
     result = true;
   } else {
     switch (el) {
+      case 109:
+        result = (parent !== "pushObject");
+        break;
+      case 110:
+        result = (parent !== "jump");
+        break;
+      case 111:
+        result = (parent !== "moveLeft");
+        break;
+      case 112:
+        result = (parent !== "moveRight");
+        break;
       case 157:
         idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
         if (idx >= 0) {
-          if (gameInfo.musicBoxes[idx].mode === "keyboard") {
-            result = true;
-          }
+          result = (gameInfo.musicBoxes[idx].mode === "keyboard");
         }
         break;
       case 159:
@@ -73,8 +83,21 @@ function canMoveAlone(gameData, gameInfo, x, y) {
         idx = findElementByCoordinates(x, y, gameInfo.pistons);
         if (idx >= 0) {
           const piston = gameInfo.pistons[idx];
-          if (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball"].includes(piston.mode) && !piston.activated) {
-            result = true;
+          result = (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", 
+            "pinkball"].includes(piston.mode) && !piston.activated);
+        }
+        break;
+      case 178:
+        idx = findElementByCoordinates(x, y, gameInfo.movers);
+        if (idx >= 0) {
+          result = true;
+          if (
+            (parent === "moveLeft") && gameInfo.movers[idx].activeSides.includes("right") ||
+            (parent === "moveRight") && gameInfo.movers[idx].activeSides.includes("left") ||
+            (parent === "jump") && gameInfo.movers[idx].activeSides.includes("bottom") ||
+            (parent === "pushObject") && gameInfo.movers[idx].activeSides.includes("top")
+          ) {
+            result = false;
           }
         }
         break;
@@ -221,6 +244,23 @@ export function changeQuestion(gameInfo, x, y, question) {
   idx = findElementByCoordinates(x, y, gameInfo.questionStones);
   if (idx >= 0) {
     gameInfo.questionStones[idx].question = question;
+  }
+  return idx;
+}
+
+export function changeSides(gameInfo, x, y, sides) {
+  let idx = -1;
+
+  if ((sides !== null) && (sides.length !== 0)) {
+    if (idx === -1) {
+      idx = findElementByCoordinates(x, y, gameInfo.movers);
+      if (idx >= 0) {
+        gameInfo.movers[idx].activeSides.length = 0;
+        for (let i = 0; i < sides.length; i++) {
+          gameInfo.movers[idx].activeSides.push(sides[i]);
+        }
+      }
+    }
   }
   return idx;
 }
@@ -2819,7 +2859,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   if (x > 1) {
     // 1 object
     objectNumber = row[x - 1];
-    if (!result.player && (whiteOrBlueOrPink(objectNumber) || (canMoveAlone(gameData, gameInfo, x - 1, y) && (objectNumber !== 111))) && (row[x - 2] === 0) &&
+    if (!result.player && (whiteOrBlueOrPink(objectNumber) || canMoveAlone(gameData, gameInfo, x - 1, y, "moveLeft")) && (row[x - 2] === 0) &&
       !hasForceRight(gameData, gameInfo, x - 1, y)) {
       row[x - 2] = row[x - 1];
       row[x - 1] = 2;
@@ -3007,7 +3047,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   if (x < maxX - 1) {
     // 1 object
     objectNumber = row[x + 1];
-    if (!result.player && (whiteOrBlueOrPink(objectNumber) || (canMoveAlone(gameData, gameInfo, x + 1, y) && (objectNumber !== 112))) && (row[x + 2] === 0) &&
+    if (!result.player && (whiteOrBlueOrPink(objectNumber) || canMoveAlone(gameData, gameInfo, x + 1, y, "moveRight")) && (row[x + 2] === 0) &&
       !hasForceLeft(gameData, gameInfo, x + 1, y)) {
       row[x + 2] = row[x + 1];
       row[x + 1] = 2;
@@ -3254,7 +3294,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
   }
   if (!result.player && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
     objectNumber = gameData[y + dy1][x];
-    if ((canMoveAlone(gameData, gameInfo, x, y + dy1) && (objectNumber !== 110)) && gameData[y + dy2][x] === 0 &&
+    if (canMoveAlone(gameData, gameInfo, x, y + dy1, "jump") && gameData[y + dy2][x] === 0 &&
       ((gravityDown && !hasForceDown(gameData, gameInfo, x, y + dy1)) ||
         (gravityUp && !hasForceUp(gameData, gameInfo, x, y + dy1)))
     ) {
@@ -3501,7 +3541,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
   element2 = getGameDataValue(gameData, x, y + dy2);
 
   if ((gravityUp && (y >= minY) && !hasForceDown(gameData, gameInfo, x, y + dy1)) || (gravityDown && (y <= maxY) && !hasForceUp(gameData, gameInfo, x, y + dy1))) {
-    if (!result.player && (canMoveAlone(gameData, gameInfo, x, y + dy1) && ![109, 178].includes(element1)) && (element2 === 0)) {
+    if (!result.player && canMoveAlone(gameData, gameInfo, x, y + dy1, "pushObject") && (element2 === 0)) {
       gameData[y + dy2][x] = element1;
       gameData[y + dy1][x] = 2;
       gameData[y][x] = element;
