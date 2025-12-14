@@ -83,7 +83,7 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
         idx = findElementByCoordinates(x, y, gameInfo.pistons);
         if (idx >= 0) {
           const piston = gameInfo.pistons[idx];
-          result = (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", 
+          result = (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball",
             "pinkball"].includes(piston.mode) && !piston.activated);
         }
         break;
@@ -252,15 +252,27 @@ export function changeSides(gameInfo, x, y, sides) {
   let idx = -1;
 
   if ((sides !== null) && (sides.length !== 0)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.movers);
-      if (idx >= 0) {
-        gameInfo.movers[idx].activeSides.length = 0;
-        for (let i = 0; i < sides.length; i++) {
-          gameInfo.movers[idx].activeSides.push(sides[i]);
-        }
+    idx = findElementByCoordinates(x, y, gameInfo.movers);
+    if (idx >= 0) {
+      gameInfo.movers[idx].activeSides.length = 0;
+      for (let i = 0; i < sides.length; i++) {
+        gameInfo.movers[idx].activeSides.push(sides[i]);
       }
     }
+  }
+  return idx;
+}
+
+export function changeTicks(gameInfo, x, y, ticks) {
+  let idx = -1;
+
+  if (ticks < 0) {
+    return idx;
+  }
+
+  idx = findElementByCoordinates(x, y, gameInfo.delays);
+  if (idx >= 0) {
+    gameInfo.delays[idx].gameTicks = ticks;
   }
   return idx;
 }

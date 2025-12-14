@@ -3651,6 +3651,9 @@ function drawLevel(
         case 2144:
           drawSides();
           break;
+        case 2145:
+          drawAbbreviation("t=");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

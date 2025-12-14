@@ -12,6 +12,7 @@ import {
   changeIntelligence,
   changeQuestion,
   changeSides,
+  changeTicks,
   dropObject,
   inWater,
   jump,
@@ -107,6 +108,7 @@ let createLevelRaster = false;
 let createLevelSelectedCell = null;
 let createLevelSides = null;
 let createLevelStonesPages = 2;
+let createLevelTicks = -1;
 let createLevelTranspose = 0;
 let ctx;
 let ignoreGravity = true;
@@ -344,7 +346,7 @@ function BalPage() {
     if (globalVars.createLevel) {
       return;
     }
-    
+
     checkMusicBoxes(backData, gameData, gameInfo, gameVars);
   }
 
@@ -1139,7 +1141,7 @@ function BalPage() {
             break;
           case 6:
             // Misc
-            arr1 = [91, 119, 120, 97, 208, 157, 167, 89, 183, 184, 185, 21];
+            arr1 = [91, 119, 120, 97, 208, 157, 167, 2145, 89, 183, 184, 185, 21];
             arr2 = [0];
             break;
           case 15:
@@ -2614,6 +2616,13 @@ function BalPage() {
                   }
                 }
               }
+              if ((createLevelObject === 2145) && (createLevelTicks >= 0)) {
+                if (changeTicks(gameInfo, column, row, createLevelTicks) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a delay to set the number of game ticks.");
+                  }
+                }
+              }
               if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
                 if (changeDirection(gameData, gameInfo, column, row, createLevelDirection) === -1) {
                   if (oneSelected) {
@@ -2864,6 +2873,7 @@ function BalPage() {
     let direction = "";
     let newValue = "";
     let ok = false;
+    let val_int = -1;
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
@@ -3248,6 +3258,23 @@ function BalPage() {
             }
             if (!ok) {
               createLevelSides = null;
+              createLevelObject = -1;
+            }
+            break;
+          case 2145:
+            ok = false;
+            if ((row > 0) && (createLevelMenu === menuToNumber("misc"))) {
+              newValue = await showInput("Ticks", "Enter the number of game ticks.", "3");
+              if (newValue !== null) {
+                val_int = tryParseInt(newValue, -1);
+                if (val_int >= 1) {
+                  createLevelTicks = val_int;
+                  ok = true;
+                }
+              }
+            }
+            if (!ok) {
+              createLevelTicks = -1;
               createLevelObject = -1;
             }
             break;

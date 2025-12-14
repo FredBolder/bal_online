@@ -1,106 +1,55 @@
-$stonepattern: 1
-$answer: 19, 5, 1
-$answer: 19, 7, 3
-$answer: 19, 9, 5
-$answer: 19, 11, 7
-$answer: 19, 13, 9
-$answer: 19, 6, 2
-$answer: 19, 8, 4
-$answer: 19, 10, 6
-$answer: 19, 12, 8
-$answer: 19, 14, 10
-$group: 22, 1, 3
-$pistonmode: 22, 1, momentary
-$group: 2, 17, 3
-$pistonmode: 2, 17, momentary
-$group: 23, 0, 2
-$pistonmode: 23, 0, momentary
-$group: 26, 12, 4
-$pistonmode: 26, 12, momentary
-$group: 3, 10, 2
-$group: 3, 18, 3
-$group: 28, 18, 4
-$direction: 16, 6, left
-$direction: 16, 9, left
-$direction: 16, 12, left
-$direction: 16, 14, left
-$question: 5, 6, τ
-$answer: 5, 6, 4
-$question: 6, 6, έ
-$answer: 6, 6, 4
-$question: 7, 6, σ
-$answer: 7, 6, 4
-$question: 8, 6, σ
-$answer: 8, 6, 4
-$question: 9, 6, ε
-$answer: 9, 6, 4
-$question: 10, 6, ρ
-$answer: 10, 6, 4
-$question: 11, 6, α
-$answer: 11, 6, 4
-$question: 5, 9, έ
-$answer: 5, 9, 6
-$question: 6, 9, ξ
-$answer: 6, 9, 6
-$question: 7, 9, ι
-$answer: 7, 9, 6
-$question: 5, 12, π
-$answer: 5, 12, 5
-$question: 6, 12, έ
-$answer: 6, 12, 5
-$question: 7, 12, ν
-$answer: 7, 12, 5
-$question: 8, 12, τ
-$answer: 8, 12, 5
-$question: 9, 12, ε
-$answer: 9, 12, 5
-$question: 5, 14, δ
-$answer: 5, 14, 10
-$question: 6, 14, έ
-$answer: 6, 14, 10
-$question: 7, 14, κ
-$answer: 7, 14, 10
-$question: 8, 14, α
-$answer: 8, 14, 10
-$question: 26, 3, τ
-$answer: 26, 3, 3
-$question: 26, 4, ρ
-$answer: 26, 4, 3
-$question: 26, 5, ί
-$answer: 26, 5, 3
-$question: 26, 6, α
-$answer: 26, 6, 3
-$question: 21, 18, δ
-$answer: 21, 18, 2
-$question: 22, 18, ύ
-$answer: 22, 18, 2
-$question: 23, 18, ο
-$answer: 23, 18, 2
-$question: 7, 2, ο
-$answer: 7, 2, 8
-$question: 8, 2, χ
-$answer: 8, 2, 8
-$question: 9, 2, τ
-$answer: 9, 2, 8
-$question: 10, 2, ώ
-$answer: 10, 2, 8
-11111111111111111111111Ì111111
-1   3  1111       = =1Ì51   31
-1m     ҸҸҸҸ  2    = = 5      1
-11111111111111Џ111=1=1 111Ҹ111
-1          8 β  11=1=11111Ҹ111
-1   111111111   11=ҹ=11111Ҹ111
-1   4ҸҸҸҸҸҸҸ    њ1=ҹ=11111Ҹ111
-1  H111111111   11=ҹ=11111 111
-1 H1111111111   11=ҹ=11111 111
-1   4ҸҸҸ        њ1=ҹ=1111  111
-1  m111111111   11=ҹ=1111    1
-1 11111111111   11=ҹ=113111 11
-1   4ҸҸҸҸҸ      њ1=ҹ=1T   Ë5 1
-1  H111111111   11=ҹ=1111 1 11
-1   4ҸҸҸҸ       њ1=ҹ=11     T1
-1ѨѨѨ1111111111  11=1=13    111
-1           11  11=1=1       1
-11Ë         11  11=1=1111    1
-111m        11  11= =ҸҸҸ5   m1
-111111111111111111111111111111
+$gameticks: mover, 10
+$stonepattern: 2
+$answer: 5, 4, 5
+$activesides: 9, 2, bottom
+$activesides: 10, 3, bottom
+$activesides: 11, 3, bottom
+$activesides: 12, 3, bottom
+$direction: 9, 6, downright
+$direction: 10, 6, downright
+$direction: 11, 7, downright
+$activesides: 1, 14, bottom
+$activesides: 2, 14, bottom
+$activesides: 3, 14, bottom
+$activesides: 4, 14, bottom
+$activesides: 5, 14, bottom
+$activesides: 6, 14, bottom
+$activesides: 7, 14, bottom
+$activesides: 8, 14, bottom
+$activesides: 9, 14, bottom
+$activesides: 10, 14, bottom
+$activesides: 11, 14, bottom
+$activesides: 12, 14, bottom
+$activesides: 13, 14, bottom
+$activesides: 14, 14, bottom
+$activesides: 15, 14, bottom
+$activesides: 16, 14, bottom
+$group: 9, 1, 2
+$sticky: 9, 1, yes
+$sticky: 9, 7, yes
+$group: 8, 16, 2
+$group: 12, 16, 2
+$question: 14, 4, 1+1
+$answer: 14, 4, 2
+$question: 14, 7, 1+1
+$answer: 14, 7, 2
+11111111111111111111
+11     11Ì1111τ1   1
+11     11η1111 1   1
+11     11 ηηη1 1   1
+1τ2  ҹ Π1Π    Ҹ1   1
+111111111    1 1   1
+13     11ηη  1 1   1
+1      11Ù1η  Ҹ1   1
+1      11111η1 1   1
+1      1111111 1   1
+1      1111111 1   1
+1      1111111     1
+1      1111111     1
+11111111111111111111
+1ηηηηηηηηηηηηηηηη111
+1          4      11
+1 m111m1m111m1111 11
+1 111111111111111 11
+1                 φ1
+1Ω111111111111111111
