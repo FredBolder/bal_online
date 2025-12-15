@@ -3654,6 +3654,12 @@ function drawLevel(
         case 2145:
           drawAbbreviation("t=");
           break;
+        case 2146:
+          drawAbbreviation("1 oct");
+          break;
+        case 2147:
+          drawAbbreviation("2 oct");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

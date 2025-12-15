@@ -67,6 +67,9 @@ export function changeMusicBoxProperty(gameInfo, x, y, property, value) {
                 musicBox.notes.length = 0;
                 musicBox.notes.push(value);
                 break;
+            case "octaves":
+                musicBox.octaves = value;
+                break;
             case "stepspermeasure":
                 musicBox.stepsPerMeasure = value;
                 break;
@@ -367,6 +370,10 @@ export function clearPlayedNotes() {
 export function fixDoors(gameInfo) {
     let found = false;
 
+    if (globalVars.createLevel) {
+        return;
+    }
+
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
         if (musicBox.mode === "door") {
@@ -386,7 +393,11 @@ export function fixDoors(gameInfo) {
             }
             if (!found) {
                 if (musicBox.notes.length < 2) {
-                    randomSequence(musicBox.notes);
+                    if (musicBox.octaves == 2) {
+                        randomSequenceTwoOctaves(musicBox.notes);
+                    } else {
+                        randomSequence(musicBox.notes);
+                    }
                 } else if (musicBox.notes.includes("|")) {
                     randomUserSequence(musicBox.notes);
                 }
@@ -400,7 +411,7 @@ function isChordOrIntervalMode(mode) {
 }
 
 export function musicBoxModes() {
-    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard", 
+    return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard",
         "near", "note", "song"];
 }
 
@@ -664,6 +675,25 @@ function randomSequence(notes) {
         ["C4", "E4", "D4", "F4", "E4", "G4"],
         ["D4", "F4", "E4", "G4", "F4", "A4"],
         ["C4", "E4", "G4", "C5", "G4", "E4", "C4"],
+    ];
+    n = randomInt(0, sequences.length - 1);
+    notes.length = 0;
+    for (let i = 0; i < sequences[n].length; i++) {
+        notes.push(sequences[n][i]);
+    }
+}
+
+function randomSequenceTwoOctaves(notes) {
+    let n = 0;
+    const sequences = [
+        ["D4", "D4", "A4", "D5", "A5", "F5", "D5", "F5"],
+        ["A4", "A4", "C5", "E5", "A5", "E5", "C5", "E5"],
+        ["G5", "G5", "E5", "C5", "G4", "C5", "E5", "G5"],
+        ["C4", "C4", "E4", "G4", "C5", "C5", "E5", "G5"],
+        ["D4", "D4", "A4", "A4", "D5", "D5", "F5", "A5"],
+        ["G5", "G5", "E5", "B4", "G4", "B4", "E5", "G5"],
+        ["D4", "A4", "F4", "D5", "A4", "F5", "D5", "A5"],
+        ["C4", "G4", "E4", "C5", "G4", "E5", "C5", "G5"],
     ];
     n = randomInt(0, sequences.length - 1);
     notes.length = 0;

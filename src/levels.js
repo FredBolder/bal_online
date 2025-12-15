@@ -41,7 +41,7 @@ export const series6End = 5009;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
-export const seriesMusic2End = 6205;
+export const seriesMusic2End = 6206;
 export const seriesMathStart = 6250;
 export const seriesMathEnd = 6253;
 export const seriesLanguageStart = 6300;
@@ -293,6 +293,7 @@ export function checkSettings(data, settings) {
     { name: "$inverted", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
+    { name: "$octaves", params: 3, xy: true },
     { name: "$notes", params: 0, xy: true },
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
@@ -577,6 +578,20 @@ export function checkSettings(data, settings) {
                 case 157:
                   if (values[2].trim() === "") {
                     msg += `${settingNr(i)}Empty value for note override.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
+            case "$octaves":
+              switch (data[y][x]) {
+                case "M":
+                case 157:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > 2)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for octaves.\n`;
                   }
                   break;
                 default:
@@ -1547,6 +1562,14 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   gameInfo.musicBoxes[idx].notes.push(values[note]);
                 }
               }
+            }
+          }
+          break;
+        case "$octaves":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if ((validXY) && (val_int >= 1) && (val_int <= 2)) {
+              changeMusicBoxProperty(gameInfo, x, y, "octaves", val_int);
             }
           }
           break;

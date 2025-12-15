@@ -1,3 +1,4 @@
+$extra: 1
 $gameticks: mover, 10
 $stonepattern: 2
 $answer: 3, 4, 8

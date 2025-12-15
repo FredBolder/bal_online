@@ -1,81 +1,194 @@
-$gameticks: mover, 10
-$stonepattern: 2
-$answer: 3, 4, 8
-$answer: 2, 7, 5
-$answer: 2, 10, 7
-$activesides: 9, 2, bottom
-$activesides: 10, 3, bottom
-$activesides: 11, 3, bottom
-$activesides: 12, 3, bottom
-$direction: 9, 6, downright
-$direction: 10, 6, downright
-$direction: 11, 7, downright
-$direction: 12, 11, upright
-$activesides: 1, 14, bottom
-$activesides: 2, 14, bottom
-$activesides: 3, 14, bottom
-$activesides: 4, 14, bottom
-$activesides: 5, 14, bottom
-$activesides: 6, 14, bottom
-$activesides: 7, 14, bottom
-$activesides: 8, 14, bottom
-$activesides: 9, 14, bottom
-$activesides: 10, 14, bottom
-$activesides: 11, 14, bottom
-$activesides: 12, 14, bottom
-$activesides: 13, 14, bottom
-$activesides: 14, 14, bottom
-$activesides: 15, 14, bottom
-$activesides: 16, 14, bottom
-$group: 9, 1, 2
-$sticky: 9, 1, yes
-$pistonmode: 7, 4, purpleball
-$sticky: 9, 7, yes
-$group: 8, 16, 2
-$group: 12, 16, 2
-$question: 14, 4, s
-$answer: 14, 4, 7
-$question: 15, 4, e
-$answer: 15, 4, 7
-$question: 16, 4, p
-$answer: 16, 4, 7
-$question: 17, 4, t
-$answer: 17, 4, 7
-$question: 14, 7, c
-$answer: 14, 7, 5
-$question: 15, 7, i
-$answer: 15, 7, 5
-$question: 16, 7, n
-$answer: 16, 7, 5
-$question: 17, 7, q
-$answer: 17, 7, 5
-$question: 14, 9, h
-$answer: 14, 9, 8
-$question: 15, 9, u
-$answer: 15, 9, 8
-$question: 16, 9, i
-$answer: 16, 9, 8
-$question: 17, 9, t
-$answer: 17, 9, 8
-$group: 6, 2, 2
-$group: 8, 4, 2
-11111111111111111111
-11  ==Π11Ì1111τ11111
-11  ==Π11η1111 11111
-11  ==111 ηηη1 11111
-1τ2ҹ==1ËΠΠ    ҸҸҸҸ11
-1111==111    1 11111
-1   == 11ηη  1 11111
-1 ҹ == 11Ù1η  ҸҸҸҸ11
-1111== 1α 81η1 11111
-1   == 1 111  ҸҸҸҸ11
-1 ҹ ==       1 11111
-1111== ηηηηηη1    31
-1111== 1111111     1
-11111111111111111111
-1ηηηηηηηηηηηηηηηη111
-1             4   11
-1 m111m1m111m1111 11
-1 111111111111111 11
-1                 φ1
-1Ω111111111111111111
+$stonepattern: 1
+$musicbox: 9, 7, keyboard, 5
+$instrument: 9, 7, piano, 90
+$part: 9, 7, top
+$musicbox: 10, 7, keyboard, 5
+$notes: 10, 7, D4
+$instrument: 10, 7, piano, 90
+$part: 10, 7, top
+$musicbox: 11, 7, keyboard, 5
+$notes: 11, 7, E4
+$instrument: 11, 7, piano, 90
+$part: 11, 7, top
+$musicbox: 12, 7, keyboard, 5
+$notes: 12, 7, F4
+$instrument: 12, 7, piano, 90
+$part: 12, 7, top
+$musicbox: 13, 7, keyboard, 5
+$notes: 13, 7, G4
+$instrument: 13, 7, piano, 90
+$part: 13, 7, top
+$musicbox: 14, 7, keyboard, 5
+$notes: 14, 7, A4
+$instrument: 14, 7, piano, 90
+$part: 14, 7, top
+$musicbox: 15, 7, keyboard, 5
+$notes: 15, 7, B4
+$instrument: 15, 7, piano, 90
+$part: 15, 7, top
+$musicbox: 9, 9, keyboard, 5
+$instrument: 9, 9, piano, 90
+$musicbox: 10, 9, keyboard, 5
+$notes: 10, 9, D4
+$instrument: 10, 9, piano, 90
+$musicbox: 11, 9, keyboard, 5
+$notes: 11, 9, E4
+$instrument: 11, 9, piano, 90
+$musicbox: 12, 9, keyboard, 5
+$notes: 12, 9, F4
+$instrument: 12, 9, piano, 90
+$musicbox: 13, 9, keyboard, 5
+$notes: 13, 9, G4
+$instrument: 13, 9, piano, 90
+$musicbox: 14, 9, keyboard, 5
+$notes: 14, 9, A4
+$instrument: 14, 9, piano, 90
+$musicbox: 15, 9, keyboard, 5
+$notes: 15, 9, B4
+$instrument: 15, 9, piano, 90
+$musicbox: 9, 8, keyboard, 5
+$instrument: 9, 8, piano, 90
+$part: 9, 8, middle
+$musicbox: 10, 8, keyboard, 5
+$notes: 10, 8, D4
+$instrument: 10, 8, piano, 90
+$part: 10, 8, middle
+$musicbox: 11, 8, keyboard, 5
+$notes: 11, 8, E4
+$instrument: 11, 8, piano, 90
+$part: 11, 8, middle
+$musicbox: 12, 8, keyboard, 5
+$notes: 12, 8, F4
+$instrument: 12, 8, piano, 90
+$part: 12, 8, middle
+$musicbox: 13, 8, keyboard, 5
+$notes: 13, 8, G4
+$instrument: 13, 8, piano, 90
+$part: 13, 8, middle
+$musicbox: 14, 8, keyboard, 5
+$notes: 14, 8, A4
+$instrument: 14, 8, piano, 90
+$part: 14, 8, middle
+$musicbox: 15, 8, keyboard, 5
+$notes: 15, 8, B4
+$instrument: 15, 8, piano, 90
+$part: 15, 8, middle
+$musicbox: 16, 9, keyboard, 5
+$notes: 16, 9, C5
+$instrument: 16, 9, piano, 90
+$musicbox: 16, 8, keyboard, 5
+$notes: 16, 8, C5
+$instrument: 16, 8, piano, 90
+$part: 16, 8, middle
+$musicbox: 16, 7, keyboard, 5
+$notes: 16, 7, C5
+$instrument: 16, 7, piano, 90
+$part: 16, 7, top
+$musicbox: 17, 9, keyboard, 5
+$notes: 17, 9, D5
+$instrument: 17, 9, piano, 90
+$musicbox: 17, 8, keyboard, 5
+$notes: 17, 8, D5
+$instrument: 17, 8, piano, 90
+$part: 17, 8, middle
+$musicbox: 17, 7, keyboard, 5
+$notes: 17, 7, D5
+$instrument: 17, 7, piano, 90
+$part: 17, 7, top
+$musicbox: 18, 9, keyboard, 5
+$notes: 18, 9, E5
+$instrument: 18, 9, piano, 90
+$musicbox: 18, 8, keyboard, 5
+$notes: 18, 8, E5
+$instrument: 18, 8, piano, 90
+$part: 18, 8, middle
+$musicbox: 18, 7, keyboard, 5
+$notes: 18, 7, E5
+$instrument: 18, 7, piano, 90
+$part: 18, 7, top
+$musicbox: 19, 9, keyboard, 5
+$notes: 19, 9, F5
+$instrument: 19, 9, piano, 90
+$musicbox: 19, 8, keyboard, 5
+$notes: 19, 8, F5
+$instrument: 19, 8, piano, 90
+$part: 19, 8, middle
+$musicbox: 19, 7, keyboard, 5
+$notes: 19, 7, F5
+$instrument: 19, 7, piano, 90
+$part: 19, 7, top
+$musicbox: 20, 9, keyboard, 5
+$notes: 20, 9, G5
+$instrument: 20, 9, piano, 90
+$musicbox: 20, 8, keyboard, 5
+$notes: 20, 8, G5
+$instrument: 20, 8, piano, 90
+$part: 20, 8, middle
+$musicbox: 20, 7, keyboard, 5
+$notes: 20, 7, G5
+$instrument: 20, 7, piano, 90
+$part: 20, 7, top
+$musicbox: 21, 9, keyboard, 5
+$notes: 21, 9, A5
+$instrument: 21, 9, piano, 90
+$musicbox: 21, 8, keyboard, 5
+$notes: 21, 8, A5
+$instrument: 21, 8, piano, 90
+$part: 21, 8, middle
+$musicbox: 21, 7, keyboard, 5
+$notes: 21, 7, A5
+$instrument: 21, 7, piano, 90
+$part: 21, 7, top
+$musicbox: 22, 9, keyboard, 5
+$notes: 22, 9, B5
+$instrument: 22, 9, piano, 90
+$musicbox: 22, 8, keyboard, 5
+$notes: 22, 8, B5
+$instrument: 22, 8, piano, 90
+$part: 22, 8, middle
+$musicbox: 22, 7, keyboard, 5
+$notes: 22, 7, B5
+$instrument: 22, 7, piano, 90
+$part: 22, 7, top
+$musicbox: 23, 7, keyboard, 5
+$notes: 23, 7, C6
+$instrument: 23, 7, piano, 90
+$musicbox: 23, 8, keyboard, 5
+$notes: 23, 8, C6
+$instrument: 23, 8, piano, 90
+$musicbox: 23, 9, keyboard, 5
+$notes: 23, 9, C6
+$instrument: 23, 9, piano, 90
+$musicbox: 7, 11, interval2, 5
+$instrument: 7, 11, piano, 90
+$group: 7, 11, 2
+$musicbox: 25, 11, door, 5
+$instrument: 25, 11, piano, 90
+$octaves: 25, 11, 2
+$musicbox: 13, 5, chord4, 5
+$instrument: 13, 5, piano, 90
+$group: 13, 5, 3
+$musicbox: 22, 14, chord4, 5
+$instrument: 22, 14, piano, 90
+$group: 22, 14, 3
+1111111111111111111111111111111
+1=                           c1
+1=    C              c1111111 1
+1=     1111111              1 1
+1=     13    1                1
+1=     1  Ѥ  M                1
+1=     1111111111111111111=1  1
+1=     11MMMMMMMMMMMMMMM11=1  1
+1=     11MMMMMMMMMMMMMMM11=1  1
+1=     11MMMMMMMMMMMMMMM11=1  1
+1=9   C11                1=1  1
+1=   2 M>                M 3  1
+11111111111p111111111111111G  1
+1=          Π         1   31  1
+1=111111111       Π   M    1  1
+1=1111111111111111111 111111  1
+1=                            1
+111                           1
+111                          C1
+111                          11
+1111111111111111111111111111111

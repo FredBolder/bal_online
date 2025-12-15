@@ -1131,7 +1131,7 @@ function BalPage() {
             break;
           case 4:
             // Music box
-            arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103];
+            arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103, 2146, 2147];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
           case 5:
@@ -2741,6 +2741,21 @@ function BalPage() {
                 }
                 if (changeMusicBoxProperty(gameInfo, column, row, "part", newValue) === -1) {
                   showMessage("Info", "Click on a music box to set the part of it.");
+                }
+              }
+              if ((createLevelMenu === menuToNumber("musicboxes")) && [2146, 2147].includes(createLevelObject)) {
+                switch (createLevelObject) {
+                  case 2146:
+                    newValue = 1;
+                    break;
+                  case 2147:
+                    newValue = 2;
+                    break;
+                  default:
+                    break;
+                }
+                if (changeMusicBoxProperty(gameInfo, column, row, "octaves", newValue) === -1) {
+                  showMessage("Info", "Click on a music box to set the number of octaves.");
                 }
               }
 

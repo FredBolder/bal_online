@@ -1,3 +1,5 @@
+$extra: 1
+$restorepoint: 0
 $stonepattern: 1
 $musicbox: 9, 7, keyboard, 5
 $instrument: 9, 7, piano, 90
@@ -168,23 +170,26 @@ $octaves: 25, 11, 2
 $musicbox: 13, 5, chord4, 5
 $instrument: 13, 5, piano, 90
 $group: 13, 5, 3
+$musicbox: 22, 14, chord4, 5
+$instrument: 22, 14, piano, 90
+$group: 22, 14, 3
 1111111111111111111111111111111
-1=9                          c1
-1=                            1
-1=     1111111                1
-1=     1     1                1
+1=                           c1
+1=    C              c1111111 1
+1=     1111111              1 1
+1=     13    1                1
 1=     1  Ѥ  M                1
 1=     1111111111111111111=1  1
 1=     11MMMMMMMMMMMMMMM11=1  1
 1=     11MMMMMMMMMMMMMMM11=1  1
 1=     11MMMMMMMMMMMMMMM11=1  1
-1=     11                1=1  1
+1=9   C11                1=1  1
 1=   2 M>                M 3  1
-111111111111111111111111111G  1
-11                            1
-11                            1
-13                            1
-1                             1
+11111111111p111111111111111G  1
+1=          Π         1   31  1
+1=111111111       Π   M    1  1
+1=1111111111111111111 111111  1
+1=                            1
 111                           1
 111                          C1
 111                          11
