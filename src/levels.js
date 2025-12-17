@@ -43,7 +43,7 @@ export const seriesEasy2End = 6013;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6206;
 export const seriesMathStart = 6250;
-export const seriesMathEnd = 6253;
+export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6302;
 

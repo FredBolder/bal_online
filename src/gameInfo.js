@@ -300,7 +300,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 242: {
-                    let answerBall = { x: j, y: i, answer: "2", color: "purple" };
+                    let answerBall = { x: j, y: i, answer: "2", color: "purple", delete: false };
                     result.answerBalls.push(answerBall);
                     break;
                 }
@@ -1031,7 +1031,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
                 if (idx >= 0) {
                     obj = gameInfo.answerBalls[idx];
-                    extraInfo = `Answer: ${obj.answer}`;
+                    extraInfo = `Answer: ${obj.answer}, Delete: ${obj.delete}, `;
                 }
                 info = `Answer ball, ` + extraInfo;
                 break;

@@ -307,7 +307,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 242: {
-            let answerBall = { x, y, answer: "2", color: "purple" };
+            let answerBall = { x, y, answer: "2", color: "purple", delete: false };
             gameInfo.answerBalls.push(answerBall);
             break;
         }

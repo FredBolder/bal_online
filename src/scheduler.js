@@ -1,3 +1,4 @@
+import { checkComparisons } from "./answerBalls.js";
 import { checkFalling, findElementByCoordinates, } from "./balUtils.js";
 import { moveConveyorBelts } from "./conveyorBelts.js";
 import { checkCopiers } from "./copiers.js";
@@ -53,6 +54,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
 
     if (checkAll) {
         if (checkQuestionStones(gameData, gameInfo)) {
+            updateCanvas = true;
+        }
+
+        if (checkComparisons(gameData, gameInfo)) {
             updateCanvas = true;
         }
 
