@@ -1,16 +1,16 @@
 import { findElementByCoordinates } from "./balUtils.js";
 
 function complete(expr) {
-  return !/[+\-*/]\s*$/.test(expr);
+    return !/[+\-*/]\s*$/.test(expr);
 }
 
 function calc(expr) {
-  if (!complete(expr)) return null;
-  try {
-    return Function(`"use strict"; return (${expr})`)();
-  } catch {
-    return null;
-  }
+    if (!complete(expr)) return null;
+    try {
+        return Function(`"use strict"; return (${expr})`)();
+    } catch {
+        return null;
+    }
 }
 
 export function checkComparisons(gameData, gameInfo) {
@@ -87,18 +87,85 @@ export function checkComparisons(gameData, gameInfo) {
             return false;
         }
         for (let i = 0; i < expressions.length - 1; i++) {
-            const expr1 = expressions[i].trim();
-            const expr2 = expressions[i + 1].trim();
+            const expr1 = convert(expressions[i].trim());
+            const expr2 = convert(expressions[i + 1].trim());
             if ((expr1 === "") || (expr2 === "")) {
                 return false;
             }
             const calc1 = calc(expr1);
             const calc2 = calc(expr2);
-            if ((calc1 === null) || (calc2 === null) || (calc1 !== calc2)) {
+            if ((calc1 === null) || (calc2 === null) || !equal(calc1, calc2)) {
                 return false;
             }
         }
         return true;
+    }
+
+    function convert(s) {
+        const chars = Array.from(s); // Unicode-safe
+        let result = "";
+
+        for (let i = 0; i < chars.length; i++) {
+            const ch = chars[i];
+            const next = chars[i + 1] ?? "";
+
+            let value = "";
+            if (ch === "%") {
+                i++;
+                switch (next) {
+                    case "S":
+                        value = "10";
+                        break;
+                    case "s":
+                        value = "15";
+                        break;
+                    case "E":
+                        value = "20";
+                        break;
+                    case "e":
+                        value = "30";
+                        break;
+                    case "Q":
+                        value = "40";
+                        break;
+                    case "q":
+                        value = "60";
+                        break;
+                    case "H":
+                        value = "80";
+                        break;
+                    case "h":
+                        value = "120";
+                        break;
+                    case "W":
+                        value = "160";
+                        break;
+                    case "w":
+                        value = "240";
+                        break;
+                    default:
+                        value = "%";
+                        i--;
+                        break;
+                }
+                result += value;
+                continue;
+            }
+
+            if (ch === "x") {
+                result += "*";
+                continue;
+            }
+
+            // other characters
+            result += ch;
+        }
+
+        return result;
+    }
+
+    function equal(a, b, tolerance = 1e-9) {
+        return Math.abs(a - b) < tolerance;
     }
 
     for (let i = 0; i < gameInfo.answerBalls.length; i++) {

@@ -4,9 +4,9 @@ $startlevelmessage: Only one sound is played at a time in the required rhythm. T
 $stonepattern: 1
 $gameticksxy: 17, 7, 3
 $musicbox: 14, 2, door, 5
-$notes: 14, 2, C4, E4, E4, C4, E4, C4, E4, |, C4, .G6, E4, C4, .G6, E4, .G6
-$addnotes: 14, 2, |, C4, E4, E4, C4, .G6, E4, .G6, |, C4, .G6, .G6, C4, .G6, E4, .G6
-$addnotes: 14, 2, |, C4, E4, .G6, C4, .G6, E4, .G6, |, C4, C4, .G6, C4, .G6, E4, .G6
+$notes: 14, 2, C4, E4, E4, C4, E4, C4, E4, |, C4, .G4, E4, C4, .G4, E4, .G4
+$addnotes: 14, 2, |, C4, E4, E4, C4, .G4, E4, .G4, |, C4, .G4, .G4, C4, .G4, E4, .G4
+$addnotes: 14, 2, |, C4, E4, .G4, C4, .G4, E4, .G4, |, C4, C4, .G4, C4, .G4, E4, .G4
 $addnotes: 14, 2, |, C4, E4, C4, E4, C4, E4, E4
 $instrument: 14, 2, drums, 90
 $musicbox: 4, 3, keyboard, 5
@@ -19,10 +19,10 @@ $instrument: 8, 3, snaredrum, 90
 $direction: 8, 3, right
 $noteoverride: 8, 3, C4
 $musicbox: 12, 3, keyboard, 5
-$notes: 12, 3, G6
+$notes: 12, 3, G4
 $instrument: 12, 3, hihat, 80
 $direction: 12, 3, right
-$noteoverride: 12, 3, E4
+$noteoverride: 12, 3, C4
 $group: 18, 5, 2
 $pistonmode: 18, 5, momentary
 $pistonmode: 18, 9, momentary

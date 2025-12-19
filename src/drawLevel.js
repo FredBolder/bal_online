@@ -1411,6 +1411,107 @@ function drawLevel(
     ctx.lineWidth = 1;
   }
 
+  function drawNote(x, y, type, dotted) {
+    const size = w1 * 0.8;
+    const pxScale = window.devicePixelRatio || 1;
+    const minDrawingWidth = 1 / pxScale;
+    const lineWidth = Math.max(size * 0.06, minDrawingWidth);
+    const rX = size * 0.18 * 0.8;
+    const rY = size * 0.14 * 0.8;
+    let cx = 0;
+    let cy = 0;
+    let headRotation = -0.35;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    switch (type) {
+      case "whole":
+        offsetX = 0;
+        offsetY = 0;
+        break;
+      case "half":
+        offsetX = -0.04;
+        offsetY = 0.2;
+        break;
+      case "quarter":
+        offsetX = -0.05;
+        offsetY = 0.25;
+        break;
+      case "eighth":
+        offsetX = -0.05;
+        offsetY = 0.25;
+        break;
+      case "sixteenth":
+        offsetX = -0.05;
+        offsetY = 0.25;
+        break;
+      default:
+        break;
+    }
+    offsetX = offsetX * size;
+    offsetY = offsetY * size;
+    cx = x + offsetX;
+    cy = y + offsetY;
+
+    ctx.save();
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+
+    // ---- Note head ----
+    if (type === "whole") {
+      headRotation = 0;
+    }
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, rX, rY, headRotation, 0, Math.PI * 2);
+    ctx.stroke();
+    if ((type !== "whole") && (type !== "half")) {
+      ctx.fill();
+    }
+
+    // ---- Stem ----
+    let stemX = cx + rX;
+    let stemBottomY = cy - (size * 0.05);
+    let stemTopY = cy - (size * 0.6);
+
+    if (type !== "whole") {
+      ctx.beginPath();
+      ctx.moveTo(stemX, stemBottomY);
+      ctx.lineTo(stemX, stemTopY);
+      ctx.stroke();
+    }
+
+    // ---- Flags ----
+    let flags = 0;
+    if (type === "eighth") flags = 1;
+    if (type === "sixteenth") flags = 2;
+
+    for (let i = 0; i < flags; i++) {
+      const flagSpacing = Math.max(size * 0.15, ctx.lineWidth * 2);
+      const offset = i * flagSpacing;
+      ctx.beginPath();
+      ctx.moveTo(stemX, stemTopY + offset);
+      ctx.quadraticCurveTo(
+        cx + size * 0.45,
+        stemTopY + (size * 0.12) + offset,
+        cx + size * 0.35,
+        stemTopY + (size * 0.22) + offset
+      );
+      ctx.stroke();
+    }
+
+    // ---- Dot ----
+    if (dotted) {
+      ctx.beginPath();
+      //ctx.arc(cx + (rX * 2.1), cy, rY * 0.5, 0, Math.PI * 2);
+      ctx.arc(cx + rX * 2.15, cy - rY * 0.15, rY * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
   function drawNumber(n) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
     drawText(ctx, xc, yc, n.toString(), "middle", "white", w2 * 0.7, w1 * 0.8);
@@ -1860,7 +1961,41 @@ function drawLevel(
       answer = gameInfo.answerBalls[idx].answer;
     }
     drawPurpleBall();
-    drawText(ctx, xc, yc, answer, "middle", "white", w2 * 0.6, w1 * 0.7);
+    switch (answer) {
+      case "%W":
+        drawNote(xc, yc, "whole", false);
+        break;
+      case "%H":
+        drawNote(xc, yc, "half", false);
+        break;
+      case "%Q":
+        drawNote(xc, yc, "quarter", false);
+        break;
+      case "%E":
+        drawNote(xc, yc, "eighth", false);
+        break;
+      case "%S":
+        drawNote(xc, yc, "sixteenth", false);
+        break;
+      case "%w":
+        drawNote(xc, yc, "whole", true);
+        break;
+      case "%h":
+        drawNote(xc, yc, "half", true);
+        break;
+      case "%q":
+        drawNote(xc, yc, "quarter", true);
+        break;
+      case "%e":
+        drawNote(xc, yc, "eighth", true);
+        break;
+      case "%s":
+        drawNote(xc, yc, "sixteenth", true);
+        break;
+      default:
+        drawText(ctx, xc, yc, answer, "middle", "white", w2 * 0.6, w1 * 0.7);
+        break;
+    }
   }
 
   function drawPurpleBall() {
