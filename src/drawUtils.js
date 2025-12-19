@@ -89,45 +89,55 @@ export function drawText(
   maxWidth,
   outline,
   outlineWidth,
-  angle = 0 // radians
+  angle = 0
 ) {
   ctx.save();
 
   ctx.font = `${height}px sans-serif`;
   ctx.fillStyle = color;
 
-  // set alignment/baseline
-  switch (align) {
-    case "middle":
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      break;
-    case "left":
-      ctx.textAlign = "left";
-      ctx.textBaseline = "alphabetic";
-      break;
-    case "right":
-      ctx.textAlign = "right";
-      ctx.textBaseline = "alphabetic";
-      break;
-    case "center":
-      ctx.textAlign = "center";
-      ctx.textBaseline = "alphabetic";
-      break;
-    default:
-      break;
+  const m = ctx.measureText(text);
+  const ascent = m.actualBoundingBoxAscent || 0;
+  const descent = m.actualBoundingBoxDescent || 0;
+  const rawWidth = m.width;
+
+  // vertical true center
+  const vOffset = (ascent - descent) / 2;
+
+  // scale compensation for maxWidth
+  let scaledWidth = rawWidth;
+  if (maxWidth && rawWidth > maxWidth) {
+    const scale = maxWidth / rawWidth;
+    scaledWidth = rawWidth * scale; // the width after the browser applies scaling
   }
 
-  // move the origin to (x,y) then rotate; draw at 0,0
+  // horizontal alignment
+  let hOffset = 0;
+  switch (align) {
+    case "right":
+      hOffset = -scaledWidth;
+      break;
+    case "center":
+    case "middle":
+      hOffset = -scaledWidth / 2;
+      break;
+    case "left":
+    default:
+      hOffset = 0;
+  }
+
   ctx.translate(Math.round(x), Math.round(y));
   if (angle !== 0) ctx.rotate(angle);
 
-  ctx.fillText(text, 0, 0, Math.round(maxWidth));
+  const drawX = Math.round(hOffset);
+  const drawY = Math.round(vOffset);
+
+  ctx.fillText(text, drawX, drawY, Math.round(maxWidth));
 
   if (outline) {
     ctx.strokeStyle = outline;
     ctx.lineWidth = outlineWidth || 1;
-    ctx.strokeText(text, 0, 0, Math.round(maxWidth));
+    ctx.strokeText(text, drawX, drawY, Math.round(maxWidth));
     ctx.lineWidth = 1;
   }
 

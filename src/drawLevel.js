@@ -439,7 +439,7 @@ function drawLevel(
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "red", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
-    drawText(ctx, xc, ymin + w2 * 0.8, "TNT", "middle", "white", w2 * 0.4, w1 * 0.54);
+    drawText(ctx, xc, ymin + w2 * 0.75, "TNT", "middle", "white", w2 * 0.4, w1 * 0.54);
   }
 
   function drawDiamant(color) {
@@ -1896,7 +1896,7 @@ function drawLevel(
     drawFilledBox(ctx, xmin + d1, ymin + d2, w1 - 2 * d1, w2 - d2, "gray", true);
     drawLine(ctx, xc, ymin + d3, xc, ymin + d2, color);
     drawLine(ctx, xc - d4, ymin + d3, xc + d4, ymin + d3, color);
-    drawText(ctx, xc, ymin + w2 * 0.8, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54);
+    drawText(ctx, xc, ymin + w2 * 0.75, group.toString(), "middle", "black", w2 * 0.4, w1 * 0.54);
   }
 
   function drawPrevious() {

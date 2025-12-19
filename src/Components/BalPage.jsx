@@ -1233,6 +1233,18 @@ function BalPage() {
     }
   }
 
+  function handleClickedLevel() {
+    let result = -1;
+
+    if ((globalVars.clickedLevel > 0) && (globalVars.uf || firstOfSeries(globalVars.clickedLevel) ||
+      (globalVars.up && solvedLevels.includes(globalVars.clickedLevel - 2)) ||
+      solvedLevels.includes(globalVars.clickedLevel) || solvedLevels.includes(globalVars.clickedLevel - 1))) {
+      result = globalVars.clickedLevel;
+      globalVars.clickedLevel = -1;
+    }
+    return result;
+  }
+
   async function handleKeyDown(e) {
     let info = {
       action: "",
@@ -2170,21 +2182,23 @@ function BalPage() {
           cbMusic.current.value = getSettings().music.toString();
           cbSound.current.value = getSettings().sound.toString();
           gameVars.currentLevel = 200;
-          if (globalVars.clickedLevel === -1) {
-            // Do not load when a level is chosen from the overview to avoid a start level message
-            // Level 200 has no start level message
-            await loadProgress(gameVars);
-          }
+          await loadProgress(gameVars);
+
           if (globalVars.uf) {
             gameVars.currentLevel = 0;
           }
+
+          const clickedLevel = handleClickedLevel();
+          if (clickedLevel >= 0) {
+            gameVars.currentLevel = clickedLevel;
+          }
+
           await initLevel(gameVars.currentLevel);
         }
-        if ((globalVars.clickedLevel > 0) && (globalVars.uf || firstOfSeries(globalVars.clickedLevel) ||
-          (globalVars.up && solvedLevels.includes(globalVars.clickedLevel - 2)) ||
-          solvedLevels.includes(globalVars.clickedLevel) || solvedLevels.includes(globalVars.clickedLevel - 1))) {
-          await initLevel(globalVars.clickedLevel);
-          globalVars.clickedLevel = -1;
+        
+        const clickedLevel = handleClickedLevel();
+        if (clickedLevel >= 0) {
+          await initLevel(clickedLevel);
         }
 
         updateProgressText();
