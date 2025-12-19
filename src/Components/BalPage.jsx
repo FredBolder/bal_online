@@ -2170,7 +2170,11 @@ function BalPage() {
           cbMusic.current.value = getSettings().music.toString();
           cbSound.current.value = getSettings().sound.toString();
           gameVars.currentLevel = 200;
-          await loadProgress(gameVars);
+          if (globalVars.clickedLevel === -1) {
+            // Do not load when a level is chosen from the overview to avoid a start level message
+            // Level 200 has no start level message
+            await loadProgress(gameVars);
+          }
           if (globalVars.uf) {
             gameVars.currentLevel = 0;
           }
