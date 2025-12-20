@@ -166,6 +166,11 @@ function drawLevel(
     }
   }
 
+  function drawAnswerColor(color) {
+    const size = w1 * 0.5;
+    drawFilledBox(ctx, xc - (0.5 * size), yc - (0.5 * size), size, size, color);
+  }
+
   function drawArrow(direction, frontColor, backColor, options = {}) {
     let angle = 0;
     let d1 = w1 / 3;
@@ -1991,6 +1996,39 @@ function drawLevel(
         break;
       case "%s":
         drawNote(xc, yc, "sixteenth", true);
+        break;
+      case "$black":
+        drawAnswerColor("black");
+        break;
+      case "$brown":
+        drawAnswerColor("brown");
+        break;
+      case "$blue":
+        drawAnswerColor("blue");
+        break;
+      case "$gray":
+        drawAnswerColor("gray");
+        break;
+      case "$green":
+        drawAnswerColor("green");
+        break;
+      case "$orange":
+        drawAnswerColor("#ED7014");
+        break;
+      case "$pink":
+        drawAnswerColor("#FF69B4");
+        break;
+      case "$purple":
+        drawAnswerColor("#800080");
+        break;
+      case "$red":
+        drawAnswerColor("red");
+        break;
+      case "$yellow":
+        drawAnswerColor("yellow");
+        break;
+      case "$white":
+        drawAnswerColor("white");
         break;
       default:
         drawText(ctx, xc, yc, answer, "middle", "white", w2 * 0.6, w1 * 0.7);
