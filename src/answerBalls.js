@@ -87,8 +87,8 @@ export function checkComparisons(gameData, gameInfo) {
             return false;
         }
         for (let i = 0; i < expressions.length - 1; i++) {
-            const expr1 = convert(expressions[i].trim());
-            const expr2 = convert(expressions[i + 1].trim());
+            const expr1 = expressions[i].trim();
+            const expr2 = expressions[i + 1].trim();
             if ((expr1 === "") || (expr2 === "")) {
                 return false;
             }
@@ -102,65 +102,58 @@ export function checkComparisons(gameData, gameInfo) {
     }
 
     function convert(s) {
-        const chars = Array.from(s); // Unicode-safe
         let result = "";
 
-        for (let i = 0; i < chars.length; i++) {
-            const ch = chars[i];
-            const next = chars[i + 1] ?? "";
-
-            let value = "";
-            if (ch === "%") {
-                i++;
-                switch (next) {
-                    case "S":
-                        value = "10";
-                        break;
-                    case "s":
-                        value = "15";
-                        break;
-                    case "E":
-                        value = "20";
-                        break;
-                    case "e":
-                        value = "30";
-                        break;
-                    case "Q":
-                        value = "40";
-                        break;
-                    case "q":
-                        value = "60";
-                        break;
-                    case "H":
-                        value = "80";
-                        break;
-                    case "h":
-                        value = "120";
-                        break;
-                    case "W":
-                        value = "160";
-                        break;
-                    case "w":
-                        value = "240";
-                        break;
-                    default:
-                        value = "%";
-                        i--;
-                        break;
-                }
-                result += value;
-                continue;
-            }
-
-            if (ch === "x") {
-                result += "*";
-                continue;
-            }
-
-            // other characters
-            result += ch;
+        switch (s) {
+            case "%s":
+                result = "20";
+                break;
+            case "%s.":
+                result = "30";
+                break;
+            case "%s..":
+                result = "35";
+                break;
+            case "%e":
+                result = "40";
+                break;
+            case "%e.":
+                result = "60";
+                break;
+            case "%e..":
+                result = "70";
+                break;
+            case "%q":
+                result = "80";
+                break;
+            case "%q.":
+                result = "120";
+                break;
+            case "%q..":
+                result = "140";
+                break;
+            case "%h":
+                result = "160";
+                break;
+            case "%h.":
+                result = "240";
+                break;
+            case "%h..":
+                result = "280";
+                break;
+            case "%w":
+                result = "320";
+                break;
+            case "%w.":
+                result = "480";
+                break;
+            case "%w..":
+                result = "560";
+                break;
+            default:
+                result = s;
+                break;
         }
-
         return result;
     }
 
@@ -181,7 +174,7 @@ export function checkComparisons(gameData, gameInfo) {
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 indexList.push(idx);
-                sHorizontal += gameInfo.answerBalls[idx].answer;
+                sHorizontal += convert(gameInfo.answerBalls[idx].answer);
             } else {
                 break;
             }
@@ -202,7 +195,7 @@ export function checkComparisons(gameData, gameInfo) {
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 indexList.push(idx);
-                sVertical += gameInfo.answerBalls[idx].answer;
+                sVertical += convert(gameInfo.answerBalls[idx].answer);
             } else {
                 break;
             }

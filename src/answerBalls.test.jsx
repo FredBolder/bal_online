@@ -211,11 +211,11 @@ describe("answerBalls", () => {
         const gameInfo = {
             ...defaultGameInfo,
             answerBalls: [
-                { x: 1, y: 4, answer: "%Q", color: "purple", delete: false },
+                { x: 1, y: 4, answer: "%q", color: "purple", delete: false },
                 { x: 2, y: 4, answer: "=", color: "purple", delete: false },
-                { x: 3, y: 4, answer: "%e", color: "purple", delete: false },
+                { x: 3, y: 4, answer: "%e.", color: "purple", delete: false },
                 { x: 4, y: 4, answer: "+", color: "purple", delete: false },
-                { x: 5, y: 4, answer: "%S", color: "purple", delete: false },
+                { x: 5, y: 4, answer: "%s", color: "purple", delete: false },
             ],
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
@@ -247,11 +247,11 @@ describe("answerBalls", () => {
         const gameInfo = {
             ...defaultGameInfo,
             answerBalls: [
-                { x: 1, y: 4, answer: "%Q", color: "purple", delete: false },
+                { x: 1, y: 4, answer: "%q", color: "purple", delete: false },
                 { x: 2, y: 4, answer: "=", color: "purple", delete: false },
-                { x: 3, y: 4, answer: "%e", color: "purple", delete: false },
+                { x: 3, y: 4, answer: "%e.", color: "purple", delete: false },
                 { x: 4, y: 4, answer: "+", color: "purple", delete: false },
-                { x: 5, y: 4, answer: "%s", color: "purple", delete: false },
+                { x: 5, y: 4, answer: "%s.", color: "purple", delete: false },
             ],
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
@@ -269,6 +269,44 @@ describe("answerBalls", () => {
         const info = checkComparisons(input, gameInfo);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
+    });
+
+    it("checkComparisons H", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            answerBalls: [
+                { x: 1, y: 4, answer: "%q..", color: "purple", delete: false },
+                { x: 2, y: 4, answer: "=", color: "purple", delete: false },
+                { x: 3, y: 4, answer: "%q", color: "purple", delete: false },
+                { x: 4, y: 4, answer: "+", color: "purple", delete: false },
+                { x: 5, y: 4, answer: "%e", color: "purple", delete: false },
+                { x: 6, y: 4, answer: "+", color: "purple", delete: false },
+                { x: 7, y: 4, answer: "%s", color: "purple", delete: false },
+            ],
+            blueBall: { x: 1, y: 5 },
+            greenBalls: 1,
+        };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 242, 242, 242, 242, 242, 242, 242, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkComparisons(input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(info).toBe(true);
     });
 
     // Insert new tests here

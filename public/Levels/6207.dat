@@ -1,14 +1,14 @@
 $stonepattern: 1
 $extra: 1
 $has: propeller
-$answer: 5, 3, %s
-$answer: 9, 5, %e
-$answer: 11, 5, %Q
-$answer: 2, 6, %E
-$answer: 7, 7, %q
+$answer: 5, 3, %s.
+$answer: 9, 5, %e.
+$answer: 11, 5, %q
+$answer: 2, 6, %e
+$answer: 7, 7, %q.
 $answer: 8, 7, =
 $answer: 5, 11, +
-$answer: 9, 11, %S
+$answer: 9, 11, %s
 $answer: 3, 12, =
 $answer: 5, 12, +
 111111111111111

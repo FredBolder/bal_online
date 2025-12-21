@@ -1,3 +1,4 @@
+import { drawCar, drawFish, drawFlower, drawHeart, drawStar, drawTree } from "./drawAnswerBallIcons.js"
 import { findElementByCoordinates } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
 import {
@@ -1416,7 +1417,7 @@ function drawLevel(
     ctx.lineWidth = 1;
   }
 
-  function drawNote(x, y, type, dotted) {
+  function drawNote(x, y, type, dots) {
     const size = w1 * 0.8;
     const pxScale = window.devicePixelRatio || 1;
     const minDrawingWidth = 1 / pxScale;
@@ -1452,6 +1453,9 @@ function drawLevel(
         break;
       default:
         break;
+    }
+    if (dots > 1) {
+      offsetX -= 0.1;
     }
     offsetX = offsetX * size;
     offsetY = offsetY * size;
@@ -1507,10 +1511,14 @@ function drawLevel(
     }
 
     // ---- Dot ----
-    if (dotted) {
+    if (dots > 0) {
       ctx.beginPath();
-      //ctx.arc(cx + (rX * 2.1), cy, rY * 0.5, 0, Math.PI * 2);
-      ctx.arc(cx + rX * 2.15, cy - rY * 0.15, rY * 0.45, 0, Math.PI * 2);
+      ctx.arc(cx + (rX * 2.15), cy - (rY * 0.15), rY * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    if (dots > 1) {
+      ctx.beginPath();
+      ctx.arc(cx + (rX * 2.15) + (w1 * 0.15), cy - (rY * 0.15), rY * 0.45, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -1967,68 +1975,101 @@ function drawLevel(
     }
     drawPurpleBall();
     switch (answer) {
-      case "%W":
-        drawNote(xc, yc, "whole", false);
+      case "%car":
+        drawCar(ctx, xc, yc, w1 * 0.8);
         break;
-      case "%H":
-        drawNote(xc, yc, "half", false);
+      case "%fish":
+        drawFish(ctx, xc, yc, w1 * 0.8);
         break;
-      case "%Q":
-        drawNote(xc, yc, "quarter", false);
+      case "%flower":
+        drawFlower(ctx, xc, yc, w1 * 0.65);
         break;
-      case "%E":
-        drawNote(xc, yc, "eighth", false);
+      case "%heart":
+        drawHeart(ctx, xc, yc, w1 * 0.65);
         break;
-      case "%S":
-        drawNote(xc, yc, "sixteenth", false);
+      case "%star":
+        drawStar(ctx, xc, yc, w1 * 0.65, "yellow");
+        break;
+      case "%tree":
+        drawTree(ctx, xc, yc, w1 * 0.75);
         break;
       case "%w":
-        drawNote(xc, yc, "whole", true);
+        drawNote(xc, yc, "whole", 0);
         break;
       case "%h":
-        drawNote(xc, yc, "half", true);
+        drawNote(xc, yc, "half", 0);
         break;
       case "%q":
-        drawNote(xc, yc, "quarter", true);
+        drawNote(xc, yc, "quarter", 0);
         break;
       case "%e":
-        drawNote(xc, yc, "eighth", true);
+        drawNote(xc, yc, "eighth", 0);
         break;
       case "%s":
-        drawNote(xc, yc, "sixteenth", true);
+        drawNote(xc, yc, "sixteenth", 0);
         break;
-      case "$black":
+      case "%w.":
+        drawNote(xc, yc, "whole", 1);
+        break;
+      case "%h.":
+        drawNote(xc, yc, "half", 1);
+        break;
+      case "%q.":
+        drawNote(xc, yc, "quarter", 1);
+        break;
+      case "%e.":
+        drawNote(xc, yc, "eighth", 1);
+        break;
+      case "%s.":
+        drawNote(xc, yc, "sixteenth", 1);
+        break;
+      case "%w..":
+        drawNote(xc, yc, "whole", 2);
+        break;
+      case "%h..":
+        drawNote(xc, yc, "half", 2);
+        break;
+      case "%q..":
+        drawNote(xc, yc, "quarter", 2);
+        break;
+      case "%e..":
+        drawNote(xc, yc, "eighth", 2);
+        break;
+      case "%s..":
+        drawNote(xc, yc, "sixteenth", 2);
+        break;
+      case "%black":
         drawAnswerColor("black");
         break;
-      case "$brown":
+      case "%brown":
         drawAnswerColor("brown");
         break;
-      case "$blue":
+      case "%blue":
         drawAnswerColor("blue");
         break;
-      case "$gray":
+      case "%gray":
         drawAnswerColor("gray");
         break;
-      case "$green":
+      case "%green":
         drawAnswerColor("green");
         break;
-      case "$orange":
+      case "%orange":
         drawAnswerColor("#ED7014");
         break;
-      case "$pink":
+      case "%pink":
         drawAnswerColor("#FF69B4");
         break;
-      case "$purple":
+      case "%purple":
         drawAnswerColor("#800080");
         break;
-      case "$red":
+      case "%red":
         drawAnswerColor("red");
         break;
-      case "$yellow":
-        drawAnswerColor("yellow");
-        break;
-      case "$white":
+      case "%white":
         drawAnswerColor("white");
+        break;
+      case "%yellow":
+        drawAnswerColor("yellow");
         break;
       default:
         drawText(ctx, xc, yc, answer, "middle", "white", w2 * 0.6, w1 * 0.7);
@@ -2440,28 +2481,6 @@ function drawLevel(
         ctx.lineTo(Math.round(xmin - 0.5), Math.round(ymax + 0.5));
         break;
     }
-    ctx.fill();
-  }
-
-  function drawStar(color) {
-    const outerRadius = Math.min(w1, w2) * 0.25;
-    const innerRatio = Math.sin(Math.PI * 18 / 180) / Math.sin(Math.PI * 54 / 180);
-    const innerRadius = outerRadius * innerRatio;
-    const cx = xc;
-    const cy = yc - w2 * 0.25;
-
-    ctx.beginPath();
-    const spikes = 5;
-    const step = Math.PI / spikes;
-    let angle = -Math.PI / 2;
-    for (let i = 0; i < spikes; i++) {
-      ctx.lineTo(cx + Math.cos(angle) * outerRadius, cy + Math.sin(angle) * outerRadius);
-      angle += step;
-      ctx.lineTo(cx + Math.cos(angle) * innerRadius, cy + Math.sin(angle) * innerRadius);
-      angle += step;
-    }
-    ctx.closePath();
-    ctx.fillStyle = color;
     ctx.fill();
   }
 
@@ -3502,16 +3521,16 @@ function drawLevel(
           drawMover(currentCol, currentRow);
           break;
         case 179:
-          drawStar("yellow");
+          drawStar(ctx, xc, yc - (w2 * 0.25), w1 * 0.5, "yellow");
           break;
         case 180:
-          drawStar("blue");
+          drawStar(ctx, xc, yc - (w2 * 0.25), w1 * 0.5, "blue");
           break;
         case 181:
-          drawStar("silver");
+          drawStar(ctx, xc, yc - (w2 * 0.25), w1 * 0.5, "silver");
           break;
         case 182:
-          drawStar("red");
+          drawStar(ctx, xc, yc - (w2 * 0.25), w1 * 0.5, "red");
           break;
         case 183:
           // Game rotator left
