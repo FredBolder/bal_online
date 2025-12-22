@@ -304,6 +304,16 @@ export function getGameInfo(backData, gameData) {
                     result.answerBalls.push(answerBall);
                     break;
                 }
+                case 243: {
+                    let fish = {
+                        x: j,
+                        y: i,
+                        direction: Math.random() > 0.5 ? 6 : 4,
+                        isDead: false
+                    };
+                    result.tropicalFish.push(fish);
+                    break;
+                }
                 default:
                     break;
             }
@@ -1035,6 +1045,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Answer ball, ` + extraInfo;
                 break;
+            case 243:
+                idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+                if (idx >= 0) {
+                    obj = gameInfo.tropicalFish[idx];
+                    extraInfo = `Direction: ${obj.direction}, Dead: ${obj.isDead}`;
+                }
+                info = `Tropical fish, ` + extraInfo;
+                break;
             default:
                 break;
         }
@@ -1123,6 +1141,7 @@ export function initGameInfo(info) {
     info.timeBombs = [];
     info.trapDoors = [];
     info.travelGate = { x: -1, y: -1 };
+    info.tropicalFish = [];
     info.twoBlue = false;
     info.waterWithIceObjects = [];
     info.whiteBallSynchronisers = [];

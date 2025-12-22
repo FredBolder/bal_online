@@ -311,6 +311,16 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.answerBalls.push(answerBall);
             break;
         }
+        case 243: {
+            let fish = {
+                x,
+                y,
+                direction: Math.random() > 0.5 ? 6 : 4,
+                isDead: false
+            };
+            gameInfo.tropicalFish.push(fish);
+            break;
+        }
         default:
             break;
     }
@@ -326,7 +336,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         default:
             gameData[y][x] = obj;
-            if (obj === 27) {
+            if ([27, 243].includes(obj)) {
                 backData[y][x] = 23;
             }
             break;
@@ -602,6 +612,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 gameInfo.answerBalls.splice(idx, 1);
+            }
+            break;
+        case 243:
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+                gameInfo.tropicalFish.splice(idx, 1);
             }
             break;
         default:

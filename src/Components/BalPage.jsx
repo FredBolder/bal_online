@@ -1087,7 +1087,7 @@ function BalPage() {
             break;
           case 11:
             // Water
-            arr1 = [23, 20, 113, 114, 26, 27, 205, 206];
+            arr1 = [23, 20, 113, 114, 26, 27, 243, 205, 206];
             arr2 = [0];
             break;
           case 12:

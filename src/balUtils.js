@@ -882,6 +882,9 @@ export function charToNumber(c) {
     case "ҹ":
       result = 242;
       break;
+    case "Ҽ":
+      result = 243;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1369,6 +1372,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 242:
       result = gameInfo.answerBalls;
+      break;
+    case 243:
+      result = gameInfo.tropicalFish;
       break;
     default:
       result = null;
@@ -2185,6 +2191,9 @@ export function numberToChar(n) {
     case 242:
       result = "ҹ";
       break;
+    case 243:
+      result = "Ҽ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2227,7 +2236,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
-        if (data === 27) {
+        if ([27, 243].includes(data)) {
           // Fish is always in the water
           rowBackData.push(23);
         } else {
@@ -2479,6 +2488,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
   }
 
   refs.push(gameInfo.travelGate);
+
+  for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
+    refs.push(gameInfo.tropicalFish[i]);
+  }
 
   for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
     refs.push(gameInfo.waterWithIceObjects[i]);

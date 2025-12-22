@@ -1,163 +1,20 @@
-$stonepattern: 1
-$answer: 18, 11, $purple
-$answer: 18, 9, $red
-$answer: 18, 13, $black
-$answer: 18, 10, $white
-$answer: 18, 8, $green
-$answer: 18, 12, $yellow
-$activesides: 16, 8, right
-$direction: 16, 8, up
-$activesides: 16, 9, right
-$direction: 16, 9, up
-$activesides: 16, 10, right
-$direction: 16, 10, up
-$activesides: 16, 11, right
-$direction: 16, 11, up
-$activesides: 16, 12, right
-$direction: 16, 12, up
-$activesides: 16, 13, right
-$direction: 16, 13, up
-$activesides: 16, 7, right
-$direction: 16, 7, up
-$activesides: 16, 6, right
-$direction: 16, 6, up
-$activesides: 16, 5, right
-$direction: 16, 5, up
-$activesides: 2, 12, right
-$direction: 2, 12, down
-$activesides: 2, 11, right
-$direction: 2, 11, down
-$activesides: 2, 10, right
-$direction: 2, 10, down
-$activesides: 2, 9, right
-$direction: 2, 9, down
-$activesides: 2, 8, right
-$direction: 2, 8, down
-$activesides: 16, 4, right
-$direction: 16, 4, up
-$activesides: 16, 3, right
-$direction: 16, 3, up
-$activesides: 17, 1, bottom
-$direction: 17, 1, left
-$activesides: 16, 1, bottom
-$direction: 16, 1, left
-$activesides: 15, 1, bottom
-$direction: 15, 1, left
-$activesides: 13, 1, bottom
-$direction: 13, 1, left
-$activesides: 12, 1, bottom
-$direction: 12, 1, left
-$activesides: 11, 1, bottom
-$direction: 11, 1, left
-$activesides: 10, 1, bottom
-$direction: 10, 1, left
-$activesides: 9, 1, bottom
-$direction: 9, 1, left
-$direction: 7, 3, down
-$direction: 8, 5, left
-$direction: 7, 5, left
-$direction: 6, 5, left
-$direction: 5, 5, left
-$direction: 4, 5, left
-$direction: 3, 5, down
-$activesides: 2, 7, right
-$direction: 2, 7, down
-$activesides: 2, 6, right
-$direction: 2, 6, down
-$activesides: 14, 1, bottom
-$direction: 14, 1, left
-$direction: 13, 4, down
-$direction: 9, 5, left
-$direction: 10, 5, left
-$direction: 11, 5, left
-$direction: 12, 5, left
-$activesides: 14, 4, left
-$direction: 14, 4, left
-$group: 1, 8, 3
-$pistonmode: 1, 8, momentary
-$group: 1, 9, 3
-$pistonmode: 1, 9, momentary
-$group: 1, 10, 3
-$pistonmode: 1, 10, momentary
-$group: 1, 11, 3
-$pistonmode: 1, 11, momentary
-$group: 1, 12, 3
-$pistonmode: 1, 12, momentary
-$group: 1, 13, 3
-$pistonmode: 1, 13, momentary
-$group: 6, 3, 2
-$pistonmode: 6, 3, momentary
-$pistonmode: 13, 5, momentary
-$group: 11, 17, 2
-$group: 14, 11, 3
-$question: 5, 9, g
-$answer: 5, 9, $yellow
-$question: 6, 9, e
-$answer: 6, 9, $yellow
-$question: 7, 9, l
-$answer: 7, 9, $yellow
-$question: 8, 9, b
-$answer: 8, 9, $yellow
-$question: 5, 10, r
-$answer: 5, 10, $red
-$question: 6, 10, o
-$answer: 6, 10, $red
-$question: 7, 10, t
-$answer: 7, 10, $red
-$question: 5, 11, s
-$answer: 5, 11, $black
-$question: 6, 11, c
-$answer: 6, 11, $black
-$question: 7, 11, h
-$answer: 7, 11, $black
-$question: 8, 11, w
-$answer: 8, 11, $black
-$question: 9, 11, a
-$answer: 9, 11, $black
-$question: 10, 11, r
-$answer: 10, 11, $black
-$question: 11, 11, z
-$answer: 11, 11, $black
-$question: 5, 12, w
-$answer: 5, 12, $white
-$question: 6, 12, e
-$answer: 6, 12, $white
-$question: 7, 12, i
-$answer: 7, 12, $white
-$question: 8, 12, ß
-$answer: 8, 12, $white
-$question: 5, 13, g
-$answer: 5, 13, $green
-$question: 6, 13, r
-$answer: 6, 13, $green
-$question: 7, 13, ü
-$answer: 7, 13, $green
-$question: 8, 13, n
-$answer: 8, 13, $green
-$question: 5, 8, l
-$answer: 5, 8, $purple
-$question: 6, 8, i
-$answer: 6, 8, $purple
-$question: 7, 8, l
-$answer: 7, 8, $purple
-$question: 8, 8, a
-$answer: 8, 8, $purple
-111111111111111111111
-1      1 ηηηηηηηηη111
-1      1          111
-1     Ëη       1η 111
-1            ηη1η 111
-1  ηηηηηηηηηηÙ 1η 111
-11η            1η 111
-11η            1η 111
-1Ëη  ҸҸҸҸ^111111η ҹ=1
-1Ëη  ҸҸҸҸ   11τ1η ҹ=1
-1Ëη  ҸҸҸ111    1η ҹ=1
-1Ëη  ҸҸҸҸҸҸҸ11m1η ҹ=1
-1Ëη  ҸҸҸҸ1111111η ҹ=1
-1Ë5  ҸҸҸҸ1111131η ҹ=1
-1111           1111=1
-118 α11111111111111=1
-111111  3    3 < <2=1
-1τ     1  1m1  1m1111
-111111111111111111111
+$pattern: 5, 6, 15, 5
+$background: 3, 10, 1, 1, 23
+$background: 14, 11, 1, 1, 23
+$background: 9, 12, 2, 1, 23
+$background: 9, 13, 3, 1, 23
+111111111111111
+0    Ѯ1113  Ѻ11
+0     11Ѿ     8
+025 9 J1Ѷ Ѻ=Ѿ 1
+=111   d   =  Ѻ
+=          =  0
+=    Џ111Џ111 0
+=             0
+WWWWWWWWWWWWWWW
+wwwwwwwwwwwwwww
+wwwҼwwwwwwwwwww
+wwwwwwwwwwwwww5
+wwwwwwwwwҼѼwwww
+wwwwwwwwwH1Ѭwww
+111111111111111

@@ -1979,7 +1979,7 @@ function drawLevel(
         drawCar(ctx, xc, yc, w1 * 0.8);
         break;
       case "%fish":
-        drawFish(ctx, xc, yc, w1 * 0.8);
+        drawFish(ctx, xc, yc, w1 * 0.8, false, false);
         break;
       case "%flower":
         drawFlower(ctx, xc, yc, w1 * 0.65);
@@ -2758,6 +2758,17 @@ function drawLevel(
     }
 
     ctx.restore();
+  }
+
+  function drawTropicalFish(x, y) {
+    let direction = -1
+    let idx = -1;
+    
+    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+    if (idx >= 0) {
+      direction = gameInfo.tropicalFish[idx].direction;
+    }
+    drawFish(ctx, xc, yc, w1, direction !== 6, true);
   }
 
   function drawVerticalRope() {
@@ -3664,6 +3675,9 @@ function drawLevel(
           break;
         case 242:
           drawPurpleAnswerBall(currentCol, currentRow);
+          break;
+        case 243:
+          drawTropicalFish(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

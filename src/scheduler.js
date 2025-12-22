@@ -23,6 +23,7 @@ import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./t
 import { moveRedBalls } from "./redBalls.js";
 import { checkTimeBombs } from "./timeBombs.js";
 import { checkTrapDoors } from "./trapDoors.js";
+import { moveTropicalFish } from "./tropicalFish.js";
 import { checkWhiteBallSynchronisers } from "./whiteBallSynchronisers.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "./yellowBalls.js";
 import { moveYellowBars } from "./yellowBars.js";
@@ -127,10 +128,11 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
 
-        if ((gameVars.timeFreezer === 0) && (gameInfo.redFish.length > 0)) {
+        if ((gameVars.timeFreezer === 0) && ((gameInfo.redFish.length > 0) || (gameInfo.tropicalFish.length > 0))) {
             if (gameVars.fishCounter >= gameVars.fishCountTo) {
                 gameVars.fishCounter = 0;
                 moveFish(backData, gameData, gameInfo);
+                moveTropicalFish(backData, gameData, gameInfo);
                 updateCanvas = true;
             }
             gameVars.fishCounter++;

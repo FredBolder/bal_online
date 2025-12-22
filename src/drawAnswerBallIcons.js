@@ -66,26 +66,49 @@ export function drawCar(ctx, xc, yc, size) {
     ctx.fill();
 }
 
-export function drawFish(ctx, xc, yc, size) {
+// This drawing is not only used for answer balls.
+export function drawFish(ctx, xc, yc, size, flipHorizontally = false, variation = false) {
+    if (flipHorizontally) {
+        ctx.save();
+        ctx.translate(xc, 0);
+        ctx.scale(-1, 1);
+        ctx.translate(-xc, 0);
+    }
+
     const w = size;
     const h = size;
+
+    // Color palettes
+    const palette = variation
+        ? {
+            body: "#FFD94A",       // yellow-orange
+            stripe: "#FF8C00",     // orange
+            fin: "#4CAF50",        // tropical green
+            eye: "#000000"
+        }
+        : {
+            body: "#FF6347",       // red-orange
+            stripe: "#FF4500",     // red-orange
+            fin: "#FFD700",        // gold
+            eye: "#000000"
+        };
 
     // Body dimensions
     const bodyLength = w * 0.7;
     const bodyHeight = h * 0.4;
     const tailWidth = bodyLength * 0.25;
-    const tailHeight = bodyHeight * 0.8;
+    const tailHeight = bodyHeight * 1;
 
     // Compute horizontal shift to center the full fish including tail fin
-    const tailExtension = tailWidth * 0.8; // tail extends to the left
-    const centerShift = tailExtension / 2; // shift right to center
+    const tailExtension = tailWidth * 0.8;
+    const centerShift = tailExtension / 2;
     const left = xc - bodyLength / 2 + centerShift;
     const right = xc + bodyLength / 2 + centerShift;
     const top = yc - bodyHeight / 2;
     const bottom = yc + bodyHeight / 2;
 
     // ---- Body outline ----
-    ctx.fillStyle = "#FF6347"; // base tropical color
+    ctx.fillStyle = palette.body;
     ctx.beginPath();
 
     // Nose
@@ -99,7 +122,7 @@ export function drawFish(ctx, xc, yc, size) {
     ctx.lineTo(left, yc + (0.5 * connectionWidth));
     ctx.lineTo(left + tailWidth, bottom);
 
-    // Bottom body curve
+    // Bottom curve
     ctx.lineTo(right - bodyLength * 0.5, bottom);
     ctx.quadraticCurveTo(right - bodyLength * 0.1, bottom, right, yc);
 
@@ -108,8 +131,9 @@ export function drawFish(ctx, xc, yc, size) {
 
     // ---- Stripes ----
     ctx.save();
+
+    // Clip to body shape
     ctx.beginPath();
-    // reuse body path to clip
     ctx.moveTo(right, yc);
     ctx.quadraticCurveTo(right - bodyLength * 0.1, top, right - bodyLength * 0.5, top);
     ctx.lineTo(left + tailWidth, top);
@@ -122,55 +146,74 @@ export function drawFish(ctx, xc, yc, size) {
     ctx.clip();
 
     const stripeCount = 5;
-    ctx.strokeStyle = "#FF4500";
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = palette.stripe;
+    ctx.lineWidth = Math.max(1, size * 0.05);
+
     for (let i = 1; i <= stripeCount; i++) {
-        const x = left + (i / (stripeCount + 1)) * (right - left);
+        const t = i / (stripeCount + 1);
+        const x = left + t * (right - left);
+        const distFromCenter = Math.abs(t - 0.5);
+        const curveStrength = (0.12 - distFromCenter * 0.08) * bodyLength;
+        const tilt = bodyLength * 0.03;
+        const topOffset = (0.02 + distFromCenter * 0.05) * bodyHeight;
+        const bottomOffset = (0.02 + distFromCenter * 0.05) * bodyHeight;
+        const xTop = x - tilt;
+        const xBottom = x + tilt;
+        const yTop = top + topOffset;
+        const yBottom = bottom - bottomOffset;
+        const cpX = x + curveStrength;
+        const cpY = yc;
+
         ctx.beginPath();
-        ctx.moveTo(x, top);
-        ctx.lineTo(x, bottom);
+        ctx.moveTo(xTop, yTop);
+        ctx.quadraticCurveTo(cpX, cpY, xBottom, yBottom);
         ctx.stroke();
     }
+
     ctx.restore();
 
     // ---- Tail fin ----
-    ctx.fillStyle = "#FF4500";
+    ctx.fillStyle = palette.fin;
     ctx.beginPath();
     ctx.moveTo(left, yc + (0.5 * connectionWidth));
     ctx.lineTo(left, yc - (0.5 * connectionWidth));
-    ctx.lineTo(left - tailWidth * 0.8, yc - tailHeight / 2); // top
-    ctx.lineTo(left - tailWidth * 0.8, yc + tailHeight / 2); // bottom
+    ctx.lineTo(left - tailWidth * 0.9, yc - tailHeight / 2);
+    ctx.quadraticCurveTo(left - tailWidth * 0.4, yc, left - tailWidth * 0.8, yc + tailHeight / 3);
     ctx.closePath();
     ctx.fill();
 
     // ---- Top fin ----
+    ctx.fillStyle = palette.fin;
     const dorsalHeight = bodyHeight * 0.5;
-    ctx.fillStyle = "#FFD700";
     ctx.beginPath();
-    ctx.moveTo(right - bodyLength * 0.6, top); // base near body
-    ctx.lineTo(right - bodyLength * 0.8, top - dorsalHeight); // tip backward
-    ctx.lineTo(right - bodyLength * 0.4, top); // other base
+    ctx.moveTo(right - bodyLength * 0.6, top);
+    ctx.lineTo(right - bodyLength * 0.8, top - dorsalHeight);
+    ctx.quadraticCurveTo(right - bodyLength * 0.5, top - dorsalHeight / 2, right - bodyLength * 0.4, top);
     ctx.closePath();
     ctx.fill();
 
     // ---- Bottom fin ----
-    const analHeight = bodyHeight * 0.4;
-    ctx.fillStyle = "#FFD700";
+    ctx.fillStyle = palette.fin;
+    const analHeight = bodyHeight * 0.35;
     ctx.beginPath();
     ctx.moveTo(right - bodyLength * 0.6, bottom);
     ctx.lineTo(right - bodyLength * 0.8, bottom + analHeight);
-    ctx.lineTo(right - bodyLength * 0.35, bottom);
+    ctx.quadraticCurveTo(right - bodyLength * 0.45, bottom + analHeight / 2, right - bodyLength * 0.35, bottom);
     ctx.closePath();
     ctx.fill();
 
     // ---- Eye ----
+    ctx.fillStyle = palette.eye;
     const eyeRadius = size * 0.04;
-    ctx.fillStyle = "#000";
     ctx.beginPath();
     ctx.arc(right - bodyLength * 0.15, yc - bodyHeight * 0.1, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
-}
 
+    // Restore transform if flipped
+    if (flipHorizontally) {
+        ctx.restore();
+    }
+}
 
 export function drawFlower(ctx, xc, yc, size) {
     const petalCount = 5;
@@ -239,6 +282,7 @@ export function drawHeart(ctx, xc, yc, size) {
     ctx.restore();
 }
 
+// This drawing is not only used for answer balls.
 export function drawStar(ctx, xc, yc, size, color) {
     const outerRadius = size * 0.5;
     const innerRatio = Math.sin(Math.PI * 18 / 180) / Math.sin(Math.PI * 54 / 180);
