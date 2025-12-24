@@ -314,6 +314,18 @@ export function getGameInfo(backData, gameData) {
                     result.tropicalFish.push(fish);
                     break;
                 }
+                case 244: {
+                    let changer = {
+                        x: j,
+                        y: i,
+                        color1: "lightblue",
+                        color2: "white",
+                        horizontal: false,
+                        ready: true
+                    };
+                    result.changers.push(changer);
+                    break;
+                }
                 default:
                     break;
             }
@@ -1053,6 +1065,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Tropical fish, ` + extraInfo;
                 break;
+            case 244:
+                idx = findElementByCoordinates(x, y, gameInfo.changers);
+                if (idx >= 0) {
+                    obj = gameInfo.changers[idx];
+                    extraInfo = `Color 1: ${obj.color1}, Color 2: ${obj.color2}, Horizontal: ${obj.horizontal}, Ready: ${obj.ready}`;
+                }
+                info = `Changer, ` + extraInfo;
+                break;
             default:
                 break;
         }
@@ -1091,6 +1111,7 @@ export function initGameInfo(info) {
     info.blueBall1 = { x: -1, y: -1 };
     info.blueBall2 = { x: -1, y: -1 };
     info.blueBall = info.blueBall1;
+    info.changers = [];
     info.conveyorBelts = [];
     info.copiers = [];
     info.damagedStones = [];

@@ -321,6 +321,18 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.tropicalFish.push(fish);
             break;
         }
+        case 244: {
+            let changer = {
+                x,
+                y,
+                color1: "lightblue",
+                color2: "white",
+                horizontal: false,
+                ready: true
+            };
+            gameInfo.changers.push(changer);
+            break;
+        }
         default:
             break;
     }
@@ -618,6 +630,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
             if (idx >= 0) {
                 gameInfo.tropicalFish.splice(idx, 1);
+            }
+            break;
+        case 244:
+            idx = findElementByCoordinates(x, y, gameInfo.changers);
+            if (idx >= 0) {
+                gameInfo.changers.splice(idx, 1);
             }
             break;
         default:

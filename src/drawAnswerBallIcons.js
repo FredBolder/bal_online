@@ -282,6 +282,94 @@ export function drawHeart(ctx, xc, yc, size) {
     ctx.restore();
 }
 
+export function drawHouse(ctx, xc, yc, size) {
+    // House proportions
+    const houseWidth  = size * 0.75;
+    const houseHeight = size * 0.42;
+    const roofHeight  = size * 0.20;
+
+    const chimneyWidth  = size * 0.08;
+    const chimneyHeight = size * 0.16;
+
+    const doorWidth  = houseWidth * 0.22;
+    const doorHeight = houseHeight * 0.65;
+
+    const windowSize = houseWidth * 0.22;
+
+    // Total height of house + roof
+    const totalHeight = roofHeight + houseHeight;
+
+    // Top-left corner
+    const x0 = xc - houseWidth / 2;
+    const y0 = yc - totalHeight / 2;
+
+    // ---------------- CHIMNEY ----------------
+    const chimneyX = x0 + houseWidth * 0.70;
+    const chimneyY = y0 + roofHeight * 0.10;
+
+    ctx.fillStyle = "#884422";
+    ctx.fillRect(chimneyX, chimneyY, chimneyWidth, chimneyHeight);
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = size * 0.02;
+    ctx.strokeRect(chimneyX, chimneyY, chimneyWidth, chimneyHeight);
+
+    // ---------------- ROOF ----------------
+    ctx.beginPath();
+    ctx.moveTo(x0, y0 + roofHeight);
+    ctx.lineTo(x0 + houseWidth / 2, y0);
+    ctx.lineTo(x0 + houseWidth, y0 + roofHeight);
+    ctx.closePath();
+
+    ctx.fillStyle = "#b34a1d";
+    ctx.fill();
+    ctx.stroke();
+
+    // ---------------- HOUSE BODY ----------------
+    ctx.fillStyle = "#d9b38c";
+    ctx.fillRect(x0, y0 + roofHeight, houseWidth, houseHeight);
+    ctx.strokeRect(x0, y0 + roofHeight, houseWidth, houseHeight);
+
+    // ---------------- DOOR ----------------
+    const doorX = xc - doorWidth / 2;
+    const doorY = y0 + roofHeight + houseHeight - doorHeight;
+
+    ctx.fillStyle = "#663300";
+    ctx.fillRect(doorX, doorY, doorWidth, doorHeight);
+    ctx.strokeRect(doorX, doorY, doorWidth, doorHeight);
+
+    // Door knob
+    ctx.beginPath();
+    ctx.arc(doorX + doorWidth * 0.8, doorY + doorHeight * 0.5, size * 0.012, 0, Math.PI * 2);
+    ctx.fillStyle = "#222";
+    ctx.fill();
+
+    // ---------------- WINDOWS ----------------
+    const windowTop = doorY;  // aligned with door top
+
+    const leftWindowX  = x0 + houseWidth * 0.10;
+    const rightWindowX = x0 + houseWidth * 0.90 - windowSize;
+
+    ctx.fillStyle = "#87ceeb";
+    ctx.fillRect(leftWindowX, windowTop, windowSize, windowSize);
+    ctx.strokeRect(leftWindowX, windowTop, windowSize, windowSize);
+
+    ctx.fillRect(rightWindowX, windowTop, windowSize, windowSize);
+    ctx.strokeRect(rightWindowX, windowTop, windowSize, windowSize);
+
+    // Window cross lines
+    ctx.beginPath();
+    function windowCross(x, y) {
+        ctx.moveTo(x + windowSize / 2, y);
+        ctx.lineTo(x + windowSize / 2, y + windowSize);
+        ctx.moveTo(x, y + windowSize / 2);
+        ctx.lineTo(x + windowSize, y + windowSize / 2);
+    }
+    windowCross(leftWindowX, windowTop);
+    windowCross(rightWindowX, windowTop);
+    ctx.stroke();
+}
+
+
 // This drawing is not only used for answer balls.
 export function drawStar(ctx, xc, yc, size, color) {
     const outerRadius = size * 0.5;

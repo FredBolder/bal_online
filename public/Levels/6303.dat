@@ -1,4 +1,5 @@
 $stonepattern: 1
+$hint: The language is German.
 $extra: 1
 $answer: 18, 8, %green
 $answer: 18, 9, %red

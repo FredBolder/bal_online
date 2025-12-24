@@ -1,0 +1,20 @@
+$changer: 10, 6, yes, yellow,  white
+$changer: 6, 13, yes, white,  yellow
+$changer: 8, 12, yes, yellow,  purple
+$pistonmode: 7, 14, yellowball
+111111111111111
+1      T      1
+1      1      1
+1             1
+1             1
+1   55        1
+1111   Ӄ2 Ӄ 4 1
+1     1111 11 1
+1             1
+1             1
+1             1
+13            1
+1       Ӄ     1
+1     Ӄ      T1
+1111111Ù1111111
+111111111111111

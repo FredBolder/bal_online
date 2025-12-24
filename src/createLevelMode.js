@@ -140,6 +140,15 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.answerBalls[idx2].color = gameInfo.answerBalls[idx1].color;
             }
             break;
+        case 244:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.changers);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.changers);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.changers[idx2].color1 = gameInfo.changers[idx1].color1;
+                gameInfo.changers[idx2].color2 = gameInfo.changers[idx1].color2;
+                gameInfo.changers[idx2].horizontal = gameInfo.changers[idx1].horizontal;
+            }
+            break;
         default:
             break;
     }
@@ -247,6 +256,12 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 return { arr: gameInfo.answerBalls, idx };
+            }
+            break;
+        case 244:
+            idx = findElementByCoordinates(x, y, gameInfo.changers);
+            if (idx >= 0) {
+                return { arr: gameInfo.changers, idx };
             }
             break;
         default:

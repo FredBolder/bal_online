@@ -54,7 +54,7 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242].includes(el)) {
+  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 244].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -885,6 +885,9 @@ export function charToNumber(c) {
     case "Ҽ":
       result = 243;
       break;
+    case "Ӄ":
+      result = 244;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1119,6 +1122,33 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
     }
   }
 
+  return result;
+}
+
+export function displayColor(color) {
+  let result = "";
+
+  switch (color.toLowerCase()) {
+    case "lightblue":
+      // was #90D5FF"
+      result = "#00BFFF";
+      break;
+    case "orange":
+      result = "#ED7014";
+      break;
+    case "pink":
+      result = "#FF69B4";
+      break;
+    case "purple":
+      result = "#800080";
+      break;
+    case "silver":
+      result = "#B0B0B0";
+      break;
+    default:
+      result = color;
+      break;
+  }
   return result;
 }
 
@@ -1375,6 +1405,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 243:
       result = gameInfo.tropicalFish;
+      break;
+    case 244:
+      result = gameInfo.changers;
       break;
     default:
       result = null;
@@ -2194,6 +2227,9 @@ export function numberToChar(n) {
     case 243:
       result = "Ҽ";
       break;
+    case 244:
+      result = "Ӄ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2272,6 +2308,7 @@ function getCodePartMessage(n) {
 
 export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
   const element = gameData[oldY][oldX];
+  let idx = -1;
 
   gameData[newY][newX] = element;
   gameData[oldY][oldX] = 0;
@@ -2347,6 +2384,13 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 242:
       updateObject(gameInfo.answerBalls, oldX, oldY, newX, newY);
       break;
+    case 244:
+      updateObject(gameInfo.changers, oldX, oldY, newX, newY);
+      idx = findElementByCoordinates(newX, newY, gameInfo.changers);
+      if (idx >= 0) {
+        gameInfo.changers[idx].ready = true;
+      }
+      break;
     default:
       break;
   }
@@ -2383,6 +2427,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.answerBalls.length; i++) {
     refs.push(gameInfo.answerBalls[i]);
+  }
+
+  for (let i = 0; i < gameInfo.changers.length; i++) {
+    refs.push(gameInfo.changers[i]);
   }
 
   for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
@@ -2812,6 +2860,9 @@ export function updateObjectByObjectNumber(gameInfo, objectNumber, x1, y1, x2, y
           break;
         case 203:
           list[i].counter = 0;
+          break;
+        case 244:
+          list[i].ready = true;
           break;
         default:
           break;

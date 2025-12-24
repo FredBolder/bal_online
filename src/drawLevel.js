@@ -1,5 +1,5 @@
-import { drawCar, drawFish, drawFlower, drawHeart, drawStar, drawTree } from "./drawAnswerBallIcons.js"
-import { findElementByCoordinates } from "./balUtils.js";
+import { drawCar, drawFish, drawFlower, drawHeart, drawHouse, drawStar, drawTree } from "./drawAnswerBallIcons.js"
+import { displayColor, findElementByCoordinates } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
 import {
   drawBox,
@@ -322,6 +322,28 @@ function drawLevel(
     }
     drawLine(ctx, xc - d3, ymin + d2, xc - d3, ymin + d2 + (sticks * w2 * factor), "black");
     drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
+  }
+
+  function drawChanger(x, y) {
+    let color1 = "blue";
+    let color2 = "white";
+    let horizontal = false;
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.changers);
+    if (idx >= 0) {
+      color1 = gameInfo.changers[idx].color1;
+      color2 = gameInfo.changers[idx].color2;
+      horizontal = gameInfo.changers[idx].horizontal;
+    }
+
+    if (horizontal) {
+      drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2, displayColor(color1));
+      drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2, displayColor(color2));
+    } else {
+      drawFilledBox(ctx, xmin, ymin, w1, w2 * 0.5, displayColor(color1));
+      drawFilledBox(ctx, xmin, yc, w1, w2 * 0.5, displayColor(color2));
+    }
   }
 
   function drawChordTypeOrInterval(chordTypeOrInterval) {
@@ -1772,7 +1794,7 @@ function drawLevel(
         color = "white";
         break;
       case "lightblueball":
-        color = "#90D5FF";
+        color = displayColor("lightblue");
         break;
       case "yellowball":
         color = "yellow";
@@ -1781,13 +1803,13 @@ function drawLevel(
         color = "red";
         break;
       case "purpleball":
-        color = "#800080";
+        color = displayColor("purple");
         break;
       case "orangeball":
-        color = "#ED7014";
+        color = displayColor("orange");
         break;
       case "pinkball":
-        color = "#FF69B4";
+        color = displayColor("pink");
         break;
       default:
         color = "gray";
@@ -1987,6 +2009,9 @@ function drawLevel(
       case "%heart":
         drawHeart(ctx, xc, yc, w1 * 0.65);
         break;
+      case "%house":
+        drawHouse(ctx, xc, yc, w1 * 0.8);
+        break;
       case "%star":
         drawStar(ctx, xc, yc, w1 * 0.65, "yellow");
         break;
@@ -2054,13 +2079,13 @@ function drawLevel(
         drawAnswerColor("green");
         break;
       case "%orange":
-        drawAnswerColor("#ED7014");
+        drawAnswerColor(displayColor("orange"));
         break;
       case "%pink":
-        drawAnswerColor("#FF69B4");
+        drawAnswerColor(displayColor("pink"));
         break;
       case "%purple":
-        drawAnswerColor("#800080");
+        drawAnswerColor(displayColor("purple"));
         break;
       case "%red":
         drawAnswerColor("red");
@@ -2763,7 +2788,7 @@ function drawLevel(
   function drawTropicalFish(x, y) {
     let direction = -1
     let idx = -1;
-    
+
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
@@ -3379,19 +3404,19 @@ function drawLevel(
           drawBarBottom("yellow");
           break;
         case 126:
-          drawBarLeft("deepskyblue");
+          drawBarLeft(displayColor("lightblue"));
           break;
         case 127:
-          drawBarRight("deepskyblue");
+          drawBarRight(displayColor("lightblue"));
           break;
         case 128:
-          drawBarMiddle("deepskyblue");
+          drawBarMiddle(displayColor("lightblue"));
           break;
         case 129:
-          drawBarTop("deepskyblue");
+          drawBarTop(displayColor("lightblue"));
           break;
         case 130:
-          drawBarBottom("deepskyblue");
+          drawBarBottom(displayColor("lightblue"));
           break;
         case 131:
           drawYellowStopper(currentCol, currentRow);
@@ -3418,7 +3443,7 @@ function drawLevel(
           drawDirectionChanger5();
           break;
         case 140:
-          drawSmallBall("#B0B0B0");
+          drawSmallBall(displayColor("silver"));
           break;
         case 141:
           drawQuarterCircleStoneBottomLeft(currentCol, currentRow);
@@ -3581,13 +3606,13 @@ function drawLevel(
           drawTeleportsCreator(true);
           break;
         case 195:
-          drawSmallBall("#90D5FF");
+          drawSmallBall(displayColor("lightblue"));
           break;
         case 196:
           drawSmallBall("yellow");
           break;
         case 197:
-          drawSmallBall("#800080");
+          drawSmallBall(displayColor("purple"));
           break;
         case 198:
           drawDisappearingStone(currentCol, currentRow);
@@ -3602,13 +3627,13 @@ function drawLevel(
           drawSmallBall("red");
           break;
         case 202:
-          drawSmallBall("#ED7014");
+          drawSmallBall(displayColor("orange"));
           break;
         case 203:
           drawPinkBall();
           break;
         case 204:
-          drawSmallBall("#FF69B4");
+          drawSmallBall(displayColor("pink"));
           break;
         case 205:
           drawFreezeGun();
@@ -3678,6 +3703,9 @@ function drawLevel(
           break;
         case 243:
           drawTropicalFish(currentCol, currentRow);
+          break;
+        case 244:
+          drawChanger(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

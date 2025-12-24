@@ -1,0 +1,16 @@
+$stonepattern: 1
+$hint: Change the white ball into a yellow ball.
+$extra: 1
+$changer: 9, 4, no, purple, lightblue
+$changer: 9, 5, yes, lightblue, white
+$changer: 9, 6, no, yellow, purple
+111111111111
+13    11 4=1
+1     11 1=1
+111=1111  =1
+18 =  Ψ1 Ӄ=1
+11 =  11 Ӄ=1
+111=1 11 Ӄ=1
+1         =1
+1ψ   2    =1
+111111111111

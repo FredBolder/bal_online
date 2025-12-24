@@ -1,13 +1,14 @@
 $answer: 1, 1, %car
 $answer: 3, 1, %fish
-$answer: 7, 1, %heart
-$answer: 1, 3, %star
-$answer: 3, 3, %tree
 $answer: 5, 1, %flower
+$answer: 7, 1, %heart
+$answer: 3, 3, %star
+$answer: 5, 3, %tree
+$answer: 1, 3, %house
 0000000000
 0ҹ ҹ ҹ ҹ 0
 0        0
-0ҹ ҹ     0
+0ҹ ҹ ҹ   0
 0        0
 0        0
 0        0

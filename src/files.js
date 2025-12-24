@@ -1,5 +1,6 @@
 import { numberToChar, stringArrayToNumberArray } from "./balUtils.js";
 import { checkLevel } from "./levels.js";
+import { booleanToYesOrNo } from "./utils.js";
 
 export async function exportLevel(backData, gameData, gameInfo, gameVars) {
     try {
@@ -241,6 +242,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         const answerBall = gameInfo.answerBalls[i];
         line = `$answer: ${answerBall.x}, ${answerBall.y}, ${answerBall.answer}`;
         lines.push(line);
+    }
+
+    for (let i = 0; i < gameInfo.changers.length; i++) {
+        const changer = gameInfo.changers[i];
+        if (changer.horizontal || (changer.color1.toLowerCase() !== "lightblue") || (changer.color2.toLowerCase() !== "white")) {
+            line = `$changer: ${changer.x}, ${changer.y}, ${booleanToYesOrNo(changer.horizontal)}, ${changer.color1}, ${changer.color2}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {

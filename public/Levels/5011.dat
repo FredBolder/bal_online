@@ -1,25 +1,25 @@
+$extra: 1
+$gameticks: mover, 10
 $stonepattern: 2
-$changer: 15, 7, yes, white,  purple
-$changer: 14, 14, no, yellow,  lightblue
-$changer: 11, 16, no, lightblue,  red
-$activesides: 18, 6, left
-$direction: 18, 6, up
+$changer: 15, 8, yes, white, purple
+$changer: 14, 14, no, yellow, lightblue
+$changer: 11, 16, no, lightblue, red
+$activesides: 16, 6, right
+$direction: 16, 6, up
 $activesides: 16, 5, right
 $direction: 16, 5, up
-$activesides: 16, 4, right
-$direction: 16, 4, up
 $pistonmode: 18, 11, purpleball
 $pistonmode: 17, 18, purpleball
 11111111111111111111
-1  3               1
+T    3             1
 1                  1
-14                 1
-111=111111111111η=11
-111=11      1   η=81
-111=11      1    =η1
-18 = c      1  Ӄ =11
-111=        11111=11
-111=             =11
+1                  1
+14                 T
+111=11111Џ111111η=11
+111=11      1111η=81
+18 = c      1    =11
+111=        1  Ӄ =11
+111=        1 111=11
 111=             =11
 111=             =Ö1
 111=1c         11=11

@@ -6,6 +6,10 @@ export function booleanToString(value) {
   return value ? "1": "0";
 }
 
+export function booleanToYesOrNo(value) {
+  return value ? "yes": "no";
+}
+
 // eslint-disable-next-line no-unused-vars
 function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
@@ -123,6 +127,12 @@ export function rotatePoints(points, basePoint, angle) {
     const ry = sin * dx + cos * dy + basePoint.y;
     return { x: rx, y: ry };
   });
+}
+
+export function swap(a, b) {
+  let temp = a;
+  a = b;
+  b = temp;
 }
 
 export function stringToBoolean(value) {

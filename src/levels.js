@@ -1,5 +1,6 @@
 import { removeObject } from "./addRemoveObject.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
+import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { globalVars } from "./glob.js";
 import { moversDirections } from "./movers.js";
@@ -37,9 +38,9 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5010;
+export const series6End = 5011;
 export const seriesEasy2Start = 6000;
-export const seriesEasy2End = 6013;
+export const seriesEasy2End = 6016;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6207;
 export const seriesMathStart = 6250;
@@ -278,6 +279,7 @@ export function checkSettings(data, settings) {
     { name: "$answer", params: 0, xy: true },
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
+    { name: "$changer", params: 5, xy: true },
     { name: "$conveyorbeltmode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
     { name: "$displaysize", params: 2, xy: false },
@@ -365,6 +367,23 @@ export function checkSettings(data, settings) {
               }
               if (((x + w - 1) >= data[0].length) || ((y + h - 1) >= data.length)) {
                 msg += `${settingNr(i)}The area exceeds the game raster.\n`;
+              }
+              break;
+            case "$changer":
+              if (!["yes", "no"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
+              }
+              if (validXY && !["Ӄ", 244].includes(data[y][x])) {
+                msg += `${settingNr(i)}No changer found at the coordinates ${x}, ${y}.\n`;
+              }
+              if (!checkColor(values[3])) {
+                msg += `${settingNr(i)}Invalid value ${values[3]} for color 1.\n`;
+              }
+              if (!checkColor(values[4])) {
+                msg += `${settingNr(i)}Invalid value ${values[4]} for color 2.\n`;
+              }
+              if (valuesLowerCase[3] === valuesLowerCase[4]) {
+                msg += `${settingNr(i)}A changer must have two different colors.\n`;
               }
               break;
             case "$conveyorbeltmode":
@@ -1310,6 +1329,27 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 gameVars.bgcolor.push({ x, y, w, h, color });
               } else {
                 gameVars.fgcolor.push({ x, y, w, h, color });
+              }
+            }
+          }
+          break;
+        case "$changer":
+          if (values.length === 5) {
+            if (validXY) {
+              idx = findElementByCoordinates(x, y, gameInfo.changers);
+              if (idx >= 0) {
+                switch (valuesLowerCase[2]) {
+                  case "no":
+                    gameInfo.changers[idx].horizontal = false;
+                    break;
+                  case "yes":
+                    gameInfo.changers[idx].horizontal = true;
+                    break;
+                  default:
+                    break;
+                }
+                gameInfo.changers[idx].color1 = valuesLowerCase[3];
+                gameInfo.changers[idx].color2 = valuesLowerCase[4];
               }
             }
           }

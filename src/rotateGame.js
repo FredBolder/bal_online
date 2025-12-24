@@ -206,6 +206,26 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.blueBall2, rows, rotateLeft);
       }
 
+      // Changers
+      for (let i = 0; i < gameInfo.changers.length; i++) {
+        let swap = false;
+        const changer = gameInfo.changers[i];
+        rotateXY(changer, rows, rotateLeft);
+        const c1 = changer.color1;
+        const c2 = changer.color2;
+        if (changer.horizontal) {
+          swap = rotateLeft;
+          changer.horizontal = false;
+        } else {
+          swap = !rotateLeft;
+          changer.horizontal = true;
+        }
+        if (swap) {
+          changer.color1 = c2;
+          changer.color2 = c1;
+        }
+      }
+
       // Copiers
       for (let i = 0; i < gameInfo.copiers.length; i++) {
         rotateXY(gameInfo.copiers[i], rows, rotateLeft);

@@ -1,4 +1,5 @@
 $hint: Throw four white balls in the hole.
+$extra: 1
 $stonepattern: 1
 $changer: 9, 9, no, white, lightblue
 $changer: 8, 10, yes, purple, lightblue

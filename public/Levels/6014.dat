@@ -1,0 +1,13 @@
+$hint: Move the white ball one step to the right before pushing the changer down.
+$extra: 1
+$stonepattern: 1
+1111111111
+1   5    1
+1     Ӄ  1
+1    111=1
+11     1=1
+13     1=1
+1      1=1
+1      1=1
+1   2    1
+1111111111
