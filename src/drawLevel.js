@@ -1,4 +1,4 @@
-import { drawCar, drawFish, drawFlower, drawHeart, drawHouse, drawStar, drawTree } from "./drawAnswerBallIcons.js"
+import { drawCar, drawFish, drawFlower, drawHeart, drawHouse, drawStar, drawTrain, drawTree } from "./drawAnswerBallIcons.js"
 import { displayColor, findElementByCoordinates } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
 import {
@@ -344,6 +344,14 @@ function drawLevel(
       drawFilledBox(ctx, xmin, ymin, w1, w2 * 0.5, displayColor(color1));
       drawFilledBox(ctx, xmin, yc, w1, w2 * 0.5, displayColor(color2));
     }
+  }
+
+  function drawChangerColors() {
+      drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2 * 0.5, displayColor("white"));
+      drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, displayColor("lightblue"));
+      drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, displayColor("yellow"));
+      drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, displayColor("pink"));
+      drawText(ctx, xc, yc, "sel", "middle", "black", w2 * 0.7, w1 * 0.8);
   }
 
   function drawChordTypeOrInterval(chordTypeOrInterval) {
@@ -2014,6 +2022,9 @@ function drawLevel(
         break;
       case "%star":
         drawStar(ctx, xc, yc, w1 * 0.65, "yellow");
+        break;
+      case "%train":
+        drawTrain(ctx, xc, yc, w1 * 0.85, true);
         break;
       case "%tree":
         drawTree(ctx, xc, yc, w1 * 0.75);
@@ -3893,6 +3904,9 @@ function drawLevel(
           break;
         case 2147:
           drawAbbreviation("2 oct");
+          break;
+        case 2148:
+          drawChangerColors();
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

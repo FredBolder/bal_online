@@ -107,6 +107,26 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally = false, variation 
     const top = yc - bodyHeight / 2;
     const bottom = yc + bodyHeight / 2;
 
+    // ---- Top fin ----
+    ctx.fillStyle = palette.fin;
+    const dorsalHeight = bodyHeight * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(right - bodyLength * 0.6, top + (0.05 * bodyHeight));
+    ctx.lineTo(right - bodyLength * 0.8, top - dorsalHeight);
+    ctx.quadraticCurveTo(right - bodyLength * 0.5, top - dorsalHeight / 2, right - bodyLength * 0.4, top + (0.05 * bodyHeight));
+    ctx.closePath();
+    ctx.fill();
+
+    // ---- Bottom fin ----
+    ctx.fillStyle = palette.fin;
+    const analHeight = bodyHeight * 0.35;
+    ctx.beginPath();
+    ctx.moveTo(right - bodyLength * 0.6, bottom - (0.05 * bodyHeight));
+    ctx.lineTo(right - bodyLength * 0.8, bottom + analHeight);
+    ctx.quadraticCurveTo(right - bodyLength * 0.45, bottom + analHeight / 2, right - bodyLength * 0.35, bottom - (0.05 * bodyHeight));
+    ctx.closePath();
+    ctx.fill();
+
     // ---- Body outline ----
     ctx.fillStyle = palette.body;
     ctx.beginPath();
@@ -182,26 +202,6 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally = false, variation 
     ctx.closePath();
     ctx.fill();
 
-    // ---- Top fin ----
-    ctx.fillStyle = palette.fin;
-    const dorsalHeight = bodyHeight * 0.5;
-    ctx.beginPath();
-    ctx.moveTo(right - bodyLength * 0.6, top);
-    ctx.lineTo(right - bodyLength * 0.8, top - dorsalHeight);
-    ctx.quadraticCurveTo(right - bodyLength * 0.5, top - dorsalHeight / 2, right - bodyLength * 0.4, top);
-    ctx.closePath();
-    ctx.fill();
-
-    // ---- Bottom fin ----
-    ctx.fillStyle = palette.fin;
-    const analHeight = bodyHeight * 0.35;
-    ctx.beginPath();
-    ctx.moveTo(right - bodyLength * 0.6, bottom);
-    ctx.lineTo(right - bodyLength * 0.8, bottom + analHeight);
-    ctx.quadraticCurveTo(right - bodyLength * 0.45, bottom + analHeight / 2, right - bodyLength * 0.35, bottom);
-    ctx.closePath();
-    ctx.fill();
-
     // ---- Eye ----
     ctx.fillStyle = palette.eye;
     const eyeRadius = size * 0.04;
@@ -213,6 +213,8 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally = false, variation 
     if (flipHorizontally) {
         ctx.restore();
     }
+
+    ctx.lineWidth = 1;
 }
 
 export function drawFlower(ctx, xc, yc, size) {
@@ -284,14 +286,14 @@ export function drawHeart(ctx, xc, yc, size) {
 
 export function drawHouse(ctx, xc, yc, size) {
     // House proportions
-    const houseWidth  = size * 0.75;
+    const houseWidth = size * 0.75;
     const houseHeight = size * 0.42;
-    const roofHeight  = size * 0.20;
+    const roofHeight = size * 0.20;
 
-    const chimneyWidth  = size * 0.08;
+    const chimneyWidth = size * 0.08;
     const chimneyHeight = size * 0.16;
 
-    const doorWidth  = houseWidth * 0.22;
+    const doorWidth = houseWidth * 0.22;
     const doorHeight = houseHeight * 0.65;
 
     const windowSize = houseWidth * 0.22;
@@ -346,7 +348,7 @@ export function drawHouse(ctx, xc, yc, size) {
     // ---------------- WINDOWS ----------------
     const windowTop = doorY;  // aligned with door top
 
-    const leftWindowX  = x0 + houseWidth * 0.10;
+    const leftWindowX = x0 + houseWidth * 0.10;
     const rightWindowX = x0 + houseWidth * 0.90 - windowSize;
 
     ctx.fillStyle = "#87ceeb";
@@ -367,6 +369,8 @@ export function drawHouse(ctx, xc, yc, size) {
     windowCross(leftWindowX, windowTop);
     windowCross(rightWindowX, windowTop);
     ctx.stroke();
+
+    ctx.lineWidth = 1;
 }
 
 
@@ -392,6 +396,159 @@ export function drawStar(ctx, xc, yc, size, color) {
     ctx.fillStyle = color;
     ctx.fill();
 }
+
+export function drawTrain(ctx, xc, yc, size, flipHorizontally = false) {
+    if (flipHorizontally) {
+        ctx.save();
+        ctx.translate(xc, 0);
+        ctx.scale(-1, 1);
+        ctx.translate(-xc, 0);
+    }
+
+    ctx.save();
+
+    // ---- MAIN DIMENSIONS ----
+    const bodyWidth = size * 0.75;
+    const bodyHeight = size * 0.2;
+    const frameHeight = size * 0.08;
+    const wheelRadius = size * 0.085;
+
+    const boilerWidth = bodyWidth * 0.6;
+    const cabinWidth = bodyWidth * 0.4;
+    const cabinHeight = bodyHeight * 1.35;
+
+    // Smokestack dimensions
+    const stackBottomW = boilerWidth * 0.12;
+    const stackTopW = boilerWidth * 0.17;
+    const stackHeight = bodyHeight * 0.75;
+
+    // Cowcatcher dimensions
+    const cowScale = 1;
+    const cowHeight = bodyHeight * 0.5 * cowScale;
+    const cowWidth = cowHeight;
+
+    // ---- WHEEL POSITION ----
+    const wheelYOffset = -frameHeight;
+    const wheelY = bodyHeight / 2 + frameHeight / 2 + wheelRadius + wheelYOffset;
+
+    // ---- CALCULATE EXTREMES FOR CENTERING ----
+    const leftMost = -bodyWidth / 2 - cowWidth; // cowcatcher tip
+    const rightMost = bodyWidth / 2; // end of cabin
+    const topMost = -bodyHeight / 2 - (cabinHeight - bodyHeight); // top of cabin
+    const bottomMost = wheelY + wheelRadius; // bottom of wheels
+
+    // ---- CENTER SHIFTS ----
+    const hShift = (leftMost + rightMost) / 2;
+    const vShift = (topMost + bottomMost) / 2;
+
+    ctx.translate(xc - hShift, yc - vShift);
+
+    // ---- COWCATCHER ----
+    ctx.fillStyle = "#aa0000";
+    const cowBottomY = wheelY;
+    ctx.beginPath();
+    ctx.moveTo(-bodyWidth / 2 - cowWidth, cowBottomY); // bottom-left
+    ctx.lineTo(-bodyWidth / 2, cowBottomY); // bottom-right
+    ctx.lineTo(-bodyWidth / 2, cowBottomY - cowHeight); // top-right
+    ctx.closePath();
+    ctx.fill();
+
+    // ---- BOTTOM FRAME ----
+    ctx.fillStyle = "#252525";
+    ctx.fillRect(
+        -bodyWidth / 2,
+        -frameHeight / 2 + bodyHeight / 2,
+        bodyWidth,
+        frameHeight
+    );
+
+    // ---- BOILER ----
+    ctx.fillStyle = "#000";
+    ctx.fillRect(
+        -bodyWidth / 2,
+        -bodyHeight / 2,
+        boilerWidth,
+        bodyHeight
+    );
+
+    // ---- CABIN ----
+    ctx.fillRect(
+        -bodyWidth / 2 + boilerWidth,
+        -bodyHeight / 2 - (cabinHeight - bodyHeight),
+        cabinWidth,
+        cabinHeight
+    );
+
+    // ---- WINDOWS ----
+    ctx.fillStyle = "#9cd6ff";
+
+    const windowTopMargin = cabinHeight * 0.2; // distance from top of cabin
+    const windowSideMargin = cabinWidth * 0.1; // distance from sides of cabin
+    const windowSpacing = cabinWidth * 0.1; // space between the two windows
+    const windowHeight = cabinHeight * 0.3; // height of windows
+    const windowWidth = (cabinWidth - 2 * windowSideMargin - windowSpacing) / 2; // width of each window
+
+    // Left window
+    ctx.fillRect(
+        -bodyWidth / 2 + boilerWidth + windowSideMargin,
+        -bodyHeight / 2 - (cabinHeight - bodyHeight) + windowTopMargin,
+        windowWidth,
+        windowHeight
+    );
+
+    // Right window
+    ctx.fillRect(
+        -bodyWidth / 2 + boilerWidth + windowSideMargin + windowWidth + windowSpacing,
+        -bodyHeight / 2 - (cabinHeight - bodyHeight) + windowTopMargin,
+        windowWidth,
+        windowHeight
+    );
+
+    // ---- SMOKESTACK ----
+    const stackX = -bodyWidth / 2 + boilerWidth * 0.18;
+    const stackY = -bodyHeight / 2 - stackHeight * 0.6;
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(stackX, stackY + stackHeight);
+    ctx.lineTo(stackX + stackBottomW, stackY + stackHeight);
+    ctx.lineTo(stackX + stackTopW, stackY);
+    ctx.lineTo(stackX - (stackTopW - stackBottomW), stackY);
+    ctx.closePath();
+    ctx.fill();
+
+    // ---- WHEELS AND PISTON ROD ----
+
+    // Wheels
+    const wheelPositions = [-bodyWidth * 0.25, 0, bodyWidth * 0.25];
+    ctx.fillStyle = "#222";
+    wheelPositions.forEach(x => {
+        ctx.beginPath();
+        ctx.arc(x, wheelY, wheelRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+    });
+
+    // Piston
+    const pistonYOffset = wheelRadius * 0.4; // distance below wheel center
+    const pistonY = wheelY + pistonYOffset;
+    ctx.strokeStyle = "#777";
+    ctx.lineWidth = Math.max(1, size * 0.015);
+    ctx.beginPath();
+    ctx.moveTo(wheelPositions[0], pistonY);
+    ctx.lineTo(wheelPositions[wheelPositions.length - 1], pistonY);
+    ctx.stroke();
+
+    ctx.restore();
+
+    // Restore transform if flipped
+    if (flipHorizontally) {
+        ctx.restore();
+    }
+
+    ctx.lineWidth = 1;
+}
+
+
 
 export function drawTree(ctx, xc, yc, size) {
     const trunkWidth = size * 0.1; // was 0.15

@@ -1,12 +1,18 @@
-$answer: 2, 2, %car
-$answer: 4, 2, %fish
-1111111111
-1        1
-1 ҹ ҹ Ć  1
-1     2  1
-1     1  1
-1        1
-1        1
-13       1
-1        1
+$answer: 1, 1, %car
+$answer: 3, 1, %fish
+$answer: 5, 1, %flower
+$answer: 7, 1, %heart
+$answer: 1, 3, %house
+$answer: 3, 3, %star
+$answer: 5, 3, %tree
+$answer: 7, 3, %train
+0000000000
+0ҹ ҹ ҹ ҹ 0
+0        0
+0ҹ ҹ ҹ ҹ 0
+0        0
+0        0
+0        0
+0        3
+0        2
 1111111111

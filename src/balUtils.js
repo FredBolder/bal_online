@@ -1,3 +1,4 @@
+import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
 import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
@@ -125,6 +126,25 @@ export function changeAnswer(gameInfo, x, y, answer) {
   return idx;
 }
 
+export function changeChangerColors(gameInfo, x, y, colors) {
+  let idx = -1;
+  const colorList = colors.split(",");
+
+  if (colorList.length !== 2) return idx;
+
+  const color1 = colorList[0].trim().toLowerCase();
+  const color2 = colorList[1].trim().toLowerCase();
+
+  if (!checkColor(color1) || !checkColor(color2)) return idx;
+
+  idx = findElementByCoordinates(x, y, gameInfo.changers);
+  if (idx >= 0) {
+    gameInfo.changers[idx].color1 = color1;
+    gameInfo.changers[idx].color2 = color2;
+  }
+  return idx;
+}
+
 export function changeDirection(gameData, gameInfo, x, y, direction) {
   let idx = -1;
 
@@ -181,6 +201,14 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
       idx = findElementByCoordinates(x, y, gameInfo.movers);
       if (idx >= 0) {
         gameInfo.movers[idx].direction = direction;
+      }
+    }
+  }
+  if (["horizontal", "vertical"].includes(direction)) {
+    if (idx === -1) {
+      idx = findElementByCoordinates(x, y, gameInfo.changers);
+      if (idx >= 0) {
+        gameInfo.changers[idx].horizontal = (direction === "horizontal");
       }
     }
   }
@@ -2359,6 +2387,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       break;
     case 157:
       updateObject(gameInfo.musicBoxes, oldX, oldY, newX, newY);
+      break;
+    case 158:
+      updateObject(gameInfo.pistonsTriggers, oldX, oldY, newX, newY);
       break;
     case 171:
       updateObject(gameInfo.conveyorBelts, oldX, oldY, newX, newY);

@@ -7,6 +7,7 @@ import { actionKeys, actionList, hasAction } from "../actions.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import {
   changeAnswer,
+  changeChangerColors,
   changeGroup,
   changeDirection,
   changeIntelligence,
@@ -96,6 +97,7 @@ let dropPressed = false;
 let kPressed = false;
 let createLevelAnswer = "";
 let createLevelBallsPages = 2;
+let createLevelChangerColors = "";
 let createLevelColorPages = 2;
 let createLevelDirection = "";
 let createLevelInstrument = "xylophone";
@@ -1045,7 +1047,7 @@ function BalPage() {
             // Balls
             switch (globalVars.createLevelBallsPage) {
               case 2:
-                arr1 = [199, 207, 244];
+                arr1 = [199, 207, 244, 2133, 2148];
                 arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
@@ -1612,20 +1614,17 @@ function BalPage() {
         }
         break;
       }
-      case "t":
-      case "T":
-        tryAgain();
+      case "r":
+      case "R":
+        if (!kPressed && !dropPressed) {
+          tryAgain();
+        }
         break;
       default:
         break;
     }
     if (e.shiftKey) {
       switch (e.key) {
-        case "R":
-          if (!kPressed && !dropPressed) {
-            randomLevel();
-          }
-          break;
         case "ArrowLeft":
           info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
           break;
@@ -2195,7 +2194,7 @@ function BalPage() {
 
           await initLevel(gameVars.currentLevel);
         }
-        
+
         const clickedLevel = handleClickedLevel();
         if (clickedLevel >= 0) {
           await initLevel(clickedLevel);
@@ -2644,7 +2643,14 @@ function BalPage() {
               if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
                 if (changeDirection(gameData, gameInfo, column, row, createLevelDirection) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on an elevator, a conveyor belt, a mover, a music box or a pusher to set a valid direction.");
+                    showMessage("Info", "Click on an elevator, a conveyor belt, a mover, a music box, a pusher or a changer to set a valid direction.");
+                  }
+                }
+              }
+              if ((createLevelObject === 2148) && (createLevelChangerColors !== "")) {
+                if (changeChangerColors(gameInfo, column, row, createLevelChangerColors) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a changer to set valid colors.");
                   }
                 }
               }
@@ -3219,6 +3225,9 @@ function BalPage() {
               if (createLevelMenu === menuToNumber("pistons")) {
                 newValue = await showSelect("Pushers", "Direction:", ["left", "right", "up", "down"], 0);
               }
+              if (createLevelMenu === menuToNumber("balls")) {
+                newValue = await showSelect("Changers", "Direction:", ["horizontal", "vertical"], 0);
+              }
               if (newValue !== null) {
                 createLevelDirection = removeChar(newValue, " ");
                 ok = true;
@@ -3308,6 +3317,66 @@ function BalPage() {
             }
             if (!ok) {
               createLevelTicks = -1;
+              createLevelObject = -1;
+            }
+            break;
+          case 2148:
+            ok = false;
+            if (row > 0) {
+              newValue = null;
+              if (createLevelMenu === menuToNumber("balls")) {
+                newValue = await showSelect("Changers", "Colors:", [
+                  "light blue, orange",
+                  "light blue, pink",
+                  "light blue, purple",
+                  "light blue, red",
+                  "light blue, white",
+                  "light blue, yellow",
+                  "orange, light blue",
+                  "orange, pink",
+                  "orange, purple",
+                  "orange, red",
+                  "orange, white",
+                  "orange, yellow",
+                  "pink, light blue",
+                  "pink, orange",
+                  "pink, purple",
+                  "pink, red",
+                  "pink, white",
+                  "pink, yellow",
+                  "purple, light blue",
+                  "purple, orange",
+                  "purple, pink",
+                  "purple, red",
+                  "purple, white",
+                  "purple, yellow",
+                  "red, light blue",
+                  "red, orange",
+                  "red, pink",
+                  "red, purple",
+                  "red, white",
+                  "red, yellow",
+                  "white, light blue",
+                  "white, orange",
+                  "white, pink",
+                  "white, purple",
+                  "white, red",
+                  "white, yellow",
+                  "yellow, light blue",
+                  "yellow, orange",
+                  "yellow, pink",
+                  "yellow, purple",
+                  "yellow, red",
+                  "yellow, white",
+                ], 0);
+              }
+              if (newValue !== null) {
+                createLevelChangerColors = removeChar(newValue, " ");
+                ok = true;
+              }
+            }
+            if (!ok) {
+              createLevelChangerColors = "";
               createLevelObject = -1;
             }
             break;

@@ -38,15 +38,15 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5011;
+export const series6End = 5012;
 export const seriesEasy2Start = 6000;
-export const seriesEasy2End = 6016;
+export const seriesEasy2End = 6017;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6207;
 export const seriesMathStart = 6250;
 export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
-export const seriesLanguageEnd = 6303;
+export const seriesLanguageEnd = 6304;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
