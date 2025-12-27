@@ -12,6 +12,7 @@ import {
 import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
 import { globalVars } from "./glob.js";
+import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
 import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
@@ -1185,16 +1186,24 @@ function drawLevel(
 
   function drawMover(x, y) {
     const activeColor = "#16cc16ff";
+    let color = "white";
     const d1 = w1 * 0.1;
     const d2 = w1 * 0.1;
+    const d3 = w1 * 0.12;
     let activeSides = ["top"];
     let direction = "right";
     let idx = -1;
+    let inverted = false;
+    let mode = "all";
+    let xBall = -1;
+    let yBall = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.movers);
     if (idx >= 0) {
       activeSides = gameInfo.movers[idx].activeSides;
       direction = gameInfo.movers[idx].direction;
+      inverted = gameInfo.movers[idx].inverted;
+      mode = gameInfo.movers[idx].mode.toLowerCase();
     }
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     if (activeSides.includes("top")) {
@@ -1210,6 +1219,55 @@ function drawLevel(
       drawLine(ctx, xmax - d1, ymin + d1 + d2, xmax - d1, ymax - d1 - d2, activeColor);
     }
     drawArrow(direction, "white", "#464646", { box: false });
+
+    xBall = xc;
+    yBall = yc;
+    if (mode !== "all") {
+      switch (direction) {
+        case "left":
+          xBall += w1 * 0.23;
+          break;
+        case "right":
+          xBall -= w1 * 0.23;
+          break;
+        case "up":
+          yBall += w2 * 0.23;
+          break;
+        case "down":
+          yBall -= w2 * 0.23;
+          break;
+        case "upleft":
+          xBall += w1 * 0.15;
+          yBall += w2 * 0.15;
+          break;
+        case "upright":
+          xBall -= w1 * 0.15;
+          yBall += w2 * 0.15;
+          break;
+        case "downleft":
+          xBall += w1 * 0.15;
+          yBall -= w2 * 0.15;
+          break;
+        case "downright":
+          xBall -= w1 * 0.15;
+          yBall -= w2 * 0.15;
+          break;
+        default:
+          break;
+      }
+    }
+    if (moverModes().includes(mode) && mode.endsWith("ball")) {
+        drawFilledCircle(ctx, xBall, yBall, w1 * 0.14, displayColor(mode.slice(0, mode.length - 4)));
+        if (inverted) {
+          if (mode === "redball") {
+            color = "yellow";
+          } else {
+            color = "red";
+          }
+          drawLine(ctx, xBall - d3, yBall - d3, xBall + d3, yBall + d3, color);
+          drawLine(ctx, xBall - d3, yBall + d3, xBall + d3, yBall - d3, color);
+        }
+    }
   }
 
   function drawMusicBox(x, y) {

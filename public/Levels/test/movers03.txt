@@ -1,0 +1,37 @@
+$stonepattern: 1
+$activesides: 4, 3, bottom
+$activesides: 5, 3, bottom
+$inverted: 5, 3, yes
+$movermode: 5, 3, lightblueball
+$activesides: 6, 3, bottom
+$activesides: 7, 3, bottom
+$inverted: 7, 3, yes
+$movermode: 7, 3, pinkball
+$activesides: 8, 3, bottom
+$direction: 5, 5, down
+$movermode: 5, 5, lightblueball
+$direction: 7, 5, down
+$movermode: 7, 5, pinkball
+$direction: 9, 5, down
+$activesides: 4, 6, right
+$direction: 4, 6, down
+$activesides: 6, 6, right
+$direction: 6, 6, down
+$activesides: 8, 6, right
+$direction: 8, 6, down
+$activesides: 4, 7, right
+$direction: 4, 7, down
+$activesides: 6, 7, right
+$direction: 6, 7, down
+$activesides: 8, 7, right
+$direction: 8, 7, down
+11111111111
+1  Ѥ    311
+1  Ѥ     11
+1  4ηηηηη11
+1255      1
+11111η1η1η1
+1   η η η 1
+1   η η η 1
+1   1 1 1 1
+11111111111

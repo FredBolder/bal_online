@@ -267,7 +267,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             break;
         }
         case 178: {
-            let mover = { x, y, direction: "right", activeSides: ["top"], counter: 0 };
+            let mover = { x, y, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 };
             gameInfo.movers.push(mover);
             break;
         }

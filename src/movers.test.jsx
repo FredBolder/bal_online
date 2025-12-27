@@ -22,9 +22,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 0 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
         let input = [
@@ -57,9 +57,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "left", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 5, direction: "left", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 5, direction: "upleft", activeSides: ["top"], counter: 0 }
+                { x: 1, y: 5, direction: "left", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 5, direction: "left", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 5, direction: "upleft", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ],
             yellowBalls: [{ x: 5, y: 4, direction: "none" }]
         };
@@ -94,9 +94,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 4, direction: "down", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 4, direction: "down", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 4, direction: "up", activeSides: ["top"], counter: 0 }
+                { x: 1, y: 4, direction: "down", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 4, direction: "down", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 4, direction: "up", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
         let input = [
@@ -129,9 +129,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 4, direction: "upright", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 4, direction: "down", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 4, direction: "down", activeSides: ["top"], counter: 0 }
+                { x: 1, y: 4, direction: "upright", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 4, direction: "down", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 4, direction: "down", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ],
             pinkBalls: [{ x: 5, y: 3, delete: false, skipFalling: 0 }]
         };
@@ -166,9 +166,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 5 },
-                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 3 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 5 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 3 }
             ],
             pinkBalls: [{ x: 3, y: 4, delete: false, counter: 0 }]
         };
@@ -203,9 +203,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 },
-                { x: 3, y: 4, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 }
+                { x: 1, y: 4, direction: "right", activeSides: ["bottom"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 4, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 4, direction: "right", activeSides: ["bottom"], mode: "all", inverted: false, counter: 0 }
             ]
         };
         let input = [
@@ -238,8 +238,8 @@ describe("movers", () => {
             blueBall: { x: 5, y: 5 },
             greenBalls: 1,
             movers: [
-                { x: 4, y: 2, direction: "right", activeSides: ["right"], counter: 0 },
-                { x: 4, y: 5, direction: "left", activeSides: ["right"], counter: 0 },
+                { x: 4, y: 2, direction: "right", activeSides: ["right"], mode: "all", inverted: false, counter: 0 },
+                { x: 4, y: 5, direction: "left", activeSides: ["right"], mode: "all", inverted: false, counter: 0 },
             ]
         };
         let input = [
@@ -272,8 +272,8 @@ describe("movers", () => {
             blueBall: { x: 5, y: 5 },
             greenBalls: 1,
             movers: [
-                { x: 4, y: 2, direction: "right", activeSides: ["right", "top"], counter: 0 },
-                { x: 4, y: 5, direction: "upleft", activeSides: ["right"], counter: 0 },
+                { x: 4, y: 2, direction: "right", activeSides: ["right", "top"], mode: "all", inverted: false, counter: 0 },
+                { x: 4, y: 5, direction: "upleft", activeSides: ["right"], mode: "all", inverted: false, counter: 0 },
             ]
         };
         let input = [
@@ -308,9 +308,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 0 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
         let input = [
@@ -336,9 +336,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "left", activeSides: ["top"], counter: 0 },
-                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 0 }
+                { x: 1, y: 5, direction: "left", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
         let input = [
@@ -364,9 +364,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 5, direction: "right", activeSides: ["top"], counter: 1 },
-                { x: 3, y: 5, direction: "right", activeSides: ["top"], counter: 1 },
-                { x: 5, y: 5, direction: "right", activeSides: ["top"], counter: 1 }
+                { x: 1, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 1 },
+                { x: 3, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 1 },
+                { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 1 }
             ]
         };
         let input = [
@@ -392,9 +392,9 @@ describe("movers", () => {
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
             movers: [
-                { x: 1, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 },
-                { x: 3, y: 4, direction: "right", activeSides: ["top"], counter: 0 },
-                { x: 5, y: 4, direction: "right", activeSides: ["bottom"], counter: 0 }
+                { x: 1, y: 4, direction: "right", activeSides: ["bottom"], mode: "all", inverted: false, counter: 0 },
+                { x: 3, y: 4, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 },
+                { x: 5, y: 4, direction: "right", activeSides: ["bottom"], mode: "all", inverted: false, counter: 0 }
             ]
         };
         let input = [

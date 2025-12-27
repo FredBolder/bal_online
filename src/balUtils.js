@@ -4,7 +4,7 @@ import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
-import { moverIsMovingBlueBall, moversDirections } from "./movers.js";
+import { moverIsMovingBlueBall, moverDirections } from "./movers.js";
 import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
@@ -196,7 +196,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
       }
     }
   }
-  if (moversDirections().includes(direction)) {
+  if (moverDirections().includes(direction)) {
     if (idx === -1) {
       idx = findElementByCoordinates(x, y, gameInfo.movers);
       if (idx >= 0) {

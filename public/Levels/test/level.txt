@@ -1,25 +1,41 @@
-$extra: 1
-$hint: Changle all purple balls into white balls.
 $stonepattern: 1
-$changer: 5, 5, yes, white, purple
-$direction: 4, 6, left
-$direction: 3, 6, left
-$direction: 12, 10, up
-$direction: 11, 10, up
-$direction: 10, 10, up
-$direction: 9, 10, up
-$direction: 8, 10, up
-$direction: 7, 10, up
-$direction: 6, 10, up
-11111111111111
-1      T     1
-11 11111     1
-11  1α81     1
-13  1 11     1
-1    Ӄ       1
-11 ηη1       1
-11 11        1
-11 11 pppp   1
-11 11       m1
-11 1T2њњњњњњњ1
-11111111111111
+$activesides: 3, 3, bottom
+$activesides: 4, 3, bottom
+$inverted: 4, 3, yes
+$movermode: 4, 3, lightblueball
+$activesides: 5, 3, bottom
+$activesides: 6, 3, bottom
+$inverted: 6, 3, yes
+$movermode: 6, 3, pinkball
+$activesides: 7, 3, bottom
+$movermode: 4, 5, lightblueball
+$movermode: 6, 5, pinkball
+$activesides: 3, 6, right
+$direction: 3, 6, down
+$activesides: 3, 7, right
+$direction: 3, 7, down
+$activesides: 3, 8, right
+$direction: 3, 8, down
+$activesides: 5, 6, right
+$direction: 5, 6, down
+$activesides: 5, 7, right
+$direction: 5, 7, down
+$activesides: 5, 8, right
+$direction: 5, 8, down
+$activesides: 7, 6, right
+$direction: 7, 6, down
+$activesides: 7, 7, right
+$direction: 7, 7, down
+$activesides: 7, 8, right
+$direction: 7, 8, down
+$direction: 8, 5, down
+1111111111
+1 Ѥ    311
+1 Ѥ     11
+1 4ηηηηη11
+125      1
+1111η1η1η1
+1  η η η 1
+1  η η η 1
+1  η η η 1
+1111111111

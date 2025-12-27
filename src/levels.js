@@ -3,7 +3,7 @@ import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } 
 import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
 import { globalVars } from "./glob.js";
-import { moversDirections } from "./movers.js";
+import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
@@ -38,7 +38,7 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5012;
+export const series6End = 5013;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6017;
 export const seriesMusic2Start = 6200;
@@ -293,6 +293,7 @@ export function checkSettings(data, settings) {
     { name: "$ignorepattern", params: 4, xy: true },
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
+    { name: "$movermode", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
     { name: "$octaves", params: 3, xy: true },
@@ -410,7 +411,7 @@ export function checkSettings(data, settings) {
                   break;
                 case "η":
                 case 178:
-                  if (!moversDirections().includes(valuesLowerCase[2])) {
+                  if (!moverDirections().includes(valuesLowerCase[2])) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
@@ -482,6 +483,22 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["M", 157].includes(data[y][x])) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$inverted":
+              if (!["yes", "no"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
+              }
+              if (validXY && !["Ù", "Ì", "Ö", "Ë", "η", 159, 161, 163, 165, 178].includes(data[y][x])) {
+                msg += `${settingNr(i)}No piston or mover found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$movermode":
+              if (!moverModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid mover mode ${values[2]}.\n`;
+              }
+              if (validXY && !["η", 178].includes(data[y][x])) {
+                msg += `${settingNr(i)}No mover found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$musicbox":
@@ -559,7 +576,6 @@ export function checkSettings(data, settings) {
                   break;
               }
               break;
-            case "$inverted":
             case "$sticky":
               if (!["yes", "no"].includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}yes or no expected.\n`;
@@ -1563,6 +1579,31 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   default:
                     break;
                 }
+              }
+              if (idx === -1) {
+                idx = findElementByCoordinates(x, y, gameInfo.movers);
+                if (idx >= 0) {
+                  switch (valuesLowerCase[2]) {
+                    case "no":
+                      gameInfo.movers[idx].inverted = false;
+                      break;
+                    case "yes":
+                      gameInfo.movers[idx].inverted = true;
+                      break;
+                    default:
+                      break;
+                  }
+                }
+              }
+            }
+          }
+          break;
+        case "$movermode":
+          if (values.length === 3) {
+            if (validXY && (moverModes().includes(valuesLowerCase[2]))) {
+              idx = findElementByCoordinates(x, y, gameInfo.movers);
+              if (idx >= 0) {
+                gameInfo.movers[idx].mode = valuesLowerCase[2];
               }
             }
           }

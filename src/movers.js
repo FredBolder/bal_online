@@ -1,6 +1,66 @@
-import { getGameDataValue, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue, moveObject } from "./balUtils.js";
 
 const moveableObjects = [2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242, 244];
+
+function canMove(objectNumber, mode, inverted) {
+    let result = false;
+    if (!moveableObjects.includes(objectNumber)) return false;
+
+    switch (mode.toLowerCase()) {
+        case "all":
+            return true;
+        case "blueball":
+            result = objectNumber === 2;
+            break;
+        case "lightblueball":
+            result = objectNumber === 5;
+            break;
+        case "orangeball":
+            result = objectNumber === 40;
+            break;
+        case "pinkball":
+            result = objectNumber === 203;
+            break;
+        case "purpleball":
+            result = [28, 242].includes(objectNumber);
+            break;
+        case "redball":
+            result = [8, 93, 94].includes(objectNumber);
+            break;
+        case "whiteball":
+            result = objectNumber === 4;
+            break;
+        case "yellowball":
+            result = objectNumber === 9;
+            break;
+        default:
+            return false;
+    }
+    if (inverted) {
+        result = !result;
+    }
+    return result;
+}
+
+export function changeMoverInverted(gameInfo, x, y) {
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.movers);
+    if (idx >= 0) {
+        gameInfo.movers[idx].inverted = !gameInfo.movers[idx].inverted;
+    }
+    return idx;
+}
+
+export function changeMoverMode(gameInfo, x, y, mode) {
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.movers);
+    if (idx >= 0) {
+        gameInfo.movers[idx].mode = mode;
+    }
+    return idx;
+}
 
 export function checkMovers(gameData, gameInfo, gameVars, checkBlue) {
     const top = 0;
@@ -19,12 +79,14 @@ export function checkMovers(gameData, gameInfo, gameVars, checkBlue) {
 
     for (let i = 0; i < gameInfo.movers.length; i++) {
         const mover = gameInfo.movers[i];
+        const mode = mover.mode;
+        const inverted = mover.inverted;
         const elTop = getGameDataValue(gameData, mover.x, mover.y - 1);
         const elBottom = getGameDataValue(gameData, mover.x, mover.y + 1);
         const elLeft = getGameDataValue(gameData, mover.x - 1, mover.y);
         const elRight = getGameDataValue(gameData, mover.x + 1, mover.y);
-        if (!moveableObjects.includes(elTop) && !moveableObjects.includes(elBottom) &&
-            !moveableObjects.includes(elLeft) && !moveableObjects.includes(elRight)) {
+        if (!canMove(elTop, mode, inverted) && !canMove(elBottom, mode, inverted) &&
+            !canMove(elLeft, mode, inverted) && !canMove(elRight, mode, inverted)) {
             if (!checkBlue) {
                 mover.counter = 0;
             }
@@ -64,7 +126,7 @@ export function checkMovers(gameData, gameInfo, gameVars, checkBlue) {
                     default:
                         break;
                 }
-                if (!mover.activeSides.includes(sideStr) || !moveableObjects.includes(el)) {
+                if (!mover.activeSides.includes(sideStr) || !canMove(el, mode, inverted)) {
                     continue;
                 }
 
@@ -147,7 +209,12 @@ export function moverIsMovingBlueBall(gameData, gameInfo, gameVars) {
     return checkMovers(gameData, gameInfo, gameVars, true);
 }
 
-export function moversDirections() {
+export function moverDirections() {
     return ["left", "right", "up", "down", "upleft", "upright", "downleft", "downright"];
 }
+
+export function moverModes() {
+    return ["all", "blueball", "lightblueball", "orangeball", "pinkball", "purpleball", "redball", "whiteball", "yellowball"];
+}
+
 

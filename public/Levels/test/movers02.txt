@@ -1,0 +1,25 @@
+$direction: 4, 4, upleft
+$movermode: 4, 4, purpleball
+$direction: 5, 4, up
+$movermode: 5, 4, purpleball
+$direction: 6, 4, upright
+$movermode: 6, 4, purpleball
+$movermode: 6, 5, purpleball
+$direction: 6, 6, downright
+$movermode: 6, 6, purpleball
+$direction: 5, 6, down
+$movermode: 5, 6, purpleball
+$direction: 4, 6, downleft
+$movermode: 4, 6, purpleball
+$direction: 4, 5, left
+$movermode: 4, 5, purpleball
+1111111111
+1        1
+1        1
+1        1
+1   ηηη  1
+1   η η  1
+1   ηηη  1
+13       1
+1   2    1
+1111111111

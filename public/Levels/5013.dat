@@ -1,3 +1,4 @@
+$extra: 1
 $stonepattern: 1
 $changer: 4, 2, yes, white, purple
 $changer: 27, 2, yes, lightblue, white
@@ -5,10 +6,18 @@ $changer: 4, 9, yes, white, pink
 $changer: 27, 9, yes, yellow, white
 $activesides: 15, 0, bottom
 $direction: 15, 0, down
+$movermode: 15, 0, purpleball
 $activesides: 16, 0, bottom
 $direction: 16, 0, left
+$movermode: 16, 0, purpleball
 $direction: 6, 3, left
+$movermode: 6, 3, purpleball
+$movermode: 25, 3, lightblueball
+$direction: 5, 10, down
+$movermode: 5, 10, blueball
 $direction: 6, 10, left
+$movermode: 6, 10, pinkball
+$movermode: 25, 10, yellowball
 $inverted: 4, 16, yes
 $pistonmode: 4, 16, momentary
 $sticky: 4, 16, yes
@@ -26,11 +35,9 @@ $pistonmode: 7, 16, momentary
 $sticky: 7, 16, yes
 $group: 9, 16, 13
 $pistonmode: 9, 16, momentary
-$sticky: 9, 16, yes
 $group: 5, 3, 13
 $group: 26, 3, 13
 $group: 30, 7, 3
-$group: 5, 10, 13
 $group: 26, 10, 13
 $group: 30, 13, 4
 $group: 1, 14, 2
@@ -44,10 +51,10 @@ $group: 1, 14, 2
 1m  1           =          1  m1
 11111           =    Ѥ     11111
 1   Ӄ       p   =    Ѥ     Ӄ   1
-1   φmη111111111=11111111ηmΦ   1
-1ѨѨѨ11111       =        111ѨѨѨ1
-1   11111       =          1   1
-1   11111hhh1   =          1  m1
+1   φηη111111111=11111111ηmΦ   1
+1ѨѨѨ1 111       =        111ѨѨѨ1
+1   1 111       =          1   1
+1   1  81hhh1   =          1  m1
 1m  11111ψ  1   =          1  11
 11111111111^1   =          11111
 13 1ÌÌÌÌ1Ì1 1   =              1

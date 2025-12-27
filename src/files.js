@@ -298,6 +298,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$direction: ${mover.x}, ${mover.y}, ${mover.direction}`;
             lines.push(line);
         }
+        if (mover.inverted) {
+            line = `$inverted: ${mover.x}, ${mover.y}, yes`;
+            lines.push(line);
+        }
+        if (mover.mode !== "all") {
+            line = `$movermode: ${mover.x}, ${mover.y}, ${mover.mode}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {

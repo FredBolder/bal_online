@@ -42,6 +42,7 @@ import { globalVars } from "../glob.js";
 import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
+import { changeMoverInverted, changeMoverMode, moverModes } from "../movers.js";
 import { closeAudio, getAudioContext, instruments } from "../music.js";
 import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
@@ -1074,8 +1075,8 @@ function BalPage() {
             break;
           case 8:
             // Elevators
-            arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81, 178, 2133];
-            arr2 = [2144];
+            arr1 = [6, 7, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
+            arr2 = [178, 2133, 2144, 2092, 2039];
             break;
           case 9:
             // Conveyor belts
@@ -2694,6 +2695,23 @@ function BalPage() {
                 }
               }
 
+              if (createLevelMenu === menuToNumber("elevators")) {
+                if ((createLevelObject === 2092) && moverModes().includes(createLevelMode)) {
+                  if (changeMoverMode(gameInfo, column, row, createLevelMode) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a mover to set the mode of it.");
+                    }
+                  }
+                }
+                if (createLevelObject === 2039) {
+                  if (changeMoverInverted(gameInfo, column, row) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a mover to toggle between inverted and not inverted.");
+                    }
+                  }
+                }
+              }
+
               if (createLevelMenu === menuToNumber("pistons")) {
                 if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
@@ -3035,6 +3053,28 @@ function BalPage() {
               ok = false;
               if (row > 0) {
                 newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                createLevelMode = "";
+                createLevelObject = -1;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (createLevelMenu === menuToNumber("elevators")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "light blue ball", "orange ball", 
+                  "pink ball", "purple ball", "red ball", "white ball", "yellow ball"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;
