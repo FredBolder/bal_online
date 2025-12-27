@@ -348,11 +348,11 @@ function drawLevel(
   }
 
   function drawChangerColors() {
-      drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2 * 0.5, displayColor("white"));
-      drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, displayColor("lightblue"));
-      drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, displayColor("yellow"));
-      drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, displayColor("pink"));
-      drawText(ctx, xc, yc, "sel", "middle", "black", w2 * 0.7, w1 * 0.8);
+    drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2 * 0.5, displayColor("white"));
+    drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, displayColor("lightblue"));
+    drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, displayColor("yellow"));
+    drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, displayColor("pink"));
+    drawText(ctx, xc, yc, "sel", "middle", "black", w2 * 0.7, w1 * 0.8);
   }
 
   function drawChordTypeOrInterval(chordTypeOrInterval) {
@@ -1189,14 +1189,16 @@ function drawLevel(
     let color = "white";
     const d1 = w1 * 0.1;
     const d2 = w1 * 0.1;
-    const d3 = w1 * 0.12;
+    const d3 = w1 * 0.13;
+    const d4 = w1 * 0.12;
     let activeSides = ["top"];
     let direction = "right";
     let idx = -1;
     let inverted = false;
     let mode = "all";
-    let xBall = -1;
-    let yBall = -1;
+    let showInverted = false;
+    let xObject = -1;
+    let yObject = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.movers);
     if (idx >= 0) {
@@ -1220,53 +1222,59 @@ function drawLevel(
     }
     drawArrow(direction, "white", "#464646", { box: false });
 
-    xBall = xc;
-    yBall = yc;
+    xObject = xc;
+    yObject = yc;
     if (mode !== "all") {
       switch (direction) {
         case "left":
-          xBall += w1 * 0.23;
+          xObject += w1 * 0.23;
           break;
         case "right":
-          xBall -= w1 * 0.23;
+          xObject -= w1 * 0.23;
           break;
         case "up":
-          yBall += w2 * 0.23;
+          yObject += w2 * 0.23;
           break;
         case "down":
-          yBall -= w2 * 0.23;
+          yObject -= w2 * 0.23;
           break;
         case "upleft":
-          xBall += w1 * 0.15;
-          yBall += w2 * 0.15;
+          xObject += w1 * 0.15;
+          yObject += w2 * 0.15;
           break;
         case "upright":
-          xBall -= w1 * 0.15;
-          yBall += w2 * 0.15;
+          xObject -= w1 * 0.15;
+          yObject += w2 * 0.15;
           break;
         case "downleft":
-          xBall += w1 * 0.15;
-          yBall -= w2 * 0.15;
+          xObject += w1 * 0.15;
+          yObject -= w2 * 0.15;
           break;
         case "downright":
-          xBall -= w1 * 0.15;
-          yBall -= w2 * 0.15;
+          xObject -= w1 * 0.15;
+          yObject -= w2 * 0.15;
           break;
         default:
           break;
       }
     }
+    showInverted = false;
     if (moverModes().includes(mode) && mode.endsWith("ball")) {
-        drawFilledCircle(ctx, xBall, yBall, w1 * 0.14, displayColor(mode.slice(0, mode.length - 4)));
-        if (inverted) {
-          if (mode === "redball") {
-            color = "yellow";
-          } else {
-            color = "red";
-          }
-          drawLine(ctx, xBall - d3, yBall - d3, xBall + d3, yBall + d3, color);
-          drawLine(ctx, xBall - d3, yBall + d3, xBall + d3, yBall - d3, color);
-        }
+      drawFilledCircle(ctx, xObject, yObject, w1 * 0.14, displayColor(mode.slice(0, mode.length - 4)));
+      showInverted = true;
+    }
+    if (mode === "directionchanger") {
+      drawFilledBox(ctx, xObject - d3, yObject - d3, d3 + d3, d3 + d3, displayColor("yellow"), false);
+      showInverted = true;
+    }
+    if (showInverted && inverted) {
+      if (mode === "redball") {
+        color = "yellow";
+      } else {
+        color = "red";
+      }
+      drawLine(ctx, xObject - d4, yObject - d4, xObject + d4, yObject + d4, color);
+      drawLine(ctx, xObject - d4, yObject + d4, xObject + d4, yObject - d4, color);
     }
   }
 

@@ -1,56 +1,57 @@
 $stonepattern: 1
-$changer: 4, 2, yes, white, purple
-$changer: 27, 2, yes, lightblue, white
-$changer: 4, 9, yes, white, pink
-$changer: 27, 9, yes, yellow, white
-$activesides: 15, 0, bottom
-$direction: 15, 0, down
-$activesides: 16, 0, bottom
-$direction: 16, 0, left
-$direction: 6, 3, left
-$direction: 6, 10, left
-$inverted: 4, 16, yes
-$pistonmode: 4, 16, momentary
-$sticky: 4, 16, yes
-$group: 5, 16, 2
-$inverted: 5, 16, yes
-$pistonmode: 5, 16, momentary
-$sticky: 5, 16, yes
-$group: 6, 16, 3
-$inverted: 6, 16, yes
-$pistonmode: 6, 16, momentary
-$sticky: 6, 16, yes
-$group: 7, 16, 4
-$inverted: 7, 16, yes
-$pistonmode: 7, 16, momentary
-$sticky: 7, 16, yes
-$group: 9, 16, 13
-$pistonmode: 9, 16, momentary
-$sticky: 9, 16, yes
-$group: 5, 3, 13
-$group: 26, 3, 13
-$group: 30, 7, 3
-$group: 5, 10, 13
-$group: 26, 10, 13
-$group: 30, 13, 4
-$group: 1, 14, 2
-111111111111111ηη111111111111111
-1   1           =          1   1
-1   Ӄ   p p   5 =ΠѤ   55   Ӄ   1
-1   φmη111111111=11111111ηmΦ   1
-1ѨѨѨ111         =        111ѨѨѨ1
-1   1           =c         1   1
-1   1           =          1   1
-1m  1           =          1  m1
-11111           =    Ѥ     11111
-1   Ӄ       p   =    Ѥ     Ӄ   1
-1   φmη111111111=11111111ηmΦ   1
-1ѨѨѨ11111       =        111ѨѨѨ1
-1   11111       =          1   1
-1   11111hhh1   =          1  m1
-1m  11111ψ  1   =          1  11
-11111111111^1   =          11111
-13 1ÌÌÌÌ1Ì1 1   =              1
-1  1ßßßß1o1^1   =              1
-1           Π 2 =        9 9 9 1
-1111111111111111Ψ111111111111111
+$changer: 7, 17, no, purple, white
+$changer: 1, 17, no, purple, lightblue
+$changer: 7, 2, no, purple, pink
+$changer: 17, 1, yes, pink, lightblue
+$changer: 5, 1, yes, white, yellow
+$activesides: 13, 8, bottom
+$activesides: 14, 8, bottom
+$inverted: 14, 8, yes
+$movermode: 14, 8, whiteball
+$activesides: 15, 8, bottom
+$activesides: 16, 8, bottom
+$inverted: 16, 8, yes
+$movermode: 16, 8, orangeball
+$activesides: 17, 8, bottom
+$activesides: 18, 8, bottom
+$inverted: 18, 8, yes
+$movermode: 18, 8, pinkball
+$activesides: 19, 8, bottom
+$direction: 14, 10, down
+$movermode: 14, 10, whiteball
+$direction: 16, 10, down
+$movermode: 16, 10, orangeball
+$direction: 18, 10, down
+$movermode: 18, 10, pinkball
+$activesides: 20, 4, bottom
+$direction: 20, 4, up
+$activesides: 20, 2, bottom
+$direction: 20, 2, up
+$activesides: 20, 0, bottom
+$direction: 20, 0, left
+$activesides: 19, 0, bottom
+$direction: 19, 0, left
+$activesides: 20, 8, bottom
+$direction: 20, 8, down
+$activesides: 21, 9, left
+$direction: 21, 9, down
+1111111111111111111ηη11
+1    Ӄ Π c  Ψ    Ӄ   11
+1   Δ  Ӄ    9      1η11
+1               O    11
+1      c        O   η11
+1  5            O    11
+11111^111Џ1111111111111
+1            1111111111
+1        4   ηηηηηηηη11
+1ψ     2 4           η1
+11111=1111Џ111η1η1η1 11
+1    =   1         1V11
+1    =   11        1111
+1    =    1         3 1
+1    =    1           1
+1    =    1111 1 1 1  1
+1Π   =       1 1 1 1  1
+1Ӄ   = Ӄ     1 1 1 1  1
+1    =    5  1 1 1 1  1
+11111111111111111111111

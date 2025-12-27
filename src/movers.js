@@ -12,6 +12,12 @@ function canMove(objectNumber, mode, inverted) {
         case "blueball":
             result = objectNumber === 2;
             break;
+        case "directionchanger":
+            result = [84, 85, 86, 138, 139].includes(objectNumber);
+            break;
+        case "grayball":
+            result = [82, 98].includes(objectNumber);
+            break;
         case "lightblueball":
             result = objectNumber === 5;
             break;
@@ -214,7 +220,7 @@ export function moverDirections() {
 }
 
 export function moverModes() {
-    return ["all", "blueball", "lightblueball", "orangeball", "pinkball", "purpleball", "redball", "whiteball", "yellowball"];
+    return ["all", "blueball", "directionchanger", "grayball", "lightblueball", "orangeball", "pinkball", "purpleball", "redball", "whiteball", "yellowball"];
 }
 
 

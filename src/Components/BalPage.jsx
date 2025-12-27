@@ -3073,8 +3073,8 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "light blue ball", "orange ball", 
-                  "pink ball", "purple ball", "red ball", "white ball", "yellow ball"], 0);
+                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "direction changer", "gray ball", "light blue ball",  
+                  "orange ball", "pink ball", "purple ball", "red ball", "white ball", "yellow ball"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;
