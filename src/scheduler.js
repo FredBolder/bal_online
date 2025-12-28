@@ -1,4 +1,4 @@
-import { checkComparisons } from "./answerBalls.js";
+import { checkComparisons, updateWeight } from "./answerBalls.js";
 import { checkFalling, findElementByCoordinates, } from "./balUtils.js";
 import { moveConveyorBelts } from "./conveyorBelts.js";
 import { checkChangers } from "./changers.js";
@@ -59,6 +59,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
 
+        updateWeight(backData, gameData, gameInfo, gameVars);
         if (checkComparisons(gameData, gameInfo)) {
             updateCanvas = true;
         }

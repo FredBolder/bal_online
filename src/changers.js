@@ -2,7 +2,7 @@ import { getGameDataValue } from "./balUtils.js";
 import { addObject, removeObject } from "./addRemoveObject.js";
 
 export function checkColor(color) {
-    return ["white", "lightblue", "orange", "pink", "purple", "red", "yellow"].includes(color.toLowerCase());
+    return ["all", "lightblue", "orange", "pink", "purple", "red", "white", "yellow"].includes(color.toLowerCase());
 }
 
 function colorToObject(color) {
@@ -88,14 +88,14 @@ export function checkChangers(backData, gameData, gameInfo) {
             const c1 = changer.color1.toLowerCase();
             const c2 = changer.color2.toLowerCase();
             if (changer.horizontal) {
-                if ((objectToColor(elLeft) === c1) && (elRight === 0)) {
+                if (((objectToColor(elLeft) === c1) || (c1 === "all") && (checkColor(objectToColor(elLeft)))) && (elRight === 0)) {
                     obj = colorToObject(c2);
                     if (obj > 0) {
                         removeObject(gameData, gameInfo, changer.x - 1, changer.y);
                         addObject(backData, gameData, gameInfo, changer.x + 1, changer.y, obj);
                         changed = true;
                     }
-                } else if ((objectToColor(elRight) === c2) && (elLeft === 0)) {
+                } else if (((objectToColor(elRight) === c2) || (c2 === "all") && (checkColor(objectToColor(elRight)))) && (elLeft === 0)) {
                     obj = colorToObject(c1);
                     if (obj > 0) {
                         removeObject(gameData, gameInfo, changer.x + 1, changer.y);
@@ -104,14 +104,14 @@ export function checkChangers(backData, gameData, gameInfo) {
                     }
                 }
             } else {
-                if ((objectToColor(elTop) === c1) && (elBottom === 0)) {
+                if (((objectToColor(elTop) === c1) || (c1 === "all") && (checkColor(objectToColor(elTop)))) && (elBottom === 0)) {
                     obj = colorToObject(c2);
                     if (obj > 0) {
                         removeObject(gameData, gameInfo, changer.x, changer.y - 1);
                         addObject(backData, gameData, gameInfo, changer.x, changer.y + 1, obj);
                         changed = true;
                     }
-                } else if ((objectToColor(elBottom) === c2) && (elTop === 0)) {
+                } else if (((objectToColor(elBottom) === c2) || (c2 === "all") && (checkColor(objectToColor(elBottom)))) && (elTop === 0)) {
                     obj = colorToObject(c1);
                     if (obj > 0) {
                         removeObject(gameData, gameInfo, changer.x, changer.y + 1);

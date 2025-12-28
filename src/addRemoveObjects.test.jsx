@@ -70,7 +70,7 @@ describe("addRemoveObject", () => {
     // addObject
 
     it("addObject A", () => {
-        let inputBack02 = zeroArray(5, 8);
+        let inputBack = zeroArray(5, 8);
         let yellow = [{ x: 4, y: 3, direction: "none" }];
         let gameInfo = {
             ...defaultGameInfo,
@@ -91,13 +91,13 @@ describe("addRemoveObject", () => {
             [1, 0, 2, 9, 9, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        addObject(inputBack02, input, gameInfo, 3, 3, 9);
+        addObject(inputBack, input, gameInfo, 3, 3, 9);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(JSON.stringify(yellow)).toBe(JSON.stringify([{ x: 4, y: 3, direction: "none" }, { x: 3, y: 3, direction: "none" }]));
     });
 
     it("addObject B", () => {
-        let inputBack02 = zeroArray(5, 8);
+        let inputBack = zeroArray(5, 8);
         let yellow = [{ x: 4, y: 3, direction: "none" }];
         let gameInfo = {
             ...defaultGameInfo,
@@ -118,7 +118,7 @@ describe("addRemoveObject", () => {
             [1, 0, 2, 0, 165, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        addObject(inputBack02, input, gameInfo, 4, 3, 165);
+        addObject(inputBack, input, gameInfo, 4, 3, 165);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(JSON.stringify(yellow)).toBe(JSON.stringify([]));
         expect(JSON.stringify(gameInfo.pistons)).toBe(JSON.stringify(

@@ -5,6 +5,7 @@ import { ModalContext } from "./ModalContext";
 
 import { actionKeys, actionList, hasAction } from "../actions.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
+import { answerBallModes, changeAnswerBallMode } from "../answerBalls.js";
 import {
   changeAnswer,
   changeChangerColors,
@@ -1054,7 +1055,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [2, 3, 140, 168, 192, 195, 197, 202, 204, 4, 200, 5, 126, 127, 128, 129];
-                arr2 = [130, 28, 242, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 0, 0, 2101];
+                arr2 = [130, 28, 242, 2092, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 0, 2101];
                 break;
             }
             break;
@@ -2687,6 +2688,16 @@ function BalPage() {
                 }
               }
 
+              if (createLevelMenu === menuToNumber("balls")) {
+                if ((createLevelObject === 2092) && answerBallModes().includes(createLevelMode)) {
+                  if (changeAnswerBallMode(gameInfo, column, row, createLevelMode) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on an answer ball to set the mode of it.");
+                    }
+                  }
+                }
+              }
+
               if ((createLevelMenu === menuToNumber("redballs")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
                 if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
                   if (oneSelected) {
@@ -3047,6 +3058,27 @@ function BalPage() {
           }
         }
 
+        if (createLevelMenu === menuToNumber("balls")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Answer balls", "Mode:", ["answer ball", "scale"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                createLevelMode = "";
+                createLevelObject = -1;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
         if (createLevelMenu === menuToNumber("pistons")) {
           switch (createLevelObject) {
             case 2092:
@@ -3073,7 +3105,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "direction changer", "gray ball", "light blue ball",  
+                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "direction changer", "gray ball", "light blue ball",
                   "orange ball", "pink ball", "purple ball", "red ball", "white ball", "yellow ball"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
@@ -3366,42 +3398,56 @@ function BalPage() {
               newValue = null;
               if (createLevelMenu === menuToNumber("balls")) {
                 newValue = await showSelect("Changers", "Colors:", [
+                  "all, light blue",
+                  "all, orange",
+                  "all, pink",
+                  "all, purple",
+                  "all, red",
+                  "all, white",
+                  "all, yellow",
+                  "light blue, all",
                   "light blue, orange",
                   "light blue, pink",
                   "light blue, purple",
                   "light blue, red",
                   "light blue, white",
                   "light blue, yellow",
+                  "orange, all",
                   "orange, light blue",
                   "orange, pink",
                   "orange, purple",
                   "orange, red",
                   "orange, white",
                   "orange, yellow",
+                  "pink, all",
                   "pink, light blue",
                   "pink, orange",
                   "pink, purple",
                   "pink, red",
                   "pink, white",
                   "pink, yellow",
+                  "purple, all",
                   "purple, light blue",
                   "purple, orange",
                   "purple, pink",
                   "purple, red",
                   "purple, white",
                   "purple, yellow",
+                  "red, all",
                   "red, light blue",
                   "red, orange",
                   "red, pink",
                   "red, purple",
                   "red, white",
                   "red, yellow",
+                  "white, all",
                   "white, light blue",
                   "white, orange",
                   "white, pink",
                   "white, purple",
                   "white, red",
                   "white, yellow",
+                  "yellow, all",
                   "yellow, light blue",
                   "yellow, orange",
                   "yellow, pink",

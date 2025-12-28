@@ -1,4 +1,18 @@
-import { findElementByCoordinates } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove } from "./balUtils.js";
+
+export function answerBallModes() {
+    return ["answerball", "scale"];
+}
+
+export function changeAnswerBallMode(gameInfo, x, y, mode) {
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+    if (idx >= 0) {
+        gameInfo.answerBalls[idx].mode = mode;
+    }
+    return idx;
+}
 
 function complete(expr) {
     return !/[+\-*/]\s*$/.test(expr);
@@ -219,4 +233,43 @@ export function checkComparisons(gameData, gameInfo) {
     }
     answerBallsCopy.length = 0;
     return update;
+}
+
+export function updateWeight(backData, gameData, gameInfo, gameVars) {
+    let hasWeight = false;
+    let stop = false;
+    let y = 0;
+
+    for (let i = 0; i < gameInfo.answerBalls.length; i++) {
+        const answerBall = gameInfo.answerBalls[i];
+        let weight = 0;
+        if (answerBall.mode !== "scale") continue;
+        y = answerBall.y - 1;
+        stop = false;
+        while ((y >= 0) && !stop) {
+            hasWeight = hasWeightAbove(backData, gameData, gameInfo, gameVars, answerBall.x, answerBall.x, y + 1, false);
+            const el = gameData[y][answerBall.x];
+            if (hasWeight) {
+                switch (el) {
+                    case 2:
+                    case 4:
+                    case 8:
+                    case 40:
+                    case 93:
+                    case 94:
+                        weight += 1;
+                        break;
+                    case 203:
+                        weight += 0.5;
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                stop = true;
+            }
+            y--;
+        }
+        answerBall.answer = weight.toString();
+    }
 }

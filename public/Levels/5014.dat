@@ -6,6 +6,7 @@ $changer: 7, 2, no, purple, pink
 $changer: 4, 7, yes, pink, purple
 $changer: 1, 17, no, purple, lightblue
 $changer: 7, 17, no, purple, white
+$changer: 20, 9, yes, all, white
 $activesides: 19, 0, bottom
 $direction: 19, 0, left
 $activesides: 20, 0, bottom
@@ -15,6 +16,8 @@ $direction: 20, 2, up
 $activesides: 20, 4, bottom
 $direction: 20, 4, up
 $activesides: 13, 8, bottom
+$inverted: 13, 8, yes
+$movermode: 13, 8, blueball
 $activesides: 14, 8, bottom
 $inverted: 14, 8, yes
 $movermode: 14, 8, whiteball
@@ -26,17 +29,14 @@ $activesides: 17, 8, bottom
 $activesides: 18, 8, bottom
 $inverted: 18, 8, yes
 $movermode: 18, 8, pinkball
-$activesides: 19, 8, bottom
-$activesides: 20, 8, bottom
-$direction: 20, 8, down
-$activesides: 21, 9, left
-$direction: 21, 9, down
 $direction: 14, 10, down
 $movermode: 14, 10, whiteball
 $direction: 16, 10, down
 $movermode: 16, 10, orangeball
 $direction: 18, 10, down
 $movermode: 18, 10, pinkball
+$direction: 13, 10, down
+$movermode: 13, 10, blueball
 1111111111111111111ηη11
 1    Ӄ Π c  Ψ    Ӄ   11
 1   Δ  Ӄ    9      1η11
@@ -45,10 +45,10 @@ $movermode: 18, 10, pinkball
 1  5            O    11
 11111^111Џ1111111111111
 1   Ӄ        1111111111
-1        4   ηηηηηηηη11
-1ψ     2 4           η1
-11111=1111Џ111η1η1η1 11
-1    =   1         1V11
+1        4   ηηηηηη1111
+1ψ      24          Ӄ 1
+11111=1111Џ11ηη1η1η11 1
+1    =   1  1      81V1
 1    =   11        1111
 1    =    1          31
 1    =    1           1

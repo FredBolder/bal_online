@@ -242,6 +242,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         const answerBall = gameInfo.answerBalls[i];
         line = `$answer: ${answerBall.x}, ${answerBall.y}, ${answerBall.answer}`;
         lines.push(line);
+        if (answerBall.mode !== "answerball") {
+            line = `$answerballmode: ${answerBall.x}, ${answerBall.y}, ${answerBall.mode}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.changers.length; i++) {

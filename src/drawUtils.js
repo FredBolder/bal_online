@@ -102,7 +102,6 @@ export function drawText(
   const rawWidth = m.width;
 
   // vertical true center
-  const vOffset = (ascent - descent) / 2;
 
   // scale compensation for maxWidth
   let scaledWidth = rawWidth;
@@ -113,17 +112,26 @@ export function drawText(
 
   // horizontal alignment
   let hOffset = 0;
+  let vOffset = 0;
   switch (align) {
     case "right":
       hOffset = -scaledWidth;
+      vOffset = 0;
       break;
     case "center":
-    case "middle":
       hOffset = -scaledWidth / 2;
       break;
+    case "middle":
+      hOffset = -scaledWidth / 2;
+      vOffset = (ascent - descent) / 2;
+      break;
     case "left":
+      hOffset = 0;
+      vOffset = 0;
+      break;
     default:
       hOffset = 0;
+      vOffset = 0;
   }
 
   ctx.translate(Math.round(x), Math.round(y));

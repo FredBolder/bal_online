@@ -1,4 +1,5 @@
 import { removeObject } from "./addRemoveObject.js";
+import { answerBallModes } from "./answerBalls.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
@@ -277,6 +278,7 @@ export function checkSettings(data, settings) {
     { name: "$activesides", params: 0, xy: true },
     { name: "$addnotes", params: 0, xy: true },
     { name: "$answer", params: 0, xy: true },
+    { name: "$answerballmode", params: 3, xy: true },
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$changer", params: 5, xy: true },
@@ -352,6 +354,14 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["ҹ", "Ҹ", 241, 242].includes(data[y][x])) {
                 msg += `${settingNr(i)}No question stone or answer ball found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$answerballmode":
+              if (!answerBallModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid answer ball mode ${values[2]}.\n`;
+              }
+              if (validXY && !["ҹ", 242].includes(data[y][x])) {
+                msg += `${settingNr(i)}No answer ball found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$background":
@@ -1316,6 +1326,19 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             idx = findElementByCoordinates(x, y, gameInfo.questionStones);
             if (idx >= 0) {
               gameInfo.questionStones[idx].answer = val_str;
+            }
+          }
+          break;
+        case "$answerballmode":
+          if (values.length === 3) {
+            if (validXY && (answerBallModes().includes(valuesLowerCase[2]))) {
+              idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+              if (idx >= 0) {
+                gameInfo.answerBalls[idx].mode = valuesLowerCase[2];
+                if (gameInfo.answerBalls[idx].mode === "scale") {
+                  gameInfo.answerBalls[idx].answer = "0";
+                }
+              }
             }
           }
           break;
