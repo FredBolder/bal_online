@@ -7,6 +7,7 @@ import { gameScheduler } from "./scheduler.js";
 describe("music boxes", () => {
     let defaultGameInfo;
     let defaultGameVars;
+    const inputBack = zeroArray(6, 15);
  
     beforeEach(() => {
         defaultGameInfo = {};
@@ -17,8 +18,7 @@ describe("music boxes", () => {
 
     it("plays the melody step-by-step", async () => {
         clearPlayedNotes();
-        const inputBack01_5_13 = zeroArray(5, 15);
-        const gameInfo01a = {
+        const gameinfo = {
             ...defaultGameInfo,
             blueBall1: { x: 5, y: 4 },
             blueBall: null,
@@ -75,9 +75,9 @@ describe("music boxes", () => {
                 },
             ]
         };
-        gameInfo01a.blueBall = gameInfo01a.blueBall1;
+        gameinfo.blueBall = gameinfo.blueBall1;
 
-        const input01a = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 157, 157, 157, 157, 157, 157, 157, 157, 1, 1, 1, 1, 1, 1],
@@ -89,57 +89,57 @@ describe("music boxes", () => {
         const flushPromises = () => new Promise(r => setTimeout(r, 0));
 
         // Check doors before playing the right melody
-        expect(input01a[4][10]).toBe(157);
-        expect(input01a[4][12]).toBe(157);
+        expect(input[4][10]).toBe(157);
+        expect(input[4][12]).toBe(157);
         // Play G4
-        const info01a1 = jump(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a1.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info1 = jump(inputBack, input, gameinfo, defaultGameVars);
+        expect(info1.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
         // Move two steps to the left
-        const info01a2 = moveLeft(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a2.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info2 = moveLeft(inputBack, input, gameinfo, defaultGameVars);
+        expect(info2.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
-        const info01a3 = moveLeft(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a3.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info3 = moveLeft(inputBack, input, gameinfo, defaultGameVars);
+        expect(info3.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
         // Check doors after playing one note
-        expect(input01a[4][10]).toBe(157);
-        expect(input01a[4][12]).toBe(157);
+        expect(input[4][10]).toBe(157);
+        expect(input[4][12]).toBe(157);
         // Play E4
-        const info01a4 = jump(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a4.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info4 = jump(inputBack, input, gameinfo, defaultGameVars);
+        expect(info4.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
         // Move two steps to the left
-        const info01a5 = moveLeft(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a5.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info5 = moveLeft(inputBack, input, gameinfo, defaultGameVars);
+        expect(info5.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
-        const info01a6 = moveLeft(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a6.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info6 = moveLeft(inputBack, input, gameinfo, defaultGameVars);
+        expect(info6.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
         // Check doors after playing two notes
-        expect(input01a[4][10]).toBe(157);
-        expect(input01a[4][12]).toBe(157);
+        expect(input[4][10]).toBe(157);
+        expect(input[4][12]).toBe(157);
         // Play C4
-        const info01a7 = jump(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        expect(info01a7.player).toBe(true);
-        checkMusicBoxes(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
-        await gameScheduler(inputBack01_5_13, input01a, gameInfo01a, defaultGameVars);
+        const info7 = jump(inputBack, input, gameinfo, defaultGameVars);
+        expect(info7.player).toBe(true);
+        checkMusicBoxes(inputBack, input, gameinfo, defaultGameVars);
+        await gameScheduler(inputBack, input, gameinfo, defaultGameVars);
         await flushPromises();
         // Check doors after playing the right melody
-        expect(input01a[4][10]).toBe(0);
-        expect(input01a[4][12]).toBe(0);
+        expect(input[4][10]).toBe(0);
+        expect(input[4][12]).toBe(0);
     });
 
     // Insert new tests here
