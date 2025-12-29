@@ -36,7 +36,7 @@ svg {
     --radius-menu: 10px;
     --radius-menu-hover: 9px;
     color: white;
-    background-image: url("stone1.png");
+    background-image: url("/stone1.png");
     background-repeat: repeat;
     background-size: auto;
 }
