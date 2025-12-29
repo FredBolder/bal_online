@@ -1,4 +1,5 @@
 $stonepattern: 1
+$hint: A dot placed after a note increases its duration by half of the note’s original value.
 $extra: 1
 $has: propeller
 $answer: 5, 3, %s.

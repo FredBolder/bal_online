@@ -139,6 +139,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.answerBalls[idx2].answer = gameInfo.answerBalls[idx1].answer;
                 gameInfo.answerBalls[idx2].color = gameInfo.answerBalls[idx1].color;
+                gameInfo.answerBalls[idx2].mode = gameInfo.answerBalls[idx1].mode;
             }
             break;
         case 244:

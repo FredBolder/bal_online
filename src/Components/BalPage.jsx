@@ -2089,7 +2089,6 @@ function BalPage() {
 
     requestAnimationFrame(tick);
 
-    // 🔥 THIS is the actual stop function:
     return function stopGameClock() {
       stopped = true;
     };
@@ -3525,7 +3524,7 @@ function BalPage() {
   }
 
   return (
-    <div>
+    <div className="no-background">
       <div className="page">
         <main>
           <div className="balPanel">
