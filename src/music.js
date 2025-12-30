@@ -55,8 +55,8 @@ let operatorsList = [];
 
 export function instruments() {
   // Add test for test sound
-  return ["test", "accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "crashcymbal", "drums", "guitar", "hammondorgan", "harp", "harpsichord", "hihat",
-    "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
+  return ["test", "accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "crashcymbal", "crossstick", "drums", "guitar", "hammondorgan", "harp",
+    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
 }
 
@@ -302,6 +302,51 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     combFilter.setFeedback(cf_feedback);
     combFilter.setHP(cf_hp);
     combFilter.setLP(cf_lp);
+  }
+
+  function createCrossStick(variation = 0) {
+    switch (variation) {
+      case 1: {
+        // Click (metallic rim)
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 7400, 68, maxVolume, 0, 6, 0, 6));
+
+        // Main wood resonance 1 + inharmonic overtones
+        let w1 = 1000;
+        operators.push(new Operator(audioCtx, "sine", w1, 0, maxVolume * 0.20, 0, 35, 0, 35));
+        operators.push(new Operator(audioCtx, "sine", w1 * 1.48 + 1.5, 0, maxVolume * 0.08, 0, 35, 0, 35)); // fixed offset
+        operators.push(new Operator(audioCtx, "sine", w1 * 2.03 + 2.5, 0, maxVolume * 0.04, 0, 35, 0, 35)); // fixed offset
+
+        // Main wood resonance 2 + inharmonic overtones
+        let w2 = 700;
+        operators.push(new Operator(audioCtx, "sine", w2, 0, maxVolume * 0.12, 0, 40, 0, 40));
+        operators.push(new Operator(audioCtx, "sine", w2 * 1.52 + 1.2, 0, maxVolume * 0.05, 0, 40, 0, 40)); // fixed offset
+        operators.push(new Operator(audioCtx, "sine", w2 * 1.98 + 2.0, 0, maxVolume * 0.025, 0, 40, 0, 40)); // fixed offset
+
+        // Tiny metallic noise
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 11000, 80, maxVolume * 0.04, 0, 5, 0, 5));
+        break;
+      }
+      default: {
+        // Click (metallic rim)
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 6700, 64, maxVolume, 0, 7, 0, 7));
+
+        // Main wood resonance 1 + inharmonic overtones
+        let w3 = 820;
+        operators.push(new Operator(audioCtx, "sine", w3, 0, maxVolume * 0.22, 0, 35, 0, 35));
+        operators.push(new Operator(audioCtx, "sine", w3 * 1.47 + 1.2, 0, maxVolume * 0.12, 0, 35, 0, 35));
+        operators.push(new Operator(audioCtx, "sine", w3 * 2.01 + 2.0, 0, maxVolume * 0.06, 0, 35, 0, 35));
+
+        // Main wood resonance 2 + inharmonic overtones
+        let w4 = 580;
+        operators.push(new Operator(audioCtx, "sine", w4, 0, maxVolume * 0.15, 0, 40, 0, 40));
+        operators.push(new Operator(audioCtx, "sine", w4 * 1.53 + 1.5, 0, maxVolume * 0.08, 0, 40, 0, 40));
+        operators.push(new Operator(audioCtx, "sine", w4 * 1.97 + 2.5, 0, maxVolume * 0.04, 0, 40, 0, 40));
+
+        // Tiny metallic noise
+        operators.push(new Operator(audioCtx, "noiseAndBPF", 11500, 80, maxVolume * 0.04, 0, 5, 0, 5));
+        break;
+      }
+    }
   }
 
   function createHiHat(variation = 0) {
@@ -775,6 +820,18 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
             break;
         }
         break;
+      case "crossstick":
+        switch (note) {
+          case "C4":
+            createCrossStick(0);
+            break;
+          case "D4":
+            createCrossStick(1);
+            break;
+          default:
+            break;
+        }
+        break;
       case "crashcymbal":
         switch (note) {
           case "C4":
@@ -854,6 +911,12 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
             break;
           case "C7":
             createCrashCymbal(1);
+            break;
+          case "D7":
+            createCrossStick(0);
+            break;
+          case "E7":
+            createCrossStick(1);
             break;
           default:
             break;

@@ -94,8 +94,6 @@ function createDistortionCurve({
     return curve;
 }
 
-
-
 function createPulseWave(audioCtx, dutyCycle = 0.25, harmonics = 5, phaseDeg = 0) {
     const real = new Float32Array(harmonics + 1);
     const imag = new Float32Array(harmonics + 1);
@@ -128,7 +126,6 @@ export function getPreDelay() {
 function safeTarget(v) {
     return Math.max(v, 0.0001);
 }
-
 
 class Operator {
     constructor(audioContext, waveform, frequency, detuneOrResonance, volume, attack, decay, sustain, release, postFilterGain = null) {

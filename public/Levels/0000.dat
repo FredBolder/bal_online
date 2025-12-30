@@ -1,18 +1,25 @@
-$answer: 1, 1, %car
-$answer: 3, 1, %fish
-$answer: 5, 1, %flower
-$answer: 7, 1, %heart
-$answer: 1, 3, %house
-$answer: 3, 3, %star
-$answer: 5, 3, %tree
-$answer: 7, 3, %train
-0000000000
-0ҹ ҹ ҹ ҹ 0
-0        0
-0ҹ ҹ ҹ ҹ 0
-0        0
-0        0
-0        0
-0        3
-0        2
-1111111111
+$instrument: 8, 16, bassdrum, 90
+$instrument: 11, 16, crossstick, 90
+$instrument: 15, 16, hihat, 90
+$notes: 13, 16, D4
+$instrument: 13, 16, crossstick, 90
+11111111111111111111111111111111
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1       M  M M M               1
+13                             1
+1          2                   1
+11111111111111111111111111111111
