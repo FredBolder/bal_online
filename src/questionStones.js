@@ -36,7 +36,7 @@ export function checkQuestionStones(gameData, gameInfo) {
                     break;
             }
             el = getGameDataValue(gameData, x, y)
-            if (el === 242) {
+            if ([242, 245].includes(el)) {
                 idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
                 if (idx >= 0) {
                     if ((gameInfo.answerBalls[idx].answer === questionStone.answer) &&

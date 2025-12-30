@@ -40,7 +40,7 @@ describe("balUtils checkTrapDoors", () => {
             [1, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = checkTrapDoors(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkTrapDoors(inputBack01, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: false, sound: false }));
         expect(JSON.stringify(gameInfo.trapDoors)).toBe(JSON.stringify([{ x: 3, y: 3, status: 1 }]));
@@ -73,7 +73,7 @@ describe("balUtils checkTrapDoors", () => {
             [1, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = checkTrapDoors(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkTrapDoors(inputBack01, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(JSON.stringify(info)).toBe(JSON.stringify({ updated: true, sound: false }));
         expect(JSON.stringify(gameInfo.trapDoors)).toBe(JSON.stringify([{ x: 1, y: 3, status: 0 }, { x: 3, y: 3, status: 1 }]));

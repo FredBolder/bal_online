@@ -4,7 +4,7 @@ import { movePusher } from "./pushers.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
-    return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 244].includes(element);
+    return [2, 4, 5, 8, 9, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 244, 245].includes(element);
 }
 
 export function checkPistonsDetector(gameData, gameInfo) {
@@ -39,7 +39,7 @@ export function checkPistonsDetector(gameData, gameInfo) {
         }
         if ((x >= 0) && (x <= maxX) && (y >= 0) && (y <= maxY)) {
             activate = ((gameData[y][x] === 2) && (piston.mode === "blueball")) ||
-                ((gameData[y][x] === 4) && (piston.mode === "whiteball")) ||
+                ([4, 245].includes(gameData[y][x]) && (piston.mode === "whiteball")) ||
                 ((gameData[y][x] === 5) && (piston.mode === "lightblueball")) ||
                 ((gameData[y][x] === 9) && (piston.mode === "yellowball")) ||
                 ([8, 93, 94].includes(gameData[y][x]) && (piston.mode === "redball")) ||

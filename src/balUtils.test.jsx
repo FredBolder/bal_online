@@ -152,8 +152,8 @@ describe("balUtils", () => {
 
   // charToNumber and numberToChar
 
-  // Increase 244 when there are objects with a higher number
-  for (let i = 0; i <= 244; i++) {
+  // Increase 245 when there are objects with a higher number
+  for (let i = 0; i <= 245; i++) {
     const input = i;
     const expectedOutput = input;
     const ch = numberToChar(input);
@@ -178,7 +178,7 @@ describe("balUtils", () => {
       [1, 2, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, { ...defaultGameVars }, 2, 4, 3, false);
+    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, defaultGameVars, 2, 4, 3, false);
     expect(info).toBe(true);
   });
 
@@ -193,7 +193,7 @@ describe("balUtils", () => {
       [1, 2, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, { ...defaultGameVars }, 2, 4, 3, false);
+    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, defaultGameVars, 2, 4, 3, false);
     expect(info).toBe(false);
   });
 
@@ -217,7 +217,7 @@ describe("balUtils", () => {
       [0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0],
     ];
-    const info = hasWeightAbove(inputBack, input, gameInfo, { ...defaultGameVars }, 2, 4, 3, false);
+    const info = hasWeightAbove(inputBack, input, gameInfo, defaultGameVars, 2, 4, 3, false);
     expect(info).toBe(false);
   });
 
@@ -241,7 +241,7 @@ describe("balUtils", () => {
       [0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0],
     ];
-    const info = hasWeightAbove(inputBack, input, gameInfo, { ...defaultGameVars }, 2, 4, 3, false);
+    const info = hasWeightAbove(inputBack, input, gameInfo, defaultGameVars, 2, 4, 3, false);
     expect(info).toBe(true);
   });
 
@@ -256,7 +256,7 @@ describe("balUtils", () => {
       [1, 0, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, { ...defaultGameVars }, 2, 4, 3, false);
+    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, defaultGameVars, 2, 4, 3, false);
     expect(info).toBe(true);
   });
 
@@ -275,7 +275,7 @@ describe("balUtils", () => {
       [1, 2, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, { ...defaultGameVars }, 2, 2, 3, false);
+    const info = hasWeightAbove(inputBack_7_7, input, gameInfo, defaultGameVars, 2, 2, 3, false);
     expect(info).toBe(true);
   });
 

@@ -50,7 +50,7 @@ export function checkComparisons(gameData, gameInfo) {
         xMax = x;
         while (!stop) {
             x--;
-            if ((x >= 0) && (gameData[y][x] === 242)) {
+            if ((x >= 0) && [242, 245].includes(gameData[y][x])) {
                 xMin = x;
             } else {
                 stop = true;
@@ -60,7 +60,7 @@ export function checkComparisons(gameData, gameInfo) {
         x = xStart;
         while (!stop) {
             x++;
-            if ((x <= maxX) && (gameData[y][x] === 242)) {
+            if ((x <= maxX) && [242, 245].includes(gameData[y][x])) {
                 xMax = x;
             } else {
                 stop = true;
@@ -75,7 +75,7 @@ export function checkComparisons(gameData, gameInfo) {
         yMax = y;
         while (!stop) {
             y--;
-            if ((y >= 0) && (gameData[y][x] === 242)) {
+            if ((y >= 0) && [242, 245].includes(gameData[y][x])) {
                 yMin = y;
             } else {
                 stop = true;
@@ -85,7 +85,7 @@ export function checkComparisons(gameData, gameInfo) {
         y = yStart;
         while (!stop) {
             y++;
-            if ((y <= maxY) && (gameData[y][x] === 242)) {
+            if ((y <= maxY) && [242, 245].includes(gameData[y][x])) {
                 yMax = y;
             } else {
                 stop = true;
@@ -257,6 +257,7 @@ export function updateWeight(backData, gameData, gameInfo, gameVars) {
                     case 40:
                     case 93:
                     case 94:
+                    case 245:
                         weight += 1;
                         break;
                     case 203:

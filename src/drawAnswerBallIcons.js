@@ -472,6 +472,7 @@ export function drawTrain(ctx, xc, yc, size, flipHorizontally = false) {
     );
 
     // ---- CABIN ----
+    ctx.fillStyle = "#000";
     ctx.fillRect(
         -bodyWidth / 2 + boilerWidth,
         -bodyHeight / 2 - (cabinHeight - bodyHeight),
@@ -521,6 +522,7 @@ export function drawTrain(ctx, xc, yc, size, flipHorizontally = false) {
     // Wheels
     const wheelPositions = [-bodyWidth * 0.25, 0, bodyWidth * 0.25];
     ctx.fillStyle = "#222";
+    ctx.strokeStyle = "#444";
     wheelPositions.forEach(x => {
         ctx.beginPath();
         ctx.arc(x, wheelY, wheelRadius, 0, Math.PI * 2);

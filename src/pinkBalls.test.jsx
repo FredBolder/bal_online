@@ -43,7 +43,7 @@ describe("Pink balls", () => {
             [1, 0, 2, 203, 203, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars });
+        const info = movePinkBalls(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
@@ -81,7 +81,7 @@ describe("Pink balls", () => {
             [1, 1, 22, 22, 22, 22, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars });
+        const info = movePinkBalls(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
@@ -155,7 +155,7 @@ describe("Pink balls", () => {
             [1, 0, 2, 203, 4, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars });
+        const info = movePinkBalls(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([
@@ -186,7 +186,7 @@ describe("Pink balls", () => {
             [1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars });
+        const info = movePinkBalls(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.pinkBalls).toEqual([
@@ -223,7 +223,7 @@ describe("Pink balls", () => {
             [1, 2, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = movePinkBalls(inputBack, input, gameInfo, { ...defaultGameVars });
+        const info = movePinkBalls(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.pinkBalls).toEqual([

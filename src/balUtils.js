@@ -1,3 +1,4 @@
+import { removeObject } from "./addRemoveObject.js";
 import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
 import { checkDetonator } from "./detonator.js";
@@ -916,6 +917,9 @@ export function charToNumber(c) {
     case "Ӄ":
       result = 244;
       break;
+    case "Ӆ":
+      result = 245;
+      break;
     case "|":
       result = 1000;
       break;
@@ -929,6 +933,7 @@ export function charToNumber(c) {
 }
 
 export function checkFalling(backData, gameData, gameInfo, gameVars) {
+  const canFall = [2, 4, 8, 40, 93, 94, 245];
   let forceDown = false;
   let forceUp = false;
   let idx = -1;
@@ -946,7 +951,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         let element1 = gameData[i][j];
         let element2 = gameData[i + 1][j];
 
-        if ((element2 === 22) && ([2, 4, 8, 9, 40, 93, 94].includes(element1))) {
+        if ((element2 === 22) && (canFall.includes(element1) || (element1 === 9))) {
           // lava
           result.update = true;
           if (gameVars.soundLava !== "never") {
@@ -958,37 +963,13 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
               }
             }
           }
-          gameData[i][j] = 0;
-          switch (element1) {
-            case 8:
-            case 93:
-            case 94:
-              idx = findElementByCoordinates(j, i, gameInfo.redBalls);
-              if (idx >= 0) {
-                gameInfo.redBalls.splice(idx, 1);
-              }
-              break;
-            case 9:
-              idx = findElementByCoordinates(j, i, gameInfo.yellowBalls);
-              if (idx >= 0) {
-                gameInfo.yellowBalls.splice(idx, 1);
-              }
-              break;
-            case 40:
-              idx = findElementByCoordinates(j, i, gameInfo.orangeBalls);
-              if (idx >= 0) {
-                gameInfo.orangeBalls.splice(idx, 1);
-              }
-              break;
-            default:
-              break;
-          }
+          removeObject(gameData, gameInfo, j, i);
         }
 
         if (j < gameData[i].length - 1) {
           if (
             // wall |\
-            hasTopGlideLeftToRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasTopGlideLeftToRight(element2) && canFall.includes(element1) &&
             gameData[i][j + 1] === 0 && gameData[i + 1][j + 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -1003,7 +984,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j >= 1) {
           if (
             // wall /|
-            hasTopGlideRightToLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasTopGlideRightToLeft(element2) && canFall.includes(element1) &&
             gameData[i][j - 1] === 0 && gameData[i + 1][j - 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -1026,7 +1007,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
 
         if (element2 === 0 &&
           (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
-            (((element1 === 4) || (element1 === 40)) && !forceUp))) {
+            ([4, 40, 245].includes(element1) && !forceUp))) {
           skip = ((element1 === 2) && (gameVars.skipFalling > 0));
           if (skip) {
             gameVars.skipFalling--;
@@ -1074,7 +1055,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j < gameData[i].length - 1) {
           if (
             // wall |/
-            hasBottomGlideLeftToRight(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasBottomGlideLeftToRight(element2) && canFall.includes(element1) &&
             gameData[i][j + 1] === 0 && gameData[i - 1][j + 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -1089,7 +1070,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         if (j >= 1) {
           if (
             // wall \|
-            hasBottomGlideRightToLeft(element2) && [2, 4, 8, 40, 93, 94].includes(element1) &&
+            hasBottomGlideRightToLeft(element2) && canFall.includes(element1) &&
             gameData[i][j - 1] === 0 && gameData[i - 1][j - 1] === 0 && !inWater(j, i, backData) &&
             (!gameInfo.hasPropeller || (element1 !== 2))
           ) {
@@ -1112,7 +1093,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
 
         if (element2 === 0 &&
           (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
-            (((element1 === 4) || (element1 === 40)) && !forceDown))) {
+            ([4, 40, 245].includes(element1) && !forceDown))) {
           skip = ((element1 === 2) && (gameVars.skipFalling > 0));
           if (skip) {
             gameVars.skipFalling--;
@@ -1268,7 +1249,7 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
       const el = gameData[y - 1][i];
       const forceDown = hasForceDown(gameData, gameInfo, i, y - 1);
       const pushing = (pushingDown && (i === gameInfo.blueBall.x) && ((y - 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 40, 93, 94, 203].includes(el)) {
+      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(el)) {
         if (pushing || gravityDown || forceDown) {
           weight = true;
         }
@@ -1296,7 +1277,7 @@ export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xma
       const el = gameData[y + 1][i];
       const forceUp = hasForceUp(gameData, gameInfo, i, y + 1);
       const pushing = (pushingUp && (i === gameInfo.blueBall.x) && ((y + 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 40, 93, 94, 203].includes(el)) {
+      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(el)) {
         if (pushing || gravityUp || forceUp) {
           weight = true;
         }
@@ -1429,6 +1410,7 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       result = gameInfo.questionStones;
       break;
     case 242:
+    case 245:
       result = gameInfo.answerBalls;
       break;
     case 243:
@@ -2258,6 +2240,9 @@ export function numberToChar(n) {
     case 244:
       result = "Ӄ";
       break;
+    case 245:
+      result = "Ӆ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2413,6 +2398,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       updateObject(gameInfo.questionStones, oldX, oldY, newX, newY);
       break;
     case 242:
+    case 245:
       updateObject(gameInfo.answerBalls, oldX, oldY, newX, newY);
       break;
     case 244:
@@ -2708,7 +2694,7 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       gameInfo.hasTelekineticPower = true;
       result.message = "You have now telekinetic power! By pressing the Space bar or the A button you can move the ";
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
-      result.message += "purple ball, purple answer ball, moveable gray ball, orange ball, pink ball, direction changer, time bomb, ";
+      result.message += "purple ball, answer ball, moveable gray ball, orange ball, pink ball, direction changer, time bomb, ";
       result.message += "conveyor belt part, mover";
       break;
     case 156:
@@ -2904,7 +2890,7 @@ export function updateObjectByObjectNumber(gameInfo, objectNumber, x1, y1, x2, y
 }
 
 function whiteOrBlueOrPink(n) {
-  return [4, 5, 203].includes(n);
+  return [4, 5, 203, 245].includes(n);
 }
 
 export function zeroArray(rows, columns) {

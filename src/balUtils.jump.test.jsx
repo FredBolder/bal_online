@@ -32,7 +32,7 @@ describe("balUtils jump", () => {
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, gameInfo, { ...defaultGameVars });
+    let info = jump(inputBack, input, gameInfo, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -55,7 +55,7 @@ describe("balUtils jump", () => {
       [1, 0, 0, 4, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, { ...defaultGameVars });
+    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
@@ -77,7 +77,7 @@ describe("balUtils jump", () => {
       [1, 2, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 1, y: 3 } }, { ...defaultGameVars });
+    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 1, y: 3 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
@@ -94,7 +94,7 @@ describe("balUtils jump", () => {
       [1, 1, 1, 1, 1],
     ];
     let expectedOutput = copy2dArray(input);
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down" }] }, { ...defaultGameVars });
+    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down" }] }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.player).toBe(false);
   });
@@ -116,7 +116,7 @@ describe("balUtils jump", () => {
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, gameInfo, { ...defaultGameVars });
+    let info = jump(inputBack, input, gameInfo, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
@@ -140,7 +140,7 @@ describe("balUtils jump", () => {
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, gameInfo, { ...defaultGameVars });
+    let info = jump(inputBack, input, gameInfo, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);

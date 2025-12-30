@@ -1008,7 +1008,7 @@ function BalPage() {
         arr0 = [2083, 2084, 1, 4, 8, 9, 159, 6, 171, 10, 20, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 31, 157, 153, 91, 0, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 31, 157, 153, 91, 241, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -1041,7 +1041,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 241, 2142, 242, 2143, 2101];
+                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 0, 0, 0, 0, 2101];
                 break;
             }
             break;
@@ -1055,7 +1055,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [2, 3, 140, 168, 192, 195, 197, 202, 204, 4, 200, 5, 126, 127, 128, 129];
-                arr2 = [130, 28, 242, 2092, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 0, 2101];
+                arr2 = [130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 0, 0, 0, 2101];
                 break;
             }
             break;
@@ -1146,6 +1146,11 @@ function BalPage() {
           case 6:
             // Misc
             arr1 = [91, 119, 120, 97, 208, 157, 167, 2145, 89, 183, 184, 185, 21];
+            arr2 = [0];
+            break;
+          case 7:
+            // Answer balls
+            arr1 = [241, 2142, 242, 245, 2143, 2092];
             arr2 = [0];
             break;
           case 15:
@@ -2672,14 +2677,14 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("stones")) && (createLevelObject === 2142)) {
+              if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2142)) {
                 if (changeQuestion(gameInfo, column, row, createLevelQuestion) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a question stone to set the question.");
                   }
                 }
               }
-              if ((createLevelMenu === menuToNumber("stones")) && (createLevelObject === 2143)) {
+              if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2143)) {
                 if (changeAnswer(gameInfo, column, row, createLevelAnswer) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a question stone or an answer ball to set the answer.");
@@ -2687,7 +2692,7 @@ function BalPage() {
                 }
               }
 
-              if (createLevelMenu === menuToNumber("balls")) {
+              if (createLevelMenu === menuToNumber("answerballs")) {
                 if ((createLevelObject === 2092) && answerBallModes().includes(createLevelMode)) {
                   if (changeAnswerBallMode(gameInfo, column, row, createLevelMode) === -1) {
                     if (oneSelected) {
@@ -3057,7 +3062,7 @@ function BalPage() {
           }
         }
 
-        if (createLevelMenu === menuToNumber("balls")) {
+        if (createLevelMenu === menuToNumber("answerballs")) {
           switch (createLevelObject) {
             case 2092:
               ok = false;
@@ -3191,7 +3196,7 @@ function BalPage() {
           }
         }
 
-        if ((createLevelMenu === menuToNumber("stones")) && ([2142, 2143].includes(createLevelObject))) {
+        if ((createLevelMenu === menuToNumber("answerballs")) && ([2142, 2143].includes(createLevelObject))) {
           ok = false;
           switch (createLevelObject) {
             case 2142:

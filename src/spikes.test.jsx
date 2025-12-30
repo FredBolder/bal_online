@@ -29,7 +29,7 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
@@ -49,7 +49,7 @@ describe("Spikes", () => {
             [1, 0, 0, 175, 0, 0, 174, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
@@ -67,7 +67,7 @@ describe("Spikes", () => {
             [1, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
@@ -85,7 +85,7 @@ describe("Spikes", () => {
             [1, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
@@ -103,7 +103,7 @@ describe("Spikes", () => {
             [1, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(false);
     });
 
@@ -121,7 +121,7 @@ describe("Spikes", () => {
             [1, 0, 0, 111, 0, 2, 177, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
@@ -139,7 +139,7 @@ describe("Spikes", () => {
             [1, 176, 2, 0, 0, 0, 112, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
@@ -157,7 +157,7 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(false);
     });
 
@@ -176,7 +176,7 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, { ...defaultGameVars });
+        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 

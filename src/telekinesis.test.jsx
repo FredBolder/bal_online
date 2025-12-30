@@ -38,7 +38,7 @@ describe("moveObjectWithTelekineticPower", () => {
             [1, 2, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(true);
     });
@@ -59,7 +59,7 @@ describe("moveObjectWithTelekineticPower", () => {
         ];
         let expectedOutput = copy2dArray(input);
 
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(false);
     });
@@ -88,7 +88,7 @@ describe("moveObjectWithTelekineticPower", () => {
             [1, 2, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(true);
         expect(JSON.stringify(gameInfo.yellowBalls)).toBe(JSON.stringify([{ x: 2, y: 3, direction: "none" }]));
@@ -118,7 +118,7 @@ describe("moveObjectWithTelekineticPower", () => {
             [1, 0, 0, 0, 2, 117, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(true);
         expect(JSON.stringify(gameInfo.timeBombs)).toBe(JSON.stringify([{ x: 5, y: 4, status: getTimeBombsTime() }]));
@@ -147,7 +147,7 @@ describe("moveObjectWithTelekineticPower", () => {
             [1, 2, 28, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(true);
     });
@@ -175,7 +175,7 @@ describe("moveObjectWithTelekineticPower", () => {
             [1, 2, 4, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(true);
     });
@@ -204,7 +204,7 @@ describe("moveObjectWithTelekineticPower", () => {
             [1, 2, 203, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveObjectWithTelekineticPower(input, gameInfo, { ...defaultGameVars });
+        let info = moveObjectWithTelekineticPower(input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info.player).toBe(true);
         expect(JSON.stringify(gameInfo.pinkBalls)).toBe(JSON.stringify([{ x: 2, y: 4, delete: false, skipFalling: 0 }]));

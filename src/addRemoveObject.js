@@ -1,7 +1,7 @@
 import { findElementByCoordinates } from "./balUtils.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
-export function addObject(backData, gameData, gameInfo, x, y, obj) {
+export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
     if (!backData || !gameData || !gameInfo) {
         return;
     }
@@ -10,7 +10,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
         return;
     }
     removeObject(gameData, gameInfo, x, y);
-    switch (obj) {
+    switch (objectNumber) {
         case 2:
             if ((gameInfo.blueBall.x !== -1) && (gameInfo.blueBall.y !== -1)) {
                 gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
@@ -26,7 +26,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             let elevator = {
                 x,
                 y,
-                up: obj === 106
+                up: objectNumber === 106
             };
             gameInfo.elevators.push(elevator);
             break;
@@ -36,7 +36,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             let elevator = {
                 x,
                 y,
-                right: obj === 107
+                right: objectNumber === 107
             };
             gameInfo.horizontalElevators.push(elevator);
             break;
@@ -45,7 +45,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
         case 93:
         case 94: {
             let redBall = { x, y };
-            switch (obj) {
+            switch (objectNumber) {
                 case 93:
                     redBall.smart = 1;
                     break;
@@ -93,7 +93,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             let teleport = {
                 x,
                 y,
-                selfDestructing: obj === 92,
+                selfDestructing: objectNumber === 92,
                 color: "white",
                 group: 1
             };
@@ -225,7 +225,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
         case 163:
         case 165: {
             let direction = "up";
-            switch (obj) {
+            switch (objectNumber) {
                 case 159:
                     direction = "up";
                     break;
@@ -306,8 +306,10 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
             gameInfo.questionStones.push(questionStone);
             break;
         }
-        case 242: {
-            let answerBall = { x, y, answer: "2", color: "purple", mode: "answerball", delete: false };
+        case 242:
+        case 245: {
+            const color = objectNumber === 242 ? "purple" : "white";
+            let answerBall = { x, y, answer: "2", color, mode: "answerball", delete: false };
             gameInfo.answerBalls.push(answerBall);
             break;
         }
@@ -336,7 +338,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
         default:
             break;
     }
-    switch (obj) {
+    switch (objectNumber) {
         case 20:
         case 23:
         case 25:
@@ -344,11 +346,11 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
         case 90:
         case 137:
         case 170:
-            backData[y][x] = obj;
+            backData[y][x] = objectNumber;
             break;
         default:
-            gameData[y][x] = obj;
-            if ([27, 243].includes(obj)) {
+            gameData[y][x] = objectNumber;
+            if ([27, 243].includes(objectNumber)) {
                 backData[y][x] = 23;
             }
             break;
@@ -356,7 +358,7 @@ export function addObject(backData, gameData, gameInfo, x, y, obj) {
 }
 
 export function removeObject(gameData, gameInfo, x, y) {
-    let obj = 0;
+    let objectNumber = 0;
     let idx = -1;
 
     if (!gameData || !gameInfo) {
@@ -365,8 +367,8 @@ export function removeObject(gameData, gameInfo, x, y) {
     if ((x < 0) || (x >= gameData[0].length) || (y < 0) || (y >= gameData.length)) {
         return;
     }
-    obj = gameData[y][x];
-    switch (obj) {
+    objectNumber = gameData[y][x];
+    switch (objectNumber) {
         case 2:
             gameInfo.blueBall.x = -1;
             gameInfo.blueBall.y = -1;
@@ -533,7 +535,7 @@ export function removeObject(gameData, gameInfo, x, y) {
             if (idx >= 0) {
                 gameInfo.pistons.splice(idx, 1);
             }
-            switch (obj) {
+            switch (objectNumber) {
                 case 159:
                     if (y > 0) {
                         if (gameData[y - 1][x] === 160) {
@@ -621,6 +623,7 @@ export function removeObject(gameData, gameInfo, x, y) {
             }
             break;
         case 242:
+        case 245:
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 gameInfo.answerBalls.splice(idx, 1);

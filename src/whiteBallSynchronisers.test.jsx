@@ -43,7 +43,7 @@ describe("checkWhiteBallSynchronisers", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, { ...defaultGameVars })
+        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, defaultGameVars)
         expect(input).toEqual(expectedOutput);
         expect(info.update).toBe(true);
     });
@@ -110,7 +110,7 @@ describe("checkWhiteBallSynchronisers", () => {
             [1, 2, 0, 4, 200, 0, 0, 112, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, { ...defaultGameVars })
+        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, defaultGameVars)
         expect(input).toEqual(expectedOutput);
         expect(info.update).toBe(true);
     });
@@ -134,7 +134,7 @@ describe("checkWhiteBallSynchronisers", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, { ...defaultGameVars })
+        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, defaultGameVars)
         expect(input).toEqual(expectedOutput);
         expect(info.update).toBe(false);
     });
@@ -168,7 +168,7 @@ describe("checkWhiteBallSynchronisers", () => {
             [1, 2, 0, 0, 200, 4, 0, 0, 1],
             [1, 1, 109, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, { ...defaultGameVars })
+        const info = checkWhiteBallSynchronisers(inputBack, input, gameInfo, defaultGameVars)
         expect(input).toEqual(expectedOutput);
         expect(info.update).toBe(true);
     });

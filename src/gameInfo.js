@@ -6,7 +6,8 @@ export function getGameInfo(backData, gameData) {
     initGameInfo(result);
     for (let i = 0; i < gameData.length; i++) {
         for (let j = 0; j < gameData[i].length; j++) {
-            switch (gameData[i][j]) {
+            const objectNumber = gameData[i][j];
+            switch (objectNumber) {
                 case 2:
                     result.blueBall.x = j;
                     result.blueBall.y = i;
@@ -26,7 +27,7 @@ export function getGameInfo(backData, gameData) {
                 case 94:
                     {
                         let redBall = { x: j, y: i };
-                        switch (gameData[i][j]) {
+                        switch (objectNumber) {
                             case 93:
                                 redBall.smart = 1;
                                 break;
@@ -48,7 +49,7 @@ export function getGameInfo(backData, gameData) {
                     let elevator = {
                         x: j,
                         y: i,
-                        up: gameData[i][j] === 106
+                        up: objectNumber === 106
                     };
                     result.elevators.push(elevator);
                     break;
@@ -58,7 +59,7 @@ export function getGameInfo(backData, gameData) {
                     let elevator = {
                         x: j,
                         y: i,
-                        right: gameData[i][j] === 107
+                        right: objectNumber === 107
                     };
                     result.horizontalElevators.push(elevator);
                     break;
@@ -79,7 +80,7 @@ export function getGameInfo(backData, gameData) {
                     let teleport = {
                         x: j,
                         y: i,
-                        selfDestructing: gameData[i][j] === 92,
+                        selfDestructing: objectNumber === 92,
                         color: "white",
                         group: 1
                     };
@@ -225,7 +226,7 @@ export function getGameInfo(backData, gameData) {
                 case 163:
                 case 165: {
                     let direction = "up";
-                    switch (gameData[i][j]) {
+                    switch (objectNumber) {
                         case 159:
                             direction = "up";
                             break;
@@ -299,8 +300,10 @@ export function getGameInfo(backData, gameData) {
                     result.questionStones.push(questionStone);
                     break;
                 }
-                case 242: {
-                    let answerBall = { x: j, y: i, answer: "2", color: "purple", mode: "answerball", delete: false };
+                case 242:
+                case 245: {
+                    const color = objectNumber === 242 ? "purple" : "white";
+                    let answerBall = { x: j, y: i, answer: "2", color, mode: "answerball", delete: false };
                     result.answerBalls.push(answerBall);
                     break;
                 }
@@ -352,7 +355,7 @@ export function getGameInfo(backData, gameData) {
 
 export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
     let backInfo = "";
-    let element = 0;
+    let objectNumber = 0;
     let extraBackInfo = "Additional object information not found!";
     let extraInfo = "Additional object information not found!";
     let firstNote = "";
@@ -361,7 +364,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
     let obj = null;
     let result = "";
 
-    element = gameData[y][x];
+    objectNumber = gameData[y][x];
     if (all) {
         switch (backData[y][x]) {
             case 20:
@@ -396,7 +399,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
         }
     }
 
-    switch (element) {
+    switch (objectNumber) {
         case 157:
             idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
             if (idx >= 0) {
@@ -460,10 +463,10 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
     }
 
     if (all) {
-        if (element >= 210 && element <= 225) {
-            element = -10;
+        if (objectNumber >= 210 && objectNumber <= 225) {
+            objectNumber = -10;
         }
-        switch (element) {
+        switch (objectNumber) {
             case -10:
                 info = `Stone shape`;
                 break;
@@ -967,7 +970,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Disappearing stone, ` + extraInfo;
                 break;
-            case 199:    
+            case 199:
                 info = `Shrinker`;
                 break;
             case 200:
@@ -1050,10 +1053,11 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 info = `Question stone, ` + extraInfo;
                 break;
             case 242:
+            case 245:
                 idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
                 if (idx >= 0) {
                     obj = gameInfo.answerBalls[idx];
-                    extraInfo = `Answer: ${obj.answer}, Mode: ${obj.mode}, Delete: ${obj.delete}`;
+                    extraInfo = `Answer: ${obj.answer}, Mode: ${obj.mode}, Color: ${obj.color}, Delete: ${obj.delete}`;
                 }
                 info = `Answer ball, ` + extraInfo;
                 break;

@@ -168,9 +168,154 @@ function drawLevel(
     }
   }
 
+  function drawAnswerBall(x, y, color) {
+    let answer = "2";
+    let foreColor = color === "purple" ? "white" : "black";
+    let idx = 0;
+    let mode = "answerball";
+
+    idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+    if (idx >= 0) {
+      answer = gameInfo.answerBalls[idx].answer;
+      mode = gameInfo.answerBalls[idx].mode;
+    }
+
+    if (mode === "scale") {
+      const distFromAbove = w2 * 0.2;
+      const distFromSide = w1 * 0.2;
+      const textDistFromBottom = w2 * 0.1;
+      ctx.fillStyle = displayColor(color);
+      ctx.strokeStyle = displayColor(color);
+      ctx.beginPath();
+      ctx.moveTo(xmin + distFromSide, ymin + distFromAbove);
+      ctx.lineTo(xmax - distFromSide, ymin + distFromAbove);
+      ctx.lineTo(xmax, ymax + 0.5);
+      ctx.lineTo(xmin, ymax + 0.5);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      drawFilledBox(ctx, xmin, ymin, w1, distFromAbove, "#777777");
+      drawText(ctx, xc, ymax - textDistFromBottom, answer, "center", foreColor, w2 * 0.6, w1 * 0.6);
+    } else {
+      if (color === "purple") {
+        drawPurpleBall();
+      } else {
+        drawWhiteBall();
+      }
+      switch (answer) {
+        case "%car":
+          drawCar(ctx, xc, yc, w1 * 0.8);
+          break;
+        case "%fish":
+          drawFish(ctx, xc, yc, w1 * 0.8, false, false);
+          break;
+        case "%flower":
+          drawFlower(ctx, xc, yc, w1 * 0.65);
+          break;
+        case "%heart":
+          drawHeart(ctx, xc, yc, w1 * 0.65);
+          break;
+        case "%house":
+          drawHouse(ctx, xc, yc, w1 * 0.8);
+          break;
+        case "%star":
+          drawStar(ctx, xc, yc, w1 * 0.65, "yellow");
+          break;
+        case "%train":
+          drawTrain(ctx, xc, yc, w1 * 0.85, true);
+          break;
+        case "%tree":
+          drawTree(ctx, xc, yc, w1 * 0.75);
+          break;
+        case "%w":
+          drawNote(xc, yc, "whole", 0, foreColor);
+          break;
+        case "%h":
+          drawNote(xc, yc, "half", 0, foreColor);
+          break;
+        case "%q":
+          drawNote(xc, yc, "quarter", 0, foreColor);
+          break;
+        case "%e":
+          drawNote(xc, yc, "eighth", 0, foreColor);
+          break;
+        case "%s":
+          drawNote(xc, yc, "sixteenth", 0, foreColor);
+          break;
+        case "%w.":
+          drawNote(xc, yc, "whole", 1, foreColor);
+          break;
+        case "%h.":
+          drawNote(xc, yc, "half", 1, foreColor);
+          break;
+        case "%q.":
+          drawNote(xc, yc, "quarter", 1, foreColor);
+          break;
+        case "%e.":
+          drawNote(xc, yc, "eighth", 1, foreColor);
+          break;
+        case "%s.":
+          drawNote(xc, yc, "sixteenth", 1, foreColor);
+          break;
+        case "%w..":
+          drawNote(xc, yc, "whole", 2, foreColor);
+          break;
+        case "%h..":
+          drawNote(xc, yc, "half", 2, foreColor);
+          break;
+        case "%q..":
+          drawNote(xc, yc, "quarter", 2, foreColor);
+          break;
+        case "%e..":
+          drawNote(xc, yc, "eighth", 2, foreColor);
+          break;
+        case "%s..":
+          drawNote(xc, yc, "sixteenth", 2, foreColor);
+          break;
+        case "%black":
+          drawAnswerColor("black");
+          break;
+        case "%brown":
+          drawAnswerColor("brown");
+          break;
+        case "%blue":
+          drawAnswerColor("blue");
+          break;
+        case "%gray":
+          drawAnswerColor("gray");
+          break;
+        case "%green":
+          drawAnswerColor("green");
+          break;
+        case "%orange":
+          drawAnswerColor(displayColor("orange"));
+          break;
+        case "%pink":
+          drawAnswerColor(displayColor("pink"));
+          break;
+        case "%purple":
+          drawAnswerColor(displayColor("purple"));
+          break;
+        case "%red":
+          drawAnswerColor("red");
+          break;
+        case "%white":
+          drawAnswerColor("white");
+          break;
+        case "%yellow":
+          drawAnswerColor("yellow");
+          break;
+        default:
+          drawText(ctx, xc, yc, answer, "middle", foreColor, w2 * 0.6, w1 * 0.7);
+          break;
+      }
+    }
+  }
+
   function drawAnswerColor(color) {
     const size = w1 * 0.5;
     drawFilledBox(ctx, xc - (0.5 * size), yc - (0.5 * size), size, size, color);
+    drawBox(ctx, xc - (0.5 * size), yc - (0.5 * size), size, size, "black");
   }
 
   function drawArrow(direction, frontColor, backColor, options = {}) {
@@ -1534,7 +1679,7 @@ function drawLevel(
     ctx.lineWidth = 1;
   }
 
-  function drawNote(x, y, type, dots) {
+  function drawNote(x, y, type, dots, color) {
     const size = w1 * 0.8;
     const pxScale = window.devicePixelRatio || 1;
     const minDrawingWidth = 1 / pxScale;
@@ -1580,8 +1725,8 @@ function drawLevel(
     cy = y + offsetY;
 
     ctx.save();
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "white";
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
 
@@ -2080,145 +2225,6 @@ function drawLevel(
     ctx.lineTo(pt1.x, pt1.y);
     ctx.fill();
     ctx.stroke();
-  }
-
-  function drawPurpleAnswerBall(x, y) {
-    let answer = "2";
-    let idx = 0;
-    let mode = "answerball";
-
-    idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-    if (idx >= 0) {
-      answer = gameInfo.answerBalls[idx].answer;
-      mode = gameInfo.answerBalls[idx].mode;
-    }
-
-    if (mode === "scale") {
-      const distFromAbove = w2 * 0.2;
-      const distFromSide = w1 * 0.2;
-      const textDistFromBottom = w2 * 0.1;
-      ctx.fillStyle = displayColor("purple");
-      ctx.strokeStyle = displayColor("purple");
-      ctx.beginPath();
-      ctx.moveTo(xmin + distFromSide, ymin + distFromAbove);
-      ctx.lineTo(xmax - distFromSide, ymin + distFromAbove);
-      ctx.lineTo(xmax, ymax + 0.5);
-      ctx.lineTo(xmin, ymax + 0.5);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-      drawFilledBox(ctx, xmin, ymin, w1, distFromAbove, "#777777");
-      drawText(ctx, xc, ymax - textDistFromBottom, answer, "center", "white", w2 * 0.6, w1 * 0.6);
-    } else {
-      drawPurpleBall();
-      switch (answer) {
-        case "%car":
-          drawCar(ctx, xc, yc, w1 * 0.8);
-          break;
-        case "%fish":
-          drawFish(ctx, xc, yc, w1 * 0.8, false, false);
-          break;
-        case "%flower":
-          drawFlower(ctx, xc, yc, w1 * 0.65);
-          break;
-        case "%heart":
-          drawHeart(ctx, xc, yc, w1 * 0.65);
-          break;
-        case "%house":
-          drawHouse(ctx, xc, yc, w1 * 0.8);
-          break;
-        case "%star":
-          drawStar(ctx, xc, yc, w1 * 0.65, "yellow");
-          break;
-        case "%train":
-          drawTrain(ctx, xc, yc, w1 * 0.85, true);
-          break;
-        case "%tree":
-          drawTree(ctx, xc, yc, w1 * 0.75);
-          break;
-        case "%w":
-          drawNote(xc, yc, "whole", 0);
-          break;
-        case "%h":
-          drawNote(xc, yc, "half", 0);
-          break;
-        case "%q":
-          drawNote(xc, yc, "quarter", 0);
-          break;
-        case "%e":
-          drawNote(xc, yc, "eighth", 0);
-          break;
-        case "%s":
-          drawNote(xc, yc, "sixteenth", 0);
-          break;
-        case "%w.":
-          drawNote(xc, yc, "whole", 1);
-          break;
-        case "%h.":
-          drawNote(xc, yc, "half", 1);
-          break;
-        case "%q.":
-          drawNote(xc, yc, "quarter", 1);
-          break;
-        case "%e.":
-          drawNote(xc, yc, "eighth", 1);
-          break;
-        case "%s.":
-          drawNote(xc, yc, "sixteenth", 1);
-          break;
-        case "%w..":
-          drawNote(xc, yc, "whole", 2);
-          break;
-        case "%h..":
-          drawNote(xc, yc, "half", 2);
-          break;
-        case "%q..":
-          drawNote(xc, yc, "quarter", 2);
-          break;
-        case "%e..":
-          drawNote(xc, yc, "eighth", 2);
-          break;
-        case "%s..":
-          drawNote(xc, yc, "sixteenth", 2);
-          break;
-        case "%black":
-          drawAnswerColor("black");
-          break;
-        case "%brown":
-          drawAnswerColor("brown");
-          break;
-        case "%blue":
-          drawAnswerColor("blue");
-          break;
-        case "%gray":
-          drawAnswerColor("gray");
-          break;
-        case "%green":
-          drawAnswerColor("green");
-          break;
-        case "%orange":
-          drawAnswerColor(displayColor("orange"));
-          break;
-        case "%pink":
-          drawAnswerColor(displayColor("pink"));
-          break;
-        case "%purple":
-          drawAnswerColor(displayColor("purple"));
-          break;
-        case "%red":
-          drawAnswerColor("red");
-          break;
-        case "%white":
-          drawAnswerColor("white");
-          break;
-        case "%yellow":
-          drawAnswerColor("yellow");
-          break;
-        default:
-          drawText(ctx, xc, yc, answer, "middle", "white", w2 * 0.6, w1 * 0.7);
-          break;
-      }
-    }
   }
 
   function drawPurpleBall() {
@@ -3818,13 +3824,16 @@ function drawLevel(
           drawQuestionStone(currentCol, currentRow);
           break;
         case 242:
-          drawPurpleAnswerBall(currentCol, currentRow);
+          drawAnswerBall(currentCol, currentRow, "purple");
           break;
         case 243:
           drawTropicalFish(currentCol, currentRow);
           break;
         case 244:
           drawChanger(currentCol, currentRow);
+          break;
+        case 245:
+          drawAnswerBall(currentCol, currentRow, "white");
           break;
         case 1000:
           // For manual only (empty)

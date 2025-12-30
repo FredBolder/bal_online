@@ -29,7 +29,7 @@ describe("balUtils moveLeft", () => {
       [1, 2, 0, 4, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, gameInfo, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, gameInfo, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
@@ -48,7 +48,7 @@ describe("balUtils moveLeft", () => {
       [1, 2, 0, 4, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, gameInfo, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, gameInfo, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -66,7 +66,7 @@ describe("balUtils moveLeft", () => {
       [1, 2, 0, 4, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 2, y: 1 } }, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 2, y: 1 } }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
@@ -83,7 +83,7 @@ describe("balUtils moveLeft", () => {
       [1, 4, 4, 2, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -100,7 +100,7 @@ describe("balUtils moveLeft", () => {
       [1, 4, 4, 2, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 3, y: 1 } }, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 3, y: 1 } }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
@@ -117,7 +117,7 @@ describe("balUtils moveLeft", () => {
       [1, 0, 4, 4, 4, 2, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 5, y: 1 } }, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 5, y: 1 } }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
@@ -134,7 +134,7 @@ describe("balUtils moveLeft", () => {
       [1, 5, 4, 2, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -147,7 +147,7 @@ describe("balUtils moveLeft", () => {
       [1, 1, 1, 1, 1, 1],
     ];
     const expectedOutput = copy2dArray(input);
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right" }] }, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right" }] }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.player).toBe(false);
   });
@@ -174,7 +174,7 @@ describe("balUtils moveLeft", () => {
       [1, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveLeft(inputBack01_8_6, input, gameInfo, { ...defaultGameVars });
+    const info = moveLeft(inputBack01_8_6, input, gameInfo, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);

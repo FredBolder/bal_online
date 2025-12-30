@@ -27,7 +27,7 @@ describe("balUtils Locked doors", () => {
       [1, 0, 0, 30, 2, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = moveRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 }, hasKey: true }, { ...defaultGameVars });
+    let info = moveRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 }, hasKey: true }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({
@@ -54,7 +54,7 @@ describe("balUtils Locked doors", () => {
       [1, 0, 2, 30, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = moveRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, { ...defaultGameVars });
+    let info = moveRight(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({
@@ -81,7 +81,7 @@ describe("balUtils Locked doors", () => {
       [1, 0, 2, 30, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = moveLeft(inputBack, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 }, hasKey: true }, { ...defaultGameVars });
+    let info = moveLeft(inputBack, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 }, hasKey: true }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({
@@ -108,7 +108,7 @@ describe("balUtils Locked doors", () => {
       [1, 0, 0, 30, 2, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = moveLeft(inputBack, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, { ...defaultGameVars });
+    let info = moveLeft(inputBack, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({

@@ -134,6 +134,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             }
             break;
         case 242:
+        case 245:
             idx1 = findElementByCoordinates(x1, y1, gameInfo.answerBalls);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.answerBalls);
             if ((idx1 >= 0) && (idx2 >= 0)) {
@@ -255,6 +256,7 @@ function getObjectInfo(gameInfo, x, y, n) {
             }
             break;
         case 242:
+        case 245:
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 return { arr: gameInfo.answerBalls, idx };
@@ -383,6 +385,9 @@ export function menuToNumber(s) {
                     break;
                 case "misc":
                     result = 6;
+                    break;
+                case "answerballs":
+                    result = 7;
                     break;
                 case "info":
                     result = 15;

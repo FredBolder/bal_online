@@ -45,7 +45,7 @@ describe("balUtils Ladders", () => {
       [1, 0, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = checkFalling(inputBack, input, { ...defaultGameInfo }, { ...defaultGameVars });
+    let info = checkFalling(inputBack, input, { ...defaultGameInfo }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({ update: false, sound: "" })
@@ -73,7 +73,7 @@ describe("balUtils Ladders", () => {
       [1, 0, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = pushObject(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } }, { ...defaultGameVars });
+    let info = pushObject(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({ player: true, sound: "" })
@@ -101,7 +101,7 @@ describe("balUtils Ladders", () => {
       [1, 0, 2, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = checkFalling(inputBack, input, { ...defaultGameInfo }, { ...defaultGameVars });
+    let info = checkFalling(inputBack, input, { ...defaultGameInfo }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({ update: true, sound: "" })
@@ -129,7 +129,7 @@ describe("balUtils Ladders", () => {
       [1, 0, 0, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } }, { ...defaultGameVars });
+    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(JSON.stringify(info)).toBe(
       JSON.stringify({

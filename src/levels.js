@@ -352,7 +352,7 @@ export function checkSettings(data, settings) {
               if (val_str.trim() === "") {
                 msg += `${settingNr(i)}Empty value for answer.\n`;
               }
-              if (validXY && !["ҹ", "Ҹ", 241, 242].includes(data[y][x])) {
+              if (validXY && !["ҹ", "Ҹ", "Ӆ", 241, 242, 245].includes(data[y][x])) {
                 msg += `${settingNr(i)}No question stone or answer ball found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -360,7 +360,7 @@ export function checkSettings(data, settings) {
               if (!answerBallModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid answer ball mode ${values[2]}.\n`;
               }
-              if (validXY && !["ҹ", 242].includes(data[y][x])) {
+              if (validXY && !["ҹ", "Ӆ", 242, 245].includes(data[y][x])) {
                 msg += `${settingNr(i)}No answer ball found at the coordinates ${x}, ${y}.\n`;
               }
               break;

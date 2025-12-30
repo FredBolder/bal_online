@@ -220,7 +220,7 @@ describe("Teleports", () => {
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let info = checkPurpleTeleports(backData, input, gameInfo, { ...defaultGameVars });
+        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(true);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
@@ -253,7 +253,7 @@ describe("Teleports", () => {
         ];
         let expectedOutput = copy2dArray(input);
         let expectedBackData = copy2dArray(backData);
-        let info = checkPurpleTeleports(backData, input, gameInfo, { ...defaultGameVars });
+        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
@@ -286,7 +286,7 @@ describe("Teleports", () => {
         ];
         let expectedOutput = copy2dArray(input);
         let expectedBackData = copy2dArray(backData);
-        let info = checkPurpleTeleports(backData, input, gameInfo, { ...defaultGameVars });
+        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
@@ -335,7 +335,7 @@ describe("Teleports", () => {
             [0, 0, 0, 170, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let info = checkPurpleTeleports(backData, input, gameInfo, { ...defaultGameVars });
+        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(true);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
