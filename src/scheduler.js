@@ -13,6 +13,7 @@ import { clearBitMapLava } from "./drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "./elevators.js";
 import { moveFish } from "./fish.js";
 import { checkIce } from "./freeze.js";
+import { checkLava } from "./lava.js";
 import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
 //import { checkMusicBoxes } from "./musicBoxes.js";
@@ -380,7 +381,15 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         if (info.sound !== "") {
             playSounds.push(info.sound);
         }
-        if (info.sound === "pain") {
+
+        info = checkLava(gameData, gameInfo, gameVars);
+        if (info.update) {
+            updateCanvas = true;
+        }
+        if (info.sound !== "") {
+            playSounds.push(info.sound);
+        }
+        if (info.gameOver) {
             gameVars.gameOver = true;
             updateCanvas = true;
         }

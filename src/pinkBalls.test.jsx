@@ -57,42 +57,6 @@ describe("Pink balls", () => {
         const inputBack = zeroArray(6, 7);
         const gameInfo = {
             ...defaultGameInfo,
-            blueBall: { x: 1, y: 3 },
-            greenBalls: 0,
-            pinkBalls: [
-                { x: 3, y: 2, delete: false, counter: defaultGameVars.pinkCountTo },
-                { x: 3, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
-                { x: 4, y: 3, delete: false, counter: defaultGameVars.pinkCountTo },
-            ],
-        };
-        const input = [
-            [1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 0, 0, 0, 0, 1],
-            [1, 0, 0, 203, 0, 0, 1],
-            [1, 2, 0, 203, 203, 0, 1],
-            [1, 1, 22, 22, 22, 22, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-        ];
-        const expectedOutput = [
-            [1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 1],
-            [1, 2, 0, 203, 0, 0, 1],
-            [1, 1, 22, 22, 22, 22, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-        ];
-        const info = movePinkBalls(inputBack, input, gameInfo, defaultGameVars);
-        expect(input).toEqual(expectedOutput);
-        expect(info).toBe(true);
-        expect(gameInfo.pinkBalls).toEqual([
-            { x: 3, y: 3, delete: false, counter: 0 },
-        ]);
-    });
-
-    test("movePinkBalls C", () => {
-        const inputBack = zeroArray(6, 7);
-        const gameInfo = {
-            ...defaultGameInfo,
             blueBall: { x: 2, y: 1 },
             greenBalls: 0,
             pinkBalls: [
@@ -127,7 +91,7 @@ describe("Pink balls", () => {
         ]);
     });
 
-    test("movePinkBalls D", () => {
+    test("movePinkBalls C", () => {
         const inputBack = zeroArray(6, 7);
         const gameInfo = {
             ...defaultGameInfo,
@@ -165,7 +129,7 @@ describe("Pink balls", () => {
         ]);
     });
 
-    test("movePinkBalls E", () => {
+    test("movePinkBalls D", () => {
         const inputBack = zeroArray(6, 7);
         const gameInfo = {
             ...defaultGameInfo,
@@ -196,7 +160,7 @@ describe("Pink balls", () => {
         ]);
     });
 
-    test("movePinkBalls F", () => {
+    test("movePinkBalls E", () => {
         const inputBack = zeroArray(6, 7);
         const gameInfo = {
             ...defaultGameInfo,
@@ -232,7 +196,7 @@ describe("Pink balls", () => {
         ]);
     });
 
-    test("movePinkBalls G", () => {
+    test("movePinkBalls F", () => {
         const inputBack = zeroArray(6, 7);
         const gameInfo = {
             ...defaultGameInfo,

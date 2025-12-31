@@ -77,6 +77,11 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             gameInfo.trapDoors.push(trap);
             break;
         }
+        case 22: {
+            let lava = { x, y }
+            gameInfo.lava.push(lava);
+            break;
+        }
         case 27: {
             let fish = {
                 x,
@@ -340,6 +345,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
     }
     switch (objectNumber) {
         case 20:
+        case 22:
         case 23:
         case 25:
         case 80:

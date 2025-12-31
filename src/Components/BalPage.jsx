@@ -40,6 +40,7 @@ import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
+import { deleteIfLava } from "../lava.js";
 import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
@@ -454,6 +455,7 @@ function BalPage() {
       saveUndo("Delete column", "level");
       for (let i = 0; i < gameData.length; i++) {
         removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
+        deleteIfLava(backData, gameInfo, createLevelSelectedCell.x, i);
         deleteIfPurpleTeleport(backData, gameInfo, createLevelSelectedCell.x, i);
         gameData[i].splice(createLevelSelectedCell.x, 1);
         backData[i].splice(createLevelSelectedCell.x, 1);
@@ -488,6 +490,7 @@ function BalPage() {
       saveUndo("Delete row", "level");
       for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
         removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
+        deleteIfLava(backData, gameInfo, i, createLevelSelectedCell.y);
         deleteIfPurpleTeleport(backData, gameInfo, i, createLevelSelectedCell.y);
       }
       gameData.splice(createLevelSelectedCell.y, 1);
@@ -2861,6 +2864,7 @@ function BalPage() {
                 }
               }
             } else if (createLevelObject > 0) {
+              deleteIfLava(backData, gameInfo, column, row);
               deleteIfPurpleTeleport(backData, gameInfo, column, row);
               addObject(backData, gameData, gameInfo, column, row, createLevelObject);
             } else if (createLevelObject === -3) {
@@ -2868,6 +2872,7 @@ function BalPage() {
               if (gameData[row][column] > 0) {
                 removeObject(gameData, gameInfo, column, row);
               } else {
+                deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 if ([20, 23, 25, 90].includes(backData[row][column])) {
                   backData[row][column] = 0;

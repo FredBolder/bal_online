@@ -3250,6 +3250,9 @@ function drawLevel(
         case 20:
           drawWaterSurface();
           break;
+        case 22:
+          drawLava();
+          break;
         case 23:
           drawWater();
           break;
@@ -3354,9 +3357,6 @@ function drawLevel(
           break;
         case 21:
           drawPalmTreeTrunkPart();
-          break;
-        case 22:
-          drawLava();
           break;
         case 24:
           drawPanagiotis();

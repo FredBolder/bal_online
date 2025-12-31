@@ -1,4 +1,3 @@
-import { removeObject } from "./addRemoveObject.js";
 import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
 import { checkDetonator } from "./detonator.js";
@@ -951,21 +950,6 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         let element1 = gameData[i][j];
         let element2 = gameData[i + 1][j];
 
-        if ((element2 === 22) && (canFall.includes(element1) || (element1 === 9))) {
-          // lava
-          result.update = true;
-          if (gameVars.soundLava !== "never") {
-            if (element1 === 2) {
-              result.sound = "pain";
-            } else {
-              if (gameVars.soundLava !== "player") {
-                result.sound = "splash1";
-              }
-            }
-          }
-          removeObject(gameData, gameInfo, j, i);
-        }
-
         if (j < gameData[i].length - 1) {
           if (
             // wall |\
@@ -1320,6 +1304,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 13:
       result = gameInfo.trapDoors;
+      break;
+    case 22:
+      result = gameInfo.lava;
       break;
     case 27:
       result = gameInfo.redFish;
@@ -2281,7 +2268,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
           data = 0;
         }
       }
-      if ([20, 23, 25, 80, 90, 137, 170].includes(data)) {
+      if ([20, 22, 23, 25, 80, 90, 137, 170].includes(data)) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
@@ -2494,6 +2481,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
     refs.push(gameInfo.horizontalElevators[i]);
+  }
+
+  for (let i = 0; i < gameInfo.lava.length; i++) {
+    refs.push(gameInfo.lava[i]);
   }
 
   for (let i = 0; i < gameInfo.magnets.length; i++) {

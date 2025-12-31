@@ -27,13 +27,6 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
                         }
                     }
 
-                    if (elementUnder === 22) {
-                        // lava
-                        pinkBall.delete = true;
-                        gameData[pinkBall.y][pinkBall.x] = 0;
-                        update = true;
-                    }
-
                     if (pinkBall.x < gameData[i].length - 1) {
                         // wall |\
                         if (hasTopGlideLeftToRight(elementUnder) && (gameData[i][pinkBall.x + 1] === 0) &&
@@ -163,13 +156,5 @@ export function movePinkBalls(backData, gameData, gameInfo, gameVars) {
             }
         }
     }
-
-    // Delete pink balls that fell in the lava
-    gameInfo.pinkBalls.splice(0, gameInfo.pinkBalls.length,
-        ...gameInfo.pinkBalls.filter(ball => !ball.delete)
-    );
-
-
-
     return update;
 }

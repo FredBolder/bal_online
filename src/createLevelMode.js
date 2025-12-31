@@ -1,6 +1,7 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates } from "./balUtils.js";
 import { globalVars } from "./glob.js";
+import { deleteIfLava } from "./lava.js";
 import { deleteIfPurpleTeleport } from "./teleports.js";
 
 export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
@@ -287,6 +288,7 @@ export function loadCellForUndo(backData, gameData, gameInfo, obj) {
             removeObject(gameData, gameInfo, x, y);
         }
         if (obj.bd === 0) {
+            deleteIfLava(backData, gameInfo, x, y);
             deleteIfPurpleTeleport(backData, gameInfo, x, y);
             if ([20, 23, 25, 90].includes(backData[y][x])) {
                 backData[y][x] = 0;
@@ -297,6 +299,7 @@ export function loadCellForUndo(backData, gameData, gameInfo, obj) {
             createLevelObject = obj.bd;
         }
         if (createLevelObject >= 0) {
+            deleteIfLava(backData, gameInfo, x, y);
             deleteIfPurpleTeleport(backData, gameInfo, x, y);
             addObject(backData, gameData, gameInfo, x, y, createLevelObject);
             if (obj.gi !== null) {

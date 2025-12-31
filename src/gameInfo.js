@@ -333,6 +333,11 @@ export function getGameInfo(backData, gameData) {
                     break;
             }
             switch (backData[i][j]) {
+                case 22: {
+                    let lava = { x: j, y: i }
+                    result.lava.push(lava);
+                    break;
+                }
                 case 170: {
                     // The other teleports (31 and 92) are in gameData
                     let teleport = {
@@ -369,6 +374,13 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
         switch (backData[y][x]) {
             case 20:
                 backInfo = "Water surface";
+                break;
+            case 22:
+                idx = findElementByCoordinates(x, y, gameInfo.lava);
+                if (idx >= 0) {
+                    extraBackInfo = `Index: ${idx}`;
+                }
+                backInfo = `Lava, ` + extraBackInfo;
                 break;
             case 23:
                 backInfo = "Water";
@@ -560,9 +572,6 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 break;
             case 21:
                 info = `Palm tree trunk part`;
-                break;
-            case 22:
-                info = `Lava`;
                 break;
             case 24:
                 info = `Panagiotis (creator of this level)`;
@@ -1150,6 +1159,7 @@ export function initGameInfo(info) {
     info.hasYellowBall = false;
     info.horizontalElevators = [];
     info.lastMusicBox = null;
+    info.lava = [];
     info.magnets = [];
     info.movers = [];
     info.musicBoxes = [];
