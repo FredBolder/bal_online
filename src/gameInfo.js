@@ -1215,6 +1215,8 @@ export function initGameVars(vars) {
     vars.iceCountTo = 250;
     vars.ignorePattern = [];
     vars.laser = null;
+    vars.lavaCounter = 0;
+    vars.lavaCountTo = 10;
     vars.moverCountTo = 0;
     vars.orangeCounter = 0;
     vars.phaseTicks = 250;

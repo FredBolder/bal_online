@@ -1,22 +1,24 @@
 import { removeObject } from "./addRemoveObject.js";
-import { findElementByCoordinates } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
+import { deleteIfPurpleTeleport } from "./teleports.js";
+
+function canStopLava(objectNumber) {
+    return [1, 15, 16, 17, 18, 36, 38, 91, 117, 119, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 241].includes(objectNumber);
+}
 
 export function checkLava(gameData, gameInfo, gameVars) {
     const result = { update: false, sound: "", gameOver: false };
     for (let i = 0; i < gameInfo.lava.length; i++) {
         const lava = gameInfo.lava[i];
         const objectNumber = gameData[lava.y][lava.x];
-        if (objectNumber > 0) {
+        if ((objectNumber > 0) && !canStopLava(objectNumber)) {
             result.update = true;
-            if (objectNumber === 2) {
+            if ([2, 3].includes(objectNumber)) {
                 result.gameOver = true;
             }
             removeObject(gameData, gameInfo, lava.x, lava.y);
             if ((gameVars.soundLava !== "never") && (objectNumber === 2)) {
                 result.sound = "pain";
-            }
-            if ((gameVars.soundLava === "default") && (objectNumber !== 2) && (result.sound === "")) {
-                result.sound = "splash1";
             }
         }
     }
@@ -34,6 +36,94 @@ export function deleteIfLava(backData, gameInfo, x, y) {
         }
         backData[y][x] = 0;
     }
+}
+
+export function moveLava(backData, gameData, gameInfo, gameVars) {
+    const result = { update: false, sound: "", gameOver: false };
+    let foundGap = false;
+    const movedDown = [];
+    const maxX = gameData[0].length - 1;
+    const maxY = gameData.length - 1;
+    let newX = -1;
+    let newY = -1;
+    for (let i = 0; i < gameInfo.lava.length; i++) {
+        const lava = gameInfo.lava[i];
+        //const lavaAbove = getGameDataValue(backData, lava.x, lava.y - 1) === 22;
+        const lavaUnder = getGameDataValue(backData, lava.x, lava.y + 1) === 22;
+        const lavaLeft = getGameDataValue(backData, lava.x - 1, lava.y) === 22;
+        const lavaRight = getGameDataValue(backData, lava.x + 1, lava.y) === 22;
+        //const elAbove = getGameDataValue(gameData, lava.x, lava.y - 1);
+        const elUnder = getGameDataValue(gameData, lava.x, lava.y + 1);
+        const elLeft = getGameDataValue(gameData, lava.x - 1, lava.y);
+        const elRight = getGameDataValue(gameData, lava.x + 1, lava.y);
+        newX = -1;
+        newY = -1;
+        if ((lava.x > 0) && !canStopLava(elLeft) && !lavaLeft) {
+            newX = lava.x - 1;
+            newY = lava.y;
+        }
+        if ((lava.x < maxX) && !canStopLava(elRight) && !lavaRight) {
+            newX = lava.x + 1;
+            newY = lava.y;
+        }
+        if ((lava.y < maxY) && !canStopLava(elUnder) && !lavaUnder) {
+            newX = lava.x;
+            newY = lava.y + 1;
+        }
+        if ((newX >= 0) && (newY >= 0)) {
+            if ([2, 3].includes(gameData[newY][newX])) {
+                result.gameOver = true;
+            }
+            if ((gameVars.soundLava !== "never") && (gameData[newY][newX] === 2)) {
+                result.sound = "pain";
+            }
+            removeObject(gameData, gameInfo, newX, newY);
+            deleteIfPurpleTeleport(backData, gameInfo, newX, newY);
+            if (newY > lava.y) {
+                movedDown.push(i);
+            }
+            backData[lava.y][lava.x] = 0;
+            lava.x = newX;
+            lava.y = newY;
+            backData[lava.y][lava.x] = 22;
+            result.update = true;
+        }
+    }
+    if (result.update) {
+        do {
+            foundGap = false;
+            for (let i = 0; i < gameInfo.lava.length; i++) {
+                if (movedDown.includes(i)) continue;
+                const lava = gameInfo.lava[i];
+                const lavaUnder = getGameDataValue(backData, lava.x, lava.y + 1) === 22;
+                const lavaUnderLeft = getGameDataValue(backData, lava.x - 1, lava.y + 1) === 22;
+                const lavaUnderRight = getGameDataValue(backData, lava.x + 1, lava.y + 1) === 22;
+                const elUnder = getGameDataValue(gameData, lava.x, lava.y + 1);
+                const elUnderLeft = getGameDataValue(gameData, lava.x - 1, lava.y + 1);
+                const elUnderRight = getGameDataValue(gameData, lava.x + 1, lava.y + 1);
+                if (lava.y >= maxY) continue;
+                if ((elUnder === 0) && !lavaUnder) {
+                    foundGap = true;
+                    backData[lava.y][lava.x] = 0;
+                    lava.y++;
+                    backData[lava.y][lava.x] = 22;
+                } else if ((elUnderLeft === 0) && !lavaUnderLeft) {
+                    foundGap = true;
+                    backData[lava.y][lava.x] = 0;
+                    lava.x--;
+                    lava.y++;
+                    backData[lava.y][lava.x] = 22;
+                } else if ((elUnderRight === 0) && !lavaUnderRight) {
+                    foundGap = true;
+                    backData[lava.y][lava.x] = 0;
+                    lava.x++;
+                    lava.y++;
+                    backData[lava.y][lava.x] = 22;
+                }
+            }
+        } while (foundGap);
+    }
+    return result;
 }
 
 

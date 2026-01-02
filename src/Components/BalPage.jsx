@@ -55,6 +55,7 @@ import {
   insertIgnoreAtRow, maxStonePatterns, moveIgnore
 } from "../stonePatterns.js";
 import { rotateGame } from "../rotateGame.js";
+import { startSchedulers, stopSchedulers } from "../schedulerState.js";
 import { getSettings, loadSettings, saveSettings, setSettings, settings } from "../settings.js";
 import { shrinkObject } from "../shrink.js";
 import { playSound } from "../sound.js";
@@ -2121,34 +2122,6 @@ function BalPage() {
     return () => { stopped = true; };
   }
 
-  const gameClockRef = useRef(null);
-  const renderLoopRef = useRef(null);
-
-  const schedulersRunningRef = useRef(false);
-
-  const startSchedulers = async () => {
-    if (schedulersRunningRef.current) return; // already running
-
-    const audioCtx = getAudioContext();
-    await audioCtx.resume();
-
-    // stop old loops just in case
-    if (gameClockRef.current) gameClockRef.current();
-    if (renderLoopRef.current) renderLoopRef.current();
-
-    gameClockRef.current = startGameClock(audioCtx, runMusicScheduler, schedulerTime());
-    renderLoopRef.current = startRenderLoop(audioCtx, runGameScheduler, schedulerTime());
-    schedulersRunningRef.current = true;
-  };
-
-  const stopSchedulers = () => {
-    if (gameClockRef.current) gameClockRef.current();
-    if (renderLoopRef.current) renderLoopRef.current();
-    gameClockRef.current = null;
-    renderLoopRef.current = null;
-    schedulersRunningRef.current = false;
-  };
-
   useEffect(() => {
     if (globalVars.balPageLoading || !gameCanvas.current) return;
     globalVars.balPageLoading = true;
@@ -2157,15 +2130,46 @@ function BalPage() {
 
     const audioCtx = getAudioContext();
 
-    audioCtx.resume().then(() => {
-      startSchedulers();
-    });
+const waitForRefsAndInit = () => {
+  if (!cbArrowButtons.current || !cbCreateLevel.current || !cbQuestions.current) {
+    requestAnimationFrame(waitForRefsAndInit);
+    return;
+  }
+
+  // Now refs are guaranteed to exist
+  cbArrowButtons.current.checked = getSettings().arrowButtons;
+  cbCreateLevel.current.checked = false;
+  cbQuestions.current.checked = getSettings().lessQuestions;
+  cbMusic.current.value = getSettings().music.toString();
+  cbSound.current.value = getSettings().sound.toString();
+};
+
+waitForRefsAndInit();
+
+
+    const start = async () => {
+      if (audioCtx.state !== "running") {
+        await audioCtx.resume();
+        if (audioCtx.state !== "running") return;
+      }
+
+      startSchedulers(
+        audioCtx,
+        startGameClock,
+        startRenderLoop,
+        runMusicScheduler,
+        runGameScheduler,
+        schedulerTime
+      );
+    };
+
+    start();
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
         stopSchedulers();
       } else {
-        startSchedulers();
+        start();
       }
     };
 
@@ -2193,7 +2197,7 @@ function BalPage() {
           await loadProgress(gameVars);
 
           if (globalVars.uf) {
-            gameVars.currentLevel = 0;
+            gameVars.currentLevel = 200;
           }
 
           const clickedLevel = handleClickedLevel();

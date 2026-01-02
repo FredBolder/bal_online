@@ -86,7 +86,7 @@ describe("Lava", () => {
             [1, 1, 1, 1, 1, 1, 1]
         ];
         const info = checkLava(input, gameInfo, defaultGameVars);
-        expect(info).toEqual({ update: true, sound: "splash1", gameOver: false });
+        expect(info).toEqual({ update: true, sound: "", gameOver: false });
         expect(input).toEqual(expectedOutput);
         expect(gameInfo.pinkBalls).toEqual([]);
     });

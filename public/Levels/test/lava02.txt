@@ -9,7 +9,7 @@ $stonepattern: 2
 1    1VVVVV1  1
 1    1VVVVV1  1
 1    BVVVVV1  1
-111111BBBB11111
+111111111111111
 1             1
 13            1
 1        2   b1

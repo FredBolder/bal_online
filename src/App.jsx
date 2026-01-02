@@ -15,13 +15,13 @@ function App() {
       <ModalProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<StartPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/bal" element={<BalPage />} />
-            <Route path="/help" element={<HelpPage />} />
-            <Route path="/overview" element={<OverviewPage />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="*" element={<PageNotFound />} />
+              <Route path="/" element={<StartPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/bal" element={<BalPage />} />
+              <Route path="/help" element={<HelpPage />} />
+              <Route path="/overview" element={<OverviewPage />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
       </ModalProvider>

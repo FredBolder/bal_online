@@ -13,7 +13,7 @@ import { clearBitMapLava } from "./drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "./elevators.js";
 import { moveFish } from "./fish.js";
 import { checkIce } from "./freeze.js";
-import { checkLava } from "./lava.js";
+import { checkLava, moveLava } from "./lava.js";
 import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
 //import { checkMusicBoxes } from "./musicBoxes.js";
@@ -42,6 +42,12 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     let updateGreen = false;
     let updateLevelNumber = false;
 
+    function addSound(sound) {
+        if (!playSounds.includes(sound)) {
+            playSounds.push(sound);
+        }
+    }
+
     if (checkAll) {
         if (gameVars.remainingPhaseTicks > 0) {
             gameVars.remainingPhaseTicks--;
@@ -52,7 +58,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     }
 
     if (checkMagnets(gameInfo)) {
-        playSounds.push("magnet");
+        addSound("magnet");
     }
 
     if (checkAll) {
@@ -75,22 +81,22 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
 
         if (checkPurpleTeleports(backData, gameData, gameInfo)) {
             updateCanvas = true;
-            playSounds.push("teleport");
+            addSound("teleport");
         }
 
         info = checkTrapDoors(backData, gameData, gameInfo, gameVars);
         if (info.sound) {
-            playSounds.push("trap");
+            addSound("trap");
         }
         if (info.updated) {
             updateCanvas = true;
         }
         info = checkDamagedStones(backData, gameData, gameInfo, gameVars);
         if (info.sound === 1) {
-            playSounds.push("breaking1");
+            addSound("breaking1");
         }
         if (info.sound === 2) {
-            playSounds.push("breaking2");
+            addSound("breaking2");
         }
         if (info.update) {
             updateCanvas = true;
@@ -207,7 +213,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
                     updateCanvas = true;
                 }
                 if (info.eating) {
-                    playSounds.push("eat");
+                    addSound("eat");
                 }
             }
         }
@@ -249,7 +255,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         } else {
             info = checkDetonator(backData, gameData, gameInfo, gameVars, false);
             if (info.explosion) {
-                playSounds.push("explosion");
+                addSound("explosion");
                 gameVars.explosionCounter = 2;
             }
             if (info.updated) {
@@ -260,7 +266,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         if (gameVars.timeFreezer === 0) {
             info = checkTimeBombs(gameData, backData, gameInfo);
             if (info.explosion) {
-                playSounds.push("explosion");
+                addSound("explosion");
             }
             if (info.updated) {
                 updateCanvas = true;
@@ -313,7 +319,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             let teleport2 = -1;
             switch (gameVars.teleporting) {
                 case 1:
-                    playSounds.push("teleport");
+                    addSound("teleport");
                     gameVars.teleporting = 2;
                     break;
                 case 2:
@@ -358,7 +364,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
                 gameInfo.electricityActive = true;
             }
             if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
-                playSounds.push("electricity");
+                addSound("electricity");
             }
             if (
                 gameInfo.electricityActive ||
@@ -379,15 +385,31 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
         if (info.sound !== "") {
-            playSounds.push(info.sound);
+            addSound(info.sound);
         }
+
+        if (gameVars.lavaCounter >= gameVars.lavaCountTo) {
+            gameVars.lavaCounter = 0;
+            info = moveLava(backData, gameData, gameInfo, gameVars);
+            if (info.update) {
+                updateCanvas = true;
+            }
+            if (info.sound !== "") {
+                addSound(info.sound);
+            }
+            if (info.gameOver) {
+                gameVars.gameOver = true;
+                updateCanvas = true;
+            }
+        }
+        gameVars.lavaCounter++;
 
         info = checkLava(gameData, gameInfo, gameVars);
         if (info.update) {
             updateCanvas = true;
         }
         if (info.sound !== "") {
-            playSounds.push(info.sound);
+            addSound(info.sound);
         }
         if (info.gameOver) {
             gameVars.gameOver = true;
@@ -399,9 +421,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         const gameOverResult = checkGameOver(backData, gameData, gameInfo, gameVars);
         for (let i = 0; i < gameOverResult.playSounds.length; i++) {
             const snd = gameOverResult.playSounds[i];
-            if (!playSounds.includes(snd)) {
-                playSounds.push(snd);
-            }
+            addSound(snd);
         }
     }
 
