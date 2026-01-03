@@ -116,6 +116,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.lavaCountTo !== 10) {
+        line = `$gameticks: lava, ${gameVars.lavaCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.moverCountTo !== 0) {
         line = `$gameticks: mover, ${gameVars.moverCountTo}`;
         lines.push(line);
@@ -128,6 +133,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     if (gameVars.pinkCountTo !== 5) {
         line = `$gameticks: pinkball, ${gameVars.pinkCountTo}`;
+        lines.push(line);
+    }
+
+    if (gameVars.timeBombsTime !== 100) {
+        line = `$gameticks: timebomb, ${gameVars.timeBombsTime}`;
         lines.push(line);
     }
 

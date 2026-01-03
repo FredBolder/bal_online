@@ -15,14 +15,10 @@ export function startSchedulers(
     schedulerTime
 ) {
     if (schedulersRunning) {
-        console.warn("Schedulers already running");
         return;
     }
 
-    // stop defensively
     stopSchedulers();
-
-    console.log("Schedulers started");
 
     stopGameClock = startGameClock(
         audioCtx,
@@ -40,11 +36,8 @@ export function startSchedulers(
 
 export function stopSchedulers() {
     if (!schedulersRunning) {
-        console.warn("Schedulers already stopped");
         return;
     }
-
-    console.log("Schedulers stopped");
 
     if (stopGameClock) stopGameClock();
     if (stopRenderLoop) stopRenderLoop();

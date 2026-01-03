@@ -92,6 +92,7 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowUpLeft from "../Images/arrow_up_left.svg";
 import arrowUpRight from "../Images/arrow_up_right.svg";
 import selectButton from "../Images/select_button.png";
+import { setTimeBombsTime } from "../timeBombs.js";
 
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
@@ -129,6 +130,7 @@ let gameInfo = {};
 initGameInfo(gameInfo);
 let gameVars = {};
 initGameVars(gameVars);
+setTimeBombsTime(gameVars.timeBombsTime);
 
 let gameDataMenu = [];
 let backDataMenu = [];
@@ -609,6 +611,7 @@ function BalPage() {
       checkSettingsResult = checkSettings(gameData, [setting]);
       if (checkSettingsResult === "") {
         loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
+        setTimeBombsTime(gameVars.timeBombsTime);
         updateGameCanvas();
       } else {
         showMessage("Error", checkSettingsResult);
@@ -718,6 +721,7 @@ function BalPage() {
         }
         gameVars = null;
         gameVars = data.gameVars;
+        setTimeBombsTime(gameVars.timeBombsTime);
         updateProgressText();
         updateGameCanvas();
         updateGreen();
@@ -768,6 +772,7 @@ function BalPage() {
       gameInfo = null;
       gameInfo = getGameInfo(backData, gameData);
       loadLevelSettings(backData, gameData, gameInfo, gameVars, result.levelSettings);
+      setTimeBombsTime(gameVars.timeBombsTime);
       gameVars.laser = null;
       gameVars.gameOver = false;
       gameVars.currentLevel = 9999;
@@ -1221,6 +1226,7 @@ function BalPage() {
       }
       gameVars.laser = null;
       gameVars.gameOver = false;
+      setTimeBombsTime(gameVars.timeBombsTime);
       fixDoors(gameInfo);
       updateProgressText();
       updateGameCanvas();
@@ -2197,7 +2203,7 @@ waitForRefsAndInit();
           await loadProgress(gameVars);
 
           if (globalVars.uf) {
-            gameVars.currentLevel = 200;
+            gameVars.currentLevel = 0;
           }
 
           const clickedLevel = handleClickedLevel();

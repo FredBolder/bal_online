@@ -1242,6 +1242,7 @@ export function initGameVars(vars) {
     vars.startlevelmessage = "";
     vars.stonePattern = 0;
     vars.teleporting = 0;
+    vars.timeBombsTime = 100;
     vars.timeFreezer = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;

@@ -1,5 +1,7 @@
 import { removeObject } from "./addRemoveObject.js";
 
+let timeBombsTime = 100;
+
 export function checkTimeBombs(gameData, backData, gameInfo) {
     let el = 0;
     let xmin = 0;
@@ -69,7 +71,14 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
 }
 
 export function getTimeBombsTime() {
-  return 100;
+    const time = Math.max(20, timeBombsTime);
+    console.log("GET: ", time);
+    return time;
+}
+
+export function setTimeBombsTime(time) {
+    timeBombsTime = time;
+    console.log("SET: ", time);
 }
 
 export function updateTimeBomb(timeBombs, x1, y1, x2, y2) {
