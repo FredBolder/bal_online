@@ -1,0 +1,16 @@
+$lavacanmove: yes
+111111111111111
+13            1
+1             1
+1   2b        1
+1   11VVV1    1
+1   1úVVV1    1
+1   11VVV1    1
+1   1úVVV1    1
+111 11VVV1    1
+1   1úVVV1    1
+1   11VVV1VVVV1
+1   1úVVV1VVVV1
+11  11VVV1VVVV1
+111 BBVVVBVVVV1
+111111111111111

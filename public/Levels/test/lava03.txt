@@ -1,17 +1,16 @@
-$gameticks: lava, 20
-$stonepattern: 2
+$lavacanmove: yes
 111111111111111
 13            1
 1             1
-1             1
-1             1
-1             1
-1    1     1  1
-1    1VVVVV1  1
-1    1VVVVV1  1
-1    1VVVVV1  1
-111111111111111
-1    2 Ξ      1
-1    1111111  1
-1             1
+1   2b        1
+1   11VVVVVVVV1
+1   1úVVVVVVVV1
+1   11VVVVVVVV1
+1   1úVVVVVVVV1
+1   11VVVVVVVV1
+1   1úVVVVVVVV1
+1   11VVVVVVVV1
+1   1úVVVVVVVV1
+1   11VVVVVVVV1
+1   BBVVVVVVVV1
 111111111111111

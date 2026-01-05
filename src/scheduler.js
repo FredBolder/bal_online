@@ -388,21 +388,23 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             addSound(info.sound);
         }
 
-        if (gameVars.lavaCounter >= gameVars.lavaCountTo) {
-            gameVars.lavaCounter = 0;
-            info = moveLava(backData, gameData, gameInfo, gameVars);
-            if (info.update) {
-                updateCanvas = true;
+        if (gameVars.lavaCanMove) {
+            if (gameVars.lavaCounter >= gameVars.lavaCountTo) {
+                gameVars.lavaCounter = 0;
+                info = moveLava(backData, gameData, gameInfo, gameVars);
+                if (info.update) {
+                    updateCanvas = true;
+                }
+                if (info.sound !== "") {
+                    addSound(info.sound);
+                }
+                if (info.gameOver) {
+                    gameVars.gameOver = true;
+                    updateCanvas = true;
+                }
             }
-            if (info.sound !== "") {
-                addSound(info.sound);
-            }
-            if (info.gameOver) {
-                gameVars.gameOver = true;
-                updateCanvas = true;
-            }
+            gameVars.lavaCounter++;
         }
-        gameVars.lavaCounter++;
 
         info = checkLava(gameData, gameInfo, gameVars);
         if (info.update) {

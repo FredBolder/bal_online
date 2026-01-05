@@ -295,6 +295,7 @@ export function checkSettings(data, settings) {
     { name: "$ignorepattern", params: 4, xy: true },
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
+    { name: "$lavacanmove", params: 1, xy: false },
     { name: "$movermode", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
@@ -501,6 +502,11 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", "η", 159, 161, 163, 165, 178].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston or mover found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$lavacanmove":
+              if (!["yes", "no"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
               }
               break;
             case "$movermode":
@@ -1624,6 +1630,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   }
                 }
               }
+            }
+          }
+          break;
+        case "$lavacanmove":
+          if (values.length === 1) {
+            switch (valuesLowerCase[0]) {
+              case "no":
+                gameVars.lavaCanMove = false;
+                break;
+              case "yes":
+                gameVars.lavaCanMove = true;
+                break;
+              default:
+                break;
             }
           }
           break;

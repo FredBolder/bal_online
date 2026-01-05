@@ -1215,6 +1215,7 @@ export function initGameVars(vars) {
     vars.iceCountTo = 250;
     vars.ignorePattern = [];
     vars.laser = null;
+    vars.lavaCanMove = false;
     vars.lavaCounter = 0;
     vars.lavaCountTo = 10;
     vars.moverCountTo = 0;

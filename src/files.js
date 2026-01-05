@@ -116,6 +116,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.lavaCanMove) {
+        line = `$lavacanmove: yes`;
+        lines.push(line);
+    }
+
     if (gameVars.lavaCountTo !== 10) {
         line = `$gameticks: lava, ${gameVars.lavaCountTo}`;
         lines.push(line);
