@@ -72,13 +72,11 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
 
 export function getTimeBombsTime() {
     const time = Math.max(20, timeBombsTime);
-    console.log("GET: ", time);
     return time;
 }
 
 export function setTimeBombsTime(time) {
     timeBombsTime = time;
-    console.log("SET: ", time);
 }
 
 export function updateTimeBomb(timeBombs, x1, y1, x2, y2) {

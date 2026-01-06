@@ -169,10 +169,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
 
             if (gameVars.elevatorCounter >= gameVars.elevatorCountTo) {
                 gameVars.elevatorCounter = 0;
-                if (moveElevators(gameData, gameInfo, gameVars)) {
+                if (moveElevators(backData, gameData, gameInfo, gameVars)) {
                     updateCanvas = true;
                 }
-                if (moveHorizontalElevators(gameData, gameInfo, gameVars)) {
+                if (moveHorizontalElevators(backData, gameData, gameInfo, gameVars)) {
                     updateCanvas = true;
                 }
             }

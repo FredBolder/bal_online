@@ -49,7 +49,8 @@ export function getGameInfo(backData, gameData) {
                     let elevator = {
                         x: j,
                         y: i,
-                        up: objectNumber === 106
+                        up: objectNumber === 106,
+                        hasBlueBall: false
                     };
                     result.elevators.push(elevator);
                     break;
@@ -59,7 +60,8 @@ export function getGameInfo(backData, gameData) {
                     let elevator = {
                         x: j,
                         y: i,
-                        right: objectNumber === 107
+                        right: objectNumber === 107,
+                        hasBlueBall: false
                     };
                     result.horizontalElevators.push(elevator);
                     break;
@@ -502,7 +504,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.elevators);
                 if (idx >= 0) {
                     obj = gameInfo.elevators[idx];
-                    extraInfo = `Up: ${obj.up}`;
+                    extraInfo = `Up: ${obj.up}, Has blue ball: ${obj.hasBlueBall}`;
                 }
                 info = `Elevator, ` + extraInfo;
                 break;
@@ -511,7 +513,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
                 if (idx >= 0) {
                     obj = gameInfo.horizontalElevators[idx];
-                    extraInfo = `Right: ${obj.right}`;
+                    extraInfo = `Right: ${obj.right}, Has blue ball: ${obj.hasBlueBall}`;
                 }
                 info = `Horizontal elevator, ` + extraInfo;
                 break;

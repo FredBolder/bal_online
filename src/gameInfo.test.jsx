@@ -87,8 +87,8 @@ describe("Game info", () => {
             ...defaultGameInfo,
             blueBall1: { x: 4, y: 5 },
             elevators: [
-                { x: 8, y: 2, up: false },
-                { x: 2, y: 5, up: true },
+                { x: 8, y: 2, up: false, hasBlueBall: false },
+                { x: 2, y: 5, up: true, hasBlueBall: false },
             ],
             greenBalls: 2,
             yellowBalls: [{ x: 1, y: 4, direction: "none" }],

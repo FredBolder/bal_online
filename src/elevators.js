@@ -1,4 +1,4 @@
-import { moveObject } from "./balUtils.js";
+import { hasWeightAbove, hasWeightBelow, moveObject } from "./balUtils.js";
 
 function moveableByElevator(gameInfo, n) {
   let result = false;
@@ -105,7 +105,7 @@ export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
   return updated;
 }
 
-export function moveElevators(gameData, gameInfo, gameVars) {
+export function moveElevators(backData, gameData, gameInfo, gameVars) {
   const gravityDown = (gameVars.gravity === "down");
   let updated = false;
 
@@ -113,6 +113,7 @@ export function moveElevators(gameData, gameInfo, gameVars) {
     const elevator = gameInfo.elevators[i];
     let directionChanged = false;
     let downPossible = false;
+    let hasBlue = elevator.hasBlueBall;
     let upPossible = false;
     let emptyDown = -1;
     let emptyUp = -1;
@@ -123,12 +124,21 @@ export function moveElevators(gameData, gameInfo, gameVars) {
     emptyUp = -1;
     upPossible = true;
     for (let j = elevator.y - 1; j >= 0; j--) {
-      if (gameData[j][elevator.x] === 0) {
+      const objectNumber = gameData[j][elevator.x];
+      if (objectNumber === 0) {
         emptyUp = j;
         break;
       }
-      if (!moveableByElevator(gameInfo, gameData[j][elevator.x])) {
+      if (!moveableByElevator(gameInfo, objectNumber)) {
         upPossible = false;
+      }
+      if (upPossible && (objectNumber === 2)) {
+        if (!elevator.hasBlueBall && gravityDown && !hasWeightAbove(backData, gameData, gameInfo, gameVars, elevator.x, elevator.x, j + 1, false)) {
+          upPossible = false;
+        }
+        if (!elevator.hasBlueBall && !gravityDown && !hasWeightBelow(backData, gameData, gameInfo, gameVars, elevator.x, elevator.x, j - 1, false)) {
+          upPossible = false;
+        }
       }
     }
     if (emptyUp === -1) {
@@ -138,12 +148,21 @@ export function moveElevators(gameData, gameInfo, gameVars) {
     emptyDown = -1;
     downPossible = true;
     for (let j = elevator.y + 1; j < gameData.length; j++) {
-      if (gameData[j][elevator.x] === 0) {
+      const objectNumber = gameData[j][elevator.x];
+      if (objectNumber === 0) {
         emptyDown = j;
         break;
       }
-      if (!moveableByElevator(gameInfo, gameData[j][elevator.x])) {
+      if (!moveableByElevator(gameInfo, objectNumber)) {
         downPossible = false;
+      }
+      if (downPossible && (objectNumber === 2)) {
+        if (!elevator.hasBlueBall && gravityDown && !hasWeightAbove(backData, gameData, gameInfo, gameVars, elevator.x, elevator.x, j + 1, false)) {
+          downPossible = false;
+        }
+        if (!elevator.hasBlueBall && !gravityDown && !hasWeightBelow(backData, gameData, gameInfo, gameVars, elevator.x, elevator.x, j - 1, false)) {
+          downPossible = false;
+        }
       }
     }
     if (emptyDown === -1) {
@@ -186,17 +205,27 @@ export function moveElevators(gameData, gameInfo, gameVars) {
         if (upPossible) {
           gameData[elevator.y][elevator.x] = 0;
           elevator.y--;
+          hasBlue = false;
           updated = true;
           if (gravityDown) {
             for (let j = emptyUp; j < y - 1; j++) {
+              if (gameData[j + 1][x] === 2) {
+                hasBlue = true;
+              }
               moveObject(gameData, gameInfo, x, j + 1, x, j);
             }
           } else {
             for (let j = y + 1; j < gameData.length; j++) {
-              if ((gameData[j - 1][x] === 0) && moveableByElevator(gameInfo, gameData[j][x])) {
-                moveObject(gameData, gameInfo, x, j, x, j - 1);
-              } else {
+              const objectNumber = gameData[j][x];
+              if ((gameData[j - 1][x] !== 0) || !moveableByElevator(gameInfo, objectNumber)) {
                 break;
+              }
+              if ((objectNumber === 2) && !elevator.hasBlueBall && !hasWeightBelow(backData, gameData, gameInfo, gameVars, x, x, j - 1, false)) {
+                break;
+              }
+              moveObject(gameData, gameInfo, x, j, x, j - 1);
+              if (objectNumber === 2) {
+                hasBlue = true;
               }
             }
           }
@@ -207,40 +236,57 @@ export function moveElevators(gameData, gameInfo, gameVars) {
         if (downPossible) {
           gameData[elevator.y][elevator.x] = 0;
           elevator.y++;
+          hasBlue = false;
+          updated = true;
           if (gravityDown) {
             for (let j = y - 1; j >= 0; j--) {
-              if ((gameData[j + 1][x] === 0) && moveableByElevator(gameInfo, gameData[j][x])) {
-                moveObject(gameData, gameInfo, x, j, x, j + 1);
-              } else {
+              const objectNumber = gameData[j][x];
+              if ((gameData[j + 1][x] !== 0) || !moveableByElevator(gameInfo, objectNumber)) {
                 break;
+              }
+              if ((objectNumber === 2) && !elevator.hasBlueBall && !hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, j + 1, false)) {
+                break;
+              }
+              moveObject(gameData, gameInfo, x, j, x, j + 1);
+              if (objectNumber === 2) {
+                hasBlue = true;
               }
             }
           } else {
             for (let j = emptyDown; j > y + 1; j--) {
+              if (gameData[j - 1][x] === 2) {
+                hasBlue = true;
+              }
               moveObject(gameData, gameInfo, x, j - 1, x, j);
             }
           }
           gameData[elevator.y][elevator.x] = 6;
-          updated = true;
         }
       }
     }
+    elevator.hasBlueBall = hasBlue;
   }
   return updated;
 }
 
-export function moveHorizontalElevators(gameData, gameInfo, gameVars) {
+export function moveHorizontalElevators(backData, gameData, gameInfo, gameVars) {
   let dx = 0;
   let el = 0;
+  let hasBlue = false;
   const gravityDown = (gameVars.gravity === "down");
   let updated = false;
+  let yFrom = -1;
+  let yObject = -1;
+  let yStep = -1;
+  let yTo = -1;
   let stop = false;
 
   for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
     const elevator = gameInfo.horizontalElevators[i];
+    const x = elevator.x;
+    const y = elevator.y;
     let directionChanged = false;
-    let x = elevator.x;
-    let y = elevator.y;
+    hasBlue = false;
 
     if (elevator.right) {
       if (gameData[y][x + 1] !== 0 && gameData[y][x - 1] === 0) {
@@ -270,25 +316,39 @@ export function moveHorizontalElevators(gameData, gameInfo, gameVars) {
         elevator.x = x + dx;
         stop = false;
         if (gravityDown) {
-          for (let j = y - 1; j >= 0 && !stop; j--) {
-            if (moveableByElevator(gameInfo, gameData[j][x]) && gameData[j][x + dx] === 0) {
-              moveObject(gameData, gameInfo, x, j, x + dx, j);
-            } else {
-              stop = true;
-            }
-          }
+          yFrom = y - 1;
+          yTo = 0;
+          yStep = -1;
         } else {
-          for (let j = y + 1; j < gameData.length && !stop; j++) {
-            if (moveableByElevator(gameInfo, gameData[j][x]) && gameData[j][x + dx] === 0) {
-              moveObject(gameData, gameInfo, x, j, x + dx, j);
-            } else {
-              stop = true;
+          yFrom = y + 1;
+          yTo = gameData.length - 1;
+          yStep = 1;
+        }
+        yObject = yFrom;
+        while (!stop && (((yObject >= yTo) && gravityDown) || ((yObject <= yTo) && !gravityDown))) {
+          const objectNumber = gameData[yObject][x];
+          if (moveableByElevator(gameInfo, objectNumber) && gameData[yObject][x + dx] === 0) {
+            if (objectNumber === 2) {
+              if (!elevator.hasBlueBall && gravityDown && !hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, yObject - yStep, false)) {
+                stop = true;
+              }
+              if (!elevator.hasBlueBall && !gravityDown && !hasWeightBelow(backData, gameData, gameInfo, gameVars, x, x, yObject - yStep, false)) {
+                stop = true;
+              }
+              hasBlue = !stop;
             }
+            if (!stop) {
+              moveObject(gameData, gameInfo, x, yObject, x + dx, yObject);
+            }
+          } else {
+            stop = true;
           }
+          yObject += yStep;
         }
         updated = true;
       }
     }
+    elevator.hasBlueBall = hasBlue;
   }
   return updated;
 }

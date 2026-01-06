@@ -1230,16 +1230,18 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
   if (y > 0) {
     for (let i = xmin; i <= xmax; i++) {
       let weight = false;
-      const el = gameData[y - 1][i];
+      const back = getGameDataValue(backData, i, y);
+      const backAbove = getGameDataValue(backData, i, y - 1);
+      const elAbove = getGameDataValue(gameData, i, y - 1);
       const forceDown = hasForceDown(gameData, gameInfo, i, y - 1);
       const pushing = (pushingDown && (i === gameInfo.blueBall.x) && ((y - 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(el)) {
+      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(elAbove)) {
         if (pushing || gravityDown || forceDown) {
           weight = true;
         }
       }
-      if ((el === 2) && !forceDown && !pushing) {
-        if (gameInfo.hasPropeller || [20, 23, 25, 90, 137].includes(backData[y - 1][i]) || isHorizontalRope(i, y - 2, backData)) {
+      if ((elAbove === 2) && !forceDown && !pushing) {
+        if (gameInfo.hasPropeller || [25, 90, 137].includes(back) || [20, 23, 25, 80, 90, 137].includes(backAbove) || isHorizontalRope(i, y - 2, backData)) {
           weight = false;
         }
       }
@@ -1258,16 +1260,18 @@ export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xma
   if (y < gameData.length - 1) {
     for (let i = xmin; i <= xmax; i++) {
       let weight = false;
-      const el = gameData[y + 1][i];
+      const back = getGameDataValue(backData, i, y);
+      const backBelow = getGameDataValue(backData, i, y + 1);
+      const elBelow = gameData[y + 1][i];
       const forceUp = hasForceUp(gameData, gameInfo, i, y + 1);
       const pushing = (pushingUp && (i === gameInfo.blueBall.x) && ((y + 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(el)) {
+      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(elBelow)) {
         if (pushing || gravityUp || forceUp) {
           weight = true;
         }
       }
-      if ((el === 2) && !forceUp && !pushing) {
-        if (gameInfo.hasPropeller || [20, 23, 25, 90, 137].includes(backData[y + 1][i]) || isHorizontalRope(i, y + 2, backData)) {
+      if ((elBelow === 2) && !forceUp && !pushing) {
+        if (gameInfo.hasPropeller || [25, 90, 137].includes(back) || [20, 23, 25, 90, 137].includes(backBelow) || isHorizontalRope(i, y + 2, backData)) {
           weight = false;
         }
       }

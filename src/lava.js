@@ -37,7 +37,7 @@ export function deleteIfLava(backData, gameInfo, x, y) {
   }
 }
 
-function getLavaRegions(gameInfo, backData) {
+export function getLavaRegions(gameInfo, backData) {
   const visited = new Set();
   const regions = [];
 

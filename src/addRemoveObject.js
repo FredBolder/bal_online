@@ -26,7 +26,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             let elevator = {
                 x,
                 y,
-                up: objectNumber === 106
+                up: objectNumber === 106,
+                hasBlueBall: false
             };
             gameInfo.elevators.push(elevator);
             break;
@@ -36,7 +37,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             let elevator = {
                 x,
                 y,
-                right: objectNumber === 107
+                right: objectNumber === 107,
+                hasBlueBall: false
             };
             gameInfo.horizontalElevators.push(elevator);
             break;

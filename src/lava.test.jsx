@@ -1,6 +1,6 @@
 import { beforeEach, describe, it, expect } from "vitest";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { checkLava } from "./lava.js";
+import { checkLava, getLavaRegions } from "./lava.js";
 
 describe("Lava", () => {
     let defaultGameInfo;
@@ -91,6 +91,83 @@ describe("Lava", () => {
         expect(gameInfo.pinkBalls).toEqual([]);
     });
 
+    it("getLavaRegions A", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 2 },
+            greenBalls: 1,
+            lava: [
+                { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 },
+                { x: 1, y: 6 }, { x: 2, y: 6 }, { x: 3, y: 6 }, { x: 4, y: 6 }, { x: 5, y: 6 },
+            ],
+        };
+        let backInput = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 22, 22, 22, 22, 22, 0],
+            [0, 22, 22, 22, 22, 22, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+        ];
+        const info = getLavaRegions(gameInfo, backInput);
+        expect(info.length).toBe(1); // 1 region
+        expect(info[0].length).toBe(10); // 10 lava objects in the region
+    });
+
+    it("getLavaRegions B", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 2 },
+            greenBalls: 1,
+            lava: [
+                { x: 1, y: 5 }, { x: 2, y: 5 }, { x: 4, y: 5 }, { x: 5, y: 5 },
+                { x: 1, y: 6 }, { x: 2, y: 6 }, { x: 4, y: 6 }, { x: 5, y: 6 },
+            ],
+        };
+        let backInput = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 22, 22, 0, 22, 22, 0],
+            [0, 22, 22, 0, 22, 22, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+        ];
+        const info = getLavaRegions(gameInfo, backInput);
+        expect(info.length).toBe(2); // 2 regions
+        expect(info[0].length).toBe(4); // 4 lava objects in the first region
+        expect(info[1].length).toBe(4); // 4 lava objects in the second region
+    });
+
+    it("getLavaRegions C", () => {
+        let gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 1, y: 2 },
+            greenBalls: 1,
+            lava: [
+                { x: 5, y: 1 }, { x: 5, y: 2 }, { x: 5, y: 3 }, { x: 5, y: 4 },
+                { x: 1, y: 5 }, { x: 2, y: 5 },
+                { x: 1, y: 6 }, { x: 2, y: 6 },
+            ],
+        };
+        let backInput = [
+            [0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 22, 0],
+            [0, 0, 0, 0, 0, 22, 0],
+            [0, 0, 0, 0, 0, 22, 0],
+            [0, 0, 0, 0, 0, 22, 0],
+            [0, 22, 22, 0, 0, 0, 0],
+            [0, 22, 22, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0],
+        ];
+        const info = getLavaRegions(gameInfo, backInput);
+        expect(info.length).toBe(2); // 2 regions
+        expect(info[0].length).toBe(4); // 4 lava objects in the first region
+        expect(info[1].length).toBe(4); // 4 lava objects in the second region
+    });
 
 
     // Insert new tests here
