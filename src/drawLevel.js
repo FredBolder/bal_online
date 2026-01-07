@@ -900,6 +900,16 @@ function drawLevel(
     }
   }
 
+  function drawElevatorDirectionChanger1() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
+    drawLine(ctx, xmin, ymax, xmax, ymin, "white");
+  }
+
+  function drawElevatorDirectionChanger2() {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
+    drawLine(ctx, xmin, ymin, xmax, ymax, "white");
+  }
+
   function drawElevatorEntranceAndExit(x, y) {
     const color = getFgcolor(x, y, "white");
     let d1 = w1 / 3;
@@ -3834,6 +3844,12 @@ function drawLevel(
           break;
         case 245:
           drawAnswerBall(currentCol, currentRow, "white");
+          break;
+        case 246:
+          drawElevatorDirectionChanger1();
+          break;
+        case 247:
+          drawElevatorDirectionChanger2();
           break;
         case 1000:
           // For manual only (empty)

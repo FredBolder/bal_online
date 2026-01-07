@@ -1,4 +1,4 @@
-import { hasWeightAbove, hasWeightBelow, moveObject } from "./balUtils.js";
+import { getGameDataValue, hasWeightAbove, hasWeightBelow, moveObject } from "./balUtils.js";
 
 function moveableByElevator(gameInfo, n) {
   let result = false;
@@ -106,11 +106,15 @@ export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
 }
 
 export function moveElevators(backData, gameData, gameInfo, gameVars) {
+  let changeElevators = [];
+  let found = false;
   const gravityDown = (gameVars.gravity === "down");
   let updated = false;
 
   for (let i = 0; i < gameInfo.elevators.length; i++) {
     const elevator = gameInfo.elevators[i];
+    const elAbove = getGameDataValue(gameData, elevator.x, elevator.y - 1);
+    const elBelow = getGameDataValue(gameData, elevator.x, elevator.y + 1);
     let directionChanged = false;
     let downPossible = false;
     let hasBlue = elevator.hasBlueBall;
@@ -119,6 +123,15 @@ export function moveElevators(backData, gameData, gameInfo, gameVars) {
     let emptyUp = -1;
     let x = 0;
     let y = 0;
+
+    // Check for direction changer
+    if ((elAbove === 246) || (elBelow === 247)) {
+      changeElevators.push({ index: i, direction: "right" });
+      continue;
+    } else if ((elAbove === 247) || (elBelow === 246)) {
+      changeElevators.push({ index: i, direction: "left" });
+      continue;
+    }
 
     // Check in which directions it is possible to move
     emptyUp = -1;
@@ -266,13 +279,47 @@ export function moveElevators(backData, gameData, gameInfo, gameVars) {
     }
     elevator.hasBlueBall = hasBlue;
   }
+
+  if (changeElevators.length > 0) {
+    updated = true;
+    for (let i = 0; i < changeElevators.length; i++) {
+      const index = changeElevators[i].index;
+      const direction = changeElevators[i].direction;
+      const elevatorOld = gameInfo.elevators[index];
+      const elevatorNew = {
+        x: elevatorOld.x,
+        y: elevatorOld.y,
+        right: direction === "right",
+        hasBlueBall: elevatorOld.hasBlueBall
+      };
+      gameInfo.horizontalElevators.push(elevatorNew);
+      gameData[elevatorNew.y][elevatorNew.x] = (direction === "right") ? 107 : 7;
+    }
+    // Delete changed elevators
+    const newElevators = [];
+    for (let i = 0; i < gameInfo.elevators.length; i++) {
+      const elevator = gameInfo.elevators[i];
+      found = false;
+      for (let j = 0; j < changeElevators.length; j++) {
+        if (changeElevators[j].index === i) {
+          found = true;
+        }
+      }
+      if (!found) {
+        newElevators.push(elevator);
+      }
+    }
+    gameInfo.elevators.length = 0;
+    gameInfo.elevators = newElevators;
+  }
   return updated;
 }
 
 export function moveHorizontalElevators(backData, gameData, gameInfo, gameVars) {
+  let changeElevators = [];
   let dx = 0;
   let el = 0;
-  let hasBlue = false;
+  let found = false;
   const gravityDown = (gameVars.gravity === "down");
   let updated = false;
   let yFrom = -1;
@@ -285,8 +332,19 @@ export function moveHorizontalElevators(backData, gameData, gameInfo, gameVars) 
     const elevator = gameInfo.horizontalElevators[i];
     const x = elevator.x;
     const y = elevator.y;
+    const elLeft = getGameDataValue(gameData, x - 1, y);
+    const elRight = getGameDataValue(gameData, x + 1, y);
     let directionChanged = false;
-    hasBlue = false;
+    let hasBlue = false;
+
+    // Check for direction changer
+    if ((elLeft === 246) || (elRight === 247)) {
+      changeElevators.push({ index: i, direction: "down" });
+      continue;
+    } else if ((elLeft === 247) || (elRight === 246)) {
+      changeElevators.push({ index: i, direction: "up" });
+      continue;
+    }
 
     if (elevator.right) {
       if (gameData[y][x + 1] !== 0 && gameData[y][x - 1] === 0) {
@@ -349,6 +407,39 @@ export function moveHorizontalElevators(backData, gameData, gameInfo, gameVars) 
       }
     }
     elevator.hasBlueBall = hasBlue;
+  }
+
+  if (changeElevators.length > 0) {
+    updated = true;
+    for (let i = 0; i < changeElevators.length; i++) {
+      const index = changeElevators[i].index;
+      const direction = changeElevators[i].direction;
+      const elevatorOld = gameInfo.horizontalElevators[index];
+      const elevatorNew = {
+        x: elevatorOld.x,
+        y: elevatorOld.y,
+        up: direction === "up",
+        hasBlueBall: elevatorOld.hasBlueBall
+      };
+      gameInfo.elevators.push(elevatorNew);
+      gameData[elevatorNew.y][elevatorNew.x] = (direction === "up") ? 106 : 6;
+    }
+    // Delete changed elevators
+    const newElevators = [];
+    for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
+      const elevator = gameInfo.horizontalElevators[i];
+      found = false;
+      for (let j = 0; j < changeElevators.length; j++) {
+        if (changeElevators[j].index === i) {
+          found = true;
+        }
+      }
+      if (!found) {
+        newElevators.push(elevator);
+      }
+    }
+    gameInfo.horizontalElevators.length = 0;
+    gameInfo.horizontalElevators = newElevators;
   }
   return updated;
 }

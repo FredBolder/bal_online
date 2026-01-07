@@ -647,13 +647,13 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 info = `Gray ball`;
                 break;
             case 84:
-                info = `Direction changer 1`;
+                info = `Yellow direction changer 1`;
                 break;
             case 85:
-                info = `Direction changer 2`;
+                info = `Yellow direction changer 2`;
                 break;
             case 86:
-                info = `Direction changer 3`;
+                info = `Yellow direction changer 3`;
                 break;
             case 87:
                 info = `One direction port up`;
@@ -824,10 +824,10 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 info = `Yellow pauser, ` + extraInfo;
                 break;
             case 138:
-                info = `Direction changer 4`;
+                info = `Yellow direction changer 4`;
                 break;
             case 139:
-                info = `Direction changer 5`;
+                info = `Yellow direction changer 5`;
                 break;
             case 140:
                 info = `Small silver ball`;
@@ -1087,6 +1087,12 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraInfo = `Color 1: ${obj.color1}, Color 2: ${obj.color2}, Horizontal: ${obj.horizontal}, Ready: ${obj.ready}`;
                 }
                 info = `Changer, ` + extraInfo;
+                break;
+            case 246:
+                info = `Elevator direction changer 1`;
+                break;
+            case 247:
+                info = `Elevator direction changer 2`;
                 break;
             default:
                 break;

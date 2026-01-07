@@ -88,7 +88,7 @@ export function getObjectCoordinates(gameData, gameInfo, gameVars) {
 }
 
 function isMoveableObject(gameData, x, y) {
-    return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139, 171, 172, 173, 178, 203, 242, 245].includes(gameData[y][x]);
+    return [4, 5, 9, 28, 40, 82, 98, 84, 85, 86, 117, 138, 139, 171, 172, 173, 178, 203, 242, 245, 246, 247].includes(gameData[y][x]);
 }
 
 export function moveObjectWithTelekineticPower(gameData, gameInfo, gameVars) {
