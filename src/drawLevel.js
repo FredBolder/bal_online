@@ -1173,6 +1173,127 @@ function drawLevel(
     }
   }
 
+  function drawJellyfish(x, y) {
+    let dead = false;
+    let idx = -1;
+    idx = findElementByCoordinates(x, y, gameInfo.jellyfish);
+    if (idx >= 0) {
+      dead = gameInfo.jellyfish[idx].isDead;
+    }
+
+    const size = w1;
+    const time = performance.now() * 0.001;
+
+    // ===== ANIMATION SETTINGS =====
+    const bellPulse = dead ? 0 : 0.25; // 0 .. 0.3 (0 = no bell animation)
+    const tentacleWave = dead ? 0 : 0.4; // 0 .. 0.5 (0 = static tentacles)
+    const waveSpeed = 2; // 0.5 .. 5
+
+    // ===== SIZE SETTINGS =====
+    const bellTop = -20; // -35 .. -15
+    const bellBottom = 6; // 5 .. 15
+    const tentacleBottom = 55; // 35 .. 65
+
+    const designLeft = -30; // -35 .. -25
+    const designRight = 30; // 25 .. 35
+
+    // ===== COMPUTE DESIGN BOUNDS =====
+    const designTop = bellTop - 5;   // small margin for pulse
+    const designBottom = tentacleBottom;
+
+    const designWidth = designRight - designLeft;
+    const designHeight = designBottom - designTop;
+
+    const scale = size / Math.max(designWidth, designHeight);
+
+    // Centering
+    const offsetX = -(designLeft + designRight) / 2;
+    const offsetY = -(designTop + designBottom) / 2;
+
+    ctx.save();
+    ctx.translate(xc, yc);
+    ctx.scale(scale, scale);
+    ctx.translate(offsetX, offsetY);
+
+    // ===== BELL ANIMATION =====
+    const pulse = bellPulse
+      ? Math.sin(time * waveSpeed) * bellPulse * 6
+      : 0;
+
+    const animatedBellTop = bellTop + pulse;
+
+    // ===== BELL =====
+    ctx.beginPath();
+    ctx.moveTo(-30, bellBottom);
+
+    // Left wall
+    ctx.bezierCurveTo(
+      -30, animatedBellTop + 20,
+      -24, animatedBellTop + 6,
+      -16, animatedBellTop + 4
+    );
+
+    // Top dome
+    ctx.bezierCurveTo(
+      -6, animatedBellTop,
+      6, animatedBellTop,
+      16, animatedBellTop + 4
+    );
+
+    // Right wall
+    ctx.bezierCurveTo(
+      24, animatedBellTop + 6,
+      30, animatedBellTop + 20,
+      30, bellBottom
+    );
+
+    // Bottom fold
+    ctx.quadraticCurveTo(0, bellBottom + 16, -30, bellBottom);
+    ctx.closePath();
+
+    ctx.fillStyle = "rgba(180, 220, 255, 0.75)";
+    ctx.strokeStyle = "rgba(120, 170, 220, 0.9)";
+    ctx.lineWidth = 2 / scale;
+    ctx.fill();
+    ctx.stroke();
+
+    // ===== INNER BELL DETAIL =====
+    ctx.beginPath();
+    ctx.moveTo(-14, bellBottom - 6);
+    ctx.quadraticCurveTo(
+      0,
+      animatedBellTop + 6,
+      14,
+      bellBottom - 6
+    );
+    ctx.strokeStyle = "rgba(140, 190, 230, 0.6)";
+    ctx.lineWidth = 1.2 / scale;
+    ctx.stroke();
+
+    // ===== TENTACLES =====
+    ctx.strokeStyle = "rgba(120, 170, 220, 0.85)";
+    ctx.lineWidth = 1.4 / scale;
+
+    for (let x = -18; x <= 18; x += 6) {
+
+      const sway = tentacleWave
+        ? Math.sin(time * waveSpeed + x * 0.25) * tentacleWave * 8
+        : 0;
+
+      ctx.beginPath();
+      ctx.moveTo(x, bellBottom);
+
+      ctx.bezierCurveTo(
+        x + 4 + sway, 22,
+        x - 4 - sway, 38,
+        x + sway, tentacleBottom
+      );
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
   function drawKey(x, y) {
     let color = getFgcolor(x, y, "silver");
     let d1 = w1 / 4;
@@ -3850,6 +3971,9 @@ function drawLevel(
           break;
         case 247:
           drawElevatorDirectionChanger2();
+          break;
+        case 248:
+          drawJellyfish(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

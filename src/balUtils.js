@@ -925,6 +925,9 @@ export function charToNumber(c) {
     case "ӈ":
       result = 247;
       break;
+    case "Ӊ":
+      result = 248;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1415,6 +1418,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 244:
       result = gameInfo.changers;
+      break;
+    case 248:
+      result = gameInfo.jellyfish;
       break;
     default:
       result = null;
@@ -2246,6 +2252,9 @@ export function numberToChar(n) {
     case 247:
       result = "ӈ";
       break;
+    case 248:
+      result = "Ӊ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2288,8 +2297,8 @@ export function stringArrayToNumberArray(arr, importing = false) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
-        if ([27, 243].includes(data)) {
-          // Fish is always in the water
+        if ([27, 243, 248].includes(data)) {
+          // Fish and jellyfish is always in the water
           rowBackData.push(23);
         } else {
           rowBackData.push(0);
@@ -2411,6 +2420,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
         gameInfo.changers[idx].ready = true;
       }
       break;
+    case 248:
+      updateObject(gameInfo.jellyfish, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -2497,6 +2509,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
     refs.push(gameInfo.horizontalElevators[i]);
+  }
+
+  for (let i = 0; i < gameInfo.jellyfish.length; i++) {
+    refs.push(gameInfo.jellyfish[i]);
   }
 
   for (let i = 0; i < gameInfo.lava.length; i++) {
@@ -3596,6 +3612,7 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
 }
 
 export function pushObject(backData, gameData, gameInfo, gameVars) {
+  let back2 = -1;
   let direction = "";
   let dy1 = 0;
   let dy2 = 0;
@@ -3638,6 +3655,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
     oneDirection = 87;
   }
   element1 = getGameDataValue(gameData, x, y + dy1);
+  back2 = getGameDataValue(backData, x, y + dy2);
   element2 = getGameDataValue(gameData, x, y + dy2);
 
   if ((gravityUp && (y >= minY) && !hasForceDown(gameData, gameInfo, x, y + dy1)) || (gravityDown && (y <= maxY) && !hasForceUp(gameData, gameInfo, x, y + dy1))) {
@@ -3657,6 +3675,11 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
           updateObjectByObjectNumber(gameInfo, element1, x, y + dy1, x, y + dy2);
           break;
       }
+      result.player = true;
+    }
+    if (!result.player && (element1 === 248) && (element2 === 0) && (back2 === 23)) {
+      moveObject(gameData, gameInfo, x, y + dy1, x, y + dy2);
+      moveObject(gameData, gameInfo, x, y, x, y + dy1);
       result.player = true;
     }
     if (!result.player && (element1 === oneDirection) && (element2 === 0)) {

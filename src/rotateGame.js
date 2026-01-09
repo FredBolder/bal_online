@@ -313,6 +313,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         gameInfo.forces[i].direction = rotateDirection(gameInfo.forces[i].direction, rotateLeft);
       }
 
+      // Jellyfish
+      for (let i = 0; i < gameInfo.jellyfish.length; i++) {
+        rotateXY(gameInfo.jellyfish[i], rows, rotateLeft);
+      }
+
       // Magnets
       for (let i = 0; i < gameInfo.magnets.length; i++) {
         rotateXY(gameInfo.magnets[i], rows, rotateLeft);

@@ -4,7 +4,7 @@ $musicbox: 12, 3, firstcount, 7
 $notes: 12, 3, A5, -, D6, -, F6, -, E6, -, -, F6, E6, -, D6, -, A5, -, -, -, -, -, -, -, -, -, A5, -, D6, -, F6, -, E6, -
 $addnotes: 12, 3, -, F6, G6, -, A6, -, -, -, -, -, -, -, -, -, -, A6, Bb6, -, G6, -, F6, -, E6, -, F6, -, G6, -, A6, -, F6, -, -
 $addnotes: 12, 3, -, -, -, -, -, -, A5, F6, -, G6, -, F6, -, E6, -, D6, -, C#6, -, D6, -, -, -, -, -, -, -, -, -, -, -
-$instrument: 12, 3, strings, 100
+$instrument: 12, 3, strings1, 100
 $stepspermeasure: 12, 3, 6
 $musicbox: 22, 3, firstcount, 7
 $notes: 22, 3, D3, -, -, -, -, -, A2, -, -, -, -, -, D3, -, -, -, -, -, A2, -, -, -, -, A2, D3, -, -, -, -, -, A2, -

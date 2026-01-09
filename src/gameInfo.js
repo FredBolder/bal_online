@@ -331,6 +331,16 @@ export function getGameInfo(backData, gameData) {
                     result.changers.push(changer);
                     break;
                 }
+                case 248: {
+                    let jellyfish = {
+                        x: j,
+                        y: i,
+                        time: 0,
+                        isDead: false
+                    };
+                    result.jellyfish.push(jellyfish);
+                    break;
+                }
                 default:
                     break;
             }
@@ -1094,6 +1104,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             case 247:
                 info = `Elevator direction changer 2`;
                 break;
+            case 248:
+                idx = findElementByCoordinates(x, y, gameInfo.jellyfish);
+                if (idx >= 0) {
+                    obj = gameInfo.jellyfish[idx];
+                    extraInfo = `Dead: ${obj.isDead}`;
+                }
+                info = `Jellyfish, ` + extraInfo;
+                break;
             default:
                 break;
         }
@@ -1166,6 +1184,7 @@ export function initGameInfo(info) {
     info.hasWhiteBall = false;
     info.hasYellowBall = false;
     info.horizontalElevators = [];
+    info.jellyfish = [];
     info.lastMusicBox = null;
     info.lava = [];
     info.magnets = [];

@@ -35,6 +35,10 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
                         const fish = gameInfo.tropicalFish[j];
                         fish.isDead = true;
                     }
+                    for (let j = 0; j < gameInfo.jellyfish.length; j++) {
+                        const fish = gameInfo.jellyfish[j];
+                        fish.isDead = true;
+                    }
                 }
             }
         }

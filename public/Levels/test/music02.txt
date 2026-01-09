@@ -25,7 +25,7 @@ $instrument: 12, 3, piano, 100
 $notes: 13, 3, C4, D4
 $instrument: 13, 3, snaredrum, 100
 $notes: 14, 3, C3, C4, C5
-$instrument: 14, 3, strings, 100
+$instrument: 14, 3, strings1, 100
 $notes: 15, 3, C3, C4, C5
 $instrument: 15, 3, trombone, 100
 $notes: 16, 3, C3, C4, C5

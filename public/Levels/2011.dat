@@ -30,7 +30,7 @@ $notes: 14, 1, C4, -, C4, -, C4, -
 $group: 14, 1, 17
 
 $musicbox: 15, 1, song, 6
-$instrument: 15, 1, strings, 25
+$instrument: 15, 1, strings1, 25
 $notes: 15, 1, D4, -, -, -, -, -, F4, -, -, -, -, -, E4, -, F4, -, G4, -, A4, -, -, -, -, - 
 $addnotes: 15, 1, D4, -, -, -, -, -, F4, -, -, -, -, -, E4, -, F4, -, E4, -, D4, -, -, -, -, -
 $group: 15, 1, 17

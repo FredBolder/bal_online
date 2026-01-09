@@ -56,7 +56,7 @@ let operatorsList = [];
 export function instruments() {
   // Add test for test sound
   return ["test", "accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "crashcymbal", "crossstick", "drums", "guitar", "hammondorgan", "harp",
-    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings", "tom", "trombone", "trumpet",
+    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
 }
 
@@ -579,12 +579,15 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
   }
 
   function createTest() {
-    attack = 5;
-    decay = 2000;
-    release = 250;
-    operators.push(new Operator(audioCtx, "rideNoise", frequency, 0, maxVolume, attack, decay, maxVolume * 0.8, release));
-    //filter1.setFilter("highpass", 590, 590, 590, 590, 590, 50, 0, 500, 5, 250);
-    //filter2.setFilter("lowpass", 600, 600, 600, 600, 600, 50, 0, 500, 5, 250);
+    attack = 100;
+    decay = 1000;
+    release = 100;
+    f1 = 0.5;
+    f2 = 0.8;
+    operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+    operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+    operators[0].setLfo("dco", "triangle", 5, 0.002, 100);
+    filter1.setFilter("lowpass", 2500, 3000, 2500, 2500, 2500, 0, attack, decay, 5, release);
   }
 
   function createTom(variation = 0) {
@@ -1093,7 +1096,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         filter1.setFilter("lowpass", 2500, 2500, 2500, 2500, 2500, 0, attack, decay, 5, release);
         operators[0].setPitchEnv(60 / 1200, 50, 0);
         break;
-      case "strings":
+      case "strings1":
         attack = 100;
         decay = 1000;
         release = 100;
@@ -1102,6 +1105,17 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators.push(new Operator(audioCtx, "sawtooth", frequency, 10, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         operators[0].setLfo("dco", "sine", 4, 0.005, 250);
         filter1.setFilter("lowpass", 2000, 2500, 2000, 2000, 2000, 0, attack, decay, 5, release);
+        break;
+      case "strings2":
+        attack = 100;
+        decay = 1000;
+        release = 100;
+        f1 = 0.5;
+        f2 = 0.8;
+        operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators[0].setLfo("dco", "triangle", 5, 0.002, 100); // LFO only for the first oscillator
+        filter1.setFilter("lowpass", 2500, 3000, 2500, 2500, 2500, 0, attack, decay, 5, release);
         break;
       case "test":
         createTest();

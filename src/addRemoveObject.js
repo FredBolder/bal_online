@@ -342,6 +342,16 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             gameInfo.changers.push(changer);
             break;
         }
+        case 248: {
+            let jellyfish = {
+                x,
+                y,
+                time: 0,
+                isDead: false
+            };
+            gameInfo.jellyfish.push(jellyfish);
+            break;
+        }
         default:
             break;
     }
@@ -358,7 +368,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         default:
             gameData[y][x] = objectNumber;
-            if ([27, 243].includes(objectNumber)) {
+            if ([27, 243, 248].includes(objectNumber)) {
                 backData[y][x] = 23;
             }
             break;
@@ -647,6 +657,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.changers);
             if (idx >= 0) {
                 gameInfo.changers.splice(idx, 1);
+            }
+            break;
+        case 248:
+            idx = findElementByCoordinates(x, y, gameInfo.jellyfish);
+            if (idx >= 0) {
+                gameInfo.jellyfish.splice(idx, 1);
             }
             break;
         default:

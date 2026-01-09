@@ -36,7 +36,7 @@ $notes: 8, 5, A3, D4, E4, D4, A3, D4, E4, D4, Bb3, D4, E4, D4, Bb3, -, -, -, -, 
 $addnotes: 8, 5, -, -, -, -, A3, D4, E4, D4, A3, D4, E4, D4, Bb3, D4, E4, D4, Bb3, -, -, -, -, -, G3, C4, D4, C4, G3, C4, D4, C4, A3, D4, E4
 $addnotes: 8, 5, F4, D4, -, -, -, -, -, D4, F4, A4, F4, D4, G4, Bb4, G4, C4, E4, G4, E4, C4, E4, A4, E4, A4, -, D4, F4, Bb4, F4, D4, G4, Bb4, F4
 $addnotes: 8, 5, C4, E4, G4, E4, D4, -, -, -, -, -
-$instrument: 8, 5, strings, 15
+$instrument: 8, 5, strings1, 15
 $stepspermeasure: 8, 5, 18
 $musicbox: 11, 7, song, 10
 $notes: 11, 7, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -, -

@@ -13,6 +13,7 @@ import { clearBitMapLava } from "./drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "./elevators.js";
 import { moveFish } from "./fish.js";
 import { checkIce } from "./freeze.js";
+import { checkJellyfish } from "./jellyfish.js";
 import { checkLava, moveLava } from "./lava.js";
 import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
@@ -135,6 +136,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
 
+        // Animation
         gameVars.refreshCounter++;
         if (gameVars.refreshCounter >= gameVars.refreshCountTo) {
             gameVars.refreshCounter = 0;
@@ -412,6 +414,15 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
         if (info.sound !== "") {
             addSound(info.sound);
+        }
+        if (info.gameOver) {
+            gameVars.gameOver = true;
+            updateCanvas = true;
+        }
+
+        info = checkJellyfish(backData, gameData, gameInfo);
+        if (info.update) {
+            updateCanvas = true;
         }
         if (info.gameOver) {
             gameVars.gameOver = true;
