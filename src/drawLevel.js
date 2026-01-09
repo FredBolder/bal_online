@@ -1292,6 +1292,7 @@ function drawLevel(
     }
 
     ctx.restore();
+    ctx.lineWidth = 1;
   }
 
   function drawKey(x, y) {
