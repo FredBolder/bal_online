@@ -89,6 +89,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 x,
                 y,
                 direction: Math.random() > 0.5 ? 6 : 4,
+                blocked: false,
                 isDead: false
             };
             gameInfo.redFish.push(fish);
@@ -325,6 +326,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 x,
                 y,
                 direction: Math.random() > 0.5 ? 6 : 4,
+                variation: 1,
                 isDead: false
             };
             gameInfo.tropicalFish.push(fish);

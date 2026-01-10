@@ -8,7 +8,6 @@ $background: 6, 9, 1, 1, 23
 $background: 6, 10, 1, 1, 23
 $background: 8, 10, 1, 1, 23
 $background: 11, 11, 1, 1, 23
-$background: 2, 12, 1, 1, 23
 $background: 5, 13, 1, 1, 23
 $background: 9, 13, 1, 1, 23
 $background: 4, 14, 2, 1, 23
@@ -18,13 +17,13 @@ $background: 9, 14, 2, 1, 23
 0             0
 0             0
 0             0
-0    9 2      0
+0      2      0
 WWWWWW111WWWWWW
 wwwwwwJ1Ѿwwwwww
 wwwwwww1wwwwwww
 wwwwwwѴ1wwwwwww
 wwwwww11Ѭwwwwww
 wwwwwwwwwwwfwww
-wwҼwww111wwwwww
+wwwwww111wwwwww
 wwwwwѼ111Ѭwwwww
 wwwwѻ11111Gwwww

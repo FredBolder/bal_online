@@ -79,19 +79,41 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally = false, variation 
     const h = size;
 
     // Color palettes
-    const palette = variation
-        ? {
-            body: "#FFD94A",       // yellow-orange
-            stripe: "#FF8C00",     // orange
-            fin: "#4CAF50",        // tropical green
-            eye: "#000000"
-        }
-        : {
-            body: "#FF6347",       // red-orange
-            stripe: "#FF4500",     // red-orange
-            fin: "#FFD700",        // gold
-            eye: "#000000"
-        };
+    let palette = null;
+    switch (variation) {
+        case 1:
+            palette = {
+                body: "#FFD94A",    // yellow-orange
+                stripe: "#FF8C00",  // orange
+                fin: "#4CAF50",     // tropical green
+                eye: "#000000"
+            }
+            break;
+        case 2:
+            palette = {
+                body: "#FFD23C",    // rich golden yellow
+                stripe: "#1A1A1A",  // near-black vertical bars
+                fin: "#FFE680",     // pale golden / translucent yellow
+                eye: "#000000"
+            }
+            break;
+        case 3:
+            palette = {
+                body: "#FFC107",    // deeper gold
+                stripe: "#000000",  // true black stripes
+                fin: "#FFEB99",     // lighter yellow fins
+                eye: "#000000"
+            }
+            break;
+        default:
+            palette = {
+                body: "#FF6347",    // red-orange
+                stripe: "#FF4500",  // red-orange
+                fin: "#FFD700",     // gold
+                eye: "#000000"
+            };
+            break;
+    }
 
     // Body dimensions
     const bodyLength = w * 0.7;

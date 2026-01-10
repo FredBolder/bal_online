@@ -41,7 +41,7 @@ export const series5End = 3323;
 export const series6Start = 5000;
 export const series6End = 5018;
 export const seriesEasy2Start = 6000;
-export const seriesEasy2End = 6020;
+export const seriesEasy2End = 6021;
 export const seriesMusic2Start = 6200;
 export const seriesMusic2End = 6207;
 export const seriesMathStart = 6250;
@@ -310,7 +310,8 @@ export function checkSettings(data, settings) {
     { name: "$startlevelmessage", params: 0, xy: false },
     { name: "$stepspermeasure", params: 3, xy: true },
     { name: "$sticky", params: 3, xy: true },
-    { name: "$stonepattern", params: 1, xy: false }
+    { name: "$stonepattern", params: 1, xy: false },
+    { name: "$variation", params: 3, xy: true },
   ];
 
   let gameTicks = 0;
@@ -348,6 +349,23 @@ export function checkSettings(data, settings) {
         }
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
+            case "$activesides":
+              if (values.length < 3) {
+                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
+              }
+              if (validXY && !["η", 178].includes(data[y][x])) {
+                msg += `${settingNr(i)}No mover found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$addnotes":
+            case "$notes":
+              if (values.length < 3) {
+                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
+              }
+              if (validXY && !["M", 157].includes(data[y][x])) {
+                msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
             case "$answer":
               val_str = getStringAfterCoordinates(value);
               if (val_str.trim() === "") {
@@ -529,6 +547,33 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
+            case "$noteoverride":
+              switch (data[y][x]) {
+                case "M":
+                case 157:
+                  if (values[2].trim() === "") {
+                    msg += `${settingNr(i)}Empty value for note override.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
+            case "$octaves":
+              switch (data[y][x]) {
+                case "M":
+                case 157:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > 2)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for octaves.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
             case "$part":
               switch (data[y][x]) {
                 case "M":
@@ -606,47 +651,17 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for stone pattern number.\n`;
               }
               break;
-            case "$activesides":
-              if (values.length < 3) {
-                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
-              }
-              if (validXY && !["η", 178].includes(data[y][x])) {
-                msg += `${settingNr(i)}No mover found at the coordinates ${x}, ${y}.\n`;
-              }
-              break;
-            case "$addnotes":
-            case "$notes":
-              if (values.length < 3) {
-                msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
-              }
-              if (validXY && !["M", 157].includes(data[y][x])) {
-                msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
-              }
-              break;
-            case "$noteoverride":
+            case "$variation":
               switch (data[y][x]) {
-                case "M":
-                case 157:
-                  if (values[2].trim() === "") {
-                    msg += `${settingNr(i)}Empty value for note override.\n`;
-                  }
-                  break;
-                default:
-                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
-                  break;
-              }
-              break;
-            case "$octaves":
-              switch (data[y][x]) {
-                case "M":
-                case 157:
+                case "Ҽ":
+                case 243:
                   val_int = tryParseInt(values[2], -1);
-                  if ((val_int < 1) || (val_int > 2)) {
-                    msg += `${settingNr(i)}Invalid value ${values[2]} for octaves.\n`;
+                  if ((val_int < 0) || (val_int > 3)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for variation.\n`;
                   }
                   break;
                 default:
-                  msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;
@@ -1796,6 +1811,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= maxStonePatterns)) {
             gameVars.stonePattern = val_int;
+          }
+          break;
+        case "$variation":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if ((validXY) && (val_int >= 0) && (val_int <= 3)) {
+              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+              if (idx >= 0) {
+                gameInfo.tropicalFish[idx].variation = val_int;
+              }
+            }
           }
           break;
         default:

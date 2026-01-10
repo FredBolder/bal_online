@@ -1,4 +1,4 @@
-import { findElementByCoordinates } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
 
 function checkDirectionChanger(gameData, x, y) {
     let result = { directionChanger: 0, pointToAdd: null };
@@ -436,30 +436,34 @@ export function moveYellowBalls(gameData, yellowBalls) {
     return updated;
 }
 
-export function stopYellowBallsThatAreBlocked(arr, yellowBalls) {
+export function stopYellowBallsThatAreBlocked(gameData, yellowBalls) {
     // This makes makes it a little easier to stop a yellow ball by a falling ball (Level 901 by Panagiotis)
     for (let i = 0; i < yellowBalls.length; i++) {
         let stop = false;
-        let x = yellowBalls[i].x;
-        let y = yellowBalls[i].y;
+        const x = yellowBalls[i].x;
+        const y = yellowBalls[i].y;
+        const elLeft = getGameDataValue(gameData, x - 1, y);
+        const elRight = getGameDataValue(gameData, x + 1, y);
+        const elAbove = getGameDataValue(gameData, x, y - 1);
+        const elBelow = getGameDataValue(gameData, x, y + 1);
         switch (yellowBalls[i].direction) {
             case "left":
-                if (![0, 84, 85, 86, 138, 139, 155].includes(arr[y][x - 1])) {
+                if (![0, 84, 85, 86, 138, 139, 155].includes(elLeft)) {
                     stop = true;
                 }
                 break;
             case "right":
-                if (![0, 84, 85, 86, 138, 139, 155].includes(arr[y][x + 1])) {
+                if (![0, 84, 85, 86, 138, 139, 155].includes(elRight)) {
                     stop = true;
                 }
                 break;
             case "up":
-                if (![0, 84, 85, 86, 138, 139, 155].includes(arr[y - 1][x])) {
+                if (![0, 84, 85, 86, 138, 139, 155].includes(elAbove)) {
                     stop = true;
                 }
                 break;
             case "down":
-                if (![0, 84, 85, 86, 138, 139, 155].includes(arr[y + 1][x])) {
+                if (![0, 84, 85, 86, 138, 139, 155].includes(elBelow)) {
                     stop = true;
                 }
                 break;

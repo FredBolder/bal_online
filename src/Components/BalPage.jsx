@@ -15,6 +15,7 @@ import {
   changeQuestion,
   changeSides,
   changeTicks,
+  changeVariation,
   dropObject,
   inWater,
   jump,
@@ -1100,7 +1101,7 @@ function BalPage() {
             break;
           case 11:
             // Water
-            arr1 = [23, 20, 113, 114, 26, 27, 243, 248, 205, 206];
+            arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 248, 205, 206];
             arr2 = [0];
             break;
           case 12:
@@ -2670,6 +2671,13 @@ waitForRefsAndInit();
                 if (changeChangerColors(gameInfo, column, row, createLevelChangerColors) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a changer to set valid colors.");
+                  }
+                }
+              }
+              if (createLevelObject === 2149) {
+                if (changeVariation(gameInfo, column, row) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a tropical fish to change the variation.");
                   }
                 }
               }

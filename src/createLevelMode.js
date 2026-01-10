@@ -144,6 +144,13 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.answerBalls[idx2].mode = gameInfo.answerBalls[idx1].mode;
             }
             break;
+        case 243:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.tropicalFish);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.tropicalFish);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.tropicalFish[idx2].variation = gameInfo.tropicalFish[idx1].variation;
+            }
+            break;
         case 244:
             idx1 = findElementByCoordinates(x1, y1, gameInfo.changers);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.changers);

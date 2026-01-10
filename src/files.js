@@ -433,6 +433,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
+        const fish = gameInfo.tropicalFish[i];
+        if (fish.variation !== 1) {
+            line = `$variation: ${fish.x}, ${fish.y}, ${fish.variation}`;
+            lines.push(line);
+        }
+    }
+
     first = true;
     h = 1;
     w = 1;

@@ -1,6 +1,8 @@
 export function moveTropicalFish(backData, gameData, gameInfo) {
     let changed = false;
     let down = false;
+    const maxX = gameData[0].length - 1;
+    const maxY = gameData.length - 1;
     let up = false;
     let upOrDown = false;
 
@@ -12,12 +14,9 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
         gameData[fish.y][fish.x] = 0;
 
         if (fish.isDead) {
-            if (fish.y < gameData.length - 1) {
-                if (
-                    gameData[fish.y + 1][fish.x] === 0 &&
-                    backData[fish.y + 1][fish.x] === 23
-                ) {
-                    fish.y += 1;
+            if (fish.y < maxY) {
+                if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+                    fish.y++;
                 }
             }
         } else {
@@ -30,21 +29,15 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
             }
             if (fish.direction === 6) {
                 changed = false;
-                if (fish.x < gameData[0].length - 1) {
-                    if (
-                        gameData[fish.y][fish.x + 1] === 0 &&
-                        backData[fish.y][fish.x + 1] === 23
-                    ) {
-                        fish.x += 1;
+                if (fish.x < maxX) {
+                    if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+                        fish.x++;
                         changed = true;
                     }
                 }
                 if (!changed) {
-                    if (fish.x > 1) {
-                        if (
-                            gameData[fish.y][fish.x - 1] === 0 &&
-                            backData[fish.y][fish.x - 1] === 23
-                        ) {
+                    if (fish.x > 0) {
+                        if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
                             fish.direction = 4;
                             changed = true;
                         }
@@ -53,21 +46,15 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
                 }
             } else if (fish.direction === 4) {
                 changed = false;
-                if (fish.x > 1) {
-                    if (
-                        gameData[fish.y][fish.x - 1] === 0 &&
-                        backData[fish.y][fish.x - 1] === 23
-                    ) {
-                        fish.x -= 1;
+                if (fish.x > 0) {
+                    if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+                        fish.x--;
                         changed = true;
                     }
                 }
                 if (!changed) {
-                    if (fish.x < gameData[0].length - 1) {
-                        if (
-                            gameData[fish.y][fish.x + 1] === 0 &&
-                            backData[fish.y][fish.x + 1] === 23
-                        ) {
+                    if (fish.x < maxX) {
+                        if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
                             fish.direction = 6;
                             changed = true;
                         }
@@ -87,22 +74,16 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
                 }
             }
             if (up) {
-                if (fish.y > 1) {
-                    if (
-                        gameData[fish.y - 1][fish.x] === 0 &&
-                        backData[fish.y - 1][fish.x] === 23
-                    ) {
-                        fish.y -= 1;
+                if (fish.y > 0) {
+                    if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
+                        fish.y--;
                     }
                 }
             }
             if (down) {
-                if (fish.y < gameData.length - 1) {
-                    if (
-                        gameData[fish.y + 1][fish.x] === 0 &&
-                        backData[fish.y + 1][fish.x] === 23
-                    ) {
-                        fish.y += 1;
+                if (fish.y < maxY) {
+                    if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+                        fish.y++;
                     }
                 }
             }
