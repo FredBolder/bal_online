@@ -315,7 +315,9 @@ export function getGameInfo(backData, gameData) {
                         x: j,
                         y: i,
                         direction: Math.random() > 0.5 ? 6 : 4,
-                        variation: 1,
+                        palette: 2,
+                        stripes: 5,
+                        variation: 0,
                         isDead: false
                     };
                     result.tropicalFish.push(fish);
@@ -1088,7 +1090,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
                 if (idx >= 0) {
                     obj = gameInfo.tropicalFish[idx];
-                    extraInfo = `Direction: ${obj.direction}, Variation: ${obj.variation}, Dead: ${obj.isDead}`;
+                    extraInfo = `Direction: ${obj.direction}, Palette: ${obj.palette}, Stripes: ${obj.stripes}, Variation: ${obj.variation}, Dead: ${obj.isDead}`;
                 }
                 info = `Tropical fish, ` + extraInfo;
                 break;

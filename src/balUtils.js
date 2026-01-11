@@ -305,23 +305,6 @@ export function changeTicks(gameInfo, x, y, ticks) {
   return idx;
 }
 
-export function changeVariation(gameInfo, x, y) {
-  let idx = -1;
-  let variation = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-  if (idx >= 0) {
-    variation = gameInfo.tropicalFish[idx].variation + 1;
-    if (variation > 3) {
-      variation = 0;
-    }
-    gameInfo.tropicalFish[idx].variation = variation;
-  }
-  return idx;
-}
-
-
-
 export function charToNumber(c) {
   let result = 0;
 

@@ -1,11 +1,24 @@
-$stonepattern: 2
-1111111111
-1    ѿ1111
-1     Ѯ111
-1      3Ѯ1
-1        1
-1   4    1
-1 Dӈ1    1
-1   p    1
-1   2    1
-1111111111
+$has: divingglasses
+$palette: 1, 1, 1
+$stripes: 1, 1, 0
+$stripes: 3, 3, 1
+$palette: 5, 5, 3
+$stripes: 5, 5, 2
+$palette: 7, 7, 4
+$stripes: 7, 7, 3
+$background: 0, 0, 1, 1, 23
+$background: 1, 1, 1, 1, 23
+$background: 3, 3, 1, 1, 23
+$background: 5, 5, 1, 1, 23
+$background: 7, 7, 1, 1, 23
+$background: 0, 9, 1, 1, 23
+3wwwwwwwww
+wҼwwwwwwww
+wwwwwwwwww
+wwwҼwwwwww
+wwwwwwwwww
+wwwwwҼwwww
+wwwwwwwwww
+wwwwwwwҼww
+wwwwwwwwww
+2wwwwwwwww

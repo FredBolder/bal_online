@@ -11,6 +11,7 @@ import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
+import { tropicalFishPalettes, tropicalFishVariations } from "./tropicalFish.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
@@ -301,6 +302,7 @@ export function checkSettings(data, settings) {
     { name: "$noteoverride", params: 3, xy: true },
     { name: "$octaves", params: 3, xy: true },
     { name: "$notes", params: 0, xy: true },
+    { name: "$palette", params: 3, xy: true },
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
@@ -311,6 +313,7 @@ export function checkSettings(data, settings) {
     { name: "$stepspermeasure", params: 3, xy: true },
     { name: "$sticky", params: 3, xy: true },
     { name: "$stonepattern", params: 1, xy: false },
+    { name: "$stripes", params: 3, xy: true },
     { name: "$variation", params: 3, xy: true },
   ];
 
@@ -574,6 +577,20 @@ export function checkSettings(data, settings) {
                   break;
               }
               break;
+            case "$palette":
+              switch (data[y][x]) {
+                case "Ҽ":
+                case 243:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > tropicalFishPalettes)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for palette.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
             case "$part":
               switch (data[y][x]) {
                 case "M":
@@ -651,12 +668,26 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for stone pattern number.\n`;
               }
               break;
+            case "$stripes":
+              switch (data[y][x]) {
+                case "Ҽ":
+                case 243:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 0) || (val_int > 7)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for stripes.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
             case "$variation":
               switch (data[y][x]) {
                 case "Ҽ":
                 case 243:
                   val_int = tryParseInt(values[2], -1);
-                  if ((val_int < 0) || (val_int > 3)) {
+                  if ((val_int < 0) || (val_int > tropicalFishVariations)) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for variation.\n`;
                   }
                   break;
@@ -1718,6 +1749,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$palette":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishPalettes)) {
+              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+              if (idx >= 0) {
+                gameInfo.tropicalFish[idx].palette = val_int;
+              }
+            }
+          }
+          break;
         case "$part":
           if (values.length === 3) {
             if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
@@ -1813,10 +1855,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             gameVars.stonePattern = val_int;
           }
           break;
+        case "$stripes":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if ((validXY) && (val_int >= 0) && (val_int <= 7)) {
+              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+              if (idx >= 0) {
+                gameInfo.tropicalFish[idx].stripes = val_int;
+              }
+            }
+          }
+          break;
         case "$variation":
           if (values.length === 3) {
             val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 0) && (val_int <= 3)) {
+            if ((validXY) && (val_int >= 0) && (val_int <= tropicalFishVariations)) {
               idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
               if (idx >= 0) {
                 gameInfo.tropicalFish[idx].variation = val_int;

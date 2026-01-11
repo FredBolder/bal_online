@@ -1,4 +1,4 @@
-import { drawCar, drawFish, drawFlower, drawHeart, drawHouse, drawStar, drawTrain, drawTree } from "./drawAnswerBallIcons.js"
+import { drawCar, drawFlower, drawHeart, drawHouse, drawStar, drawTrain, drawTree } from "./drawAnswerBallIcons.js"
 import { displayColor, findElementByCoordinates } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
 import {
@@ -16,6 +16,7 @@ import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
 import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
+import { drawFish } from "./tropicalFish.js";
 import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
 
 let bitmapLava = null;
@@ -207,7 +208,7 @@ function drawLevel(
           drawCar(ctx, xc, yc, w1 * 0.8);
           break;
         case "%fish":
-          drawFish(ctx, xc, yc, w1 * 0.8, false, 0);
+          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 5, 0);
           break;
         case "%flower":
           drawFlower(ctx, xc, yc, w1 * 0.65);
@@ -965,6 +966,13 @@ function drawLevel(
     ctx.lineTo(xc - (w1 / 4), yc - (w2 / 12));
     ctx.closePath();
     ctx.fill();
+  }
+
+  function drawFishColors() {
+    drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2 * 0.5, "#FF6347");
+    drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, "#FFD23C");
+    drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, "#7EC8E3");
+    drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, "#1F5F8B");
   }
 
   function drawForceDown() {
@@ -3044,15 +3052,19 @@ function drawLevel(
 
   function drawTropicalFish(x, y) {
     let direction = -1
-    let variation = 1;
+    let palette = 2;
+    let stripes = 7;
+    let variation = 0;
     let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
+      palette = gameInfo.tropicalFish[idx].palette;
+      stripes = gameInfo.tropicalFish[idx].stripes;
       variation = gameInfo.tropicalFish[idx].variation;
     }
-    drawFish(ctx, xc, yc, w1, direction !== 6, variation);
+    drawFish(ctx, xc, yc, w1, direction !== 6, palette, stripes, variation);
   }
 
   function drawVerticalRope() {
@@ -4169,6 +4181,12 @@ function drawLevel(
           drawChangerColors();
           break;
         case 2149:
+          drawFishColors();
+          break;
+        case 2150:
+          drawAbbreviation("3|||");
+          break;
+        case 2151:
           drawAbbreviation("var");
           break;
         default:
