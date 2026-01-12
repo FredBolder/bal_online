@@ -208,7 +208,7 @@ function drawLevel(
           drawCar(ctx, xc, yc, w1 * 0.8);
           break;
         case "%fish":
-          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 5, 0);
+          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 5, 1, 2);
           break;
         case "%flower":
           drawFlower(ctx, xc, yc, w1 * 0.65);
@@ -3052,19 +3052,21 @@ function drawLevel(
 
   function drawTropicalFish(x, y) {
     let direction = -1
+    let height = 0;
     let palette = 2;
     let stripes = 7;
-    let variation = 0;
+    let tail = 1;
     let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
+      height = gameInfo.tropicalFish[idx].height;
       palette = gameInfo.tropicalFish[idx].palette;
       stripes = gameInfo.tropicalFish[idx].stripes;
-      variation = gameInfo.tropicalFish[idx].variation;
+      tail = gameInfo.tropicalFish[idx].tail;
     }
-    drawFish(ctx, xc, yc, w1, direction !== 6, palette, stripes, variation);
+    drawFish(ctx, xc, yc, w1, direction !== 6, palette, stripes, tail, height);
   }
 
   function drawVerticalRope() {
@@ -4184,10 +4186,13 @@ function drawLevel(
           drawFishColors();
           break;
         case 2150:
-          drawAbbreviation("3|||");
+          drawAbbreviation(")))");
           break;
         case 2151:
-          drawAbbreviation("var");
+          drawAbbreviation("↕");
+          break;
+        case 2152:
+          drawAbbreviation("tail");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

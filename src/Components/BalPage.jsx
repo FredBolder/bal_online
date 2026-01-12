@@ -62,7 +62,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { changePalette, changeStripes, changeVariation } from "../tropicalFish.js";
+import { changeHeight, changePalette, changeStripes, changeTail } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -1101,7 +1101,7 @@ function BalPage() {
             break;
           case 11:
             // Water
-            arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2150, 2151, 248, 205, 206];
+            arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2150, 2151, 2152, 248, 205, 206];
             arr2 = [0];
             break;
           case 12:
@@ -2689,9 +2689,16 @@ waitForRefsAndInit();
                 }
               }
               if (createLevelObject === 2151) {
-                if (changeVariation(gameInfo, column, row) === -1) {
+                if (changeHeight(gameInfo, column, row) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish to change the variation.");
+                    showMessage("Info", "Click on a tropical fish to change the body height.");
+                  }
+                }
+              }
+              if (createLevelObject === 2152) {
+                if (changeTail(gameInfo, column, row) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a tropical fish to change the tail type.");
                   }
                 }
               }

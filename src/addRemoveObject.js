@@ -328,7 +328,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 direction: Math.random() > 0.5 ? 6 : 4,
                 palette: 2,
                 stripes: 5,
-                variation: 0,
+                tail: 1,
+                height: 2,
                 isDead: false
             };
             gameInfo.tropicalFish.push(fish);
