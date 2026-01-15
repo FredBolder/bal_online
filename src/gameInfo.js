@@ -317,7 +317,7 @@ export function getGameInfo(backData, gameData) {
                         direction: Math.random() > 0.5 ? 6 : 4,
                         palette: 2,
                         height: 2,
-                        tail: 1,
+                        tail: 2,
                         fins: 3,
                         stripes: 5,
                         isDead: false

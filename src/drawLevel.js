@@ -4205,7 +4205,7 @@ function drawLevel(
           drawFish(ctx, xc, yc, w1, false, 8, 2, 5, 1, 15);
           break;
         case 2155:
-          // Tropical fish - Redtail shark
+          // Tropical fish - Red Tail Shark
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 9, 1, 6, 2, 0);
           break;
@@ -4213,6 +4213,11 @@ function drawLevel(
           // Tropical fish - Juvenile Golden Trevally
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 3, 2, 6, 3, 12);
+          break;
+        case 2157:
+          // Tropical fish - Yellow Tail Acei Cichlid
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 10, 1, 3, 3, 0);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

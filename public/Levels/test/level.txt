@@ -11,13 +11,19 @@ $tail: 2, 0, 6
 $palette: 4, 0, 3
 $stripes: 4, 0, 12
 $tail: 4, 0, 6
+$fins: 0, 2, 4
+$height: 0, 2, 1
+$palette: 0, 2, 10
+$stripes: 0, 2, 0
+$tail: 0, 2, 3
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23
+$background: 0, 2, 1, 1, 23
 $background: 5, 5, 1, 1, 23
 Ҽ0Ҽ0Ҽ0
 0    0
-0    0
+Ҽ    0
 0    0
 3    0
 0ҹ 2 Ҽ

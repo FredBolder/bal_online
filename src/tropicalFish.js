@@ -1,9 +1,9 @@
 import { findElementByCoordinates } from "./balUtils.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 3;
+export const tropicalFishFinVariations = 4;
 export const tropicalFishHeights = 3;
-export const tropicalFishPalettes = 9;
+export const tropicalFishPalettes = 10;
 export const tropicalFishStripes = 16;
 export const tropicalFishTails = 6;
 
@@ -429,7 +429,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 });
                 break;
             case 2:
-                // Redtail shark
+                // Red Tail Shark
                 // Dorsal fins
                 drawFinAlongCurve(ctx, {
                     frameFunc: getBodyTopFrame,
@@ -502,6 +502,43 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                     steps: 6
                 });
                 break;
+            case 4:
+                // Yellow Tail Acei Cichlid
+                // Dorsal fins
+                drawFinAlongCurve(ctx, {
+                    frameFunc: getBodyTopFrame,
+                    startT: 0.35,
+                    endT: 0.8,
+                    height: bodyHeight * 0.2,
+                    taper: 0.7,
+                    lean: 5,
+                    overlap: bodyHeight * 0.1,
+                    steps: 6
+                });
+
+                // Anal fin
+                drawFinAlongCurve(ctx, {
+                    frameFunc: getBodyBottomFrame,
+                    startT: 0.7,
+                    endT: 0.9,
+                    height: bodyHeight * 0.25,
+                    taper: 1,
+                    lean: 1.5,
+                    overlap: bodyHeight * 0.1
+                });
+
+                // Pelvic fin
+                drawFinAlongCurve(ctx, {
+                    frameFunc: getBodyBottomFrame,
+                    startT: 0.4,
+                    endT: 0.5,
+                    height: bodyHeight * 0.4,
+                    taper: 0.8,
+                    lean: 0.9,
+                    overlap: bodyHeight * 0.1,
+                    steps: 6
+                });
+                break;
             default:
                 break;
         }
@@ -525,7 +562,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 rotation = 1.6 * Math.PI;
                 break;
             case 2:
-                // Redtail fish
+                // Red Tail Shark
                 cx = bodyRight - (bodyLength * 0.3);
                 cy = yc + (bodyHeight * 0.25);
                 finWidth = bodyLength * 0.2;
@@ -538,6 +575,14 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 cy = yc + (bodyHeight * 0.25);
                 finWidth = bodyLength * 0.2;
                 finHeight = bodyHeight * 0.5;
+                rotation = 1.7 * Math.PI;
+                break;
+            case 4:
+                // Yellow Tail Acei Cichlid
+                cx = bodyRight - (bodyLength * 0.3);
+                cy = yc + (bodyHeight * 0.25);
+                finWidth = bodyLength * 0.15;
+                finHeight = bodyHeight * 0.4;
                 rotation = 1.7 * Math.PI;
                 break;
             default:
@@ -659,7 +704,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     switch (height) {
         case 1:
             bodyHeight = h * 0.25;
-            bodyLength = w * 0.75;
+            bodyLength = w * 0.74;
             break;
         case 3:
             bodyHeight = h * 0.3;
@@ -686,7 +731,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             break;
         case 3:
             // Truncate
-            tailWidth = bodyLength * 0.25;
+            tailWidth = bodyLength * 0.23;
             tailHeight = bodyHeight * 0.7;
             break;
         case 4:

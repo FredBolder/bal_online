@@ -447,7 +447,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             }
             break;
         case 9:
-            // Redtail shark
+            // Red Tail Shark
             colors = {
                 body: "#222222",    // deep matte black
                 stripe: "#222222",  // no stripe

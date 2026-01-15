@@ -60,12 +60,22 @@ export function getTropicalFishColor(palette) {
             }
             break;
         case 9:
-            // Redtail shark
+            // Red Tail shark
             colors = {
                 body: "#222222",    // deep matte black
                 stripe: "#222222",  // no stripe
                 fin: "#333333",     // very dark gray (almost black)
                 tail: "#FF3B3B",    // vivid red
+            }
+            break;
+        case 10:
+            // Yellow Tail Acei Cichlid
+            colors = {
+                body: "#7FA8C3",    // soft bluish-gray
+                stripe: "#5D7A9B",  // slightly darker blue-gray (subtle lateral stripe)
+                fin: "#F8E14D",     // bright yellow
+                tail: "#FFEA3C",    // vivid yellow
+                eye: "#1C1C1C"      // dark black
             }
             break;
         default:
