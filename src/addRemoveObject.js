@@ -331,7 +331,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 tail: 2,
                 fins: 3,
                 stripes: 5,
-                isDead: false
+                isDead: false,
+                counter: 0 
             };
             gameInfo.tropicalFish.push(fish);
             break;

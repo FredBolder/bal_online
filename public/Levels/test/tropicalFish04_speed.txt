@@ -1,0 +1,48 @@
+$fins: 2, 6, 1
+$palette: 2, 6, 8
+$stripes: 2, 6, 15
+$tail: 2, 6, 5
+$fins: 2, 7, 2
+$height: 2, 7, 1
+$palette: 2, 7, 9
+$stripes: 2, 7, 0
+$tail: 2, 7, 6
+$palette: 2, 8, 3
+$stripes: 2, 8, 12
+$tail: 2, 8, 6
+$fins: 2, 9, 4
+$height: 2, 9, 1
+$palette: 2, 9, 10
+$stripes: 2, 9, 0
+$tail: 2, 9, 3
+$fins: 2, 10, 5
+$height: 2, 10, 4
+$palette: 2, 10, 11
+$stripes: 2, 10, 17
+$tail: 2, 10, 6
+$fins: 2, 11, 4
+$height: 2, 11, 3
+$palette: 2, 11, 12
+$stripes: 2, 11, 0
+$tail: 2, 11, 7
+$background: 2, 6, 1, 1, 23
+$background: 2, 7, 1, 1, 23
+$background: 2, 8, 1, 1, 23
+$background: 2, 9, 1, 1, 23
+$background: 2, 10, 1, 1, 23
+$background: 2, 11, 1, 1, 23
+111111111111111
+13            1
+12            1
+11            1
+1             1
+1WWWWWWWWWWWWW1
+1wҼwwwwwwwwwww1
+1wҼwwwwwwwwwww1
+1wҼwwwwwwwwwww1
+1wҼwwwwwwwwwww1
+1wҼwwwwwwwwwww1
+1wҼwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+111111111111111

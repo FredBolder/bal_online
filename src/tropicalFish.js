@@ -1,11 +1,11 @@
 import { findElementByCoordinates } from "./balUtils.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 4;
-export const tropicalFishHeights = 3;
-export const tropicalFishPalettes = 10;
-export const tropicalFishStripes = 16;
-export const tropicalFishTails = 6;
+export const tropicalFishFinVariations = 5;
+export const tropicalFishHeights = 4;
+export const tropicalFishPalettes = 12;
+export const tropicalFishStripes = 17;
+export const tropicalFishTails = 7;
 
 function quadBezierPoint(p0, p1, p2, t) {
     const mt = 1 - t;
@@ -211,8 +211,6 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P4.x, P4.y);
         }
     }
-
-
 
 
     // --- Body functions ---
@@ -430,7 +428,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 break;
             case 2:
                 // Red Tail Shark
-                // Dorsal fins
+                // Dorsal fin
                 drawFinAlongCurve(ctx, {
                     frameFunc: getBodyTopFrame,
                     startT: 0.4,
@@ -467,7 +465,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 break;
             case 3:
                 // Juvenile Golden Trevally
-                // Dorsal fins
+                // Dorsal fin
                 drawFinAlongCurve(ctx, {
                     frameFunc: getBodyTopFrame,
                     startT: 0.5,
@@ -504,7 +502,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 break;
             case 4:
                 // Yellow Tail Acei Cichlid
-                // Dorsal fins
+                // Dorsal fin
                 drawFinAlongCurve(ctx, {
                     frameFunc: getBodyTopFrame,
                     startT: 0.35,
@@ -535,6 +533,44 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                     height: bodyHeight * 0.4,
                     taper: 0.8,
                     lean: 0.9,
+                    overlap: bodyHeight * 0.1,
+                    steps: 6
+                });
+                break;
+            case 5:
+                // Siamese Algae Eater
+                // Dorsal fin
+                // Dorsal fin
+                drawFinAlongCurve(ctx, {
+                    frameFunc: getBodyTopFrame,
+                    startT: 0.4,
+                    endT: 0.65,
+                    height: bodyHeight * 0.9,
+                    taper: 1,
+                    lean: 0.2,
+                    overlap: bodyHeight * 0.1,
+                    steps: 6
+                });
+
+                // Anal fin
+                drawFinAlongCurve(ctx, {
+                    frameFunc: getBodyBottomFrame,
+                    startT: 0.75,
+                    endT: 0.9,
+                    height: bodyHeight * 0.55,
+                    taper: 1,
+                    lean: 0.7,
+                    overlap: bodyHeight * 0.1
+                });
+
+                // Pelvic fin
+                drawFinAlongCurve(ctx, {
+                    frameFunc: getBodyBottomFrame,
+                    startT: 0.45,
+                    endT: 0.65,
+                    height: bodyHeight * 0.7,
+                    taper: 1,
+                    lean: 0.8,
                     overlap: bodyHeight * 0.1,
                     steps: 6
                 });
@@ -585,6 +621,14 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
                 finHeight = bodyHeight * 0.4;
                 rotation = 1.7 * Math.PI;
                 break;
+            case 5:
+                // Siamese Algae Eater
+                cx = bodyRight - (bodyLength * 0.3);
+                cy = yc + (bodyHeight * 0.4);
+                finWidth = bodyLength * 0.2;
+                finHeight = bodyHeight * 0.7;
+                rotation = 1.7 * Math.PI;
+                break;
             default:
                 break;
         }
@@ -597,6 +641,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         // 1-7 = normal 1-7 stripes
         // 8-12 = thin / normal alternating 4 - 8 stripes
         // 13-16 = thick 1-4 stripes
+        // 17 = horizontal stripe
         const bodyWidth = bodyRight - bodyLeft;
         const bodyCenter = (bodyRight + bodyLeft) / 2;
         let numberOfStripes = 0;
@@ -609,7 +654,17 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         buildBodyPath(ctx);
         ctx.clip();
 
-        if (stripes > 12) {
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        if (stripes === 17) {
+            ctx.lineWidth = stripeWidth;
+            ctx.strokeStyle = colors.stripe;
+            ctx.beginPath();
+            ctx.moveTo(left + tailWidth, yc);
+            ctx.lineTo(right, yc);
+            ctx.stroke();
+        } else if (stripes > 12) {
             numberOfStripes = stripes - 7;
             stripeWidth = stripeWidth * 1.3;
             // Custom stripe positions
@@ -651,8 +706,6 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             }
         }
 
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
         for (let i = 0; i < positions.length; i++) {
             const distFromCenter = (2 * Math.abs(positions[i] - bodyCenter)) / bodyLength; // 0..1
             const curveStrength = (0.12 - (distFromCenter * 0.08)) * bodyLength;
@@ -710,6 +763,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             bodyHeight = h * 0.3;
             bodyLength = w * 0.6;
             break;
+        case 4:
+            bodyHeight = h * 0.15;
+            bodyLength = w * 0.74;
+            break;
         default:
             // 2
             bodyHeight = h * 0.3;
@@ -748,6 +805,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             // Forked
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.9;
+            break;
+        case 7:
+            // Forked
+            tailWidth = bodyLength * 0.25;
+            tailHeight = bodyHeight * 0.6;
             break;
         default:
             tailWidth = bodyLength * 0.25;
@@ -838,6 +900,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             drawRoundedTail();
             break;
         case 6:
+        case 7:
             drawForkedTail();
             break;
         default:
@@ -852,7 +915,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     ctx.fillStyle = colors.eye;
     ctx.strokeStyle = colors.body;
     ctx.lineWidth = 1;
-    const eyeRadius = (height === 1) ? size * 0.03 : size * 0.04;
+    const eyeRadius = ([1, 4].includes(height)) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
     ctx.arc(right - bodyLength * 0.15, yc - bodyHeight * 0.1, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
@@ -867,7 +930,9 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
 }
 
 export function moveTropicalFish(backData, gameData, gameInfo) {
+    let update = false;
     let changed = false;
+    let countTo = 12;
     let down = false;
     const maxX = gameData[0].length - 1;
     const maxY = gameData.length - 1;
@@ -875,88 +940,118 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
     let upOrDown = false;
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
-        down = false;
-        up = false;
-        upOrDown = false;
         const fish = gameInfo.tropicalFish[i];
-        gameData[fish.y][fish.x] = 0;
-
         if (fish.isDead) {
-            if (fish.y < maxY) {
-                if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
-                    fish.y++;
-                }
-            }
+            countTo = 12;
         } else {
-            if (Math.random() < 0.1) {
-                if (fish.direction === 6) {
-                    fish.direction = 4;
-                } else {
-                    fish.direction = 6;
-                }
+            switch (fish.tail) {
+                case 3:
+                    // truncate
+                    countTo = 8;
+                    break;
+                case 1:
+                case 2:
+                    // emarginate
+                    countTo = 7;
+                    break;
+                case 6:
+                case 7:
+                    // forked
+                    countTo = 6;
+                    break;
+                default:
+                    // normal (rounded)
+                    countTo = 10;
+                    break;
             }
-            if (fish.direction === 6) {
-                changed = false;
-                if (fish.x < maxX) {
-                    if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
-                        fish.x++;
-                        changed = true;
-                    }
-                }
-                if (!changed) {
-                    if (fish.x > 0) {
-                        if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
-                            fish.direction = 4;
-                            changed = true;
-                        }
-                    }
-                    upOrDown = !changed;
-                }
-            } else if (fish.direction === 4) {
-                changed = false;
-                if (fish.x > 0) {
-                    if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
-                        fish.x--;
-                        changed = true;
-                    }
-                }
-                if (!changed) {
-                    if (fish.x < maxX) {
-                        if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
-                            fish.direction = 6;
-                            changed = true;
-                        }
-                    }
-                    upOrDown = !changed;
-                }
-            }
-            if (upOrDown) {
-                if (Math.random() > 0.5) {
-                    if (!down) {
-                        up = true;
-                    }
-                } else {
-                    if (!up) {
-                        down = true;
-                    }
-                }
-            }
-            if (up) {
-                if (fish.y > 0) {
-                    if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
-                        fish.y--;
-                    }
-                }
-            }
-            if (down) {
+        }
+        if (fish.counter < countTo) {
+            fish.counter++;
+        } else {
+            update = true;
+            fish.counter = 0;
+            down = false;
+            up = false;
+            upOrDown = false;
+            gameData[fish.y][fish.x] = 0;
+
+            if (fish.isDead) {
                 if (fish.y < maxY) {
                     if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
                         fish.y++;
                     }
                 }
+            } else {
+                if (Math.random() < 0.1) {
+                    if (fish.direction === 6) {
+                        fish.direction = 4;
+                    } else {
+                        fish.direction = 6;
+                    }
+                }
+                if (fish.direction === 6) {
+                    changed = false;
+                    if (fish.x < maxX) {
+                        if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+                            fish.x++;
+                            changed = true;
+                        }
+                    }
+                    if (!changed) {
+                        if (fish.x > 0) {
+                            if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+                                fish.direction = 4;
+                                changed = true;
+                            }
+                        }
+                        upOrDown = !changed;
+                    }
+                } else if (fish.direction === 4) {
+                    changed = false;
+                    if (fish.x > 0) {
+                        if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+                            fish.x--;
+                            changed = true;
+                        }
+                    }
+                    if (!changed) {
+                        if (fish.x < maxX) {
+                            if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+                                fish.direction = 6;
+                                changed = true;
+                            }
+                        }
+                        upOrDown = !changed;
+                    }
+                }
+                if (upOrDown) {
+                    if (Math.random() > 0.5) {
+                        if (!down) {
+                            up = true;
+                        }
+                    } else {
+                        if (!up) {
+                            down = true;
+                        }
+                    }
+                }
+                if (up) {
+                    if (fish.y > 0) {
+                        if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
+                            fish.y--;
+                        }
+                    }
+                }
+                if (down) {
+                    if (fish.y < maxY) {
+                        if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+                            fish.y++;
+                        }
+                    }
+                }
             }
+            gameData[fish.y][fish.x] = 243;
         }
-        gameData[fish.y][fish.x] = 243;
     }
-
+    return update;
 }

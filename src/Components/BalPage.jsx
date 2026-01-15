@@ -1103,7 +1103,7 @@ function BalPage() {
           case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157];
+            arr2 = [2154, 2155, 2156, 2157, 2158, 2159];
             break;
           case 12:
             // Groups
@@ -2711,7 +2711,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2747,6 +2747,22 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].palette = 10;
                       gameInfo.tropicalFish[idx].height = 1;
                       gameInfo.tropicalFish[idx].tail = 3;
+                      gameInfo.tropicalFish[idx].fins = 4;
+                      gameInfo.tropicalFish[idx].stripes = 0;
+                      break;
+                    case 2158:
+                      // Siamese Algae Eater
+                      gameInfo.tropicalFish[idx].palette = 11;
+                      gameInfo.tropicalFish[idx].height = 4;
+                      gameInfo.tropicalFish[idx].tail = 6;
+                      gameInfo.tropicalFish[idx].fins = 5;
+                      gameInfo.tropicalFish[idx].stripes = 17;
+                      break;
+                    case 2159:
+                      // Yellow Tail Damselfish
+                      gameInfo.tropicalFish[idx].palette = 12;
+                      gameInfo.tropicalFish[idx].height = 3;
+                      gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 4;
                       gameInfo.tropicalFish[idx].stripes = 0;
                       break;

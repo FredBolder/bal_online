@@ -148,10 +148,13 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             if (gameVars.fishCounter >= gameVars.fishCountTo) {
                 gameVars.fishCounter = 0;
                 moveFish(backData, gameData, gameInfo);
-                moveTropicalFish(backData, gameData, gameInfo);
                 updateCanvas = true;
             }
             gameVars.fishCounter++;
+        }
+
+        if (moveTropicalFish(backData, gameData, gameInfo)) {
+            updateCanvas = true;
         }
 
         gameVars.wave1++;

@@ -4217,7 +4217,17 @@ function drawLevel(
         case 2157:
           // Tropical fish - Yellow Tail Acei Cichlid
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 10, 1, 3, 3, 0);
+          drawFish(ctx, xc, yc, w1, false, 10, 1, 3, 4, 0);
+          break;
+        case 2158:
+          // Tropical fish - Siamese Algae Eater
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 11, 4, 6, 5, 17);
+          break;
+        case 2159:
+          // Tropical fish - Yellow Tail Damselfish
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 12, 3, 7, 4, 0);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

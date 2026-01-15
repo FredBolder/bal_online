@@ -78,6 +78,26 @@ export function getTropicalFishColor(palette) {
                 eye: "#1C1C1C"      // dark black
             }
             break;
+        case 11:
+            // Siamese Algae Eater
+            colors = {
+                body: "#8FA1A8",    // cool blue-gray
+                stripe: "#0E1418",  // deep near-black stripe
+                fin: "#6F838B",     // translucent blue-gray
+                tail: "#7C8F96",    // slightly brighter
+                eye: "#020406"      // very dark, not pure black
+            }
+            break;
+        case 12:
+            // Yellow Tail Damselfish
+            colors = {
+                body: "#1F3FAE",    // reef blue
+                stripe: "#2A4FCF",  // subtle lighter blue highlight stripe
+                fin: "#2A4EC0",     // reef-blue
+                tail: "#FFD83D",    // vivid yellow
+                eye: "#05070D"      // dark navy-black
+            }
+            break;
         default:
             // 1
             colors = {

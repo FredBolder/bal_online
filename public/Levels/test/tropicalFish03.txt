@@ -16,14 +16,26 @@ $height: 0, 2, 1
 $palette: 0, 2, 10
 $stripes: 0, 2, 0
 $tail: 0, 2, 3
+$fins: 2, 2, 5
+$height: 2, 2, 4
+$palette: 2, 2, 11
+$stripes: 2, 2, 17
+$tail: 2, 2, 6
+$fins: 4, 2, 4
+$height: 4, 2, 3
+$palette: 4, 2, 12
+$stripes: 4, 2, 0
+$tail: 4, 2, 7
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23
 $background: 0, 2, 1, 1, 23
+$background: 2, 2, 1, 1, 23
+$background: 4, 2, 1, 1, 23
 $background: 5, 5, 1, 1, 23
 Ҽ0Ҽ0Ҽ0
 0    0
-Ҽ    0
+Ҽ Ҽ Ҽ0
 0    0
 3    0
 0ҹ 2 Ҽ
