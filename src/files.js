@@ -435,6 +435,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
         const fish = gameInfo.tropicalFish[i];
+        if (fish.fins !== 3) {
+            line = `$fins: ${fish.x}, ${fish.y}, ${fish.fins}`;
+            lines.push(line);
+        }
         if (fish.height !== 2) {
             line = `$height: ${fish.x}, ${fish.y}, ${fish.height}`;
             lines.push(line);

@@ -11,7 +11,7 @@ import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
-import { tropicalFishHeights, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
+import { tropicalFishFinVariations, tropicalFishHeights, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
@@ -288,6 +288,7 @@ export function checkSettings(data, settings) {
     { name: "$displaysize", params: 2, xy: false },
     { name: "$extra", params: 1, xy: false },
     { name: "$fgcolor", params: 5, xy: true },
+    { name: "$fins", params: 3, xy: true },
     { name: "$gameticks", params: 2, xy: false },
     { name: "$gameticksxy", params: 3, xy: true },
     { name: "$group", params: 3, xy: true },
@@ -473,6 +474,20 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 1)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for extra.\n`;
+              }
+              break;
+            case "$fins":
+              switch (data[y][x]) {
+                case "Ҽ":
+                case 243:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > tropicalFishFinVariations)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for fins.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  break;
               }
               break;
             case "$gameticks":
@@ -1486,6 +1501,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= 1)) {
             gameVars.extra = val_int;
+          }
+          break;
+        case "$fins":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishFinVariations)) {
+              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+              if (idx >= 0) {
+                gameInfo.tropicalFish[idx].fins = val_int;
+              }
+            }
           }
           break;
         case "$gameticks":

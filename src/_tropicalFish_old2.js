@@ -1,11 +1,10 @@
 import { findElementByCoordinates } from "./balUtils.js";
-import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 3;
+export const tropicalFishFinVariations = 1;
 export const tropicalFishHeights = 3;
 export const tropicalFishPalettes = 9;
-export const tropicalFishStripes = 16;
-export const tropicalFishTails = 6;
+export const tropicalFishStripes = 11;
+export const tropicalFishTails = 3;
 
 function quadBezierPoint(p0, p1, p2, t) {
     const mt = 1 - t;
@@ -105,11 +104,10 @@ export function changeTail(gameInfo, x, y) {
 // This drawing is also used for answer balls.
 export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, tail, fins, stripes) {
     // --- Tail functions ---
-    function drawEmarginateTail(variation = false) {
-        const factor = variation ? 0.6 : 0.95;
+    function drawEmarginateTail() {
         ctx.moveTo(left + tailWidth, yc + connectionWidth * 0.5);
         ctx.lineTo(left, yc + tailHeight * 0.5);
-        ctx.quadraticCurveTo(left + (tailWidth * factor), yc, left, yc - tailHeight * 0.5);
+        ctx.quadraticCurveTo(left + (tailWidth * 0.95), yc, left, yc - tailHeight * 0.5);
         ctx.lineTo(left + tailWidth, yc - connectionWidth * 0.5);
     }
 
@@ -142,78 +140,6 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         ctx.arc(arcCx, arcCy, radius, startAngle, endAngle, true);
         ctx.lineTo(tailBaseX, connectionBottom);
     }
-
-    function cubicFromMid(p0, p3, bend, normalSign) {
-        const dx = p3.x - p0.x;
-        const dy = p3.y - p0.y;
-        const len = Math.hypot(dx, dy) || 1;
-
-        // unit perpendicular
-        const nx = -dy / len * normalSign;
-        const ny = dx / len * normalSign;
-
-        // points at 1/3 and 2/3 of the chord
-        const c1 = {
-            x: p0.x + dx / 3 + nx * bend,
-            y: p0.y + dy / 3 + ny * bend
-        };
-
-        const c2 = {
-            x: p0.x + dx * 2 / 3 + nx * bend,
-            y: p0.y + dy * 2 / 3 + ny * bend
-        };
-
-        return { c1, c2 };
-    }
-
-    function drawForkedTail() {
-        const rightX = left + tailWidth;
-
-        const yTopConn = yc - connectionWidth * 0.5;
-        const yBotConn = yc + connectionWidth * 0.5;
-
-        const yTopTip = yc - tailHeight * 0.5;
-        const yBotTip = yc + tailHeight * 0.5;
-
-        const tipX = left;
-        const notchX = left + tailWidth * 0.5;
-
-        const bendOuter = tailWidth * 0.05;
-        const bendInner = tailWidth * 0.08;
-
-        const P0 = { x: rightX, y: yTopConn };
-        const P1 = { x: tipX, y: yTopTip };
-        const P2 = { x: notchX, y: yc };
-        const P3 = { x: tipX, y: yBotTip };
-        const P4 = { x: rightX, y: yBotConn };
-
-        ctx.moveTo(P0.x, P0.y);
-
-        // Change +1 to -1 for bending in other direction
-        // Outer upper
-        {
-            const { c1, c2 } = cubicFromMid(P0, P1, bendOuter, +1);
-            ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P1.x, P1.y);
-        }
-        // Inner upper
-        {
-            const { c1, c2 } = cubicFromMid(P1, P2, bendInner, +1);
-            ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P2.x, P2.y);
-        }
-        // Inner lower
-        {
-            const { c1, c2 } = cubicFromMid(P2, P3, bendInner, +1);
-            ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P3.x, P3.y);
-        }
-        // Outer lower
-        {
-            const { c1, c2 } = cubicFromMid(P3, P4, bendOuter, +1);
-            ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P4.x, P4.y);
-        }
-    }
-
-
-
 
     // --- Body functions ---
 
@@ -251,6 +177,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         );
 
         ctx.closePath();
+    }
+
+    function leftNormal(v) {
+        return { x: -v.y, y: v.x };
     }
 
     function getBodyBottomFrame(t) {
@@ -297,7 +227,44 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         return { p, tan, normal };
     }
 
+    function getBodyTopPoint(t) {
+        if (t < 0.5) {
+            return quadBezierPoint(
+                bodyCurves.topFront.p0,
+                bodyCurves.topFront.p1,
+                bodyCurves.topFront.p2,
+                t * 2
+            );
+        } else {
+            return quadBezierPoint(
+                bodyCurves.topRear.p0,
+                bodyCurves.topRear.p1,
+                bodyCurves.topRear.p2,
+                (t - 0.5) * 2
+            );
+        }
+    }
+
+    function getBodyBottomPoint(t) {
+        if (t < 0.5) {
+            return quadBezierPoint(
+                bodyCurves.bottomFront.p0,
+                bodyCurves.bottomFront.p1,
+                bodyCurves.bottomFront.p2,
+                t * 2
+            );
+        } else {
+            return quadBezierPoint(
+                bodyCurves.bottomRear.p0,
+                bodyCurves.bottomRear.p1,
+                bodyCurves.bottomRear.p2,
+                (t - 0.5) * 2
+            );
+        }
+    }
+
     // --- Fin functions ---
+
 
     function drawFinAlongCurve(ctx, opts) {
         let { startT, endT, height, taper = 0.5, lean = 0, overlap = 0, steps = 10, frameFunc } = opts;
@@ -309,6 +276,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             startT = 1 - startT;
             endT = 1 - endT;
 
+            // Keep order correct
             if (startT > endT) {
                 [startT, endT] = [endT, startT];
             }
@@ -323,24 +291,17 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
 
             const { p, normal, tan } = frameFunc(t);
 
-            // taper along fin length
             const h = height * (1 - taper * Math.abs(s - 0.5) * 2);
 
-            // lean along tangent
             const dir = frameFunc === getBodyBottomFrame ? -1 : 1;
             const lx = tan.x * lean * h * dir;
             const ly = tan.y * lean * h * dir;
 
-            // base inside the body
-            const bx = p.x - normal.x * overlap;
-            const by = p.y - normal.y * overlap;
+            const ox = normal.x * (h + overlap) + lx;
+            const oy = normal.y * (h + overlap) + ly;
 
-            // tip outside the body
-            const tx = p.x + normal.x * h + lx;
-            const ty = p.y + normal.y * h + ly;
-
-            base.push({ x: bx, y: by });
-            tip.push({ x: tx, y: ty });
+            base.push({ x: p.x, y: p.y });
+            tip.push({ x: p.x + ox, y: p.y + oy });
         }
 
         ctx.beginPath();
@@ -379,262 +340,125 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         ctx.restore();
     }
 
+    // ---------- Fin system (replace existing dorsal/anal code with this) ----------
+    // fin config parsing: supports number bitmask, preset string, or object.
+    // Bit positions (if number used): 1=dorsal, 2=anal, 4=pectoral, 8=pelvic
+    function parseFinsParam(fins) {
+        // default: keep previous behavior (dorsal + anal visible)
+        const defaultObj = { dorsal: true, anal: true, pectoral: false, pelvic: false };
+
+        if (fins == null) return defaultObj;
+
+        if (typeof fins === "string") {
+            const s = fins.toLowerCase();
+            if (s === "all") return { dorsal: true, anal: true, pectoral: true, pelvic: true };
+            if (s === "none") return { dorsal: false, anal: false, pectoral: false, pelvic: false };
+            if (s === "default") return defaultObj;
+            const obj = { ...defaultObj };
+            s.split(",").map(x => x.trim()).forEach(tok => {
+                if (!tok) return;
+                if (tok === "pectoral") obj.pectoral = true;
+                if (tok === "pelvic") obj.pelvic = true;
+                if (tok === "dorsal") obj.dorsal = true;
+                if (tok === "anal") obj.anal = true;
+                if (tok === "no-dorsal") obj.dorsal = false;
+                if (tok === "no-anal") obj.anal = false;
+            });
+            return obj;
+        }
+
+        if (typeof fins === "number") {
+            return {
+                dorsal: !!(fins & 1),
+                anal: !!(fins & 2),
+                pectoral: !!(fins & 4),
+                pelvic: !!(fins & 8),
+            };
+        }
+
+        if (typeof fins === "object") {
+            // normalize
+            return {
+                dorsal: fins.dorsal ?? defaultObj.dorsal,
+                anal: fins.anal ?? defaultObj.anal,
+                pectoral: fins.pectoral ?? defaultObj.pectoral,
+                pelvic: fins.pelvic ?? defaultObj.pelvic
+            };
+        }
+
+        return defaultObj;
+    }
+
+    function mapToBelly(t) {
+        // 0 → start of belly
+        // 1 → start of tail root
+        const BELLY_START = 0.48;
+        const BELLY_END = 0.80;
+
+        return BELLY_START + t * (BELLY_END - BELLY_START);
+    }
+
     function drawBackgroundFins() {
         ctx.fillStyle = colors.fin;
 
-        switch (fins) {
-            case 1:
-                // Clownfish
-                // Dorsal fins
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyTopFrame,
-                    startT: 0.38,
-                    endT: 0.58,
-                    height: bodyHeight * 0.25,
-                    taper: 0.5,
-                    lean: 0.0,
-                    overlap: bodyHeight * 0.1
-                });
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyTopFrame,
-                    startT: 0.7,
-                    endT: 0.9,
-                    height: bodyHeight * 0.25,
-                    taper: 0.5,
-                    lean: 0.0,
-                    overlap: bodyHeight * 0.1
-                });
+        // dorsal (top)
+        drawFinAlongCurve(ctx, {
+            frameFunc: getBodyTopFrame,
+            startT: 0.38,
+            endT: 0.62,
+            height: bodyHeight * 0.45,
+            taper: 0.65, // 0.65
+            lean: 0.25, // 0.25
+            overlap: bodyHeight * 0.04
+        });
 
-                // Anal fin
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyBottomFrame,
-                    startT: 0.7,
-                    endT: 0.9,
-                    height: bodyHeight * 0.25,
-                    taper: 0.5,
-                    lean: 0.5,
-                    overlap: bodyHeight * 0.1
-                });
+        // anal (bottom)
+        if (finCfg.anal) {
+            drawFinAlongCurve(ctx, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.48,
+                endT: 0.68,
+                height: bodyHeight * 0.32,
+                taper: 0.55,
+                lean: 0.35,
+                overlap: bodyHeight * 0.04
+            });
+        }
 
-                // Pelvic fin
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyBottomFrame,
-                    startT: 0.4,
-                    endT: 0.5,
-                    height: bodyHeight * 0.3,
-                    taper: 0.7,
-                    lean: 0.4,
-                    overlap: bodyHeight * 0.1,
-                    steps: 6
-                });
-                break;
-            case 2:
-                // Redtail shark
-                // Dorsal fins
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyTopFrame,
-                    startT: 0.4,
-                    endT: 0.85,
-                    height: bodyHeight * 0.35,
-                    taper: 1,
-                    lean: -0.96,
-                    overlap: bodyHeight * 0.1,
-                    steps: 2
-                });
-
-                // Anal fin
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyBottomFrame,
-                    startT: 0.8,
-                    endT: 0.95,
-                    height: bodyHeight * 0.25,
-                    taper: 1,
-                    lean: 0.7,
-                    overlap: bodyHeight * 0.1
-                });
-
-                // Pelvic fin
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyBottomFrame,
-                    startT: 0.5,
-                    endT: 0.7,
-                    height: bodyHeight * 0.3,
-                    taper: 1,
-                    lean: 0.6,
-                    overlap: bodyHeight * 0.1,
-                    steps: 6
-                });
-                break;
-            case 3:
-                // Juvenile Golden Trevally
-                // Dorsal fins
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyTopFrame,
-                    startT: 0.5,
-                    endT: 0.75,
-                    height: bodyHeight * 0.3,
-                    taper: 1,
-                    lean: 0.7,
-                    overlap: bodyHeight * 0.1,
-                    steps: 2
-                });
-
-                // Anal fin
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyBottomFrame,
-                    startT: 0.6,
-                    endT: 0.8,
-                    height: bodyHeight * 0.25,
-                    taper: 1,
-                    lean: 0.7,
-                    overlap: bodyHeight * 0.1
-                });
-
-                // Pelvic fin
-                drawFinAlongCurve(ctx, {
-                    frameFunc: getBodyBottomFrame,
-                    startT: 0.3,
-                    endT: 0.4,
-                    height: bodyHeight * 0.2,
-                    taper: 1,
-                    lean: 0.35,
-                    overlap: bodyHeight * 0.1,
-                    steps: 6
-                });
-                break;
-            default:
-                break;
+        // pelvic fins - small pair near mid-lower belly
+        if (finCfg.pelvic) {
+            drawFinAlongCurve(ctx, {
+                frameFunc: (t) => getBodyBottomFrame(mapToBelly(t)),
+                startT: 0.00,
+                endT: 0.25,
+                height: bodyHeight * 0.22,
+                taper: 0.75,
+                lean: 0.55,
+                overlap: bodyHeight * 0.05,
+                steps: 6
+            });
         }
     }
 
     function drawForeGroundFins() {
         ctx.fillStyle = colors.fin;
-        let cx = 0;
-        let cy = 0;
-        let finWidth = 0;
-        let finHeight = 0;
-        let rotation = 0;
-        // Pectoral fin
-        switch (fins) {
-            case 1:
-                // Clownfish
-                cx = bodyRight - (bodyLength * 0.37);
-                cy = yc + (bodyHeight * 0.25);
-                finWidth = bodyLength * 0.25;
-                finHeight = bodyHeight * 0.7;
-                rotation = 1.6 * Math.PI;
-                break;
-            case 2:
-                // Redtail fish
-                cx = bodyRight - (bodyLength * 0.3);
-                cy = yc + (bodyHeight * 0.25);
-                finWidth = bodyLength * 0.2;
-                finHeight = bodyHeight * 0.5;
-                rotation = 1.7 * Math.PI;
-                break;
-            case 3:
-                // Juvenile Golden Trevally
-                cx = bodyRight - (bodyLength * 0.3);
-                cy = yc + (bodyHeight * 0.25);
-                finWidth = bodyLength * 0.2;
-                finHeight = bodyHeight * 0.5;
-                rotation = 1.7 * Math.PI;
-                break;
-            default:
-                break;
+
+        // pectorals - located near the head/upper-mid area, angled back
+        if (finCfg.pectoral) {
+            const t = 0.22;
+            const topPt = getBodyTopPoint(t);
+            const bottomPt = getBodyBottomPoint(t);
+            const midY = (topPt.y + bottomPt.y) * 0.5;
+
+            drawFinShape(
+                bodyRight - bodyLength * 0.12, // fixed anatomical X
+                midY,
+                bodyLength * 0.22,
+                bodyHeight * 0.22,
+                -0.8,
+                { style: "pointy" }
+            );
         }
-        drawFinShape(cx, cy, finWidth, finHeight, rotation, { style: "pointy" });
-    }
-
-    function drawStripes() {
-        // stripes
-        // 0 = no stripes
-        // 1-7 = normal 1-7 stripes
-        // 8-12 = thin / normal alternating 4 - 8 stripes
-        // 13-16 = thick 1-4 stripes
-        const bodyWidth = bodyRight - bodyLeft;
-        const bodyCenter = (bodyRight + bodyLeft) / 2;
-        let numberOfStripes = 0;
-        const positions = [];
-        let stripePattern = 0;
-        let stripeWidth = Math.max(1, size * 0.05);
-
-        ctx.save();
-        // Clip to body shape
-        buildBodyPath(ctx);
-        ctx.clip();
-
-        if (stripes > 12) {
-            numberOfStripes = stripes - 7;
-            stripeWidth = stripeWidth * 1.3;
-            // Custom stripe positions
-            switch (stripes) {
-                case 13:
-                    positions.push((bodyWidth * 0.5) + bodyLeft);
-                    break;
-                case 14:
-                    positions.push((bodyWidth * 0.3) + bodyLeft);
-                    positions.push((bodyWidth * 0.65) + bodyLeft);
-                    break;
-                case 15:
-                    positions.push((bodyWidth * 0.05) + bodyLeft);
-                    positions.push((bodyWidth * 0.375) + bodyLeft);
-                    positions.push((bodyWidth * 0.7) + bodyLeft);
-                    break;
-                case 16:
-                    positions.push((bodyWidth * 0.05) + bodyLeft);
-                    positions.push((bodyWidth * 0.27) + bodyLeft);
-                    positions.push((bodyWidth * 0.48) + bodyLeft);
-                    positions.push((bodyWidth * 0.7) + bodyLeft);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            const headMargin = 0.1;
-            const tailMargin = 0;
-            if (stripes > 7) {
-                numberOfStripes = stripes - 4;
-                stripePattern = 1;
-            } else {
-                numberOfStripes = stripes;
-            }
-            for (let i = 0; i < numberOfStripes; i++) {
-                const t = tailMargin + (i + 0.5) / numberOfStripes * (1 - tailMargin - headMargin);
-                const x = bodyLeft + t * bodyWidth;
-                positions.push(x);
-            }
-        }
-
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        for (let i = 0; i < positions.length; i++) {
-            const distFromCenter = (2 * Math.abs(positions[i] - bodyCenter)) / bodyLength; // 0..1
-            const curveStrength = (0.12 - (distFromCenter * 0.08)) * bodyLength;
-            if (colors.stripeOutline !== null) {
-                ctx.strokeStyle = colors.stripeOutline;
-                if ((stripePattern === 1) && (i % 2 !== 0)) {
-                    ctx.lineWidth = stripeWidth * 1.6 * 0.3;
-                } else {
-                    ctx.lineWidth = stripeWidth * 1.6;
-                }
-                ctx.beginPath();
-                ctx.moveTo(positions[i], top);
-                ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bottom);
-                ctx.stroke();
-            }
-            ctx.strokeStyle = colors.stripe;
-            if ((stripePattern === 1) && (i % 2 !== 0)) {
-                ctx.lineWidth = stripeWidth * 0.3;
-            } else {
-                ctx.lineWidth = stripeWidth;
-            }
-            ctx.beginPath();
-            ctx.moveTo(positions[i], top);
-            ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bottom);
-            ctx.stroke();
-        }
-        ctx.restore();
     }
 
     // --- End of nested functions ---
@@ -651,24 +475,120 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     const h = size;
 
     // Color palettes
-    const colors = getTropicalFishColor(palette);
+    let colors = null;
+    switch (palette) {
+        case 2:
+            colors = {
+                body: "#FFD94A",    // yellow-orange
+                stripe: "#FF8C00",  // orange
+                stripeOutline: null,
+                fin: "#4CAF50",     // tropical green
+                tail: "#4CAF50",
+                eye: "#000000"
+            }
+            break;
+        case 3:
+            // Can be combined with jellyfish
+            colors = {
+                body: "#FFD23C",    // rich golden yellow
+                stripe: "#1A1A1A",  // near-black
+                stripeOutline: null,
+                fin: "#FFE680",     // pale golden / translucent yellow
+                tail: "#FFE680",
+                eye: "#000000"
+            }
+            break;
+        case 4:
+            // Can be combined with jellyfish
+            colors = {
+                body: "#FFC107",    // deeper gold
+                stripe: "#000000",  // black
+                stripeOutline: null,
+                fin: "#FFEB99",     // lighter yellow
+                tail: "#FFEB99",
+                eye: "#000000"
+            }
+            break;
+        case 5:
+            colors = {
+                body: "#7EC8E3",    // soft tropical light blue
+                stripe: "#2A6F97",  // deeper blue
+                stripeOutline: null,
+                fin: "#A9DCEC",     // pale translucent blue
+                tail: "#A9DCEC",
+                eye: "#000000"
+            }
+            break;
+        case 6:
+            // Can be combined with jellyfish
+            colors = {
+                body: "#C9D6DF",    // silvery blue-gray
+                stripe: "#5F6F7A",  // muted gray
+                stripeOutline: null,
+                fin: "#E3EDF2",     // very light translucent
+                tail: "#E3EDF2",
+                eye: "#000000"
+            }
+            break;
+        case 7:
+            // Can be combined with jellyfish
+            colors = {
+                body: "#1F5F8B",    // deep ocean blue
+                stripe: "#0B2F4A",  // very dark blue (almost black)
+                stripeOutline: null,
+                fin: "#3F7FA6",     // muted blue
+                tail: "#3F7FA6",
+                eye: "#000000"
+            }
+            break;
+        case 8:
+            // Clownfish
+            colors = {
+                body: "#FF8C1A",    // bright orange
+                stripe: "#FFFFFF",  // clean white
+                stripeOutline: "#000000",
+                fin: "#FFB347",     // lighter orange
+                tail: "#FFB347",
+                eye: "#000000"
+            }
+            break;
+        case 9:
+            // Redtail shark
+            colors = {
+                body: "#222222",    // deep matte black
+                stripe: "#222222",  // no stripe
+                stripeOutline: null,
+                fin: "#333333",     // very dark gray (almost black)
+                tail: "#FF3B3B",    // vivid red
+                eye: "#000000"
+            }
+            break;
+        default:
+            // 1
+            colors = {
+                body: "#FF6347",    // red-orange
+                stripe: "#FF4500",  // red-orange
+                stripeOutline: null,
+                fin: "#FFD700",     // gold
+                tail: "#FFD700",
+                eye: "#000000"
+            };
+            break;
+    }
 
     // Body dimensions
-    let bodyLength = 0;
+    const bodyLength = w * 0.7;
     let bodyHeight = 0;
     switch (height) {
         case 1:
             bodyHeight = h * 0.25;
-            bodyLength = w * 0.75;
             break;
         case 3:
-            bodyHeight = h * 0.3;
-            bodyLength = w * 0.6;
+            bodyHeight = h * 0.45;
             break;
         default:
             // 2
-            bodyHeight = h * 0.3;
-            bodyLength = w * 0.7;
+            bodyHeight = h * 0.35;
             break;
     }
     let tailWidth = 0;
@@ -680,29 +600,14 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
             tailHeight = bodyHeight * 0.9;
             break;
         case 2:
-            // Emarginate
-            tailWidth = bodyLength * 0.25;
-            tailHeight = bodyHeight * 0.9;
-            break;
-        case 3:
             // Truncate
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.7;
             break;
-        case 4:
+        case 3:
             // Rounded
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.7;
-            break;
-        case 5:
-            // Rounded
-            tailWidth = bodyLength * 0.24;
-            tailHeight = bodyHeight * 0.6;
-            break;
-        case 6:
-            // Forked
-            tailWidth = bodyLength * 0.25;
-            tailHeight = bodyHeight * 0.9;
             break;
         default:
             tailWidth = bodyLength * 0.25;
@@ -749,7 +654,9 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     };
 
 
-    // ---- Dorsal, anal and pelvic fins ----
+    // ---- Fins ----
+    // Decide positions & sizes relative to body
+    const finCfg = parseFinsParam(7);
     drawBackgroundFins();
 
 
@@ -757,23 +664,81 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     ctx.fillStyle = colors.body;
     ctx.strokeStyle = colors.body;
 
-    buildBodyPath(ctx);
-    ctx.fill();
-    ctx.stroke();
+    // Delete everything (parts of fins) under the body
+    // ctx.save();
+    // ctx.globalCompositeOperation = "destination-out";
+    // buildBodyPath(ctx);
+    // ctx.fill();
+    // ctx.restore();
+    // ctx.globalCompositeOperation = "source-over";
+
+    //buildBodyPath(ctx);
+    //ctx.fill();
 
     // DEBUG
     // TODO: Comment out
-    // ctx.strokeStyle = "white";
-    // ctx.lineWidth = 1;
-    // buildBodyPath(ctx);
-    // ctx.stroke();
-    // stripes = 0;
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    buildBodyPath(ctx);
+    ctx.stroke();
+    stripes = 0;
 
 
     // ---- Stripes ----
-    drawStripes();
+    ctx.save();
+    // Clip to body shape
+    buildBodyPath(ctx);
+    ctx.clip();
 
-    // ---- Pectoral fins ----
+    let headMargin = 0.1;
+    let numberOfStripes = 5;
+    let stripeWidth = Math.max(1, size * 0.05);
+
+    if (stripes > 7) {
+        numberOfStripes = stripes - 7;
+        stripeWidth = stripeWidth * 1.5;
+        headMargin = 0.3;
+    } else {
+        numberOfStripes = stripes;
+    }
+
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    const tailMargin = 0;
+    const bodyWidth = bodyRight - bodyLeft;
+    for (let i = 0; i < numberOfStripes; i++) {
+        const t = tailMargin + (i + 0.5) / numberOfStripes * (1 - tailMargin - headMargin);
+        const x = bodyLeft + t * bodyWidth;
+        const distFromCenter = Math.abs(t - 0.5);
+        const curveStrength = (0.12 - distFromCenter * 0.08) * bodyLength;
+        const tilt = bodyLength * 0.03;
+        const topOffset = (0.02 + distFromCenter * 0.05) * bodyHeight;
+        const bottomOffset = (0.02 + distFromCenter * 0.05) * bodyHeight;
+        const xTop = x - tilt;
+        const xBottom = x + tilt;
+        const yTop = top + topOffset;
+        const yBottom = bottom - bottomOffset;
+        const cpX = x + curveStrength;
+        const cpY = yc;
+
+        if (colors.stripeOutline !== null) {
+            ctx.strokeStyle = colors.stripeOutline;
+            ctx.lineWidth = stripeWidth * 1.6;
+            ctx.beginPath();
+            ctx.moveTo(xTop, yTop);
+            ctx.quadraticCurveTo(cpX, cpY, xBottom, yBottom);
+            ctx.stroke();
+        }
+        ctx.strokeStyle = colors.stripe;
+        ctx.lineWidth = stripeWidth;
+        ctx.beginPath();
+        ctx.moveTo(xTop, yTop);
+        ctx.quadraticCurveTo(cpX, cpY, xBottom, yBottom);
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    // ---- More fins ----
     drawForeGroundFins();
 
     // ---- Tail ----
@@ -781,19 +746,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     ctx.beginPath();
     switch (tail) {
         case 2:
-            drawEmarginateTail(true);
-            break;
-        case 3:
             drawTruncateTail();
             break;
-        case 4:
+        case 3:
             drawRoundedTail();
-            break;
-        case 5:
-            drawRoundedTail();
-            break;
-        case 6:
-            drawForkedTail();
             break;
         default:
             // 1
@@ -805,13 +761,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
 
     // ---- Eye ----
     ctx.fillStyle = colors.eye;
-    ctx.strokeStyle = colors.body;
-    ctx.lineWidth = 1;
     const eyeRadius = (height === 1) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
     ctx.arc(right - bodyLength * 0.15, yc - bodyHeight * 0.1, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
-    ctx.stroke();
 
     // Restore transform if flipped
     if (flipHorizontally) {

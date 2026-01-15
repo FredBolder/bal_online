@@ -11,7 +11,7 @@ import {
   changeChangerColors,
   changeGroup,
   changeDirection,
-  changeIntelligence,  
+  changeIntelligence,
   changeQuestion,
   changeSides,
   changeTicks,
@@ -26,6 +26,7 @@ import {
   pushObject,
   stringArrayToNumberArray,
   zeroArray,
+  findElementByCoordinates,
 } from "../balUtils.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart, stringToCode } from "../codes.js";
 import {
@@ -62,7 +63,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { changeHeight, changePalette, changeStripes, changeTail } from "../tropicalFish.js";
+import { changeFins, changeHeight, changePalette, changeStripes, changeTail } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -1101,8 +1102,8 @@ function BalPage() {
             break;
           case 11:
             // Water
-            arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2150, 2151, 2152, 248, 205, 206];
-            arr2 = [0];
+            arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 205, 206];
+            arr2 = [2154, 2155, 2156];
             break;
           case 12:
             // Groups
@@ -2137,21 +2138,21 @@ function BalPage() {
 
     const audioCtx = getAudioContext();
 
-const waitForRefsAndInit = () => {
-  if (!cbArrowButtons.current || !cbCreateLevel.current || !cbQuestions.current) {
-    requestAnimationFrame(waitForRefsAndInit);
-    return;
-  }
+    const waitForRefsAndInit = () => {
+      if (!cbArrowButtons.current || !cbCreateLevel.current || !cbQuestions.current) {
+        requestAnimationFrame(waitForRefsAndInit);
+        return;
+      }
 
-  // Now refs are guaranteed to exist
-  cbArrowButtons.current.checked = getSettings().arrowButtons;
-  cbCreateLevel.current.checked = false;
-  cbQuestions.current.checked = getSettings().lessQuestions;
-  cbMusic.current.value = getSettings().music.toString();
-  cbSound.current.value = getSettings().sound.toString();
-};
+      // Now refs are guaranteed to exist
+      cbArrowButtons.current.checked = getSettings().arrowButtons;
+      cbCreateLevel.current.checked = false;
+      cbQuestions.current.checked = getSettings().lessQuestions;
+      cbMusic.current.value = getSettings().music.toString();
+      cbSound.current.value = getSettings().sound.toString();
+    };
 
-waitForRefsAndInit();
+    waitForRefsAndInit();
 
 
     const start = async () => {
@@ -2449,6 +2450,7 @@ waitForRefsAndInit();
   }
 
   function handleGameCanvasClick(e) {
+    let idx = -1;
     let info = "";
     let move = false;
     let newValue = "";
@@ -2699,6 +2701,49 @@ waitForRefsAndInit();
                 if (changeTail(gameInfo, column, row) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a tropical fish to change the tail type.");
+                  }
+                }
+              }
+              if (createLevelObject === 2153) {
+                if (changeFins(gameInfo, column, row) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a tropical fish to change the fins.");
+                  }
+                }
+              }
+              if ([2154, 2155, 2156].includes(createLevelObject)) {
+                deleteIfLava(backData, gameInfo, column, row);
+                deleteIfPurpleTeleport(backData, gameInfo, column, row);
+                addObject(backData, gameData, gameInfo, column, row, 243);
+                idx = findElementByCoordinates(column, row, gameInfo.tropicalFish);
+                if (idx >= 0) {
+                  switch (createLevelObject) {
+                    case 2154:
+                      // Clownfish
+                      gameInfo.tropicalFish[idx].palette = 8;
+                      gameInfo.tropicalFish[idx].height = 2;
+                      gameInfo.tropicalFish[idx].tail = 5;
+                      gameInfo.tropicalFish[idx].fins = 1;
+                      gameInfo.tropicalFish[idx].stripes = 15;
+                      break;
+                    case 2155:
+                      // Redtail shark
+                      gameInfo.tropicalFish[idx].palette = 9;
+                      gameInfo.tropicalFish[idx].height = 1;
+                      gameInfo.tropicalFish[idx].tail = 6;
+                      gameInfo.tropicalFish[idx].fins = 2;
+                      gameInfo.tropicalFish[idx].stripes = 0;
+                      break;
+                    case 2156:
+                      // Juvenile Golden Trevally
+                      gameInfo.tropicalFish[idx].palette = 3;
+                      gameInfo.tropicalFish[idx].height = 2;
+                      gameInfo.tropicalFish[idx].tail = 6;
+                      gameInfo.tropicalFish[idx].fins = 3;
+                      gameInfo.tropicalFish[idx].stripes = 12;
+                      break;
+                    default:
+                      break;
                   }
                 }
               }

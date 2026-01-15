@@ -1,11 +1,24 @@
-$background: 4, 6, 1, 1, 23
-1111111111
-1        1
-1        1
-1        1
-1        1
-1        1
-1   Ҽ    1
-13       1
-1   2    1
-1111111111
+$answer: 1, 5, %fish
+$fins: 0, 0, 1
+$palette: 0, 0, 8
+$stripes: 0, 0, 15
+$tail: 0, 0, 5
+$fins: 2, 0, 2
+$height: 2, 0, 1
+$palette: 2, 0, 9
+$stripes: 2, 0, 0
+$tail: 2, 0, 6
+$palette: 4, 0, 3
+$stripes: 4, 0, 12
+$tail: 4, 0, 6
+$background: 0, 0, 1, 1, 23
+$background: 2, 0, 1, 1, 23
+$background: 4, 0, 1, 1, 23
+$background: 5, 5, 1, 1, 23
+Ҽ0Ҽ0Ҽ0
+0    0
+0    0
+0    0
+3    0
+0ҹ 2 Ҽ
+111111
