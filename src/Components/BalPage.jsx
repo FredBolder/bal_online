@@ -1110,7 +1110,7 @@ function BalPage() {
           case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160];
+            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161];
             break;
           case 12:
             // Groups
@@ -2718,7 +2718,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2780,6 +2780,14 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].tail = 3;
                       gameInfo.tropicalFish[idx].fins = 6;
                       gameInfo.tropicalFish[idx].stripes = 4;
+                      break;
+                    case 2161:
+                      // Smallmouth Grunt
+                      gameInfo.tropicalFish[idx].palette = 14;
+                      gameInfo.tropicalFish[idx].shape = 2;
+                      gameInfo.tropicalFish[idx].tail = 7;
+                      gameInfo.tropicalFish[idx].fins = 7;
+                      gameInfo.tropicalFish[idx].stripes = 18;
                       break;
                     default:
                       break;

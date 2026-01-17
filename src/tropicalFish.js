@@ -1,13 +1,14 @@
 import { findElementByCoordinates } from "./balUtils.js";
 import { buildBodyPath } from "./fishBody.js";
 import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
+import { drawStripes } from "./fishStripes.js";
 import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 6;
-export const tropicalFishPalettes = 13;
+export const tropicalFishFinVariations = 7;
+export const tropicalFishPalettes = 14;
 export const tropicalFishShapes = 5;
-export const tropicalFishStripes = 17;
+export const tropicalFishStripes = 18;
 export const tropicalFishTails = 8;
 
 export function changeFins(gameInfo, x, y) {
@@ -87,109 +88,6 @@ export function changeTail(gameInfo, x, y) {
 
 // This drawing is also used for answer balls.
 export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, tail, fins, stripes) {
-    function drawStripes() {
-        // stripes
-        // 0 = no stripes
-        // 1-7 = normal 1-7 stripes
-        // 8-12 = thin / normal alternating 4 - 8 stripes
-        // 13-16 = thick 1-4 stripes
-        // 17 = horizontal stripe
-        const bodyWidth = bodyRight - bodyLeft;
-        const bodyCenter = (bodyRight + bodyLeft) / 2;
-        let numberOfStripes = 0;
-        const positions = [];
-        let stripePattern = 0;
-        let stripeWidth = Math.max(1, size * 0.05);
-
-        ctx.save();
-        // Clip to body shape
-        buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, midX, yc);
-        ctx.clip();
-
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-
-        if (stripes === 17) {
-            ctx.lineWidth = stripeWidth;
-            ctx.strokeStyle = colors.stripe;
-            ctx.beginPath();
-            ctx.moveTo(left + tailWidth, yc);
-            ctx.lineTo(right, yc);
-            ctx.stroke();
-        } else if (stripes > 12) {
-            numberOfStripes = stripes - 7;
-            stripeWidth = stripeWidth * 1.3;
-            // Custom stripe positions
-            switch (stripes) {
-                case 13:
-                    positions.push((bodyWidth * 0.5) + bodyLeft);
-                    break;
-                case 14:
-                    positions.push((bodyWidth * 0.3) + bodyLeft);
-                    positions.push((bodyWidth * 0.65) + bodyLeft);
-                    break;
-                case 15:
-                    positions.push((bodyWidth * 0.05) + bodyLeft);
-                    positions.push((bodyWidth * 0.375) + bodyLeft);
-                    positions.push((bodyWidth * 0.7) + bodyLeft);
-                    break;
-                case 16:
-                    positions.push((bodyWidth * 0.05) + bodyLeft);
-                    positions.push((bodyWidth * 0.27) + bodyLeft);
-                    positions.push((bodyWidth * 0.48) + bodyLeft);
-                    positions.push((bodyWidth * 0.7) + bodyLeft);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            const headMargin = 0.1;
-            const tailMargin = 0;
-            if (stripes > 7) {
-                numberOfStripes = stripes - 4;
-                stripePattern = 1;
-            } else {
-                numberOfStripes = stripes;
-            }
-            for (let i = 0; i < numberOfStripes; i++) {
-                const t = tailMargin + (i + 0.5) / numberOfStripes * (1 - tailMargin - headMargin);
-                const x = bodyLeft + t * bodyWidth;
-                positions.push(x);
-            }
-        }
-
-        for (let i = 0; i < positions.length; i++) {
-            const distFromCenter = (2 * Math.abs(positions[i] - bodyCenter)) / bodyLength; // 0..1
-            const curveStrength = (0.12 - (distFromCenter * 0.08)) * bodyLength;
-            if (colors.stripeOutline !== null) {
-                ctx.strokeStyle = colors.stripeOutline;
-                if ((stripePattern === 1) && (i % 2 !== 0)) {
-                    ctx.lineWidth = stripeWidth * 1.6 * 0.3;
-                } else {
-                    ctx.lineWidth = stripeWidth * 1.6;
-                }
-                ctx.beginPath();
-                ctx.moveTo(positions[i], top);
-                ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bottom);
-                ctx.stroke();
-            }
-            ctx.strokeStyle = colors.stripe;
-            if ((stripePattern === 1) && (i % 2 !== 0)) {
-                ctx.lineWidth = stripeWidth * 0.3;
-            } else {
-                ctx.lineWidth = stripeWidth;
-            }
-            ctx.beginPath();
-            ctx.moveTo(positions[i], top);
-            ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bottom);
-            ctx.stroke();
-        }
-        ctx.restore();
-    }
-
-    // --- End of nested functions ---
-
-
     if (flipHorizontally) {
         ctx.save();
         ctx.translate(xc, 0);
@@ -242,7 +140,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     // ---- Body outline ----
     const bodyLeft = left + tailWidth;
     const bodyRight = right;
-    const midX = (bodyLeft + bodyRight) / 2;
+    const bodyCenter = (bodyLeft + bodyRight) / 2;
     const connectionHeight = bodyHeight * 0.15;
     let frontCurve = bodyLength * 0.12;
     let rearCurve = bodyLength * 0.3;
@@ -262,20 +160,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
         topFront: {
             p0: { x: bodyRight, y: yc },
             p1: { x: bodyRight - frontCurve, y: top },
-            p2: { x: midX, y: top }
+            p2: { x: bodyCenter, y: top }
         },
         topRear: {
-            p0: { x: midX, y: top },
+            p0: { x: bodyCenter, y: top },
             p1: { x: bodyLeft + rearCurve, y: top },
             p2: { x: bodyLeft, y: yc - connectionHeight / 2 }
         },
         bottomRear: {
             p0: { x: bodyLeft, y: yc + connectionHeight / 2 },
             p1: { x: bodyLeft + rearCurve, y: bottom },
-            p2: { x: midX, y: bottom }
+            p2: { x: bodyCenter, y: bottom }
         },
         bottomFront: {
-            p0: { x: midX, y: bottom },
+            p0: { x: bodyCenter, y: bottom },
             p1: { x: bodyRight - frontCurve, y: bottom },
             p2: { x: bodyRight, y: yc }
         }
@@ -290,7 +188,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.fillStyle = colors.body;
     ctx.strokeStyle = colors.body;
 
-    buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, midX, yc);
+    buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
     ctx.fill();
     ctx.stroke();
 
@@ -298,13 +196,13 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     // TODO: Comment out
     // ctx.strokeStyle = "white";
     // ctx.lineWidth = 1;
-    // buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, midX, yc);
+    // buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
     // ctx.stroke();
     // stripes = 0;
 
 
     // ---- Stripes ----
-    drawStripes();
+    drawStripes(ctx, size, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, frontCurve, rearCurve, colors, stripes);
 
     // ---- Pectoral fins ----
     drawForegroundFins(ctx, fins, yc, bodyHeight, bodyLength, bodyRight, colors);

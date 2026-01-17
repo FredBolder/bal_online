@@ -104,8 +104,18 @@ export function getTropicalFishColor(palette) {
                 body: "#C7CDD1",    // silvery white / pale pearl
                 stripe: "#1A1E23",  // deep charcoal black
                 fin: "#9AA3A9",     // translucent silver-gray
-                tail: "#8F979C",   // slightly darker translucent
-                eye: "#B5342A"     // subtle reddish eye
+                tail: "#8F979C",    // slightly darker translucent
+                eye: "#B5342A"      // subtle reddish eye
+            }
+            break;
+        case 14:
+            // Smallmouth Grunt
+            colors = {
+                body: "#7E8A90",    // dark steel-gray
+                stripe: "#F2D24B",  // saturated yellow horizontal stripes
+                fin: "#EBCB55",     // slightly lighter, less saturated yellow
+                tail: "#F7E06A",    // brightest yellow for motion & sun hit
+                eye: "#0A0E12"
             }
             break;
         default:

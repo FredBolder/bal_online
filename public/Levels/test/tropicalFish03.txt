@@ -2,35 +2,39 @@ $answer: 2, 5, %fish
 $fins: 0, 0, 1
 $palette: 0, 0, 8
 $stripes: 0, 0, 15
-$tail: 0, 0, 5
+$tail: 0, 0, 6
 $fins: 2, 0, 2
 $palette: 2, 0, 9
 $shape: 2, 0, 1
 $stripes: 2, 0, 0
-$tail: 2, 0, 6
+$tail: 2, 0, 7
 $palette: 4, 0, 3
 $stripes: 4, 0, 12
-$tail: 4, 0, 6
+$tail: 4, 0, 7
 $fins: 6, 0, 4
 $palette: 6, 0, 10
 $shape: 6, 0, 1
 $stripes: 6, 0, 0
-$tail: 6, 0, 3
+$tail: 6, 0, 4
 $fins: 0, 2, 5
 $palette: 0, 2, 11
 $shape: 0, 2, 4
 $stripes: 0, 2, 17
-$tail: 0, 2, 6
+$tail: 0, 2, 7
 $fins: 2, 2, 4
 $palette: 2, 2, 12
 $shape: 2, 2, 3
 $stripes: 2, 2, 0
-$tail: 2, 2, 7
+$tail: 2, 2, 8
 $fins: 4, 2, 6
 $palette: 4, 2, 13
 $shape: 4, 2, 5
 $stripes: 4, 2, 4
 $tail: 4, 2, 3
+$fins: 6, 2, 7
+$palette: 6, 2, 14
+$stripes: 6, 2, 18
+$tail: 6, 2, 7
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23
@@ -38,10 +42,11 @@ $background: 6, 0, 1, 1, 23
 $background: 0, 2, 1, 1, 23
 $background: 2, 2, 1, 1, 23
 $background: 4, 2, 1, 1, 23
+$background: 6, 2, 1, 1, 23
 $background: 0, 4, 1, 1, 23
 Ҽ0Ҽ0Ҽ0Ҽ
 0     0
-Ҽ Ҽ Ҽ 0
+Ҽ Ҽ Ҽ Ҽ
 0     0
 Ҽ  3  0
 0 ҹ2  0

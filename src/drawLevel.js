@@ -4234,6 +4234,11 @@ function drawLevel(
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4);
           break;
+        case 2161:
+          // Tropical fish - Smallmouth Grunt
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 18);
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

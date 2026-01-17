@@ -503,6 +503,55 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 10
             });
             break;
+        case 7:
+            // Smallmouth Grunt
+            // Dorsal fins
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.35,
+                endT: 0.7,
+                height: bodyHeight * 0.1,
+                taper: 0.8,
+                lean: 0.0,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.7,
+                endT: 0.95,
+                height: bodyHeight * 0.2,
+                taper: 1,
+                lean: -0.1,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.7,
+                endT: 0.95,
+                height: bodyHeight * 0.2,
+                taper: 1,
+                lean: 0.9,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.4,
+                endT: 0.5,
+                height: bodyHeight * 0.2,
+                taper: 1,
+                lean: 0.8,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+            break;
         default:
             break;
     }
@@ -560,6 +609,14 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
         case 6:
             // Zebra Angelfish
             cx = bodyRight - (bodyLength * 0.25);
+            cy = yCenter + (bodyHeight * 0.15);
+            finWidth = bodyLength * 0.15;
+            finHeight = bodyHeight * 0.5;
+            rotation = 1.6 * Math.PI;
+            break;
+        case 7:
+            // Smallmouth Grunt
+            cx = bodyRight - (bodyLength * 0.3);
             cy = yCenter + (bodyHeight * 0.15);
             finWidth = bodyLength * 0.15;
             finHeight = bodyHeight * 0.5;
