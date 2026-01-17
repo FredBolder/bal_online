@@ -63,7 +63,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { changeFins, changeHeight, changePalette, changeStripes, changeTail } from "../tropicalFish.js";
+import { changeFins, changeShape, changePalette, changeStripes, changeTail } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -417,13 +417,17 @@ function BalPage() {
 
 
   async function clickNewLevel(silent = false) {
+    const sizes = ["32 x 20 (Landscape)", "10 x 10 (Square)", "15 x 15 (Square)", "20 x 20 (Square)"];
     let level = 9999;
     let value = null;
 
     if (silent) {
       value = "32 x 20 (Landscape)";
     } else {
-      value = await showSelect("New level", "Size", ["32 x 20 (Landscape)", "10 x 10 (Square)", "15 x 15 (Square)", "20 x 20 (Square)"], 0);
+      if (globalVars.uf) {
+        sizes.push("5 x 5 (Test)");
+      }
+      value = await showSelect("New level", "Size", sizes, 0);
     }
     if (value !== null) {
       createLevelSelectedCell = null;
@@ -439,6 +443,9 @@ function BalPage() {
           break;
         case "10 x 10 (Square)":
           level = 9996;
+          break;
+        case "5 x 5 (Test)":
+          level = 9995;
           break;
         default:
           level = 9999;
@@ -1103,7 +1110,7 @@ function BalPage() {
           case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157, 2158, 2159];
+            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160];
             break;
           case 12:
             // Groups
@@ -2691,7 +2698,7 @@ function BalPage() {
                 }
               }
               if (createLevelObject === 2151) {
-                if (changeHeight(gameInfo, column, row) === -1) {
+                if (changeShape(gameInfo, column, row) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a tropical fish to change the body height.");
                   }
@@ -2711,7 +2718,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2721,50 +2728,58 @@ function BalPage() {
                     case 2154:
                       // Clownfish
                       gameInfo.tropicalFish[idx].palette = 8;
-                      gameInfo.tropicalFish[idx].height = 2;
-                      gameInfo.tropicalFish[idx].tail = 5;
+                      gameInfo.tropicalFish[idx].shape = 2;
+                      gameInfo.tropicalFish[idx].tail = 6;
                       gameInfo.tropicalFish[idx].fins = 1;
                       gameInfo.tropicalFish[idx].stripes = 15;
                       break;
                     case 2155:
                       // Red Tail Shark
                       gameInfo.tropicalFish[idx].palette = 9;
-                      gameInfo.tropicalFish[idx].height = 1;
-                      gameInfo.tropicalFish[idx].tail = 6;
+                      gameInfo.tropicalFish[idx].shape = 1;
+                      gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 2;
                       gameInfo.tropicalFish[idx].stripes = 0;
                       break;
                     case 2156:
                       // Juvenile Golden Trevally
                       gameInfo.tropicalFish[idx].palette = 3;
-                      gameInfo.tropicalFish[idx].height = 2;
-                      gameInfo.tropicalFish[idx].tail = 6;
+                      gameInfo.tropicalFish[idx].shape = 2;
+                      gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 3;
                       gameInfo.tropicalFish[idx].stripes = 12;
                       break;
                     case 2157:
                       // Yellow Tail Acei Cichlid
                       gameInfo.tropicalFish[idx].palette = 10;
-                      gameInfo.tropicalFish[idx].height = 1;
-                      gameInfo.tropicalFish[idx].tail = 3;
+                      gameInfo.tropicalFish[idx].shape = 1;
+                      gameInfo.tropicalFish[idx].tail = 4;
                       gameInfo.tropicalFish[idx].fins = 4;
                       gameInfo.tropicalFish[idx].stripes = 0;
                       break;
                     case 2158:
                       // Siamese Algae Eater
                       gameInfo.tropicalFish[idx].palette = 11;
-                      gameInfo.tropicalFish[idx].height = 4;
-                      gameInfo.tropicalFish[idx].tail = 6;
+                      gameInfo.tropicalFish[idx].shape = 4;
+                      gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 5;
                       gameInfo.tropicalFish[idx].stripes = 17;
                       break;
                     case 2159:
                       // Yellow Tail Damselfish
                       gameInfo.tropicalFish[idx].palette = 12;
-                      gameInfo.tropicalFish[idx].height = 3;
-                      gameInfo.tropicalFish[idx].tail = 7;
+                      gameInfo.tropicalFish[idx].shape = 3;
+                      gameInfo.tropicalFish[idx].tail = 8;
                       gameInfo.tropicalFish[idx].fins = 4;
                       gameInfo.tropicalFish[idx].stripes = 0;
+                      break;
+                    case 2160:
+                      // Zebra Angelfish
+                      gameInfo.tropicalFish[idx].palette = 13;
+                      gameInfo.tropicalFish[idx].shape = 5;
+                      gameInfo.tropicalFish[idx].tail = 3;
+                      gameInfo.tropicalFish[idx].fins = 6;
+                      gameInfo.tropicalFish[idx].stripes = 4;
                       break;
                     default:
                       break;

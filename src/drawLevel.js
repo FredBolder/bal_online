@@ -3053,8 +3053,8 @@ function drawLevel(
   function drawTropicalFish(x, y) {
     let direction = -1
     let fins = 1;
-    let height = 2;
     let palette = 2;
+    let shape = 2;
     let stripes = 5;
     let tail = 1;
     let idx = -1;
@@ -3063,12 +3063,12 @@ function drawLevel(
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
       fins = gameInfo.tropicalFish[idx].fins;
-      height = gameInfo.tropicalFish[idx].height;
       palette = gameInfo.tropicalFish[idx].palette;
+      shape = gameInfo.tropicalFish[idx].shape;
       stripes = gameInfo.tropicalFish[idx].stripes;
       tail = gameInfo.tropicalFish[idx].tail;
     }
-    drawFish(ctx, xc, yc, w1, direction !== 6, palette, height, tail, fins, stripes);
+    drawFish(ctx, xc, yc, w1, direction !== 6, palette, shape, tail, fins, stripes);
   }
 
   function drawVerticalRope() {
@@ -4202,32 +4202,37 @@ function drawLevel(
         case 2154:
           // Tropical fish - Clownfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 8, 2, 5, 1, 15);
+          drawFish(ctx, xc, yc, w1, false, 8, 2, 6, 1, 15);
           break;
         case 2155:
           // Tropical fish - Red Tail Shark
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 9, 1, 6, 2, 0);
+          drawFish(ctx, xc, yc, w1, false, 9, 1, 7, 2, 0);
           break;
         case 2156:
           // Tropical fish - Juvenile Golden Trevally
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 3, 2, 6, 3, 12);
+          drawFish(ctx, xc, yc, w1, false, 3, 2, 7, 3, 12);
           break;
         case 2157:
           // Tropical fish - Yellow Tail Acei Cichlid
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 10, 1, 3, 4, 0);
+          drawFish(ctx, xc, yc, w1, false, 10, 1, 4, 4, 0);
           break;
         case 2158:
           // Tropical fish - Siamese Algae Eater
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 11, 4, 6, 5, 17);
+          drawFish(ctx, xc, yc, w1, false, 11, 4, 7, 5, 17);
           break;
         case 2159:
           // Tropical fish - Yellow Tail Damselfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 12, 3, 7, 4, 0);
+          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 4, 0);
+          break;
+        case 2160:
+          // Tropical fish - Zebra Angelfish
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

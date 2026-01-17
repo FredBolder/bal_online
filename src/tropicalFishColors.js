@@ -98,6 +98,16 @@ export function getTropicalFishColor(palette) {
                 eye: "#05070D"      // dark navy-black
             }
             break;
+        case 13:
+            // Zebra Angelfish
+            colors = {
+                body: "#C7CDD1",    // silvery white / pale pearl
+                stripe: "#1A1E23",  // deep charcoal black
+                fin: "#9AA3A9",     // translucent silver-gray
+                tail: "#8F979C",   // slightly darker translucent
+                eye: "#B5342A"     // subtle reddish eye
+            }
+            break;
         default:
             // 1
             colors = {

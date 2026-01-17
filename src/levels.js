@@ -11,7 +11,7 @@ import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
-import { tropicalFishFinVariations, tropicalFishHeights, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
+import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
@@ -293,7 +293,6 @@ export function checkSettings(data, settings) {
     { name: "$gameticksxy", params: 3, xy: true },
     { name: "$group", params: 3, xy: true },
     { name: "$has", params: 1, xy: false },
-    { name: "$height", params: 3, xy: true },
     { name: "$hint", params: 0, xy: false },
     { name: "$ignorepattern", params: 4, xy: true },
     { name: "$instrument", params: 4, xy: true },
@@ -310,6 +309,7 @@ export function checkSettings(data, settings) {
     { name: "$pistonmode", params: 3, xy: true },
     { name: "$question", params: 0, xy: true },
     { name: "$restorepoint", params: 1, xy: false },
+    { name: "$shape", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
     { name: "$stepspermeasure", params: 3, xy: true },
@@ -521,20 +521,6 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
               break;
-            case "$height":
-              switch (data[y][x]) {
-                case "Ҽ":
-                case 243:
-                  val_int = tryParseInt(values[2], -1);
-                  if ((val_int < 1) || (val_int > tropicalFishHeights)) {
-                    msg += `${settingNr(i)}Invalid value ${values[2]} for height.\n`;
-                  }
-                  break;
-                default:
-                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
-                  break;
-              }
-              break;
             case "$instrument":
               if (!instruments().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid instrument ${values[2]}.\n`;
@@ -663,6 +649,20 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 1)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for restore point.\n`;
+              }
+              break;
+            case "$shape":
+              switch (data[y][x]) {
+                case "Ҽ":
+                case 243:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > tropicalFishShapes)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for shape.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  break;
               }
               break;
             case "$sound":
@@ -1208,7 +1208,7 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= seriesMathStart && n <= seriesMathEnd) ||
       (n >= seriesLanguageStart && n <= seriesLanguageEnd)
     )) ||
-    ((n >= 9996) && (n <= 9999)) ||
+    ((n >= 9995) && (n <= 9999)) ||
     (n === 0)
   ) {
     result = await loadFromFile(n, gateTravelling);
@@ -1661,17 +1661,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
           }
           break;
-        case "$height":
-          if (values.length === 3) {
-            val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishHeights)) {
-              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-              if (idx >= 0) {
-                gameInfo.tropicalFish[idx].height = val_int;
-              }
-            }
-          }
-          break;
         case "$hint":
           gameVars.hint = value;
           break;
@@ -1856,6 +1845,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= 1)) {
             gameVars.restorePoint = val_int;
+          }
+          break;
+        case "$shape":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishShapes)) {
+              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+              if (idx >= 0) {
+                gameInfo.tropicalFish[idx].shape = val_int;
+              }
+            }
           }
           break;
         case "$sound":

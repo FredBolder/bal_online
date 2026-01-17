@@ -40,26 +40,31 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             tailHeight = bodyHeight * 0.9;
             break;
         case 3:
+            // Emarginate
+            tailWidth = bodyLength * 0.26;
+            tailHeight = bodyHeight * 0.6;
+            break;
+        case 4:
             // Truncate
             tailWidth = bodyLength * 0.23;
             tailHeight = bodyHeight * 0.7;
             break;
-        case 4:
+        case 5:
             // Rounded
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.7;
             break;
-        case 5:
+        case 6:
             // Rounded
             tailWidth = bodyLength * 0.24;
             tailHeight = bodyHeight * 0.6;
             break;
-        case 6:
+        case 7:
             // Forked
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.9;
             break;
-        case 7:
+        case 8:
             // Forked
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.6;

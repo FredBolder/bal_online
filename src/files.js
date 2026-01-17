@@ -439,12 +439,12 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$fins: ${fish.x}, ${fish.y}, ${fish.fins}`;
             lines.push(line);
         }
-        if (fish.height !== 2) {
-            line = `$height: ${fish.x}, ${fish.y}, ${fish.height}`;
-            lines.push(line);
-        }
         if (fish.palette !== 2) {
             line = `$palette: ${fish.x}, ${fish.y}, ${fish.palette}`;
+            lines.push(line);
+        }
+        if (fish.shape !== 2) {
+            line = `$shape: ${fish.x}, ${fish.y}, ${fish.shape}`;
             lines.push(line);
         }
         if (fish.stripes !== 5) {

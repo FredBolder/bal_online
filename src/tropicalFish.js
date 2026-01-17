@@ -4,11 +4,11 @@ import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
 import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 5;
-export const tropicalFishHeights = 4;
-export const tropicalFishPalettes = 12;
+export const tropicalFishFinVariations = 6;
+export const tropicalFishPalettes = 13;
+export const tropicalFishShapes = 5;
 export const tropicalFishStripes = 17;
-export const tropicalFishTails = 7;
+export const tropicalFishTails = 8;
 
 export function changeFins(gameInfo, x, y) {
     let idx = -1;
@@ -25,21 +25,6 @@ export function changeFins(gameInfo, x, y) {
     return idx;
 }
 
-export function changeHeight(gameInfo, x, y) {
-    let idx = -1;
-    let height = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-    if (idx >= 0) {
-        height = gameInfo.tropicalFish[idx].height + 1;
-        if (height > tropicalFishHeights) {
-            height = 1;
-        }
-        gameInfo.tropicalFish[idx].height = height;
-    }
-    return idx;
-}
-
 export function changePalette(gameInfo, x, y) {
     let idx = -1;
     let palette = -1;
@@ -51,6 +36,21 @@ export function changePalette(gameInfo, x, y) {
             palette = 1;
         }
         gameInfo.tropicalFish[idx].palette = palette;
+    }
+    return idx;
+}
+
+export function changeShape(gameInfo, x, y) {
+    let idx = -1;
+    let shape = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+    if (idx >= 0) {
+        shape = gameInfo.tropicalFish[idx].shape + 1;
+        if (shape > tropicalFishShapes) {
+            shape = 1;
+        }
+        gameInfo.tropicalFish[idx].shape = shape;
     }
     return idx;
 }
@@ -86,7 +86,7 @@ export function changeTail(gameInfo, x, y) {
 }
 
 // This drawing is also used for answer balls.
-export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, tail, fins, stripes) {
+export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, tail, fins, stripes) {
     function drawStripes() {
         // stripes
         // 0 = no stripes
@@ -206,7 +206,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     // Body dimensions
     let bodyLength = 0;
     let bodyHeight = 0;
-    switch (height) {
+    switch (shape) {
         case 1:
             bodyHeight = h * 0.25;
             bodyLength = w * 0.74;
@@ -218,6 +218,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
         case 4:
             bodyHeight = h * 0.15;
             bodyLength = w * 0.74;
+            break;
+        case 5:
+            bodyHeight = h * 0.45;
+            bodyLength = w * 0.55;
             break;
         default:
             // 2
@@ -240,8 +244,19 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     const bodyRight = right;
     const midX = (bodyLeft + bodyRight) / 2;
     const connectionHeight = bodyHeight * 0.15;
-    const frontCurve = (height === 3) ? bodyLength * 0.08 : bodyLength * 0.12;
-    const rearCurve = bodyLength * 0.3;
+    let frontCurve = bodyLength * 0.12;
+    let rearCurve = bodyLength * 0.3;
+    switch (shape) {
+        case 3:
+            frontCurve = bodyLength * 0.08;
+            break;
+        case 5:
+            frontCurve = bodyLength * 0.2;
+            rearCurve = bodyLength * 0.2;
+            break;
+        default:
+            break;
+    }
 
     const bodyCurves = {
         topFront: {
@@ -297,19 +312,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     // ---- Tail ----
     switch (tail) {
         case 2:
+        case 3:
             drawEmarginateTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail, true);
             break;
-        case 3:
-            drawTruncateTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
-            break;
         case 4:
-            drawRoundedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
+            drawTruncateTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
             break;
         case 5:
             drawRoundedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
             break;
         case 6:
+            drawRoundedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
+            break;
         case 7:
+        case 8:
             drawForkedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
             break;
         default:
@@ -322,7 +338,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, height, t
     ctx.fillStyle = colors.eye;
     ctx.strokeStyle = colors.body;
     ctx.lineWidth = 1;
-    const eyeRadius = ([1, 4].includes(height)) ? size * 0.03 : size * 0.04;
+    const eyeRadius = ([1, 4].includes(shape)) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
     ctx.arc(right - bodyLength * 0.15, yc - bodyHeight * 0.1, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
@@ -352,23 +368,37 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
             countTo = 12;
         } else {
             switch (fish.tail) {
-                case 3:
+                case 4:
                     // truncate
                     countTo = 8;
                     break;
                 case 1:
                 case 2:
+                case 3:
                     // emarginate
                     countTo = 7;
                     break;
-                case 6:
                 case 7:
+                case 8:
                     // forked
                     countTo = 6;
                     break;
                 default:
                     // normal (rounded)
                     countTo = 10;
+                    break;
+            }
+            switch (fish.shape) {
+                case 3:
+                    countTo += 5;
+                    break;
+                case 4:
+                    countTo -= 2;
+                    break;
+                case 5:
+                    countTo += 10;
+                    break;
+                default:
                     break;
             }
         }

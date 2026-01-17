@@ -149,7 +149,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx2 = findElementByCoordinates(x2, y2, gameInfo.tropicalFish);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.tropicalFish[idx2].palette = gameInfo.tropicalFish[idx1].palette;
-                gameInfo.tropicalFish[idx2].height = gameInfo.tropicalFish[idx1].height;
+                gameInfo.tropicalFish[idx2].shape = gameInfo.tropicalFish[idx1].shape;
                 gameInfo.tropicalFish[idx2].tail = gameInfo.tropicalFish[idx1].tail;
                 gameInfo.tropicalFish[idx2].fins = gameInfo.tropicalFish[idx1].fins;
                 gameInfo.tropicalFish[idx2].stripes = gameInfo.tropicalFish[idx1].stripes;

@@ -1,9 +1,15 @@
-$palette: 3, 1, 3
-$stripes: 3, 1, 12
-$tail: 3, 1, 6
-$background: 3, 1, 1, 1, 23
-11111
-1  Ҽ1
-13  1
-1  21
+$palette: 2, 1, 3
+$stripes: 2, 1, 12
+$tail: 2, 1, 6
+$fins: 2, 3, 6
+$palette: 2, 3, 13
+$shape: 2, 3, 5
+$stripes: 2, 3, 4
+$tail: 2, 3, 3
+$background: 2, 1, 1, 1, 23
+$background: 2, 3, 1, 1, 23
+00000
+0 Ҽ 0
+3   0
+2 Ҽ 0
 11111

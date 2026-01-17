@@ -327,7 +327,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 y,
                 direction: Math.random() > 0.5 ? 6 : 4,
                 palette: 2,
-                height: 2,
+                shape: 2,
                 tail: 2,
                 fins: 3,
                 stripes: 5,
