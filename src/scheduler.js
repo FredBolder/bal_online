@@ -153,7 +153,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             gameVars.fishCounter++;
         }
 
-        if (moveTropicalFish(backData, gameData, gameInfo)) {
+        if (moveTropicalFish(backData, gameData, gameInfo, gameVars)) {
             updateCanvas = true;
         }
 

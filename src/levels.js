@@ -307,6 +307,8 @@ export function checkSettings(data, settings) {
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
     { name: "$pistonmode", params: 3, xy: true },
+    { name: "$plantsswayamount", params: 1, xy: false },
+    { name: "$plantsswayspeed", params: 1, xy: false },
     { name: "$question", params: 0, xy: true },
     { name: "$restorepoint", params: 1, xy: false },
     { name: "$shape", params: 3, xy: true },
@@ -491,11 +493,11 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "mover", "phaseability", "pinkball", "timebomb", "yellowslowdowner"].includes(valuesLowerCase[0])) {
+              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "mover", "phaseability", "pinkball", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
-              if ((gameTicks < 0) || ((gameTicks < 1) && !["mover"].includes(valuesLowerCase[0]))) {
+              if ((gameTicks < 0) || ((gameTicks < 1) && !["mover", "tropicalfish"].includes(valuesLowerCase[0]))) {
                 msg += `${settingNr(i)}Invalid value ${values[1]} for ticks.\n`;
               }
               break;
@@ -634,6 +636,13 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$plantsswayamount":
+            case "$plantsswayspeed":
+              val_int = tryParseInt(values[0], -1);
+              if ((val_int < 0) || (val_int > 100)) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for percentage.\n`;
               }
               break;
             case "$question":
@@ -1517,7 +1526,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$gameticks":
           if (values.length === 2) {
             gameTicks = tryParseInt(values[1], -1);
-            if ((gameTicks >= 1) || ((gameTicks >= 0) && ["mover"].includes(valuesLowerCase[0]))) {
+            if ((gameTicks >= 1) || ((gameTicks >= 0) && ["mover", "tropicalfish"].includes(valuesLowerCase[0]))) {
               switch (valuesLowerCase[0]) {
                 case "conveyorbelt":
                   gameVars.conveyorBeltCountTo = gameTicks;
@@ -1548,6 +1557,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                   break;
                 case "timebomb":
                   gameVars.timeBombsTime = gameTicks;
+                  break;
+                case "tropicalfish":
+                  gameVars.tropicalFishCountToOverride = gameTicks;
                   break;
                 case "yellowslowdowner":
                   gameVars.yellowSlowdownerDurationTicks = gameTicks;
@@ -1829,6 +1841,22 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               if (idx >= 0) {
                 gameInfo.pistons[idx].mode = valuesLowerCase[2];
               }
+            }
+          }
+          break;
+        case "$plantsswayamount":
+          if (values.length === 1) {
+            val_int = tryParseInt(values[0], -1);
+            if ((val_int >= 0) && (val_int <= 100)) {
+              gameVars.plantsSwayAmount = val_int;
+            }
+          }
+          break;
+        case "$plantsswayspeed":
+          if (values.length === 1) {
+            val_int = tryParseInt(values[0], -1);
+            if ((val_int >= 0) && (val_int <= 100)) {
+              gameVars.plantsSwaySpeed = val_int;
             }
           }
           break;

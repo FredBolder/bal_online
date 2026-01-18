@@ -1,16 +1,17 @@
+$plantsswayamount: 20
 $has: divingglasses
-$palette: 5, 4, 3
-$stripes: 5, 4, 12
-$tail: 5, 4, 7
-$palette: 4, 7, 3
-$stripes: 4, 7, 12
-$tail: 4, 7, 7
+$palette: 3, 4, 3
+$stripes: 3, 4, 12
+$tail: 3, 4, 7
+$palette: 1, 7, 3
+$stripes: 1, 7, 12
+$tail: 1, 7, 7
 $background: 0, 0, 1, 1, 23
 $background: 1, 2, 1, 1, 23
 $background: 6, 3, 1, 1, 23
-$background: 5, 4, 1, 1, 23
+$background: 3, 4, 1, 1, 23
 $background: 4, 5, 1, 1, 23
-$background: 4, 7, 1, 1, 23
+$background: 1, 7, 1, 1, 23
 $background: 0, 8, 2, 1, 23
 $background: 3, 8, 7, 1, 23
 $background: 0, 9, 10, 1, 23
@@ -18,9 +19,9 @@ $background: 0, 9, 10, 1, 23
 wwwwwwwwww
 w2wwwwwwww
 wwwwwwӉwww
-wwwwwҼwwww
+wwwҼwwwwww
 wwwwӉwwwww
 wwwwwwwwww
-wwwwҼwwwww
+wҼwwwwwwww
 ѵӋwӋӋѯûѵӋӋ
 1111111111

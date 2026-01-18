@@ -1119,6 +1119,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Jellyfish, ` + extraInfo;
                 break;
+            case 249:
+                info = `Coral reef plant`;
+                break;
             default:
                 break;
         }
@@ -1266,6 +1269,8 @@ export function initGameVars(vars) {
     vars.pistonsRepeatSlowModeActive = false;
     vars.pistonsRepeatSlowModeCounter = 0;
     vars.pistonsRepeatSlowModeCountTo = 1;
+    vars.plantsSwayAmount = 10;
+    vars.plantsSwaySpeed = 20;
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
@@ -1279,6 +1284,7 @@ export function initGameVars(vars) {
     vars.teleporting = 0;
     vars.timeBombsTime = 100;
     vars.timeFreezer = 0;
+    vars.tropicalFishCountToOverride = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;
     vars.yellowCounter = 0;

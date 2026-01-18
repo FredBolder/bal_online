@@ -928,6 +928,9 @@ export function charToNumber(c) {
     case "Ӊ":
       result = 248;
       break;
+    case "Ӌ":
+      result = 249;
+      break;      
     case "|":
       result = 1000;
       break;
@@ -2255,6 +2258,9 @@ export function numberToChar(n) {
     case 248:
       result = "Ӊ";
       break;
+    case 249:
+      result = "Ӌ";
+      break;      
     case 1000:
       // For manual only
       result = "|";

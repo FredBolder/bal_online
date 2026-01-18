@@ -277,7 +277,8 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 height: bodyHeight * 0.25,
                 taper: 0.5,
                 lean: 0.0,
-                overlap: bodyHeight * 0.1
+                overlap: bodyHeight * 0.1,
+                steps: 10
             });
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
@@ -286,7 +287,8 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 height: bodyHeight * 0.25,
                 taper: 0.5,
                 lean: 0.0,
-                overlap: bodyHeight * 0.1
+                overlap: bodyHeight * 0.1,
+                steps: 10
             });
 
             // Anal fin
@@ -387,7 +389,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             });
             break;
         case 4:
-            // Yellow Tail Acei Cichlid
+            // Yellow Tail Acei Cichlid & Yellow Tail Damselfish
             // Dorsal fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
@@ -397,7 +399,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 taper: 0.7,
                 lean: 5,
                 overlap: bodyHeight * 0.1,
-                steps: 6
+                steps: 10
             });
 
             // Anal fin

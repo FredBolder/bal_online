@@ -141,8 +141,23 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.plantsSwayAmount !== 10) {
+        line = `$plantsswayamount: ${gameVars.plantsSwayAmount}`;
+        lines.push(line);
+    }
+
+    if (gameVars.plantsSwaySpeed !== 10) {
+        line = `$plantsswayspeed: ${gameVars.plantsSwaySpeed}`;
+        lines.push(line);
+    }
+
     if (gameVars.timeBombsTime !== 100) {
         line = `$gameticks: timebomb, ${gameVars.timeBombsTime}`;
+        lines.push(line);
+    }
+
+    if (gameVars.tropicalFishCountToOverride !== 0) {
+        line = `$gameticks: tropicalfish, ${gameVars.tropicalFishCountToOverride}`;
         lines.push(line);
     }
 

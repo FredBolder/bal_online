@@ -1,6 +1,7 @@
 import { drawCar, drawFlower, drawHeart, drawHouse, drawStar, drawTrain, drawTree } from "./drawAnswerBallIcons.js"
 import { displayColor, findElementByCoordinates } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
+import { drawCoralReefPlant } from "./coralReefPlants.js";
 import {
   drawBox,
   drawCircle,
@@ -42,6 +43,8 @@ function drawLevel(
   let wave = gameVars.wave2;
   let bgcolor = gameVars.bgcolor;
   let fgcolor = gameVars.fgcolor;
+  let swayPhase = 0;
+  let wavelengthInCols = 8;
 
   function createLavaBitmap(size = 32) {
     const bmpCanvas = document.createElement('canvas');
@@ -3993,6 +3996,12 @@ function drawLevel(
           break;
         case 248:
           drawJellyfish(currentCol, currentRow);
+          break;
+        case 249:
+          drawWater();
+          wavelengthInCols = 10; // how many columns per full 2π wave
+          swayPhase = ((currentCol / wavelengthInCols) % 1) * Math.PI * 2;
+          drawCoralReefPlant(ctx, xc, yc, w1, gameVars.plantsSwayAmount, gameVars.plantsSwaySpeed, swayPhase);
           break;
         case 1000:
           // For manual only (empty)

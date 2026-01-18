@@ -250,7 +250,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.lineWidth = 1;
 }
 
-export function moveTropicalFish(backData, gameData, gameInfo) {
+export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
     let update = false;
     let changed = false;
     let countTo = 12;
@@ -264,6 +264,8 @@ export function moveTropicalFish(backData, gameData, gameInfo) {
         const fish = gameInfo.tropicalFish[i];
         if (fish.isDead) {
             countTo = 12;
+        } if (gameVars.tropicalFishCountToOverride > 0) { 
+            countTo = gameVars.tropicalFishCountToOverride;   
         } else {
             switch (fish.tail) {
                 case 4:

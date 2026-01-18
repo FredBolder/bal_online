@@ -38,7 +38,6 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
         for (let i = 0; i < 5; i++) {
             const y = yc + ((i - 2) / 5 * dist);
             const distFromCenter = (2 * (y - yc)) / dist; // 0..1
-            console.log(distFromCenter);
             const curveStrength = distFromCenter * dist * 1;
             ctx.beginPath();
             ctx.moveTo(bodyLeft, y);
