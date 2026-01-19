@@ -389,7 +389,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             });
             break;
         case 4:
-            // Yellow Tail Acei Cichlid & Yellow Tail Damselfish
+            // Yellow Tail Acei Cichlid, Yellow Tail Damselfish and Bicolor Anthias
             // Dorsal fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
@@ -593,7 +593,7 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             rotation = 1.7 * Math.PI;
             break;
         case 4:
-            // Yellow Tail Acei Cichlid
+            // Yellow Tail Acei Cichlid, Yellow Tail Damselfish and Bicolor Anthias
             cx = bodyRight - (bodyLength * 0.3);
             cy = yCenter + (bodyHeight * 0.25);
             finWidth = bodyLength * 0.15;

@@ -23,6 +23,7 @@ import {
   seriesMusic2Start, seriesMusic2End,
   seriesMathStart, seriesMathEnd,
   seriesLanguageStart, seriesLanguageEnd,
+  seriesFishStart, seriesFishEnd,
 } from "../levels.js";
 import { loadProgress, solvedLevels } from "../progress.js";
 import { loadSettings } from "../settings.js";
@@ -78,6 +79,7 @@ function OverviewPage() {
   const [seriesMusic2List, setSeriesMusic2List] = useState([]);
   const [seriesMathList, setSeriesMathList] = useState([]);
   const [seriesLanguageList, setSeriesLanguageList] = useState([]);
+  const [seriesFishList, setSeriesFishList] = useState([]);
 
   const [progressText, setProgressText] = useState("");
 
@@ -193,6 +195,12 @@ function OverviewPage() {
       listLanguage.push(i);
     }
     setSeriesLanguageList(listLanguage);
+
+    const listFish = [];
+    for (let i = seriesFishStart; i <= seriesFishEnd; i++) {
+      listFish.push(i);
+    }
+    setSeriesFishList(listFish);
   }
 
   function updateProgressText() {
@@ -390,6 +398,15 @@ function OverviewPage() {
           <h2>Language</h2>
           <div className="seriesList">
             {seriesLanguageList.map((level) => (<div
+              key={level}
+              style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
+              onClick={() => handleClick(level)} >
+              {displayLevelNumber(level)}
+            </div>))}
+          </div>
+          <h2>Fish</h2>
+          <div className="seriesList">
+            {seriesFishList.map((level) => (<div
               key={level}
               style={{ color: levelNumberColor(level), cursor: levelNumberCursor(level) }}
               onClick={() => handleClick(level)} >

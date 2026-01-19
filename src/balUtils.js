@@ -2303,8 +2303,8 @@ export function stringArrayToNumberArray(arr, importing = false) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
-        if ([27, 243, 248].includes(data)) {
-          // Fish and jellyfish is always in the water
+        if ([27, 243, 248, 249].includes(data)) {
+          // Fish, jellyfish and coral reef plants are always in the water
           rowBackData.push(23);
         } else {
           rowBackData.push(0);

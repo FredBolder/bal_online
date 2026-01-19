@@ -49,6 +49,8 @@ export const seriesMathStart = 6250;
 export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
+export const seriesFishStart = 6350;
+export const seriesFishEnd = 6350;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -899,6 +901,10 @@ export function displayLevelNumber(level, addInfo = false) {
     current = (level - seriesLanguageStart) + 1;
     total = (seriesLanguageEnd - seriesLanguageStart) + 1;
     series = "Language";
+  } else if ((level >= seriesFishStart) && (level <= seriesFishEnd)) {
+    current = (level - seriesFishStart) + 1;
+    total = (seriesFishEnd - seriesFishStart) + 1;
+    series = "Fish";
   }
 
   if (current === -1) {
@@ -919,7 +925,7 @@ export function displayLevelNumber(level, addInfo = false) {
 export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
     seriesSmallStart, seriesEasy1Start, seriesExtremeStart, seriesMusic1Start, series6Start,
-    seriesEasy2Start, seriesMusic2Start, seriesMathStart, seriesLanguageStart].includes(level)
+    seriesEasy2Start, seriesMusic2Start, seriesMathStart, seriesLanguageStart, seriesFishStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -1173,6 +1179,9 @@ export function getAllLevels() {
   for (let i = seriesLanguageStart; i <= seriesLanguageEnd; i++) {
     levels.push(i);
   }
+  for (let i = seriesFishStart; i <= seriesFishEnd; i++) {
+    levels.push(i);
+  }
   return levels;
 }
 
@@ -1215,7 +1224,8 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= seriesEasy2Start && n <= seriesEasy2End) ||
       (n >= seriesMusic2Start && n <= seriesMusic2End) ||
       (n >= seriesMathStart && n <= seriesMathEnd) ||
-      (n >= seriesLanguageStart && n <= seriesLanguageEnd)
+      (n >= seriesLanguageStart && n <= seriesLanguageEnd) ||
+      (n >= seriesFishStart && n <= seriesFishEnd)
     )) ||
     ((n >= 9995) && (n <= 9999)) ||
     (n === 0)
@@ -1284,7 +1294,8 @@ export function isExtra(n) {
     ((n >= seriesEasy2Start) && (n <= seriesEasy2End)) ||
     ((n >= seriesMusic2Start) && (n <= seriesMusic2End)) ||
     ((n >= seriesMathStart) && (n <= seriesMathEnd)) ||
-    ((n >= seriesLanguageStart) && (n <= seriesLanguageEnd))
+    ((n >= seriesLanguageStart) && (n <= seriesLanguageEnd)) ||
+    ((n >= seriesFishStart) && (n <= seriesFishEnd))
   )
 }
 
@@ -1983,6 +1994,7 @@ export function numberOfLevels() {
   n += (seriesMusic2End - seriesMusic2Start) + 1;
   n += (seriesMathEnd - seriesMathStart) + 1;
   n += (seriesLanguageEnd - seriesLanguageStart) + 1;
+  n += (seriesFishEnd - seriesFishStart) + 1;
   return n;
 }
 

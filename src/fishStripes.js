@@ -6,8 +6,9 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
     // 1-7 = normal 1-7 stripes
     // 8-12 = thin / normal alternating 4 - 8 stripes
     // 13-16 = thick 1-4 stripes
-    // 17 = horizontal stripe
-    // 18 = 5 horizontal stripes
+    // 17 = horizontal tick stripe
+    // 18 = horizontal thin stripe
+    // 19 = 5 horizontal stripes
     const bodyHeight = bodyBottom - bodyTop;
     const bodyLength = bodyRight - bodyLeft;
     const bodyCenter = (bodyRight + bodyLeft) / 2;
@@ -24,14 +25,14 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
-    if (stripes === 17) {
-        ctx.lineWidth = stripeWidth;
+    if ((stripes === 17) || (stripes === 18)) {
+        ctx.lineWidth = (stripes === 18) ? stripeWidth * 0.25 : stripeWidth;
         ctx.strokeStyle = colors.stripe;
         ctx.beginPath();
         ctx.moveTo(bodyLeft, yc);
         ctx.lineTo(bodyRight, yc);
         ctx.stroke();
-    } else if (stripes === 18) {
+    } else if (stripes === 19) {
         ctx.lineWidth = stripeWidth * 0.25;
         ctx.strokeStyle = colors.stripe;
         const dist = bodyHeight / 2;

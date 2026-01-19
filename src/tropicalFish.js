@@ -1,85 +1,105 @@
 import { findElementByCoordinates } from "./balUtils.js";
-import { buildBodyPath } from "./fishBody.js";
+import { buildBodyPath, fillUpperBody } from "./fishBody.js";
 import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
 import { drawStripes } from "./fishStripes.js";
 import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 7;
-export const tropicalFishPalettes = 14;
+export const tropicalFishPalettes = 15;
 export const tropicalFishShapes = 5;
-export const tropicalFishStripes = 18;
+export const tropicalFishStripes = 19;
 export const tropicalFishTails = 8;
 
-export function changeFins(gameInfo, x, y) {
+export function changeFins(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
     let idx = -1;
     let fins = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
-        fins = gameInfo.tropicalFish[idx].fins + 1;
+        fins = gameInfo.tropicalFish[idx].fins + step;
         if (fins > tropicalFishFinVariations) {
             fins = 1;
+        }
+        if (fins < 1) {
+            fins = tropicalFishFinVariations;
         }
         gameInfo.tropicalFish[idx].fins = fins;
     }
     return idx;
 }
 
-export function changePalette(gameInfo, x, y) {
+export function changePalette(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
     let idx = -1;
     let palette = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
-        palette = gameInfo.tropicalFish[idx].palette + 1;
+        palette = gameInfo.tropicalFish[idx].palette + step;
         if (palette > tropicalFishPalettes) {
             palette = 1;
+        }
+        if (palette < 1) {
+            palette = tropicalFishPalettes;
         }
         gameInfo.tropicalFish[idx].palette = palette;
     }
     return idx;
 }
 
-export function changeShape(gameInfo, x, y) {
+export function changeShape(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
     let idx = -1;
     let shape = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
-        shape = gameInfo.tropicalFish[idx].shape + 1;
+        shape = gameInfo.tropicalFish[idx].shape + step;
         if (shape > tropicalFishShapes) {
             shape = 1;
+        }
+        if (shape < 1) {
+            shape = tropicalFishShapes;
         }
         gameInfo.tropicalFish[idx].shape = shape;
     }
     return idx;
 }
 
-export function changeStripes(gameInfo, x, y) {
+export function changeStripes(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
     let idx = -1;
     let stripes = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
-        stripes = gameInfo.tropicalFish[idx].stripes + 1;
+        stripes = gameInfo.tropicalFish[idx].stripes + step;
         if (stripes > tropicalFishStripes) {
             stripes = 0;
+        }
+        if (stripes < 0) {
+            stripes = tropicalFishStripes;
         }
         gameInfo.tropicalFish[idx].stripes = stripes;
     }
     return idx;
 }
 
-export function changeTail(gameInfo, x, y) {
+export function changeTail(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
     let idx = -1;
     let tail = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
-        tail = gameInfo.tropicalFish[idx].tail + 1;
+        tail = gameInfo.tropicalFish[idx].tail + step;
         if (tail > tropicalFishTails) {
             tail = 1;
+        }
+        if (tail < 1) {
+            tail = tropicalFishTails;
         }
         gameInfo.tropicalFish[idx].tail = tail;
     }
@@ -201,6 +221,9 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     // stripes = 0;
 
 
+    // ---- Bicolor ----
+    fillUpperBody(ctx, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, frontCurve, rearCurve, colors);
+
     // ---- Stripes ----
     drawStripes(ctx, size, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, frontCurve, rearCurve, colors, stripes);
 
@@ -240,7 +263,9 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.beginPath();
     ctx.arc(right - bodyLength * 0.15, yc - bodyHeight * 0.1, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
-    ctx.stroke();
+    if (colors.upperBody === null) {
+        ctx.stroke();
+    }
 
     // Restore transform if flipped
     if (flipHorizontally) {
@@ -264,8 +289,8 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
         const fish = gameInfo.tropicalFish[i];
         if (fish.isDead) {
             countTo = 12;
-        } if (gameVars.tropicalFishCountToOverride > 0) { 
-            countTo = gameVars.tropicalFishCountToOverride;   
+        } if (gameVars.tropicalFishCountToOverride > 0) {
+            countTo = gameVars.tropicalFishCountToOverride;
         } else {
             switch (fish.tail) {
                 case 4:

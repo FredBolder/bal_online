@@ -96,3 +96,32 @@ export function getBodyTopFrame(bodyCurves, t) {
     return { p, tan, normal };
 }
 
+export function fillUpperBody(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, connectionHeight, frontCurve, rearCurve, colors) {
+    const bodyHeight = bodyBottom - bodyTop;
+    const bodyCenter = (bodyRight + bodyLeft) / 2;
+    const overlap = bodyHeight * 0.1;
+
+    if (colors.upperBody === null) {
+        return;
+    }
+
+    ctx.save();
+    // Clip to body shape
+    buildBodyPath(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
+    ctx.clip();
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = colors.upperBody;
+    ctx.fillStyle = colors.upperBody;
+    ctx.beginPath();
+    ctx.moveTo(bodyLeft - overlap, bodyTop - overlap);
+    ctx.lineTo(bodyRight + overlap, bodyTop - overlap);
+    ctx.lineTo(bodyRight + overlap, yc);
+    ctx.lineTo(bodyLeft - overlap, yc);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fill();
+
+    ctx.restore();
+}
+

@@ -375,7 +375,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         default:
             gameData[y][x] = objectNumber;
-            if ([27, 243, 248].includes(objectNumber)) {
+            if ([27, 243, 248, 249].includes(objectNumber)) {
                 backData[y][x] = 23;
             }
             break;

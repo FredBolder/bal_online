@@ -1,3 +1,4 @@
+$plantsswayspeed: 20
 $fins: 2, 6, 1
 $palette: 2, 6, 8
 $stripes: 2, 6, 15
@@ -34,6 +35,11 @@ $fins: 2, 13, 7
 $palette: 2, 13, 14
 $stripes: 2, 13, 18
 $tail: 2, 13, 7
+$fins: 2, 14, 4
+$palette: 2, 14, 15
+$shape: 2, 14, 1
+$stripes: 2, 14, 18
+$tail: 2, 14, 7
 $background: 2, 6, 1, 1, 23
 $background: 2, 7, 1, 1, 23
 $background: 2, 8, 1, 1, 23
@@ -42,12 +48,14 @@ $background: 2, 10, 1, 1, 23
 $background: 2, 11, 1, 1, 23
 $background: 2, 12, 1, 1, 23
 $background: 2, 13, 1, 1, 23
+$background: 2, 14, 1, 1, 23
 111111111111111
 13            1
 12            1
 11            1
 1             1
 1WWWWWWWWWWWWW1
+1wҼwwwwwwwwwww1
 1wҼwwwwwwwwwww1
 1wҼwwwwwwwwwww1
 1wҼwwwwwwwwwww1

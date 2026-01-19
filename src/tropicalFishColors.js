@@ -118,6 +118,17 @@ export function getTropicalFishColor(palette) {
                 eye: "#0A0E12"
             }
             break;
+        case 15:
+            // Bicolor Anthias
+            colors = {
+                body: "#7A2E8E",       // purple / magenta
+                upperBody: "#E6B72E",  // primary yellow
+                stripe: "#5A1F6B",     // magenta very thin horizonal stripe
+                fin: "#B043C6",        // soft white
+                tail: "#B043C6",       // soft white 
+                eye: "#1A1A1A"
+            }
+            break;
         default:
             // 1
             colors = {
@@ -127,6 +138,7 @@ export function getTropicalFishColor(palette) {
             };
             break;
     }
+    colors.upperBody = colors.upperBody ?? null;
     colors.tail = colors.tail ?? colors.fin;
     colors.eye = colors.eye ?? "#000000";
     colors.stripeOutline = colors.stripeOutline ?? null;

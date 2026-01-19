@@ -147,6 +147,8 @@ function BalPage() {
   const { modalState } = useContext(ModalContext);
 
   const actionButtonRef = useRef(null);
+  const addRows = useRef(null);
+  const addColumns = useRef(null);
   const arrowButtonDownLeft = useRef(null);
   const arrowButtonDownRight = useRef(null);
   const arrowButtonUpLeft = useRef(null);
@@ -569,6 +571,31 @@ function BalPage() {
     }
   }
 
+  async function clickAddColumns() {
+    let columns = 1;
+    const columnsInput = await showInput("Add columns", "Enter the number of columns to add (1-25).", "5");
+    if (columnsInput === null) {
+      return;
+    }
+    columns = tryParseInt(columnsInput, -1);
+    if ((columns >= 1) && (columns <= 25)) {
+      saveUndo("Add columns", "level");
+      const newCells = [];
+      for (let i = 0; i < columns; i++) {
+        newCells.push(0);
+      }
+      for (let i = 0; i < gameData.length; i++) {
+        gameData[i].push(...newCells);
+        backData[i].push(...newCells);
+      }
+      createLevelSelectedCell = null;
+      updateGameCanvas();
+      updateGreen();
+    } else {
+      showMessage("Error", "Invalid number of columns");
+    }
+  }
+
   async function clickInsertRow() {
     function ins() {
       saveUndo("Insert row", "level");
@@ -605,6 +632,32 @@ function BalPage() {
           ins();
         }
       }
+    }
+  }
+
+  async function clickAddRows() {
+    let rows = 1;
+    const rowsInput = await showInput("Add rows", "Enter the number of rows to add (1-25).", "5");
+    if (rowsInput === null) {
+      return;
+    }
+    rows = tryParseInt(rowsInput, -1);
+    if ((rows >= 1) && (rows <= 25)) {
+      saveUndo("Add rows", "level");
+      const columns = gameData[0].length;
+      const newRow = [];
+      for (let i = 0; i < columns; i++) {
+        newRow.push(0);
+      }
+      for (let i = 0; i < rows; i++) {
+        gameData.push([...newRow]);
+        backData.push([...newRow]);
+      }
+      createLevelSelectedCell = null;
+      updateGameCanvas();
+      updateGreen();
+    } else {
+      showMessage("Error", "Invalid number of rows");
     }
   }
 
@@ -1110,7 +1163,7 @@ function BalPage() {
           case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161];
+            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162];
             break;
           case 12:
             // Groups
@@ -2197,6 +2250,7 @@ function BalPage() {
 
         if (!initialized) {
           initialized = true;
+          globalVars.createLevel = false;
           globalVars.stoneImg01 = await loadImage('/stone1.png');
           globalVars.stoneImg02 = await loadImage('/stone2.png');
           globalVars.stoneImg03 = await loadImage('/stone3.png');
@@ -2281,7 +2335,9 @@ function BalPage() {
     levelSetting.current.style.display = (globalVars.createLevel) ? "block" : "none";
     newLevel.current.style.display = (globalVars.createLevel) ? "block" : "none";
     insertColumn.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    addColumns.current.style.display = (globalVars.createLevel) ? "block" : "none";
     insertRow.current.style.display = (globalVars.createLevel) ? "block" : "none";
+    addRows.current.style.display = (globalVars.createLevel) ? "block" : "none";
     deleteColumn.current.style.display = (globalVars.createLevel) ? "block" : "none";
     deleteRow.current.style.display = (globalVars.createLevel) ? "block" : "none";
     undo.current.style.display = (globalVars.createLevel) ? "block" : "none";
@@ -2545,7 +2601,7 @@ function BalPage() {
             break;
         }
       }
-      if (!e.altKey && !e.shiftKey) {
+      if (!e.shiftKey) {
         move = ((createLevelMenu === menuToNumber("select")) && (createLevelObject === 2095));
         xmin = column;
         xmax = xmin;
@@ -2684,41 +2740,41 @@ function BalPage() {
                 }
               }
               if (createLevelObject === 2149) {
-                if (changePalette(gameInfo, column, row) === -1) {
+                if (changePalette(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a tropical fish to change the palette.");
                   }
                 }
               }
               if (createLevelObject === 2150) {
-                if (changeStripes(gameInfo, column, row) === -1) {
+                if (changeStripes(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a tropical fish to change the number of stripes.");
                   }
                 }
               }
               if (createLevelObject === 2151) {
-                if (changeShape(gameInfo, column, row) === -1) {
+                if (changeShape(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish to change the body height.");
+                    showMessage("Info", "Click on a tropical fish to change the body shape.");
                   }
                 }
               }
               if (createLevelObject === 2152) {
-                if (changeTail(gameInfo, column, row) === -1) {
+                if (changeTail(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish to change the tail type.");
+                    showMessage("Info", "Click on a tropical fish to change the tail.");
                   }
                 }
               }
               if (createLevelObject === 2153) {
-                if (changeFins(gameInfo, column, row) === -1) {
+                if (changeFins(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a tropical fish to change the fins.");
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2787,6 +2843,14 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].shape = 2;
                       gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 7;
+                      gameInfo.tropicalFish[idx].stripes = 19;
+                      break;
+                    case 2162:
+                      // Bicolor Anthias
+                      gameInfo.tropicalFish[idx].palette = 15;
+                      gameInfo.tropicalFish[idx].shape = 1;
+                      gameInfo.tropicalFish[idx].tail = 7;
+                      gameInfo.tropicalFish[idx].fins = 4;
                       gameInfo.tropicalFish[idx].stripes = 18;
                       break;
                     default:
@@ -3690,8 +3754,14 @@ function BalPage() {
                 <div ref={insertColumn} onClick={() => { clickInsertColumn() }}>
                   <label>Insert column</label>
                 </div>
+                <div ref={addColumns} onClick={() => { clickAddColumns() }}>
+                  <label>Add columns</label>
+                </div>
                 <div ref={insertRow} onClick={() => { clickInsertRow() }}>
                   <label>Insert row</label>
+                </div>
+                <div ref={addRows} onClick={() => { clickAddRows() }}>
+                  <label>Add rows</label>
                 </div>
                 <div ref={deleteColumn} onClick={() => { clickDeleteColumn() }}>
                   <label>Delete column</label>

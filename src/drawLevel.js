@@ -3998,7 +3998,6 @@ function drawLevel(
           drawJellyfish(currentCol, currentRow);
           break;
         case 249:
-          drawWater();
           wavelengthInCols = 10; // how many columns per full 2π wave
           swayPhase = ((currentCol / wavelengthInCols) % 1) * Math.PI * 2;
           drawCoralReefPlant(ctx, xc, yc, w1, gameVars.plantsSwayAmount, gameVars.plantsSwaySpeed, swayPhase);
@@ -4246,7 +4245,12 @@ function drawLevel(
         case 2161:
           // Tropical fish - Smallmouth Grunt
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 18);
+          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 19);
+          break;
+        case 2162:
+          // Tropical fish - Bicolor Anthias
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 15, 1, 7, 4, 18);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
