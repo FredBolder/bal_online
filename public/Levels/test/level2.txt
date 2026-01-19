@@ -1,104 +1,66 @@
-$bgcolor: 0, 0, 29, 8, #87CEFA
-$bgcolor: 0, 1, 1, 1, #006400
-$fgcolor: 0, 7, 6, 1, #FCDE9C
-$fgcolor: 0, 1, 1, 1, #87CEFA
-$fgcolor: 1, 1, 1, 1, #006400
-$fgcolor: 2, 1, 1, 1, #006400
-$fgcolor: 2, 2, 1, 1, #006400
-$fgcolor: 1, 2, 1, 1, #006400
-$fgcolor: 1, 3, 1, 1, #006400
-$displaysize: 10, 10
 $plantsswayspeed: 20
-$answer: 9, 9, ?
-$pistonmode: 1, 8, momentary
-$group: 1, 10, 2
-$pistonmode: 1, 10, momentary
-$pistonmode: 17, 14, momentary
-$group: 21, 14, 2
-$question: 15, 16, Dam
-$answer: 15, 16, ?
-$question: 16, 16, sel
-$answer: 16, 16, ?
-$question: 17, 16, fish
-$answer: 17, 16, ?
-$question: 15, 18, An
-$answer: 15, 18, !
-$question: 16, 18, gel
-$answer: 16, 18, !
-$question: 17, 18, fish
-$answer: 17, 18, !
-$fins: 11, 13, 4
-$palette: 11, 13, 12
-$shape: 11, 13, 3
-$stripes: 11, 13, 0
-$tail: 11, 13, 8
-$fins: 9, 14, 4
-$palette: 9, 14, 12
-$shape: 9, 14, 3
-$stripes: 9, 14, 0
-$tail: 9, 14, 8
-$palette: 20, 9, 3
-$stripes: 20, 9, 12
-$tail: 20, 9, 7
-$palette: 22, 11, 3
-$stripes: 22, 11, 12
-$tail: 22, 11, 7
-$palette: 27, 17, 3
-$stripes: 27, 17, 12
-$tail: 27, 17, 7
-$palette: 25, 14, 3
-$stripes: 25, 14, 12
-$tail: 25, 14, 7
-$background: 14, 7, 4, 1, 20
-$background: 5, 8, 1, 1, 23
-$background: 14, 8, 4, 1, 23
-$background: 24, 8, 1, 1, 23
-$background: 5, 9, 1, 1, 23
-$background: 9, 9, 1, 1, 23
-$background: 11, 9, 1, 1, 23
-$background: 14, 9, 4, 1, 23
-$background: 20, 9, 1, 1, 23
-$background: 15, 10, 3, 1, 23
-$background: 15, 11, 3, 1, 23
-$background: 22, 11, 1, 1, 23
-$background: 27, 11, 1, 1, 23
-$background: 6, 12, 1, 1, 23
-$background: 14, 12, 4, 1, 23
-$background: 6, 13, 1, 1, 23
-$background: 11, 13, 1, 1, 23
-$background: 14, 13, 4, 1, 23
-$background: 9, 14, 1, 1, 23
-$background: 14, 14, 5, 1, 23
-$background: 21, 14, 1, 1, 23
-$background: 25, 14, 1, 1, 23
-$background: 14, 15, 9, 1, 23
-$background: 7, 16, 1, 1, 23
-$background: 15, 16, 3, 1, 23
-$background: 22, 16, 1, 1, 23
-$background: 7, 17, 1, 1, 23
-$background: 14, 17, 5, 1, 23
-$background: 22, 17, 1, 1, 23
-$background: 27, 17, 1, 1, 23
-$background: 8, 18, 4, 1, 23
-$background: 15, 18, 3, 1, 23
-$background: 22, 18, 4, 1, 23
-00000000000000000000000000000
-;ѽѵ                         0
-PѬѮ                         0
-PѶ                          0
-P                           0
-Pd             ѼѬ           0
-P2            Ѽ11G          0
-11 1ςWWWWWWWWWѺ111WWWWWWWWWWW
-1Ëo 1Ѭwwwwwwwwú11ѾwwwwwwӉwwww
-11 11ѸwwwҹwӉwwѮ11üwwҼwwwwwwww
-1Ëo 11wwwwwwwww11üwwwwwwwwwww
-11 111wwwwwwwww11ѸwwwwҼwwwwӉw
-11 111ѬwwwwwwwѴ111wwwwwwwwwww
-11 131ѸwwwwҼwwѼ111wwwwwwwwwww
-11   11wwҼwwww111ËowwmwwwҼwww
-1111111wwwwwww11111^v1Gwwwwww
-1111111ѬwwwwwwwҸҸҸwwww1wwwwww
-1111111Ѹwwwwww11111www1wwwwҼw
-11111111GӋӋmwwwҸҸҸwwww1ѬӋӋwww
-11111111111111111111111111111
+$has: divingglasses
+$question: 9, 7, An
+$answer: 9, 7, Angelfish
+$question: 10, 7, gel
+$answer: 10, 7, Angelfish
+$question: 11, 7, fish
+$answer: 11, 7, Angelfish
+$fins: 1, 1, 6
+$palette: 1, 1, 13
+$shape: 1, 1, 5
+$stripes: 1, 1, 4
+$tail: 1, 1, 3
+$fins: 4, 3, 6
+$palette: 4, 3, 13
+$shape: 4, 3, 5
+$stripes: 4, 3, 4
+$tail: 4, 3, 3
+$fins: 6, 2, 6
+$palette: 6, 2, 13
+$shape: 6, 2, 5
+$stripes: 6, 2, 4
+$tail: 6, 2, 3
+$fins: 3, 8, 2
+$palette: 3, 8, 9
+$shape: 3, 8, 1
+$stripes: 3, 8, 0
+$tail: 3, 8, 7
+$fins: 2, 7, 5
+$palette: 2, 7, 11
+$shape: 2, 7, 4
+$stripes: 2, 7, 17
+$tail: 2, 7, 7
+$fins: 6, 6, 5
+$palette: 6, 6, 11
+$shape: 6, 6, 4
+$stripes: 6, 6, 17
+$tail: 6, 6, 7
+$background: 10, 0, 1, 1, 23
+$background: 16, 0, 1, 1, 23
+$background: 1, 1, 1, 1, 23
+$background: 9, 1, 2, 1, 23
+$background: 6, 2, 1, 1, 23
+$background: 10, 2, 2, 1, 23
+$background: 4, 3, 1, 1, 23
+$background: 10, 3, 2, 1, 23
+$background: 10, 4, 2, 1, 23
+$background: 1, 5, 1, 1, 23
+$background: 9, 5, 3, 1, 23
+$background: 6, 6, 1, 1, 23
+$background: 9, 6, 3, 1, 23
+$background: 2, 7, 1, 1, 23
+$background: 9, 7, 3, 1, 23
+$background: 3, 8, 1, 1, 23
+$background: 8, 8, 5, 1, 23
+$background: 0, 9, 20, 1, 23
+wwwwwwwwww8wwwww3www
+wҼwwwwwwwѮ1wwwwwwwww
+wwwwwwҼwww1Ѭwwwwwwww
+wwwwҼwwwww1Ѹwwwwwwww
+wwwwwwwwww11wwwwwwww
+w2wwwwwwwH11wwwwwwww
+wwwwwwҼww111wwwwwwww
+wwҼwwwwwwҸҸҸwwwwwwww
+wwwҼwwwwѼ111Gwwwwwww
+11111111111111111111

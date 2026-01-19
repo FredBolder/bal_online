@@ -470,6 +470,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$tail: ${fish.x}, ${fish.y}, ${fish.tail}`;
             lines.push(line);
         }
+        if (fish.answer !== "fish") {
+            line = `$answer: ${fish.x}, ${fish.y}, ${fish.answer}`;
+            lines.push(line);
+        }
     }
 
     first = true;

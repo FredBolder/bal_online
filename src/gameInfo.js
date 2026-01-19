@@ -321,7 +321,8 @@ export function getGameInfo(backData, gameData) {
                         fins: 3,
                         stripes: 5,
                         isDead: false,
-                        counter: 0 
+                        counter: 0,
+                        answer: "fish" 
                     };
                     result.tropicalFish.push(fish);
                     break;
@@ -1270,7 +1271,7 @@ export function initGameVars(vars) {
     vars.pistonsRepeatSlowModeCounter = 0;
     vars.pistonsRepeatSlowModeCountTo = 1;
     vars.plantsSwayAmount = 10;
-    vars.plantsSwaySpeed = 20;
+    vars.plantsSwaySpeed = 10;
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;

@@ -36,14 +36,23 @@ export function checkQuestionStones(gameData, gameInfo) {
                     break;
             }
             el = getGameDataValue(gameData, x, y)
-            if ([242, 245].includes(el)) {
+            if ((gameData[questionStone.y][questionStone.x] === 241) && [242, 243, 245].includes(el)) {
                 idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
                 if (idx >= 0) {
-                    if ((gameInfo.answerBalls[idx].answer === questionStone.answer) &&
-                        (gameData[questionStone.y][questionStone.x] === 241)) {
+                    if (gameInfo.answerBalls[idx].answer === questionStone.answer) {
                         questionStone.disappeared = true;
                         gameData[questionStone.y][questionStone.x] = 0;
                         update = true;
+                    }
+                }
+                if (!questionStone.disappeared) {
+                    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+                    if (idx >= 0) {
+                        if (gameInfo.tropicalFish[idx].answer === questionStone.answer) {
+                            questionStone.disappeared = true;
+                            gameData[questionStone.y][questionStone.x] = 0;
+                            update = true;
+                        }
                     }
                 }
             }

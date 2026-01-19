@@ -50,7 +50,7 @@ export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
 export const seriesFishStart = 6350;
-export const seriesFishEnd = 6350;
+export const seriesFishEnd = 6351;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -380,8 +380,8 @@ export function checkSettings(data, settings) {
               if (val_str.trim() === "") {
                 msg += `${settingNr(i)}Empty value for answer.\n`;
               }
-              if (validXY && !["ҹ", "Ҹ", "Ӆ", 241, 242, 245].includes(data[y][x])) {
-                msg += `${settingNr(i)}No question stone or answer ball found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["ҹ", "Ҹ", "Ҽ", "Ӆ", 241, 242, 243, 245].includes(data[y][x])) {
+                msg += `${settingNr(i)}No question stone, answer ball or tropical fish found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$answerballmode":
@@ -1428,6 +1428,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             idx = findElementByCoordinates(x, y, gameInfo.questionStones);
             if (idx >= 0) {
               gameInfo.questionStones[idx].answer = val_str;
+            }
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+              gameInfo.tropicalFish[idx].answer = val_str;
             }
           }
           break;
