@@ -5,8 +5,8 @@ import { drawStripes } from "./fishStripes.js";
 import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 7;
-export const tropicalFishPalettes = 15;
+export const tropicalFishFinVariations = 8;
+export const tropicalFishPalettes = 16;
 export const tropicalFishShapes = 5;
 export const tropicalFishStripes = 19;
 export const tropicalFishTails = 8;
@@ -201,7 +201,8 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
 
 
     // ---- Dorsal, anal and pelvic fins ----
-    drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors);
+    const heightFactor = ((shape === 5) && (fins === 5)) ? 0.5 : 1; // prevent fins from becoming to big
+    drawBackgroundFins(ctx, fins, bodyHeight * heightFactor, bodyCurves, colors);
 
 
     // ---- Draw the body ----
@@ -259,13 +260,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.fillStyle = colors.eye;
     ctx.strokeStyle = colors.body;
     ctx.lineWidth = 1;
+    const xEye = right - bodyLength * 0.15;
+    const yEye = yc - bodyHeight * 0.1;
     const eyeRadius = ([1, 4].includes(shape)) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
-    ctx.arc(right - bodyLength * 0.15, yc - bodyHeight * 0.1, eyeRadius, 0, Math.PI * 2);
+    ctx.arc(xEye, yEye, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
     if (colors.upperBody === null) {
         ctx.stroke();
     }
+    // Pupil
+    ctx.fillStyle = colors.eyePupil;
+    ctx.beginPath();
+    ctx.arc(xEye, yEye, eyeRadius * 0.4, 0, Math.PI * 2);
+    ctx.fill();
 
     // Restore transform if flipped
     if (flipHorizontally) {

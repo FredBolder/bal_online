@@ -4,143 +4,181 @@ export function getTropicalFishColor(palette) {
     switch (palette) {
         case 2:
             colors = {
-                body: "#FFD94A",    // yellow-orange
-                stripe: "#FF8C00",  // orange
-                fin: "#4CAF50",     // tropical green
+                body: "#FFD94A",
+                stripe: "#FF8C00",
+                fin: "#4CAF50",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 3:
             // Juvenile Golden Trevally
             // Can be combined with jellyfish
             colors = {
-                body: "#FFD23C",    // rich golden yellow
-                stripe: "#1A1A1A",  // near-black
-                fin: "#FFE680",     // pale golden / translucent yellow
+                body: "#FFD23C",
+                stripe: "#1A1A1A",
+                fin: "#FFE680",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 4:
             // Juvenile Golden Trevally
             // Can be combined with jellyfish
             colors = {
-                body: "#FFC107",    // deeper gold
-                stripe: "#000000",  // black
-                fin: "#FFEB99",     // lighter yellow
+                body: "#FFC107",
+                stripe: "#000000",
+                fin: "#FFEB99",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 5:
             colors = {
-                body: "#7EC8E3",    // soft tropical light blue
-                stripe: "#2A6F97",  // deeper blue
-                fin: "#A9DCEC",     // pale translucent blue
+                body: "#7EC8E3",
+                stripe: "#2A6F97",
+                fin: "#A9DCEC",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 6:
             // Can be combined with jellyfish
             colors = {
-                body: "#C9D6DF",    // silvery blue-gray
-                stripe: "#5F6F7A",  // muted gray
-                fin: "#E3EDF2",     // very light translucent
+                body: "#C9D6DF",
+                stripe: "#5F6F7A",
+                fin: "#E3EDF2",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 7:
             // Can be combined with jellyfish
             colors = {
-                body: "#1F5F8B",    // deep ocean blue
-                stripe: "#0B2F4A",  // very dark blue (almost black)
-                fin: "#3F7FA6",     // muted blue
+                body: "#1F5F8B",
+                stripe: "#0B2F4A",
+                fin: "#3F7FA6",
+                eye: "#0E1418",
+                eyePupil: "#0A0E12"
             }
             break;
         case 8:
             // Clownfish
             colors = {
-                body: "#FF8C1A",    // bright orange
-                stripe: "#FFFFFF",  // clean white
+                body: "#FF8C1A",
+                stripe: "#FFFFFF",
                 stripeOutline: "#000000",
-                fin: "#FFB347",     // lighter orange
+                fin: "#FFB347",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 9:
             // Red Tail shark
             colors = {
-                body: "#222222",    // deep matte black
-                stripe: "#222222",  // no stripe
-                fin: "#333333",     // very dark gray (almost black)
-                tail: "#FF3B3B",    // vivid red
+                body: "#222222",
+                stripe: "#222222",
+                fin: "#333333",
+                tail: "#FF3B3B",
+                eye: "#1A1A1A",
+                eyePupil: "#0A0E12"
             }
             break;
         case 10:
             // Yellow Tail Acei Cichlid
             colors = {
-                body: "#7FA8C3",    // soft bluish-gray
-                stripe: "#5D7A9B",  // slightly darker blue-gray (subtle lateral stripe)
-                fin: "#F8E14D",     // bright yellow
-                tail: "#FFEA3C",    // vivid yellow
-                eye: "#1C1C1C"      // dark black
+                body: "#7FA8C3",
+                stripe: "#5D7A9B",
+                fin: "#F8E14D",
+                tail: "#FFEA3C",
+                eye: "#1C1C1C",
+                eyePupil: "#0A0E12"
             }
             break;
         case 11:
             // Siamese Algae Eater
             colors = {
-                body: "#8FA1A8",    // cool blue-gray
-                stripe: "#0E1418",  // deep near-black stripe
-                fin: "#6F838B",     // translucent blue-gray
-                tail: "#7C8F96",    // slightly brighter
-                eye: "#020406"      // very dark, not pure black
+                body: "#8FA1A8",
+                stripe: "#0E1418",
+                fin: "#6F838B",
+                tail: "#7C8F96",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 12:
             // Yellow Tail Damselfish
             colors = {
-                body: "#1F3FAE",    // reef blue
-                stripe: "#2A4FCF",  // subtle lighter blue highlight stripe
-                fin: "#2A4EC0",     // reef-blue
-                tail: "#FFD83D",    // vivid yellow
-                eye: "#05070D"      // dark navy-black
+                body: "#1F3FAE",
+                stripe: "#2A4FCF",
+                fin: "#2A4EC0",
+                tail: "#FFD83D",
+                eye: "#0E1418",
+                eyePupil: "#0A0E12"
             }
             break;
         case 13:
             // Zebra Angelfish
             colors = {
-                body: "#C7CDD1",    // silvery white / pale pearl
-                stripe: "#1A1E23",  // deep charcoal black
-                fin: "#9AA3A9",     // translucent silver-gray
-                tail: "#8F979C",    // slightly darker translucent
-                eye: "#B5342A"      // subtle reddish eye
+                body: "#C7CDD1",
+                stripe: "#1A1E23",
+                fin: "#9AA3A9",
+                tail: "#8F979C",
+                eye: "#B5342A",
+                eyePupil: "#0A0E12"
             }
             break;
         case 14:
             // Smallmouth Grunt
             colors = {
-                body: "#7E8A90",    // dark steel-gray
-                stripe: "#F2D24B",  // saturated yellow horizontal stripes
-                fin: "#EBCB55",     // slightly lighter, less saturated yellow
-                tail: "#F7E06A",    // brightest yellow for motion & sun hit
-                eye: "#0A0E12"
+                body: "#7E8A90",
+                stripe: "#F2D24B",
+                fin: "#EBCB55",
+                tail: "#F7E06A",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             }
             break;
         case 15:
             // Bicolor Anthias
             colors = {
-                body: "#7A2E8E",       // purple / magenta
-                upperBody: "#E6B72E",  // primary yellow
-                stripe: "#5A1F6B",     // magenta very thin horizonal stripe
-                fin: "#B043C6",        // soft white
-                tail: "#B043C6",       // soft white 
-                eye: "#1A1A1A"
+                body: "#7A2E8E",
+                upperBody: "#E6B72E",
+                stripe: "#5A1F6B",
+                fin: "#B043C6",
+                tail: "#B043C6",
+                eye: "#1A1A1A",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 16:
+            // Blue Diamond Discus
+            colors = {
+                body: "#4F8FA8",
+                stripe: "#2F3F48",
+                fin: "#6FB7C9",
+                tail: "#8FD3E0",
+                eye: "#E39B2E",
+                eyePupil: "#0A0E12"
             }
             break;
         default:
-            // 1
             colors = {
-                body: "#FF6347",    // red-orange
-                stripe: "#FF4500",  // red-orange
-                fin: "#FFD700",     // gold
+                body: "#FF6347",
+                stripe: "#FF4500",
+                fin: "#FFD700",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
             };
             break;
     }
+
     colors.upperBody = colors.upperBody ?? null;
     colors.tail = colors.tail ?? colors.fin;
-    colors.eye = colors.eye ?? "#000000";
+    colors.eye = colors.eye ?? "#1A1F24";
+    colors.eyePupil = colors.eyePupil ?? "#0A0E12";
     colors.stripeOutline = colors.stripeOutline ?? null;
+
     return colors;
 }
+

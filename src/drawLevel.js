@@ -4252,6 +4252,11 @@ function drawLevel(
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 15, 1, 7, 4, 18);
           break;
+        case 2163:
+          // Tropical fish - Blue Diamond Discus
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0);
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

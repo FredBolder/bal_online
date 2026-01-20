@@ -1,33 +1,9 @@
-export function cubicFromMid(p0, p3, curvature, normalSign) {
-    const dx = p3.x - p0.x;
-    const dy = p3.y - p0.y;
-    const len = Math.hypot(dx, dy) || 1;
-
-    // unit perpendicular
-    const nx = -dy / len * normalSign;
-    const ny = dx / len * normalSign;
-
-    // actual bend in pixels (scale-invariant)
-    const bend = curvature * len;
-
-    // points at 1/3 and 2/3 of the chord
-    const c1 = {
-        x: p0.x + dx / 3 + nx * bend,
-        y: p0.y + dy / 3 + ny * bend
-    };
-
-    const c2 = {
-        x: p0.x + dx * 2 / 3 + nx * bend,
-        y: p0.y + dy * 2 / 3 + ny * bend
-    };
-
-    return { c1, c2 };
-}
+import { cubicFromMid } from "./graphicUtils.js";
 
 export function getTailDimensions(tail, bodyLength, bodyHeight) {
     let tailWidth = 0;
     let tailHeight = 0;
-    
+
     switch (tail) {
         case 1:
             // Emarginate
@@ -111,10 +87,8 @@ export function drawEmarginateTail(
     const yTopTip = yCenter - tailHeight * 0.5;
     const yBotTip = yCenter + tailHeight * 0.5;
 
-    // Robust geometric scale
     const scale = Math.sqrt(tailWidth * tailHeight);
 
-    // Dimensionless curvature (variation controls notch depth)
     const curvature = (variation ? 0.16 : 0.25) * scale / tailHeight;
 
     const P0 = { x: rightX, y: yBotConn };
@@ -124,19 +98,10 @@ export function drawEmarginateTail(
 
     ctx.beginPath();
     ctx.moveTo(P0.x, P0.y);
-
-    // Lower straight edge
     ctx.lineTo(P1.x, P1.y);
-
-    // Emarginate notch (inward bend)
-    {
-        const { c1, c2 } = cubicFromMid(P1, P2, curvature, +1);
-        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P2.x, P2.y);
-    }
-
-    // Upper straight edge
+    const { c1, c2 } = cubicFromMid(P1, P2, curvature, +1);
+    ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P2.x, P2.y);
     ctx.lineTo(P3.x, P3.y);
-
     ctx.closePath();
     ctx.fill();
     ctx.stroke();

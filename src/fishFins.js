@@ -1,13 +1,5 @@
 import { getBodyBottomFrame, getBodyTopFrame } from "./fishBody.js";
-
-function midPoint(p1, p2) {
-    let x = 0;
-    let y = 0;
-
-    x = (p1.x + p2.x) / 2;
-    y = (p1.y + p2.y) / 2;
-    return { x, y };
-}
+import { cubicFromMid, midPoint } from "./graphicUtils.js";
 
 function normalize(v) {
     const L = Math.hypot(v.x, v.y) || 1;
@@ -235,32 +227,95 @@ function drawFinAlongCurve(ctx, bodyCurves, opts) {
     ctx.stroke();
 }
 
-// generic fin painter - center at cx,cy. rotation in radians.
-// width = side-to-side span, height = tip length.
-// options: {style: "rounded"|"pointy", curvature: 0..1}
-function drawFinShape(ctx, cx, cy, width, height, rotation = 0, options = {}) {
-    const style = options.style || "rounded";
-    const curvature = (options.curvature ?? 0.6); // how tall the curve is
+// Pectoral fin painter
+// cx, cy          : fin root center
+// connectionWidth : width where fin connects to body (can be < finWidth)
+// finWidth        : maximum fin span (side-to-side)
+// length          : fin length (root -> tip). Tip will be exactly -length in local coords.
+// rotation        : radians
+// options         : {
+//    curvature: 0..1 (multiplier for bulge),
+//    widestPoint: 0..1 (0 = base, 1 = tip),
+//    tipRoundness: 0..1 how rounded the tip is (0 = round, 1 = very pointy)
+// }
+
+export function drawPectoralFin(
+    ctx,
+    cx,
+    cy,
+    connectionWidth,
+    finWidth,
+    length,
+    rotation = 0,
+    options = {}
+) {
+    const curvature = options.curvature ?? 0.12; // dimensionless, WAS 0.08
+    const tipRoundness = options.tipRoundness ?? 0.25;
+    const widestPoint = options.widestPoint ?? 0.6;
+    const tipFrac = options.tipFrac ?? 0.25; // tip width fraction
+
+    const halfConn = connectionWidth * 0.5;
+    const halfFin = finWidth * 0.5;
+
+    // Key points (local coordinates)
+    const aspect = length / finWidth; // < 1 = squat fin
+    const widen = Math.max(1, 1.4 - aspect); // boost when squat
+
+    const P0 = { x: -halfConn, y: 0 };                      // base left
+    const P1 = { x: -halfFin * widen, y: -length * widestPoint };    // widest left
+    const P2 = { x: -halfFin * tipFrac, y: -length };       // tip left
+
+    const P3 = { x: halfFin * tipFrac, y: -length };        // tip right
+    const P4 = { x: halfFin * widen, y: -length * widestPoint };     // widest right
+    const P5 = { x: halfConn, y: 0 };                       // base right
+
+    // scale-aware curvature
+    const scale = Math.sqrt(finWidth * length);
+    const edgeCurvature = curvature * scale / length; // was finWidth
+
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(rotation);
     ctx.beginPath();
-    // base left -> tip -> base right -> back to left
-    ctx.moveTo(-width * 0.5, 0);
-    if (style === "pointy") {
-        // stronger curve to a point
-        ctx.quadraticCurveTo(0, -height * (curvature + 0.25), width * 0.5, 0);
-        ctx.lineTo(-width * 0.5, 0);
-    } else {
-        // rounded: double quadratic for a soft fin
-        ctx.quadraticCurveTo(-width * 0.15, -height * curvature, 0, -height);
-        ctx.quadraticCurveTo(width * 0.15, -height * curvature, width * 0.5, 0);
-        ctx.lineTo(-width * 0.5, 0);
+
+    ctx.moveTo(P0.x, P0.y);
+
+    // ---- Left side (2 curves) ----
+    {
+        const { c1, c2 } = cubicFromMid(P0, P1, edgeCurvature, -1);
+        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P1.x, P1.y);
     }
+    {
+        const { c1, c2 } = cubicFromMid(P1, P2, edgeCurvature, -1);
+        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P2.x, P2.y);
+    }
+
+
+    // ---- Tip cap ----
+    const r = tipRoundness * Math.min(halfFin, length * 0.25);
+
+    ctx.bezierCurveTo(
+        P2.x, P2.y - r * 0.5,
+        P3.x, P3.y - r * 0.25,
+        P3.x, P3.y
+    );
+
+
+    // ---- Right side (mirror) ----
+    {
+        const { c1, c2 } = cubicFromMid(P3, P4, edgeCurvature, -1);
+        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P4.x, P4.y);
+    }
+    {
+        const { c1, c2 } = cubicFromMid(P4, P5, edgeCurvature, -1);
+        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P5.x, P5.y);
+    }
+
     ctx.closePath();
     ctx.fill();
     ctx.restore();
 }
+
 
 export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
     ctx.fillStyle = colors.fin;
@@ -428,7 +483,6 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 5:
             // Siamese Algae Eater
             // Dorsal fin
-            // Dorsal fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.4,
@@ -554,6 +608,44 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 10
             });
             break;
+        case 8:
+            // Blue Diamond Discus
+            // Dorsal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.3,
+                endT: 0.9,
+                height: bodyHeight * 0.16,
+                taper: 1.0,
+                lean: 3,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.4,
+                endT: 0.9,
+                height: bodyHeight * 0.14,
+                taper: 1.0,
+                lean: 3,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.15,
+                endT: 0.17,
+                height: bodyHeight * 0.2,
+                taper: 0.4,
+                lean: 3,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+            break;
         default:
             break;
     }
@@ -563,71 +655,98 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
     ctx.fillStyle = colors.fin;
     let cx = 0;
     let cy = 0;
+    let connectionWidth = 0;
     let finWidth = 0;
     let finHeight = 0;
     let rotation = 0;
+    let options = {};
     // Pectoral fin
     switch (fins) {
         case 1:
             // Clownfish
-            cx = bodyRight - (bodyLength * 0.37);
-            cy = yCenter + (bodyHeight * 0.25);
+            cx = bodyRight - (bodyLength * 0.35);
+            cy = yCenter + (bodyHeight * 0.2);
             finWidth = bodyLength * 0.25;
-            finHeight = bodyHeight * 0.7;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.5;
             rotation = 1.6 * Math.PI;
             break;
         case 2:
             // Red Tail Shark
             cx = bodyRight - (bodyLength * 0.3);
             cy = yCenter + (bodyHeight * 0.25);
-            finWidth = bodyLength * 0.2;
-            finHeight = bodyHeight * 0.5;
-            rotation = 1.7 * Math.PI;
+            finWidth = bodyLength * 0.1;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.3 * Math.PI;
+            options.widestPoint = 0.9;
             break;
         case 3:
             // Juvenile Golden Trevally
-            cx = bodyRight - (bodyLength * 0.3);
+            cx = bodyRight - (bodyLength * 0.23);
             cy = yCenter + (bodyHeight * 0.25);
-            finWidth = bodyLength * 0.2;
-            finHeight = bodyHeight * 0.5;
-            rotation = 1.7 * Math.PI;
+            finWidth = bodyLength * 0.12;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.45 * Math.PI;
+            options.widestPoint = 0.9;
             break;
         case 4:
             // Yellow Tail Acei Cichlid, Yellow Tail Damselfish and Bicolor Anthias
-            cx = bodyRight - (bodyLength * 0.3);
+            cx = bodyRight - (bodyLength * 0.27);
             cy = yCenter + (bodyHeight * 0.25);
-            finWidth = bodyLength * 0.15;
-            finHeight = bodyHeight * 0.4;
-            rotation = 1.7 * Math.PI;
+            finWidth = bodyLength * 0.12;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.45 * Math.PI;
+            options.widestPoint = 0.9;
             break;
         case 5:
             // Siamese Algae Eater
-            cx = bodyRight - (bodyLength * 0.3);
-            cy = yCenter + (bodyHeight * 0.4);
-            finWidth = bodyLength * 0.2;
+            cx = bodyRight - (bodyLength * 0.23);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.1;
+            connectionWidth = finWidth * 0.5;
             finHeight = bodyHeight * 0.7;
-            rotation = 1.7 * Math.PI;
+            rotation = 1.4 * Math.PI;
+            options.widestPoint = 0.9;
             break;
         case 6:
             // Zebra Angelfish
-            cx = bodyRight - (bodyLength * 0.25);
-            cy = yCenter + (bodyHeight * 0.15);
-            finWidth = bodyLength * 0.15;
-            finHeight = bodyHeight * 0.5;
-            rotation = 1.6 * Math.PI;
+            cx = bodyRight - (bodyLength * 0.3);
+            cy = yCenter + (bodyHeight * 0.2);
+            finWidth = bodyLength * 0.2;
+            connectionWidth = finWidth * 0.25;
+            finHeight = bodyHeight * 0.4;
+            rotation = 1.5 * Math.PI;
+            options.widestPoint = 0.95;
+            options.tipRoundness = 0.3;
             break;
         case 7:
             // Smallmouth Grunt
+            cx = bodyRight - (bodyLength * 0.23);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.12;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.45 * Math.PI;
+            options.widestPoint = 0.9;
+            break;
+        case 8:
+            // Blue Diamond Discus
             cx = bodyRight - (bodyLength * 0.3);
-            cy = yCenter + (bodyHeight * 0.15);
-            finWidth = bodyLength * 0.15;
-            finHeight = bodyHeight * 0.5;
-            rotation = 1.6 * Math.PI;
+            cy = yCenter + (bodyHeight * 0.2);
+            finWidth = bodyLength * 0.2;
+            connectionWidth = finWidth * 0.25;
+            finHeight = bodyHeight * 0.4;
+            rotation = 1.5 * Math.PI;
+            options.widestPoint = 0.95;
+            options.tipRoundness = 0.3;
             break;
         default:
             break;
     }
-    drawFinShape(ctx, cx, cy, finWidth, finHeight, rotation, { style: "pointy" });
+    drawPectoralFin(ctx, cx, cy, connectionWidth, finWidth, finHeight, rotation, options);
 }
 
 
