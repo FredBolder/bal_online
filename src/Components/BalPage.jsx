@@ -1163,7 +1163,7 @@ function BalPage() {
           case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163];
+            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165];
             break;
           case 12:
             // Groups
@@ -2774,7 +2774,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2860,6 +2860,22 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].tail = 4;
                       gameInfo.tropicalFish[idx].fins = 8;
                       gameInfo.tropicalFish[idx].stripes = 0;
+                      break;
+                    case 2164:
+                      // Orange-red Discus
+                      gameInfo.tropicalFish[idx].palette = 17;
+                      gameInfo.tropicalFish[idx].shape = 5;
+                      gameInfo.tropicalFish[idx].tail = 3;
+                      gameInfo.tropicalFish[idx].fins = 8;
+                      gameInfo.tropicalFish[idx].stripes = 5;
+                      break;
+                    case 2165:
+                      // Black Neon Tetra
+                      gameInfo.tropicalFish[idx].palette = 18;
+                      gameInfo.tropicalFish[idx].shape = 6;
+                      gameInfo.tropicalFish[idx].tail = 7;
+                      gameInfo.tropicalFish[idx].fins = 9;
+                      gameInfo.tropicalFish[idx].stripes = 20;
                       break;
                     default:
                       break;

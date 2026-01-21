@@ -1,0 +1,50 @@
+$extra: 1
+$stonepattern: 2
+$pistonmode: 8, 9, momentary
+$group: 8, 10, 2
+$pistonmode: 8, 10, momentary
+$group: 3, 12, 3
+$inverted: 3, 12, yes
+$pistonmode: 3, 12, momentary
+$sticky: 3, 12, yes
+$group: 6, 6, 2
+$group: 10, 13, 3
+$group: 17, 2, 2
+$group: 6, 13, 2
+$fins: 10, 8, 4
+$palette: 10, 8, 15
+$shape: 10, 8, 1
+$stripes: 10, 8, 18
+$tail: 10, 8, 7
+$fins: 11, 10, 4
+$palette: 11, 10, 15
+$shape: 11, 10, 1
+$stripes: 11, 10, 18
+$tail: 11, 10, 7
+$fins: 13, 11, 4
+$palette: 13, 11, 15
+$shape: 13, 11, 1
+$stripes: 13, 11, 18
+$tail: 13, 11, 7
+$background: 10, 8, 1, 1, 23
+$background: 8, 9, 1, 1, 23
+$background: 8, 10, 1, 1, 23
+$background: 11, 10, 1, 1, 23
+$background: 8, 11, 1, 1, 23
+$background: 13, 11, 1, 1, 23
+$background: 10, 13, 1, 1, 23
+1111111111111111111
+1   4 31    3 1  11
+1 4 4  1      l  T1
+1 1=1 11     111111
+1  =           d 11
+1m = 2           T1
+111=11m1wwwwwwww111
+1  =1111wwwwwwww111
+1 111111wwҼwwwww111
+1 111111Ùwwwwwww111
+1  o  T1ËwwҼwwww111
+111 1v11kwwwwҼww111
+111Ù1 11wwwwwwww111
+11111 T1wwmwwwww111
+1111111111111111111

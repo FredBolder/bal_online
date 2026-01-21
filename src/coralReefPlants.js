@@ -143,7 +143,8 @@ export function drawCoralReefPlant(ctx, xc, yc, size, swayAmountPercentage, sway
     ctx.beginPath();
     ctx.moveTo(p0.x, p0.y);
     ctx.bezierCurveTo(sp1.x, sp1.y, sp2.x, sp2.y, p3.x, p3.y);
-    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.lineCap = 'round'; 
+    ctx.lineJoin = 'round';
     ctx.strokeStyle = "rgba(60,140,110,0.95)";
     ctx.lineWidth = stemThickness;
     ctx.stroke();
@@ -195,4 +196,6 @@ export function drawCoralReefPlant(ctx, xc, yc, size, swayAmountPercentage, sway
     }
 
     ctx.restore();
+    ctx.lineCap = 'butt'; 
+    ctx.lineJoin = 'miter';
 }

@@ -5,10 +5,10 @@ import { drawStripes } from "./fishStripes.js";
 import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 8;
-export const tropicalFishPalettes = 16;
-export const tropicalFishShapes = 5;
-export const tropicalFishStripes = 19;
+export const tropicalFishFinVariations = 9;
+export const tropicalFishPalettes = 18;
+export const tropicalFishShapes = 6;
+export const tropicalFishStripes = 20;
 export const tropicalFishTails = 8;
 
 export function changeFins(gameInfo, x, y, decrease) {
@@ -141,6 +141,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             bodyHeight = h * 0.45;
             bodyLength = w * 0.55;
             break;
+        case 6:
+            bodyHeight = h * 0.2;
+            bodyLength = w * 0.74;
+            break;
         default:
             // 2
             bodyHeight = h * 0.3;
@@ -171,6 +175,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
         case 5:
             frontCurve = bodyLength * 0.2;
             rearCurve = bodyLength * 0.2;
+            break;
+        case 6:
+            frontCurve = bodyLength * 0.08;
+            rearCurve = bodyLength * 0.4;
             break;
         default:
             break;
@@ -295,6 +303,9 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
         const fish = gameInfo.tropicalFish[i];
+        
+        if (![20, 23].includes(backData[fish.y][fish.x])) continue;
+
         if (fish.isDead) {
             countTo = 12;
         } if (gameVars.tropicalFishCountToOverride > 0) {

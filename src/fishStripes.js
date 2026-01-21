@@ -9,9 +9,11 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
     // 17 = horizontal tick stripe
     // 18 = horizontal thin stripe
     // 19 = 5 horizontal stripes
+    // 20 = 2 horizontal stripes
     const bodyHeight = bodyBottom - bodyTop;
     const bodyLength = bodyRight - bodyLeft;
     const bodyCenter = (bodyRight + bodyLeft) / 2;
+    let dy = 0;
     let numberOfStripes = 0;
     const positions = [];
     let stripePattern = 0;
@@ -22,11 +24,8 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
     buildBodyPath(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
     ctx.clip();
 
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-
     if ((stripes === 17) || (stripes === 18)) {
-        ctx.lineWidth = (stripes === 18) ? stripeWidth * 0.25 : stripeWidth;
+        ctx.lineWidth = (stripes === 18) ? stripeWidth * 0.25 : stripeWidth * 0.9;
         ctx.strokeStyle = colors.stripe;
         ctx.beginPath();
         ctx.moveTo(bodyLeft, yc);
@@ -43,6 +42,24 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
             ctx.beginPath();
             ctx.moveTo(bodyLeft, y);
             ctx.quadraticCurveTo(bodyCenter, y + curveStrength, bodyRight, y);
+            ctx.stroke();
+        }
+    } else if (stripes === 20) {
+        const widthFactorNormal = 0.85;
+        const widthFactorThin = 0.3;
+        ctx.lineWidth = stripeWidth * widthFactorNormal;
+        ctx.strokeStyle = colors.stripe;
+        ctx.beginPath();
+        ctx.moveTo(bodyLeft, yc);
+        ctx.lineTo(bodyRight - (bodyLength * 0.25), yc); // not over the eye
+        ctx.stroke();
+        if (colors.secondStripe !== null) {
+            ctx.lineWidth = stripeWidth * widthFactorThin;
+            ctx.strokeStyle = colors.secondStripe;
+            dy = (stripeWidth * widthFactorNormal / 2) + (stripeWidth * widthFactorThin / 2);
+            ctx.beginPath();
+            ctx.moveTo(bodyLeft, yc - dy);
+            ctx.lineTo(bodyRight - (bodyLength * 0.25), yc - dy);
             ctx.stroke();
         }
     } else if (stripes > 12) {

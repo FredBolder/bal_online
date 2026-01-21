@@ -1928,6 +1928,7 @@ function drawLevel(
     }
 
     ctx.restore();
+    ctx.lineCap = 'butt';
   }
 
   function drawNumber(n) {
@@ -4256,6 +4257,16 @@ function drawLevel(
           // Tropical fish - Blue Diamond Discus
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0);
+          break;
+        case 2164:
+          // Tropical fish - Orange-red Discus
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 17, 5, 3, 8, 5);
+          break;
+        case 2165:
+          // Tropical fish - Black Neon Tetra
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

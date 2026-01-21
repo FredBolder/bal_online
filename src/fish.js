@@ -60,6 +60,9 @@ export function moveFish(backData, gameData, gameInfo) {
     up = false;
     upOrDown = false;
     const fish = gameInfo.redFish[i];
+
+    if (![20, 23].includes(backData[fish.y][fish.x])) continue;
+
     gameData[fish.y][fish.x] = 0;
 
     if (fish.isDead) {

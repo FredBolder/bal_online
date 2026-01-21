@@ -162,6 +162,30 @@ export function getTropicalFishColor(palette) {
                 eyePupil: "#0A0E12"
             }
             break;
+        case 17:
+            // Orange-red Discus
+            colors = {
+                body: "#E86A2A",
+                stripe: "#B23A1E",
+                fin: "#F08A4B",
+                tail: "#D45C2C",
+                eye: "#F2B13A",
+                eyePupil: "#120A08"
+            }
+            break;
+        case 18:
+            // Black Neon Tetra
+            colors = {
+                upperBody: "#C9B56A",
+                body: "#E2E5E2",
+                stripe: "#1A1E21",
+                secondStripe: "#7FAFB6",
+                fin: "#B9C0BB",
+                tail: "#AEB5B0",
+                eye: "#E1A13A",
+                eyePupil: "#0C0F12"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",
@@ -177,6 +201,7 @@ export function getTropicalFishColor(palette) {
     colors.tail = colors.tail ?? colors.fin;
     colors.eye = colors.eye ?? "#1A1F24";
     colors.eyePupil = colors.eyePupil ?? "#0A0E12";
+    colors.secondStripe = colors.secondStripe ?? null;
     colors.stripeOutline = colors.stripeOutline ?? null;
 
     return colors;

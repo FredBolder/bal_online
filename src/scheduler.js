@@ -27,6 +27,7 @@ import { moveRedBalls } from "./redBalls.js";
 import { checkTimeBombs } from "./timeBombs.js";
 import { checkTrapDoors } from "./trapDoors.js";
 import { moveTropicalFish } from "./tropicalFish.js";
+import { checkFishOutOfWater } from "./water.js";
 import { checkWhiteBallSynchronisers } from "./whiteBallSynchronisers.js";
 import { moveYellowBalls, stopYellowBallsThatAreBlocked } from "./yellowBalls.js";
 import { moveYellowBars } from "./yellowBars.js";
@@ -144,17 +145,24 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
 
-        if ((gameVars.timeFreezer === 0) && ((gameInfo.redFish.length > 0) || (gameInfo.tropicalFish.length > 0))) {
+        if ((gameVars.timeFreezer === 0) && ((gameInfo.redFish.length > 0) ||
+            (gameInfo.tropicalFish.length > 0) || (gameInfo.jellyfish.length > 0))) {
             if (gameVars.fishCounter >= gameVars.fishCountTo) {
                 gameVars.fishCounter = 0;
                 moveFish(backData, gameData, gameInfo);
                 updateCanvas = true;
             }
             gameVars.fishCounter++;
-        }
 
-        if (moveTropicalFish(backData, gameData, gameInfo, gameVars)) {
-            updateCanvas = true;
+            if (moveTropicalFish(backData, gameData, gameInfo, gameVars)) {
+                updateCanvas = true;
+            }
+
+            if (gameVars.checkFishOutOfWaterCounter >= 10) {
+                gameVars.checkFishOutOfWaterCounter = 0;
+                checkFishOutOfWater(backData, gameInfo);
+            }
+            gameVars.checkFishOutOfWaterCounter++;
         }
 
         gameVars.wave1++;

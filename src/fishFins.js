@@ -646,6 +646,53 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 10
             });
             break;
+        case 9:
+            // Black Neon Tetra
+            // Dorsal fins
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.45,
+                endT: 0.7,
+                height: bodyHeight * 0.5,
+                taper: 1,
+                lean: 0.7,
+                overlap: bodyHeight * 0.1,
+                steps: 2
+            });
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.85,
+                endT: 0.9,
+                height: bodyHeight * 0.15,
+                taper: 1,
+                lean: 0.4,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.6,
+                endT: 0.88,
+                height: bodyHeight * 0.3,
+                taper: 1,
+                lean: -0.4,
+                overlap: bodyHeight * 0.1
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.45,
+                endT: 0.55,
+                height: bodyHeight * 0.15,
+                taper: 1,
+                lean: 0.35,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
+            break;
         default:
             break;
     }
@@ -742,6 +789,16 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             rotation = 1.5 * Math.PI;
             options.widestPoint = 0.95;
             options.tipRoundness = 0.3;
+            break;
+        case 9:
+            // Black Neon Tetra
+            cx = bodyRight - (bodyLength * 0.23);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.08;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.45 * Math.PI;
+            options.widestPoint = 0.9;
             break;
         default:
             break;

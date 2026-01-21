@@ -90,6 +90,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 y,
                 direction: Math.random() > 0.5 ? 6 : 4,
                 blocked: false,
+                outOfWater: 0,
                 isDead: false
             };
             gameInfo.redFish.push(fish);
@@ -331,6 +332,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 tail: 2,
                 fins: 3,
                 stripes: 5,
+                outOfWater: 0,
                 isDead: false,
                 counter: 0,
                 answer: "fish" 
@@ -355,6 +357,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 x,
                 y,
                 time: 0,
+                outOfWater: 0,
                 isDead: false
             };
             gameInfo.jellyfish.push(jellyfish);
