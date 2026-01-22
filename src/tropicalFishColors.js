@@ -186,6 +186,18 @@ export function getTropicalFishColor(palette) {
                 eyePupil: "#0C0F12"
             }
             break;
+        case 19:
+            // Yellow Tang
+            colors = {
+                body: "#F2C94C",      // rich golden yellow body
+                stripe: "#9E8A2B",    // no stripe, but for other fish
+                fin: "#D9B43A",       // slightly darker fins for visibility
+                tail: "#CFAF34",      // denser tail
+                eye: "#1B1F22",       // dark eye
+                eyePupil: "#0B0F14",  // deep black pupil
+                accent: "#E07A1F"     // subtle orange accent (scalpel / depth hint)
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",

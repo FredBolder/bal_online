@@ -6,7 +6,7 @@ import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, 
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 9;
-export const tropicalFishPalettes = 18;
+export const tropicalFishPalettes = 19;
 export const tropicalFishShapes = 6;
 export const tropicalFishStripes = 20;
 export const tropicalFishTails = 8;

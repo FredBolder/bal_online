@@ -50,7 +50,7 @@ export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
 export const seriesFishStart = 6350;
-export const seriesFishEnd = 6354;
+export const seriesFishEnd = 6355;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;

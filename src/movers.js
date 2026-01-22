@@ -1,6 +1,6 @@
 import { findElementByCoordinates, getGameDataValue, moveObject } from "./balUtils.js";
 
-const moveableObjects = [2, 4, 5, 8, 9, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242, 244, 245, 246, 247];
+const moveableObjects = [2, 4, 5, 8, 9, 27, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242, 243, 244, 245, 246, 247, 248];
 
 function canMove(objectNumber, mode, inverted) {
     let result = false;

@@ -1,44 +1,43 @@
 $extra: 1
 $stonepattern: 2
 $has: divingglasses
-$pistonmode: 8, 9, momentary
-$pistonmode: 8, 10, momentary
-$group: 3, 11, 2
-$pistonmode: 3, 11, momentary
-$group: 10, 13, 2
-$fins: 10, 8, 4
-$palette: 10, 8, 15
-$shape: 10, 8, 1
-$stripes: 10, 8, 18
-$tail: 10, 8, 7
-$fins: 13, 11, 4
-$palette: 13, 11, 15
-$shape: 13, 11, 1
-$stripes: 13, 11, 18
-$tail: 13, 11, 7
-$fins: 11, 10, 4
-$palette: 11, 10, 15
-$shape: 11, 10, 1
-$stripes: 11, 10, 18
-$tail: 11, 10, 7
-$background: 10, 8, 1, 1, 23
-$background: 8, 9, 1, 1, 23
-$background: 8, 10, 1, 1, 23
-$background: 11, 10, 1, 1, 23
-$background: 13, 11, 1, 1, 23
-$background: 10, 13, 1, 1, 23
-11111111111111111111
-13  4   1   3     11
-1   4   1         11
-111=11111         11
-1  =              11
-1m =  2           T1
-111=1111wwwwwwww1111
-1  =1111wwwwwwww1111
-1 111111wwҼwwwww1111
-1 1 1111Ùwwwwwww1111
-1  o  T1ËwwҼwwww1111
-111Ù1111wwwwwҼww1111
-11111111wwwwwwww1111
-11111111wwmwwwww1111
-11111111111111111111
+$gameticksxy: 16, 3, 100
+$gameticksxy: 18, 7, 100
+$activesides: 8, 7, left, right
+$direction: 8, 7, left
+$activesides: 8, 8, left, right
+$inverted: 5, 3, yes
+$sticky: 5, 3, yes
+$sticky: 11, 3, yes
+$group: 5, 4, 2
+$sticky: 5, 4, yes
+$group: 11, 4, 2
+$sticky: 11, 4, yes
+$group: 15, 5, 2
+$pistonmode: 15, 5, momentary
+$group: 19, 8, 2
+$pistonmode: 19, 8, momentary
+$group: 16, 6, 2
+$group: 18, 9, 2
+$group: 20, 6, 3
+$group: 3, 9, 3
+$fins: 4, 7, 8
+$palette: 4, 7, 16
+$shape: 4, 7, 5
+$stripes: 4, 7, 0
+$tail: 4, 7, 4
+$background: 4, 7, 1, 1, 23
+$background: 3, 9, 2, 1, 23
+111111111111111111111
+Φ    4           1131
+1 11m11!1!111111 T  1
+1 111Ë 515 Ö11k1)1111
+1 T  Ë5   5Ö   1 1111
+1 11         11Ë    0
+1 1wwwww1wwwwww1mG  m
+1 1wҼwwwηwwwwww111)11
+1 1wwwwwηwwwwww1   Ö1
+1 1њ2www1wwwwww1 Hm11
+1 11111111111111 1111
+1                φ111
+1Ω1111111111111111111

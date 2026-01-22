@@ -55,7 +55,7 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247].includes(el)) {
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247].includes(el)) {
     result = true;
   } else {
     switch (el) {

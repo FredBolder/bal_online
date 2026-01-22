@@ -10,6 +10,11 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
     let obj = 0;
 
     obj = gameData[y1][x1];
+    
+    if (obj === 2) {
+        return;
+    }
+
     if (obj === 0) {
         obj = backData[y1][x1];
     }
@@ -272,6 +277,12 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
                 return { arr: gameInfo.answerBalls, idx };
+            }
+            break;
+        case 243:
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+                return { arr: gameInfo.tropicalFish, idx };
             }
             break;
         case 244:
