@@ -28,28 +28,28 @@ $question: 16, 18, gel
 $answer: 16, 18, !
 $question: 17, 18, fish
 $answer: 17, 18, !
-$fins: 11, 13, 4
-$palette: 11, 13, 12
-$shape: 11, 13, 3
-$stripes: 11, 13, 0
-$tail: 11, 13, 8
-$fins: 9, 14, 4
-$palette: 9, 14, 12
-$shape: 9, 14, 3
-$stripes: 9, 14, 0
-$tail: 9, 14, 8
 $palette: 20, 9, 3
 $stripes: 20, 9, 12
 $tail: 20, 9, 7
 $palette: 22, 11, 3
 $stripes: 22, 11, 12
 $tail: 22, 11, 7
-$palette: 27, 17, 3
-$stripes: 27, 17, 12
-$tail: 27, 17, 7
 $palette: 25, 14, 3
 $stripes: 25, 14, 12
 $tail: 25, 14, 7
+$palette: 27, 17, 3
+$stripes: 27, 17, 12
+$tail: 27, 17, 7
+$fins: 9, 14, 11
+$palette: 9, 14, 12
+$shape: 9, 14, 3
+$stripes: 9, 14, 0
+$tail: 9, 14, 8
+$fins: 11, 13, 11
+$palette: 11, 13, 12
+$shape: 11, 13, 3
+$stripes: 11, 13, 0
+$tail: 11, 13, 8
 $background: 14, 7, 4, 1, 20
 $background: 5, 8, 1, 1, 23
 $background: 14, 8, 4, 1, 23

@@ -1163,7 +1163,7 @@ function BalPage() {
           case 11:
             // Water
             arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165];
+            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166];
             break;
           case 12:
             // Groups
@@ -2052,6 +2052,10 @@ function BalPage() {
               showMessage("Info", `Level ${gameVars.currentLevel}: ${numberToCode(gameVars.currentLevel)}`);
             }
             break;
+          case "D":
+            globalVars.debug = !globalVars.debug;
+            updateGameCanvas();            
+            break;
           case "H":
             hint(gameVars);
             break;
@@ -2774,7 +2778,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2826,7 +2830,7 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].palette = 12;
                       gameInfo.tropicalFish[idx].shape = 3;
                       gameInfo.tropicalFish[idx].tail = 8;
-                      gameInfo.tropicalFish[idx].fins = 4;
+                      gameInfo.tropicalFish[idx].fins = 11;
                       gameInfo.tropicalFish[idx].stripes = 0;
                       break;
                     case 2160:
@@ -2876,6 +2880,14 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 9;
                       gameInfo.tropicalFish[idx].stripes = 20;
+                      break;
+                    case 2166:
+                      // Yellow Tang
+                      gameInfo.tropicalFish[idx].palette = 19;
+                      gameInfo.tropicalFish[idx].shape = 7;
+                      gameInfo.tropicalFish[idx].tail = 4;
+                      gameInfo.tropicalFish[idx].fins = 10;
+                      gameInfo.tropicalFish[idx].stripes = 0;
                       break;
                     default:
                       break;

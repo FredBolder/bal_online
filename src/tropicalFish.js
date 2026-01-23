@@ -1,13 +1,14 @@
 import { findElementByCoordinates } from "./balUtils.js";
-import { buildBodyPath, fillUpperBody } from "./fishBody.js";
+import { buildBodyCurves, buildBodyPath, fillUpperBody } from "./fishBody.js";
 import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
 import { drawStripes } from "./fishStripes.js";
 import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
+import { globalVars } from "./glob.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 9;
+export const tropicalFishFinVariations = 11;
 export const tropicalFishPalettes = 19;
-export const tropicalFishShapes = 6;
+export const tropicalFishShapes = 7;
 export const tropicalFishStripes = 20;
 export const tropicalFishTails = 8;
 
@@ -145,6 +146,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             bodyHeight = h * 0.2;
             bodyLength = w * 0.74;
             break;
+        case 7:
+            // Tang
+            bodyHeight = h * 0.45;
+            bodyLength = w * 0.7;
+            break;
         default:
             // 2
             bodyHeight = h * 0.3;
@@ -164,49 +170,125 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     // ---- Body outline ----
     const bodyLeft = left + tailWidth;
     const bodyRight = right;
-    const bodyCenter = (bodyLeft + bodyRight) / 2;
     const connectionHeight = bodyHeight * 0.15;
-    let frontCurve = bodyLength * 0.12;
-    let rearCurve = bodyLength * 0.3;
+
+
+    let bodyCurvature = null;
     switch (shape) {
         case 3:
-            frontCurve = bodyLength * 0.08;
+            // Yellow Tail Damselfish
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.8,
+                topFrontBodyCpDist: 0.3,
+                topRearBodyCpPos: 0.6,
+                topRearBodyCpDist: 0.2,
+                bottomFrontBodyCpPos: 0.8,
+                bottomFrontBodyCpDist: 0.3,
+                bottomRearBodyCpPos: 0.6,
+                bottomRearBodyCpDist: 0.2,
+            };
+            break;
+        case 4:
+            // Siamese Algae Eater
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.9,
+                topFrontBodyCpDist: 0.15,
+                topRearBodyCpPos: 0.6,
+                topRearBodyCpDist: 0.08,
+                bottomFrontBodyCpPos: 0.9,
+                bottomFrontBodyCpDist: 0.15,
+                bottomRearBodyCpPos: 0.6,
+                bottomRearBodyCpDist: 0.08,
+            };
             break;
         case 5:
-            frontCurve = bodyLength * 0.2;
-            rearCurve = bodyLength * 0.2;
+            // Angelfish and Discus
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.5,
+                topFrontBodyCpDist: 0.35,
+                topRearBodyCpPos: 0.5,
+                topRearBodyCpDist: 0.35,
+                bottomFrontBodyCpPos: 0.5,
+                bottomFrontBodyCpDist: 0.35,
+                bottomRearBodyCpPos: 0.5,
+                bottomRearBodyCpDist: 0.35,
+            };
             break;
         case 6:
-            frontCurve = bodyLength * 0.08;
-            rearCurve = bodyLength * 0.4;
+            // Black Neon Tetra
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.8,
+                topFrontBodyCpDist: 0.2,
+                topRearBodyCpPos: 0.9,
+                topRearBodyCpDist: 0.05,
+                bottomFrontBodyCpPos: 0.8,
+                bottomFrontBodyCpDist: 0.2,
+                bottomRearBodyCpPos: 0.9,
+                bottomRearBodyCpDist: 0.05,
+            };
+            break;
+        case 7:
+            // Tang
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.95,
+                topFrontBodyCpDist: 0.25,
+                topRearBodyCpPos: 0.5,
+                topRearBodyCpDist: 0.2,
+                bottomFrontBodyCpPos: 0.5,
+                bottomFrontBodyCpDist: 0.2,
+                bottomRearBodyCpPos: 0.5,
+                bottomRearBodyCpDist: 0.2,
+            };
             break;
         default:
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.7, // 0 = left, 1 = right (towards head)
+                topFrontBodyCpDist: 0.3,
+                topRearBodyCpPos: 0.5,
+                topRearBodyCpDist: 0.1,
+                bottomFrontBodyCpPos: 0.7,
+                bottomFrontBodyCpDist: 0.3,
+                bottomRearBodyCpPos: 0.5,
+                bottomRearBodyCpDist: 0.1,
+            };
             break;
     }
 
-    const bodyCurves = {
-        topFront: {
-            p0: { x: bodyRight, y: yc },
-            p1: { x: bodyRight - frontCurve, y: top },
-            p2: { x: bodyCenter, y: top }
-        },
-        topRear: {
-            p0: { x: bodyCenter, y: top },
-            p1: { x: bodyLeft + rearCurve, y: top },
-            p2: { x: bodyLeft, y: yc - connectionHeight / 2 }
-        },
-        bottomRear: {
-            p0: { x: bodyLeft, y: yc + connectionHeight / 2 },
-            p1: { x: bodyLeft + rearCurve, y: bottom },
-            p2: { x: bodyCenter, y: bottom }
-        },
-        bottomFront: {
-            p0: { x: bodyCenter, y: bottom },
-            p1: { x: bodyRight - frontCurve, y: bottom },
-            p2: { x: bodyRight, y: yc }
-        }
-    };
+    // no bending
+    // bodyCurvature = {
+    //     topFrontBodyCpPos: 0.5,
+    //     topFrontBodyCpDist: 0,
+    //     topRearBodyCpPos: 0.5,
+    //     topRearBodyCpDist: 0,
+    //     bottomFrontBodyCpPos: 0.5,
+    //     bottomFrontBodyCpDist: 0,
+    //     bottomRearBodyCpPos: 0.5,
+    //     bottomRearBodyCpDist: 0,
+    // };
 
+    // isTang (boolean)
+    // noseLength (pixels): Range 0 .. 0.3 * bodyLength
+    // noseTipYOffset (pixels): Range -0.25 .. 0.35 * bodyHeight
+    // headTopYOffset (pixels): 0.06 * bodyHeight,
+    // headBottomYOffset (pixels): 0.08 * bodyHeight,
+    // noseCurvature: (factor) 0.10
+
+    const bodyOptions = {
+        isTang: (shape === 7) ? true : false,
+        noseLength: bodyLength * 0.18, // was 0.18
+        noseTipYOffset: bodyHeight * 0.18, // was 0.15 
+        headTopYOffset: bodyHeight * 0.25, // was 0.06
+        headBottomYOffset: bodyHeight * 0.08, // was 0.08
+        noseCurvature: 0.15, // was 0.1
+        ...bodyCurvature,
+    }
+
+    const geom = buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, yc, bodyOptions);
+
+    const bodyCurves = buildBodyCurves(
+        { ...geom, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, isTang: bodyOptions.isTang },
+        bodyCurvature
+    );
 
     // ---- Dorsal, anal and pelvic fins ----
     const heightFactor = ((shape === 5) && (fins === 5)) ? 0.5 : 1; // prevent fins from becoming to big
@@ -217,27 +299,29 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.fillStyle = colors.body;
     ctx.strokeStyle = colors.body;
 
-    buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
-    ctx.fill();
+    buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, yc, bodyOptions);
+
+    if (globalVars.debug) {
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 1;
+        stripes = 0;
+    } else {
+        ctx.fill();
+    }
     ctx.stroke();
 
-    // DEBUG
-    // TODO: Comment out
-    // ctx.strokeStyle = "white";
-    // ctx.lineWidth = 1;
-    // buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
-    // ctx.stroke();
-    // stripes = 0;
-
-
     // ---- Bicolor ----
-    fillUpperBody(ctx, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, frontCurve, rearCurve, colors);
+    if (!globalVars.debug) {
+        fillUpperBody(ctx, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, colors, bodyOptions);
+    }
 
     // ---- Stripes ----
-    drawStripes(ctx, size, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, frontCurve, rearCurve, colors, stripes);
+    drawStripes(ctx, size, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, colors, stripes, bodyOptions);
 
     // ---- Pectoral fins ----
-    drawForegroundFins(ctx, fins, yc, bodyHeight, bodyLength, bodyRight, colors);
+    if (!globalVars.debug) {
+        drawForegroundFins(ctx, fins, yc, bodyHeight, bodyLength, bodyRight, colors);
+    }
 
     // ---- Tail ----
     switch (tail) {
@@ -268,7 +352,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.fillStyle = colors.eye;
     ctx.strokeStyle = colors.body;
     ctx.lineWidth = 1;
-    const xEye = right - bodyLength * 0.15;
+    const xEye = bodyOptions.isTang ? geom.headRight - bodyLength * 0.04 : geom.headRight - bodyLength * 0.15;
     const yEye = yc - bodyHeight * 0.1;
     const eyeRadius = ([1, 4].includes(shape)) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
@@ -303,7 +387,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
         const fish = gameInfo.tropicalFish[i];
-        
+
         if (![20, 23].includes(backData[fish.y][fish.x])) continue;
 
         if (fish.isDead) {

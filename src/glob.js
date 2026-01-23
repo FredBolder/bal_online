@@ -7,6 +7,7 @@ export const globalVars = {
     createLevelMenuPage: 1,
     createLevelStonesPage: 1,
     createLevelZoom: 0,
+    debug: false,
     input: "",
     isInOtherWorld: false,
     loading: true,

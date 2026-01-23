@@ -55,6 +55,7 @@ $palette: 2, 4, 18
 $shape: 2, 4, 6
 $stripes: 2, 4, 20
 $tail: 2, 4, 7
+$shape: 4, 4, 7
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23
@@ -67,11 +68,12 @@ $background: 6, 2, 1, 1, 23
 $background: 8, 2, 1, 1, 23
 $background: 0, 4, 1, 1, 23
 $background: 2, 4, 1, 1, 23
+$background: 4, 4, 1, 1, 23
 $background: 8, 4, 1, 1, 23
 Ҽ0Ҽ0Ҽ0Ҽ0Ҽ0
 0        0
 Ҽ Ҽ Ҽ Ҽ Ҽ0
 0        0
-Ҽ Ҽ   3 Ҽ0
+Ҽ Ҽ Ҽ 3 Ҽ0
 0    ҹ2  0
 1111111111

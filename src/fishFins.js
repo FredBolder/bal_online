@@ -1,9 +1,21 @@
 import { getBodyBottomFrame, getBodyTopFrame } from "./fishBody.js";
+import { globalVars } from "./glob.js";
 import { cubicFromMid, midPoint } from "./graphicUtils.js";
 
 function normalize(v) {
     const L = Math.hypot(v.x, v.y) || 1;
     return { x: v.x / L, y: v.y / L };
+}
+
+function normalizeFinT(startT, endT, isReversed) {
+    if (isReversed) {
+        startT = 1 - startT;
+        endT = 1 - endT;
+    }
+    if (startT > endT) {
+        [startT, endT] = [endT, startT];
+    }
+    return { startT, endT };
 }
 
 export function drawAngelfishFin(ctx, bodyCurves, opts) {
@@ -23,13 +35,7 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
     const isBottom = frameFunc === getBodyBottomFrame;
     const bendSign = isBottom ? +1 : -1;
 
-    if (isBottom) {
-        startT = 1 - startT;
-        endT = 1 - endT;
-        if (startT > endT) {
-            [startT, endT] = [endT, startT];
-        }
-    }
+    ({ startT, endT } = normalizeFinT(startT, endT, isBottom));
 
     const top = frameFunc(bodyCurves, 0.5).p;
     const right = frameFunc(bodyCurves, isBottom ? 0 : 1).p;
@@ -109,7 +115,9 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
         ctx.lineTo(p2o.x, p2o.y);
     }
     ctx.closePath();
-    ctx.fill();
+    if (!globalVars.debug) {
+        ctx.fill();
+    }
     ctx.stroke();
 
     // filaments
@@ -180,14 +188,7 @@ function drawFinAlongCurve(ctx, bodyCurves, opts) {
     // Bottom curve runs tail → head, so invert t
     const isBottom = frameFunc === getBodyBottomFrame;
 
-    if (isBottom) {
-        startT = 1 - startT;
-        endT = 1 - endT;
-
-        if (startT > endT) {
-            [startT, endT] = [endT, startT];
-        }
-    }
+    ({ startT, endT } = normalizeFinT(startT, endT, isBottom));
 
     const base = [];
     const tip = [];
@@ -223,7 +224,9 @@ function drawFinAlongCurve(ctx, bodyCurves, opts) {
     base.forEach(p => ctx.lineTo(p.x, p.y));
     tip.reverse().forEach(p => ctx.lineTo(p.x, p.y));
     ctx.closePath();
-    ctx.fill();
+    if (!globalVars.debug) {
+        ctx.fill();
+    }
     ctx.stroke();
 }
 
@@ -444,7 +447,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             });
             break;
         case 4:
-            // Yellow Tail Acei Cichlid, Yellow Tail Damselfish and Bicolor Anthias
+            // Yellow Tail Acei Cichlid and Bicolor Anthias
             // Dorsal fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
@@ -452,9 +455,9 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 endT: 0.8,
                 height: bodyHeight * 0.2,
                 taper: 0.7,
-                lean: 5,
+                lean: 6,
                 overlap: bodyHeight * 0.1,
-                steps: 10
+                steps: 30
             });
 
             // Anal fin
@@ -693,6 +696,81 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 6
             });
             break;
+        case 10:
+            // Yellow Tang
+            // Dorsal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.14,
+                endT: 0.9,
+                height: bodyHeight * 0.18,
+                taper: 0.9,
+                lean: 1.5,
+                overlap: bodyHeight * 0.1,
+                steps: 17
+            });
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.4,
+                endT: 0.9,
+                height: bodyHeight * 0.2,
+                taper: 1.0,
+                lean: 0.7,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.1,
+                endT: 0.2,
+                height: bodyHeight * 0.12,
+                taper: 0.4,
+                lean: 2,
+                overlap: bodyHeight * 0.1,
+                steps: 10
+            });
+            break;
+        case 11:
+            // Yellow Tail Damselfish
+            // Dorsal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.35,
+                endT: 0.8,
+                height: bodyHeight * 0.2,
+                taper: 0.8,
+                lean: 4,
+                overlap: bodyHeight * 0.1,
+                steps: 30
+            });
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.7,
+                endT: 0.9,
+                height: bodyHeight * 0.25,
+                taper: 1,
+                lean: 1.5,
+                overlap: bodyHeight * 0.1
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.4,
+                endT: 0.5,
+                height: bodyHeight * 0.4,
+                taper: 0.8,
+                lean: 0.9,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
+            break;
         default:
             break;
     }
@@ -739,7 +817,7 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             options.widestPoint = 0.9;
             break;
         case 4:
-            // Yellow Tail Acei Cichlid, Yellow Tail Damselfish and Bicolor Anthias
+            // Yellow Tail Acei Cichlid and Bicolor Anthias
             cx = bodyRight - (bodyLength * 0.27);
             cy = yCenter + (bodyHeight * 0.25);
             finWidth = bodyLength * 0.12;
@@ -795,6 +873,27 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             cx = bodyRight - (bodyLength * 0.23);
             cy = yCenter + (bodyHeight * 0.25);
             finWidth = bodyLength * 0.08;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.45 * Math.PI;
+            options.widestPoint = 0.9;
+            break;
+        case 10:
+            // Yellow Tang
+            cx = bodyRight - (bodyLength * 0.3);
+            cy = yCenter + (bodyHeight * 0.2);
+            finWidth = bodyLength * 0.3;
+            connectionWidth = finWidth * 0.25;
+            finHeight = bodyHeight * 0.4;
+            rotation = 1.5 * Math.PI;
+            options.widestPoint = 0.95;
+            options.tipRoundness = 0.3;
+            break;
+        case 11:
+            // Yellow Tail Damselfish
+            cx = bodyRight - (bodyLength * 0.27);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.12;
             connectionWidth = finWidth * 0.5;
             finHeight = bodyHeight * 0.6;
             rotation = 1.45 * Math.PI;

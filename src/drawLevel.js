@@ -4236,7 +4236,7 @@ function drawLevel(
         case 2159:
           // Tropical fish - Yellow Tail Damselfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 4, 0);
+          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 11, 0);
           break;
         case 2160:
           // Tropical fish - Zebra Angelfish
@@ -4267,6 +4267,11 @@ function drawLevel(
           // Tropical fish - Black Neon Tetra
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20);
+          break;
+        case 2166:
+          // Tropical fish - Yellow Tang
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

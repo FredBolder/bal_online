@@ -1,3 +1,4 @@
+import { globalVars } from "./glob.js";
 import { cubicFromMid } from "./graphicUtils.js";
 
 export function getTailDimensions(tail, bodyLength, bodyHeight) {
@@ -103,7 +104,9 @@ export function drawEmarginateTail(
     ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P2.x, P2.y);
     ctx.lineTo(P3.x, P3.y);
     ctx.closePath();
-    ctx.fill();
+    if (!globalVars.debug) {
+        ctx.fill();
+    }
     ctx.stroke();
 }
 
@@ -170,7 +173,9 @@ export function drawForkedTail(
     }
 
     ctx.closePath();
-    ctx.fill();
+    if (!globalVars.debug) {
+        ctx.fill();
+    }
     ctx.stroke();
 }
 
@@ -199,7 +204,9 @@ export function drawRoundedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, conn
     ctx.arc(arcCx, arcCy, radius, startAngle, endAngle, true);
     ctx.lineTo(tailBaseX, connectionBottom);
     ctx.closePath();
-    ctx.fill();
+    if (!globalVars.debug) {
+        ctx.fill();
+    }
     ctx.stroke();
 }
 
@@ -212,7 +219,9 @@ export function drawTruncateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, con
     ctx.lineTo(xLeft, yCenter - tailHeight * 0.5);
     ctx.lineTo(xLeft + tailWidth, yCenter - connectionHeight * 0.5);
     ctx.closePath();
-    ctx.fill();
+    if (!globalVars.debug) {
+        ctx.fill();
+    }
     ctx.stroke();
 }
 

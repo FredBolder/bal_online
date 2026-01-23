@@ -24,6 +24,46 @@ export function cubicFromMid(p0, p3, curvature, normalSign) {
     return { c1, c2 };
 }
 
+export function quadControlFromChordPosition(p0, p2, curvature, normalSign, position, useSecondPoint = false) {
+    // position is point on line (0 = p0, 0.5 = mid, 1 = p2)
+    const dx = p2.x - p0.x;
+    const dy = p2.y - p0.y;
+    const len = Math.hypot(dx, dy) || 1;
+
+    if (useSecondPoint) {
+        // Use the second point as reference
+        position = 1 - position;
+    }
+    const mx = ((p2.x - p0.x) * position) + p0.x;
+    const my = ((p2.y - p0.y) * position) + p0.y;
+
+    // unit perpendicular (normal)
+    const nx = -dy / len * normalSign;
+    const ny = dx / len * normalSign;
+
+    // bend in pixels, scale with chord length
+    const bend = curvature * len;
+
+    return { x: mx + nx * bend, y: my + ny * bend };
+}
+
+export function quadControlFromMid(p0, p2, curvature, normalSign) {
+    const dx = p2.x - p0.x;
+    const dy = p2.y - p0.y;
+    const len = Math.hypot(dx, dy) || 1;
+
+    const mp = midPoint(p0, p2);
+
+    // unit perpendicular (normal)
+    const nx = -dy / len * normalSign;
+    const ny = dx / len * normalSign;
+
+    // bend in pixels, scale with chord length
+    const bend = curvature * len;
+
+    return { x: mp.x + nx * bend, y: mp.y + ny * bend };
+}
+
 export function midPoint(p1, p2) {
     const x = (p1.x + p2.x) / 2;
     const y = (p1.y + p2.y) / 2;

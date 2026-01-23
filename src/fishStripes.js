@@ -1,6 +1,6 @@
 import { buildBodyPath } from "./fishBody.js";
 
-export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, connectionHeight, frontCurve, rearCurve, colors, stripes) {
+export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, connectionHeight, colors, stripes, bodyOptions) {
     // stripes
     // 0 = no stripes
     // 1-7 = normal 1-7 stripes
@@ -21,7 +21,7 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
 
     ctx.save();
     // Clip to body shape
-    buildBodyPath(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, connectionHeight, rearCurve, frontCurve, bodyCenter, yc);
+    buildBodyPath(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, connectionHeight, yc, bodyOptions);
     ctx.clip();
 
     if ((stripes === 17) || (stripes === 18)) {
