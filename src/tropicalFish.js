@@ -7,7 +7,7 @@ import { globalVars } from "./glob.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 11;
-export const tropicalFishPalettes = 19;
+export const tropicalFishPalettes = 20;
 export const tropicalFishShapes = 7;
 export const tropicalFishStripes = 20;
 export const tropicalFishTails = 8;
@@ -291,7 +291,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     );
 
     // ---- Dorsal, anal and pelvic fins ----
-    const heightFactor = ((shape === 5) && (fins === 5)) ? 0.5 : 1; // prevent fins from becoming to big
+    let heightFactor = 1;
+    if (((shape === 5) && (fins === 5)) || ((shape === 7) && [4, 5].includes(fins))) {
+        heightFactor = 0.5;
+    }
     drawBackgroundFins(ctx, fins, bodyHeight * heightFactor, bodyCurves, colors);
 
 
@@ -367,12 +370,27 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.arc(xEye, yEye, eyeRadius * 0.4, 0, Math.PI * 2);
     ctx.fill();
 
+    // ---- Barb ----
+    if (bodyOptions.isTang) {
+        const barbHeight = Math.max(1, size * 0.04);
+        // Purple tang has thinner barb
+        const barbWidth = (palette === 20) ? Math.max(1, size * 0.01) : Math.max(1, size * 0.025);
+        ctx.strokeStyle = colors.barb;
+        ctx.beginPath();
+        ctx.lineCap = 'round'; 
+        ctx.lineWidth = Math.max(1, barbWidth);
+        ctx.moveTo(bodyLeft - (barbHeight * 0.5), yc);
+        ctx.lineTo(bodyLeft + (barbHeight * 0.5), yc);
+        ctx.stroke();
+    }
+
     // Restore transform if flipped
     if (flipHorizontally) {
         ctx.restore();
     }
 
     ctx.lineWidth = 1;
+    ctx.lineCap = 'butt'; 
 }
 
 export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {

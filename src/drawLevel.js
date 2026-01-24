@@ -4273,6 +4273,11 @@ function drawLevel(
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0);
           break;
+        case 2167:
+          // Tropical fish - Purple Tang
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0);
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

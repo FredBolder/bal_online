@@ -189,13 +189,25 @@ export function getTropicalFishColor(palette) {
         case 19:
             // Yellow Tang
             colors = {
-                body: "#F2C94C",      // rich golden yellow body
-                stripe: "#9E8A2B",    // no stripe, but for other fish
-                fin: "#D9B43A",       // slightly darker fins for visibility
-                tail: "#CFAF34",      // denser tail
-                eye: "#1B1F22",       // dark eye
-                eyePupil: "#0B0F14",  // deep black pupil
-                accent: "#E07A1F"     // subtle orange accent (scalpel / depth hint)
+                body: "#F2C94C",
+                stripe: "#9E8A2B",
+                fin: "#D9B43A",
+                tail: "#CFAF34",
+                barb: "#F2F2F2",
+                eye: "#1B1F22",
+                eyePupil: "#0B0F14",
+            }
+            break;
+        case 20:
+            // Purple Tang
+            colors = {
+                body: "#5B2D8B",
+                stripe: "#4A256F",
+                fin: "#4F277E",
+                tail: "#F2C94C",
+                barb: "#DAD3C6",
+                eye: "#1A1A1A",
+                eyePupil: "#000000",
             }
             break;
         default:
@@ -211,6 +223,7 @@ export function getTropicalFishColor(palette) {
 
     colors.upperBody = colors.upperBody ?? null;
     colors.tail = colors.tail ?? colors.fin;
+    colors.barb = colors.barb ?? "#F2F2F2";
     colors.eye = colors.eye ?? "#1A1F24";
     colors.eyePupil = colors.eyePupil ?? "#0A0E12";
     colors.secondStripe = colors.secondStripe ?? null;

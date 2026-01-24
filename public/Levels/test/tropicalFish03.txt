@@ -55,7 +55,11 @@ $palette: 2, 4, 18
 $shape: 2, 4, 6
 $stripes: 2, 4, 20
 $tail: 2, 4, 7
+$fins: 4, 4, 10
+$palette: 4, 4, 19
 $shape: 4, 4, 7
+$stripes: 4, 4, 0
+$tail: 4, 4, 4
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23

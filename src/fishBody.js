@@ -122,6 +122,7 @@ export function buildBodyPath(
   yc,
   {
     isTang = false,
+    noseHeight = (bottom - top) * 0.06,
     noseLength = (bodyRight - bodyLeft) * 0.18,
     noseTipYOffset = (bottom - top) * 0.15,
     headTopYOffset = (bottom - top) * 0.06,
@@ -143,16 +144,21 @@ export function buildBodyPath(
   const headTopY = isTang ? top + headTopYOffset : yc;
   const headBottomY = isTang ? bottom - headBottomYOffset : yc;
 
-  const noseTip = {
+  const noseTipTop = {
     x: bodyRight,
-    y: isTang ? yc + noseTipYOffset : yc
+    y: isTang ? yc + noseTipYOffset - (noseHeight * 0.5) : yc
+  };
+
+  const noseTipBottom = {
+    x: bodyRight,
+    y: isTang ? yc + noseTipYOffset + (noseHeight * 0.5) : yc
   };
 
   ctx.beginPath();
 
   // -------- Nose curves --------
-  const topNoseCtrl = quadControlFromMid(noseTip, { x: headRight, y: headTopY }, noseCurvature, -1);
-  const bottomNoseCtrl = quadControlFromMid({ x: headRight, y: headBottomY }, noseTip, noseCurvature, -1);
+  const topNoseCtrl = quadControlFromMid(noseTipTop, { x: headRight, y: headTopY }, noseCurvature, -1);
+  const bottomNoseCtrl = quadControlFromMid({ x: headRight, y: headBottomY }, noseTipBottom , noseCurvature, -1);
 
   // -------- Front body curves (mid → headRight) --------
   const topFrontCtrl = quadControlFromChordPosition({ x: midX, y: top }, { x: headRight, y: headTopY }, topFrontBodyCpDist, -1, topFrontBodyCpPos, false);
@@ -163,7 +169,8 @@ export function buildBodyPath(
   const bottomRearCtrl = quadControlFromChordPosition({ x: bodyLeft, y: yc + connectionHeight / 2 }, { x: midX, y: bottom }, bottomRearBodyCpDist, +1, bottomRearBodyCpPos, false);
 
   // -------- draw path --------
-  ctx.moveTo(noseTip.x, noseTip.y);
+  ctx.moveTo(noseTipBottom.x, noseTipBottom.y);
+  ctx.lineTo(noseTipTop.x, noseTipTop.y);
 
   // top side
   ctx.quadraticCurveTo(topNoseCtrl.x, topNoseCtrl.y, headRight, headTopY);
@@ -174,8 +181,8 @@ export function buildBodyPath(
   ctx.lineTo(bodyLeft, yc + connectionHeight / 2);
   ctx.quadraticCurveTo(bottomRearCtrl.x, bottomRearCtrl.y, midX, bottom);
   ctx.quadraticCurveTo(bottomFrontCtrl.x, bottomFrontCtrl.y, headRight, headBottomY);
-  ctx.quadraticCurveTo(bottomNoseCtrl.x, bottomNoseCtrl.y, noseTip.x, noseTip.y);
-
+  ctx.quadraticCurveTo(bottomNoseCtrl.x, bottomNoseCtrl.y, noseTipBottom.x, noseTipBottom.y);
+ 
   ctx.closePath();
 
   return { midX, headRight, headTopY, headBottomY };
