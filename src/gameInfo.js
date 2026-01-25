@@ -1235,6 +1235,9 @@ export function initGameVars(vars) {
     vars.ballPushersActive = false;
     vars.bgcolor = [];
     vars.checkFishOutOfWaterCounter = 0;
+    vars.colorElevator = "#464646";
+    vars.colorElevatorArrow = "white";
+    vars.colorWater = "#00005A";
     vars.conveyorBeltAngleLeft = Math.PI * 2;
     vars.conveyorBeltAngleRight = 0;
     vars.conveyorBeltCounter = 0;

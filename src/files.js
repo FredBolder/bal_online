@@ -73,6 +73,21 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    if (gameVars.colorElevator !== "#464646") {
+        line = `$color: elevator, ${gameVars.colorElevator}`;
+        lines.push(line);
+    }
+
+    if (gameVars.colorElevatorArrow !== "white") {
+        line = `$color: elevatorarrow, ${gameVars.colorElevatorArrow}`;
+        lines.push(line);
+    }
+
+    if (gameVars.colorWater !== "#00005A") {
+        line = `$color: water, ${gameVars.colorWater}`;
+        lines.push(line);
+    }
+
     if (gameVars.ignorePattern !== null) {
         for (let i = 0; i < gameVars.ignorePattern.length; i++) {
             const ip = gameVars.ignorePattern[i];

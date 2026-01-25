@@ -1,0 +1,25 @@
+$fins: 3, 7, 10
+$palette: 3, 7, 19
+$shape: 3, 7, 7
+$stripes: 3, 7, 0
+$tail: 3, 7, 4
+$fins: 5, 6, 10
+$palette: 5, 6, 20
+$shape: 5, 6, 7
+$stripes: 5, 6, 0
+$tail: 5, 6, 4
+$background: 8, 5, 1, 1, 20
+$background: 5, 6, 1, 1, 23
+$background: 3, 7, 1, 1, 23
+$background: 1, 8, 1, 1, 23
+$background: 8, 8, 1, 1, 23
+1111111111
+13       1
+12       1
+11       1
+1        1
+1WWWWWWWж1
+1wwwwҼwww1
+1wwҼwwwww1
+1ςwwwwwwσ1
+1111111111

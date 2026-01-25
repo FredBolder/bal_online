@@ -936,24 +936,24 @@ function drawLevel(
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
-    drawLine(ctx, xc - d1, yc, xc + d1, yc, "white");
-    drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, "white");
-    drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, "white");
-    drawLine(ctx, xc + d1, yc, xc + d3, yc - d2, "white");
-    drawLine(ctx, xc + d1, yc, xc + d3, yc + d2, "white");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, gameVars.colorElevator, true);
+    drawLine(ctx, xc - d1, yc, xc + d1, yc, gameVars.colorElevatorArrow);
+    drawLine(ctx, xc - d1, yc, xc - d3, yc - d2, gameVars.colorElevatorArrow);
+    drawLine(ctx, xc - d1, yc, xc - d3, yc + d2, gameVars.colorElevatorArrow);
+    drawLine(ctx, xc + d1, yc, xc + d3, yc - d2, gameVars.colorElevatorArrow);
+    drawLine(ctx, xc + d1, yc, xc + d3, yc + d2, gameVars.colorElevatorArrow);
   }
 
   function drawElevatorUpDown() {
     let d1 = w1 / 3;
     let d2 = w1 / 10;
     let d3 = w1 / 8;
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
-    drawLine(ctx, xc, yc - d1, xc, yc + d1, "white");
-    drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), "white";
-    drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), "white";
-    drawLine(ctx, xc, yc + d1, xc - d2, yc + d3), "white";
-    drawLine(ctx, xc, yc + d1, xc + d2, yc + d3), "white";
+    drawFilledBox(ctx, xmin, ymin, w1, w2, gameVars.colorElevator, true);
+    drawLine(ctx, xc, yc - d1, xc, yc + d1, gameVars.colorElevatorArrow);
+    drawLine(ctx, xc, yc - d1, xc - d2, yc - d3), gameVars.colorElevatorArrow;
+    drawLine(ctx, xc, yc - d1, xc + d2, yc - d3), gameVars.colorElevatorArrow;
+    drawLine(ctx, xc, yc + d1, xc - d2, yc + d3), gameVars.colorElevatorArrow;
+    drawLine(ctx, xc, yc + d1, xc + d2, yc + d3), gameVars.colorElevatorArrow;
   }
 
   function drawExplosion() {
@@ -3092,7 +3092,15 @@ function drawLevel(
   }
 
   function drawWater() {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "#00005A");
+    drawFilledBox(ctx, xmin, ymin, w1, w2, gameVars.colorWater);
+  }
+
+  function drawWaterColors() {
+    drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2 * 0.5, displayColor("#0059B3"));
+    drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, displayColor("#001A66"));
+    drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, displayColor("#1F4E5F"));
+    drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, displayColor("#2E6F7E"));
+    drawText(ctx, xc, yc, "sel", "middle", "white", w2 * 0.7, w1 * 0.8);
   }
 
   function drawWaterSurface() {
@@ -3124,9 +3132,9 @@ function drawLevel(
     pt2.y = waterLevel1;
     pt3.x = xmax;
     pt3.y = waterLevel2;
-    drawFilledBox(ctx, xmin, waterLevel2, w1, ymax - waterLevel2 + 1, "#00005A");
-    ctx.fillStyle = "#00005A";
-    ctx.strokeStyle = "#00005A";
+    drawFilledBox(ctx, xmin, waterLevel2, w1, ymax - waterLevel2 + 1, gameVars.colorWater);
+    ctx.fillStyle = gameVars.colorWater;
+    ctx.strokeStyle = gameVars.colorWater;
     ctx.beginPath();
     ctx.moveTo(pt1.x, pt1.y);
     ctx.lineTo(pt2.x, pt2.y);
@@ -3161,12 +3169,12 @@ function drawLevel(
       objectNumber = gameInfo.waterWithIceObjects[idx].objectNumber;
     }
 
-    drawFilledBox(ctx, xmin, ymin + d1, w1, w2 - d1, "#00005A");
+    drawFilledBox(ctx, xmin, ymin + d1, w1, w2 - d1, gameVars.colorWater);
     drawFilledBox(ctx, xmin, ymin, w1, d1, "#D6FFFA");
     ctx.lineWidth = 3;
     if (x % 2 == 0) {
       drawLine(ctx, xmin + d2, ymin + d1, xmin + d3, ymin + d1, "#D6FFFA");
-      drawLine(ctx, xmin + d4, ymin + d1, xmin + d5, ymin + d1, "#00005A");
+      drawLine(ctx, xmin + d4, ymin + d1, xmin + d5, ymin + d1, gameVars.colorWater);
     } else {
       drawLine(ctx, xmin + d6, ymin + d1, xmin + d7, ymin + d1, "#D6FFFA");
     }
@@ -4277,6 +4285,9 @@ function drawLevel(
           // Tropical fish - Purple Tang
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0);
+          break;
+        case 2200:
+          drawWaterColors();
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

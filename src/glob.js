@@ -6,6 +6,7 @@ export const globalVars = {
     createLevelColorPage: 1,
     createLevelMenuPage: 1,
     createLevelStonesPage: 1,
+    createLevelWaterPage: 1,
     createLevelZoom: 0,
     debug: false,
     input: "",

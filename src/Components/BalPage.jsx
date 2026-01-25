@@ -119,6 +119,7 @@ let createLevelSides = null;
 let createLevelStonesPages = 2;
 let createLevelTicks = -1;
 let createLevelTranspose = 0;
+let createLevelWaterPages = 2;
 let ctx;
 let ignoreGravity = true;
 let initialized = false;
@@ -1162,8 +1163,17 @@ function BalPage() {
             break;
           case 11:
             // Water
-            arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
-            arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167];
+            switch (globalVars.createLevelWaterPage) {
+              case 2:
+                arr1 = [2200];
+                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
+                break;
+              default:
+                // page 1
+                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
+                arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 0, 2101];
+                break;
+            }
             break;
           case 12:
             // Groups
@@ -3529,6 +3539,14 @@ function BalPage() {
               fillMenu(menuToNumber("balls"));
               updateCreateLevelCanvas();
               createLevelObject = -1;
+            } else if (createLevelMenu === menuToNumber("water")) {
+              globalVars.createLevelWaterPage++;
+              if (globalVars.createLevelWaterPage > createLevelWaterPages) {
+                globalVars.createLevelWaterPage = 1;
+              }
+              fillMenu(menuToNumber("water"));
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
             }
             break;
           case 2133:
@@ -3715,6 +3733,83 @@ function BalPage() {
               createLevelChangerColors = "";
               createLevelObject = -1;
             }
+            break;
+          case 2200:
+            if (row > 0) {
+              newValue = null;
+              if (createLevelMenu === menuToNumber("water")) {
+                newValue = await showSelect("Water", "Color:", [
+                  "ocean blue", "sea blue", "open water", "coastal water", "abyss blue", "deep ocean", "navy sea", "dark blue water", 
+                  "midnight water", "cold river", "lake water", "calm river", "tropical sea", "dark swamp", "algae water",
+                  "deep reef shallow", "deep coral zone", "near abyss reef", "dark reef water",
+                ], 0);
+              }
+              if (newValue !== null) {
+                switch (newValue) {
+                  case "ocean blue":
+                    gameVars.colorWater = "#004C99";
+                    break;
+                  case "sea blue":
+                    gameVars.colorWater = "#0059B3";
+                    break;
+                  case "open water":
+                    gameVars.colorWater = "#0077B6";
+                    break;
+                  case "coastal water":
+                    gameVars.colorWater = "#0099CC";
+                    break;
+                  case "abyss blue":
+                    gameVars.colorWater = "#00005A";
+                    break;
+                  case "deep ocean":
+                    gameVars.colorWater = "#001A66";
+                    break;
+                  case "navy sea":
+                    gameVars.colorWater = "#002B80";
+                    break;
+                  case "dark blue water":
+                    gameVars.colorWater = "#003366";
+                    break;
+                  case "midnight water":
+                    gameVars.colorWater = "#003F7F";
+                    break;
+                  case "cold river":
+                    gameVars.colorWater = "#1F4E5F";
+                    break;
+                  case "lake water":
+                    gameVars.colorWater = "#2E6F7E";
+                    break;
+                  case "calm river":
+                    gameVars.colorWater = "#5FB3B3 ";
+                    break;
+                  case "tropical sea":
+                    gameVars.colorWater = "#00E0B8";
+                    break;
+                  case "dark swamp":
+                    gameVars.colorWater = "#2F4F4F";
+                    break;
+                  case "algae water":
+                    gameVars.colorWater = "#5F7F6F";
+                    break;
+                  case "deep reef shallow":
+                    gameVars.colorWater = "#006D6F";
+                    break;
+                  case "deep coral zone":
+                    gameVars.colorWater = "#003A4A";
+                    break;
+                  case "near abyss reef":
+                    gameVars.colorWater = "#002233";
+                    break;
+                 case "dark reef water":
+                    gameVars.colorWater = "#001B2B";
+                    break;
+                  default:
+                    break;
+                }
+              }
+              updateGameCanvas();
+            }
+            createLevelObject = -1;
             break;
           default:
             break;

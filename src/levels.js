@@ -285,6 +285,7 @@ export function checkSettings(data, settings) {
     { name: "$background", params: 5, xy: true },
     { name: "$bgcolor", params: 5, xy: true },
     { name: "$changer", params: 5, xy: true },
+    { name: "$color", params: 2, xy: false },
     { name: "$conveyorbeltmode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
     { name: "$displaysize", params: 2, xy: false },
@@ -431,6 +432,11 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["{", 171].includes(data[y][x])) {
                 msg += `${settingNr(i)}No conveyor found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$color":
+              if (!["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               break;
             case "$direction":
@@ -1495,6 +1501,26 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 }
                 gameInfo.changers[idx].color1 = valuesLowerCase[3];
                 gameInfo.changers[idx].color2 = valuesLowerCase[4];
+              }
+            }
+          }
+          break;
+        case "$color":
+          if (values.length === 2) {
+            if (["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
+              color = valuesLowerCase[1];
+              switch (valuesLowerCase[0]) {
+                case "elevator":
+                  gameVars.colorElevator = color;
+                  break;
+                case "elevatorarrow":
+                  gameVars.colorElevatorArrow = color;
+                  break;
+                case "water":
+                  gameVars.colorWater = color;
+                  break;
+                default:
+                  break;
               }
             }
           }

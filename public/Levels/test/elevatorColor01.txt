@@ -1,0 +1,12 @@
+$color: elevator, green
+$color: elevatorarrow, yellow
+1111111111
+1        1
+1        1
+1        1
+1     L  1
+1        1
+1   D    1
+13       1
+1   2    1
+1111111111
