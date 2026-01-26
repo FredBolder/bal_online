@@ -1,16 +1,10 @@
+import { globalVars } from "./glob.js";
 import { quadControlFromChordPosition, quadControlFromMid } from "./graphicUtils.js";
 
-/**
- * Build the four main body curves using midpoint-perpendicular quadratic bending.
- * This replaces the old frontCurve / rearCurve system completely.
- *
- * Curve order matches the legacy system so existing fins keep working.
- */
 export function buildBodyCurves(geom, options = {}) {
   const {
     midX,
     bodyLeft,
-    bodyRight,
     headRight,
     headTopY,
     headBottomY,
@@ -18,7 +12,6 @@ export function buildBodyCurves(geom, options = {}) {
     bottom,
     yc,
     connectionHeight,
-    isTang
   } = geom;
   const topFrontBodyCpPos = options.topFrontBodyCpPos ?? 0.5;
   const topFrontBodyCpDist = options.topFrontBodyCpDist ?? 0;
@@ -30,13 +23,8 @@ export function buildBodyCurves(geom, options = {}) {
   const bottomRearBodyCpDist = options.bottomRearBodyCpDist ?? 0;
 
   // -------- FRONT ENDPOINTS (depend on isTang) --------
-  const frontTopEnd = isTang
-    ? { x: headRight, y: headTopY }
-    : { x: bodyRight, y: yc };
-
-  const frontBottomEnd = isTang
-    ? { x: headRight, y: headBottomY }
-    : { x: bodyRight, y: yc };
+  const frontTopEnd = { x: headRight, y: headTopY };
+  const frontBottomEnd = { x: headRight, y: headBottomY };
 
   // -------- topFront (front → mid top) --------
   const topFrontP0 = frontTopEnd;
@@ -110,9 +98,7 @@ export function buildBodyCurves(geom, options = {}) {
   };
 }
 
-
-
-export function buildBodyPath(
+export function buildBody(
   ctx,
   bodyLeft,
   bodyRight,
@@ -125,6 +111,7 @@ export function buildBodyPath(
     noseHeight = (bottom - top) * 0.06,
     noseLength = (bodyRight - bodyLeft) * 0.18,
     noseTipYOffset = (bottom - top) * 0.15,
+    noseYOffset = 0, // for Snapper
     headTopYOffset = (bottom - top) * 0.06,
     headBottomYOffset = (bottom - top) * 0.08,
     noseCurvature = 0.10,
@@ -141,20 +128,20 @@ export function buildBodyPath(
   const headRight = isTang ? bodyRight - noseLength : bodyRight;
   const midX = (bodyLeft + headRight) / 2;
 
-  const headTopY = isTang ? top + headTopYOffset : yc;
-  const headBottomY = isTang ? bottom - headBottomYOffset : yc;
+  const headTopY = isTang ? top + headTopYOffset : yc + noseYOffset;
+  const headBottomY = isTang ? bottom - headBottomYOffset : yc + noseYOffset;
 
   const noseTipTop = {
     x: bodyRight,
-    y: isTang ? yc + noseTipYOffset - (noseHeight * 0.5) : yc
+    y: isTang ? yc + noseTipYOffset - (noseHeight * 0.5) : yc + noseYOffset
   };
 
   const noseTipBottom = {
     x: bodyRight,
-    y: isTang ? yc + noseTipYOffset + (noseHeight * 0.5) : yc
+    y: isTang ? yc + noseTipYOffset + (noseHeight * 0.5) : yc + noseYOffset
   };
 
-  ctx.beginPath();
+  //ctx.beginPath();
 
   // -------- Nose curves --------
   const topNoseCtrl = quadControlFromMid(noseTipTop, { x: headRight, y: headTopY }, noseCurvature, -1);
@@ -188,24 +175,43 @@ export function buildBodyPath(
   return { midX, headRight, headTopY, headBottomY };
 }
 
-function quadBezierPoint(p0, p1, p2, t) {
-  const mt = 1 - t;
-  return {
-    x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
-    y: mt * mt * p0.y + 2 * mt * t * p1.y + t * t * p2.y
-  };
+export function drawBody(ctx, path, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, colors) {
+    const bodyHeight = bodyBottom - bodyTop;
+    const bodyWidth = bodyRight - bodyLeft;
+    const color = colors.body;
+
+    if (colors.upperBody === null) {
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        if (!globalVars.debug) {
+            ctx.fill(path);
+        }
+        ctx.stroke(path);
+    } else {
+        // Upper
+        drawBodyClipped(ctx, path, colors.upperBody, [bodyLeft - 2, bodyTop - 2, bodyWidth + 4, bodyHeight * 0.5 + 2]);
+        // Lower
+        drawBodyClipped(ctx, path, color, [bodyLeft - 2, yc, bodyWidth + 4, bodyHeight * 0.5 + 2]);
+    }
 }
 
-function quadBezierTangent(p0, p1, p2, t) {
-  return {
-    x: 2 * (1 - t) * (p1.x - p0.x) + 2 * t * (p2.x - p1.x),
-    y: 2 * (1 - t) * (p1.y - p0.y) + 2 * t * (p2.y - p1.y)
-  };
-}
+function drawBodyClipped(ctx, path, color, clipRect) {
+    ctx.save();
 
-function normalize(v) {
-  const len = Math.hypot(v.x, v.y) || 1;
-  return { x: v.x / len, y: v.y / len };
+    ctx.beginPath();
+    ctx.rect(...clipRect);
+    ctx.clip();
+
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    if (!globalVars.debug) {
+        ctx.fill(path);
+    }
+    ctx.stroke(path);
+
+    ctx.restore();
 }
 
 export function getBodyBottomFrame(bodyCurves, t) {
@@ -250,31 +256,26 @@ export function getBodyTopFrame(bodyCurves, t) {
   return { p, tan, normal };
 }
 
-export function fillUpperBody(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, connectionHeight, colors, bodyOptions) {
-  const bodyHeight = bodyBottom - bodyTop;
-  const overlap = bodyHeight * 0.1;
-
-  if (colors.upperBody === null) {
-    return;
-  }
-
-  ctx.save();
-  // Clip to body shape
-  buildBodyPath(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, connectionHeight, yc, bodyOptions);
-  ctx.clip();
-
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = colors.upperBody;
-  ctx.fillStyle = colors.upperBody;
-  ctx.beginPath();
-  ctx.moveTo(bodyLeft - overlap, bodyTop - overlap);
-  ctx.lineTo(bodyRight + overlap, bodyTop - overlap);
-  ctx.lineTo(bodyRight + overlap, yc);
-  ctx.lineTo(bodyLeft - overlap, yc);
-  ctx.closePath();
-  ctx.stroke();
-  ctx.fill();
-
-  ctx.restore();
+function normalize(v) {
+  const len = Math.hypot(v.x, v.y) || 1;
+  return { x: v.x / len, y: v.y / len };
 }
+
+function quadBezierPoint(p0, p1, p2, t) {
+  const mt = 1 - t;
+  return {
+    x: mt * mt * p0.x + 2 * mt * t * p1.x + t * t * p2.x,
+    y: mt * mt * p0.y + 2 * mt * t * p1.y + t * t * p2.y
+  };
+}
+
+function quadBezierTangent(p0, p1, p2, t) {
+  return {
+    x: 2 * (1 - t) * (p1.x - p0.x) + 2 * t * (p2.x - p1.x),
+    y: 2 * (1 - t) * (p1.y - p0.y) + 2 * t * (p2.y - p1.y)
+  };
+}
+
+
+
 

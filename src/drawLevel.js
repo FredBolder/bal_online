@@ -1928,7 +1928,7 @@ function drawLevel(
     }
 
     ctx.restore();
-    ctx.lineCap = 'butt';
+    ctx.lineCap = "butt";
   }
 
   function drawNumber(n) {
@@ -4285,6 +4285,11 @@ function drawLevel(
           // Tropical fish - Purple Tang
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0);
+          break;
+        case 2168:
+          // Tropical fish - Brigham’s snapper
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 21, 8, 7, 4, 21);
           break;
         case 2200:
           drawWaterColors();

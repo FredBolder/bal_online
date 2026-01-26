@@ -321,13 +321,21 @@ export function drawPectoralFin(
 
 
 export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
-    ctx.fillStyle = colors.fin;
-    ctx.strokeStyle = colors.fin;
+    function setColors(upper) {
+        if (upper) {
+            ctx.fillStyle = colors.upperFin;
+            ctx.strokeStyle = colors.upperFin;
+        } else {
+            ctx.fillStyle = colors.fin;
+            ctx.strokeStyle = colors.fin;
+        }
+    }
 
     switch (fins) {
         case 1:
             // Clownfish
             // Dorsal fins
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.38,
@@ -348,6 +356,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 10
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -375,6 +384,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 2:
             // Red Tail Shark
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.4,
@@ -385,6 +395,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 2
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -412,6 +423,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 3:
             // Juvenile Golden Trevally
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.5,
@@ -422,6 +434,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 2
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -449,6 +462,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 4:
             // Yellow Tail Acei Cichlid and Bicolor Anthias
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.35,
@@ -459,6 +473,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 30
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -486,6 +501,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 5:
             // Siamese Algae Eater
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.4,
@@ -496,8 +512,11 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 6
             });
+            setColors(false);
 
             // Anal fin
+            ctx.fillStyle = colors.fin;
+            ctx.strokeStyle = colors.fin;
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyBottomFrame,
                 startT: 0.75,
@@ -523,6 +542,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 6:
             // Zebra Angelfish
             // Dorsal fin
+            setColors(true);
             drawAngelfishFin(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.3,
@@ -535,6 +555,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 filamentBendFactor: 0.1,
                 overlap: bodyHeight * 0.1,
             });
+            setColors(false);
 
             // Anal fin
             drawAngelfishFin(ctx, bodyCurves, {
@@ -565,6 +586,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 7:
             // Smallmouth Grunt
             // Dorsal fins
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.35,
@@ -575,6 +597,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 10
             });
+            setColors(false);
 
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
@@ -614,6 +637,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 8:
             // Blue Diamond Discus
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.3,
@@ -624,6 +648,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 10
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -652,6 +677,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 9:
             // Black Neon Tetra
             // Dorsal fins
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.45,
@@ -672,6 +698,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 10
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -699,6 +726,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 10:
             // Yellow Tang
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.14,
@@ -709,6 +737,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 17
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
@@ -737,6 +766,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
         case 11:
             // Yellow Tail Damselfish
             // Dorsal fin
+            setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.35,
@@ -747,6 +777,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
                 steps: 30
             });
+            setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {

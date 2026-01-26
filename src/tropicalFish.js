@@ -1,15 +1,15 @@
 import { findElementByCoordinates } from "./balUtils.js";
-import { buildBodyCurves, buildBodyPath, fillUpperBody } from "./fishBody.js";
+import { buildBody, buildBodyCurves, drawBody } from "./fishBody.js";
 import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
 import { drawStripes } from "./fishStripes.js";
-import { drawEmarginateTail, drawForkedTail, drawRoundedTail, drawTruncateTail, getTailDimensions } from "./fishTails.js";
+import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 11;
-export const tropicalFishPalettes = 20;
-export const tropicalFishShapes = 7;
-export const tropicalFishStripes = 20;
+export const tropicalFishPalettes = 21;
+export const tropicalFishShapes = 8;
+export const tropicalFishStripes = 21;
 export const tropicalFishTails = 8;
 
 export function changeFins(gameInfo, x, y, decrease) {
@@ -151,6 +151,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             bodyHeight = h * 0.45;
             bodyLength = w * 0.7;
             break;
+        case 8:
+            // Snapper
+            bodyHeight = h * 0.25;
+            bodyLength = w * 0.74;
+            break;
         default:
             // 2
             bodyHeight = h * 0.3;
@@ -174,6 +179,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
 
 
     let bodyCurvature = null;
+    let noseYOffset = 0;
     switch (shape) {
         case 3:
             // Yellow Tail Damselfish
@@ -240,6 +246,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
                 bottomRearBodyCpDist: 0.2,
             };
             break;
+        case 8:
+            // Snapper
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.7,
+                topFrontBodyCpDist: 0.35,
+                topRearBodyCpPos: 0.5,
+                topRearBodyCpDist: 0.1,
+                bottomFrontBodyCpPos: 0.7,
+                bottomFrontBodyCpDist: 0.3,
+                bottomRearBodyCpPos: 0.5,
+                bottomRearBodyCpDist: 0.1,
+            };            
+            noseYOffset = bodyHeight * 0.1;
+            break;
         default:
             bodyCurvature = {
                 topFrontBodyCpPos: 0.7, // 0 = left, 1 = right (towards head)
@@ -277,17 +297,19 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
         isTang: (shape === 7) ? true : false,
         noseLength: bodyLength * 0.18, // was 0.18
         noseTipYOffset: bodyHeight * 0.18, // was 0.15 
+        noseYOffset,
         headTopYOffset: bodyHeight * 0.25, // was 0.06
         headBottomYOffset: bodyHeight * 0.08, // was 0.08
         noseCurvature: 0.15, // was 0.1
         ...bodyCurvature,
     }
 
-    const geom = buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, yc, bodyOptions);
+    const bodyPath = new Path2D();
+    const geom = buildBody(bodyPath, bodyLeft, bodyRight, top, bottom, connectionHeight, yc, bodyOptions);
 
     const bodyCurves = buildBodyCurves(
-        { ...geom, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, isTang: bodyOptions.isTang },
-        bodyCurvature
+        { ...geom, bodyLeft, top, bottom, yc, connectionHeight },
+        bodyOptions
     );
 
     // ---- Dorsal, anal and pelvic fins ----
@@ -299,27 +321,12 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
 
 
     // ---- Draw the body ----
-    ctx.fillStyle = colors.body;
-    ctx.strokeStyle = colors.body;
-
-    buildBodyPath(ctx, bodyLeft, bodyRight, top, bottom, connectionHeight, yc, bodyOptions);
-
-    if (globalVars.debug) {
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 1;
-        stripes = 0;
-    } else {
-        ctx.fill();
-    }
-    ctx.stroke();
-
-    // ---- Bicolor ----
-    if (!globalVars.debug) {
-        fillUpperBody(ctx, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, colors, bodyOptions);
-    }
+    drawBody(ctx, bodyPath, bodyLeft, bodyRight, top, bottom, yc, colors);
 
     // ---- Stripes ----
-    drawStripes(ctx, size, bodyLeft, bodyRight, top, bottom, yc, connectionHeight, colors, stripes, bodyOptions);
+    if (!globalVars.debug) {
+        drawStripes(ctx, bodyPath, size, bodyLeft, bodyRight, top, bottom, yc, colors, stripes);
+    }
 
     // ---- Pectoral fins ----
     if (!globalVars.debug) {
@@ -327,29 +334,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     }
 
     // ---- Tail ----
-    switch (tail) {
-        case 2:
-        case 3:
-            drawEmarginateTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail, true);
-            break;
-        case 4:
-            drawTruncateTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
-            break;
-        case 5:
-            drawRoundedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
-            break;
-        case 6:
-            drawRoundedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
-            break;
-        case 7:
-        case 8:
-            drawForkedTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
-            break;
-        default:
-            // 1
-            drawEmarginateTail(ctx, left, yc, tailWidth, tailHeight, connectionHeight, colors.tail);
-            break;
-    }
+    drawTail(ctx, left, yc, tail, tailWidth, tailHeight, connectionHeight, colors);
 
     // ---- Eye ----
     ctx.fillStyle = colors.eye;
@@ -377,7 +362,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
         const barbWidth = (palette === 20) ? Math.max(1, size * 0.01) : Math.max(1, size * 0.025);
         ctx.strokeStyle = colors.barb;
         ctx.beginPath();
-        ctx.lineCap = 'round'; 
+        ctx.lineCap = "round"; 
         ctx.lineWidth = Math.max(1, barbWidth);
         ctx.moveTo(bodyLeft - (barbHeight * 0.5), yc);
         ctx.lineTo(bodyLeft + (barbHeight * 0.5), yc);
@@ -390,7 +375,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     }
 
     ctx.lineWidth = 1;
-    ctx.lineCap = 'butt'; 
+    ctx.lineCap = "butt"; 
 }
 
 export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {

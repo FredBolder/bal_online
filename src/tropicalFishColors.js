@@ -210,6 +210,19 @@ export function getTropicalFishColor(palette) {
                 eyePupil: "#000000",
             }
             break;
+        case 21:
+            // Brigham’s snapper or Gindai
+            colors = {
+                body: "#E76F7D",
+                stripe: "#F9D342",
+                fin: "#CF5A66",
+                upperFin: "#EFBF4A",
+                tail: "#F2C94C",
+                upperTail: "#E8B777",
+                eye: "#2A2A2A",
+                eyePupil: "#050505",
+            };
+            break;
         default:
             colors = {
                 body: "#FF6347",
@@ -222,7 +235,9 @@ export function getTropicalFishColor(palette) {
     }
 
     colors.upperBody = colors.upperBody ?? null;
+    colors.upperFin = colors.upperFin ?? colors.fin;
     colors.tail = colors.tail ?? colors.fin;
+    colors.upperTail = colors.upperTail ?? null;
     colors.barb = colors.barb ?? "#F2F2F2";
     colors.eye = colors.eye ?? "#1A1F24";
     colors.eyePupil = colors.eyePupil ?? "#0A0E12";

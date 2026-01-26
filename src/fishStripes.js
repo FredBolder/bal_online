@@ -1,6 +1,4 @@
-import { buildBodyPath } from "./fishBody.js";
-
-export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, connectionHeight, colors, stripes, bodyOptions) {
+export function drawStripes(ctx, bodyPath, size, bodyLeft, bodyRight, bodyTop, bodyBottom, yc, colors, stripes) {
     // stripes
     // 0 = no stripes
     // 1-7 = normal 1-7 stripes
@@ -10,19 +8,21 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
     // 18 = horizontal thin stripe
     // 19 = 5 horizontal stripes
     // 20 = 2 horizontal stripes
+    // 21 = 4 diagonal stripes
     const bodyHeight = bodyBottom - bodyTop;
+    const extraHeight = bodyHeight * 0.1;
     const bodyLength = bodyRight - bodyLeft;
     const bodyCenter = (bodyRight + bodyLeft) / 2;
+    let bottomOffset = 0;
     let dy = 0;
+    let diagonal = false;
     let numberOfStripes = 0;
     const positions = [];
     let stripePattern = 0;
     let stripeWidth = Math.max(1, size * 0.05);
 
     ctx.save();
-    // Clip to body shape
-    buildBodyPath(ctx, bodyLeft, bodyRight, bodyTop, bodyBottom, connectionHeight, yc, bodyOptions);
-    ctx.clip();
+    ctx.clip(bodyPath);
 
     if ((stripes === 17) || (stripes === 18)) {
         ctx.lineWidth = (stripes === 18) ? stripeWidth * 0.25 : stripeWidth * 0.9;
@@ -62,6 +62,13 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
             ctx.lineTo(bodyRight - (bodyLength * 0.25), yc - dy);
             ctx.stroke();
         }
+    } else if (stripes === 21) {
+        stripeWidth = stripeWidth * 1.3;
+        diagonal = true;
+        positions.push((bodyLength * 0.1) + bodyLeft);
+        positions.push((bodyLength * 0.32) + bodyLeft);
+        positions.push((bodyLength * 0.54) + bodyLeft);
+        positions.push((bodyLength * 0.76) + bodyLeft);
     } else if (stripes > 12) {
         numberOfStripes = stripes - 7;
         stripeWidth = stripeWidth * 1.3;
@@ -104,6 +111,11 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
         }
     }
 
+    diagonal = true;
+    if (diagonal) {
+        ctx.lineCap = "round";
+        bottomOffset = bodyHeight * 0.2;
+    }
     for (let i = 0; i < positions.length; i++) {
         const distFromCenter = (2 * Math.abs(positions[i] - bodyCenter)) / bodyLength; // 0..1
         const curveStrength = (0.12 - (distFromCenter * 0.08)) * bodyLength;
@@ -115,8 +127,12 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
                 ctx.lineWidth = stripeWidth * 1.6;
             }
             ctx.beginPath();
-            ctx.moveTo(positions[i], bodyTop);
-            ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bodyBottom);
+            ctx.moveTo(positions[i], bodyTop - extraHeight);
+            if (diagonal) {
+                ctx.lineTo(positions[i] - bottomOffset, yc);
+            } else {
+                ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bodyBottom + extraHeight);
+            }
             ctx.stroke();
         }
         ctx.strokeStyle = colors.stripe;
@@ -126,9 +142,14 @@ export function drawStripes(ctx, size, bodyLeft, bodyRight, bodyTop, bodyBottom,
             ctx.lineWidth = stripeWidth;
         }
         ctx.beginPath();
-        ctx.moveTo(positions[i], bodyTop);
-        ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bodyBottom);
+        ctx.moveTo(positions[i], bodyTop - extraHeight);
+        if (diagonal) {
+            ctx.lineTo(positions[i] - bottomOffset, yc);
+        } else {
+            ctx.quadraticCurveTo(positions[i] + curveStrength, yc, positions[i], bodyBottom + extraHeight);
+        }
         ctx.stroke();
     }
+    ctx.lineCap = "butt";
     ctx.restore();
 }

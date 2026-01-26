@@ -1171,7 +1171,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
-                arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 0, 2101];
+                arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2101];
                 break;
             }
             break;
@@ -2790,7 +2790,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
@@ -2908,6 +2908,14 @@ function BalPage() {
                       gameInfo.tropicalFish[idx].tail = 4;
                       gameInfo.tropicalFish[idx].fins = 10;
                       gameInfo.tropicalFish[idx].stripes = 0;
+                      break;
+                    case 2168:
+                      // Brigham’s snapper
+                      gameInfo.tropicalFish[idx].palette = 21;
+                      gameInfo.tropicalFish[idx].shape = 8;
+                      gameInfo.tropicalFish[idx].tail = 7;
+                      gameInfo.tropicalFish[idx].fins = 4;
+                      gameInfo.tropicalFish[idx].stripes = 21;
                       break;
                     default:
                       break;
