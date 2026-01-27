@@ -8,7 +8,7 @@ import { getTropicalFishColor } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 11;
 export const tropicalFishPalettes = 21;
-export const tropicalFishShapes = 8;
+export const tropicalFishShapes = 9;
 export const tropicalFishStripes = 21;
 export const tropicalFishTails = 8;
 
@@ -156,6 +156,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             bodyHeight = h * 0.25;
             bodyLength = w * 0.74;
             break;
+        case 9:
+            // Siamese Algae Eater
+            bodyHeight = h * 0.15;
+            bodyLength = w * 0.74;
+            break;
         default:
             // 2
             bodyHeight = h * 0.3;
@@ -260,6 +265,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             };            
             noseYOffset = bodyHeight * 0.1;
             break;
+        case 9:
+            // Siamese Algae Eater
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.85,
+                topFrontBodyCpDist: 0.23,
+                topRearBodyCpPos: 0.6,
+                topRearBodyCpDist: 0.08,
+                bottomFrontBodyCpPos: 0.9,
+                bottomFrontBodyCpDist: 0.15,
+                bottomRearBodyCpPos: 0.6,
+                bottomRearBodyCpDist: 0.08,
+            };        
+            noseYOffset = bodyHeight * 0.15;
+            break;
         default:
             bodyCurvature = {
                 topFrontBodyCpPos: 0.7, // 0 = left, 1 = right (towards head)
@@ -342,7 +361,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.lineWidth = 1;
     const xEye = bodyOptions.isTang ? geom.headRight - bodyLength * 0.04 : geom.headRight - bodyLength * 0.15;
     const yEye = yc - bodyHeight * 0.1;
-    const eyeRadius = ([1, 4].includes(shape)) ? size * 0.03 : size * 0.04;
+    const eyeRadius = ([1, 4, 9].includes(shape)) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
     ctx.arc(xEye, yEye, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
@@ -424,6 +443,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
                     countTo += 5;
                     break;
                 case 4:
+                case 9:
                     countTo -= 2;
                     break;
                 case 5:

@@ -17,7 +17,7 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#FFD23C",
                 stripe: "#1A1A1A",
-                fin: "#FFE680",
+                fin: "#E0B93A",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
@@ -28,7 +28,7 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#FFC107",
                 stripe: "#000000",
-                fin: "#FFEB99",
+                fin: "#D9A92E",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
@@ -68,7 +68,7 @@ export function getTropicalFishColor(palette) {
                 body: "#FF8C1A",
                 stripe: "#FFFFFF",
                 stripeOutline: "#000000",
-                fin: "#FFB347",
+                fin: "#E67818",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
@@ -76,10 +76,10 @@ export function getTropicalFishColor(palette) {
         case 9:
             // Red Tail shark
             colors = {
-                body: "#222222",
-                stripe: "#222222",
-                fin: "#333333",
-                tail: "#FF3B3B",
+                body: "#2B2B2B",
+                stripe: "#1F1F1F",
+                fin: "#3A3A3A",
+                tail: "#C93636",
                 eye: "#1A1A1A",
                 eyePupil: "#0A0E12"
             }
@@ -87,10 +87,10 @@ export function getTropicalFishColor(palette) {
         case 10:
             // Yellow Tail Acei Cichlid
             colors = {
-                body: "#7FA8C3",
-                stripe: "#5D7A9B",
-                fin: "#F8E14D",
-                tail: "#FFEA3C",
+                body: "#7294B2",
+                stripe: "#4F6D8D",
+                fin: "#E3D44A",
+                tail: "#EAE041",
                 eye: "#1C1C1C",
                 eyePupil: "#0A0E12"
             }
@@ -111,8 +111,8 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#1F3FAE",
                 stripe: "#2A4FCF",
-                fin: "#2A4EC0",
-                tail: "#FFD83D",
+                fin: "#182F78",
+                tail: "#F2CC3A",
                 eye: "#0E1418",
                 eyePupil: "#0A0E12"
             }
@@ -131,10 +131,10 @@ export function getTropicalFishColor(palette) {
         case 14:
             // Smallmouth Grunt
             colors = {
-                body: "#7E8A90",
-                stripe: "#F2D24B",
-                fin: "#EBCB55",
-                tail: "#F7E06A",
+                body: "#75808A",
+                stripe: "#D8BF48",
+                fin: "#D9C255",
+                tail: "#E5D46A",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
@@ -145,8 +145,8 @@ export function getTropicalFishColor(palette) {
                 body: "#7A2E8E",
                 upperBody: "#E6B72E",
                 stripe: "#5A1F6B",
-                fin: "#B043C6",
-                tail: "#B043C6",
+                fin: "#8F329E",
+                tail: "#9538A4",
                 eye: "#1A1A1A",
                 eyePupil: "#0A0E12"
             }
@@ -156,8 +156,8 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#4F8FA8",
                 stripe: "#2F3F48",
-                fin: "#6FB7C9",
-                tail: "#8FD3E0",
+                fin: "#456F82",
+                tail: "#5A98AA",
                 eye: "#E39B2E",
                 eyePupil: "#0A0E12"
             }
@@ -167,8 +167,8 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#E86A2A",
                 stripe: "#B23A1E",
-                fin: "#F08A4B",
-                tail: "#D45C2C",
+                fin: "#E07A40",
+                tail: "#EA8A52",
                 eye: "#F2B13A",
                 eyePupil: "#120A08"
             }

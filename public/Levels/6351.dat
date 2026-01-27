@@ -24,21 +24,21 @@ $shape: 4, 3, 5
 $stripes: 4, 3, 4
 $tail: 4, 3, 3
 $answer: 4, 3, Angelfish
-$fins: 6, 6, 5
-$palette: 6, 6, 11
-$shape: 6, 6, 4
-$stripes: 6, 6, 17
-$tail: 6, 6, 7
-$fins: 2, 7, 5
-$palette: 2, 7, 11
-$shape: 2, 7, 4
-$stripes: 2, 7, 17
-$tail: 2, 7, 7
 $fins: 3, 8, 2
 $palette: 3, 8, 9
 $shape: 3, 8, 1
 $stripes: 3, 8, 0
 $tail: 3, 8, 7
+$fins: 6, 6, 5
+$palette: 6, 6, 11
+$shape: 6, 6, 9
+$stripes: 6, 6, 17
+$tail: 6, 6, 7
+$fins: 2, 7, 5
+$palette: 2, 7, 11
+$shape: 2, 7, 9
+$stripes: 2, 7, 17
+$tail: 2, 7, 7
 $background: 9, 0, 1, 1, 23
 $background: 14, 0, 1, 1, 23
 $background: 1, 1, 1, 1, 23

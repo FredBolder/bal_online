@@ -2832,7 +2832,7 @@ function BalPage() {
                     case 2158:
                       // Siamese Algae Eater
                       gameInfo.tropicalFish[idx].palette = 11;
-                      gameInfo.tropicalFish[idx].shape = 4;
+                      gameInfo.tropicalFish[idx].shape = 9;
                       gameInfo.tropicalFish[idx].tail = 7;
                       gameInfo.tropicalFish[idx].fins = 5;
                       gameInfo.tropicalFish[idx].stripes = 17;

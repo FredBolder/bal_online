@@ -1,5 +1,5 @@
-$stonepattern: 2
 $extra: 1
+$stonepattern: 2
 $pistonmode: 14, 9, momentary
 $sticky: 14, 9, yes
 $pistonmode: 6, 10, momentary
@@ -16,7 +16,7 @@ $stripes: 11, 10, 0
 $tail: 11, 10, 4
 $fins: 9, 13, 5
 $palette: 9, 13, 11
-$shape: 9, 13, 4
+$shape: 9, 13, 9
 $stripes: 9, 13, 17
 $tail: 9, 13, 7
 $background: 9, 8, 1, 1, 23

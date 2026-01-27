@@ -4239,7 +4239,7 @@ function drawLevel(
         case 2158:
           // Tropical fish - Siamese Algae Eater
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 11, 4, 7, 5, 17);
+          drawFish(ctx, xc, yc, w1, false, 11, 9, 7, 5, 17);
           break;
         case 2159:
           // Tropical fish - Yellow Tail Damselfish

@@ -1,11 +1,45 @@
-$fins: 2, 2, 4
-$palette: 2, 2, 21
-$shape: 2, 2, 8
-$stripes: 2, 2, 21
-$tail: 2, 2, 7
-$background: 2, 2, 1, 1, 23
-00000
-0   0
-3 Ҽ 0
-2   0
-11111
+$extra: 1
+$stonepattern: 2
+$pistonmode: 14, 9, momentary
+$sticky: 14, 9, yes
+$pistonmode: 6, 10, momentary
+$sticky: 6, 10, yes
+$fins: 9, 8, 8
+$palette: 9, 8, 16
+$shape: 9, 8, 5
+$stripes: 9, 8, 0
+$tail: 9, 8, 4
+$fins: 11, 10, 8
+$palette: 11, 10, 16
+$shape: 11, 10, 5
+$stripes: 11, 10, 0
+$tail: 11, 10, 4
+$fins: 9, 13, 5
+$palette: 9, 13, 11
+$shape: 9, 13, 9
+$stripes: 9, 13, 17
+$tail: 9, 13, 7
+$background: 9, 8, 1, 1, 23
+$background: 14, 8, 2, 1, 23
+$background: 5, 9, 2, 1, 23
+$background: 14, 9, 2, 1, 23
+$background: 5, 10, 2, 1, 23
+$background: 11, 10, 1, 1, 23
+$background: 14, 10, 2, 1, 23
+$background: 5, 11, 2, 1, 23
+$background: 9, 13, 1, 1, 23
+11111111111111111111
+11     d    3     31
+11                 1
+1j                 1
+1   2 111       5  1
+111=1           1111
+111=1wwwwwwwwwww1111
+111=1wwwwwwwwwww1111
+1 4=1wwwwҼwwwwp11111
+1 1=11pwwwwwwwÙ11111
+1 1=11ÙwwwwҼww111111
+1  =111wwwwwwwww1111
+1  =1wwwwwwwwwww1111
+1m =1wwwwҼwwwwww1111
+11111111111111111111

@@ -111,7 +111,6 @@ export function drawStripes(ctx, bodyPath, size, bodyLeft, bodyRight, bodyTop, b
         }
     }
 
-    diagonal = true;
     if (diagonal) {
         ctx.lineCap = "round";
         bottomOffset = bodyHeight * 0.2;
