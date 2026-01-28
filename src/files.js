@@ -214,6 +214,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: divingglasses`;
         lines.push(line);
     }
+    if (gameInfo.hasFishFood) {
+        line = `$has: fishfood`;
+        lines.push(line);
+    }
     if (gameInfo.hasFreezeGun) {
         line = `$has: freezegun`;
         lines.push(line);

@@ -332,10 +332,11 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 tail: 2,
                 fins: 3,
                 stripes: 5,
+                blocked: false,
                 outOfWater: 0,
                 isDead: false,
                 counter: 0,
-                answer: "fish" 
+                answer: "fish"
             };
             gameInfo.tropicalFish.push(fish);
             break;
@@ -361,6 +362,17 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 isDead: false
             };
             gameInfo.jellyfish.push(jellyfish);
+            break;
+        }
+        case 251: {
+            let food = {
+                x,
+                y,
+                floats: true,
+                foodLeft: 8,
+                counter: 0,
+            };
+            gameInfo.fishFood.push(food);
             break;
         }
         default:
@@ -674,6 +686,12 @@ export function removeObject(gameData, gameInfo, x, y) {
             idx = findElementByCoordinates(x, y, gameInfo.jellyfish);
             if (idx >= 0) {
                 gameInfo.jellyfish.splice(idx, 1);
+            }
+            break;
+        case 250:
+            idx = findElementByCoordinates(x, y, gameInfo.fishFood);
+            if (idx >= 0) {
+                gameInfo.fishFood.splice(idx, 1);
             }
             break;
         default:

@@ -20,7 +20,7 @@ import { checkYellowStoppers } from "./yellowStoppers.js";
 const phaseThroughObjects = [1, 10, 11, 12, 15, 16, 17, 18, 21, 30, 35, 87, 88, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 169, 198];
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
-  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205, 207, 226, 227, 228, 229, 230, 231, 232, 233].includes(object);
+  let result = [0, 3, 26, 29, 34, 81, 99, 105, 108, 118, 120, 133, 134, 135, 140, 156, 168, 179, 186, 187, 188, 189, 190, 191, 193, 194, 199, 205, 207, 226, 227, 228, 229, 230, 231, 232, 233, 250].includes(object);
   switch (object) {
     case 192:
       result = !gameInfo.hasWhiteBall;
@@ -55,7 +55,7 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247].includes(el)) {
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -937,6 +937,12 @@ export function charToNumber(c) {
     case "Ӌ":
       result = 249;
       break;
+    case "Ӎ":
+      result = 250;
+      break;
+    case "ӎ":
+      result = 251;
+      break;
     case "|":
       result = 1000;
       break;
@@ -965,8 +971,30 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
   if (gameVars.gravity === "down") {
     for (let i = gameData.length - 2; i >= 0; i--) {
       for (let j = 0; j < gameData[i].length; j++) {
-        let element1 = gameData[i][j];
-        let element2 = gameData[i + 1][j];
+        const element1 = getGameDataValue(gameData, j, i);
+        const element2 = getGameDataValue(gameData, j, i + 1);
+        const element3 = getGameDataValue(gameData, j, i + 2);
+        const elementBottomLeft = getGameDataValue(gameData, j - 1, i + 1);
+        const elementBottomRight = getGameDataValue(gameData, j + 1, i + 1);
+
+        if (hasWeightAbove(backData, gameData, gameInfo, gameVars, j, j, i + 1, false) && (element2 === 251)) {
+          result.update = true;
+          if (element3 === 0) {
+            moveObject(gameData, gameInfo, j, i + 1, j, i + 2);
+          } else if (elementBottomLeft === 0) {
+            moveObject(gameData, gameInfo, j, i + 1, j - 1, i + 1);
+          } else if (elementBottomRight === 0) {
+            moveObject(gameData, gameInfo, j, i + 1, j + 1, i + 1);
+          } else {
+            // When the food can go nowhere, it will be removed
+            idx = findElementByCoordinates(j, i + 1, gameInfo.fishFood);
+            if (idx >= 0) {
+              const food = gameInfo.fishFood[idx];
+              food.foodLeft = 0;
+              gameData[food.y][food.x] = 0;
+            }
+          }
+        }
 
         if (j < gameData[i].length - 1) {
           if (
@@ -1002,8 +1030,8 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
 
     for (let i = gameData.length - 2; i >= 0; i--) {
       for (let j = 0; j < gameData[i].length; j++) {
-        let element1 = gameData[i][j];
-        let element2 = gameData[i + 1][j];
+        const element1 = getGameDataValue(gameData, j, i);
+        const element2 = getGameDataValue(gameData, j, i + 1);
 
         if (element2 !== 0) continue;
 
@@ -1053,8 +1081,8 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
   if (gameVars.gravity === "up") {
     for (let i = 1; i <= gameData.length - 1; i++) {
       for (let j = 0; j < gameData[i].length; j++) {
-        let element1 = gameData[i][j];
-        let element2 = gameData[i - 1][j];
+        const element1 = getGameDataValue(gameData, j, i);
+        const element2 = getGameDataValue(gameData, j, i - 1);
 
         if (j < gameData[i].length - 1) {
           if (
@@ -1090,8 +1118,8 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 1; i <= gameData.length - 1; i++) {
       for (let j = 0; j < gameData[i].length; j++) {
-        let element1 = gameData[i][j];
-        let element2 = gameData[i - 1][j];
+        const element1 = getGameDataValue(gameData, j, i);
+        const element2 = getGameDataValue(gameData, j, i - 1);
 
         forceDown = hasForceDown(gameData, gameInfo, j, i);
 
@@ -1285,10 +1313,10 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
         }
         idx = findElementByCoordinates(i, y - 1, gameInfo[animalList]);
         if (idx >= 0) {
-            animal = gameInfo[animalList][idx];
-            if (!animal.isDead && (backAbove === 23)) {
-              weight = false;
-            }
+          animal = gameInfo[animalList][idx];
+          if (!animal.isDead && (backAbove === 23)) {
+            weight = false;
+          }
         }
       }
       if (weight) {
@@ -1458,6 +1486,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 248:
       result = gameInfo.jellyfish;
+      break;
+    case 251:
+      result = gameInfo.fishFood;
       break;
     default:
       result = null;
@@ -2295,6 +2326,12 @@ export function numberToChar(n) {
     case 249:
       result = "Ӌ";
       break;
+    case 250:
+      result = "Ӎ";
+      break;
+    case 251:
+      result = "ӎ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2469,6 +2506,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 248:
       updateObject(gameInfo.jellyfish, oldX, oldY, newX, newY);
       break;
+    case 251:
+      updateObject(gameInfo.fishFood, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -2547,6 +2587,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.elevators.length; i++) {
     refs.push(gameInfo.elevators[i]);
+  }
+
+  for (let i = 0; i < gameInfo.fishFood.length; i++) {
+    refs.push(gameInfo.fishFood[i]);
   }
 
   for (let i = 0; i < gameInfo.forces.length; i++) {
@@ -2898,6 +2942,11 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       break;
     case 207:
       gameVars.remainingPhaseTicks = gameVars.phaseTicks;
+      break;
+    case 250:
+      gameInfo.hasFishFood = true;
+      result.message = "You have now fish food. You can feed fish by pressing the Space bar or the A button and ";
+      result.message += "after that pressing a move key or button to indicate the direction (for example the right arrow key)."
       break;
     default:
       break;

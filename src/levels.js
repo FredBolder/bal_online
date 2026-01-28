@@ -50,7 +50,7 @@ export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
 export const seriesFishStart = 6350;
-export const seriesFishEnd = 6355;
+export const seriesFishEnd = 6356;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -103,6 +103,7 @@ export function addSolvedLevels(levelStr) {
 export function checkLevel(data, settings) {
   let checkSettingsResult = "";
   let differentLength = false;
+  let foundFishFood = false;
   let foundGravityChanger = false;
   let foundLava = false;
   let foundWater = false;
@@ -173,6 +174,10 @@ export function checkLevel(data, settings) {
           case "b":
             nDetonators++;
             break;
+          case "Ӎ":
+          case "ӎ":
+            foundFishFood = true;
+            break;
           case "Є":
           case "З":
             foundGravityChanger = true;
@@ -231,8 +236,8 @@ export function checkLevel(data, settings) {
     if ((nGameRotator > 0) && (data.length !== data[0].length)) {
       msg += "There can only be a game rotator when the number of columns is the same as the number of rows.\n";
     }
-    if (foundGravityChanger && (foundWater || foundLava)) {
-      msg += "There can be no gravity changer in a level with water and/or lava.\n";
+    if (foundGravityChanger && (foundWater || foundLava || foundFishFood)) {
+      msg += "There can be no gravity changer in a level with fish food, lava or water.\n";
     }
     if (nSmallBlueBalls > 1) {
       msg += "There can be only one small blue ball.\n";
@@ -525,7 +530,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "freezegun", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
+              if (!["nothing", "coilspring", "divingglasses", "fishfood", "freezegun", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
                 "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball",
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
@@ -1635,6 +1640,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             case "nothing":
               gameInfo.hasCoilSpring = false;
               gameInfo.hasDivingGlasses = false;
+              gameInfo.hasFishFood = false;
               gameInfo.hasFreezeGun = false;
               gameInfo.hasKey = false;
               gameInfo.hasLadder = false;
@@ -1658,6 +1664,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "divingglasses":
               gameInfo.hasDivingGlasses = true;
+              break;
+            case "fishfood":
+              gameInfo.hasFishFood = true;
               break;
             case "freezegun":
               gameInfo.hasFreezeGun = true;

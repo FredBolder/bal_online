@@ -307,6 +307,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.elevatorInOuts[i], rows, rotateLeft);
       }
 
+      // Fish food
+      for (let i = 0; i < gameInfo.fishFood.length; i++) {
+        rotateXY(gameInfo.fishFood[i], rows, rotateLeft);
+      }
+
       // Forces
       for (let i = 0; i < gameInfo.forces.length; i++) {
         rotateXY(gameInfo.forces[i], rows, rotateLeft);

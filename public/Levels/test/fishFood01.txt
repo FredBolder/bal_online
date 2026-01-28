@@ -1,0 +1,27 @@
+$has: divingglasses
+$fins: 6, 13, 10
+$palette: 6, 13, 19
+$shape: 6, 13, 7
+$stripes: 6, 13, 0
+$tail: 6, 13, 4
+$background: 6, 13, 1, 1, 23
+11111111111111111111
+13                 1
+1                  1
+1                  1
+1                  1
+1      2 Ӎ         1
+1     1111         1
+1                  1
+1                  1
+1WWWWWWWWWWWWWWWWWW1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwҼwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1
+11111111111111111111

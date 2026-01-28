@@ -169,6 +169,13 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.changers[idx2].horizontal = gameInfo.changers[idx1].horizontal;
             }
             break;
+        case 251:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.fishFood);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.fishFood);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.fishFood[idx2].floats = gameInfo.fishFood[idx1].floats;
+            }
+            break;
         default:
             break;
     }

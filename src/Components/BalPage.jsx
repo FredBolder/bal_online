@@ -37,6 +37,7 @@ import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
+import { feedFish } from "../fishFood.js";
 import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
@@ -957,6 +958,9 @@ function BalPage() {
     if (gameInfo.hasDivingGlasses) {
       addItem("diving glasses");
     }
+    if (gameInfo.hasFishFood) {
+      addItem("fish food");
+    }
     if (gameInfo.hasFreezeGun) {
       addItem("freeze gun");
     }
@@ -1165,7 +1169,7 @@ function BalPage() {
             // Water
             switch (globalVars.createLevelWaterPage) {
               case 2:
-                arr1 = [2200];
+                arr1 = [2200, 250, 251];
                 arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
@@ -1536,6 +1540,10 @@ function BalPage() {
             freezeWater(backData, gameData, gameInfo, direction);
             updateGameCanvas();
             break;
+          case "feedFish":
+            feedFish(backData, gameData, gameInfo, direction);
+            updateGameCanvas();
+            break;
           default:
             break;
         }
@@ -1647,6 +1655,9 @@ function BalPage() {
         case "Use telekinetic power":
           actionIndex = 11;
           break;
+        case "Feed fish":
+          actionIndex = 12;
+          break;
         default:
           break;
       }
@@ -1689,6 +1700,9 @@ function BalPage() {
         break;
       case 11:
         info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
+        break;
+      case 12:
+        gameInfo.action = "feedFish";
         break;
       default:
         break;

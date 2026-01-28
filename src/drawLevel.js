@@ -12,6 +12,7 @@ import {
 } from "./drawUtils.js";
 import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
+import { drawFishFood, drawFishFoodInPot } from "./fishFood.js";
 import { globalVars } from "./glob.js";
 import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
@@ -976,6 +977,17 @@ function drawLevel(
     drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, "#FFD23C");
     drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, "#7EC8E3");
     drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, "#1F5F8B");
+  }
+
+  function drawFishFoodObject(x, y) {
+    let idx = -1;
+    let foodLeft = 8;
+
+    idx = findElementByCoordinates(x, y, gameInfo.fishFood);
+    if (idx >= 0) {
+      foodLeft = gameInfo.fishFood[idx].foodLeft;
+    }
+    drawFishFood(ctx, xc, yc, w1, foodLeft);
   }
 
   function drawForceDown() {
@@ -4010,6 +4022,12 @@ function drawLevel(
           wavelengthInCols = 10; // how many columns per full 2π wave
           swayPhase = ((currentCol / wavelengthInCols) % 1) * Math.PI * 2;
           drawCoralReefPlant(ctx, xc, yc, w1, gameVars.plantsSwayAmount, gameVars.plantsSwaySpeed, swayPhase);
+          break;
+        case 250:
+          drawFishFoodInPot(ctx, xmin, ymin, w1);
+          break;
+        case 251:
+          drawFishFoodObject(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

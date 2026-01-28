@@ -12,6 +12,7 @@ import { checkForces } from "./force.js";
 import { clearBitMapLava } from "./drawLevel.js";
 import { checkElevatorInOuts, moveElevators, moveHorizontalElevators } from "./elevators.js";
 import { moveFish } from "./fish.js";
+import { moveFishFood } from "./fishFood.js";
 import { checkIce } from "./freeze.js";
 import { checkJellyfish } from "./jellyfish.js";
 import { checkLava, moveLava } from "./lava.js";
@@ -390,6 +391,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
 
         if (movePinkBalls(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
+        }
+
+        if (moveFishFood(backData, gameData, gameInfo, gameVars)) {
             updateCanvas = true;
         }
 

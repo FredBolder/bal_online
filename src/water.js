@@ -12,7 +12,6 @@ export function checkFishOutOfWater(backData, gameInfo) {
             } else {
                 animal.outOfWater++;
                 if (animal.outOfWater > 20) {
-                    console.log("!!!!!!!!!!!!!");
                     animal.isDead = true;
                 }
             }
@@ -51,7 +50,6 @@ export function getConnectedWater(backData, x, y) {
         const objectNumber = getGameDataValue(backData, cx, cy);
         if (!isWater(objectNumber)) continue;
 
-        // ✅ only now we mark visited
         visited.add(key);
         water.add(key);
 

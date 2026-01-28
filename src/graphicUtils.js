@@ -24,6 +24,10 @@ export function cubicFromMid(p0, p3, curvature, normalSign) {
     return { c1, c2 };
 }
 
+export function dist(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(Math.abs(x2 - x1), 2) + Math.pow(Math.abs(y2 - y1), 2));
+}
+
 export function quadControlFromChordPosition(p0, p2, curvature, normalSign, position, useSecondPoint = false) {
     // position is point on line (0 = p0, 0.5 = mid, 1 = p2)
     const dx = p2.x - p0.x;

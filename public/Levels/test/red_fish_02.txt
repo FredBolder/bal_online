@@ -1,0 +1,17 @@
+$has: divingglasses
+$background: 10, 9, 1, 1, 23
+111111111111111
+1      1      1
+1      3      1
+1      2      1
+1WWWWWW1WWWWWW1
+1wwwwww1wwwwww1
+1wwwwww1wwwwww1
+1wwwwww1wwwwww1
+1wwwwww1wwwwww1
+1wwwwww1wwfwww1
+1wwwwww1wwwwww1
+1wwwwww1wwwwww1
+1wwwwww1wwwwww1
+1wwwwww1wwwwww1
+111111111111111

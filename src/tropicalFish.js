@@ -1,6 +1,8 @@
-import { findElementByCoordinates } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
+import { freeToSwim } from "./fish.js";
 import { buildBody, buildBodyCurves, drawBody } from "./fishBody.js";
 import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
+import { nearestFoodPosition } from "./fishFood.js";
 import { drawStripes } from "./fishStripes.js";
 import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
@@ -262,7 +264,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
                 bottomFrontBodyCpDist: 0.3,
                 bottomRearBodyCpPos: 0.5,
                 bottomRearBodyCpDist: 0.1,
-            };            
+            };
             noseYOffset = bodyHeight * 0.1;
             break;
         case 9:
@@ -276,7 +278,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
                 bottomFrontBodyCpDist: 0.15,
                 bottomRearBodyCpPos: 0.6,
                 bottomRearBodyCpDist: 0.08,
-            };        
+            };
             noseYOffset = bodyHeight * 0.15;
             break;
         default:
@@ -381,7 +383,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
         const barbWidth = (palette === 20) ? Math.max(1, size * 0.01) : Math.max(1, size * 0.025);
         ctx.strokeStyle = colors.barb;
         ctx.beginPath();
-        ctx.lineCap = "round"; 
+        ctx.lineCap = "round";
         ctx.lineWidth = Math.max(1, barbWidth);
         ctx.moveTo(bodyLeft - (barbHeight * 0.5), yc);
         ctx.lineTo(bodyLeft + (barbHeight * 0.5), yc);
@@ -394,7 +396,13 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     }
 
     ctx.lineWidth = 1;
-    ctx.lineCap = "butt"; 
+    ctx.lineCap = "butt";
+}
+
+function nextToFood(gameData, x, y) {
+    const elementLeft = getGameDataValue(gameData, x - 1, y);
+    const elementRight = getGameDataValue(gameData, x + 1, y);
+    return ((elementLeft === 251) || (elementRight === 251));
 }
 
 export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
@@ -402,6 +410,9 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
     let changed = false;
     let countTo = 12;
     let down = false;
+    let foodX = -1;
+    let foodY = -1;
+    let goToFood = false;
     const maxX = gameData[0].length - 1;
     const maxY = gameData.length - 1;
     let up = false;
@@ -409,6 +420,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
         const fish = gameInfo.tropicalFish[i];
+        goToFood = false;
 
         if (![20, 23].includes(backData[fish.y][fish.x])) continue;
 
@@ -455,90 +467,146 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
         }
         if (fish.counter < countTo) {
             fish.counter++;
-        } else {
-            update = true;
-            fish.counter = 0;
-            down = false;
-            up = false;
-            upOrDown = false;
-            gameData[fish.y][fish.x] = 0;
+            continue;
+        }
 
-            if (fish.isDead) {
-                if (fish.y < maxY) {
-                    if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
-                        fish.y++;
-                    }
-                }
-            } else {
-                if (Math.random() < 0.1) {
-                    if (fish.direction === 6) {
-                        fish.direction = 4;
-                    } else {
-                        fish.direction = 6;
-                    }
-                }
-                if (fish.direction === 6) {
-                    changed = false;
-                    if (fish.x < maxX) {
-                        if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
-                            fish.x++;
-                            changed = true;
-                        }
-                    }
-                    if (!changed) {
-                        if (fish.x > 0) {
-                            if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
-                                fish.direction = 4;
-                                changed = true;
-                            }
-                        }
-                        upOrDown = !changed;
-                    }
-                } else if (fish.direction === 4) {
-                    changed = false;
-                    if (fish.x > 0) {
-                        if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
-                            fish.x--;
-                            changed = true;
-                        }
-                    }
-                    if (!changed) {
-                        if (fish.x < maxX) {
-                            if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
-                                fish.direction = 6;
-                                changed = true;
-                            }
-                        }
-                        upOrDown = !changed;
-                    }
-                }
-                if (upOrDown) {
-                    if (Math.random() > 0.5) {
-                        if (!down) {
-                            up = true;
-                        }
-                    } else {
-                        if (!up) {
-                            down = true;
-                        }
-                    }
-                }
-                if (up) {
-                    if (fish.y > 0) {
-                        if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
-                            fish.y--;
-                        }
-                    }
-                }
-                if (down) {
-                    if (fish.y < maxY) {
-                        if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
-                            fish.y++;
-                        }
-                    }
+        update = true;
+        fish.counter = 0;
+        down = false;
+        up = false;
+        upOrDown = false;
+        gameData[fish.y][fish.x] = 0;
+
+        if (fish.isDead) {
+            if (fish.y < maxY) {
+                if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+                    fish.y++;
                 }
             }
             gameData[fish.y][fish.x] = 243;
+            continue;
+        }
+
+        const foodPosition = nearestFoodPosition(backData, gameInfo, fish.x, fish.y);
+        if ((foodPosition.x >= 0) && (foodPosition.y >= 0)) {
+            goToFood = true;
+            foodX = foodPosition.x;
+            foodY = foodPosition.y;
+        }
+
+        if (Math.random() < 0.1) {
+            if (fish.direction === 6) {
+                fish.direction = 4;
+            } else {
+                fish.direction = 6;
+            }
+        }
+        if (goToFood) {
+            if (fish.x > foodX + 1) {
+                fish.direction = fish.blocked ? 6 : 4;
+            }
+            if (fish.x < foodX - 1) {
+                fish.direction = fish.blocked ? 4 : 6;
+            }
+            if (fish.blocked) {
+                upOrDown = true;
+            }
+            fish.blocked = false;
+            if (fish.y > foodY) {
+                if (freeToSwim(foodX, fish.x, fish.y - 1, gameData) && freeToSwim(foodX, fish.x, fish.y, gameData)) {
+                    up = true;
+                }
+            }
+            if (fish.y < foodY) {
+                if (freeToSwim(foodX, fish.x, fish.y + 1, gameData) && freeToSwim(foodX, fish.x, fish.y, gameData)) {
+                    down = true;
+                }
+            }
+        }
+        if (fish.direction === 6) {
+            changed = false;
+            if (fish.x < maxX) {
+                if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+                    fish.x++;
+                    changed = true;
+                }
+            }
+            if (!changed) {
+                if ((fish.x > 0) && !goToFood) {
+                    if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+                        fish.direction = 4;
+                        changed = true;
+                    }
+                }
+                upOrDown = !changed;
+            }
+        } else if (fish.direction === 4) {
+            changed = false;
+            if (fish.x > 0) {
+                if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+                    fish.x--;
+                    changed = true;
+                }
+            }
+            if (!changed) {
+                if ((fish.x < maxX) && !goToFood) {
+                    if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+                        fish.direction = 6;
+                        changed = true;
+                    }
+                }
+                upOrDown = !changed;
+            }
+        }
+        if (upOrDown) {
+            if (Math.random() > 0.5) {
+                if (!down) {
+                    up = true;
+                }
+            } else {
+                if (!up) {
+                    down = true;
+                }
+            }
+        }
+        if (up && !nextToFood(gameData, fish.x, fish.y)) {
+            if (fish.y > 0) {
+                if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
+                    fish.y--;
+                } else if (!changed) {
+                    fish.blocked = true;
+                }
+            }
+        }
+        if (down && !nextToFood(gameData, fish.x, fish.y)) {
+            if (fish.y < maxY) {
+                if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+                    fish.y++;
+                } else if (!changed) {
+                    fish.blocked = true;
+                }
+            }
+        }
+
+        gameData[fish.y][fish.x] = 243;
+
+        // check food
+        for (let j = 0; j < gameInfo.fishFood.length; j++) {
+            const food = gameInfo.fishFood[j];
+
+            if ((food.foodLeft <= 0) || (fish.y !== food.y)) continue;
+
+            if (fish.x - 1 === food.x) {
+                fish.direction = 4;
+                food.foodLeft--;
+            }
+            if (fish.x + 1 === food.x) {
+                fish.direction = 6;
+                food.foodLeft--;
+            }
+            if ((food.foodLeft <= 0) && (gameData[food.y][food.x] === 251)) {
+                gameData[food.y][food.x] = 0; // object still exists, but foodLeft is 0
+            }
         }
     }
     return update;

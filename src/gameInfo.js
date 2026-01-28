@@ -321,6 +321,7 @@ export function getGameInfo(backData, gameData) {
                         tail: 2,
                         fins: 3,
                         stripes: 5,
+                        blocked: false,
                         outOfWater: 0,
                         isDead: false,
                         counter: 0,
@@ -350,6 +351,17 @@ export function getGameInfo(backData, gameData) {
                         isDead: false
                     };
                     result.jellyfish.push(jellyfish);
+                    break;
+                }
+                case 251: {
+                    let food = {
+                        x: j,
+                        y: i,
+                        floats: true,
+                        foodLeft: 8,
+                        counter: 0,
+                    };
+                    result.fishFood.push(food);
                     break;
                 }
                 default:
@@ -606,7 +618,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.redFish);
                 if (idx >= 0) {
                     obj = gameInfo.redFish[idx];
-                    extraInfo = `Direction: ${obj.direction}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
+                    extraInfo = `Direction: ${obj.direction}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
                 }
                 info = `Red fish, ` + extraInfo;
                 break;
@@ -1098,7 +1110,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 if (idx >= 0) {
                     obj = gameInfo.tropicalFish[idx];
                     extraInfo = `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `; 
-                    extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Out of water: ${obj.outOfWater}, `; 
+                    extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, `; 
                     extraInfo += `Dead: ${obj.isDead}`;
                 }
                 info = `Tropical fish, ` + extraInfo;
@@ -1127,6 +1139,17 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 break;
             case 249:
                 info = `Coral reef plant`;
+                break;
+            case 250:
+                info = `Fish food in pot`;
+                break;
+            case 251:
+                idx = findElementByCoordinates(x, y, gameInfo.fishFood);
+                if (idx >= 0) {
+                    obj = gameInfo.fishFood[idx];
+                    extraInfo = `Floats: ${obj.floats}, Food left: ${obj.foodLeft}`;
+                }
+                info = `Fish food, ` + extraInfo;
                 break;
             default:
                 break;
@@ -1177,10 +1200,12 @@ export function initGameInfo(info) {
     info.electricityActive = false;
     info.elevatorInOuts = [];
     info.elevators = [];
+    info.fishFood = [];
     info.forces = [];
     info.greenBalls = 0;
     info.hasCoilSpring = false;
     info.hasDivingGlasses = false;
+    info.hasFishFood = false;
     info.hasFreezeGun = false;
     info.hasKey = false;
     info.hasLadder = false;
@@ -1255,6 +1280,7 @@ export function initGameVars(vars) {
     vars.fgcolor = [];
     vars.fishCounter = 0;
     vars.fishCountTo = 12;
+    vars.fishFoodCountTo = 5;
     vars.gameOver = false;
     vars.gateTravelling = 0;
     vars.gravity = "down";

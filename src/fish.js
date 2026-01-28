@@ -1,4 +1,6 @@
 import { inWater } from "./balUtils.js";
+import { dist } from "./graphicUtils.js";
+import { getConnectedWater } from "./water.js";
 
 export function fishIsCloseToBlueBall(gameInfo) {
   let result = false;
@@ -23,7 +25,7 @@ export function fishIsCloseToBlueBall(gameInfo) {
   return result;
 }
 
-function freeToSwim(x1, x2, y, gameData) {
+export function freeToSwim(x1, x2, y, gameData) {
   let found = false;
 
   if (Math.abs(x1 - x2) < 2) return true;
@@ -45,17 +47,19 @@ function freeToSwim(x1, x2, y, gameData) {
 
 export function moveFish(backData, gameData, gameInfo) {
   let attack = false;
+  let ball1 = false;
+  let ball2 = false;
+  let blueX = -1;
+  let blueY = -1;
   let changed = false;
   let down = false;
   let up = false;
   let upOrDown = false;
   const maxX = gameData[0].length - 1;
   const maxY = gameData.length - 1;
-  const x = gameInfo.blueBall.x;
-  const y = gameInfo.blueBall.y;
 
-  attack = inWater(x, y, backData);
   for (let i = 0; i < gameInfo.redFish.length; i++) {
+    attack = false;
     down = false;
     up = false;
     upOrDown = false;
@@ -71,103 +75,130 @@ export function moveFish(backData, gameData, gameInfo) {
           fish.y += 1;
         }
       }
-    } else {
-      if (attack) {
-        if (fish.x > x) {
-          fish.direction = fish.blocked ? 6 : 4;
+      gameData[fish.y][fish.x] = 27;
+      continue;
+    }
+
+    ball1 = false;
+    ball2 = false;
+    if (inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData) || inWater(gameInfo.blueBall1.x, gameInfo.blueBall1.y, backData) ||
+      (gameInfo.twoBlue && inWater(gameInfo.blueBall2.x, gameInfo.blueBall2.y, backData))) {
+      const connectedWater = getConnectedWater(backData, fish.x, fish.y);
+      ball1 = (connectedWater.has(`${gameInfo.blueBall.x},${gameInfo.blueBall.y}`) ||
+        connectedWater.has(`${gameInfo.blueBall1.x},${gameInfo.blueBall1.y}`));
+      ball2 = (gameInfo.twoBlue && connectedWater.has(`${gameInfo.blueBall2.x},${gameInfo.blueBall2.y}`));
+    }
+    if (ball1 || ball2) {
+      if (ball1 && ball2) {
+        if (dist(fish.x, fish.y, gameInfo.blueBall1.x, gameInfo.blueBall1.y) < dist(fish.x, fish.y, gameInfo.blueBall2.x, gameInfo.blueBall2.y)) {
+          ball2 = false;
         } else {
-          fish.direction = fish.blocked ? 4 : 6;
+          ball1 = false;
         }
-        if (fish.blocked) {
-          upOrDown = true;
-        }
-        fish.blocked = false;
-        if (fish.y > y) {
-          if (freeToSwim(x, fish.x, fish.y - 1, gameData) && freeToSwim(x, fish.x, fish.y, gameData)) {
-            up = true;
-          }
-        }
-        if (fish.y < y) {
-          if (freeToSwim(x, fish.x, fish.y + 1, gameData) && freeToSwim(x, fish.x, fish.y, gameData)) {
-            down = true;
-          }
-        }
+      }
+      if (ball1) {
+        blueX = gameInfo.blueBall1.x;
+        blueY = gameInfo.blueBall1.y;
       } else {
-        if (Math.random() < 0.1) {
-          if (fish.direction === 6) {
-            fish.direction = 4;
-          } else {
-            fish.direction = 6;
-          }
+        blueX = gameInfo.blueBall2.x;
+        blueY = gameInfo.blueBall2.y;
+      }
+      attack = true;
+    }
+    if (attack) {
+      if (fish.x > blueX) {
+        fish.direction = fish.blocked ? 6 : 4;
+      } else {
+        fish.direction = fish.blocked ? 4 : 6;
+      }
+      if (fish.blocked) {
+        upOrDown = true;
+      }
+      fish.blocked = false;
+      if (fish.y > blueY) {
+        if (freeToSwim(blueX, fish.x, fish.y - 1, gameData) && freeToSwim(blueX, fish.x, fish.y, gameData)) {
+          up = true;
         }
       }
-      if (fish.direction === 6) {
-        changed = false;
-        if (fish.x < maxX) {
-          if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
-            fish.x++;
-            changed = true;
-          }
-        }
-        if (!changed) {
-          if (fish.x > 0 && !attack) {
-            if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
-              fish.direction = 4;
-              changed = true;
-            }
-          }
-          upOrDown = !changed;
-        }
-      } else if (fish.direction === 4) {
-        changed = false;
-        if (fish.x > 0) {
-          if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
-            fish.x--;
-            changed = true;
-          }
-        }
-        if (!changed) {
-          if (fish.x < maxX && !attack) {
-            if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
-              fish.direction = 6;
-              changed = true;
-            }
-          }
-          upOrDown = !changed;
+      if (fish.y < blueY) {
+        if (freeToSwim(blueX, fish.x, fish.y + 1, gameData) && freeToSwim(blueX, fish.x, fish.y, gameData)) {
+          down = true;
         }
       }
-      if (upOrDown) {
-        if (Math.random() > 0.5) {
-          if (!down) {
-            up = true;
-          }
+    } else {
+      if (Math.random() < 0.1) {
+        if (fish.direction === 6) {
+          fish.direction = 4;
         } else {
-          if (!up) {
-            down = true;
-          }
-        }
-      }
-      if (up) {
-        if (fish.y > 0) {
-          if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
-            fish.y--;
-          } else if (!changed) {
-            fish.blocked = true;
-          }
-
-        }
-      }
-      if (down) {
-        if (fish.y < maxY) {
-          if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
-            fish.y++;
-          } else if (!changed) {
-            fish.blocked = true;
-          }
-
+          fish.direction = 6;
         }
       }
     }
+    if (fish.direction === 6) {
+      changed = false;
+      if (fish.x < maxX) {
+        if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+          fish.x++;
+          changed = true;
+        }
+      }
+      if (!changed) {
+        if ((fish.x > 0) && !attack) {
+          if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+            fish.direction = 4;
+            changed = true;
+          }
+        }
+        upOrDown = !changed;
+      }
+    } else if (fish.direction === 4) {
+      changed = false;
+      if (fish.x > 0) {
+        if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
+          fish.x--;
+          changed = true;
+        }
+      }
+      if (!changed) {
+        if ((fish.x < maxX) && !attack) {
+          if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
+            fish.direction = 6;
+            changed = true;
+          }
+        }
+        upOrDown = !changed;
+      }
+    }
+    if (upOrDown) {
+      if (Math.random() > 0.5) {
+        if (!down) {
+          up = true;
+        }
+      } else {
+        if (!up) {
+          down = true;
+        }
+      }
+    }
+    if (up) {
+      if (fish.y > 0) {
+        if ((gameData[fish.y - 1][fish.x] === 0) && (backData[fish.y - 1][fish.x] === 23)) {
+          fish.y--;
+        } else if (!changed) {
+          fish.blocked = true;
+        }
+      }
+    }
+    if (down) {
+      if (fish.y < maxY) {
+        if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+          fish.y++;
+        } else if (!changed) {
+          fish.blocked = true;
+        }
+      }
+    }
+
     gameData[fish.y][fish.x] = 27;
   }
 }

@@ -1,3 +1,4 @@
+$color: water, #001A66
 $plantsswayspeed: 20
 $answer: 7, 5, %fish
 $fins: 0, 0, 1
@@ -17,11 +18,11 @@ $palette: 6, 0, 10
 $shape: 6, 0, 1
 $stripes: 6, 0, 0
 $tail: 6, 0, 4
-$fins: 10, 0, 4
-$palette: 10, 0, 12
-$shape: 10, 0, 3
-$stripes: 10, 0, 0
-$tail: 10, 0, 8
+$fins: 8, 0, 5
+$palette: 8, 0, 11
+$shape: 8, 0, 9
+$stripes: 8, 0, 17
+$tail: 8, 0, 7
 $fins: 0, 2, 6
 $palette: 0, 2, 13
 $shape: 0, 2, 5
@@ -60,16 +61,16 @@ $palette: 2, 4, 20
 $shape: 2, 4, 7
 $stripes: 2, 4, 0
 $tail: 2, 4, 4
-$fins: 8, 0, 5
-$palette: 8, 0, 11
-$shape: 8, 0, 9
-$stripes: 8, 0, 17
-$tail: 8, 0, 7
 $fins: 4, 4, 4
 $palette: 4, 4, 21
 $shape: 4, 4, 8
 $stripes: 4, 4, 21
 $tail: 4, 4, 7
+$fins: 10, 0, 11
+$palette: 10, 0, 12
+$shape: 10, 0, 3
+$stripes: 10, 0, 0
+$tail: 10, 0, 8
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23
