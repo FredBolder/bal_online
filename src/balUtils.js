@@ -2945,7 +2945,7 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       break;
     case 250:
       gameInfo.hasFishFood = true;
-      result.message = "You have now fish food. You can feed fish by pressing the Space bar or the A button and ";
+      result.message = "You have now fish food. You can feed tropical fish by pressing the Space bar or the A button and ";
       result.message += "after that pressing a move key or button to indicate the direction (for example the right arrow key)."
       break;
     default:

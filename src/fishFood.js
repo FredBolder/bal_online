@@ -35,9 +35,9 @@ export function drawFishFoodInPot(ctx, xmin, ymin, size) {
 
     const lineWidth = Math.max(1, size * 0.04);
 
-    const potHeight = size * 0.6;
+    const potHeight = size * 0.95;
     const potWidthBottom = size * 0.45;
-    const potWidthTop = size * 0.55;
+    const potWidthTop = size * 0.6;
     const rimOffset = size * 0.08;
 
     const yBottom = ymax - lineWidth / 2;

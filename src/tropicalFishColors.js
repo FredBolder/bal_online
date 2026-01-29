@@ -6,7 +6,7 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#FFD94A",
                 stripe: "#FF8C00",
-                fin: "#4CAF50",
+                fin: "#3E8E41",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
@@ -37,27 +37,25 @@ export function getTropicalFishColor(palette) {
             colors = {
                 body: "#7EC8E3",
                 stripe: "#2A6F97",
-                fin: "#A9DCEC",
+                fin: "#5FA6C0",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
             break;
         case 6:
-            // Can be combined with jellyfish
             colors = {
                 body: "#C9D6DF",
                 stripe: "#5F6F7A",
-                fin: "#E3EDF2",
+                fin: "#AEBFCB",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             }
             break;
         case 7:
-            // Can be combined with jellyfish
             colors = {
                 body: "#1F5F8B",
                 stripe: "#0B2F4A",
-                fin: "#3F7FA6",
+                fin: "#174C70",
                 eye: "#0E1418",
                 eyePupil: "#0A0E12"
             }
@@ -223,11 +221,138 @@ export function getTropicalFishColor(palette) {
                 eyePupil: "#050505",
             };
             break;
+        case 22:
+            colors = {
+                body: "#E66A2C",
+                stripe: "#9E3A1E",
+                fin: "#C85A26",
+                tail: "#F08A4B",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 23:
+            colors = {
+                body: "#D9C94A",
+                stripe: "#8A7A1F",
+                fin: "#B0A33A",
+                tail: "#E8D85C",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 24:
+            colors = {
+                body: "#7A3F9E",
+                stripe: "#4F2668",
+                fin: "#62307F",
+                tail: "#8A52B0",
+                eye: "#1A1A1A",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 25:
+            colors = {
+                body: "#BFCAD2",
+                stripe: "#6A7A85",
+                fin: "#9FAEB8",
+                tail: "#C9D6DF",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+
+            break;
+        case 26:
+            colors = {
+                body: "#1F4E6E",
+                stripe: "#0F2F45",
+                fin: "#163A54",
+                tail: "#2F6A8C",
+                eye: "#0E1418",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 27:
+            colors = {
+                body: "#C43C3C",
+                stripe: "#F2C94C",
+                fin: "#9E2E2E",
+                tail: "#D95C69",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 28:
+            colors = {
+                upperBody: "#1F4E6E",
+                body: "#4F8FA8",
+                stripe: "#2F3F48",
+                fin: "#3F7488",
+                tail: "#5FA2B5",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 29:
+            colors = {
+                upperBody: "#C45A2A",
+                body: "#E89A6A",
+                stripe: "#9E3A1E",
+                fin: "#C27648",
+                tail: "#F0B080",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 30:
+            colors = {
+                upperBody: "#9E8F2A",
+                body: "#D9C94A",
+                stripe: "#6F621F",
+                fin: "#B0A33A",
+                tail: "#E8D85C",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 31:
+            colors = {
+                upperBody: "#5A1F6B",
+                body: "#8A4FA0",
+                stripe: "#3F154F",
+                fin: "#6A3A80",
+                tail: "#9E6BB8",
+                eye: "#1A1A1A",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 32:
+            colors = {
+                upperBody: "#9FAEB8",
+                body: "#C9D6DF",
+                stripe: "#6A7A85",
+                fin: "#AEBFCB",
+                tail: "#D7E1E7",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
+        case 33:
+            colors = {
+                upperBody: "#8A2E2E",
+                body: "#C43C3C",
+                stripe: "#F2C94C",
+                fin: "#9E2E2E",
+                tail: "#D95C69",
+                eye: "#1A1F24",
+                eyePupil: "#0A0E12"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",
                 stripe: "#FF4500",
-                fin: "#FFD700",
+                fin: "#E6B800",
                 eye: "#1A1F24",
                 eyePupil: "#0A0E12"
             };

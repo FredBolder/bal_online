@@ -1,48 +1,61 @@
-$bgcolor: 0, 0, 19, 9, #87CEFA
-$fgcolor: 5, 8, 6, 1, #411E10
-$fgcolor: 17, 6, 1, 1, #000000
-$color: water, #004C99
-$fins: 5, 11, 10
-$palette: 5, 11, 19
-$shape: 5, 11, 7
-$stripes: 5, 11, 0
-$tail: 5, 11, 4
-$fins: 10, 12, 10
-$palette: 10, 12, 19
-$shape: 10, 12, 7
-$stripes: 10, 12, 0
-$tail: 10, 12, 4
-$fins: 3, 13, 7
-$palette: 3, 13, 14
-$stripes: 3, 13, 19
-$tail: 3, 13, 7
-$background: 12, 9, 5, 1, 23
-$background: 5, 11, 1, 1, 23
-$background: 1, 12, 1, 1, 23
-$background: 10, 12, 1, 1, 23
-$background: 17, 12, 1, 1, 23
-$background: 1, 13, 1, 1, 23
-$background: 3, 13, 1, 1, 23
-$background: 1, 14, 1, 1, 23
-$background: 17, 14, 1, 1, 23
-$background: 1, 15, 1, 1, 23
-$background: 3, 15, 7, 1, 23
-$background: 11, 15, 1, 1, 23
-$background: 15, 15, 1, 1, 23
-0000000000000010000
-0                 0
-0                 Ѽ
-0              H111
-0              11d1
-0                 1
-0             111v1
-0      Ӎ 2   1131 1
-Ѹ    Ѻ1111I 111 l 1
-1wwwwwwwwwwwѺ11ѹù11
-1wwwwwwwwwwwwwwww11
-1wwwwҼwwwwwwwwwww11
-1ѬwwwwwwwwҼwwwwww81
-1üwҼwwwwwwwwwwwww11
-1Ѹwwwwwwwwwwwwwwwk1
-11wӋӋѯûѻ1GwӋwwwӋww1
+$extra: 1
+$stonepattern: 2
+$pattern: 7, 5, 20, 20
+$pattern: 8, 5, 20, 20
+$group: 14, 4, 3
+$inverted: 14, 4, yes
+$sticky: 14, 4, yes
+$group: 15, 5, 2
+$pistonmode: 15, 5, momentary
+$pistonmode: 1, 6, momentary
+$pistonmode: 2, 8, momentary
+$group: 15, 9, 3
+$sticky: 15, 9, yes
+$pistonmode: 18, 10, momentary
+$group: 1, 4, 3
+$group: 16, 6, 2
+$direction: 4, 12, down
+$direction: 5, 12, down
+$direction: 6, 12, down
+$direction: 7, 12, down
+$direction: 8, 12, down
+$direction: 9, 12, down
+$direction: 10, 12, down
+$group: 4, 13, 2
+$direction: 4, 13, up
+$group: 5, 13, 2
+$direction: 5, 13, up
+$group: 6, 13, 2
+$direction: 6, 13, up
+$group: 7, 13, 2
+$direction: 7, 13, up
+$group: 8, 13, 2
+$direction: 8, 13, up
+$group: 9, 13, 2
+$direction: 9, 13, up
+$group: 10, 13, 2
+$direction: 10, 13, up
+$fins: 5, 10, 1
+$palette: 5, 10, 8
+$stripes: 5, 10, 15
+$tail: 5, 10, 6
+$background: 5, 10, 1, 1, 23
+$background: 3, 11, 1, 1, 23
+$background: 11, 11, 1, 1, 23
+$background: 4, 12, 8, 1, 23
+$background: 4, 13, 7, 1, 23
+1111111111111111111
+11111d1!!111Φ    11
+1           1 11411
+1     5     1 11411
+1m 2      5 1 Ë 5 1
+11-1111ЏЏ1111 1Ë  1
+1Ë  111  8111 11m 1
+11m      1131 111 1
+11Ë         1 111 1
+111m       11 1Ë 51
+1111wҼwwwww11 11  Ö
+1113wwwwwww31 11 m1
+1111њњњњњњњ11    φ1
+1111њњњњњњњ11Ω11111
 1111111111111111111

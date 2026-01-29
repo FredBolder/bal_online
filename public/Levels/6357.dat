@@ -1,0 +1,59 @@
+$extra: 1
+$stonepattern: 2
+$activesides: 9, 4, bottom
+$direction: 9, 4, left
+$activesides: 10, 4, bottom
+$direction: 10, 4, left
+$activesides: 11, 4, bottom
+$direction: 11, 4, left
+$activesides: 12, 4, bottom
+$direction: 12, 4, left
+$activesides: 13, 4, bottom
+$direction: 13, 4, left
+$activesides: 13, 6, bottom
+$direction: 13, 6, up
+$activesides: 12, 8, bottom
+$direction: 12, 8, up
+$sticky: 11, 8, yes
+$group: 6, 2, 2
+$group: 17, 8, 2
+$direction: 17, 8, down
+$fins: 15, 10, 9
+$palette: 15, 10, 18
+$shape: 15, 10, 6
+$stripes: 15, 10, 20
+$tail: 15, 10, 7
+$fins: 19, 11, 9
+$palette: 19, 11, 18
+$shape: 19, 11, 6
+$stripes: 19, 11, 20
+$tail: 19, 11, 7
+$fins: 13, 12, 9
+$palette: 13, 12, 18
+$shape: 13, 12, 6
+$stripes: 13, 12, 20
+$tail: 13, 12, 7
+$background: 15, 10, 1, 1, 23
+$background: 1, 11, 1, 1, 23
+$background: 19, 11, 1, 1, 23
+$background: 1, 12, 1, 1, 23
+$background: 11, 12, 1, 1, 23
+$background: 13, 12, 1, 1, 23
+$background: 1, 13, 2, 1, 23
+$background: 13, 13, 1, 1, 23
+$background: 21, 13, 1, 1, 23
+11111111111111111111111
+1Ӎ   hhh              1
+11ЏЏ1mm2              1
+11  1111-111111111    1
+1I  1111 ηηηηη        1
+1   11 <              1
+1   d  1 1111η        1
+1     b1 1111         1
+1    111B11Ëη    њ    1
+1wwwwwwww1111wwwwwwwww1
+1wwwwwwww1111wwҼwwwwww1
+18wwwwwww1111wwwwwwҼww1
+18wwwwwww1131Ҽwwwwwwww1
+11Ѭwwwwwwwww1GwwwwwwwH1
+11111111111111111111111
