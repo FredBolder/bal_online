@@ -1,61 +1,82 @@
-$extra: 1
-$stonepattern: 2
-$pattern: 7, 5, 20, 20
-$pattern: 8, 5, 20, 20
-$group: 14, 4, 3
-$inverted: 14, 4, yes
-$sticky: 14, 4, yes
-$group: 15, 5, 2
-$pistonmode: 15, 5, momentary
-$pistonmode: 1, 6, momentary
-$pistonmode: 2, 8, momentary
-$group: 15, 9, 3
-$sticky: 15, 9, yes
-$pistonmode: 18, 10, momentary
-$group: 1, 4, 3
-$group: 16, 6, 2
-$direction: 4, 12, down
-$direction: 5, 12, down
-$direction: 6, 12, down
-$direction: 7, 12, down
-$direction: 8, 12, down
-$direction: 9, 12, down
-$direction: 10, 12, down
-$group: 4, 13, 2
-$direction: 4, 13, up
-$group: 5, 13, 2
-$direction: 5, 13, up
-$group: 6, 13, 2
-$direction: 6, 13, up
-$group: 7, 13, 2
-$direction: 7, 13, up
-$group: 8, 13, 2
-$direction: 8, 13, up
-$group: 9, 13, 2
-$direction: 9, 13, up
-$group: 10, 13, 2
-$direction: 10, 13, up
-$fins: 5, 10, 1
-$palette: 5, 10, 8
-$stripes: 5, 10, 15
-$tail: 5, 10, 6
-$background: 5, 10, 1, 1, 23
-$background: 3, 11, 1, 1, 23
-$background: 11, 11, 1, 1, 23
-$background: 4, 12, 8, 1, 23
-$background: 4, 13, 7, 1, 23
-1111111111111111111
-11111d1!!111Φ    11
-1           1 11411
-1     5     1 11411
-1m 2      5 1 Ë 5 1
-11-1111ЏЏ1111 1Ë  1
-1Ë  111  8111 11m 1
-11m      1131 111 1
-11Ë         1 111 1
-111m       11 1Ë 51
-1111wҼwwwww11 11  Ö
-1113wwwwwww31 11 m1
-1111њњњњњњњ11    φ1
-1111њњњњњњњ11Ω11111
-1111111111111111111
+$answer: 14, 4, %emarginatetail
+$answer: 14, 6, %forkedtail
+$answer: 14, 8, %roundedtail
+$answer: 14, 10, %truncatetail
+$question: 4, 3, r
+$answer: 4, 3, %roundedtail
+$question: 4, 4, o
+$answer: 4, 4, %roundedtail
+$question: 4, 5, u
+$answer: 4, 5, %roundedtail
+$question: 4, 6, n
+$answer: 4, 6, %roundedtail
+$question: 4, 7, d
+$answer: 4, 7, %roundedtail
+$question: 4, 8, e
+$answer: 4, 8, %roundedtail
+$question: 4, 9, d
+$answer: 4, 9, %roundedtail
+$question: 6, 3, f
+$answer: 6, 3, %forkedtail
+$question: 6, 4, o
+$answer: 6, 4, %forkedtail
+$question: 6, 5, r
+$answer: 6, 5, %forkedtail
+$question: 6, 6, k
+$answer: 6, 6, %forkedtail
+$question: 6, 7, e
+$answer: 6, 7, %forkedtail
+$question: 6, 8, d
+$answer: 6, 8, %forkedtail
+$question: 8, 3, t
+$answer: 8, 3, %truncatetail
+$question: 8, 4, r
+$answer: 8, 4, %truncatetail
+$question: 8, 5, u
+$answer: 8, 5, %truncatetail
+$question: 8, 6, n
+$answer: 8, 6, %truncatetail
+$question: 8, 7, c
+$answer: 8, 7, %truncatetail
+$question: 8, 8, a
+$answer: 8, 8, %truncatetail
+$question: 8, 9, t
+$answer: 8, 9, %truncatetail
+$question: 8, 10, e
+$answer: 8, 10, %truncatetail
+$question: 10, 3, e
+$answer: 10, 3, %emarginatetail
+$question: 10, 4, m
+$answer: 10, 4, %emarginatetail
+$question: 10, 5, a
+$answer: 10, 5, %emarginatetail
+$question: 10, 6, r
+$answer: 10, 6, %emarginatetail
+$question: 10, 7, g
+$answer: 10, 7, %emarginatetail
+$question: 10, 8, i
+$answer: 10, 8, %emarginatetail
+$question: 10, 9, n
+$answer: 10, 9, %emarginatetail
+$question: 10, 10, a
+$answer: 10, 10, %emarginatetail
+$question: 10, 11, t
+$answer: 10, 11, %emarginatetail
+$question: 10, 12, e
+$answer: 10, 12, %emarginatetail
+111111111111111111111
+1  1          φ1=   1
+1  1B B B B11 11=1  1
+1  1Ҹ Ҹ Ҹ Ҹ11 11=1  1
+1  1Ҹ1Ҹ1Ҹ1Ҹ11 Ӆ =1b 1
+1  1Ҹ1Ҹ1Ҹ1Ҹ11 11=11B1
+1  1Ҹ1Ҹ1Ҹ1Ҹ11 Ӆ =1  1
+1  1Ҹ1Ҹ1Ҹ1Ҹ11 11=1  1
+1  1Ҹ1Ҹ1Ҹ1Ҹ11 Ӆ =1111
+1  1Ҹ1 1Ҹ1Ҹ11 11=   1
+1  1 1 1Ҹ1Ҹ11 Ӆ =   1
+1  1 1 1 1Ҹ11 11=   1
+13 1 1 1 1Ҹ11 4 =   1
+1           1 44=  21
+1           1Ω1111111
+111111111111111111111

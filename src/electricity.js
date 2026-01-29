@@ -31,7 +31,8 @@ export function checkElectricity(backData, gameData, gameInfo, gameVars) {
                         break;
                 }
 
-                if (backData[target][elec.x] === 20 || backData[target][elec.x] === 23) {
+                if ((backData[target][elec.x] === 20 || backData[target][elec.x] === 23) &&
+                    ![6, 7, 106, 107, 209].includes(gameData[target][elec.x])) {
                     const connectedWater = getConnectedWater(backData, elec.x, target);
                     if (connectedWater.has(`${gameInfo.blueBall.x},${gameInfo.blueBall.y}`) ||
                         connectedWater.has(`${gameInfo.blueBall1.x},${gameInfo.blueBall1.y}`)) {

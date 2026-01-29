@@ -13,6 +13,7 @@ import {
 import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
 import { drawFishFood, drawFishFoodInPot } from "./fishFood.js";
+import { drawTail } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
@@ -309,6 +310,18 @@ function drawLevel(
           break;
         case "%yellow":
           drawAnswerColor("yellow");
+          break;
+        case "%emarginatetail":
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 1, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          break;
+        case "%forkedtail":
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          break;
+        case "%roundedtail":
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 5, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          break;
+        case "%truncatetail":
+          drawTail(ctx, xmin + (w1 * 0.32), yc, 4, w1 * 0.45, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
           break;
         default:
           drawText(ctx, xc, yc, answer, "middle", foreColor, w2 * 0.6, w1 * 0.7);
