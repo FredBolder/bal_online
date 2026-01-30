@@ -1,0 +1,51 @@
+$hint: The programming language is JavaScript.
+$extra: 1
+$gameticks: mover, 2
+$stonepattern: 1
+$answer: 12, 2, 2
+$answer: 9, 5, 3
+$answer: 12, 5, 4
+$activesides: 0, 2, right
+$direction: 0, 2, down
+$activesides: 0, 3, right
+$direction: 0, 3, down
+$activesides: 0, 4, right
+$direction: 0, 4, down
+$activesides: 0, 5, right
+$direction: 0, 5, down
+$activesides: 0, 6, right
+$direction: 0, 6, down
+$activesides: 0, 7, right
+$direction: 0, 7, down
+$activesides: 0, 8, right
+$question: 3, 0, let
+$answer: 3, 0, !
+$question: 4, 0, n = 0;
+$answer: 4, 0, !
+$question: 3, 1, for
+$answer: 3, 1, !
+$question: 4, 1, (let
+$answer: 4, 1, !
+$question: 5, 1, i = 0;
+$answer: 5, 1, !
+$question: 6, 1, i <= 3;
+$answer: 6, 1, !
+$question: 7, 1, i++)
+$answer: 7, 1, !
+$question: 8, 1, n++;
+$answer: 8, 1, !
+$question: 3, 2, // n
+$answer: 3, 2, 4
+$question: 4, 2, = ?
+$answer: 4, 2, 4
+$background: 11, 7, 1, 1, 25
+111ҸҸ11111111111
+111ҸҸҸҸҸҸ1==   1
+η  ҸҸ     ==ҹ  1
+η 11111111==1111
+η         ==   1
+η   11 1 ҹ==ҹ  1
+η 1 31 111==1111
+η 1111 111=9   1
+η   11β 81== 2 1
+11η1111111111111

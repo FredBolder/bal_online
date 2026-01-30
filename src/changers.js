@@ -42,6 +42,7 @@ function objectToColor(objectNumber) {
 
     switch (objectNumber) {
         case 4:
+        case 245:
             result = "white";
             break;
         case 5:
@@ -54,6 +55,7 @@ function objectToColor(objectNumber) {
             result = "pink";
             break;
         case 28:
+        case 242:
             result = "purple";
             break;
         case 8:

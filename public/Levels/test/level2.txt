@@ -1,82 +1,67 @@
-$answer: 14, 4, %emarginatetail
-$answer: 14, 6, %forkedtail
-$answer: 14, 8, %roundedtail
-$answer: 14, 10, %truncatetail
-$question: 4, 3, r
-$answer: 4, 3, %roundedtail
-$question: 4, 4, o
-$answer: 4, 4, %roundedtail
-$question: 4, 5, u
-$answer: 4, 5, %roundedtail
-$question: 4, 6, n
-$answer: 4, 6, %roundedtail
-$question: 4, 7, d
-$answer: 4, 7, %roundedtail
-$question: 4, 8, e
-$answer: 4, 8, %roundedtail
-$question: 4, 9, d
-$answer: 4, 9, %roundedtail
-$question: 6, 3, f
-$answer: 6, 3, %forkedtail
-$question: 6, 4, o
-$answer: 6, 4, %forkedtail
-$question: 6, 5, r
-$answer: 6, 5, %forkedtail
-$question: 6, 6, k
-$answer: 6, 6, %forkedtail
-$question: 6, 7, e
-$answer: 6, 7, %forkedtail
-$question: 6, 8, d
-$answer: 6, 8, %forkedtail
-$question: 8, 3, t
-$answer: 8, 3, %truncatetail
-$question: 8, 4, r
-$answer: 8, 4, %truncatetail
-$question: 8, 5, u
-$answer: 8, 5, %truncatetail
-$question: 8, 6, n
-$answer: 8, 6, %truncatetail
-$question: 8, 7, c
-$answer: 8, 7, %truncatetail
-$question: 8, 8, a
-$answer: 8, 8, %truncatetail
-$question: 8, 9, t
-$answer: 8, 9, %truncatetail
-$question: 8, 10, e
-$answer: 8, 10, %truncatetail
-$question: 10, 3, e
-$answer: 10, 3, %emarginatetail
-$question: 10, 4, m
-$answer: 10, 4, %emarginatetail
-$question: 10, 5, a
-$answer: 10, 5, %emarginatetail
-$question: 10, 6, r
-$answer: 10, 6, %emarginatetail
-$question: 10, 7, g
-$answer: 10, 7, %emarginatetail
-$question: 10, 8, i
-$answer: 10, 8, %emarginatetail
-$question: 10, 9, n
-$answer: 10, 9, %emarginatetail
-$question: 10, 10, a
-$answer: 10, 10, %emarginatetail
-$question: 10, 11, t
-$answer: 10, 11, %emarginatetail
-$question: 10, 12, e
-$answer: 10, 12, %emarginatetail
-111111111111111111111
-1  1          φ1=   1
-1  1B B B B11 11=1  1
-1  1Ҹ Ҹ Ҹ Ҹ11 11=1  1
-1  1Ҹ1Ҹ1Ҹ1Ҹ11 Ӆ =1b 1
-1  1Ҹ1Ҹ1Ҹ1Ҹ11 11=11B1
-1  1Ҹ1Ҹ1Ҹ1Ҹ11 Ӆ =1  1
-1  1Ҹ1Ҹ1Ҹ1Ҹ11 11=1  1
-1  1Ҹ1Ҹ1Ҹ1Ҹ11 Ӆ =1111
-1  1Ҹ1 1Ҹ1Ҹ11 11=   1
-1  1 1 1Ҹ1Ҹ11 Ӆ =   1
-1  1 1 1 1Ҹ11 11=   1
-13 1 1 1 1Ҹ11 4 =   1
-1           1 44=  21
-1           1Ω1111111
-111111111111111111111
+$extra: 1
+$hint: The programming language is JavaScript.
+$stonepattern: 2
+$answer: 9, 8, true
+$answer: 10, 8, true
+$answer: 9, 10, false
+$answer: 10, 10, false
+$changer: 4, 5, yes, yellow, white
+$gameticksxy: 11, 7, 3
+$activesides: 13, 2, left
+$direction: 13, 2, left
+$direction: 4, 3, left
+$direction: 5, 3, left
+$direction: 6, 3, left
+$direction: 7, 3, left
+$direction: 8, 3, left
+$direction: 10, 3, left
+$activesides: 13, 5, left
+$direction: 13, 5, left
+$direction: 6, 6, left
+$direction: 7, 6, left
+$direction: 8, 6, left
+$direction: 9, 6, left
+$direction: 10, 6, left
+$activesides: 9, 1, bottom
+$direction: 9, 1, left
+$sticky: 14, 2, yes
+$group: 14, 5, 2
+$sticky: 14, 5, yes
+$group: 10, 0, 3
+$group: 9, 13, 2
+$group: 9, 3, 3
+$question: 5, 2, { x: 4,
+$answer: 5, 2, false
+$question: 6, 2, y: 3 }
+$answer: 6, 2, false
+$question: 7, 2, ===
+$answer: 7, 2, false
+$question: 8, 2, { x: 4,
+$answer: 8, 2, false
+$question: 9, 2, y: 3 }
+$answer: 9, 2, false
+$question: 5, 5, [1,
+$answer: 5, 5, true
+$question: 6, 5, 2]
+$answer: 6, 5, true
+$question: 7, 5, !==
+$answer: 7, 5, true
+$question: 8, 5, [1,
+$answer: 8, 5, true
+$question: 9, 5, 2]
+$answer: 9, 5, true
+1111111111Ì11111
+111τ11111ηo11111
+111  ҸҸҸҸҸ   ηÖ1
+111 ηηηηηmη 1111
+111 1111111 1111
+111 ӃҸҸҸҸҸ   ηÖ1
+131 11ηηηηη 8111
+1 < 1   111)1111
+111 1   =ӅӅ 1111
+111 1   =11 1111
+11111111=ӅӅ 1111
+1113   1=11 8111
+11τ     2   1111
+1111111m1m1Ω1111
+1111111111111111
