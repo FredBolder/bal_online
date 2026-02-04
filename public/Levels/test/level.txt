@@ -1,71 +1,15 @@
-$extra: 1
-$hint: The programming language is JavaScript.
-$stonepattern: 2
-$answer: 9, 8, true
-$answer: 10, 8, true
-$answer: 9, 10, false
-$answer: 10, 10, false
-$changer: 4, 5, yes, yellow, white
-$activesides: 9, 1, bottom
-$direction: 9, 1, left
-$activesides: 13, 2, left
-$direction: 13, 2, left
-$direction: 4, 3, left
-$direction: 5, 3, left
-$direction: 6, 3, left
-$direction: 7, 3, left
-$direction: 8, 3, left
-$direction: 10, 3, left
-$activesides: 13, 5, left
-$direction: 13, 5, left
-$direction: 7, 6, left
-$direction: 8, 6, left
-$direction: 9, 6, left
-$direction: 10, 6, left
-$activesides: 6, 4, bottom
-$direction: 6, 4, left
-$group: 10, 0, 3
-$pistonmode: 10, 0, momentary
-$sticky: 14, 2, yes
-$group: 14, 5, 2
-$sticky: 14, 5, yes
-$group: 7, 8, 4
-$pistonmode: 7, 8, momentary
-$group: 9, 3, 3
-$group: 6, 6, 4
-$group: 9, 13, 2
-$question: 5, 2, { x: 4,
-$answer: 5, 2, false
-$question: 6, 2, y: 3 }
-$answer: 6, 2, false
-$question: 7, 2, ===
-$answer: 7, 2, false
-$question: 8, 2, { x: 4,
-$answer: 8, 2, false
-$question: 9, 2, y: 3 }
-$answer: 9, 2, false
-$question: 5, 5, [1,
-$answer: 5, 5, true
-$question: 6, 5, 2]
-$answer: 6, 5, true
-$question: 7, 5, !==
-$answer: 7, 5, true
-$question: 8, 5, [1,
-$answer: 8, 5, true
-$question: 9, 5, 2]
-$answer: 9, 5, true
-1111111111Ì11111
-111τ11111ηo11111
-111  ҸҸҸҸҸ   ηÖ1
-111 ηηηηηmη 1111
-111 11η1111 1111
-111 ӃҸҸҸҸҸ   ηÖ1
-131 11mηηηη 8111
-1 < 111o111 1111
-111 111Ù=ӅӅ 1111
-111 1111=11 1111
-11111111=ӅӅ 1111
-1113   1=11 8111
-11τ     2   1111
-1111111m1m1Ω1111
-1111111111111111
+$fins: 2, 1, 1
+$palette: 2, 1, 8
+$stripes: 2, 1, 15
+$tail: 2, 1, 6
+$fins: 0, 0, 1
+$palette: 0, 0, 8
+$stripes: 0, 0, 15
+$tail: 0, 0, 6
+$background: 0, 0, 1, 1, 23
+$background: 2, 1, 1, 1, 23
+Ҽ0000
+0 Ҽ 0
+3   0
+2   0
+11111

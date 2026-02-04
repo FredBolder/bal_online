@@ -348,6 +348,17 @@ export function getTropicalFishColor(palette) {
                 eyePupil: "#0A0E12"
             }
             break;
+        case 34:
+            colors = {
+                body: "#161616",
+                stripe: "#EDEDED",
+                stripeOutline: "#0A0A0A",
+                fin: "#1A1A1A",
+                tail: "#1C1C1C",
+                eye: "#1A1F24",
+                eyePupil: "#050505"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",

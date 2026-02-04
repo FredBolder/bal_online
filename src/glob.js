@@ -13,7 +13,7 @@ export const globalVars = {
     isInOtherWorld: false,
     loading: true,
     otherWorldGreen: -1,
-    playedNotes: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    playedNotes: ["", "", "", "", "", "", "", "", "" , "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     reading: false,
     stoneImg01: null,
     stoneImg02: null,

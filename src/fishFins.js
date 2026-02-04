@@ -183,7 +183,7 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
 
 
 function drawFinAlongCurve(ctx, bodyCurves, opts) {
-    let { startT, endT, height, taper = 0.5, lean = 0, overlap = 0, steps = 10, frameFunc } = opts;
+    let { startT, endT, height, taper = 0.5, lean = 0, overlap = 0, steps = 10, frameFunc, curvature = 1 } = opts;
 
     // Bottom curve runs tail → head, so invert t
     const isBottom = frameFunc === getBodyBottomFrame;
@@ -200,7 +200,9 @@ function drawFinAlongCurve(ctx, bodyCurves, opts) {
         const { p, normal, tan } = frameFunc(bodyCurves, t);
 
         // taper along fin length
-        const h = height * (1 - taper * Math.abs(s - 0.5) * 2);
+        const d = Math.abs(s - 0.5) * 2; // 0 .. 1
+        const falloff = Math.pow(d, curvature);
+        const h = height * (1 - taper * falloff);
 
         // lean along tangent
         const dir = frameFunc === getBodyBottomFrame ? -1 : 1;
@@ -338,47 +340,50 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             setColors(true);
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
-                startT: 0.38,
-                endT: 0.58,
+                startT: 0.4,
+                endT: 0.56,
                 height: bodyHeight * 0.25,
-                taper: 0.5,
+                taper: 1,
                 lean: 0.0,
                 overlap: bodyHeight * 0.1,
-                steps: 10
+                steps: 10,
+                curvature: 1.8,
             });
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
-                startT: 0.7,
-                endT: 0.9,
+                startT: 0.66,
+                endT: 0.85,
                 height: bodyHeight * 0.25,
-                taper: 0.5,
-                lean: 0.0,
+                taper: 1,
+                lean: 0.2,
                 overlap: bodyHeight * 0.1,
-                steps: 10
+                steps: 10,
+                curvature: 1.8,
             });
             setColors(false);
 
             // Anal fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyBottomFrame,
-                startT: 0.7,
-                endT: 0.9,
+                startT: 0.66,
+                endT: 0.85,
                 height: bodyHeight * 0.25,
-                taper: 0.5,
+                taper: 1,
                 lean: 0.5,
-                overlap: bodyHeight * 0.1
+                overlap: bodyHeight * 0.1,
+                curvature: 1.8,
             });
 
             // Pelvic fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyBottomFrame,
-                startT: 0.4,
-                endT: 0.5,
-                height: bodyHeight * 0.3,
-                taper: 0.7,
-                lean: 0.4,
+                startT: 0.42,
+                endT: 0.52,
+                height: bodyHeight * 0.25,
+                taper: 1,
+                lean: 1,
                 overlap: bodyHeight * 0.1,
-                steps: 6
+                curvature: 1.8,
             });
             break;
         case 2:

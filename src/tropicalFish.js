@@ -9,7 +9,7 @@ import { globalVars } from "./glob.js";
 import { getTropicalFishColor } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 11;
-export const tropicalFishPalettes = 33;
+export const tropicalFishPalettes = 34;
 export const tropicalFishShapes = 9;
 export const tropicalFishStripes = 21;
 export const tropicalFishTails = 8;
