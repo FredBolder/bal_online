@@ -8,11 +8,11 @@ import { moverIsMovingBlueBall, moverDirections } from "./movers.js";
 import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
-import { seaAnemonesPalettes } from "./seaAnemone.js";
+import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
-import { tropicalFishPalettes } from "./tropicalFish.js";
+import { tropicalFishPalettes, tropicalFishShapes } from "./tropicalFish.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -316,6 +316,40 @@ export function changeQuestion(gameInfo, x, y, question) {
     gameInfo.questionStones[idx].question = question;
   }
   return idx;
+}
+
+export function changeShape(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
+    let idx = -1;
+    let shape = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+    if (idx >= 0) {
+        shape = gameInfo.seaAnemones[idx].shape + step;
+        if (shape > seaAnemonesShapes) {
+            shape = 1;
+        }
+        if (shape < 1) {
+            shape = seaAnemonesShapes;
+        }
+        gameInfo.seaAnemones[idx].shape = shape;
+        return idx;
+    }
+
+    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+    if (idx >= 0) {
+        shape = gameInfo.tropicalFish[idx].shape + step;
+        if (shape > tropicalFishShapes) {
+            shape = 1;
+        }
+        if (shape < 1) {
+            shape = tropicalFishShapes;
+        }
+        gameInfo.tropicalFish[idx].shape = shape;
+        return idx;
+    }
+
+    return idx;
 }
 
 export function changeSides(gameInfo, x, y, sides) {

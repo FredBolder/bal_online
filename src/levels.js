@@ -9,7 +9,7 @@ import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
-import { seaAnemonesPalettes } from "./seaAnemone.js";
+import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
@@ -696,8 +696,15 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for shape.\n`;
                   }
                   break;
+                case "Ӑ":
+                case 252:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > seaAnemonesShapes)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for shape.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No tropical fish or sea anemone found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;
@@ -1877,18 +1884,18 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$palette":
-          if (values.length === 3) {
+          if ((values.length === 3) && validXY) {
             val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishPalettes)) {
+            if ((val_int >= 1) && (val_int <= tropicalFishPalettes)) {
               idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
               if (idx >= 0) {
                 gameInfo.tropicalFish[idx].palette = val_int;
               }
-              if (idx < 0) {
-                idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-                if (idx >= 0) {
-                  gameInfo.seaAnemones[idx].palette = val_int;
-                }
+            }
+            if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesPalettes)) {
+              idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+              if (idx >= 0) {
+                gameInfo.seaAnemones[idx].palette = val_int;
               }
             }
           }
@@ -1972,12 +1979,18 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$shape":
-          if (values.length === 3) {
+          if ((values.length === 3) && validXY) {
             val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishShapes)) {
+            if ((val_int >= 1) && (val_int <= tropicalFishShapes)) {
               idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
               if (idx >= 0) {
                 gameInfo.tropicalFish[idx].shape = val_int;
+              }
+            }
+            if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesShapes)) {
+              idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+              if (idx >= 0) {
+                gameInfo.seaAnemones[idx].shape = val_int;
               }
             }
           }

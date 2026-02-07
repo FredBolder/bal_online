@@ -379,7 +379,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             let seaAnemone = {
                 x,
                 y,
-                palette: 1
+                palette: 1,
+                shape: 1
             };
             gameInfo.seaAnemones.push(seaAnemone);
             break;

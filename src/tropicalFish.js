@@ -33,25 +33,6 @@ export function changeFins(gameInfo, x, y, decrease) {
     return idx;
 }
 
-export function changeShape(gameInfo, x, y, decrease) {
-    const step = decrease ? -1 : 1;
-    let idx = -1;
-    let shape = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-    if (idx >= 0) {
-        shape = gameInfo.tropicalFish[idx].shape + step;
-        if (shape > tropicalFishShapes) {
-            shape = 1;
-        }
-        if (shape < 1) {
-            shape = tropicalFishShapes;
-        }
-        gameInfo.tropicalFish[idx].shape = shape;
-    }
-    return idx;
-}
-
 export function changeStripes(gameInfo, x, y, decrease) {
     const step = decrease ? -1 : 1;
     let idx = -1;

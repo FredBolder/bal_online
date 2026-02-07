@@ -475,6 +475,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$palette: ${seaAnemone.x}, ${seaAnemone.y}, ${seaAnemone.palette}`;
             lines.push(line);
         }
+        if (seaAnemone.shape !== 1) {
+            line = `$shape: ${seaAnemone.x}, ${seaAnemone.y}, ${seaAnemone.shape}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.teleports.length; i++) {

@@ -181,6 +181,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx2 = findElementByCoordinates(x2, y2, gameInfo.seaAnemones);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.seaAnemones[idx2].palette = gameInfo.seaAnemones[idx1].palette;
+                gameInfo.seaAnemones[idx2].shape = gameInfo.seaAnemones[idx1].shape;
             }
             break;
         default:

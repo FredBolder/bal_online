@@ -179,10 +179,12 @@ function drawLevel(
     const swayPhase = (x / 10) * Math.PI * 2;
     let idx = 0;
     let palette = 1;
+    let shape = 1;
 
     idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
     if (idx >= 0) {
       palette = gameInfo.seaAnemones[idx].palette;
+      shape = gameInfo.seaAnemones[idx].shape;
     }
 
     drawSeaAnemone(
@@ -193,7 +195,8 @@ function drawLevel(
       gameVars.seaAnemonesSwaySpeed,
       swayPhase,
       mode,
-      palette
+      palette,
+      shape
     );
   }
 

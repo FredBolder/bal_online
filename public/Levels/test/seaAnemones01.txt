@@ -4,15 +4,17 @@ $palette: 4, 8, 3
 $palette: 5, 8, 4
 $palette: 6, 8, 5
 $palette: 7, 8, 6
-$fins: 3, 6, 1
-$palette: 3, 6, 8
-$stripes: 3, 6, 15
-$tail: 3, 6, 6
+$shape: 7, 8, 2
+$shape: 8, 8, 3
 $fins: 5, 5, 10
 $palette: 5, 5, 19
 $shape: 5, 5, 7
 $stripes: 5, 5, 0
 $tail: 5, 5, 4
+$fins: 3, 6, 1
+$palette: 3, 6, 8
+$stripes: 3, 6, 15
+$tail: 3, 6, 6
 $background: 5, 5, 1, 1, 23
 $background: 3, 6, 1, 1, 23
 $background: 1, 8, 1, 1, 23

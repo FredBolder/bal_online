@@ -14,6 +14,7 @@ import {
   changeIntelligence,
   changePalette,
   changeQuestion,
+  changeShape,
   changeSides,
   changeTicks,
   dropObject,
@@ -65,7 +66,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { changeFins, changeShape, changeStripes, changeTail } from "../tropicalFish.js";
+import { changeFins, changeStripes, changeTail } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -2787,7 +2788,7 @@ function BalPage() {
               if (createLevelObject === 2151) {
                 if (changeShape(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish to change the body shape.");
+                    showMessage("Info", "Click on a tropical fish or a sea anemone to change the shape.");
                   }
                 }
               }

@@ -389,7 +389,8 @@ export function getGameInfo(backData, gameData) {
                     let seaAnemone = {
                         x: j,
                         y: i,
-                        palette: 1
+                        palette: 1,
+                        shape: 1
                     };
                     result.seaAnemones.push(seaAnemone);
                     break;
@@ -453,7 +454,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
                 if (idx >= 0) {
                     obj = gameInfo.seaAnemones[idx];
-                    extraBackInfo = `palette: ${obj.palette}`;
+                    extraBackInfo = `palette: ${obj.palette}, shape: ${obj.shape}`;
                 }
                 backInfo = `Sea anemone, ` + extraBackInfo;
                 break;

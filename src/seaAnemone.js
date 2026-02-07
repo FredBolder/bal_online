@@ -2,6 +2,7 @@ import { isClownFish } from "./tropicalFish.js";
 import { getSeaAnemoneColors } from "./seaAnemoneColors.js";
 
 export const seaAnemonesPalettes = 6;
+export const seaAnemonesShapes = 3;
 
 export function checkSeaAnemones(backData, gameInfo, gameVars) {
     if (!gameVars.gameOver) {
@@ -34,7 +35,8 @@ export function drawSeaAnemone(
     swaySpeedPercentage,
     swayPhase,
     mode,
-    palette
+    palette,
+    shape
 ) {
     const colors = getSeaAnemoneColors(palette);
     const time = performance.now() * 0.001;
@@ -42,19 +44,34 @@ export function drawSeaAnemone(
     const HEIGHT_FACTOR = 1.0;
     const DESIGN_HEIGHT = 120 * HEIGHT_FACTOR;
 
-    const BASE_RADIUS = 25;
-    const TENTACLE_SPREAD = 48;
-    const TENTACLE_COUNT = 25;
-    const TENTACLE_THICKNESS_FACTOR = 1.2;
+    let baseRadius = 25;
+    let tentacleSpread = 48;
+    let tentacleCount = 25;
+    let tentacleThicknessFactor = 1.2;
 
-    const BACK_LEN = DESIGN_HEIGHT * 0.9;
-    const BACK_THICKNESS = 4.5;
-    const FRONT_LEN = DESIGN_HEIGHT * 0.8;
-    const FRONT_THICKNESS = 5.7;
+    let backLength = DESIGN_HEIGHT * 0.9;
+    let backThickness = 5; // was 4.5
+    let frontLength = DESIGN_HEIGHT * 0.8;
+    let frontThickness = 5.5; // was 5.7
 
-    const CONTROL_OVERSHOOT = TENTACLE_SPREAD * 0.25;
+    switch (shape) {
+        case 2:
+            backLength = DESIGN_HEIGHT * 1;
+            frontLength = DESIGN_HEIGHT * 0.95;
+            break;
+        case 3:
+            tentacleCount = 20;
+            tentacleThicknessFactor = 1.5;
+            baseRadius = 60;
+            tentacleSpread = 70;
+            break;
+        default:
+            break;
+    }
 
-    const MAX_TIP_RADIUS = FRONT_THICKNESS * TENTACLE_THICKNESS_FACTOR * 0.5;
+    const CONTROL_OVERSHOOT = tentacleSpread * 0.25;
+
+    const MAX_TIP_RADIUS = frontThickness * tentacleThicknessFactor * 0.5;
 
     // Control point tuning
 
@@ -79,16 +96,18 @@ export function drawSeaAnemone(
 
     // SWAY
 
-    const MAX_SWAY = TENTACLE_SPREAD * 0.35;
-    const swayAmount = Math.min(swayAmountPercentage * 0.01 * TENTACLE_SPREAD * 0.7, MAX_SWAY);
+    const MAX_SWAY = tentacleSpread * 0.35;
+    const swayAmount = Math.min(swayAmountPercentage * 0.01 * tentacleSpread * 0.7, MAX_SWAY);
     const swaySpeed = swaySpeedPercentage * 0.01 * 4 + 0.6;
-    const maxLateral = (TENTACLE_SPREAD - BASE_RADIUS) + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS;
+    const maxLateral = (tentacleSpread - baseRadius) + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS;
 
 
-    function drawTentacle(angle, len, thickness, color, depth) {
-        const sway = Math.sin(time * swaySpeed + swayPhase + angle * 3.7) * swayAmount * depth;
-        const baseX = Math.cos(angle) * BASE_RADIUS;
-        const spreadX = Math.cos(angle) * TENTACLE_SPREAD;
+    function drawTentacle(angle, len, thickness, color, depth, phase) {
+        const effectiveSway = Math.min(swayAmount, MAX_SWAY) * depth;
+        const sway = Math.sin(time * swaySpeed + swayPhase + phase + angle * 3.7) * effectiveSway;
+
+        const baseX = Math.cos(angle) * baseRadius;
+        const spreadX = Math.cos(angle) * tentacleSpread;
 
         // tip position
         const x3 = spreadX + sway;
@@ -107,8 +126,10 @@ export function drawSeaAnemone(
         const y3 = -len * (1 - MAX_SHORTENING_FRAC * bendAmount);
 
         // base point
-        const x0 = baseX;
-        const y0 = 0;
+        const baseRx = baseRadius * 1.1;
+        const baseRy = baseRadius * 0.55;
+        const x0 = Math.cos(angle) * baseRx;
+        const y0 = Math.sin(angle) * baseRy;
 
         // actual current tentacle height
         const actualLen = Math.abs(y3 - y0);
@@ -121,12 +142,12 @@ export function drawSeaAnemone(
         const cp2y = Math.min(CP2_Y_MAX, Math.max(CP2_Y_MIN, CP2_Y_FACTOR));
 
         const cp1 = {
-            x: baseX + (x3 - baseX) * cp1x,
+            x: x0 + (x3 - x0) * cp1x,
             y: y0 - actualLen * cp1y
         };
 
         const cp2 = {
-            x: baseX + (x3 - baseX) * cp2x + sway * 0.4,
+            x: x0 + (x3 - x0) * cp2x + sway * 0.4,
             y: y0 - actualLen * cp2y
         };
 
@@ -134,7 +155,7 @@ export function drawSeaAnemone(
         ctx.moveTo(x0, y0);
         ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, x3, y3);
         ctx.strokeStyle = color;
-        ctx.lineWidth = thickness * TENTACLE_THICKNESS_FACTOR;
+        ctx.lineWidth = thickness * tentacleThicknessFactor;
         ctx.lineCap = "round";
         ctx.stroke();
 
@@ -147,7 +168,7 @@ export function drawSeaAnemone(
     }
 
     // HARD BOUNDS
-    const maxX = TENTACLE_SPREAD + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS;
+    const maxX = tentacleSpread + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS;
 
     const designWidth = maxX * 2;
     const designHeight = DESIGN_HEIGHT;
@@ -171,17 +192,34 @@ export function drawSeaAnemone(
 
     // BACKGROUND
     if (mode === "all" || mode === "background") {
-        for (let i = 0; i < TENTACLE_COUNT; i++) {
-            const a =
-                (i / TENTACLE_COUNT) * Math.PI * 2 +
-                Math.sin(i * 10.3) * 0.07;
-
+        for (let i = 0; i < tentacleCount; i++) {
+            const t = i / (tentacleCount - 1);
+            const angle = t * Math.PI + Math.PI;
+            const phaseOffset = i * 0.10;
             drawTentacle(
-                a,
-                BACK_LEN,
-                BACK_THICKNESS,
+                angle,
+                backLength,
+                backThickness,
                 colors.back,
-                0.6
+                0.5,
+                phaseOffset
+            );
+        }
+    }
+
+    // FOREGROUND
+    if (mode === "all" || mode === "foreground") {
+        for (let i = 0; i < tentacleCount; i++) {
+            const t = i / (tentacleCount - 1);
+            const angle = t * Math.PI + Math.PI;
+            const phaseOffset = i * 0.15 + 1.2;
+            drawTentacle(
+                angle,
+                frontLength,
+                frontThickness,
+                colors.front,
+                0.6,
+                phaseOffset
             );
         }
     }
@@ -191,32 +229,20 @@ export function drawSeaAnemone(
         ctx.beginPath();
         ctx.ellipse(
             0, 0,
-            BASE_RADIUS * 1.1,
-            BASE_RADIUS * 0.55,
+            baseRadius * 1.1,
+            baseRadius * 0.55,
             0,
             Math.PI,
             Math.PI * 2
         );
         ctx.closePath();
+        ctx.strokeStyle = colors.body;
+        ctx.lineWidth = 1;
         ctx.fillStyle = colors.body;
         ctx.fill();
-    }
-
-    // FOREGROUND
-    if (mode === "all" || mode === "foreground") {
-        for (let i = 0; i < TENTACLE_COUNT; i++) {
-            const a =
-                (i / TENTACLE_COUNT) * Math.PI * 2 +
-                Math.sin(i * 6.1) * 0.05;
-
-            drawTentacle(
-                a,
-                FRONT_LEN,
-                FRONT_THICKNESS,
-                colors.front,
-                1.0
-            );
-        }
+        ctx.fill();
+        ctx.stroke();
+        ctx.stroke();
     }
 
     ctx.restore(); // from clip
