@@ -25,24 +25,22 @@ export function fishIsCloseToBlueBall(gameInfo) {
   return result;
 }
 
-export function freeToSwim(x1, x2, y, gameData) {
-  let found = false;
+export function freeToSwim(x1, x2, y, backData, gameData, clownFish) {
+  function isFree(x, y) {
+      return ((gameData[y][x] === 0) && ((backData[y][x] !== 252) || clownFish));
+  }
 
   if (Math.abs(x1 - x2) < 2) return true;
   if (x2 > x1) {
     for (let i = x1 + 1; i < x2; i++) {
-      if (gameData[y][i] !== 0) {
-        found = true;
-      }
+      if (!isFree) return false;
     }
   } else {
     for (let i = x2 + 1; i < x1; i++) {
-      if (gameData[y][i] !== 0) {
-        found = true;
-      }
+      if (!isFree) return false;
     }
   }
-  return !found;
+  return true;
 }
 
 export function moveFish(backData, gameData, gameInfo) {
@@ -65,13 +63,13 @@ export function moveFish(backData, gameData, gameInfo) {
     upOrDown = false;
     const fish = gameInfo.redFish[i];
 
-    if (![20, 23].includes(backData[fish.y][fish.x])) continue;
+    if (![20, 23, 252].includes(backData[fish.y][fish.x])) continue;
 
     gameData[fish.y][fish.x] = 0;
 
     if (fish.isDead) {
       if (fish.y < maxY) {
-        if ((gameData[fish.y + 1][fish.x] === 0) && (backData[fish.y + 1][fish.x] === 23)) {
+        if ((gameData[fish.y + 1][fish.x] === 0) && [23, 252].includes(backData[fish.y + 1][fish.x])) {
           fish.y += 1;
         }
       }
@@ -116,12 +114,12 @@ export function moveFish(backData, gameData, gameInfo) {
       }
       fish.blocked = false;
       if (fish.y > blueY) {
-        if (freeToSwim(blueX, fish.x, fish.y - 1, gameData) && freeToSwim(blueX, fish.x, fish.y, gameData)) {
+        if (freeToSwim(blueX, fish.x, fish.y - 1, backData, gameData, false) && freeToSwim(blueX, fish.x, fish.y, backData, gameData, false)) {
           up = true;
         }
       }
       if (fish.y < blueY) {
-        if (freeToSwim(blueX, fish.x, fish.y + 1, gameData) && freeToSwim(blueX, fish.x, fish.y, gameData)) {
+        if (freeToSwim(blueX, fish.x, fish.y + 1, backData, gameData, false) && freeToSwim(blueX, fish.x, fish.y, backData, gameData, false)) {
           down = true;
         }
       }

@@ -1,15 +1,10 @@
-$fins: 2, 1, 1
-$palette: 2, 1, 8
-$stripes: 2, 1, 15
-$tail: 2, 1, 6
-$fins: 0, 0, 1
-$palette: 0, 0, 8
-$stripes: 0, 0, 15
-$tail: 0, 0, 6
-$background: 0, 0, 1, 1, 23
-$background: 2, 1, 1, 1, 23
-Ҽ0000
-0 Ҽ 0
-3   0
-2   0
+$fins: 2, 3, 1
+$palette: 2, 3, 8
+$stripes: 2, 3, 15
+$tail: 2, 3, 6
+$background: 2, 3, 1, 1, 23
+00000
+0Ӑ  0
+3  ww
+2wҼӐw
 11111

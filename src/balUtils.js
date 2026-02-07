@@ -8,9 +8,11 @@ import { moverIsMovingBlueBall, moverDirections } from "./movers.js";
 import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
+import { seaAnemonesPalettes } from "./seaAnemone.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
+import { tropicalFishPalettes } from "./tropicalFish.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -270,6 +272,40 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
     gameData[y][x] = [8, 93, 94][intelligence];
   }
   return idx;
+}
+
+export function changePalette(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
+    let idx = -1;
+    let palette = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+    if (idx >= 0) {
+        palette = gameInfo.seaAnemones[idx].palette + step;
+        if (palette > seaAnemonesPalettes) {
+            palette = 1;
+        }
+        if (palette < 1) {
+            palette = seaAnemonesPalettes;
+        }
+        gameInfo.seaAnemones[idx].palette = palette;
+        return idx;
+    }
+
+    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+    if (idx >= 0) {
+        palette = gameInfo.tropicalFish[idx].palette + step;
+        if (palette > tropicalFishPalettes) {
+            palette = 1;
+        }
+        if (palette < 1) {
+            palette = tropicalFishPalettes;
+        }
+        gameInfo.tropicalFish[idx].palette = palette;
+        return idx;
+    }
+
+    return idx;
 }
 
 export function changeQuestion(gameInfo, x, y, question) {
@@ -943,6 +979,9 @@ export function charToNumber(c) {
     case "ӎ":
       result = 251;
       break;
+    case "Ӑ":
+      result = 252;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1292,7 +1331,7 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
         }
       }
       if ((elAbove === 2) && !forceDown && !pushing) {
-        if (gameInfo.hasPropeller || [25, 90, 137].includes(back) || [20, 23, 25, 80, 90, 137].includes(backAbove) || isHorizontalRope(i, y - 2, backData)) {
+        if (gameInfo.hasPropeller || [25, 90, 137].includes(back) || [20, 23, 25, 80, 90, 137, 252].includes(backAbove) || isHorizontalRope(i, y - 2, backData)) {
           weight = false;
         }
       }
@@ -1345,7 +1384,7 @@ export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xma
         }
       }
       if ((elBelow === 2) && !forceUp && !pushing) {
-        if (gameInfo.hasPropeller || [25, 90, 137].includes(back) || [20, 23, 25, 90, 137].includes(backBelow) || isHorizontalRope(i, y + 2, backData)) {
+        if (gameInfo.hasPropeller || [25, 90, 137].includes(back) || [20, 23, 25, 90, 137, 252].includes(backBelow) || isHorizontalRope(i, y + 2, backData)) {
           weight = false;
         }
       }
@@ -1490,6 +1529,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
     case 251:
       result = gameInfo.fishFood;
       break;
+    case 252:
+      result = gameInfo.seaAnemones;
+      break;
     default:
       result = null;
       break;
@@ -1514,7 +1556,7 @@ export function getGameDataValue(gameData, x, y) {
 }
 
 export function inWater(x, y, backData) {
-  let result = [20, 23].includes(backData[y][x]);
+  let result = [20, 23, 252].includes(backData[y][x]);
   return result;
 }
 
@@ -2332,6 +2374,9 @@ export function numberToChar(n) {
     case 251:
       result = "ӎ";
       break;
+    case 252:
+      result = "Ӑ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2370,7 +2415,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
           data = 0;
         }
       }
-      if ([20, 22, 23, 25, 80, 90, 137, 170].includes(data)) {
+      if ([20, 22, 23, 25, 80, 90, 137, 170, 252].includes(data)) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {
@@ -2508,6 +2553,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       break;
     case 251:
       updateObject(gameInfo.fishFood, oldX, oldY, newX, newY);
+      break;
+    case 252:
+      updateObject(gameInfo.seaAnemones, oldX, oldY, newX, newY);
       break;
     default:
       break;
@@ -2651,6 +2699,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.redFish.length; i++) {
     refs.push(gameInfo.redFish[i]);
+  }
+
+  for (let i = 0; i < gameInfo.seaAnemones.length; i++) {
+    refs.push(gameInfo.seaAnemones[i]);
   }
 
   for (let i = 0; i < gameInfo.teleports.length; i++) {
@@ -3462,7 +3514,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
     if (result.player) break;
 
     // Skip the first time if the blue ball has no coil spring or it is in the water
-    if ((i === 0) && (!gameInfo.hasCoilSpring || [20, 23].includes(backData[y][x]))) continue;
+    if ((i === 0) && (!gameInfo.hasCoilSpring || [20, 23, 252].includes(backData[y][x]))) continue;
 
     if ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY))) {
       if (((i !== 0) || ((gameData[y + dy1][x] === 0))) &&
@@ -3686,7 +3738,7 @@ export function jumpLeftOrRight(backData, gameData, gameInfo, gameVars, directio
     if (result.player) break;
 
     // Skip the first time if the blue ball has no coil spring or it is in the water
-    if ((i === 0) && (!gameInfo.hasCoilSpring || [20, 23].includes(backData[y][x]))) continue;
+    if ((i === 0) && (!gameInfo.hasCoilSpring || [20, 23, 252].includes(backData[y][x]))) continue;
 
     if ((x >= minX) && (x <= maxX) && ((gravityDown && (y >= minY)) || (gravityUp && (y <= maxY)))) {
       if ((gameData[y + dy1][x] === 0) && (gameData[y + dy2][x] === 0) && ![80].includes(backData[y + dy2][x + dx])) {

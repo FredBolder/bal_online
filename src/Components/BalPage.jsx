@@ -12,6 +12,7 @@ import {
   changeGroup,
   changeDirection,
   changeIntelligence,
+  changePalette,
   changeQuestion,
   changeSides,
   changeTicks,
@@ -64,7 +65,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { changeFins, changeShape, changePalette, changeStripes, changeTail } from "../tropicalFish.js";
+import { changeFins, changeShape, changeStripes, changeTail } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -1169,12 +1170,12 @@ function BalPage() {
             // Water
             switch (globalVars.createLevelWaterPage) {
               case 2:
-                arr1 = [2200, 250, 251];
+                arr1 = [248, 2200, 250, 251];
                 arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
                 // page 1
-                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 248, 249, 205, 206];
+                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 249, 252, 205, 206];
                 arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2101];
                 break;
             }
@@ -2772,7 +2773,7 @@ function BalPage() {
               if (createLevelObject === 2149) {
                 if (changePalette(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish to change the palette.");
+                    showMessage("Info", "Click on a tropical fish or a sea anemone to change the palette.");
                   }
                 }
               }
@@ -3147,7 +3148,7 @@ function BalPage() {
               } else {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
-                if ([20, 23, 25, 90].includes(backData[row][column])) {
+                if ([20, 23, 25, 90, 252].includes(backData[row][column])) {
                   backData[row][column] = 0;
                 }
               }

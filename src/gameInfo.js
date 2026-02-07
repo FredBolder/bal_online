@@ -385,6 +385,15 @@ export function getGameInfo(backData, gameData) {
                     result.teleports.push(teleport);
                     break;
                 }
+                case 252: {
+                    let seaAnemone = {
+                        x: j,
+                        y: i,
+                        palette: 1
+                    };
+                    result.seaAnemones.push(seaAnemone);
+                    break;
+                }
                 default:
                     break;
             }
@@ -439,6 +448,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraBackInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
                 }
                 backInfo = `Purple self-destructing teleport, ` + extraBackInfo;
+                break;
+            case 252:
+                idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+                if (idx >= 0) {
+                    obj = gameInfo.seaAnemones[idx];
+                    extraBackInfo = `palette: ${obj.palette}`;
+                }
+                backInfo = `Sea anemone, ` + extraBackInfo;
                 break;
             default:
                 backInfo = "";
@@ -1240,6 +1257,7 @@ export function initGameInfo(info) {
     info.questionStones = [];
     info.redBalls = [];
     info.redFish = [];
+    info.seaAnemones = [];
     info.teleports = [];
     info.timeBombs = [];
     info.trapDoors = [];
@@ -1313,6 +1331,8 @@ export function initGameVars(vars) {
     vars.remainingPhaseTicks = 0;
     vars.restorePoint = 1;
     vars.scroll = { x: 0, y: 0 };
+    vars.seaAnemonesSwayAmount = 50;
+    vars.seaAnemonesSwaySpeed = 10;
     vars.skipFalling = 0;
     vars.soundLava = "default";
     vars.startlevelmessage = "";

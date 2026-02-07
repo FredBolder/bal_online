@@ -9,6 +9,7 @@ import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
+import { seaAnemonesPalettes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
@@ -321,6 +322,8 @@ export function checkSettings(data, settings) {
     { name: "$plantsswayspeed", params: 1, xy: false },
     { name: "$question", params: 0, xy: true },
     { name: "$restorepoint", params: 1, xy: false },
+    { name: "$seaanemonesswayamount", params: 1, xy: false },
+    { name: "$seaanemonesswayspeed", params: 1, xy: false },
     { name: "$shape", params: 3, xy: true },
     { name: "$sound", params: 2, xy: false },
     { name: "$startlevelmessage", params: 0, xy: false },
@@ -619,8 +622,15 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for palette.\n`;
                   }
                   break;
+                case "Ӑ":
+                case 252:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > seaAnemonesPalettes)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for palette.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No tropical fish or sea anemone found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;
@@ -655,6 +665,8 @@ export function checkSettings(data, settings) {
               break;
             case "$plantsswayamount":
             case "$plantsswayspeed":
+            case "$seaanemonesswayamount":
+            case "$seaanemonesswayspeed":
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for percentage.\n`;
@@ -1872,6 +1884,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               if (idx >= 0) {
                 gameInfo.tropicalFish[idx].palette = val_int;
               }
+              if (idx < 0) {
+                idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+                if (idx >= 0) {
+                  gameInfo.seaAnemones[idx].palette = val_int;
+                }
+              }
             }
           }
           break;
@@ -1935,6 +1953,22 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= 1)) {
             gameVars.restorePoint = val_int;
+          }
+          break;
+        case "$seaanemonesswayamount":
+          if (values.length === 1) {
+            val_int = tryParseInt(values[0], -1);
+            if ((val_int >= 0) && (val_int <= 100)) {
+              gameVars.seaAnemonesSwayAmount = val_int;
+            }
+          }
+          break;
+        case "$seaanemonesswayspeed":
+          if (values.length === 1) {
+            val_int = tryParseInt(values[0], -1);
+            if ((val_int >= 0) && (val_int <= 100)) {
+              gameVars.seaAnemonesSwaySpeed = val_int;
+            }
           }
           break;
         case "$shape":

@@ -378,6 +378,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.redFish[i], rows, rotateLeft);
       }
 
+      // Sea anemones
+      for (let i = 0; i < gameInfo.seaAnemones.length; i++) {
+        rotateXY(gameInfo.seaAnemones[i], rows, rotateLeft);
+      }
+
       // Teleports
       for (let i = 0; i < gameInfo.teleports.length; i++) {
         rotateXY(gameInfo.teleports[i], rows, rotateLeft);

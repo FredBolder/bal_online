@@ -176,6 +176,13 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.fishFood[idx2].floats = gameInfo.fishFood[idx1].floats;
             }
             break;
+        case 252:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.seaAnemones);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.seaAnemones);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.seaAnemones[idx2].palette = gameInfo.seaAnemones[idx1].palette;
+            }
+            break;
         default:
             break;
     }
@@ -319,7 +326,7 @@ export function loadCellForUndo(backData, gameData, gameInfo, obj) {
         if (obj.bd === 0) {
             deleteIfLava(backData, gameInfo, x, y);
             deleteIfPurpleTeleport(backData, gameInfo, x, y);
-            if ([20, 23, 25, 90].includes(backData[y][x])) {
+            if ([20, 23, 25, 90, 252].includes(backData[y][x])) {
                 backData[y][x] = 0;
             }
         }

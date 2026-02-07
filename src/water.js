@@ -24,7 +24,7 @@ function inBounds(x, y, maxX, maxY) {
 }
 
 function isWater(objectNumber) {
-    return [20, 23].includes(objectNumber);
+    return [20, 23, 252].includes(objectNumber);
 }
 
 export function getConnectedWater(backData, x, y) {

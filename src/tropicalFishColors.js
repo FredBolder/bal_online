@@ -1,4 +1,4 @@
-export function getTropicalFishColor(palette) {
+export function getTropicalFishColors(palette) {
     let colors = null;
 
     switch (palette) {

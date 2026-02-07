@@ -166,6 +166,16 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.seaAnemonesSwayAmount !== 50) {
+        line = `$seaanemonesswayamount: ${gameVars.seaAnemonesSwayAmount}`;
+        lines.push(line);
+    }
+
+    if (gameVars.seaAnemonesSwaySpeed !== 10) {
+        line = `$seaanemonesswayspeed: ${gameVars.seaAnemonesSwaySpeed}`;
+        lines.push(line);
+    }
+
     if (gameVars.timeBombsTime !== 100) {
         line = `$gameticks: timebomb, ${gameVars.timeBombsTime}`;
         lines.push(line);
@@ -457,6 +467,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
         line = `$answer: ${questionStone.x}, ${questionStone.y}, ${questionStone.answer}`;
         lines.push(line);
+    }
+
+    for (let i = 0; i < gameInfo.seaAnemones.length; i++) {
+        const seaAnemone = gameInfo.seaAnemones[i];
+        if (seaAnemone.palette !== 1) {
+            line = `$palette: ${seaAnemone.x}, ${seaAnemone.y}, ${seaAnemone.palette}`;
+            lines.push(line);
+        }
     }
 
     for (let i = 0; i < gameInfo.teleports.length; i++) {

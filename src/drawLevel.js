@@ -17,6 +17,7 @@ import { drawTail } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
+import { drawSeaAnemone } from "./seaAnemone.js";
 import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { drawFish } from "./tropicalFish.js";
@@ -174,6 +175,28 @@ function drawLevel(
     }
   }
 
+  function drawAnemone(x, y, mode) {
+    const swayPhase = (x / 10) * Math.PI * 2;
+    let idx = 0;
+    let palette = 1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+    if (idx >= 0) {
+      palette = gameInfo.seaAnemones[idx].palette;
+    }
+
+    drawSeaAnemone(
+      ctx,
+      xc, yc,
+      w1,
+      gameVars.seaAnemonesSwayAmount,
+      gameVars.seaAnemonesSwaySpeed,
+      swayPhase,
+      mode,
+      palette
+    );
+  }
+
   function drawAnswerBall(x, y, color) {
     let answer = "2";
     let foreColor = color === "purple" ? "white" : "black";
@@ -312,16 +335,16 @@ function drawLevel(
           drawAnswerColor("yellow");
           break;
         case "%emarginatetail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 1, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 1, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
           break;
         case "%forkedtail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
           break;
         case "%roundedtail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 5, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 5, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
           break;
         case "%truncatetail":
-          drawTail(ctx, xmin + (w1 * 0.32), yc, 4, w1 * 0.45, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null});
+          drawTail(ctx, xmin + (w1 * 0.32), yc, 4, w1 * 0.45, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
           break;
         default:
           drawText(ctx, xc, yc, answer, "middle", foreColor, w2 * 0.6, w1 * 0.7);
@@ -3458,6 +3481,10 @@ function drawLevel(
         case 170:
           // Teleport - will be drawn later
           break;
+        case 252:
+          drawWater();
+          drawAnemone(currentCol, currentRow, "background");
+          break;
         default:
           // empty
           break;
@@ -4033,7 +4060,7 @@ function drawLevel(
           break;
         case 249:
           wavelengthInCols = 10; // how many columns per full 2π wave
-          swayPhase = ((currentCol / wavelengthInCols) % 1) * Math.PI * 2;
+          swayPhase = (currentCol / wavelengthInCols) * Math.PI * 2;
           drawCoralReefPlant(ctx, xc, yc, w1, gameVars.plantsSwayAmount, gameVars.plantsSwaySpeed, swayPhase);
           break;
         case 250:
@@ -4331,6 +4358,14 @@ function drawLevel(
       }
 
       // Foreground
+      switch (bd) {
+        case 252:
+          drawAnemone(currentCol, currentRow, "foreground");
+          break;
+        default:
+          break;
+      }
+
       if ((gameInfo.travelGate.x === col) && (gameInfo.travelGate.y === row)) {
         drawTravelGate(currentCol, currentRow);
       }
