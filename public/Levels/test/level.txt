@@ -1,8 +1,30 @@
-$shape: 1, 2, 3
-$shape: 2, 2, 3
-$shape: 3, 2, 3
-00000
-0ӐӐӐ0
-3ӐӐӐ0
-2   0
-11111
+$group: 3, 8, 2
+$direction: 9, 0, left
+$group: 9, 1, 2
+$direction: 9, 1, left
+$palette: 9, 8, 4
+$shape: 9, 8, 5
+$palette: 8, 8, 2
+$palette: 6, 8, 2
+$palette: 6, 8, 3
+$shape: 6, 8, 5
+$shape: 10, 8, 6
+$fins: 5, 8, 1
+$palette: 5, 8, 8
+$stripes: 5, 8, 15
+$tail: 5, 8, 6
+$background: 3, 4, 2, 1, 23
+$background: 4, 5, 1, 1, 23
+$background: 10, 5, 1, 1, 23
+$background: 5, 8, 1, 1, 23
+$background: 2, 9, 10, 1, 23
+11Ѹ000004њ111
+11d     5њ131
+11          1
+112       111
+11=1Ѭwwwww111
+11=1ѸwwwwwѺ11
+1 = 1wwwwwww1
+1 = 1wwwwwww1
+1m1m1ҼӐwӐӐӐw1
+1111111111111

@@ -1,4 +1,4 @@
-$has: divingglasses
+$extra: 1
 $group: 3, 8, 2
 $direction: 9, 0, left
 $group: 9, 1, 2
@@ -14,20 +14,18 @@ $fins: 5, 8, 1
 $palette: 5, 8, 8
 $stripes: 5, 8, 15
 $tail: 5, 8, 6
-$background: 3, 4, 1, 1, 23
+$background: 3, 4, 2, 1, 23
 $background: 4, 5, 1, 1, 23
 $background: 10, 5, 1, 1, 23
-$background: 4, 6, 1, 1, 23
-$background: 11, 6, 1, 1, 23
 $background: 5, 8, 1, 1, 23
 $background: 2, 9, 10, 1, 23
-1G0000004њ11
-11      5њ13
-11         0
-112       11
-11=Gwwwwww11
-11=1ѬwwwwwѺ1
-1 = Ѹwwwwwwѷ
-1 = 1wwwwwww
-1m1m1ҼӐwӐӐӐw
-111111111111
+11Ѹ000004њ111
+11d     5њ131
+11          1
+112       111
+11=1Ѭwwwww111
+11=1ѸwwwwwѺ11
+1 = 1wwwwwww1
+1 = 1wwwwwww1
+1m1m1ҼӐwӐӐӐw1
+1111111111111

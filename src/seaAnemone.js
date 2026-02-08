@@ -1,8 +1,9 @@
+import { globalVars } from "./glob.js";
 import { isClownFish } from "./tropicalFish.js";
 import { getSeaAnemoneColors } from "./seaAnemoneColors.js";
 
-export const seaAnemonesPalettes = 6;
-export const seaAnemonesShapes = 3;
+export const seaAnemonesPalettes = 13;
+export const seaAnemonesShapes = 6;
 
 export function checkSeaAnemones(backData, gameInfo, gameVars) {
     if (!gameVars.gameOver) {
@@ -41,29 +42,54 @@ export function drawSeaAnemone(
     const colors = getSeaAnemoneColors(palette);
     const time = performance.now() * 0.001;
 
-    const HEIGHT_FACTOR = 1.0;
+    const HEIGHT_FACTOR = 1.7;
     const DESIGN_HEIGHT = 120 * HEIGHT_FACTOR;
 
-    let baseRadius = 25;
-    let tentacleSpread = 48;
+    let baseRadiusX = 35;
+    let baseRadiusY = 10;
+    let tentacleSpread = 55;
     let tentacleCount = 25;
     let tentacleThicknessFactor = 1.2;
 
-    let backLength = DESIGN_HEIGHT * 0.9;
-    let backThickness = 5; // was 4.5
-    let frontLength = DESIGN_HEIGHT * 0.8;
-    let frontThickness = 5.5; // was 5.7
+    let backLength = DESIGN_HEIGHT * 0.8;
+    let backThickness = 5;
+    let frontLength = DESIGN_HEIGHT * 0.75;
+    let frontThickness = 5.5;
 
     switch (shape) {
         case 2:
-            backLength = DESIGN_HEIGHT * 1;
-            frontLength = DESIGN_HEIGHT * 0.95;
+            backLength = DESIGN_HEIGHT * 0.9;
+            frontLength = DESIGN_HEIGHT * 0.85;
             break;
         case 3:
+            backLength = DESIGN_HEIGHT * 0.9;
+            frontLength = DESIGN_HEIGHT * 0.85;
             tentacleCount = 20;
-            tentacleThicknessFactor = 1.5;
-            baseRadius = 60;
+            tentacleThicknessFactor = 2;
+            baseRadiusX = 60;
+            baseRadiusY = 20;
             tentacleSpread = 70;
+            break;
+        case 4:
+            backLength = DESIGN_HEIGHT * 0.9;
+            frontLength = DESIGN_HEIGHT * 0.85;
+            tentacleCount = 10;
+            tentacleThicknessFactor = 4;
+            baseRadiusX = 70;
+            baseRadiusY = 30;
+            tentacleSpread = 90;
+            break;
+        case 5:
+            tentacleCount = 10;
+            tentacleThicknessFactor = 3;
+            tentacleSpread = 80;
+            break;
+        case 6:
+            backLength = DESIGN_HEIGHT * 0.9;
+            frontLength = DESIGN_HEIGHT * 0.85;
+            tentacleCount = 20;
+            tentacleThicknessFactor = 2;
+            tentacleSpread = 80;
             break;
         default:
             break;
@@ -99,39 +125,30 @@ export function drawSeaAnemone(
     const MAX_SWAY = tentacleSpread * 0.35;
     const swayAmount = Math.min(swayAmountPercentage * 0.01 * tentacleSpread * 0.7, MAX_SWAY);
     const swaySpeed = swaySpeedPercentage * 0.01 * 4 + 0.6;
-    const maxLateral = (tentacleSpread - baseRadius) + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS;
+    const maxLateral = tentacleSpread + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS + baseRadiusX;
 
 
     function drawTentacle(angle, len, thickness, color, depth, phase) {
+        // base point
+        const x0 = Math.cos(angle) * baseRadiusX;
+        const y0 = Math.sin(angle) * baseRadiusY;
+
         const effectiveSway = Math.min(swayAmount, MAX_SWAY) * depth;
         const sway = Math.sin(time * swaySpeed + swayPhase + phase + angle * 3.7) * effectiveSway;
 
-        const baseX = Math.cos(angle) * baseRadius;
         const spreadX = Math.cos(angle) * tentacleSpread;
 
         // tip position
         const x3 = spreadX + sway;
 
-        // lateral distance measured from the tentacle bottom (baseX) -> tipX
-        const lateral = Math.abs(x3 - baseX);
-
-        // ---- Linear shortening  ----
+        const lateral = Math.abs(x3 - x0);
         const bendAmount = Math.min(lateral / Math.max(1e-6, maxLateral), 1.0);
 
         // how much of the original length we allow to be removed at max bend
         // 0.40 means at full lateral bend tip Y becomes 60% of len
         const MAX_SHORTENING_FRAC = 0.40;
-
-        // linear shortening
         const y3 = -len * (1 - MAX_SHORTENING_FRAC * bendAmount);
 
-        // base point
-        const baseRx = baseRadius * 1.1;
-        const baseRy = baseRadius * 0.55;
-        const x0 = Math.cos(angle) * baseRx;
-        const y0 = Math.sin(angle) * baseRy;
-
-        // actual current tentacle height
         const actualLen = Math.abs(y3 - y0);
 
         // control points
@@ -168,10 +185,11 @@ export function drawSeaAnemone(
     }
 
     // HARD BOUNDS
-    const maxX = tentacleSpread + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS;
+    const maxX = tentacleSpread + MAX_SWAY + CONTROL_OVERSHOOT + MAX_TIP_RADIUS + baseRadiusX;
 
     const designWidth = maxX * 2;
-    const designHeight = DESIGN_HEIGHT;
+    const maxTipDroop = frontLength * 0.3;
+    const designHeight = Math.max(DESIGN_HEIGHT, baseRadiusY + frontLength + maxTipDroop);
 
     const scale = size / Math.max(designWidth, designHeight);
 
@@ -229,8 +247,8 @@ export function drawSeaAnemone(
         ctx.beginPath();
         ctx.ellipse(
             0, 0,
-            baseRadius * 1.1,
-            baseRadius * 0.55,
+            baseRadiusX,
+            baseRadiusY,
             0,
             Math.PI,
             Math.PI * 2
@@ -239,8 +257,10 @@ export function drawSeaAnemone(
         ctx.strokeStyle = colors.body;
         ctx.lineWidth = 1;
         ctx.fillStyle = colors.body;
-        ctx.fill();
-        ctx.fill();
+        if (!globalVars.debug) {
+            ctx.fill();
+            ctx.fill();
+        }
         ctx.stroke();
         ctx.stroke();
     }

@@ -2223,6 +2223,7 @@ function BalPage() {
   }
 
   useEffect(() => {
+    //console.log(`DEBUG: useEffect`);
     if (globalVars.balPageLoading || !gameCanvas.current) return;
     globalVars.balPageLoading = true;
     const abortCtrl = new AbortController();
@@ -2248,11 +2249,13 @@ function BalPage() {
 
 
     const start = async () => {
+      //console.log("DEBUG: Start audio");
       if (audioCtx.state !== "running") {
         await audioCtx.resume();
         if (audioCtx.state !== "running") return;
       }
 
+      //console.log("DEBUG: Start schedulers");
       startSchedulers(
         audioCtx,
         startGameClock,
@@ -3763,7 +3766,7 @@ function BalPage() {
               newValue = null;
               if (createLevelMenu === menuToNumber("water")) {
                 newValue = await showSelect("Water", "Color:", [
-                  "ocean blue", "sea blue", "open water", "coastal water", "abyss blue", "deep ocean", "navy sea", "dark blue water", 
+                  "ocean blue", "sea blue", "open water", "coastal water", "abyss blue", "deep ocean", "navy sea", "dark blue water",
                   "midnight water", "cold river", "lake water", "calm river", "tropical sea", "dark swamp", "algae water",
                   "deep reef shallow", "deep coral zone", "near abyss reef", "dark reef water",
                 ], 0);
@@ -3824,7 +3827,7 @@ function BalPage() {
                   case "near abyss reef":
                     gameVars.colorWater = "#002233";
                     break;
-                 case "dark reef water":
+                  case "dark reef water":
                     gameVars.colorWater = "#001B2B";
                     break;
                   default:

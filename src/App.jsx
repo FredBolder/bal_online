@@ -8,12 +8,14 @@ import OverviewPage from "./Components/OverviewPage.jsx";
 import PageNotFound from "./Components/PageNotFound.jsx";
 import PrivacyPolicy from "./Components/PrivacyPolicy";
 import StartPage from "./Components/StartPage.jsx";
+import ForceStartPage from "./Components/ForceStartPage.jsx";
 
 function App() {
   return (
     <div>
       <ModalProvider>
         <BrowserRouter>
+          <ForceStartPage />
           <Routes>
               <Route path="/" element={<StartPage />} />
               <Route path="/about" element={<AboutPage />} />
