@@ -5,7 +5,7 @@ import {
 } from "./triangleStones.js";
 
 
-const moveableOrEmpty = [0, 2, 4, 8, 40, 93, 94, 203, 245];
+const moveableOrEmpty = [0, 2, 4, 8, 27, 40, 93, 94, 203, 243, 245];
 
 export function checkForces(gameData, gameInfo) {
     let elBottom = -1;

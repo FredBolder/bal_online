@@ -1,33 +1,55 @@
+$bgcolor: 0, 0, 21, 3, #87CEFA
+$color: water, #004C99
+$extra: 1
 $has: divingglasses
-$group: 3, 8, 2
-$direction: 9, 0, left
-$group: 9, 1, 2
-$direction: 9, 1, left
-$palette: 9, 8, 4
-$shape: 9, 8, 5
-$palette: 8, 8, 2
-$palette: 6, 8, 2
-$palette: 6, 8, 3
-$shape: 6, 8, 5
-$shape: 10, 8, 6
-$fins: 5, 8, 1
-$palette: 5, 8, 8
-$stripes: 5, 8, 15
-$tail: 5, 8, 6
-$background: 3, 4, 1, 1, 23
+$direction: 4, 2, upleft
+$palette: 9, 9, 3
+$palette: 10, 9, 2
+$shape: 10, 9, 5
+$palette: 11, 9, 3
+$shape: 11, 9, 5
+$fins: 14, 9, 1
+$palette: 14, 9, 34
+$stripes: 14, 9, 15
+$tail: 14, 9, 6
+$fins: 5, 6, 1
+$palette: 5, 6, 34
+$stripes: 5, 6, 15
+$tail: 5, 6, 6
+$background: 2, 2, 1, 1, 20
+$background: 2, 3, 1, 1, 23
+$background: 4, 3, 1, 1, 23
+$background: 10, 3, 1, 1, 23
+$background: 12, 3, 1, 1, 23
+$background: 20, 3, 1, 1, 23
+$background: 3, 4, 2, 1, 23
+$background: 8, 4, 1, 1, 23
+$background: 10, 4, 1, 1, 23
+$background: 2, 5, 1, 1, 23
 $background: 4, 5, 1, 1, 23
-$background: 10, 5, 1, 1, 23
-$background: 4, 6, 1, 1, 23
-$background: 11, 6, 1, 1, 23
-$background: 5, 8, 1, 1, 23
-$background: 2, 9, 10, 1, 23
-1G0000004њ11
-11      5њ13
-11         0
-112       11
-11=Gwwwwww11
-11=1ѬwwwwwѺ1
-1 = Ѹwwwwwwѷ
-1 = 1wwwwwww
-1m1m1ҼӐwӐӐӐw
-111111111111
+$background: 12, 5, 1, 1, 23
+$background: 5, 6, 1, 1, 23
+$background: 10, 6, 1, 1, 23
+$background: 12, 6, 1, 1, 23
+$background: 4, 7, 2, 1, 23
+$background: 7, 7, 1, 1, 23
+$background: 10, 7, 1, 1, 23
+$background: 12, 7, 1, 1, 23
+$background: 4, 8, 2, 1, 23
+$background: 19, 8, 2, 1, 23
+$background: 3, 9, 1, 1, 23
+$background: 5, 9, 1, 1, 23
+$background: 7, 9, 1, 1, 23
+$background: 14, 9, 1, 1, 23
+$background: 16, 9, 4, 1, 23
+000000000000000000000
+0         ѻ1G       0
+WWѺ1ηWWWWW111WWWWWWWW
+wwú1ѾwwwwwѺ1kwwwwwwwβ
+www8üwwwӉwѼ1wwwwwwwww
+wwѮ1Ѷwwwww11Ѹwwwwwwww
+www1wҼwwww81Ѿwwwwwwww
+www11Gw2wwѺ1Ѷwwwwwwww
+www131wwwwwwwwwwwww8α
+wwwlw1wӋwӐӐӐwwҼwӋӋѴ11
+111111111111111111111

@@ -51,7 +51,7 @@ export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
 export const seriesFishStart = 6350;
-export const seriesFishEnd = 6360;
+export const seriesFishEnd = 6361;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6401;
 
