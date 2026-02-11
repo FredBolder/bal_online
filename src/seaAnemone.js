@@ -1,3 +1,4 @@
+import { findElementByCoordinates } from "./balUtils.js";
 import { globalVars } from "./glob.js";
 import { isClownFish } from "./tropicalFish.js";
 import { getSeaAnemoneColors } from "./seaAnemoneColors.js";
@@ -26,6 +27,18 @@ export function checkSeaAnemones(backData, gameInfo, gameVars) {
             fish.isDead = true;
         }
     }
+}
+
+export function deleteIfSeaAnemone(backData, gameInfo, x, y) {
+  let idx = -1;
+
+  if (backData[y][x] === 252) {
+    idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+    if (idx >= 0) {
+      gameInfo.seaAnemones.splice(idx, 1);
+    }
+    backData[y][x] = 0;
+  }
 }
 
 export function drawSeaAnemone(

@@ -705,12 +705,6 @@ export function removeObject(gameData, gameInfo, x, y) {
                 gameInfo.fishFood.splice(idx, 1);
             }
             break;
-        case 252:
-            idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-            if (idx >= 0) {
-                gameInfo.seaAnemones.splice(idx, 1);
-            }
-            break;
         default:
             break;
     }

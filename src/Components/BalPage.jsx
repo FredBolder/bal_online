@@ -98,6 +98,7 @@ import arrowUpLeft from "../Images/arrow_up_left.svg";
 import arrowUpRight from "../Images/arrow_up_right.svg";
 import selectButton from "../Images/select_button.png";
 import { setTimeBombsTime } from "../timeBombs.js";
+import { deleteIfSeaAnemone } from "../seaAnemone.js";
 
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
@@ -474,6 +475,7 @@ function BalPage() {
       for (let i = 0; i < gameData.length; i++) {
         removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
         deleteIfLava(backData, gameInfo, createLevelSelectedCell.x, i);
+        deleteIfSeaAnemone(backData, gameInfo, createLevelSelectedCell.x, i);
         deleteIfPurpleTeleport(backData, gameInfo, createLevelSelectedCell.x, i);
         gameData[i].splice(createLevelSelectedCell.x, 1);
         backData[i].splice(createLevelSelectedCell.x, 1);
@@ -509,6 +511,7 @@ function BalPage() {
       for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
         removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
         deleteIfLava(backData, gameInfo, i, createLevelSelectedCell.y);
+        deleteIfSeaAnemone(backData, gameInfo, i, createLevelSelectedCell.y);
         deleteIfPurpleTeleport(backData, gameInfo, i, createLevelSelectedCell.y);
       }
       gameData.splice(createLevelSelectedCell.y, 1);
@@ -2811,6 +2814,7 @@ function BalPage() {
               }
               if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
+                deleteIfSeaAnemone(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 addObject(backData, gameData, gameInfo, column, row, 243);
                 idx = findElementByCoordinates(column, row, gameInfo.tropicalFish);
@@ -3143,6 +3147,7 @@ function BalPage() {
               }
             } else if (createLevelObject > 0) {
               deleteIfLava(backData, gameInfo, column, row);
+              deleteIfSeaAnemone(backData, gameInfo, column, row);
               deleteIfPurpleTeleport(backData, gameInfo, column, row);
               addObject(backData, gameData, gameInfo, column, row, createLevelObject);
             } else if (createLevelObject === -3) {
@@ -3151,6 +3156,7 @@ function BalPage() {
                 removeObject(gameData, gameInfo, column, row);
               } else {
                 deleteIfLava(backData, gameInfo, column, row);
+                deleteIfSeaAnemone(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
                 if ([20, 23, 25, 90, 252].includes(backData[row][column])) {
                   backData[row][column] = 0;

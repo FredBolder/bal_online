@@ -1,55 +1,43 @@
-$bgcolor: 0, 0, 21, 3, #87CEFA
-$color: water, #004C99
 $extra: 1
 $has: divingglasses
-$direction: 4, 2, upleft
-$palette: 9, 9, 3
-$palette: 10, 9, 2
-$shape: 10, 9, 5
-$palette: 11, 9, 3
-$shape: 11, 9, 5
-$fins: 14, 9, 1
-$palette: 14, 9, 34
-$stripes: 14, 9, 15
-$tail: 14, 9, 6
-$fins: 5, 6, 1
-$palette: 5, 6, 34
-$stripes: 5, 6, 15
-$tail: 5, 6, 6
-$background: 2, 2, 1, 1, 20
-$background: 2, 3, 1, 1, 23
-$background: 4, 3, 1, 1, 23
-$background: 10, 3, 1, 1, 23
-$background: 12, 3, 1, 1, 23
-$background: 20, 3, 1, 1, 23
-$background: 3, 4, 2, 1, 23
-$background: 8, 4, 1, 1, 23
-$background: 10, 4, 1, 1, 23
-$background: 2, 5, 1, 1, 23
-$background: 4, 5, 1, 1, 23
-$background: 12, 5, 1, 1, 23
-$background: 5, 6, 1, 1, 23
-$background: 10, 6, 1, 1, 23
-$background: 12, 6, 1, 1, 23
-$background: 4, 7, 2, 1, 23
-$background: 7, 7, 1, 1, 23
-$background: 10, 7, 1, 1, 23
-$background: 12, 7, 1, 1, 23
-$background: 4, 8, 2, 1, 23
-$background: 19, 8, 2, 1, 23
-$background: 3, 9, 1, 1, 23
-$background: 5, 9, 1, 1, 23
-$background: 7, 9, 1, 1, 23
-$background: 14, 9, 1, 1, 23
-$background: 16, 9, 4, 1, 23
-000000000000000000000
-0         ѻ1G       0
-WWѺ1ηWWWWW111WWWWWWWW
-wwú1ѾwwwwwѺ1kwwwwwwwβ
-www8üwwwӉwѼ1wwwwwwwww
-wwѮ1Ѷwwwww11Ѹwwwwwwww
-www1wҼwwww81Ѿwwwwwwww
-www11Gw2wwѺ1Ѷwwwwwwww
-www131wwwwwwwwwwwww8α
-wwwlw1wӋwӐӐӐwwҼwӋӋѴ11
-111111111111111111111
+$group: 2, 5, 2
+$group: 3, 5, 3
+$group: 4, 5, 4
+$group: 1, 1, 3
+$group: 2, 1, 4
+$direction: 2, 1, left
+$direction: 12, 1, down
+$group: 1, 2, 3
+$group: 2, 2, 4
+$direction: 2, 2, left
+$group: 12, 2, 2
+$direction: 12, 2, up
+$palette: 2, 14, 4
+$shape: 2, 14, 5
+$palette: 7, 14, 2
+$shape: 7, 14, 6
+$palette: 11, 14, 3
+$shape: 11, 14, 6
+$background: 11, 10, 1, 1, 23
+$background: 5, 11, 1, 1, 23
+$background: 7, 12, 1, 1, 23
+$background: 0, 14, 2, 1, 23
+$background: 3, 14, 1, 1, 23
+$background: 5, 14, 1, 1, 23
+$background: 9, 14, 2, 1, 23
+$background: 13, 14, 1, 1, 23
+11111111111111111
+1њњ         њ   1
+1њњ         њ   1
+1               1
+1hhhhh       1111
+1mmmm2        131
+111111        l 1
+0            1111
+WWWWWWWWWWWWW1111
+wwwwwww wwwwwwwww
+wwwwwwwwwwwfwwwww
+wwwwwfwwwwwwwwwww
+wwwwwwwfwwwwwwwww
+wwwwwwwwwwwwwwwww
+ӋӋӐkwӋwӐwӋӋӐwӋwwӐ

@@ -275,37 +275,37 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
 }
 
 export function changePalette(gameInfo, x, y, decrease) {
-    const step = decrease ? -1 : 1;
-    let idx = -1;
-    let palette = -1;
+  const step = decrease ? -1 : 1;
+  let idx = -1;
+  let palette = -1;
 
-    idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-    if (idx >= 0) {
-        palette = gameInfo.seaAnemones[idx].palette + step;
-        if (palette > seaAnemonesPalettes) {
-            palette = 1;
-        }
-        if (palette < 1) {
-            palette = seaAnemonesPalettes;
-        }
-        gameInfo.seaAnemones[idx].palette = palette;
-        return idx;
+  idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+  if (idx >= 0) {
+    palette = gameInfo.seaAnemones[idx].palette + step;
+    if (palette > seaAnemonesPalettes) {
+      palette = 1;
     }
-
-    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-    if (idx >= 0) {
-        palette = gameInfo.tropicalFish[idx].palette + step;
-        if (palette > tropicalFishPalettes) {
-            palette = 1;
-        }
-        if (palette < 1) {
-            palette = tropicalFishPalettes;
-        }
-        gameInfo.tropicalFish[idx].palette = palette;
-        return idx;
+    if (palette < 1) {
+      palette = seaAnemonesPalettes;
     }
-
+    gameInfo.seaAnemones[idx].palette = palette;
     return idx;
+  }
+
+  idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+  if (idx >= 0) {
+    palette = gameInfo.tropicalFish[idx].palette + step;
+    if (palette > tropicalFishPalettes) {
+      palette = 1;
+    }
+    if (palette < 1) {
+      palette = tropicalFishPalettes;
+    }
+    gameInfo.tropicalFish[idx].palette = palette;
+    return idx;
+  }
+
+  return idx;
 }
 
 export function changeQuestion(gameInfo, x, y, question) {
@@ -319,37 +319,37 @@ export function changeQuestion(gameInfo, x, y, question) {
 }
 
 export function changeShape(gameInfo, x, y, decrease) {
-    const step = decrease ? -1 : 1;
-    let idx = -1;
-    let shape = -1;
+  const step = decrease ? -1 : 1;
+  let idx = -1;
+  let shape = -1;
 
-    idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-    if (idx >= 0) {
-        shape = gameInfo.seaAnemones[idx].shape + step;
-        if (shape > seaAnemonesShapes) {
-            shape = 1;
-        }
-        if (shape < 1) {
-            shape = seaAnemonesShapes;
-        }
-        gameInfo.seaAnemones[idx].shape = shape;
-        return idx;
+  idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+  if (idx >= 0) {
+    shape = gameInfo.seaAnemones[idx].shape + step;
+    if (shape > seaAnemonesShapes) {
+      shape = 1;
     }
-
-    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-    if (idx >= 0) {
-        shape = gameInfo.tropicalFish[idx].shape + step;
-        if (shape > tropicalFishShapes) {
-            shape = 1;
-        }
-        if (shape < 1) {
-            shape = tropicalFishShapes;
-        }
-        gameInfo.tropicalFish[idx].shape = shape;
-        return idx;
+    if (shape < 1) {
+      shape = seaAnemonesShapes;
     }
-
+    gameInfo.seaAnemones[idx].shape = shape;
     return idx;
+  }
+
+  idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+  if (idx >= 0) {
+    shape = gameInfo.tropicalFish[idx].shape + step;
+    if (shape > tropicalFishShapes) {
+      shape = 1;
+    }
+    if (shape < 1) {
+      shape = tropicalFishShapes;
+    }
+    gameInfo.tropicalFish[idx].shape = shape;
+    return idx;
+  }
+
+  return idx;
 }
 
 export function changeSides(gameInfo, x, y, sides) {
@@ -3614,11 +3614,15 @@ export function jump(backData, gameData, gameInfo, gameVars) {
       }
       result.player = true;
     }
-    if (!result.player && (gameData[y + dy1][x] === oneDirection) && (gameData[y + dy2][x] === 0)) {
+    if (!result.player && (gameData[y + dy2][x] === 0) &&
+      ((gameData[y + dy1][x] === oneDirection) || ((gameData[y + dy1][x] === 30) && gameInfo.hasKey))) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
+      if (gameData[y + dy1][x] === 30) {
+        result.sound = "unlock";
+      }
     }
     if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(gameData[y + dy1][x]) && (gameData[y + dy2][x]) === 0) {
       gameData[y + dy2][x] = 2;
@@ -3868,12 +3872,17 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       moveObject(gameData, gameInfo, x, y, x, y + dy1);
       result.player = true;
     }
-    if (!result.player && (element1 === oneDirection) && (element2 === 0)) {
+
+    if (!result.player && (element2 === 0) && ((element1 === oneDirection) || ((element1 === 30) && gameInfo.hasKey))) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
       result.player = true;
+      if (element1 === 30) {
+        result.sound = "unlock";
+      }
     }
+
     if (!result.player && (gameVars.remainingPhaseTicks > 0) && phaseThroughObjects.includes(element1) && (element2) === 0) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;

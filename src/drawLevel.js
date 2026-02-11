@@ -125,24 +125,18 @@ function drawLevel(
     drawText(ctx, xc, yc, s, "middle", "white", w2 * 0.7, w1 * 0.8);
   }
 
-  function drawAllRedFish() {
-    for (let i = 0; i < gameInfo.redFish.length; i++) {
-      const fish = gameInfo.redFish[i];
-      const x = fish.x - gameVars.scroll.x;
-      const y = fish.y - gameVars.scroll.y;
-      if ((x >= 0) && (x < columns) && (y >= 0) && (y < rows)) {
-        const xmin = x * size1 + leftMargin;
-        const xmax = xmin + size1 - 1;
-        const ymin = y * size1 + topMargin;
-        const ymax = ymin + size1 - 1;
-        const w1 = xmax - xmin + 1;
-        const w2 = ymax - ymin + 1;
-        if (fish.direction == 4) {
-          ctx.drawImage(elements.elementRedFishLeft, xmin, ymin, w1, w2);
-        } else {
-          ctx.drawImage(elements.elementRedFishRight, xmin, ymin, w1, w2);
-        }
-      }
+  function drawRedFish(x, y) {
+    let direction = 6;
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.redFish);
+    if (idx >= 0) {
+      direction = gameInfo.redFish[idx].direction;
+    }
+    if (direction == 4) {
+      ctx.drawImage(elements.elementRedFishLeft, xmin, ymin, w1, w2);
+    } else {
+      ctx.drawImage(elements.elementRedFishRight, xmin, ymin, w1, w2);
     }
   }
 
@@ -3582,7 +3576,7 @@ function drawLevel(
           drawDivingGlasses("gray");
           break;
         case 27:
-          // Red fish - will be drawn later
+          drawRedFish(currentCol, currentRow);
           break;
         case 28:
           drawPurpleBall();
@@ -4391,7 +4385,6 @@ function drawLevel(
   }
 
   drawAllTeleports();
-  drawAllRedFish();
 
   // Electricity
   if (gameInfo.electricityActive) {
