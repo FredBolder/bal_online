@@ -1140,7 +1140,7 @@ export function fixLevel(backData, gameData, gameInfo) {
     if (backData[y][x] === 170) {
       deleteIfPurpleTeleport(backData, gameInfo, x, y);
     } else {
-      removeObject(gameData, gameInfo, x, y);
+      removeObject(backData, gameData, gameInfo, x, y);
     }
   }
 

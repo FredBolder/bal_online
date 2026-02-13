@@ -6,7 +6,7 @@ import { initGameInfo, initGameVars } from "./gameInfo.js";
 describe("addRemoveObject", () => {
     let defaultGameInfo;
     let defaultGameVars;
- 
+
     beforeEach(() => {
         defaultGameInfo = {};
         initGameInfo(defaultGameInfo);
@@ -17,74 +17,76 @@ describe("addRemoveObject", () => {
     // removeObject
 
     it("removeObject A", () => {
-        let yellow = [{ x: 3, y: 3, direction: "none" }, { x: 4, y: 3, direction: "none" }];
-        let gameInfo = {
+        const inputBack = zeroArray(5, 8);
+        const yellow = [{ x: 3, y: 3, direction: "none" }, { x: 4, y: 3, direction: "none" }];
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             yellowBalls: yellow,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 9, 9, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 9, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        removeObject(input, gameInfo, 3, 3);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(yellow)).toBe(JSON.stringify([{ x: 4, y: 3, direction: "none" }]));
+        removeObject(inputBack, input, gameInfo, 3, 3);
+        expect(input).toEqual(expectedOutput);
+        expect(yellow).toEqual([{ x: 4, y: 3, direction: "none" }]);
     });
 
     it("removeObject B", () => {
-        let gameInfo = {
+        const inputBack = zeroArray(5, 8);
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             detonator: { x: 6, y: 2 },
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 37, 1],
             [1, 0, 2, 0, 0, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 0, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        removeObject(input, gameInfo, 6, 2);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(gameInfo.detonator)).toBe(JSON.stringify({ x: -1, y: -1 }));
+        removeObject(inputBack, input, gameInfo, 6, 2);
+        expect(input).toEqual(expectedOutput);
+        expect(gameInfo.detonator).toEqual({ x: -1, y: -1 });
     });
 
     // addObject
 
     it("addObject A", () => {
-        let inputBack = zeroArray(5, 8);
-        let yellow = [{ x: 4, y: 3, direction: "none" }];
-        let gameInfo = {
+        const inputBack = zeroArray(5, 8);
+        const yellow = [{ x: 4, y: 3, direction: "none" }];
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             yellowBalls: yellow,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 9, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
@@ -92,26 +94,26 @@ describe("addRemoveObject", () => {
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
         addObject(inputBack, input, gameInfo, 3, 3, 9);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(yellow)).toBe(JSON.stringify([{ x: 4, y: 3, direction: "none" }, { x: 3, y: 3, direction: "none" }]));
+        expect(input).toEqual(expectedOutput);
+        expect(yellow).toEqual([{ x: 4, y: 3, direction: "none" }, { x: 3, y: 3, direction: "none" }]);
     });
 
     it("addObject B", () => {
-        let inputBack = zeroArray(5, 8);
-        let yellow = [{ x: 4, y: 3, direction: "none" }];
-        let gameInfo = {
+        const inputBack = zeroArray(5, 8);
+        const yellow = [{ x: 4, y: 3, direction: "none" }];
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             yellowBalls: yellow,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 9, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
@@ -119,9 +121,9 @@ describe("addRemoveObject", () => {
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
         addObject(inputBack, input, gameInfo, 4, 3, 165);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(JSON.stringify(yellow)).toBe(JSON.stringify([]));
-        expect(JSON.stringify(gameInfo.pistons)).toBe(JSON.stringify(
+        expect(input).toEqual(expectedOutput);
+        expect(yellow).toEqual([]);
+        expect(gameInfo.pistons).toEqual(
             [{
                 x: 4,
                 y: 3,
@@ -132,7 +134,7 @@ describe("addRemoveObject", () => {
                 mode: "toggle",
                 group: 1
             }]
-        ));
+        );
     });
 
 

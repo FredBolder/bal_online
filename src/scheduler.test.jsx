@@ -15,16 +15,16 @@ describe("gameScheduler", () => {
     });    
 
     it("gameScheduler A", async () => {
-        let inputBack = zeroArray(5, 5);
+        const inputBack = zeroArray(5, 5);
 
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
             blueBall2: { x: -1, y: -1 },
             blueBall: { x: 3, y: 3 },
             horizontalElevators: [{ x: 3, y: 5, right: true }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -33,7 +33,7 @@ describe("gameScheduler", () => {
             [1, 0, 0, 107, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -42,7 +42,7 @@ describe("gameScheduler", () => {
             [1, 0, 0, 0, 107, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = await gameScheduler(inputBack, input, gameInfo,
+        const info = await gameScheduler(inputBack, input, gameInfo,
             { ...defaultGameVars, elevatorCounter: defaultGameVars.elevatorCountTo });
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(JSON.stringify(info)).toBe(JSON.stringify({

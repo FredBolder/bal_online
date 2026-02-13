@@ -14,7 +14,7 @@ describe("Teleports", () => {
         initGameVars(defaultGameVars);
     });
 
-    let teleports01 = [
+    const teleports01 = [
         { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
         { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
         { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
@@ -26,8 +26,8 @@ describe("Teleports", () => {
     ];
 
     it("deleteTeleports A", () => {
-        let gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
-        let expectedOutput = [
+        const gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
+        const expectedOutput = [
             { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
@@ -40,8 +40,8 @@ describe("Teleports", () => {
     });
 
     it("deleteTeleports B", () => {
-        let gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
-        let expectedOutput = [
+        const gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
+        const expectedOutput = [
             { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
             { x: 4, y: 4, selfDestructing: true, color: "white", group: 1 },
             { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
@@ -54,8 +54,8 @@ describe("Teleports", () => {
     });
 
     it("deleteTeleports C", () => {
-        let gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
-        let expectedOutput = [
+        const gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
+        const expectedOutput = [
             { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 2, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
@@ -68,8 +68,8 @@ describe("Teleports", () => {
     });
 
     it("deleteTeleports D", () => {
-        let gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
-        let expectedOutput = [
+        const gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
+        const expectedOutput = [
             { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
@@ -84,8 +84,8 @@ describe("Teleports", () => {
     });
 
     it("deleteTeleports E", () => {
-        let gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
-        let expectedOutput = [
+        const gameInfo = { ...defaultGameInfo, teleports: [...teleports01] };
+        const expectedOutput = [
             { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 4, y: 2, selfDestructing: false, color: "white", group: 1 },
             { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
@@ -97,7 +97,7 @@ describe("Teleports", () => {
         expect(JSON.stringify(gameInfo.teleports)).toBe(JSON.stringify(expectedOutput));
     });
 
-    let teleports02 = [
+    const teleports02 = [
         { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
         { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
         { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
@@ -143,7 +143,7 @@ describe("Teleports", () => {
         expect(info).toBe(6);
     });
 
-    let teleports03 = [
+    const teleports03 = [
         { x: 2, y: 2, selfDestructing: false, color: "white", group: 1 },
         { x: 4, y: 6, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
         { x: 2, y: 4, selfDestructing: true, color: "white", group: 1 },
@@ -180,7 +180,7 @@ describe("Teleports", () => {
     });
 
     it("checkPurpleTeleports A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             teleports: [
@@ -188,7 +188,7 @@ describe("Teleports", () => {
                 { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
             ]
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -196,7 +196,7 @@ describe("Teleports", () => {
             [1, 2, 0, 28, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let backData = [
+        const backData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 170, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -204,7 +204,7 @@ describe("Teleports", () => {
             [0, 0, 0, 170, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 28, 0, 1],
             [1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -212,7 +212,7 @@ describe("Teleports", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedBackData = [
+        const expectedBackData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -220,14 +220,14 @@ describe("Teleports", () => {
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
+        const info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(true);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
     });
 
     it("checkPurpleTeleports B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
             teleports: [
@@ -235,7 +235,7 @@ describe("Teleports", () => {
                 { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
             ]
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -243,7 +243,7 @@ describe("Teleports", () => {
             [1, 0, 0, 2, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let backData = [
+        const backData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 170, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -251,16 +251,16 @@ describe("Teleports", () => {
             [0, 0, 0, 170, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let expectedOutput = copy2dArray(input);
-        let expectedBackData = copy2dArray(backData);
-        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
+        const expectedOutput = copy2dArray(input);
+        const expectedBackData = copy2dArray(backData);
+        const info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
     });
 
     it("checkPurpleTeleports C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             teleports: [
@@ -268,7 +268,7 @@ describe("Teleports", () => {
                 { x: 3, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 1 },
             ]
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 4, 0, 1],
             [1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -276,7 +276,7 @@ describe("Teleports", () => {
             [1, 2, 0, 28, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let backData = [
+        const backData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 170, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -284,16 +284,16 @@ describe("Teleports", () => {
             [0, 0, 0, 170, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let expectedOutput = copy2dArray(input);
-        let expectedBackData = copy2dArray(backData);
-        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
+        const expectedOutput = copy2dArray(input);
+        const expectedBackData = copy2dArray(backData);
+        const info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));
     });
 
     it("checkPurpleTeleports D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             teleports: [
@@ -303,7 +303,7 @@ describe("Teleports", () => {
                 { x: 6, y: 4, selfDestructing: true, color: getPurpleTeleportColor(), group: 32 },
             ]
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 28, 0, 0, 0, 0, 1, 1, 1],
@@ -311,7 +311,7 @@ describe("Teleports", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let backData = [
+        const backData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 170, 0, 0],
             [0, 170, 0, 0, 0, 0, 0, 0, 0],
@@ -319,7 +319,7 @@ describe("Teleports", () => {
             [0, 0, 0, 170, 0, 0, 170, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -327,7 +327,7 @@ describe("Teleports", () => {
             [1, 2, 0, 0, 0, 0, 28, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedBackData = [
+        const expectedBackData = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 170, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -335,7 +335,7 @@ describe("Teleports", () => {
             [0, 0, 0, 170, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
         ];
-        let info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
+        const info = checkPurpleTeleports(backData, input, gameInfo, defaultGameVars);
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(true);
         expect(JSON.stringify(backData)).toBe(JSON.stringify(expectedBackData));

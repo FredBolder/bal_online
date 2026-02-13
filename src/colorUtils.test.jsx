@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { deleteColorsAtColumn, deleteColorsAtRow, insertColorsAtColumn, insertColorsAtRow } from "./colorUtils.js";
 
 describe("colorUtils", () => {
-    let colors01a = [
+    const colors01a = [
         { x: 10, y: 3, w: 30, h: 4, color: "green" },
         { x: 0, y: 2, w: 5, h: 1, color: "blue" },
         { x: 5, y: 0, w: 10, h: 5, color: "red" }
@@ -15,7 +15,7 @@ describe("colorUtils", () => {
         ]));
     });
 
-    let colors02a = [
+    const colors02a = [
         { x: 3, y: 10, w: 4, h: 30, color: "green" },
         { x: 2, y: 0, w: 1, h: 5, color: "blue" },
         { x: 0, y: 5, w: 5, h: 10, color: "red" }
@@ -28,7 +28,7 @@ describe("colorUtils", () => {
         ]));
     });
 
-    let colors03a = [
+    const colors03a = [
         { x: 10, y: 3, w: 30, h: 4, color: "green" },
         { x: 0, y: 2, w: 5, h: 1, color: "blue" },
         { x: 5, y: 0, w: 10, h: 5, color: "red" }
@@ -42,7 +42,7 @@ describe("colorUtils", () => {
         ]));
     });
 
-    let colors04a = [
+    const colors04a = [
         { x: 3, y: 10, w: 4, h: 30, color: "green" },
         { x: 2, y: 0, w: 1, h: 5, color: "blue" },
         { x: 0, y: 5, w: 5, h: 10, color: "red" }

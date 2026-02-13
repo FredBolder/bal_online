@@ -2,7 +2,7 @@ import { removeObject } from "./addRemoveObject.js";
 
 let timeBombsTime = 100;
 
-export function checkTimeBombs(gameData, backData, gameInfo) {
+export function checkTimeBombs(backData, gameData, gameInfo) {
     let el = 0;
     let xmin = 0;
     let ymin = 0;
@@ -37,7 +37,7 @@ export function checkTimeBombs(gameData, backData, gameInfo) {
                         if ((el === 2) || (el === 3)) {
                             result.gameOver = true;
                         }
-                        removeObject(gameData, gameInfo, x, y);
+                        removeObject(backData, gameData, gameInfo, x, y);
 
                         el = backData[y][x];
                         switch (el) {

@@ -473,10 +473,7 @@ function BalPage() {
     function del() {
       saveUndo("Delete column", "level");
       for (let i = 0; i < gameData.length; i++) {
-        removeObject(gameData, gameInfo, createLevelSelectedCell.x, i);
-        deleteIfLava(backData, gameInfo, createLevelSelectedCell.x, i);
-        deleteIfSeaAnemone(backData, gameInfo, createLevelSelectedCell.x, i);
-        deleteIfPurpleTeleport(backData, gameInfo, createLevelSelectedCell.x, i);
+        removeObject(backData, gameData, gameInfo, createLevelSelectedCell.x, i, true);
         gameData[i].splice(createLevelSelectedCell.x, 1);
         backData[i].splice(createLevelSelectedCell.x, 1);
       }
@@ -509,10 +506,7 @@ function BalPage() {
     function del() {
       saveUndo("Delete row", "level");
       for (let i = 0; i < gameData[createLevelSelectedCell.y].length; i++) {
-        removeObject(gameData, gameInfo, i, createLevelSelectedCell.y);
-        deleteIfLava(backData, gameInfo, i, createLevelSelectedCell.y);
-        deleteIfSeaAnemone(backData, gameInfo, i, createLevelSelectedCell.y);
-        deleteIfPurpleTeleport(backData, gameInfo, i, createLevelSelectedCell.y);
+        removeObject(backData, gameData, gameInfo, i, createLevelSelectedCell.y, true);
       }
       gameData.splice(createLevelSelectedCell.y, 1);
       backData.splice(createLevelSelectedCell.y, 1);
@@ -3153,14 +3147,9 @@ function BalPage() {
             } else if (createLevelObject === -3) {
               // DELETE
               if (gameData[row][column] > 0) {
-                removeObject(gameData, gameInfo, column, row);
+                removeObject(backData, gameData, gameInfo, column, row);
               } else {
-                deleteIfLava(backData, gameInfo, column, row);
-                deleteIfSeaAnemone(backData, gameInfo, column, row);
-                deleteIfPurpleTeleport(backData, gameInfo, column, row);
-                if ([20, 23, 25, 90, 252].includes(backData[row][column])) {
-                  backData[row][column] = 0;
-                }
+                removeObject(backData, gameData, gameInfo, column, row, true);
               }
             }
           }

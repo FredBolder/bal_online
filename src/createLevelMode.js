@@ -1,9 +1,6 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates } from "./balUtils.js";
 import { globalVars } from "./glob.js";
-import { deleteIfLava } from "./lava.js";
-import { deleteIfSeaAnemone } from "./seaAnemone.js";
-import { deleteIfPurpleTeleport } from "./teleports.js";
 
 export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
     let idx1 = -1;
@@ -11,7 +8,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
     let obj = 0;
 
     obj = gameData[y1][x1];
-    
+
     if (obj === 2) {
         return;
     }
@@ -191,18 +188,18 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
 }
 
 export function fixScroll(gameData, gameVars, columns, rows) {
-  const gameRows = gameData.length;
-  const gameColumns = gameData[0].length;
+    const gameRows = gameData.length;
+    const gameColumns = gameData[0].length;
 
-  if ((columns > 0) && (rows > 0) && (columns <= gameColumns) && (rows <= gameRows)) {
-    if (gameVars.scroll.x < 0) {gameVars.scroll.x = 0}
-    if (gameVars.scroll.y < 0) {gameVars.scroll.y = 0}
-    if (gameVars.scroll.x > gameColumns - columns) {gameVars.scroll.x = gameColumns - columns}
-    if (gameVars.scroll.y > gameRows - rows) {gameVars.scroll.y = gameRows - rows}
-  } else {
-    gameVars.scroll.x = 0;
-    gameVars.scroll.y = 0;    
-  }
+    if ((columns > 0) && (rows > 0) && (columns <= gameColumns) && (rows <= gameRows)) {
+        if (gameVars.scroll.x < 0) { gameVars.scroll.x = 0 }
+        if (gameVars.scroll.y < 0) { gameVars.scroll.y = 0 }
+        if (gameVars.scroll.x > gameColumns - columns) { gameVars.scroll.x = gameColumns - columns }
+        if (gameVars.scroll.y > gameRows - rows) { gameVars.scroll.y = gameRows - rows }
+    } else {
+        gameVars.scroll.x = 0;
+        gameVars.scroll.y = 0;
+    }
 }
 
 function getObjectInfo(gameInfo, x, y, n) {
@@ -231,6 +228,12 @@ function getObjectInfo(gameInfo, x, y, n) {
                 return { arr: gameInfo.horizontalElevators, idx };
             }
             break;
+        case 22:
+            idx = findElementByCoordinates(x, y, gameInfo.lava);
+            if (idx >= 0) {
+                return { arr: gameInfo.lava, idx };
+            }
+            break;
         case 157:
             idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
             if (idx >= 0) {
@@ -256,6 +259,12 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.delays);
             if (idx >= 0) {
                 return { arr: gameInfo.delays, idx };
+            }
+            break;
+        case 170:
+            idx = findElementByCoordinates(x, y, gameInfo.teleports);
+            if (idx >= 0) {
+                return { arr: gameInfo.teleports, idx };
             }
             break;
         case 171:
@@ -307,6 +316,12 @@ function getObjectInfo(gameInfo, x, y, n) {
                 return { arr: gameInfo.changers, idx };
             }
             break;
+        case 252:
+            idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+            if (idx >= 0) {
+                return { arr: gameInfo.seaAnemones, idx };
+            }
+            break;
         default:
             break;
     }
@@ -314,41 +329,34 @@ function getObjectInfo(gameInfo, x, y, n) {
 }
 
 export function loadCellForUndo(backData, gameData, gameInfo, obj) {
-    let createLevelObject = 0;
-    let objectInfo = null;
     let x = -1;
     let y = -1;
 
-    if (obj !== null) {
-        x = obj.x;
-        y = obj.y;
-        if (obj.gd === 0) {
-            removeObject(gameData, gameInfo, x, y);
+    if (obj === null) return;
+
+    x = obj.x;
+    y = obj.y;
+
+    removeObject(backData, gameData, gameInfo, x, y, true);
+
+    if (obj.bd > 0) {
+        addObject(backData, gameData, gameInfo, x, y, obj.bd);
+    }
+    if (obj.gd > 0) {
+        addObject(backData, gameData, gameInfo, x, y, obj.gd);
+    }
+    
+    if (obj.bdi !== null) {
+        const backDataInfo = getObjectInfo(gameInfo, x, y, obj.bd);
+        if (backDataInfo !== null) {
+            // Copy properties into existing object
+            Object.assign(backDataInfo.arr[backDataInfo.idx], obj.bdi);
         }
-        if (obj.bd === 0) {
-            deleteIfLava(backData, gameInfo, x, y);
-            deleteIfSeaAnemone(backData, gameInfo, x, y);
-            deleteIfPurpleTeleport(backData, gameInfo, x, y);
-            if ([20, 23, 25, 90, 252].includes(backData[y][x])) {
-                backData[y][x] = 0;
-            }
-        }
-        createLevelObject = obj.gd;
-        if (createLevelObject === 0) {
-            createLevelObject = obj.bd;
-        }
-        if (createLevelObject >= 0) {
-            deleteIfLava(backData, gameInfo, x, y);
-            deleteIfSeaAnemone(backData, gameInfo, x, y);
-            deleteIfPurpleTeleport(backData, gameInfo, x, y);
-            addObject(backData, gameData, gameInfo, x, y, createLevelObject);
-            if (obj.gi !== null) {
-                objectInfo = getObjectInfo(gameInfo, x, y, obj.gd);
-                if (objectInfo !== null) {
-                    // Copy properties into existing object
-                    Object.assign(objectInfo.arr[objectInfo.idx], obj.gi);
-                }
-            }
+    }
+    if (obj.gdi !== null) {
+        const gameDataInfo = getObjectInfo(gameInfo, x, y, obj.gd);
+        if (gameDataInfo !== null) {
+            Object.assign(gameDataInfo.arr[gameDataInfo.idx], obj.gdi);
         }
     }
 }
@@ -448,15 +456,19 @@ export function menuToNumber(s) {
 
 export function saveCellForUndo(backData, gameData, gameInfo, x, y) {
     const obj = {};
-    let objectInfo = null;
     obj.x = x;
     obj.y = y;
     obj.bd = backData[y][x];
+    obj.bdi = null;
     obj.gd = gameData[y][x];
-    obj.gi = null;
-    objectInfo = getObjectInfo(gameInfo, x, y, obj.gd);
-    if (objectInfo !== null) {
-        obj.gi = objectInfo.arr[objectInfo.idx]
+    obj.gdi = null;
+    const backDataInfo = getObjectInfo(gameInfo, x, y, obj.bd);
+    if (backDataInfo !== null) {
+        obj.bdi = backDataInfo.arr[backDataInfo.idx]
+    }
+    const gameDataInfo = getObjectInfo(gameInfo, x, y, obj.gd);
+    if (gameDataInfo !== null) {
+        obj.gdi = gameDataInfo.arr[gameDataInfo.idx]
     }
     return obj;
 }

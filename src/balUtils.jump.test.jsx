@@ -16,23 +16,23 @@ describe("balUtils jump", () => {
   });
 
   it("jump A", () => {
-    let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
-    let inputBack = zeroArray(5, 5);
-    let input = [
+    const gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
+    const inputBack = zeroArray(5, 5);
+    const input = [
       [1, 1, 1, 1, 1],
       [1, 0, 3, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 0, 2, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let expectedOutput = [
+    const expectedOutput = [
       [1, 1, 1, 1, 1],
       [1, 0, 3, 0, 1],
       [1, 0, 2, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, gameInfo, defaultGameVars);
+    const info = jump(inputBack, input, gameInfo, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
@@ -40,52 +40,52 @@ describe("balUtils jump", () => {
   });
 
   it("jump B", () => {
-    let inputBack = zeroArray(5, 5);
-    let input = [
+    const inputBack = zeroArray(5, 5);
+    const input = [
       [1, 1, 1, 1, 1],
       [1, 0, 1, 0, 1],
       [1, 0, 3, 0, 1],
       [1, 0, 2, 4, 1],
       [1, 1, 1, 1, 1],
     ];
-    let expectedOutput = [
+    const expectedOutput = [
       [1, 1, 1, 1, 1],
       [1, 0, 1, 0, 1],
       [1, 0, 2, 0, 1],
       [1, 0, 0, 4, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
+    const info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
   });
 
   it("jump C", () => {
-    let inputBack = zeroArray(5, 5);
-    let input = [
+    const inputBack = zeroArray(5, 5);
+    const input = [
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
       [1, 1, 1, 3, 1],
       [1, 2, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let expectedOutput = [
+    const expectedOutput = [
       [1, 1, 1, 1, 1],
       [1, 1, 1, 1, 1],
       [1, 1, 1, 3, 1],
       [1, 2, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 1, y: 3 } }, defaultGameVars);
+    const info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 1, y: 3 } }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(false);
   });
 
   it("jump D", () => {
-    let inputBack = zeroArray(5, 5);
-    let input = [
+    const inputBack = zeroArray(5, 5);
+    const input = [
       [1, 1, 1, 1, 1],
       [1, 3, 110, 0, 1],
       [1, 0, 0, 0, 1],
@@ -93,30 +93,30 @@ describe("balUtils jump", () => {
       [1, 0, 2, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let expectedOutput = copy2dArray(input);
-    let info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down" }] }, defaultGameVars);
+    const expectedOutput = copy2dArray(input);
+    const info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down" }] }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.player).toBe(false);
   });
 
   it("jump E", () => {
-    let inputBack = zeroArray(5, 5);
-    let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, hasCoilSpring: true };
-    let input = [
+    const inputBack = zeroArray(5, 5);
+    const gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, hasCoilSpring: true };
+    const input = [
       [1, 1, 1, 1, 1],
       [1, 0, 3, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 0, 2, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let expectedOutput = [
+    const expectedOutput = [
       [1, 1, 1, 1, 1],
       [1, 0, 2, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, gameInfo, defaultGameVars);
+    const info = jump(inputBack, input, gameInfo, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(true);
     expect(info.player).toBe(true);
@@ -124,23 +124,23 @@ describe("balUtils jump", () => {
   });
 
   it("jump F", () => {
-    let inputBack = zeroArray(5, 5);
-    let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, hasCoilSpring: true };
-    let input = [
+    const inputBack = zeroArray(5, 5);
+    const gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, hasCoilSpring: true };
+    const input = [
       [1, 1, 1, 1, 1],
       [1, 0, 120, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 0, 2, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let expectedOutput = [
+    const expectedOutput = [
       [1, 1, 1, 1, 1],
       [1, 0, 2, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1],
     ];
-    let info = jump(inputBack, input, gameInfo, defaultGameVars);
+    const info = jump(inputBack, input, gameInfo, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);

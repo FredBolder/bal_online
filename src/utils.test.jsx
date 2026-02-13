@@ -26,16 +26,16 @@ describe("utils", () => {
   it("randomInt 1 - 3", () => {
     const inputMin = 1;
     const inputMax = 3;
-    let output = randomInt(inputMin, inputMax);
-    let outputOk = output >= inputMin && output <= inputMax;
+    const output = randomInt(inputMin, inputMax);
+    const outputOk = output >= inputMin && output <= inputMax;
     expect(outputOk).toBe(true);
   });
 
   it("randomInt -2 - 2", () => {
     const inputMin = -2;
     const inputMax = 2;
-    let output = randomInt(inputMin, inputMax);
-    let outputOk = output >= inputMin && output <= inputMax;
+    const output = randomInt(inputMin, inputMax);
+    const outputOk = output >= inputMin && output <= inputMax;
     expect(outputOk).toBe(true);
   });
 

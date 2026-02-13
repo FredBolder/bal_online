@@ -17,7 +17,7 @@ describe("movers", () => {
     // checkMovers
 
     it("checkMovers A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -27,7 +27,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -36,7 +36,7 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -45,14 +45,14 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 4 });
     });
 
     it("checkMovers B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -63,7 +63,7 @@ describe("movers", () => {
             ],
             yellowBalls: [{ x: 5, y: 4, direction: "none" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -72,7 +72,7 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -81,7 +81,7 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
@@ -89,7 +89,7 @@ describe("movers", () => {
     });
 
     it("checkMovers C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
@@ -99,7 +99,7 @@ describe("movers", () => {
                 { x: 5, y: 4, direction: "up", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -108,7 +108,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 5, 0, 1],
@@ -117,14 +117,14 @@ describe("movers", () => {
             [1, 2, 0, 4, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });
     });
 
     it("checkMovers D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
@@ -135,7 +135,7 @@ describe("movers", () => {
             ],
             pinkBalls: [{ x: 5, y: 3, delete: false, skipFalling: 0 }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -144,7 +144,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 0, 0, 0, 1],
@@ -153,7 +153,7 @@ describe("movers", () => {
             [1, 0, 0, 4, 0, 203, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 2 });
@@ -161,7 +161,7 @@ describe("movers", () => {
     });
 
     it("checkMovers E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -172,7 +172,7 @@ describe("movers", () => {
             ],
             pinkBalls: [{ x: 3, y: 4, delete: false, counter: 0 }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -181,7 +181,7 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -190,7 +190,7 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, { ...defaultGameVars, moverCountTo: 5 });
+        const info = checkMovers(input, gameInfo, { ...defaultGameVars, moverCountTo: 5 });
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
@@ -198,7 +198,7 @@ describe("movers", () => {
     });
 
     it("checkMovers F", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
@@ -208,7 +208,7 @@ describe("movers", () => {
                 { x: 5, y: 4, direction: "right", activeSides: ["bottom"], mode: "all", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -217,7 +217,7 @@ describe("movers", () => {
             [1, 2, 0, 5, 0, 5, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -226,14 +226,14 @@ describe("movers", () => {
             [1, 0, 2, 5, 0, 0, 5, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 5 });
     });
 
     it("checkMovers G", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 5 },
             greenBalls: 1,
@@ -242,7 +242,7 @@ describe("movers", () => {
                 { x: 4, y: 5, direction: "left", activeSides: ["right"], mode: "all", inverted: false, counter: 0 },
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 5, 0, 0, 1],
             [1, 0, 0, 0, 178, 5, 0, 1],
@@ -251,7 +251,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 178, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 5, 0, 0, 1],
             [1, 0, 0, 0, 178, 0, 5, 1],
@@ -260,14 +260,14 @@ describe("movers", () => {
             [1, 0, 0, 2, 178, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 5 });
     });
 
     it("checkMovers H", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 5 },
             greenBalls: 1,
@@ -276,7 +276,7 @@ describe("movers", () => {
                 { x: 4, y: 5, direction: "upleft", activeSides: ["right"], mode: "all", inverted: false, counter: 0 },
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 5, 0, 0, 1],
             [1, 0, 0, 0, 178, 5, 0, 1],
@@ -285,7 +285,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 178, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 5, 0, 1],
             [1, 0, 0, 0, 178, 0, 5, 1],
@@ -294,14 +294,14 @@ describe("movers", () => {
             [1, 0, 0, 0, 178, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 4 });
     });
 
     it("checkMovers I", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -312,7 +312,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "down", activeSides: ["top"], mode: "lightblueball", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 178, 1],
             [1, 0, 0, 0, 0, 0, 85, 1],
@@ -322,7 +322,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 178, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -332,14 +332,14 @@ describe("movers", () => {
             [1, 0, 0, 4, 0, 5, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
 
     it("checkMovers J", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -350,7 +350,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "down", activeSides: ["top"], mode: "lightblueball", inverted: true, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 178, 1],
             [1, 0, 0, 0, 0, 0, 82, 1],
@@ -360,7 +360,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 178, 1],
             [1, 0, 0, 0, 0, 83, 0, 1],
@@ -370,14 +370,14 @@ describe("movers", () => {
             [1, 2, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 6 });
     });
 
     it("checkMovers K", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -389,7 +389,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "down", activeSides: ["top"], mode: "lightblueball", inverted: true, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 178, 0, 3, 0, 0, 178, 1],
             [1, 28, 0, 0, 0, 0, 5, 1],
@@ -399,7 +399,7 @@ describe("movers", () => {
             [1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 178, 0, 3, 0, 0, 178, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -409,7 +409,7 @@ describe("movers", () => {
             [1, 0, 0, 5, 0, 4, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkMovers(input, gameInfo, defaultGameVars);
+        const info = checkMovers(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
@@ -418,7 +418,7 @@ describe("movers", () => {
     // moverIsMovingBlueBall
 
     it("moverIsMovingBlueBall A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -428,7 +428,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -437,16 +437,16 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
+        const expectedOutput = copy2dArray(input);
 
-        let info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
+        const info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
 
     it("moverIsMovingBlueBall B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -456,7 +456,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -465,16 +465,16 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
+        const expectedOutput = copy2dArray(input);
 
-        let info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
+        const info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
 
     it("moverIsMovingBlueBall C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
@@ -484,7 +484,7 @@ describe("movers", () => {
                 { x: 5, y: 5, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 1 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -493,16 +493,16 @@ describe("movers", () => {
             [1, 178, 1, 178, 1, 178, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
+        const expectedOutput = copy2dArray(input);
 
-        let info = moverIsMovingBlueBall(input, gameInfo, { ...defaultGameVars, moverCountTo: 5 });
+        const info = moverIsMovingBlueBall(input, gameInfo, { ...defaultGameVars, moverCountTo: 5 });
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 4 });
     });
 
     it("moverIsMovingBlueBall D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
@@ -512,7 +512,7 @@ describe("movers", () => {
                 { x: 5, y: 4, direction: "right", activeSides: ["bottom"], mode: "all", inverted: false, counter: 0 }
             ]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -521,9 +521,9 @@ describe("movers", () => {
             [1, 2, 0, 5, 0, 5, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
+        const expectedOutput = copy2dArray(input);
 
-        let info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
+        const info = moverIsMovingBlueBall(input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });

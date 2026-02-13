@@ -4,7 +4,7 @@ import { getConnectedWater } from "./water.js";
 
 describe("Water getConnectedWater", () => {
     it("getConnectedWater A", () => {
-        let inputBack = [
+        const inputBack = [
             [0, 0, 0, 0, 0],
             [23, 23, 0, 23, 23],
             [23, 23, 0, 23, 23],
@@ -19,12 +19,12 @@ describe("Water getConnectedWater", () => {
             "3,4", "4,4",
         ]);
 
-        let info = getConnectedWater(inputBack, 4, 1);
+        const info = getConnectedWater(inputBack, 4, 1);
         expect(info).toEqual(expectedSet);
     });
 
     it("getConnectedWater B", () => {
-        let inputBack = [
+        const inputBack = [
             [0, 0, 0, 0, 0],
             [23, 23, 0, 23, 23],
             [23, 23, 0, 23, 23],
@@ -39,12 +39,12 @@ describe("Water getConnectedWater", () => {
             "0,4", "1,4",
         ]);
 
-        let info = getConnectedWater(inputBack, 0, 1);
+        const info = getConnectedWater(inputBack, 0, 1);
         expect(info).toEqual(expectedSet);
     });
 
     it("getConnectedWater C", () => {
-        let inputBack = [
+        const inputBack = [
             [0, 0, 0, 0, 0],
             [23, 23, 23, 0, 23],
             [23, 23, 0, 23, 23],
@@ -59,7 +59,7 @@ describe("Water getConnectedWater", () => {
             "0,4", "1,4",
         ]);
 
-        let info = getConnectedWater(inputBack, 0, 1);
+        const info = getConnectedWater(inputBack, 0, 1);
         expect(info).toEqual(expectedSet);
     });
 

@@ -278,7 +278,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
 
         if (gameVars.timeFreezer === 0) {
-            info = checkTimeBombs(gameData, backData, gameInfo);
+            info = checkTimeBombs(backData, gameData, gameInfo);
             if (info.explosion) {
                 addSound("explosion");
             }
@@ -424,7 +424,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             gameVars.lavaCounter++;
         }
 
-        info = checkLava(gameData, gameInfo, gameVars);
+        info = checkLava(backData, gameData, gameInfo, gameVars);
         if (info.update) {
             updateCanvas = true;
         }

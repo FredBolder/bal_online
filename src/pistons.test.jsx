@@ -25,14 +25,14 @@ describe("Pistons", () => {
     // checkPistonsTriggers
 
     it("checkPistonsTriggers A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -40,7 +40,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -48,13 +48,13 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
     });
 
     it("checkPistonsTriggers B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
@@ -62,7 +62,7 @@ describe("Pistons", () => {
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
             yellowBalls: [{ x: 4, y: 3, direction: "none" }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -70,7 +70,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -78,14 +78,14 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.yellowBalls).toEqual([{ x: 5, y: 3, direction: "none" }]);
     });
 
     it("checkPistonsTriggers C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
@@ -93,7 +93,7 @@ describe("Pistons", () => {
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
             yellowBalls: [{ x: 5, y: 2, direction: "none" }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 5, 9, 5, 163, 1],
@@ -101,7 +101,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 5, 9, 5, 164, 163, 1],
@@ -109,14 +109,14 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.yellowBalls).toEqual([{ x: 4, y: 2, direction: "none" }]);
     });
 
     it("checkPistonsTriggers D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
@@ -125,7 +125,7 @@ describe("Pistons", () => {
             pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }],
             yellowBalls: [{ x: 6, y: 2, direction: "none" }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 161, 0, 1],
             [1, 0, 0, 0, 0, 0, 9, 0, 1],
@@ -135,7 +135,7 @@ describe("Pistons", () => {
             [1, 158, 0, 159, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 161, 0, 1],
             [1, 0, 0, 82, 0, 0, 162, 0, 1],
@@ -145,21 +145,21 @@ describe("Pistons", () => {
             [1, 158, 0, 159, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.yellowBalls).toEqual([{ x: 6, y: 3, direction: "none" }]);
     });
 
     it("checkPistonsTriggers E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -167,14 +167,14 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const expectedOutput = copy2dArray(input);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false });
     });
 
     it("checkPistonsTriggers F", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             greenBalls: 1,
@@ -182,7 +182,7 @@ describe("Pistons", () => {
             { x: 3, y: 6, activated: false, sticky: false, inverted: false, direction: "up", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 6, pressed: false, group: 1 }, { x: 7, y: 6, pressed: false, group: 2 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 161, 0, 1],
             [1, 0, 0, 0, 0, 0, 5, 0, 1],
@@ -192,7 +192,7 @@ describe("Pistons", () => {
             [1, 158, 0, 159, 0, 0, 0, 158, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 161, 0, 1],
             [1, 0, 0, 97, 0, 0, 5, 0, 1],
@@ -202,22 +202,22 @@ describe("Pistons", () => {
             [1, 158, 0, 159, 0, 0, 0, 158, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
     });
 
     it("checkPistonsTriggers G", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: true, sticky: true, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let pistonGroupsActivated = [...defaultPistonGroupsActivated];
+        const pistonGroupsActivated = [...defaultPistonGroupsActivated];
         pistonGroupsActivated[0] = true;
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -225,7 +225,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -233,22 +233,22 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
     });
 
     it("checkPistonsTriggers H", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let pistonGroupsActivated = [...defaultPistonGroupsActivated];
+        const pistonGroupsActivated = [...defaultPistonGroupsActivated];
         pistonGroupsActivated[0] = true;
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -256,7 +256,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -264,20 +264,20 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
     });
 
     it("checkPistonsTriggers I", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "momentary", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -285,7 +285,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -293,20 +293,20 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
     });
 
     it("checkPistonsTriggers J", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "momentary", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -314,20 +314,20 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const expectedOutput = copy2dArray(input);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false });
     });
 
     it("checkPistonsTriggers K", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: true, direction: "right", mode: "toggle", group: 1 }],
             pistonsTriggers: [{ x: 1, y: 4, pressed: false, group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -335,8 +335,8 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const expectedOutput = copy2dArray(input);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false });
     });
@@ -344,13 +344,13 @@ describe("Pistons", () => {
     // checkPistonsDetector
 
     it("checkPistonsDetector A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -358,7 +358,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -366,21 +366,21 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsDetector(input, gameInfo);
+        const info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }]);
     });
 
     it("checkPistonsDetector B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             orangeBalls: [{ x: 4, y: 3, direction: "none" }],
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -388,22 +388,22 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkPistonsDetector(input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false });
         expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "whiteball", group: 1 }]);
     });
 
     it("checkPistonsDetector C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             orangeBalls: [{ x: 4, y: 3, direction: "none" }],
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "orangeball", group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -411,7 +411,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -419,7 +419,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsDetector(input, gameInfo);
+        const info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "orangeball", group: 1 }]);
@@ -427,14 +427,14 @@ describe("Pistons", () => {
     });
 
     it("checkPistonsDetector D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             pistons: [{ x: 5, y: 3, activated: false, sticky: false, inverted: false, direction: "left", mode: "redball", group: 1 }],
             redBalls: [{ x: 4, y: 3, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -442,7 +442,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -450,7 +450,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsDetector(input, gameInfo);
+        const info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.pistons).toEqual([{ x: 5, y: 3, activated: true, sticky: false, inverted: false, direction: "left", mode: "redball", group: 1 }]);
@@ -458,14 +458,14 @@ describe("Pistons", () => {
     });
 
     it("checkPistonsDetector E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             pinkBalls: [{ x: 4, y: 3, delete: false, skipFalling: 0 }],
             pistons: [{ x: 3, y: 3, activated: false, sticky: false, inverted: false, direction: "right", mode: "pinkball", group: 1 }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -473,7 +473,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -481,7 +481,7 @@ describe("Pistons", () => {
             [1, 2, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsDetector(input, gameInfo);
+        const info = checkPistonsDetector(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true });
         expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "pinkball", group: 1 }]);

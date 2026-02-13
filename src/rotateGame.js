@@ -323,6 +323,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.jellyfish[i], rows, rotateLeft);
       }
 
+      // Lava
+      for (let i = 0; i < gameInfo.lava.length; i++) {
+        rotateXY(gameInfo.lava[i], rows, rotateLeft);
+      }
+
       // Magnets
       for (let i = 0; i < gameInfo.magnets.length; i++) {
         rotateXY(gameInfo.magnets[i], rows, rotateLeft);

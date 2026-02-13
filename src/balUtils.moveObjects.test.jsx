@@ -11,12 +11,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 5, mode: "notrigger", direction: "left", group: 1 }],
@@ -26,12 +26,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 4, y: 4, mode: "notrigger", direction: "left", group: 1 }],
@@ -41,12 +41,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 3, mode: "notrigger", direction: "left", group: 1 }],
@@ -56,12 +56,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
@@ -71,12 +71,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             conveyorBelts: [{ x: 2, y: 4, mode: "notrigger", direction: "left", group: 1 }],
@@ -86,12 +86,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects F", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             yellowBalls: [{ x: 10, y: 5, direction: "none" }, { x: 5, y: 5, direction: "none" }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             yellowBalls: [{ x: 11, y: 5, direction: "none" }, { x: 5, y: 5, direction: "none" }],
@@ -101,12 +101,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects G", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             orangeBalls: [{ x: 3, y: 5, direction: "none" }, { x: 5, y: 10, direction: "none" }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             orangeBalls: [{ x: 3, y: 6, direction: "none" }, { x: 5, y: 11, direction: "none" }],
@@ -116,12 +116,12 @@ describe("balUtils moveObjects", () => {
     });
 
     it("moveObjects H", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             orangeBalls: [{ x: 3, y: 5, direction: "none" }, { x: 5, y: 10, direction: "none" }],
         };
-        let expectedGameInfo = {
+        const expectedGameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             orangeBalls: [{ x: 10, y: 4, direction: "none" }, { x: 5, y: 10, direction: "none" }],

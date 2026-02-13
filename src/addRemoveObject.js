@@ -9,7 +9,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
         (x >= backData[0].length) || (y >= backData.length)) {
         return;
     }
-    removeObject(gameData, gameInfo, x, y);
+    removeObject(backData, gameData, gameInfo, x, y);
     switch (objectNumber) {
         case 2:
             if ((gameInfo.blueBall.x !== -1) && (gameInfo.blueBall.y !== -1)) {
@@ -409,7 +409,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
     }
 }
 
-export function removeObject(gameData, gameInfo, x, y) {
+export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData = false) {
     let objectNumber = 0;
     let idx = -1;
 
@@ -419,6 +419,34 @@ export function removeObject(gameData, gameInfo, x, y) {
     if ((x < 0) || (x >= gameData[0].length) || (y < 0) || (y >= gameData.length)) {
         return;
     }
+
+    if (deleteBackData) {
+        objectNumber = backData[y][x];
+        switch (objectNumber) {
+            case 22:
+                idx = findElementByCoordinates(x, y, gameInfo.lava);
+                if (idx >= 0) {
+                    gameInfo.lava.splice(idx, 1);
+                }
+                break;
+            case 170:
+                idx = findElementByCoordinates(x, y, gameInfo.teleports);
+                if (idx >= 0) {
+                    gameInfo.teleports.splice(idx, 1);
+                }
+                break;
+            case 252:
+                idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+                if (idx >= 0) {
+                    gameInfo.seaAnemones.splice(idx, 1);
+                }
+                break;
+            default:
+                break;
+        }
+        backData[y][x] = 0;
+    }
+
     objectNumber = gameData[y][x];
     switch (objectNumber) {
         case 2:

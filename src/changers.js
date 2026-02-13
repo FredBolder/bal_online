@@ -93,14 +93,14 @@ export function checkChangers(backData, gameData, gameInfo) {
                 if (((objectToColor(elLeft) === c1) || (c1 === "all") && (checkColor(objectToColor(elLeft)))) && (elRight === 0)) {
                     obj = colorToObject(c2);
                     if (obj > 0) {
-                        removeObject(gameData, gameInfo, changer.x - 1, changer.y);
+                        removeObject(backData, gameData, gameInfo, changer.x - 1, changer.y);
                         addObject(backData, gameData, gameInfo, changer.x + 1, changer.y, obj);
                         changed = true;
                     }
                 } else if (((objectToColor(elRight) === c2) || (c2 === "all") && (checkColor(objectToColor(elRight)))) && (elLeft === 0)) {
                     obj = colorToObject(c1);
                     if (obj > 0) {
-                        removeObject(gameData, gameInfo, changer.x + 1, changer.y);
+                        removeObject(backData, gameData, gameInfo, changer.x + 1, changer.y);
                         addObject(backData, gameData, gameInfo, changer.x - 1, changer.y, obj);
                         changed = true;
                     }
@@ -109,14 +109,14 @@ export function checkChangers(backData, gameData, gameInfo) {
                 if (((objectToColor(elTop) === c1) || (c1 === "all") && (checkColor(objectToColor(elTop)))) && (elBottom === 0)) {
                     obj = colorToObject(c2);
                     if (obj > 0) {
-                        removeObject(gameData, gameInfo, changer.x, changer.y - 1);
+                        removeObject(backData, gameData, gameInfo, changer.x, changer.y - 1);
                         addObject(backData, gameData, gameInfo, changer.x, changer.y + 1, obj);
                         changed = true;
                     }
                 } else if (((objectToColor(elBottom) === c2) || (c2 === "all") && (checkColor(objectToColor(elBottom)))) && (elTop === 0)) {
                     obj = colorToObject(c1);
                     if (obj > 0) {
-                        removeObject(gameData, gameInfo, changer.x, changer.y + 1);
+                        removeObject(backData, gameData, gameInfo, changer.x, changer.y + 1);
                         addObject(backData, gameData, gameInfo, changer.x, changer.y - 1, obj);
                         changed = true;
                     }

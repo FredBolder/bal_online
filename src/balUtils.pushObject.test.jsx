@@ -15,14 +15,14 @@ describe("balUtils pushObject", () => {
     });
 
     it("pushObject A", () => {
-        let yellow = [{ x: 3, y: 3, direction: "none" }];
-        let gameInfo = { 
+        const yellow = [{ x: 3, y: 3, direction: "none" }];
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 2 }, 
             greenBalls: 1,
             yellowBalls: yellow, 
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 0, 0, 1],
@@ -31,8 +31,8 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let inputBack = zeroArray(7, 7);
-        let expectedOutput = [
+        const inputBack = zeroArray(7, 7);
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -41,7 +41,7 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(yellow).toEqual([{ x: 3, y: 4, direction: "down" }]);
         expect(info).toEqual({ player: true, sound: "" });
@@ -49,12 +49,12 @@ describe("balUtils pushObject", () => {
     });
 
     it("pushObject B", () => {
-        let gameInfo = { 
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 2 }, 
             greenBalls: 1,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 0, 0, 1],
@@ -63,8 +63,8 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let inputBack = zeroArray(7, 7);
-        let expectedOutput = [
+        const inputBack = zeroArray(7, 7);
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -73,18 +73,18 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "" });
     });
 
     it("pushObject C", () => {
-        let gameInfo = { 
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 2 }, 
             greenBalls: 1,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 0, 0, 1],
@@ -93,8 +93,8 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let inputBack = zeroArray(7, 7);
-        let expectedOutput = [
+        const inputBack = zeroArray(7, 7);
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 0, 0, 1],
@@ -103,19 +103,19 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: false, sound: "" });
     });
 
     it("pushObject D", () => {
-        let gameInfo = { 
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 2 }, 
             forces: [{ x: 3, y: 6, direction: "up" }],
             greenBalls: 1,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 0, 0, 1],
@@ -124,22 +124,22 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 109, 1, 1, 1],
         ];
-        let inputBack = zeroArray(7, 7);
-        let expectedOutput = copy2dArray(input);
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const inputBack = zeroArray(7, 7);
+        const expectedOutput = copy2dArray(input);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: false, sound: "" });
     });
 
     it("pushObject E", () => {
-        let yellow = [{ x: 3, y: 1, direction: "none" }];
-        let gameInfo = { 
+        const yellow = [{ x: 3, y: 1, direction: "none" }];
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 0 }, 
             greenBalls: 1,
             yellowBalls: yellow 
         };
-        let input = [
+        const input = [
             [1, 0, 0, 2, 0, 0, 1],
             [1, 0, 0, 9, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -148,7 +148,7 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 2, 0, 0, 1],
             [1, 0, 0, 9, 0, 0, 1],
@@ -157,8 +157,8 @@ describe("balUtils pushObject", () => {
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let inputBack = zeroArray(7, 7);
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const inputBack = zeroArray(7, 7);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 1 });
@@ -166,13 +166,13 @@ describe("balUtils pushObject", () => {
     });
 
     it("pushObject F", () => {
-        let gameInfo = { 
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 5 }, 
             greenBalls: 1,
             hasDivingGlasses: true,
         };
-        let input = [
+        const input = [
             [0, 3, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -181,7 +181,7 @@ describe("balUtils pushObject", () => {
             [0, 0, 0, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
         ];
-        let inputBack = [
+        const inputBack = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -190,7 +190,7 @@ describe("balUtils pushObject", () => {
             [23, 23, 23, 23, 23, 23, 23],
             [23, 23, 23, 23, 23, 23, 23],
         ];        
-        let expectedOutput = [
+        const expectedOutput = [
             [0, 3, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -199,21 +199,21 @@ describe("balUtils pushObject", () => {
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 2, 0, 0, 0],
         ];
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 6 });
     });
 
     it("pushObject G", () => {
-        let gameInfo = { 
+        const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 5 }, 
             greenBalls: 1,
             hasDivingGlasses: true,
             hasPropeller: true,
         };
-        let input = [
+        const input = [
             [0, 3, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -222,7 +222,7 @@ describe("balUtils pushObject", () => {
             [0, 0, 0, 2, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
         ];
-        let inputBack = [
+        const inputBack = [
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -231,7 +231,7 @@ describe("balUtils pushObject", () => {
             [0, 0, 0, 0, 0, 0, 0],
             [20, 20, 20, 20, 20, 20, 20],
         ];        
-        let expectedOutput = [
+        const expectedOutput = [
             [0, 3, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0],
@@ -240,7 +240,7 @@ describe("balUtils pushObject", () => {
             [0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 2, 0, 0, 0],
         ];
-        let info = pushObject(inputBack, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 6 });

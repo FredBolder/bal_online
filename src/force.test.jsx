@@ -14,13 +14,13 @@ describe("Force", () => {
     // ***** Force up *****
 
     it("Force up A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
             forces: [{ x: 4, y: 4, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -28,7 +28,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 2, 0, 0, 0, 1],
@@ -36,20 +36,20 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 2 });
     });
 
     it("Force up B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
             forces: [{ x: 4, y: 4, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 2, 0, 0, 0, 1],
@@ -57,7 +57,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 2, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -65,20 +65,20 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 1 });
     });
 
     it("Force up C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
             forces: [{ x: 4, y: 4, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 4, 0, 0, 0, 1],
@@ -86,7 +86,7 @@ describe("Force", () => {
             [1, 0, 0, 2, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 4, 0, 0, 0, 1],
             [1, 0, 0, 0, 4, 0, 0, 0, 1],
@@ -94,20 +94,20 @@ describe("Force", () => {
             [1, 0, 0, 2, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 4 });
     });
 
     it("Force up D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
             forces: [{ x: 4, y: 4, direction: "up" }, { x: 7, y: 4, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 17, 0, 0, 18, 1],
             [1, 0, 0, 0, 2, 0, 0, 4, 1],
@@ -115,7 +115,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 109, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 17, 2, 4, 18, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -123,20 +123,20 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 109, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 5, y: 1 });
     });
 
     it("Force up E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
             forces: [{ x: 4, y: 6, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 17, 0, 0, 0, 1],
             [1, 0, 0, 0, 2, 0, 0, 0, 1],
@@ -146,7 +146,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 17, 0, 0, 0, 1],
             [1, 0, 0, 0, 2, 0, 0, 0, 1],
@@ -156,20 +156,20 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 2 });
     });
 
     it("Force up F", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
             forces: [{ x: 4, y: 6, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 17, 0, 0, 0, 1],
             [1, 0, 0, 0, 2, 0, 0, 0, 1],
@@ -179,21 +179,21 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkForces(input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 2 });
     });
 
     it("Force up G", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
             forces: [{ x: 4, y: 6, direction: "up" }, { x: 7, y: 6, direction: "up" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 18, 0, 0, 18, 1],
             [1, 0, 0, 0, 2, 0, 0, 4, 1],
@@ -203,7 +203,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 109, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 2, 18, 0, 4, 18, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -213,21 +213,21 @@ describe("Force", () => {
             [1, 0, 0, 0, 109, 0, 0, 109, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 1 });
     });
 
     it("Force up H", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
             forces: [{ x: 4, y: 4, direction: "up" }],
             greenBalls: 1,
             pinkBalls: [{ x: 4, y: 3, delete: false, skipFalling: 0 }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -235,7 +235,7 @@ describe("Force", () => {
             [1, 0, 0, 2, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 203, 0, 0, 0, 1],
@@ -243,7 +243,7 @@ describe("Force", () => {
             [1, 0, 0, 2, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 4 });
@@ -253,13 +253,13 @@ describe("Force", () => {
     // ***** Force right *****
 
     it("Force right A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 2, y: 4, direction: "right" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -267,7 +267,7 @@ describe("Force", () => {
             [1, 0, 111, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -275,20 +275,20 @@ describe("Force", () => {
             [1, 0, 111, 0, 0, 2, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 5, y: 4 });
     });
 
     it("Force right B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 2, y: 4, direction: "right" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -296,7 +296,7 @@ describe("Force", () => {
             [1, 0, 111, 4, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -304,20 +304,20 @@ describe("Force", () => {
             [1, 0, 111, 0, 4, 2, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 5, y: 4 });
     });
 
     it("Force right C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 2, y: 4, direction: "right" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -325,21 +325,21 @@ describe("Force", () => {
             [1, 0, 111, 5, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkForces(input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 4 });
     });
 
     it("Force right D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: "right" }],
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             orangeBalls: [{ x: 4, y: 4, direction: "none" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -347,7 +347,7 @@ describe("Force", () => {
             [1, 2, 111, 0, 40, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -355,7 +355,7 @@ describe("Force", () => {
             [1, 2, 111, 0, 0, 40, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.orangeBalls).toEqual([{ x: 5, y: 4, direction: "none" }]);
@@ -363,13 +363,13 @@ describe("Force", () => {
     });
 
     it("Force right E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 1, y: 4, direction: "right" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -377,7 +377,7 @@ describe("Force", () => {
             [1, 111, 0, 0, 2, 16, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -385,20 +385,20 @@ describe("Force", () => {
             [1, 111, 0, 0, 0, 16, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 5, y: 3 });
     });
 
     it("Force right F", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 1, y: 4, direction: "right" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -406,21 +406,21 @@ describe("Force", () => {
             [1, 111, 0, 0, 2, 16, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkForces(input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 4 });
     });
 
     it("Force right G", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 1, y: 4, direction: "right" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -428,7 +428,7 @@ describe("Force", () => {
             [1, 111, 0, 4, 2, 214, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -436,7 +436,7 @@ describe("Force", () => {
             [1, 111, 0, 0, 4, 214, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 5, y: 3 });
@@ -445,88 +445,88 @@ describe("Force", () => {
     // ***** Force left *****
 
     it("Force left A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             forces: [{ x: 5, y: 3, direction: "left" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 0, 112, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 2, 0, 0, 0, 112, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 3 });
     });
 
     it("Force left B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             forces: [{ x: 5, y: 3, direction: "left" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 0, 4, 112, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 2, 0, 4, 0, 112, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 3 });
     });
 
     it("Force left C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
             forces: [{ x: 5, y: 3, direction: "left" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 2, 5, 0, 112, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkForces(input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 3 });
     });
 
     it("Force left D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
             forces: [{ x: 7, y: 4, direction: "left" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -534,7 +534,7 @@ describe("Force", () => {
             [1, 0, 0, 15, 2, 0, 0, 111, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -542,7 +542,7 @@ describe("Force", () => {
             [1, 0, 0, 15, 0, 0, 0, 111, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 3 });
@@ -551,13 +551,13 @@ describe("Force", () => {
     // ***** Force down *****
 
     it("Force down A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
             forces: [{ x: 4, y: 1, direction: "down" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 110, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -566,7 +566,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 110, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -575,20 +575,20 @@ describe("Force", () => {
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 4 });
     });
 
     it("Force down B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
             forces: [{ x: 4, y: 1, direction: "down" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 110, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -596,7 +596,7 @@ describe("Force", () => {
             [1, 0, 0, 0, 16, 0, 0, 111, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 110, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -604,20 +604,20 @@ describe("Force", () => {
             [1, 0, 0, 2, 16, 0, 0, 111, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkForces(input, gameInfo);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 3, y: 4 });
     });
 
     it("Force down C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
             forces: [{ x: 4, y: 1, direction: "down" }],
             greenBalls: 1
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 110, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -625,8 +625,8 @@ describe("Force", () => {
             [1, 0, 0, 5, 16, 0, 0, 111, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkForces(input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkForces(input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 3 });
@@ -635,122 +635,122 @@ describe("Force", () => {
     // ***** hasForceRight *****
 
     it("hasForceRight A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
             forces: [{ x: 1, y: 1, direction: "right" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 111, 0, 0, 2, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceRight(input, gameInfo, 4, 1);
+        const info = hasForceRight(input, gameInfo, 4, 1);
         expect(info).toBe(true);
     });
 
     it("hasForceRight B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
             forces: [{ x: 1, y: 1, direction: "right" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 111, 4, 0, 2, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceRight(input, gameInfo, 4, 1);
+        const info = hasForceRight(input, gameInfo, 4, 1);
         expect(info).toBe(true);
     });
 
     it("hasForceRight C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
             forces: [{ x: 1, y: 1, direction: "right" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 111, 5, 0, 2, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceRight(input, gameInfo, 4, 1);
+        const info = hasForceRight(input, gameInfo, 4, 1);
         expect(info).toBe(false);
     });
 
     // ***** hasForceLeft *****
 
     it("hasForceLeft A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             forces: [{ x: 4, y: 1, direction: "left" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 2, 0, 0, 112, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceLeft(input, gameInfo, 1, 1);
+        const info = hasForceLeft(input, gameInfo, 1, 1);
         expect(info).toBe(true);
     });
 
     it("hasForceLeft B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             forces: [{ x: 4, y: 1, direction: "left" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 2, 4, 0, 112, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceLeft(input, gameInfo, 1, 1);
+        const info = hasForceLeft(input, gameInfo, 1, 1);
         expect(info).toBe(true);
     });
 
     it("hasForceLeft C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             forces: [{ x: 4, y: 1, direction: "left" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 2, 5, 0, 112, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceLeft(input, gameInfo, 1, 1);
+        const info = hasForceLeft(input, gameInfo, 1, 1);
         expect(info).toBe(false);
     });
 
     it("hasForceLeft D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
             forces: [{ x: 4, y: 1, direction: "left" }],
             pinkBalls: [{ x: 2, y: 1, delete: false, skipFalling: 0 }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1],
             [1, 2, 203, 0, 112, 1],
             [1, 1, 1, 1, 1, 1],
         ];
-        let info = hasForceLeft(input, gameInfo, 1, 1);
+        const info = hasForceLeft(input, gameInfo, 1, 1);
         expect(info).toBe(true);
     });
 
     // ***** hasForceUp *****
 
     it("hasForceUp A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
             forces: [{ x: 2, y: 4, direction: "up" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 2, 0, 1],
@@ -758,17 +758,17 @@ describe("Force", () => {
             [1, 0, 109, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceUp(input, gameInfo, 2, 2);
+        const info = hasForceUp(input, gameInfo, 2, 2);
         expect(info).toBe(true);
     });
 
     it("hasForceUp B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
             forces: [{ x: 2, y: 4, direction: "up" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 2, 0, 1],
@@ -776,17 +776,17 @@ describe("Force", () => {
             [1, 0, 109, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceUp(input, gameInfo, 2, 2);
+        const info = hasForceUp(input, gameInfo, 2, 2);
         expect(info).toBe(true);
     });
 
     it("hasForceUp C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
             forces: [{ x: 2, y: 4, direction: "up" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 2, 0, 1],
@@ -794,17 +794,17 @@ describe("Force", () => {
             [1, 0, 109, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceUp(input, gameInfo, 2, 2);
+        const info = hasForceUp(input, gameInfo, 2, 2);
         expect(info).toBe(false);
     });
 
     it("hasForceUp D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
             forces: [{ x: 2, y: 4, direction: "up" }, { x: 2, y: 7, direction: "up" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 2, 0, 1],
@@ -815,19 +815,19 @@ describe("Force", () => {
             [1, 1, 109, 1, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceUp(input, gameInfo, 2, 2);
+        const info = hasForceUp(input, gameInfo, 2, 2);
         expect(info).toBe(true);
     });
 
     // ***** hasForceDown *****
 
     it("hasForceDown A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
             forces: [{ x: 2, y: 1, direction: "down" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 110, 0, 1],
             [1, 0, 0, 0, 1],
@@ -835,17 +835,17 @@ describe("Force", () => {
             [1, 0, 2, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceDown(input, gameInfo, 2, 4);
+        const info = hasForceDown(input, gameInfo, 2, 4);
         expect(info).toBe(true);
     });
 
     it("hasForceDown B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
             forces: [{ x: 2, y: 1, direction: "down" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 110, 0, 1],
             [1, 0, 0, 0, 1],
@@ -853,17 +853,17 @@ describe("Force", () => {
             [1, 0, 2, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceDown(input, gameInfo, 2, 4);
+        const info = hasForceDown(input, gameInfo, 2, 4);
         expect(info).toBe(true);
     });
 
     it("hasForceDown C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
             forces: [{ x: 2, y: 1, direction: "down" }]
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 110, 0, 1],
             [1, 0, 0, 0, 1],
@@ -871,7 +871,7 @@ describe("Force", () => {
             [1, 0, 2, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let info = hasForceDown(input, gameInfo, 2, 4);
+        const info = hasForceDown(input, gameInfo, 2, 4);
         expect(info).toBe(false);
     });
 

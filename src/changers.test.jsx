@@ -17,7 +17,7 @@ describe("changers", () => {
     });
 
     it("checkChangers A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             changers: [
@@ -26,7 +26,7 @@ describe("changers", () => {
             ],
             greenBalls: 1,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 5, 0, 0, 0, 1],
@@ -35,7 +35,7 @@ describe("changers", () => {
             [1, 2, 0, 0, 0, 244, 4, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 1],
@@ -44,14 +44,14 @@ describe("changers", () => {
             [1, 2, 0, 0, 0, 244, 4, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkChangers(backData, input, gameInfo);
+        const info = checkChangers(backData, input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });
     });
 
     it("checkChangers B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             changers: [
@@ -61,7 +61,7 @@ describe("changers", () => {
             greenBalls: 1,
             yellowBalls: [{ x: 2, y: 2, direction: "none" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 9, 0, 0, 0, 0, 1],
@@ -70,7 +70,7 @@ describe("changers", () => {
             [1, 2, 0, 0, 0, 244, 4, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 9, 0, 0, 0, 0, 1],
@@ -79,7 +79,7 @@ describe("changers", () => {
             [1, 2, 0, 0, 9, 244, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkChangers(backData, input, gameInfo);
+        const info = checkChangers(backData, input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });
@@ -90,7 +90,7 @@ describe("changers", () => {
     });
 
     it("checkChangers C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 5 },
             changers: [
@@ -100,7 +100,7 @@ describe("changers", () => {
             greenBalls: 1,
             yellowBalls: [{ x: 2, y: 2, direction: "none" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 0, 1],
             [1, 0, 9, 0, 0, 0, 0, 1],
@@ -109,8 +109,8 @@ describe("changers", () => {
             [1, 2, 0, 0, 0, 244, 4, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkChangers(backData, input, gameInfo);
+        const expectedOutput = copy2dArray(input);
+        const info = checkChangers(backData, input, gameInfo);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(false);
         expect(gameInfo.blueBall).toEqual({ x: 1, y: 5 });

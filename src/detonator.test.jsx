@@ -7,7 +7,7 @@ import { copy2dArray } from "./utils.js";
 describe("detonator", () => {
     let defaultGameInfo;
     let defaultGameVars;
-    let inputBack_7_7 = zeroArray(7, 7);
+    const inputBack_7_7 = zeroArray(7, 7);
 
     beforeEach(() => {
         defaultGameInfo = {};
@@ -17,8 +17,8 @@ describe("detonator", () => {
     });
 
     it("checkDetonator A", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, detonator: { x: 5, y: 5 } };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, detonator: { x: 5, y: 5 } };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -27,7 +27,7 @@ describe("detonator", () => {
             [1, 0, 0, 0, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -36,14 +36,14 @@ describe("detonator", () => {
             [1, 0, 0, 0, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkDetonator(inputBack_7_7, input, gameInfo, defaultGameVars, false);
+        const info = checkDetonator(inputBack_7_7, input, gameInfo, defaultGameVars, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: true });
     });
 
     it("checkDetonator B", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, detonator: { x: 5, y: 5 }, hasPropeller: true };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, detonator: { x: 5, y: 5 }, hasPropeller: true };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -52,15 +52,15 @@ describe("detonator", () => {
             [1, 0, 0, 0, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = copy2dArray(input);
-        let info = checkDetonator(inputBack_7_7, input, gameInfo, defaultGameVars, false);
+        const expectedOutput = copy2dArray(input);
+        const info = checkDetonator(inputBack_7_7, input, gameInfo, defaultGameVars, false);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false, explosion: false });
     });
 
     it("checkDetonator C (via pushObject)", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, detonator: { x: 5, y: 5 }, hasPropeller: true };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, detonator: { x: 5, y: 5 }, hasPropeller: true };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -69,7 +69,7 @@ describe("detonator", () => {
             [1, 0, 0, 0, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1],
@@ -78,7 +78,7 @@ describe("detonator", () => {
             [1, 0, 0, 0, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack_7_7, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack_7_7, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "explosion" });
     });

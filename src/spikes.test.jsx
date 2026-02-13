@@ -14,14 +14,14 @@ describe("Spikes", () => {
         initGameVars(defaultGameVars);
     });
 
-    let inputBack01 = zeroArray(6, 8);
+    const inputBack01 = zeroArray(6, 8);
 
     it("checkSpikes A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 3 },
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
@@ -29,19 +29,19 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     it("checkSpikes B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 3 },
             blueBall1: { x: 3, y: 3 },
             blueBall2: { x: 6, y: 3 },
             twoBlue: true,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
@@ -49,17 +49,17 @@ describe("Spikes", () => {
             [1, 0, 0, 175, 0, 0, 174, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     it("checkSpikes C", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
             forces: [{ x: 3, y: 4, direction: "up" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 175, 0, 0, 0, 1],
             [1, 1, 0, 2, 0, 0, 0, 1],
@@ -67,17 +67,17 @@ describe("Spikes", () => {
             [1, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     it("checkSpikes D", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
             forces: [{ x: 3, y: 4, direction: "up" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 175, 0, 0, 0, 1],
             [1, 1, 0, 2, 0, 0, 0, 1],
@@ -85,17 +85,17 @@ describe("Spikes", () => {
             [1, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     it("checkSpikes E", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
             forces: [{ x: 3, y: 4, direction: "up" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 175, 0, 0, 0, 1],
             [1, 1, 0, 2, 0, 0, 0, 1],
@@ -103,17 +103,17 @@ describe("Spikes", () => {
             [1, 0, 0, 109, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(false);
     });
 
     it("checkSpikes F", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 4 },
             forces: [{ x: 3, y: 4, direction: "right" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
@@ -121,17 +121,17 @@ describe("Spikes", () => {
             [1, 0, 0, 111, 0, 2, 177, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     it("checkSpikes G", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
             forces: [{ x: 6, y: 4, direction: "left" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 1, 1],
             [1, 0, 0, 0, 0, 0, 1, 1],
@@ -139,17 +139,17 @@ describe("Spikes", () => {
             [1, 176, 2, 0, 0, 0, 112, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     it("checkSpikes H", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 3 },
             hasPropeller: true,
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
@@ -157,18 +157,18 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(false);
     });
 
     it("checkSpikes I", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 3 },
             hasPropeller: true,
             forces: [{ x: 3, y: 1, direction: "down" }],
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 110, 0, 0, 0, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
@@ -176,20 +176,20 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
+        const info = checkSpikes(inputBack01, input, gameInfo, defaultGameVars);
         expect(info).toBe(true);
     });
 
     // GRAVITY UP
 
-    let inputBack02 = zeroArray(6, 8);
+    const inputBack02 = zeroArray(6, 8);
 
     it("checkSpikes Gravity Up A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 3 },
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
             [1, 1, 0, 0, 0, 0, 0, 1],
@@ -197,16 +197,16 @@ describe("Spikes", () => {
             [1, 0, 0, 174, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack02, input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        const info = checkSpikes(inputBack02, input, gameInfo, { ...defaultGameVars, gravity: "up" });
         expect(info).toBe(false);
     });
 
     it("checkSpikes Gravity Up B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
         };
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 0, 175, 0, 0, 0, 1],
             [1, 1, 0, 2, 0, 0, 0, 1],
@@ -214,7 +214,7 @@ describe("Spikes", () => {
             [1, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = checkSpikes(inputBack02, input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        const info = checkSpikes(inputBack02, input, gameInfo, { ...defaultGameVars, gravity: "up" });
         expect(info).toBe(true);
     });
 

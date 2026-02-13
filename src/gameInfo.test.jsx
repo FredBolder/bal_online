@@ -11,15 +11,15 @@ describe("Game info", () => {
     });
 
     it("getGameInfo A", () => {
-        let inputBack = zeroArray(5, 5);
-        let input = [
+        const inputBack = zeroArray(5, 5);
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 3, 1],
             [1, 8, 0, 0, 1],
             [1, 8, 3, 2, 1],
             [1, 1, 1, 1, 1],
         ];
-        let expectedOutput = {
+        const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
             greenBalls: 2,
@@ -33,15 +33,15 @@ describe("Game info", () => {
     });
 
     it("getGameInfo B", () => {
-        let inputBack = zeroArray(5, 10);
-        let input = [
+        const inputBack = zeroArray(5, 10);
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 3, 1, 0, 0, 3, 3, 1],
             [1, 8, 0, 0, 0, 0, 0, 0, 1, 1],
             [1, 8, 1, 2, 0, 0, 3, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = {
+        const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
             greenBalls: 4,
@@ -55,15 +55,15 @@ describe("Game info", () => {
     });
 
     it("getGameInfo C", () => {
-        let inputBack = zeroArray(5, 10);
-        let input = [
+        const inputBack = zeroArray(5, 10);
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 1, 3, 1, 3, 0, 0, 3, 1],
             [1, 0, 3, 0, 0, 0, 0, 0, 1, 1],
             [1, 3, 3, 2, 0, 0, 3, 1, 3, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = {
+        const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
             greenBalls: 8,
@@ -73,8 +73,8 @@ describe("Game info", () => {
     });
 
     it("getGameInfo D", () => {
-        let inputBack = zeroArray(7, 10);
-        let input = [
+        const inputBack = zeroArray(7, 10);
+        const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 4, 0, 0, 3, 3, 0, 0, 0, 1],
             [1, 36, 0, 0, 0, 0, 0, 0, 6, 1],
@@ -83,7 +83,7 @@ describe("Game info", () => {
             [1, 0, 106, 0, 2, 0, 4, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = {
+        const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 4, y: 5 },
             elevators: [
@@ -99,15 +99,15 @@ describe("Game info", () => {
     });
 
     it("getGameInfo E", () => {
-        let inputBack = zeroArray(5, 5);
-        let input = [
+        const inputBack = zeroArray(5, 5);
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 3, 1],
             [1, 93, 0, 0, 1],
             [1, 8, 3, 2, 1],
             [1, 1, 1, 1, 1],
         ];
-        let expectedOutput = {
+        const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
             greenBalls: 2,

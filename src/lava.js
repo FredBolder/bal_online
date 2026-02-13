@@ -1,12 +1,13 @@
 import { removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
+import { deleteIfSeaAnemone } from "./seaAnemone.js";
 import { deleteIfPurpleTeleport } from "./teleports.js";
 
 function canStopLava(objectNumber) {
   return [1, 15, 16, 17, 18, 36, 38, 91, 119, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 241].includes(objectNumber);
 }
 
-export function checkLava(gameData, gameInfo, gameVars) {
+export function checkLava(backData, gameData, gameInfo, gameVars) {
   const result = { update: false, sound: "", gameOver: false };
   for (let i = 0; i < gameInfo.lava.length; i++) {
     const lava = gameInfo.lava[i];
@@ -16,7 +17,7 @@ export function checkLava(gameData, gameInfo, gameVars) {
       if ([2, 3].includes(objectNumber)) {
         result.gameOver = true;
       }
-      removeObject(gameData, gameInfo, lava.x, lava.y);
+      removeObject(backData, gameData, gameInfo, lava.x, lava.y);
       if ((gameVars.soundLava !== "never") && (objectNumber === 2)) {
         result.sound = "pain";
       }
@@ -135,9 +136,10 @@ function findHighestSource(region, minY) {
   return src;
 }
 
-function teleportLava(source, targetX, targetY, backData, gameData, gameInfo) {
-  removeObject(gameData, gameInfo, targetX, targetY);
+function moveLavaObject(source, targetX, targetY, backData, gameData, gameInfo) {
+  removeObject(backData, gameData, gameInfo, targetX, targetY);
   deleteIfPurpleTeleport(backData, gameInfo, targetX, targetY);
+  deleteIfSeaAnemone(backData, gameInfo, targetX, targetY);
 
   backData[source.y][source.x] = 0;
   source.x = targetX;
@@ -187,8 +189,9 @@ export function moveLava(backData, gameData, gameInfo, gameVars) {
       if ((gameVars.soundLava !== "never") && (gameData[newY][newX] === 2)) {
         result.sound = "pain";
       }
-      removeObject(gameData, gameInfo, newX, newY);
+      removeObject(backData, gameData, gameInfo, newX, newY);
       deleteIfPurpleTeleport(backData, gameInfo, newX, newY);
+      deleteIfSeaAnemone(backData, gameInfo, newX, newY);
       backData[lava.y][lava.x] = 0;
       lava.x = newX;
       lava.y = newY;
@@ -255,7 +258,7 @@ export function moveLava(backData, gameData, gameInfo, gameVars) {
       // strict downhill check
       if (source.y >= target.y) break;
 
-      teleportLava(source, target.x, target.y, backData, gameData, gameInfo);
+      moveLavaObject(source, target.x, target.y, backData, gameData, gameInfo);
       result.update = true;
       moves++;
 

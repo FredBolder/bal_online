@@ -14,12 +14,12 @@ describe("Shrinker", () => {
     });    
 
     it("shrinkObject A", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 4 },
             yellowBalls: [{ x: 1, y: 3, direction: "none" }],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 3, 0, 0, 1],
             [1, 0, 0, 0, 1],
@@ -27,7 +27,7 @@ describe("Shrinker", () => {
             [1, 2, 0, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1],
             [1, 3, 0, 0, 1],
             [1, 0, 0, 0, 1],
@@ -41,7 +41,7 @@ describe("Shrinker", () => {
     });
 
     it("shrinkObject B", () => {
-        let gameInfo = {
+        const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 3 },
             redBalls: [
@@ -49,7 +49,7 @@ describe("Shrinker", () => {
                 { x: 1, y: 4, smart: 1, direction: "none", skipElevatorCount: 0, skipFollowCount: 0 }
             ],
         }
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1],
             [1, 3, 0, 8, 1],
             [1, 0, 0, 1, 1],
@@ -57,7 +57,7 @@ describe("Shrinker", () => {
             [1, 93, 0, 0, 1],
             [1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1],
             [1, 3, 0, 8, 1],
             [1, 0, 0, 1, 1],

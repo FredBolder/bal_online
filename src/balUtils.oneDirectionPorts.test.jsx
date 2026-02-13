@@ -22,197 +22,197 @@ describe("balUtils One direction ports", () => {
     });
 
     it("One direction ports A", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 3, 1],
             [1, 0, 2, 10, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 3, 1],
             [1, 0, 0, 10, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveRight(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, defaultGameVars);
+        const info = moveRight(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ action: "", eating: false, freezeTime: -1, player: true, sound: "" });
     });
 
     it("One direction ports B", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 11, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 2, 11, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveLeft(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, defaultGameVars);
+        const info = moveLeft(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info.player).toBe(true);
     });
 
     it("One direction ports C", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 2, 11, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 2, 11, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveRight(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, defaultGameVars);
+        const info = moveRight(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 2 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info.player).toBe(false);
     });
 
     it("One direction ports D", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 10, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 0, 0, 10, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = moveLeft(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, defaultGameVars);
+        const info = moveLeft(inputBack_4_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 2 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info.player).toBe(false);
     });
 
     it("One direction ports E", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 2, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = jump(inputBack_5_7, input, gameInfo, defaultGameVars);
+        const info = jump(inputBack_5_7, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ eating: false, freezeTime: -1, player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 1 });
     });
 
     it("One direction ports F", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 4, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 4, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = jump(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
+        const info = jump(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ eating: false, freezeTime: -1, player: false, sound: "" });
     });
 
     it("One direction ports G", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 4, y: 1 } };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 4, y: 1 } };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 2, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 0, 0, 2, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack_5_7, input, gameInfo, defaultGameVars);
+        const info = pushObject(inputBack_5_7, input, gameInfo, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 4, y: 3 });
     });
 
     it("One direction ports H", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 2, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 0, 0, 4, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 2, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 0, 0, 4, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, defaultGameVars);
+        const info = pushObject(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: false, sound: "" });
     });
 
     it("One direction ports I", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 2, 0, 1],
             [1, 1, 88, 1, 87, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 2, 0, 1],
             [1, 1, 88, 1, 87, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, defaultGameVars);
+        const info = pushObject(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: false, sound: "" });
     });
 
     it("One direction ports J", () => {
-        let input = [
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 1, 88, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 1, 88, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = jump(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
+        const info = jump(inputBack_5_7, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 } }, defaultGameVars);
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ eating: false, freezeTime: -1, player: false, sound: "" });
     });
@@ -221,44 +221,44 @@ describe("balUtils One direction ports", () => {
 
     it("One direction ports Gravity Up A", () => {
 
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 1 } };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 1 } };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 2, 0, 0, 0, 1],
             [1, 1, 88, 1, 88, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 1, 88, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = jump(inputBack_5_7, input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        const info = jump(inputBack_5_7, input, gameInfo, { ...defaultGameVars, gravity: "up" });
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ eating: false, freezeTime: -1, player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 3 });
     });
 
     it("One direction ports Gravity Up B", () => {
-        let gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
-        let input = [
+        const gameInfo = { ...defaultGameInfo, blueBall: { x: 2, y: 3 } };
+        const input = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 0, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 2, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let expectedOutput = [
+        const expectedOutput = [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 3, 2, 0, 0, 0, 1],
             [1, 1, 87, 1, 88, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1],
         ];
-        let info = pushObject(inputBack_5_7, input, gameInfo, { ...defaultGameVars, gravity: "up" });
+        const info = pushObject(inputBack_5_7, input, gameInfo, { ...defaultGameVars, gravity: "up" });
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ player: true, sound: "" });
         expect(gameInfo.blueBall).toEqual({ x: 2, y: 1 });
