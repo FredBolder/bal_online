@@ -93,6 +93,9 @@ export function getGameInfo(backData, gameData) {
                     let fish = {
                         x: j,
                         y: i,
+                        xStart: j,
+                        yStart: i,
+                        maxDistX: 0,
                         direction: Math.random() > 0.5 ? 6 : 4,
                         blocked: false,
                         outOfWater: 0,
@@ -315,6 +318,9 @@ export function getGameInfo(backData, gameData) {
                     let fish = {
                         x: j,
                         y: i,
+                        xStart: j,
+                        yStart: i,
+                        maxDistX: 0,
                         direction: Math.random() > 0.5 ? 6 : 4,
                         palette: 2,
                         shape: 2,
@@ -636,7 +642,8 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.redFish);
                 if (idx >= 0) {
                     obj = gameInfo.redFish[idx];
-                    extraInfo = `Direction: ${obj.direction}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
+                    extraInfo = `Start position: (${obj.xStart}, ${obj.yStart}), Max horizontal distance: ${obj.maxDistX}, `; 
+                    extraInfo += `Direction: ${obj.direction}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
                 }
                 info = `Red fish, ` + extraInfo;
                 break;
@@ -1127,7 +1134,8 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
                 if (idx >= 0) {
                     obj = gameInfo.tropicalFish[idx];
-                    extraInfo = `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `; 
+                    extraInfo = `Start position: (${obj.xStart}, ${obj.yStart}), Max horizontal distance: ${obj.maxDistX}, `; 
+                    extraInfo += `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `; 
                     extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, `; 
                     extraInfo += `Dead: ${obj.isDead}`;
                 }
@@ -1187,7 +1195,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
         if (info !== "") {
             info += ", ";
         }
-        info += `Position: ${x}, ${y}`;
+        info += `Position: (${x}, ${y})`;
     }
 
     if (all) {

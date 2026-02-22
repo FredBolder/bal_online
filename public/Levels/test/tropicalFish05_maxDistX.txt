@@ -1,0 +1,17 @@
+$has: divingglasses
+$maxdistx: 4, 6, 2
+$fins: 4, 6, 1
+$palette: 4, 6, 8
+$stripes: 4, 6, 15
+$tail: 4, 6, 6
+$background: 4, 6, 1, 1, 23
+1111111111
+1 2    Ӎ 1
+111Џ1111 1
+13       1
+1wwwwwwww1
+1wwwwwwww1
+1wwwҼwwww1
+1wwwwwwww1
+1wwwwwwww1
+1111111111

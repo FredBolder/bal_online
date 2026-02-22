@@ -22,7 +22,7 @@ describe("balUtils moveObjects", () => {
             conveyorBelts: [{ x: 3, y: 5, mode: "notrigger", direction: "left", group: 1 }],
         };
         moveObjects(gameInfo, "insertRow", 0, 4, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects B", () => {
@@ -37,7 +37,7 @@ describe("balUtils moveObjects", () => {
             conveyorBelts: [{ x: 4, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
         moveObjects(gameInfo, "insertColumn", 3, 0, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects C", () => {
@@ -52,7 +52,7 @@ describe("balUtils moveObjects", () => {
             conveyorBelts: [{ x: 3, y: 3, mode: "notrigger", direction: "left", group: 1 }],
         };
         moveObjects(gameInfo, "deleteRow", 0, 3, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects D", () => {
@@ -67,7 +67,7 @@ describe("balUtils moveObjects", () => {
             conveyorBelts: [{ x: 3, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
         moveObjects(gameInfo, "deleteRow", 0, 5, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects E", () => {
@@ -82,7 +82,7 @@ describe("balUtils moveObjects", () => {
             conveyorBelts: [{ x: 2, y: 4, mode: "notrigger", direction: "left", group: 1 }],
         };
         moveObjects(gameInfo, "deleteColumn", 1, 0, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects F", () => {
@@ -97,7 +97,7 @@ describe("balUtils moveObjects", () => {
             yellowBalls: [{ x: 11, y: 5, direction: "none" }, { x: 5, y: 5, direction: "none" }],
         };
         moveObjects(gameInfo, "insertColumn", 7, 0, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects G", () => {
@@ -112,7 +112,7 @@ describe("balUtils moveObjects", () => {
             orangeBalls: [{ x: 3, y: 6, direction: "none" }, { x: 5, y: 11, direction: "none" }],
         };
         moveObjects(gameInfo, "insertRow", 0, 5, 0, 0);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     it("moveObjects H", () => {
@@ -127,7 +127,7 @@ describe("balUtils moveObjects", () => {
             orangeBalls: [{ x: 10, y: 4, direction: "none" }, { x: 5, y: 10, direction: "none" }],
         };
         moveObjects(gameInfo, "moveCell", 3, 5, 10, 4);
-        expect(JSON.stringify(gameInfo)).toBe(JSON.stringify(expectedGameInfo));
+        expect(gameInfo).toEqual(expectedGameInfo);
     });
 
     // Insert new tests here

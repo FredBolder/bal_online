@@ -2823,6 +2823,12 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
           break;
       }
     }
+    if (Object.prototype.hasOwnProperty.call(p, "xStart")) {
+      p.xStart = p.x;
+    }
+    if (Object.prototype.hasOwnProperty.call(p, "yStart")) {
+      p.yStart = p.y;
+    }
   }
 }
 

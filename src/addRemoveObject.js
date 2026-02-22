@@ -88,6 +88,9 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             let fish = {
                 x,
                 y,
+                xStart: x,
+                yStart: y,
+                maxDistX: 0,
                 direction: Math.random() > 0.5 ? 6 : 4,
                 blocked: false,
                 outOfWater: 0,
@@ -326,6 +329,9 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             let fish = {
                 x,
                 y,
+                xStart: x,
+                yStart: y,
+                maxDistX: 0,
                 direction: Math.random() > 0.5 ? 6 : 4,
                 palette: 2,
                 shape: 2,

@@ -309,6 +309,7 @@ export function checkSettings(data, settings) {
     { name: "$instrument", params: 4, xy: true },
     { name: "$inverted", params: 3, xy: true },
     { name: "$lavacanmove", params: 1, xy: false },
+    { name: "$maxdistx", params: 3, xy: true },
     { name: "$movermode", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
@@ -564,6 +565,15 @@ export function checkSettings(data, settings) {
             case "$lavacanmove":
               if (!["yes", "no"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}yes or no expected.\n`;
+              }
+              break;
+            case "$maxdistx":
+              if (validXY && !["f", 27, "Ҽ", 243].includes(data[y][x])) {
+                msg += `${settingNr(i)}No fish found at the coordinates ${x}, ${y}.\n`;
+              }
+              val_int = tryParseInt(values[2], -1);
+              if (val_int < 0) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for distance.\n`;
               }
               break;
             case "$movermode":
@@ -1824,6 +1834,22 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 break;
               default:
                 break;
+            }
+          }
+          break;
+        case "$maxdistx":
+          if (values.length === 3) {
+            val_int = tryParseInt(values[2], -1);
+            if (validXY && (val_int >= 0)) {
+              idx = findElementByCoordinates(x, y, gameInfo.redFish);
+              if (idx >= 0) {
+                gameInfo.redFish[idx].maxDistX = val_int;
+              } else {
+                idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+                if (idx >= 0) {
+                  gameInfo.tropicalFish[idx].maxDistX = val_int;
+                }
+              }
             }
           }
           break;

@@ -43,6 +43,13 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.horizontalElevators[idx2].right = gameInfo.horizontalElevators[idx1].right;
             }
             break;
+        case 27:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.redFish);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.redFish);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.redFish[idx2].maxDistX = gameInfo.redFish[idx1].maxDistX;
+            }
+            break;
         case 157:
             idx1 = findElementByCoordinates(x1, y1, gameInfo.musicBoxes);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.musicBoxes);
@@ -151,6 +158,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx1 = findElementByCoordinates(x1, y1, gameInfo.tropicalFish);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.tropicalFish);
             if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.tropicalFish[idx2].maxDistX = gameInfo.tropicalFish[idx1].maxDistX;
                 gameInfo.tropicalFish[idx2].palette = gameInfo.tropicalFish[idx1].palette;
                 gameInfo.tropicalFish[idx2].shape = gameInfo.tropicalFish[idx1].shape;
                 gameInfo.tropicalFish[idx2].tail = gameInfo.tropicalFish[idx1].tail;

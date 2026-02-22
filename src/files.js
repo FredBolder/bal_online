@@ -469,6 +469,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    for (let i = 0; i < gameInfo.redFish.length; i++) {
+        const fish = gameInfo.redFish[i];
+        if (fish.maxDistX > 0) {
+            line = `$maxdistx: ${fish.x}, ${fish.y}, ${fish.maxDistX}`;
+            lines.push(line);
+        }
+    }
+
     for (let i = 0; i < gameInfo.seaAnemones.length; i++) {
         const seaAnemone = gameInfo.seaAnemones[i];
         if (seaAnemone.palette !== 1) {
@@ -491,6 +499,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
         const fish = gameInfo.tropicalFish[i];
+        if (fish.maxDistX > 0) {
+            line = `$maxdistx: ${fish.x}, ${fish.y}, ${fish.maxDistX}`;
+            lines.push(line);
+        }
         if (fish.fins !== 3) {
             line = `$fins: ${fish.x}, ${fish.y}, ${fish.fins}`;
             lines.push(line);

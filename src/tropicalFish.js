@@ -1,5 +1,5 @@
 import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
-import { freeToSwim } from "./fish.js";
+import { freeToSwim, xWithinLimits } from "./fish.js";
 import { buildBody, buildBodyCurves, drawBody } from "./fishBody.js";
 import { drawBackgroundFins, drawForegroundFins } from "./fishFins.js";
 import { nearestFoodPosition } from "./fishFood.js";
@@ -385,7 +385,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
     let upOrDown = false;
 
     function canGo(backData, x, y, clownFish) {
-       return ((backData[y][x] === 23) || ((backData[y][x] === 252) && clownFish));
+        return ((backData[y][x] === 23) || ((backData[y][x] === 252) && clownFish));
     }
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
@@ -459,7 +459,8 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
         }
 
         const foodPosition = nearestFoodPosition(backData, gameInfo, fish.x, fish.y);
-        if ((foodPosition.x >= 0) && (foodPosition.y >= 0)) {
+        if ((foodPosition.x >= 0) && (foodPosition.y >= 0) &&
+            ((fish.maxDistX === 0) || (Math.abs(foodPosition.x - fish.x) <= fish.maxDistX))) {
             goToFood = true;
             foodX = foodPosition.x;
             foodY = foodPosition.y;
@@ -496,14 +497,14 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
         }
         if (fish.direction === 6) {
             changed = false;
-            if (fish.x < maxX) {
+            if ((fish.x < maxX) && (goToFood || xWithinLimits(fish, fish.x + 1))) {
                 if ((gameData[fish.y][fish.x + 1] === 0) && canGo(backData, fish.x + 1, fish.y, clownFish)) {
                     fish.x++;
                     changed = true;
                 }
             }
             if (!changed) {
-                if ((fish.x > 0) && !goToFood) {
+                if ((fish.x > 0) && !goToFood && xWithinLimits(fish, fish.x - 1)) {
                     if ((gameData[fish.y][fish.x - 1] === 0) && canGo(backData, fish.x - 1, fish.y, clownFish)) {
                         fish.direction = 4;
                         changed = true;
@@ -513,14 +514,14 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
             }
         } else if (fish.direction === 4) {
             changed = false;
-            if (fish.x > 0) {
+            if ((fish.x > 0) && (goToFood || xWithinLimits(fish, fish.x - 1))) {
                 if ((gameData[fish.y][fish.x - 1] === 0) && canGo(backData, fish.x - 1, fish.y, clownFish)) {
                     fish.x--;
                     changed = true;
                 }
             }
             if (!changed) {
-                if ((fish.x < maxX) && !goToFood) {
+                if ((fish.x < maxX) && !goToFood && xWithinLimits(fish, fish.x + 1)) {
                     if ((gameData[fish.y][fish.x + 1] === 0) && canGo(backData, fish.x + 1, fish.y, clownFish)) {
                         fish.direction = 6;
                         changed = true;

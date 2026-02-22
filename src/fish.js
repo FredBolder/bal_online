@@ -27,7 +27,7 @@ export function fishIsCloseToBlueBall(gameInfo) {
 
 export function freeToSwim(x1, x2, y, backData, gameData, clownFish) {
   function isFree(x, y) {
-      return ((gameData[y][x] === 0) && ((backData[y][x] !== 252) || clownFish));
+    return ((gameData[y][x] === 0) && ((backData[y][x] !== 252) || clownFish));
   }
 
   if (Math.abs(x1 - x2) < 2) return true;
@@ -101,7 +101,9 @@ export function moveFish(backData, gameData, gameInfo) {
         blueX = gameInfo.blueBall2.x;
         blueY = gameInfo.blueBall2.y;
       }
-      attack = true;
+      if ((fish.maxDistX === 0) || (Math.abs(blueX - fish.x) <= fish.maxDistX)) {
+        attack = true;
+      }
     }
     if (attack) {
       if (fish.x > blueX) {
@@ -134,14 +136,14 @@ export function moveFish(backData, gameData, gameInfo) {
     }
     if (fish.direction === 6) {
       changed = false;
-      if (fish.x < maxX) {
+      if ((fish.x < maxX) && (attack || xWithinLimits(fish, fish.x + 1))) {
         if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
           fish.x++;
           changed = true;
         }
       }
       if (!changed) {
-        if ((fish.x > 0) && !attack) {
+        if ((fish.x > 0) && !attack && xWithinLimits(fish, fish.x - 1)) {
           if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
             fish.direction = 4;
             changed = true;
@@ -151,14 +153,14 @@ export function moveFish(backData, gameData, gameInfo) {
       }
     } else if (fish.direction === 4) {
       changed = false;
-      if (fish.x > 0) {
+      if ((fish.x > 0) && (attack || xWithinLimits(fish, fish.x - 1))) {
         if ((gameData[fish.y][fish.x - 1] === 0) && (backData[fish.y][fish.x - 1] === 23)) {
           fish.x--;
           changed = true;
         }
       }
       if (!changed) {
-        if ((fish.x < maxX) && !attack) {
+        if ((fish.x < maxX) && !attack && xWithinLimits(fish, fish.x + 1)) {
           if ((gameData[fish.y][fish.x + 1] === 0) && (backData[fish.y][fish.x + 1] === 23)) {
             fish.direction = 6;
             changed = true;
@@ -199,5 +201,9 @@ export function moveFish(backData, gameData, gameInfo) {
 
     gameData[fish.y][fish.x] = 27;
   }
+}
+
+export function xWithinLimits(fish, x) {
+  return ((fish.maxDistX === 0) || ((x >= (fish.xStart - fish.maxDistX)) && (x <= (fish.xStart + fish.maxDistX))));
 }
 
