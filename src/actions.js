@@ -8,13 +8,14 @@ export const actionList = [
     "Drop purple ball",
     "Drop orange ball",
     "Drop pink ball",
+    "Drop brown ball",
     "Shrink object",
     "Freeze water",
     "Use telekinetic power",
     "Feed fish"
 ];
 
-export const actionKeys = [11, 1, 10, 9, 2, 3, 4, 6, 7, 8];
+export const actionKeys = [12, 1, 11, 10, 2, 3, 4, 6, 7, 8];
 
 export function hasAction(gameInfo, actionIndex) {
     switch (actionIndex) {
@@ -37,12 +38,14 @@ export function hasAction(gameInfo, actionIndex) {
         case 8:
             return gameInfo.hasPinkBall;
         case 9:
-            return gameInfo.hasShrinker;
+            return gameInfo.hasBrownBall;
         case 10:
-            return gameInfo.hasFreezeGun;
+            return gameInfo.hasShrinker;
         case 11:
-            return gameInfo.hasTelekineticPower;
+            return gameInfo.hasFreezeGun;
         case 12:
+            return gameInfo.hasTelekineticPower;
+        case 13:
             return gameInfo.hasFishFood;
         default:
             return false;

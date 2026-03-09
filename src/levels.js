@@ -41,7 +41,7 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5018;
+export const series6End = 5019;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6021;
 export const seriesMusic2Start = 6200;
@@ -512,7 +512,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "mover", "phaseability", "pinkball", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
+              if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "mover", "phaseability", "pinkball", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -1615,6 +1615,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             gameTicks = tryParseInt(values[1], -1);
             if ((gameTicks >= 1) || ((gameTicks >= 0) && ["mover", "tropicalfish"].includes(valuesLowerCase[0]))) {
               switch (valuesLowerCase[0]) {
+                case "brownball":
+                  gameVars.brownCountTo = gameTicks;
+                  break;
                 case "conveyorbelt":
                   gameVars.conveyorBeltCountTo = gameTicks;
                   break;

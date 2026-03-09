@@ -1,6 +1,8 @@
 import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
 
 export function checkCopiers(gameData, gameInfo) {
+    let brownBall1 = null;
+    let brownBall2 = null;
     let copied = false;
     let element = 0;
     let elementBottom = -1;
@@ -27,7 +29,7 @@ export function checkCopiers(gameData, gameInfo) {
                 redBall2 = null;
                 if ((copier.x > 2) && (copier.x < (gameData[0].length - 2))) {
                     element = gameData[copier.y - 1][copier.x];
-                    if (([4, 40, 93, 94, 203].includes(element)) && (gameData[copier.y][copier.x - 1] === 0) && (gameData[copier.y][copier.x + 1] === 0)) {
+                    if (([4, 40, 93, 94, 203, 253].includes(element)) && (gameData[copier.y][copier.x - 1] === 0) && (gameData[copier.y][copier.x + 1] === 0)) {
                         info.updated = true;
                         gameData[copier.y - 1][copier.x] = 0;
                         if (gameData[copier.y][copier.x - 2] === 0) {
@@ -67,6 +69,15 @@ export function checkCopiers(gameData, gameInfo) {
                                     pinkBall1.counter = 0;
                                 }
                                 break;
+                            case 253:
+                                idx = findElementByCoordinates(copier.x, copier.y - 1, gameInfo.brownBalls);
+                                if (idx >= 0) {
+                                    brownBall1 = gameInfo.brownBalls[idx];
+                                    brownBall1.x = x;
+                                    brownBall1.y = copier.y;
+                                    brownBall1.counter = 0;
+                                }
+                                break;
                             default:
                                 break;
                         }
@@ -94,6 +105,10 @@ export function checkCopiers(gameData, gameInfo) {
                             case 203:
                                 pinkBall2 = { x: x, y: copier.y, delete: false, counter: 0 };
                                 gameInfo.pinkBalls.push(pinkBall2);
+                                break;
+                            case 253:
+                                brownBall2 = { x: x, y: copier.y, delete: false, counter: 0 };
+                                gameInfo.brownBalls.push(brownBall2);
                                 break;
                             default:
                                 break;

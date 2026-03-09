@@ -206,6 +206,11 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.blueBall2, rows, rotateLeft);
       }
 
+      // Brown balls
+      for (let i = 0; i < gameInfo.brownBalls.length; i++) {
+        rotateXY(gameInfo.brownBalls[i], rows, rotateLeft);
+      }
+
       // Changers
       for (let i = 0; i < gameInfo.changers.length; i++) {
         let swap = false;

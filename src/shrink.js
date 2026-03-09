@@ -99,6 +99,13 @@ export function shrinkObject(gameData, gameInfo, direction) {
                 gameInfo.pinkBalls.splice(idx, 1);
             }
             break;
+        case 253:
+            gameData[yTarget][xTarget] = 254;
+            idx = findElementByCoordinates(xTarget, yTarget, gameInfo.brownBalls);
+            if (idx >= 0) {
+                gameInfo.brownBalls.splice(idx, 1);
+            }
+            break;
         default:
             break;
     }

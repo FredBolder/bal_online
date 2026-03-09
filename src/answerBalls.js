@@ -261,6 +261,7 @@ export function updateWeight(backData, gameData, gameInfo, gameVars) {
                         weight += 1;
                         break;
                     case 203:
+                    case 253:
                         weight += 0.5;
                         break;
                     default:

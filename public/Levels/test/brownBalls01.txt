@@ -1,0 +1,25 @@
+$gameticks: brownball, 10
+$changer: 13, 5, yes, brown, pink
+$changer: 4, 9, no, brown, pink
+$activesides: 12, 12, bottom
+$movermode: 12, 12, brownball
+$pistonmode: 6, 7, momentary
+$group: 8, 9, 10
+$pistonmode: 8, 9, brownball
+$group: 6, 3, 2
+$group: 1, 5, 2
+11111111111111111
+1        °=     1
+1         =     1
+1     m   =     1
+1     1111=     1
+1њЬЬ      =Ь Ӄ  1
+1111      =111  1
+1     ËЬЬ =     1
+1     111 =     1
+1   Ӄ   Ë =     1
+11        =     1
+13        =     1
+1         = η   1
+1   Ь Ь  2=    m1
+11111111111111111

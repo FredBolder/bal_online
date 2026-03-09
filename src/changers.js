@@ -2,7 +2,7 @@ import { getGameDataValue } from "./balUtils.js";
 import { addObject, removeObject } from "./addRemoveObject.js";
 
 export function checkColor(color) {
-    return ["all", "lightblue", "orange", "pink", "purple", "red", "white", "yellow"].includes(color.toLowerCase());
+    return ["all", "brown", "lightblue", "orange", "pink", "purple", "red", "white", "yellow"].includes(color.toLowerCase());
 }
 
 function colorToObject(color) {
@@ -11,6 +11,9 @@ function colorToObject(color) {
     switch (color.toLowerCase()) {
         case "white":
             result = 4;
+            break;
+        case "brown":
+            result = 253;
             break;
         case "lightblue":
             result = 5;
@@ -44,6 +47,9 @@ function objectToColor(objectNumber) {
         case 4:
         case 245:
             result = "white";
+            break;
+        case 253:
+            result = "brown";
             break;
         case 5:
             result = "lightblue";

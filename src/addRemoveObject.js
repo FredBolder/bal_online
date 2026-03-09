@@ -391,6 +391,11 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             gameInfo.seaAnemones.push(seaAnemone);
             break;
         }
+        case 253: {
+            let brownBall = { x, y, delete: false, counter: 0 };
+            gameInfo.brownBalls.push(brownBall);
+            break;
+        }
         default:
             break;
     }
@@ -737,6 +742,12 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
             idx = findElementByCoordinates(x, y, gameInfo.fishFood);
             if (idx >= 0) {
                 gameInfo.fishFood.splice(idx, 1);
+            }
+            break;
+        case 253:
+            idx = findElementByCoordinates(x, y, gameInfo.brownBalls);
+            if (idx >= 0) {
+                gameInfo.brownBalls.splice(idx, 1);
             }
             break;
         default:

@@ -73,6 +73,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    if (gameVars.brownCountTo !== 5) {
+        line = `$gameticks: brownball, ${gameVars.brownCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.colorElevator !== "#464646") {
         line = `$color: elevator, ${gameVars.colorElevator}`;
         lines.push(line);

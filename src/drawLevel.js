@@ -508,6 +508,10 @@ function drawLevel(
     drawLine(ctx, xc + d3, ymin + d2, xc + d3, ymin + d2 + (sticks * w2 * factor), "black");
   }
 
+  function drawBrownBall() {
+    ctx.drawImage(elements.elementBrown, xmin, ymin, w1, w2);
+  }
+
   function drawChanger(x, y) {
     let color1 = "blue";
     let color2 = "white";
@@ -2218,6 +2222,9 @@ function drawLevel(
     switch (mode) {
       case "blueball":
         color = "blue";
+        break;
+      case "brownball":
+        color = displayColor("brown");
         break;
       case "whiteball":
         color = "white";
@@ -4065,6 +4072,12 @@ function drawLevel(
           break;
         case 251:
           drawFishFoodObject(currentCol, currentRow);
+          break;
+        case 253:
+          drawBrownBall();
+          break;
+        case 254:
+          drawSmallBall(displayColor("brown"));
           break;
         case 1000:
           // For manual only (empty)

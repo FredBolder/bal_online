@@ -1,6 +1,6 @@
 import { findElementByCoordinates, getGameDataValue, moveObject } from "./balUtils.js";
 
-const moveableObjects = [2, 4, 5, 8, 9, 27, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242, 243, 244, 245, 246, 247, 248];
+const moveableObjects = [2, 4, 5, 8, 9, 27, 28, 40, 82, 98, 84, 85, 86, 93, 94, 138, 139, 171, 172, 173, 203, 242, 243, 244, 245, 246, 247, 248, 253];
 
 function canMove(objectNumber, mode, inverted) {
     let result = false;
@@ -11,6 +11,9 @@ function canMove(objectNumber, mode, inverted) {
             return true;
         case "blueball":
             result = objectNumber === 2;
+            break;
+        case "brownball":
+            result = objectNumber === 253;
             break;
         case "directionchanger":
             result = [84, 85, 86, 138, 139].includes(objectNumber);
@@ -220,7 +223,7 @@ export function moverDirections() {
 }
 
 export function moverModes() {
-    return ["all", "blueball", "directionchanger", "grayball", "lightblueball", "orangeball", "pinkball", "purpleball", "redball", "whiteball", "yellowball"];
+    return ["all", "blueball", "brownball", "directionchanger", "grayball", "lightblueball", "orangeball", "pinkball", "purpleball", "redball", "whiteball", "yellowball"];
 }
 
 

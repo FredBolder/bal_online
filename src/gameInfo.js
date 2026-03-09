@@ -370,6 +370,11 @@ export function getGameInfo(backData, gameData) {
                     result.fishFood.push(food);
                     break;
                 }
+                case 253: {
+                    let brownBall = { x: j, y: i, delete: false, counter: 0 };
+                    result.brownBalls.push(brownBall);
+                    break;
+                }
                 default:
                     break;
             }
@@ -1177,6 +1182,17 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Fish food, ` + extraInfo;
                 break;
+            case 253:
+                idx = findElementByCoordinates(x, y, gameInfo.brownBalls);
+                if (idx >= 0) {
+                    obj = gameInfo.brownBalls[idx];
+                    extraInfo = `Delete: ${obj.delete}, Counter:  ${obj.counter}`;
+                }
+                info = `Brown ball, ` + extraInfo;
+                break;
+            case 254:
+                info = `Small brown ball`;
+                break;
             default:
                 break;
         }
@@ -1215,6 +1231,7 @@ export function initGameInfo(info) {
     info.blueBall1 = { x: -1, y: -1 };
     info.blueBall2 = { x: -1, y: -1 };
     info.blueBall = info.blueBall1;
+    info.brownBalls = [];
     info.changers = [];
     info.conveyorBelts = [];
     info.copiers = [];
@@ -1229,6 +1246,7 @@ export function initGameInfo(info) {
     info.fishFood = [];
     info.forces = [];
     info.greenBalls = 0;
+    info.hasBrownBall = false;
     info.hasCoilSpring = false;
     info.hasDivingGlasses = false;
     info.hasFishFood = false;
@@ -1286,6 +1304,7 @@ export function initGameInfo(info) {
 export function initGameVars(vars) {
     vars.ballPushersActive = false;
     vars.bgcolor = [];
+    vars.brownCountTo = 5;
     vars.checkFishOutOfWaterCounter = 0;
     vars.colorElevator = "#464646";
     vars.colorElevatorArrow = "white";

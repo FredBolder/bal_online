@@ -72,6 +72,7 @@ import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
 import imgBlueSad from "../Images/blue_ball_sad.svg";
+import imgBrown from "../Images/brown_ball.svg";
 import imgFreezeGun from "../Images/freeze_gun.svg";
 import imgGray from "../Images/gray_ball.svg";
 import imgGreen from "../Images/green_ball.svg";
@@ -166,6 +167,7 @@ function BalPage() {
   const createLevelCanvas = useRef(null);
   const deleteColumn = useRef(null);
   const deleteRow = useRef(null);
+  const elementBrown = useRef(null);
   const elementDiving = useRef(null);
   const elementFreezeGun = useRef(null);
   const elementGray = useRef(null);
@@ -220,6 +222,7 @@ function BalPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function runGameScheduler(checkAll = true) {
+    let saveBrownBall = false;
     let saveCoilSpring = false;
     let saveDivingGlasses = false;
     let saveFreezeGun = false;
@@ -241,6 +244,7 @@ function BalPage() {
     let saveYellowBall = false;
 
     function loadItems() {
+      gameInfo.hasBrownBall = saveBrownBall;
       gameInfo.hasCoilSpring = saveCoilSpring;
       gameInfo.hasDivingGlasses = saveDivingGlasses;
       gameInfo.hasFreezeGun = saveFreezeGun;
@@ -263,6 +267,7 @@ function BalPage() {
     }
 
     function saveItems() {
+      saveBrownBall = gameInfo.hasBrownBall;
       saveCoilSpring = gameInfo.hasCoilSpring;
       saveDivingGlasses = gameInfo.hasDivingGlasses;
       saveFreezeGun = gameInfo.hasFreezeGun;
@@ -951,6 +956,9 @@ function BalPage() {
       msg += item;
     }
 
+    if (gameInfo.hasBrownBall) {
+      addItem("brown ball");
+    }
     if (gameInfo.hasCoilSpring) {
       addItem("coil spring");
     }
@@ -1129,8 +1137,8 @@ function BalPage() {
                 break;
               default:
                 // page 1
-                arr1 = [2, 3, 140, 168, 192, 195, 197, 202, 204, 4, 200, 5, 126, 127, 128, 129];
-                arr2 = [130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 0, 0, 0, 2101];
+                arr1 = [2, 3, 140, 168, 192, 195, 197, 202, 204, 254, 4, 200, 5, 126, 127, 128];
+                arr2 = [129, 130, 28, 100, 101, 102, 103, 104, 83, 82, 98, 40, 203, 253, 0, 2101];
                 break;
             }
             break;
@@ -1645,17 +1653,20 @@ function BalPage() {
         case "Drop pink ball":
           actionIndex = 8;
           break;
-        case "Shrink object":
+        case "Drop brown ball":
           actionIndex = 9;
           break;
-        case "Freeze water":
+        case "Shrink object":
           actionIndex = 10;
           break;
-        case "Use telekinetic power":
+        case "Freeze water":
           actionIndex = 11;
           break;
-        case "Feed fish":
+        case "Use telekinetic power":
           actionIndex = 12;
+          break;
+        case "Feed fish":
+          actionIndex = 13;
           break;
         default:
           break;
@@ -1692,15 +1703,18 @@ function BalPage() {
         info = dropObject(gameData, gameInfo, "pinkBall");
         break;
       case 9:
-        gameInfo.action = "shrink";
+        info = dropObject(gameData, gameInfo, "brownBall");
         break;
       case 10:
-        gameInfo.action = "freeze";
+        gameInfo.action = "shrink";
         break;
       case 11:
-        info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
+        gameInfo.action = "freeze";
         break;
       case 12:
+        info = moveObjectWithTelekineticPower(gameData, gameInfo, gameVars);
+        break;
+      case 13:
         gameInfo.action = "feedFish";
         break;
       default:
@@ -2411,6 +2425,7 @@ function BalPage() {
 
     ctx = createLevelCanvas.current.getContext("2d");
     const elements = {
+      elementBrown: elementBrown.current,
       elementDiving: elementDiving.current,
       elementFreezeGun: elementFreezeGun.current,
       elementGray: elementGray.current,
@@ -2465,6 +2480,7 @@ function BalPage() {
 
     ctx = gameCanvas.current.getContext("2d");
     const elements = {
+      elementBrown: elementBrown.current,
       elementDiving: elementDiving.current,
       elementFreezeGun: elementFreezeGun.current,
       elementGray: elementGray.current,
@@ -3366,7 +3382,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball"], 0);
+                newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball", "brown ball"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;
@@ -3387,7 +3403,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "direction changer", "gray ball", "light blue ball",
+                newValue = await showSelect("Movers", "Mode:", ["all", "blue ball", "brown ball", "direction changer", "gray ball", "light blue ball",
                   "orange ball", "pink ball", "purple ball", "red ball", "white ball", "yellow ball"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
@@ -3688,6 +3704,7 @@ function BalPage() {
               newValue = null;
               if (createLevelMenu === menuToNumber("balls")) {
                 newValue = await showSelect("Changers", "Colors:", [
+                  "all, brown",
                   "all, light blue",
                   "all, orange",
                   "all, pink",
@@ -3695,7 +3712,15 @@ function BalPage() {
                   "all, red",
                   "all, white",
                   "all, yellow",
+                  "brown, light blue",
+                  "brown, orange",
+                  "brown, pink",
+                  "brown, purple",
+                  "brown, red",
+                  "brown, white",
+                  "brown, yellow",
                   "light blue, all",
+                  "light blue, brown",
                   "light blue, orange",
                   "light blue, pink",
                   "light blue, purple",
@@ -3703,6 +3728,7 @@ function BalPage() {
                   "light blue, white",
                   "light blue, yellow",
                   "orange, all",
+                  "orange, brown",
                   "orange, light blue",
                   "orange, pink",
                   "orange, purple",
@@ -3710,6 +3736,7 @@ function BalPage() {
                   "orange, white",
                   "orange, yellow",
                   "pink, all",
+                  "pink, brown",
                   "pink, light blue",
                   "pink, orange",
                   "pink, purple",
@@ -3717,6 +3744,7 @@ function BalPage() {
                   "pink, white",
                   "pink, yellow",
                   "purple, all",
+                  "purple, brown",
                   "purple, light blue",
                   "purple, orange",
                   "purple, pink",
@@ -3724,6 +3752,7 @@ function BalPage() {
                   "purple, white",
                   "purple, yellow",
                   "red, all",
+                  "red, brown",
                   "red, light blue",
                   "red, orange",
                   "red, pink",
@@ -3731,6 +3760,7 @@ function BalPage() {
                   "red, white",
                   "red, yellow",
                   "white, all",
+                  "white, brown",
                   "white, light blue",
                   "white, orange",
                   "white, pink",
@@ -3738,6 +3768,7 @@ function BalPage() {
                   "white, red",
                   "white, yellow",
                   "yellow, all",
+                  "yellow, brown",
                   "yellow, light blue",
                   "yellow, orange",
                   "yellow, pink",
@@ -4092,6 +4123,7 @@ function BalPage() {
             </div>
           </div>
           <div style={{ display: "none" }}>
+            <img ref={elementBrown} src={imgBrown} />
             <img ref={elementDiving} src={imgBlueDiving} />
             <img ref={elementHappy} src={imgBlueHappy} />
             <img ref={elementSad} src={imgBlueSad} />

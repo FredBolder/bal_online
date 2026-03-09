@@ -19,6 +19,7 @@ import { checkLava, moveLava } from "./lava.js";
 import { checkMagnets } from "./magnets.js";
 import { checkMovers } from "./movers.js";
 //import { checkMusicBoxes } from "./musicBoxes.js";
+import { checkBrownBalls, moveBrownBalls } from "./brownBalls.js";
 import { moveOrangeBalls } from "./orangeBalls.js";
 import { movePinkBalls } from "./pinkBalls.js";
 import { checkPistonsDetector, checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
@@ -391,6 +392,13 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
 
         if (movePinkBalls(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
+        }
+
+        if (moveBrownBalls(backData, gameData, gameInfo, gameVars)) {
+            updateCanvas = true;
+        }
+        if (checkBrownBalls(gameData, gameInfo)) {
             updateCanvas = true;
         }
 

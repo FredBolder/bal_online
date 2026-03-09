@@ -45,6 +45,9 @@ function canBeTakenOrIsEmpty(gameInfo, object) {
     case 204:
       result = !gameInfo.hasPinkBall;
       break;
+    case 254:
+      result = !gameInfo.hasBrownBall;
+      break;
     default:
       break;
   }
@@ -1016,6 +1019,12 @@ export function charToNumber(c) {
     case "Ӑ":
       result = 252;
       break;
+    case "Ь":
+      result = 253;
+      break;
+    case "ъ":
+      result = 254;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1243,6 +1252,9 @@ export function displayColor(color) {
   let result = "";
 
   switch (color.toLowerCase()) {
+    case "brown":
+      result = "#5C3920";
+      break;
     case "lightblue":
       // was #90D5FF"
       result = "#00BFFF";
@@ -1273,7 +1285,8 @@ export function dropObject(gameData, gameInfo, object) {
   let xTarget = -1;
   let yTarget = -1;
 
-  if (((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) ||
+  if (((object === "brownBall") && !gameInfo.hasBrownBall) ||
+    ((object === "lightBlueBall") && !gameInfo.hasLightBlueBall) ||
     ((object === "orangeBall") && !gameInfo.hasOrangeBall) ||
     ((object === "pinkBall") && !gameInfo.hasPinkBall) ||
     ((object === "purpleBall") && !gameInfo.hasPurpleBall) ||
@@ -1294,6 +1307,11 @@ export function dropObject(gameData, gameInfo, object) {
   }
   if (result.update) {
     switch (object) {
+      case "brownBall":
+        gameData[yTarget][xTarget] = 253;
+        gameInfo.brownBalls.push({ x: xTarget, y: yTarget, delete: false, counter: 0 });
+        gameInfo.hasBrownBall = false;
+        break;
       case "lightBlueBall":
         gameData[yTarget][xTarget] = 5;
         gameInfo.hasLightBlueBall = false;
@@ -1359,7 +1377,7 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
       const elAbove = getGameDataValue(gameData, i, y - 1);
       const forceDown = hasForceDown(gameData, gameInfo, i, y - 1);
       const pushing = (pushingDown && (i === gameInfo.blueBall.x) && ((y - 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 27, 40, 93, 94, 203, 243, 245, 248].includes(elAbove)) {
+      if ([2, 4, 8, 27, 40, 93, 94, 203, 243, 245, 248, 253].includes(elAbove)) {
         if (pushing || gravityDown || forceDown) {
           weight = true;
         }
@@ -1412,7 +1430,7 @@ export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xma
       const elBelow = gameData[y + 1][i];
       const forceUp = hasForceUp(gameData, gameInfo, i, y + 1);
       const pushing = (pushingUp && (i === gameInfo.blueBall.x) && ((y + 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 40, 93, 94, 203, 245].includes(elBelow)) {
+      if ([2, 4, 8, 40, 93, 94, 203, 245, 253].includes(elBelow)) {
         if (pushing || gravityUp || forceUp) {
           weight = true;
         }
@@ -1565,6 +1583,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       break;
     case 252:
       result = gameInfo.seaAnemones;
+      break;
+    case 253:
+      result = gameInfo.brownBalls;
       break;
     default:
       result = null;
@@ -2411,6 +2432,12 @@ export function numberToChar(n) {
     case 252:
       result = "Ӑ";
       break;
+    case 253:
+      result = "Ь";
+      break;
+    case 254:
+      result = "ъ";
+      break;
     case 1000:
       // For manual only
       result = "|";
@@ -2591,6 +2618,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 252:
       updateObject(gameInfo.seaAnemones, oldX, oldY, newX, newY);
       break;
+    case 253:
+      updateObject(gameInfo.brownBalls, oldX, oldY, newX, newY);
+      break;
     default:
       break;
   }
@@ -2627,6 +2657,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.answerBalls.length; i++) {
     refs.push(gameInfo.answerBalls[i]);
+  }
+
+  for (let i = 0; i < gameInfo.brownBalls.length; i++) {
+    refs.push(gameInfo.brownBalls[i]);
   }
 
   for (let i = 0; i < gameInfo.changers.length; i++) {
@@ -2899,8 +2933,8 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       gameInfo.hasTelekineticPower = true;
       result.message = "You have now telekinetic power! By pressing the Space bar or the A button you can move the ";
       result.message += "following objects that are close to you (one at the time): white ball, light blue ball, yellow ball, "
-      result.message += "purple ball, answer ball, moveable gray ball, orange ball, pink ball, direction changer, time bomb, ";
-      result.message += "conveyor belt part, mover";
+      result.message += "purple ball, answer ball, moveable gray ball, orange ball, pink ball, brown ball, direction changer, ";
+      result.message += "time bomb, conveyor belt part, mover";
       break;
     case 156:
       result.slowDownYellow = gameVars.yellowSlowdownerDurationTicks;
@@ -2995,7 +3029,7 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       break;
     case 199:
       if (!gameInfo.hasShrinker) {
-        result.message = "You have now a shrinker. You can shrink white, light blue, red, yellow, purple and orange balls by pressing the Space bar or ";
+        result.message = "You have now a shrinker. You can shrink white, light blue, red, yellow, purple, orange, pink and brown balls by pressing the Space bar or ";
         result.message += "the A button and after that pressing a move key or button to indicate the direction (for example the right arrow key)."
         gameInfo.hasShrinker = true;
       }
@@ -3039,6 +3073,12 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       gameInfo.hasFishFood = true;
       result.message = "You have now fish food. You can feed tropical fish by pressing the Space bar or the A button and ";
       result.message += "after that pressing a move key or button to indicate the direction (for example the right arrow key)."
+      break;
+    case 254:
+      if (!gameInfo.hasBrownBall) {
+        result.message = smallBallText("brown");
+        gameInfo.hasBrownBall = true;
+      }
       break;
     default:
       break;
@@ -3091,6 +3131,9 @@ export function updateObjectByObjectNumber(gameInfo, objectNumber, x1, y1, x2, y
         case 244:
           list[i].ready = true;
           break;
+        case 253:
+          list[i].counter = 0;
+          break;
         default:
           break;
       }
@@ -3099,8 +3142,8 @@ export function updateObjectByObjectNumber(gameInfo, objectNumber, x1, y1, x2, y
   }
 }
 
-function whiteOrBlueOrPink(n) {
-  return [4, 5, 203, 245].includes(n);
+function whiteBluePinkBrown(n) {
+  return [4, 5, 203, 245, 253].includes(n);
 }
 
 export function zeroArray(rows, columns) {
@@ -3162,7 +3205,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   if (x > 1) {
     // 1 object
     objectNumber = row[x - 1];
-    if (!result.player && (whiteOrBlueOrPink(objectNumber) || canMoveAlone(gameData, gameInfo, x - 1, y, "moveLeft")) && (row[x - 2] === 0) &&
+    if (!result.player && (whiteBluePinkBrown(objectNumber) || canMoveAlone(gameData, gameInfo, x - 1, y, "moveLeft")) && (row[x - 2] === 0) &&
       !hasForceRight(gameData, gameInfo, x - 1, y)) {
       row[x - 2] = row[x - 1];
       row[x - 1] = 2;
@@ -3221,7 +3264,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
   }
   if (x > 2) {
     // 2 white or blue balls
-    if (!result.player && whiteOrBlueOrPink(row[x - 1]) && whiteOrBlueOrPink(row[x - 2]) && (row[x - 3] === 0)) {
+    if (!result.player && whiteBluePinkBrown(row[x - 1]) && whiteBluePinkBrown(row[x - 2]) && (row[x - 3] === 0)) {
       updateObjectByObjectNumber(gameInfo, row[x - 2], x - 2, y, x - 3, y);
       updateObjectByObjectNumber(gameInfo, row[x - 1], x - 1, y, x - 2, y);
       row[x - 3] = row[x - 2];
@@ -3350,7 +3393,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   if (x < maxX - 1) {
     // 1 object
     objectNumber = row[x + 1];
-    if (!result.player && (whiteOrBlueOrPink(objectNumber) || canMoveAlone(gameData, gameInfo, x + 1, y, "moveRight")) && (row[x + 2] === 0) &&
+    if (!result.player && (whiteBluePinkBrown(objectNumber) || canMoveAlone(gameData, gameInfo, x + 1, y, "moveRight")) && (row[x + 2] === 0) &&
       !hasForceLeft(gameData, gameInfo, x + 1, y)) {
       row[x + 2] = row[x + 1];
       row[x + 1] = 2;
@@ -3409,7 +3452,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
   }
   if (x < maxX - 2) {
     // 2 white or blue balls
-    if (!result.player && whiteOrBlueOrPink(row[x + 1]) && whiteOrBlueOrPink(row[x + 2]) && (row[x + 3] === 0)) {
+    if (!result.player && whiteBluePinkBrown(row[x + 1]) && whiteBluePinkBrown(row[x + 2]) && (row[x + 3] === 0)) {
       updateObjectByObjectNumber(gameInfo, row[x + 2], x + 2, y, x + 3, y);
       updateObjectByObjectNumber(gameInfo, row[x + 1], x + 1, y, x + 2, y);
       row[x + 3] = row[x + 2];
