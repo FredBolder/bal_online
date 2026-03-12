@@ -1,3 +1,5 @@
+$gameticks: brownball, 1
+$extra: 1
 $stonepattern: 2
 $pistonmode: 15, 18, momentary
 111111111111111111111
