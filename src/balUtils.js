@@ -8,6 +8,7 @@ import { moverIsMovingBlueBall, moverDirections } from "./movers.js";
 import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
+import { removeStyle } from "./questionStones.js";
 import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
@@ -366,6 +367,20 @@ export function changeSides(gameInfo, x, y, sides) {
         gameInfo.movers[idx].activeSides.push(sides[i]);
       }
     }
+  }
+  return idx;
+}
+
+export function changeStyle(gameInfo, x, y, style) {
+  let idx = -1;
+  let question = "";
+
+  idx = findElementByCoordinates(x, y, gameInfo.questionStones);
+  if (idx >= 0) {
+    question = gameInfo.questionStones[idx].question;
+    question = removeStyle(question);
+    question = "{" + style + "}" + question;
+    gameInfo.questionStones[idx].question = question;
   }
   return idx;
 }

@@ -3,13 +3,13 @@ $stonepattern: 2
 $answer: 11, 11, 1
 $answer: 17, 14, 0.5
 $pistonmode: 7, 15, momentary
-$question: 12, 14, sin
+$question: 12, 14, {center}sin
 $answer: 12, 14, 1
-$question: 13, 14, (90°)
+$question: 13, 14, {center}(90°)
 $answer: 13, 14, 1
-$question: 12, 17, sin
+$question: 12, 17, {center}sin
 $answer: 12, 17, 0.5
-$question: 13, 17, (60°)
+$question: 13, 17, {center}(60°)
 $answer: 13, 17, 0.5
 11111111111111111111
 1++ =1k        =1 T1

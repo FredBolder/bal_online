@@ -1,6 +1,6 @@
 $extra: 1
-$hint: The language is French.
 $gameticks: mover, 10
+$hint: The language is French.
 $stonepattern: 2
 $answer: 3, 4, 8
 $answer: 2, 7, 5
@@ -35,29 +35,29 @@ $pistonmode: 7, 4, purpleball
 $sticky: 9, 7, yes
 $group: 8, 16, 2
 $group: 12, 16, 2
-$question: 14, 4, s
+$question: 14, 4, {center}s
 $answer: 14, 4, 7
-$question: 15, 4, e
+$question: 15, 4, {center}e
 $answer: 15, 4, 7
-$question: 16, 4, p
+$question: 16, 4, {center}p
 $answer: 16, 4, 7
-$question: 17, 4, t
+$question: 17, 4, {center}t
 $answer: 17, 4, 7
-$question: 14, 7, c
+$question: 14, 7, {center}c
 $answer: 14, 7, 5
-$question: 15, 7, i
+$question: 15, 7, {center}i
 $answer: 15, 7, 5
-$question: 16, 7, n
+$question: 16, 7, {center}n
 $answer: 16, 7, 5
-$question: 17, 7, q
+$question: 17, 7, {center}q
 $answer: 17, 7, 5
-$question: 14, 9, h
+$question: 14, 9, {center}h
 $answer: 14, 9, 8
-$question: 15, 9, u
+$question: 15, 9, {center}u
 $answer: 15, 9, 8
-$question: 16, 9, i
+$question: 16, 9, {center}i
 $answer: 16, 9, 8
-$question: 17, 9, t
+$question: 17, 9, {center}t
 $answer: 17, 9, 8
 $group: 6, 2, 2
 $group: 8, 4, 2

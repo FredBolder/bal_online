@@ -17,6 +17,7 @@ import { drawTail } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
+import { removeStyle } from "./questionStones.js";
 import { drawSeaAnemone } from "./seaAnemone.js";
 import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
@@ -2626,15 +2627,58 @@ function drawLevel(
   }
 
   function drawQuestionStone(x, y) {
+    let alignment = "middle";
+    let color = "white";
+    const colors = ["black", "blue", "brown", "gray", "green", "orange", "pink", "purple", "red", "white", "yellow"];
     let question = "1+1";
     let idx = 0;
+    let xText = xc;
+    let yText = yc;
 
     idx = findElementByCoordinates(x, y, gameInfo.questionStones);
     if (idx >= 0) {
       question = gameInfo.questionStones[idx].question;
     }
+
+    for (let i = 0; i < colors.length; i++) {
+      if (question.includes("{" + colors[i] + "}")) {
+        color = colors[i];
+      }
+    }
+    if (question.includes("{center}")) {
+      alignment = "center";
+    }
+    if (question.includes("{left}")) {
+      alignment = "left";
+    }
+    if (question.includes("{middle}")) {
+      alignment = "middle";
+    }
+    if (question.includes("{right}")) {
+      alignment = "right";
+    }
+
+    question = removeStyle(question);
     drawStone(x, y);
-    drawText(ctx, xc, yc, question, "middle", "white", w2 * 0.7, w1 * 0.8);
+    switch (alignment) {
+      case "center":
+        xText = xc;
+        yText = ymax - (w2 * 0.2);
+        break;
+      case "left":
+        xText = xmin + (w1 * 0.1);
+        yText = ymax - (w2 * 0.2);
+        break;
+      case "right":
+        xText = xmax - (w1 * 0.1);
+        yText = ymax - (w2 * 0.2);
+        break;
+      default:
+        xText = xc;
+        yText = yc;
+        break;
+    }
+    drawText(ctx, xText, yText, question, alignment, color, w2 * 0.7, w1 * 0.8);
   }
 
   function drawQuarterCircleStoneTopLeft(x, y) {
@@ -4361,6 +4405,9 @@ function drawLevel(
           break;
         case 2200:
           drawWaterColors();
+          break;
+        case 2201:
+          drawAbbreviation("TA");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

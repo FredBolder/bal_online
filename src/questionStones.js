@@ -60,3 +60,15 @@ export function checkQuestionStones(gameData, gameInfo) {
     }
     return update;
 }
+
+export function removeStyle(s) {
+    const styles = [ "black", "blue", "brown", "center", "gray", "green", "left", "middle", "orange", "pink", 
+        "purple", "red", "right", "white", "yellow"];
+    let result = s;
+
+    for (let i = 0; i < styles.length; i++) {
+        const remove = "{" + styles[i] + "}";
+        result = result.replaceAll(remove, "");        
+    }
+    return result;
+}

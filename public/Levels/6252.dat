@@ -7,25 +7,25 @@ $group: 17, 8, 2
 $pistonmode: 17, 8, purpleball
 $group: 18, 11, 3
 $pistonmode: 18, 11, purpleball
-$question: 12, 7, y
+$question: 12, 7, {center}y
 $answer: 12, 7, 2, 1
-$question: 13, 7, =
+$question: 13, 7, {center}=
 $answer: 13, 7, 2, 1
-$question: 14, 7, 2x
+$question: 14, 7, {center}2x
 $answer: 14, 7, 2, 1
-$question: 15, 7, -
+$question: 15, 7, {center}-
 $answer: 15, 7, 2, 1
-$question: 16, 7, 3
+$question: 16, 7, {center}3
 $answer: 16, 7, 2, 1
-$question: 12, 10, y
+$question: 12, 10, {center}y
 $answer: 12, 10, 1, 1
-$question: 13, 10, =
+$question: 13, 10, {center}=
 $answer: 13, 10, 1, 1
-$question: 14, 10, -x
+$question: 14, 10, {center}-x
 $answer: 14, 10, 1, 1
-$question: 15, 10, +
+$question: 15, 10, {center}+
 $answer: 15, 10, 1, 1
-$question: 16, 10, 2
+$question: 16, 10, {center}2
 $answer: 16, 10, 1, 1
 1111111111111111111111
 1    =              31

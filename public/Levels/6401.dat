@@ -16,14 +16,14 @@ $direction: 6, 3, left
 $direction: 7, 3, left
 $direction: 8, 3, left
 $direction: 10, 3, left
+$activesides: 6, 4, bottom
+$direction: 6, 4, left
 $activesides: 13, 5, left
 $direction: 13, 5, left
 $direction: 7, 6, left
 $direction: 8, 6, left
 $direction: 9, 6, left
 $direction: 10, 6, left
-$activesides: 6, 4, bottom
-$direction: 6, 4, left
 $group: 10, 0, 3
 $pistonmode: 10, 0, momentary
 $sticky: 14, 2, yes
@@ -34,25 +34,25 @@ $pistonmode: 7, 8, momentary
 $group: 9, 3, 3
 $group: 6, 6, 4
 $group: 9, 13, 2
-$question: 5, 2, { x: 4,
+$question: 5, 2, {center}{ x: 4,
 $answer: 5, 2, false
-$question: 6, 2, y: 3 }
+$question: 6, 2, {center}y: 3 }
 $answer: 6, 2, false
-$question: 7, 2, ===
+$question: 7, 2, {center}===
 $answer: 7, 2, false
-$question: 8, 2, { x: 4,
+$question: 8, 2, {center}{ x: 4,
 $answer: 8, 2, false
-$question: 9, 2, y: 3 }
+$question: 9, 2, {center}y: 3 }
 $answer: 9, 2, false
-$question: 5, 5, [1,
+$question: 5, 5, {center}[1,
 $answer: 5, 5, true
-$question: 6, 5, 2]
+$question: 6, 5, {center}2]
 $answer: 6, 5, true
-$question: 7, 5, !==
+$question: 7, 5, {center}!==
 $answer: 7, 5, true
-$question: 8, 5, [1,
+$question: 8, 5, {center}[1,
 $answer: 8, 5, true
-$question: 9, 5, 2]
+$question: 9, 5, {center}2]
 $answer: 9, 5, true
 1111111111Ì11111
 111τ11111ηo11111

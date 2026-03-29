@@ -1,0 +1,32 @@
+$question: 2, 2, {center}{red}C
+$answer: 2, 2, 2
+$question: 4, 2, {left}{green}L
+$answer: 4, 2, 2
+$question: 7, 2, {yellow}Q
+$answer: 7, 2, 2
+$question: 7, 3, {purple}Q
+$answer: 7, 3, 2
+$question: 2, 4, {blue}{middle}M
+$answer: 2, 4, 2
+$question: 4, 4, {right}{white}R
+$answer: 4, 4, 2
+$question: 7, 4, {brown}Q
+$answer: 7, 4, 2
+$question: 7, 5, {orange}Q
+$answer: 7, 5, 2
+$question: 7, 6, {pink}Q
+$answer: 7, 6, 2
+$question: 7, 7, {black}Q
+$answer: 7, 7, 2
+$question: 7, 8, {gray}Q
+$answer: 7, 8, 2
+1111111111
+1        1
+1 Ҹ Ҹ  Ҹ 1
+1      Ҹ 1
+1 Ҹ Ҹ  Ҹ 1
+1      Ҹ 1
+1      Ҹ 1
+13     Ҹ 1
+1   2  Ҹ 1
+1111111111

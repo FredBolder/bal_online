@@ -1,6 +1,6 @@
-$hint: The programming language is JavaScript.
 $extra: 1
 $gameticks: mover, 2
+$hint: The programming language is JavaScript.
 $stonepattern: 1
 $answer: 12, 2, 2
 $answer: 9, 5, 3
@@ -18,25 +18,25 @@ $direction: 0, 6, down
 $activesides: 0, 7, right
 $direction: 0, 7, down
 $activesides: 0, 8, right
-$question: 3, 0, let
+$question: 3, 0, {center}let
 $answer: 3, 0, !
-$question: 4, 0, n = 0;
+$question: 4, 0, {center}n = 0;
 $answer: 4, 0, !
-$question: 3, 1, for
+$question: 3, 1, {center}for
 $answer: 3, 1, !
-$question: 4, 1, (let
+$question: 4, 1, {center}(let
 $answer: 4, 1, !
-$question: 5, 1, i = 0;
+$question: 5, 1, {center}i = 0;
 $answer: 5, 1, !
-$question: 6, 1, i <= 3;
+$question: 6, 1, {center}i <= 3;
 $answer: 6, 1, !
-$question: 7, 1, i++)
+$question: 7, 1, {center}i++)
 $answer: 7, 1, !
-$question: 8, 1, n++;
+$question: 8, 1, {center}n++;
 $answer: 8, 1, !
-$question: 3, 2, // n
+$question: 3, 2, {center}// n
 $answer: 3, 2, 4
-$question: 4, 2, = ?
+$question: 4, 2, {center}= ?
 $answer: 4, 2, 4
 $background: 11, 7, 1, 1, 25
 111ҸҸ11111111111

@@ -15,6 +15,7 @@ import {
   changePalette,
   changeQuestion,
   changeShape,
+  changeStyle,
   changeSides,
   changeTicks,
   dropObject,
@@ -118,6 +119,7 @@ let createLevelMenuPages = 2;
 let createLevelMode = "";
 let createLevelObject = -1;
 let createLevelQuestion = "";
+let createLevelQuestionStyle = "";
 let createLevelRaster = false;
 let createLevelSelectedCell = null;
 let createLevelSides = null;
@@ -1242,7 +1244,7 @@ function BalPage() {
             break;
           case 7:
             // Answer balls
-            arr1 = [241, 2142, 242, 245, 2143, 2092];
+            arr1 = [241, 2142, 2201, 242, 245, 2143, 2092];
             arr2 = [0];
             break;
           case 15:
@@ -2997,6 +2999,14 @@ function BalPage() {
                 }
               }
 
+              if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2201)) {
+                if (changeStyle(gameInfo, column, row, createLevelQuestionStyle) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a question stone to set the style.");
+                  }
+                }
+              }
+
               if ((createLevelMenu === menuToNumber("redballs")) && (createLevelObject >= 2045) && (createLevelObject <= 2047)) {
                 if (changeIntelligence(gameData, gameInfo, column, row, createLevelObject - 2045) === -1) {
                   if (oneSelected) {
@@ -3863,6 +3873,26 @@ function BalPage() {
               updateGameCanvas();
             }
             createLevelObject = -1;
+            break;
+          case 2201:
+            ok = false;
+            if (row > 0) {
+              newValue = null;
+              if (createLevelMenu === menuToNumber("answerballs")) {
+                newValue = await showSelect("Question stones", "Text alignment:", [
+                  "center", "left", "middle", "right"
+                ], 0);
+              }
+              if (newValue !== null) {
+                createLevelQuestionStyle = newValue;
+                ok = true;
+              }
+              updateGameCanvas();
+            }
+            if (!ok) {
+              createLevelQuestionStyle = "";
+              createLevelObject = -1;
+            }
             break;
           default:
             break;

@@ -1,10 +1,10 @@
 $extra: 1
 $has: divingglasses
-$question: 8, 7, An
+$question: 8, 7, {center}An
 $answer: 8, 7, Angelfish
-$question: 9, 7, gel
+$question: 9, 7, {center}gel
 $answer: 9, 7, Angelfish
-$question: 10, 7, fish
+$question: 10, 7, {center}fish
 $answer: 10, 7, Angelfish
 $fins: 1, 1, 6
 $palette: 1, 1, 13
@@ -24,11 +24,6 @@ $shape: 4, 3, 5
 $stripes: 4, 3, 4
 $tail: 4, 3, 3
 $answer: 4, 3, Angelfish
-$fins: 3, 8, 2
-$palette: 3, 8, 9
-$shape: 3, 8, 1
-$stripes: 3, 8, 0
-$tail: 3, 8, 7
 $fins: 6, 6, 5
 $palette: 6, 6, 11
 $shape: 6, 6, 9
@@ -39,6 +34,11 @@ $palette: 2, 7, 11
 $shape: 2, 7, 9
 $stripes: 2, 7, 17
 $tail: 2, 7, 7
+$fins: 3, 8, 2
+$palette: 3, 8, 9
+$shape: 3, 8, 1
+$stripes: 3, 8, 0
+$tail: 3, 8, 7
 $background: 9, 0, 1, 1, 23
 $background: 14, 0, 1, 1, 23
 $background: 1, 1, 1, 1, 23
