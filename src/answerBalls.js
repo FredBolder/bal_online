@@ -192,7 +192,11 @@ export function checkComparisons(gameData, gameInfo) {
             } else {
                 idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
                 if (idx >= 0) {
-                    sHorizontal += gameInfo.tropicalFish[idx].answer;
+                    if (!gameInfo.tropicalFish[idx].isDead) {
+                        sHorizontal += gameInfo.tropicalFish[idx].answer;
+                    } else {
+                        sHorizontal += 'INVALID';
+                    }
                 } else {
                     break;
                 }
@@ -218,7 +222,11 @@ export function checkComparisons(gameData, gameInfo) {
             } else {
                 idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
                 if (idx >= 0) {
-                    sVertical += convert(gameInfo.tropicalFish[idx].answer);
+                    if (!gameInfo.tropicalFish[idx].isDead) {
+                        sVertical += convert(gameInfo.tropicalFish[idx].answer);
+                    } else {
+                        sVertical += 'INVALID';
+                    }
                 } else {
                     break;
                 }

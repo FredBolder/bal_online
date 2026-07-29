@@ -48,7 +48,7 @@ export function checkQuestionStones(gameData, gameInfo) {
                 if (!questionStone.disappeared) {
                     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
                     if (idx >= 0) {
-                        if (gameInfo.tropicalFish[idx].answer === questionStone.answer) {
+                        if (!gameInfo.tropicalFish[idx].isDead && (gameInfo.tropicalFish[idx].answer === questionStone.answer)) {
                             questionStone.disappeared = true;
                             gameData[questionStone.y][questionStone.x] = 0;
                             update = true;

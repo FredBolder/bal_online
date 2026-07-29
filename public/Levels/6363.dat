@@ -1,0 +1,54 @@
+$extra: 1
+$has: divingglasses
+$answer: 19, 9, =
+$answer: 20, 9, 3
+$answer: 16, 16, +
+$answer: 16, 17, +
+$changer: 13, 2, no, lightblue, yellow
+$fins: 5, 12, 10
+$palette: 5, 12, 19
+$shape: 5, 12, 7
+$stripes: 5, 12, 0
+$tail: 5, 12, 4
+$answer: 5, 12, 1
+$fins: 13, 10, 10
+$palette: 13, 10, 19
+$shape: 13, 10, 7
+$stripes: 13, 10, 0
+$tail: 13, 10, 4
+$answer: 13, 10, 1
+$fins: 3, 8, 10
+$palette: 3, 8, 19
+$shape: 3, 8, 7
+$stripes: 3, 8, 0
+$tail: 3, 8, 4
+$answer: 3, 8, 1
+$background: 3, 8, 1, 1, 23
+$background: 19, 9, 2, 1, 23
+$background: 13, 10, 1, 1, 23
+$background: 5, 12, 1, 1, 23
+$background: 10, 12, 1, 1, 23
+$background: 10, 15, 1, 1, 23
+$background: 16, 16, 1, 1, 23
+$background: 16, 17, 1, 1, 23
+$background: 6, 18, 1, 1, 23
+11111111111111111111111111111111
+1                  1          11
+1  2  p   9  Ӄ     1          11
+1=11ЏЏЏЏЏЏЏЏЏЏЏЏ   1          31
+1=                 1           1
+1=                 11=1111  1111
+1=                 1 =         1
+1WWWWWWWWWWWWWWWWWW1WWWWWWWWWWW1
+1wwҼwwwwwwwwwwwwwww1wwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwҹҹwwwwwwwwww1
+1wwwwwwwwwwwwҼwwwww1wwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1wwwwwwwwwww1
+1wwwwҼwwwwCwwwwwwww1wwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1wwwwwwwwwww1
+1wwwwwwwwwwwwwwwwww1wwwwwwwwwww1
+1wwwwwwwwwѲwwwwwwww1wwwwwwwwwww1
+1wwwwwwwwwwwwwwwҹww1wwwwwwwwwww1
+1wwwwwwwwwwwwwwwҹww1wwwwwwwwwww1
+1wwwwwcwwwwwwwwwwww1wwwwwwwwwww1
+11111111111111111111111111111111
