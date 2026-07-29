@@ -1,0 +1,85 @@
+$stonepattern: 2
+$extra: 1
+$pattern: 31, 1, 20, 20
+$pattern: 30, 1, 20, 20
+$pattern: 32, 1, 20, 20
+$pattern: 33, 1, 20, 20
+$pattern: 34, 1, 20, 20
+$activesides: 28, 9, right
+$direction: 28, 9, down
+$movermode: 28, 9, lightblueball
+$direction: 33, 11, down
+$movermode: 33, 11, whiteball
+$activesides: 26, 11, bottom
+$direction: 26, 11, up
+$movermode: 26, 11, whiteball
+$direction: 30, 11, down
+$movermode: 30, 11, lightblueball
+$direction: 31, 11, down
+$movermode: 31, 11, lightblueball
+$direction: 32, 11, down
+$movermode: 32, 11, lightblueball
+$direction: 30, 13, down
+$movermode: 30, 13, lightblueball
+$direction: 31, 13, down
+$movermode: 31, 13, lightblueball
+$direction: 32, 13, down
+$movermode: 32, 13, lightblueball
+$activesides: 18, 12, right
+$movermode: 18, 12, whiteball
+$pistonmode: 1, 1, blueball
+$group: 29, 18, 2
+$group: 27, 18, 2
+$group: 25, 18, 2
+$group: 23, 18, 2
+$group: 21, 18, 2
+$group: 19, 18, 2
+$group: 17, 18, 3
+$group: 15, 18, 3
+$group: 13, 18, 3
+$group: 11, 18, 3
+$group: 9, 18, 3
+$group: 7, 18, 3
+$group: 9, 15, 4
+$group: 13, 6, 2
+$group: 23, 6, 2
+$direction: 23, 6, down
+$group: 22, 6, 2
+$direction: 22, 6, down
+$group: 21, 6, 2
+$direction: 21, 6, down
+$group: 20, 6, 2
+$direction: 20, 6, down
+$group: 20, 7, 3
+$direction: 20, 7, up
+$group: 21, 7, 3
+$direction: 21, 7, up
+$group: 22, 7, 3
+$direction: 22, 7, up
+$group: 23, 7, 3
+$direction: 23, 7, up
+$group: 19, 6, 2
+$direction: 19, 6, down
+$group: 19, 7, 3
+$direction: 19, 7, up
+$group: 13, 13, 4
+1111111111111111111111111111111111111
+1Ë 2                        p ЏЏЏЏЏ11
+11 11C                        9999  1
+11 1                          ЏЏЏЏЏ=1
+11 1             c                 =1
+11 1111111111B11Џ11111111          =1
+11 1   1    1m1   1њњњњњ11   5      1
+11 1   l   b111   1њњњњњ1111111111111
+11 1   11111111         1131313131111
+11 1                       њη 555  11
+11 1     ppp              4         1
+11          p           11η111ηηηη1 1
+11 111 11111111111η     11        φ 1
+11 1   1   1kњ55555     111111ηηη11 1
+11 1 4     11111v^1VVVVV111111   11 1
+11 111D1 m        1VVVVV11111111111 1
+11 11111111111111111111111111111111 1
+11    < < < < < < < < < < < < < < < 1
+11Ω1111m1m1m1m1m1m1m1m1m1m1m1m1m1m111
+1111111111111111111111111111111111111

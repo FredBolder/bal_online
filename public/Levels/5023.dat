@@ -1,0 +1,64 @@
+$stonepattern: 1
+$extra: 1
+$direction: 5, 5, left
+$direction: 6, 5, left
+$direction: 7, 5, left
+$direction: 5, 10, left
+$direction: 6, 10, left
+$direction: 7, 10, left
+$direction: 5, 15, left
+$direction: 6, 15, left
+$direction: 7, 15, left
+$activesides: 26, 8, right
+$activesides: 10, 5, left
+$direction: 10, 5, down
+$movermode: 10, 5, lightblueball
+$activesides: 8, 4, right
+$direction: 8, 4, down
+$movermode: 8, 4, lightblueball
+$direction: 17, 17, left
+$direction: 18, 17, left
+$activesides: 17, 11, bottom
+$group: 15, 1, 5
+$pistonmode: 15, 1, momentary
+$group: 19, 1, 8
+$pistonmode: 19, 1, momentary
+$group: 28, 13, 5
+$group: 26, 3, 3
+$pistonmode: 25, 8, momentary
+$group: 11, 5, 2
+$pistonmode: 11, 5, momentary
+$group: 19, 5, 7
+$inverted: 19, 5, yes
+$sticky: 19, 5, yes
+$group: 21, 9, 4
+$pistonmode: 21, 9, momentary
+$group: 6, 2, 2
+$group: 2, 7, 3
+$group: 6, 7, 4
+$group: 2, 12, 5
+$group: 6, 12, 6
+$group: 2, 17, 7
+$group: 6, 17, 8
+$group: 30, 19, 7
+11111111111111111111111111111111
+1  <2>  Φ     1Ë4 1Ë4 Φ      111
+1 m111m 1 11  111 111 1  141 111
+1 11111 1 11             1Ù1 Ѻ11
+1       η 5  111111111111111 Ѯ11
+1ηηη ηηη1 ηËo 11  1Ì1     31  11
+1  < >  1 11 113  1ß1      1  11
+1 m111m 1               1111  11
+1 11111 1 111111111111-11Ëη   11
+1       1 13        1Ëo 1111  31
+1ηηη ηηη1           11 11111   1
+1  < >  1 1=   11η1     ;;;1:  1
+1 m111m 1 1=               111 1
+1 11111 1 1=    E1   5     1Ëo 1
+1       1 1=   D11         111 1
+1ηηη ηηη1 1=     1         151 1
+1  < >  1 1=     8         1 1 1
+1 m111m 1 1=    Eηη         Ӄ  1
+1 11111 1 1=   1111            1
+Φ         1111      111111Ω111m1
+111111111Ω1111111111111111111111

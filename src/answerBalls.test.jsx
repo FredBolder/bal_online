@@ -350,76 +350,148 @@ describe("answerBalls", () => {
         expect(info).toBe(true);
     });
 
-    it("updateWeight A", () => {
+    it("checkComparisons J", () => {
         const gameInfo = {
             ...defaultGameInfo,
             answerBalls: [
-                { x: 1, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-                { x: 2, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-                { x: 3, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-                { x: 4, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+                { x: 2, y: 4, answer: "+", color: "purple", mode: "answerball", delete: false },
+                { x: 4, y: 4, answer: "=", color: "purple", mode: "answerball", delete: false },
+                { x: 5, y: 4, answer: "20", color: "purple", mode: "answerball", delete: false },
             ],
-            blueBall: { x: 1, y: 4 },
+            blueBall: { x: 1, y: 5 },
             greenBalls: 1,
-            pinkBalls: [
-                { x: 4, y: 4, delete: false, counter: defaultGameVars.pinkCountTo },
-            ],
-        };
-        const input = [
-            [1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 40, 0, 0, 1],
-            [1, 2, 0, 4, 203, 0, 1],
-            [1, 242, 242, 242, 242, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-        ];
-        const expectedOutput = copy2dArray(input);
-        updateWeight(inputBack, input, gameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(gameInfo.answerBalls).toEqual([
-            { x: 1, y: 5, answer: "1", color: "purple", mode: "scale", delete: false },
-            { x: 2, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
-            { x: 3, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-            { x: 4, y: 5, answer: "0.5", color: "purple", mode: "scale", delete: false },
-        ]);
-    });
+            tropicalFish: [
+                {
+                    x: 1,
+                    y: 4,
+                    xStart: 1,
+                    yStart: 4,
+                    maxDistX: 0,
+                    direction: 6,
+                    palette: 2,
+                    shape: 2,
+                    tail: 2,
+                    fins: 3,
+                    stripes: 5,
+                    blocked: false,
+                    outOfWater: 0,
+                    isDead: false,
+                    counter: 0,
+                    answer: "15"
+                },
+                {
+                    x: 3,
+                    y: 4,
+                    xStart: 3,
+                    yStart: 4,
+                    maxDistX: 0,
+                    direction: 6,
+                    palette: 2,
+                    shape: 2,
+                    tail: 2,
+                    fins: 3,
+                    stripes: 5,
+                    blocked: false,
+                    outOfWater: 0,
+                    isDead: false,
+                    counter: 0,
+                    answer: "5"
+                }
+            ]
+    };
+    const input = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 243, 242, 243, 242, 242, 1],
+        [1, 2, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 243, 0, 243, 0, 0, 1],
+        [1, 2, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    const info = checkComparisons(input, gameInfo);
+    expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+    expect(info).toBe(true);
+});
 
-    it("updateWeight B", () => {
-        const gameInfo = {
-            ...defaultGameInfo,
-            answerBalls: [
-                { x: 1, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-                { x: 2, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-                { x: 3, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-                { x: 4, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
-            ],
-            blueBall: { x: 1, y: 4 },
-            greenBalls: 1,
-            hasPropeller: true,
-            pinkBalls: [
-                { x: 4, y: 4, delete: false, counter: defaultGameVars.pinkCountTo },
-            ],
-        };
-        const input = [
-            [1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 0, 0, 0, 0, 1],
-            [1, 0, 0, 4, 0, 0, 1],
-            [1, 0, 0, 5, 0, 0, 1],
-            [1, 2, 0, 4, 28, 0, 1],
-            [1, 242, 242, 242, 242, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-        ];
-        const expectedOutput = copy2dArray(input);
-        updateWeight(inputBack, input, gameInfo, defaultGameVars);
-        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
-        expect(gameInfo.answerBalls).toEqual([
-            { x: 1, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
-            { x: 2, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
-            { x: 3, y: 5, answer: "1", color: "purple", mode: "scale", delete: false },
-            { x: 4, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
-        ]);
-    });
+it("updateWeight A", () => {
+    const gameInfo = {
+        ...defaultGameInfo,
+        answerBalls: [
+            { x: 1, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+            { x: 2, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+            { x: 3, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+            { x: 4, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+        ],
+        blueBall: { x: 1, y: 4 },
+        greenBalls: 1,
+        pinkBalls: [
+            { x: 4, y: 4, delete: false, counter: defaultGameVars.pinkCountTo },
+        ],
+    };
+    const input = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 40, 0, 0, 1],
+        [1, 2, 0, 4, 203, 0, 1],
+        [1, 242, 242, 242, 242, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = copy2dArray(input);
+    updateWeight(inputBack, input, gameInfo, defaultGameVars);
+    expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+    expect(gameInfo.answerBalls).toEqual([
+        { x: 1, y: 5, answer: "1", color: "purple", mode: "scale", delete: false },
+        { x: 2, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
+        { x: 3, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+        { x: 4, y: 5, answer: "0.5", color: "purple", mode: "scale", delete: false },
+    ]);
+});
+
+it("updateWeight B", () => {
+    const gameInfo = {
+        ...defaultGameInfo,
+        answerBalls: [
+            { x: 1, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+            { x: 2, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+            { x: 3, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+            { x: 4, y: 5, answer: "2", color: "purple", mode: "scale", delete: false },
+        ],
+        blueBall: { x: 1, y: 4 },
+        greenBalls: 1,
+        hasPropeller: true,
+        pinkBalls: [
+            { x: 4, y: 4, delete: false, counter: defaultGameVars.pinkCountTo },
+        ],
+    };
+    const input = [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 3, 0, 0, 0, 0, 1],
+        [1, 0, 0, 4, 0, 0, 1],
+        [1, 0, 0, 5, 0, 0, 1],
+        [1, 2, 0, 4, 28, 0, 1],
+        [1, 242, 242, 242, 242, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = copy2dArray(input);
+    updateWeight(inputBack, input, gameInfo, defaultGameVars);
+    expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+    expect(gameInfo.answerBalls).toEqual([
+        { x: 1, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
+        { x: 2, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
+        { x: 3, y: 5, answer: "1", color: "purple", mode: "scale", delete: false },
+        { x: 4, y: 5, answer: "0", color: "purple", mode: "scale", delete: false },
+    ]);
+});
 
     // Insert new tests here
 });

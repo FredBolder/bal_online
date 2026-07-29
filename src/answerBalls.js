@@ -50,7 +50,7 @@ export function checkComparisons(gameData, gameInfo) {
         xMax = x;
         while (!stop) {
             x--;
-            if ((x >= 0) && [242, 245].includes(gameData[y][x])) {
+            if ((x >= 0) && [242, 243, 245].includes(gameData[y][x])) {
                 xMin = x;
             } else {
                 stop = true;
@@ -60,7 +60,7 @@ export function checkComparisons(gameData, gameInfo) {
         x = xStart;
         while (!stop) {
             x++;
-            if ((x <= maxX) && [242, 245].includes(gameData[y][x])) {
+            if ((x <= maxX) && [242, 243, 245].includes(gameData[y][x])) {
                 xMax = x;
             } else {
                 stop = true;
@@ -75,7 +75,7 @@ export function checkComparisons(gameData, gameInfo) {
         yMax = y;
         while (!stop) {
             y--;
-            if ((y >= 0) && [242, 245].includes(gameData[y][x])) {
+            if ((y >= 0) && [242, 243, 245].includes(gameData[y][x])) {
                 yMin = y;
             } else {
                 stop = true;
@@ -85,7 +85,7 @@ export function checkComparisons(gameData, gameInfo) {
         y = yStart;
         while (!stop) {
             y++;
-            if ((y <= maxY) && [242, 245].includes(gameData[y][x])) {
+            if ((y <= maxY) && [242, 243, 245].includes(gameData[y][x])) {
                 yMax = y;
             } else {
                 stop = true;
@@ -190,7 +190,12 @@ export function checkComparisons(gameData, gameInfo) {
                 indexList.push(idx);
                 sHorizontal += convert(gameInfo.answerBalls[idx].answer);
             } else {
-                break;
+                idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+                if (idx >= 0) {
+                    sHorizontal += gameInfo.tropicalFish[idx].answer;
+                } else {
+                    break;
+                }
             }
         }
         if (check(sHorizontal)) {
@@ -211,7 +216,12 @@ export function checkComparisons(gameData, gameInfo) {
                 indexList.push(idx);
                 sVertical += convert(gameInfo.answerBalls[idx].answer);
             } else {
-                break;
+                idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+                if (idx >= 0) {
+                    sVertical += convert(gameInfo.tropicalFish[idx].answer);
+                } else {
+                    break;
+                }
             }
         }
         if (check(sVertical)) {
