@@ -39,7 +39,16 @@ export const ModalProvider = ({ children }) => {
           ))}
         </p>
         <div className="modal-button-container">
-          <button autoFocus className="modal-button" onClick={() => close(true)}>OK</button>
+          <button
+            autoFocus
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(true));
+            }}
+          >
+            OK
+          </button>
         </div>
       </div>
     ));
@@ -50,8 +59,24 @@ export const ModalProvider = ({ children }) => {
       <div>
         <p>{message}</p>
         <div className="modal-button-container">
-          <button className="modal-button" onClick={() => close("YES")}>Yes</button>
-          <button className="modal-button" onClick={() => close("NO")}>No</button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close("YES"));
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close("NO"));
+            }}
+          >
+            No
+          </button>
         </div>
       </div>
     ));
@@ -77,8 +102,24 @@ export const ModalProvider = ({ children }) => {
           }}
         />
         <div className="modal-button-container">
-          <button className="modal-button" onClick={() => close(inputValue)}>OK</button>
-          <button className="modal-button" onClick={() => close(null)}>Cancel</button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(inputValue));
+            }}
+          >
+            OK
+          </button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(null));
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     ));
@@ -109,8 +150,24 @@ export const ModalProvider = ({ children }) => {
           ))}
         </select>
         <div className="modal-button-container">
-          <button className="modal-button" onClick={() => close(selectValue)}>OK</button>
-          <button className="modal-button" onClick={() => close(null)}>Cancel</button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(selectValue));
+            }}
+          >
+            OK
+          </button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(null));
+            }}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     ));
