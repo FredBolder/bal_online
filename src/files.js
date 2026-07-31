@@ -161,6 +161,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.pistonsRepeatFastModeCountTo !== 15) {
+        line = `$gameticks: piston, ${gameVars.pistonsRepeatFastModeCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.plantsSwayAmount !== 10) {
         line = `$plantsswayamount: ${gameVars.plantsSwayAmount}`;
         lines.push(line);
