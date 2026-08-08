@@ -251,6 +251,12 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.delay[i], rows, rotateLeft);
       }
 
+      // Detectors
+      for (let i = 0; i < gameInfo.detectors.length; i++) {
+        rotateXY(gameInfo.detectors[i], rows, rotateLeft);
+        // TODO: Active sides
+      }
+
       // Disappearing stones
       for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
         rotateXY(gameInfo.disappearingStones[i], rows, rotateLeft);
@@ -342,6 +348,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       for (let i = 0; i < gameInfo.movers.length; i++) {
         rotateXY(gameInfo.movers[i], rows, rotateLeft);
         gameInfo.movers[i].direction = rotateDirection(gameInfo.movers[i].direction, rotateLeft);
+        // TODO: Active sides
       }
 
       // Music boxes

@@ -191,6 +191,16 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.seaAnemones[idx2].shape = gameInfo.seaAnemones[idx1].shape;
             }
             break;
+        case 255:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.detectors);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.detectors);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.detectors[idx2].activeSides.length = 0;
+                for (let i = 0; i < gameInfo.detectors[idx1].activeSides.length; i++) {
+                    gameInfo.detectors[idx2].activeSides.push(gameInfo.detectors[idx1].activeSides[i]);
+                }
+            }
+            break;
         default:
             break;
     }
@@ -329,6 +339,12 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
             if (idx >= 0) {
                 return { arr: gameInfo.seaAnemones, idx };
+            }
+            break;
+        case 255:
+            idx = findElementByCoordinates(x, y, gameInfo.detectors);
+            if (idx >= 0) {
+                return { arr: gameInfo.detectors, idx };
             }
             break;
         default:

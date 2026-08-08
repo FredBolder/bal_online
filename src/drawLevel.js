@@ -141,6 +141,25 @@ function drawLevel(
     }
   }
 
+  function drawActiveSides(activeSides) {
+    const activeColor = "#16cc16ff";
+    const d1 = w1 * 0.1;
+    const d2 = w1 * 0.1;
+
+    if (activeSides.includes("top")) {
+      drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, activeColor);
+    }
+    if (activeSides.includes("bottom")) {
+      drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, activeColor);
+    }
+    if (activeSides.includes("left")) {
+      drawLine(ctx, xmin + d1, ymin + d1 + d2, xmin + d1, ymax - d1 - d2, activeColor);
+    }
+    if (activeSides.includes("right")) {
+      drawLine(ctx, xmax - d1, ymin + d1 + d2, xmax - d1, ymax - d1 - d2, activeColor);
+    }
+  }
+
   function drawAllTeleports() {
     for (let i = 0; i < gameInfo.teleports.length; i++) {
       const teleport = gameInfo.teleports[i];
@@ -674,6 +693,18 @@ function drawLevel(
   function drawDelay() {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "white", true);
     drawText(ctx, xc, yc, "t", "middle", "black", w2 * 0.7, w1 * 0.8);
+  }
+
+  function drawDetector(x, y) {
+    let activeSides = ["top"];
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.detectors);
+    if (idx >= 0) {
+      activeSides = gameInfo.detectors[idx].activeSides;
+    }
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
+    drawActiveSides(activeSides);
   }
 
   function drawDetonator(x, y) {
@@ -1544,12 +1575,9 @@ function drawLevel(
   }
 
   function drawMover(x, y) {
-    const activeColor = "#16cc16ff";
     let color = "white";
-    const d1 = w1 * 0.1;
-    const d2 = w1 * 0.1;
-    const d3 = w1 * 0.13;
-    const d4 = w1 * 0.12;
+    const d1 = w1 * 0.13;
+    const d2 = w1 * 0.12;
     let activeSides = ["top"];
     let direction = "right";
     let idx = -1;
@@ -1567,18 +1595,7 @@ function drawLevel(
       mode = gameInfo.movers[idx].mode.toLowerCase();
     }
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
-    if (activeSides.includes("top")) {
-      drawLine(ctx, xmin + d1 + d2, ymin + d1, xmax - d1 - d2, ymin + d1, activeColor);
-    }
-    if (activeSides.includes("bottom")) {
-      drawLine(ctx, xmin + d1 + d2, ymax - d1, xmax - d1 - d2, ymax - d1, activeColor);
-    }
-    if (activeSides.includes("left")) {
-      drawLine(ctx, xmin + d1, ymin + d1 + d2, xmin + d1, ymax - d1 - d2, activeColor);
-    }
-    if (activeSides.includes("right")) {
-      drawLine(ctx, xmax - d1, ymin + d1 + d2, xmax - d1, ymax - d1 - d2, activeColor);
-    }
+    drawActiveSides(activeSides);
     drawArrow(direction, "white", "#464646", { box: false });
 
     xObject = xc;
@@ -1623,7 +1640,7 @@ function drawLevel(
       showInverted = true;
     }
     if (mode === "directionchanger") {
-      drawFilledBox(ctx, xObject - d3, yObject - d3, d3 + d3, d3 + d3, displayColor("yellow"), false);
+      drawFilledBox(ctx, xObject - d1, yObject - d1, d1 + d1, d1 + d1, displayColor("yellow"), false);
       showInverted = true;
     }
     if (showInverted && inverted) {
@@ -1632,8 +1649,8 @@ function drawLevel(
       } else {
         color = "red";
       }
-      drawLine(ctx, xObject - d4, yObject - d4, xObject + d4, yObject + d4, color);
-      drawLine(ctx, xObject - d4, yObject + d4, xObject + d4, yObject - d4, color);
+      drawLine(ctx, xObject - d2, yObject - d2, xObject + d2, yObject + d2, color);
+      drawLine(ctx, xObject - d2, yObject + d2, xObject + d2, yObject - d2, color);
     }
   }
 
@@ -4122,6 +4139,9 @@ function drawLevel(
           break;
         case 254:
           drawSmallBall(displayColor("brown"));
+          break;
+        case 255:
+          drawDetector(currentCol, currentRow);
           break;
         case 1000:
           // For manual only (empty)

@@ -71,7 +71,7 @@ export function changeMoverMode(gameInfo, x, y, mode) {
     return idx;
 }
 
-export function checkMovers(gameData, gameInfo, gameVars, checkBlue) {
+export function checkMovers(gameData, gameInfo, gameVars, checkBlue = false) {
     const top = 0;
     const bottom = 1;
     const left = 2;

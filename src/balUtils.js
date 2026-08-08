@@ -1040,6 +1040,9 @@ export function charToNumber(c) {
     case "ъ":
       result = 254;
       break;
+    case "Ⴀ":
+      result = 255;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1049,6 +1052,7 @@ export function charToNumber(c) {
   }
   // More possible characters
   // https://www.w3schools.com/charsets/ref_utf_cyrillic.asp
+  // https://www.w3schools.com/charsets/ref_utf_georgian.asp
   return result;
 }
 
@@ -2452,6 +2456,9 @@ export function numberToChar(n) {
       break;
     case 254:
       result = "ъ";
+      break;
+    case 255:
+      result = "Ⴀ";
       break;
     case 1000:
       // For manual only
