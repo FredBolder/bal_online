@@ -374,8 +374,8 @@ export function checkSettings(data, settings) {
               if (values.length < 3) {
                 msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
               }
-              if (validXY && !["η", 178].includes(data[y][x])) {
-                msg += `${settingNr(i)}No mover found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["η", 178, "Ⴀ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No mover or detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$addnotes":
@@ -512,7 +512,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", 
+              if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava",
                 "mover", "phaseability", "pinkball", "piston", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
@@ -1445,29 +1445,35 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
       }
       switch (name) {
         case "$activesides":
-          if (values.length >= 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.movers);
-              if (idx >= 0) {
-                gameInfo.movers[idx].activeSides.length = 0;
-                gameInfo.movers[idx].activeSides = [];
-                for (let side = 2; side < values.length; side++) {
-                  gameInfo.movers[idx].activeSides.push(values[side]);
-                }
-              }
+          if (values.length < 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.movers);
+          if (idx >= 0) {
+            gameInfo.movers[idx].activeSides.length = 0;
+            gameInfo.movers[idx].activeSides = [];
+            for (let side = 2; side < values.length; side++) {
+              gameInfo.movers[idx].activeSides.push(values[side]);
+            }
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.detectors);
+          if (idx >= 0) {
+            gameInfo.detectors[idx].activeSides.length = 0;
+            gameInfo.detectors[idx].activeSides = [];
+            for (let side = 2; side < values.length; side++) {
+              gameInfo.detectors[idx].activeSides.push(values[side]);
             }
           }
           break;
         case "$addnotes":
-          if (values.length >= 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-              if (idx >= 0) {
-                gameInfo.musicBoxes[idx].noteIndex = 0;
-                for (let note = 2; note < values.length; note++) {
-                  gameInfo.musicBoxes[idx].notes.push(values[note]);
-                }
-              }
+          if (values.length < 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+          if (idx >= 0) {
+            gameInfo.musicBoxes[idx].noteIndex = 0;
+            for (let note = 2; note < values.length; note++) {
+              gameInfo.musicBoxes[idx].notes.push(values[note]);
             }
           }
           break;
@@ -1489,101 +1495,106 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$answerballmode":
-          if (values.length === 3) {
-            if (validXY && (answerBallModes().includes(valuesLowerCase[2]))) {
-              idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-              if (idx >= 0) {
-                gameInfo.answerBalls[idx].mode = valuesLowerCase[2];
-                if (gameInfo.answerBalls[idx].mode === "scale") {
-                  gameInfo.answerBalls[idx].answer = "0";
-                }
+          if (values.length !== 3) {
+            break;
+          }
+          if (validXY && (answerBallModes().includes(valuesLowerCase[2]))) {
+            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
+            if (idx >= 0) {
+              gameInfo.answerBalls[idx].mode = valuesLowerCase[2];
+              if (gameInfo.answerBalls[idx].mode === "scale") {
+                gameInfo.answerBalls[idx].answer = "0";
               }
             }
           }
           break;
         case "$background":
-          if (values.length === 5) {
-            w = tryParseInt(values[2], -1);
-            h = tryParseInt(values[3], -1);
-            element = tryParseInt(values[4], -1);
-            if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
-              ([20, 23, 25, 80, 90, 137].includes(element))) {
-              for (let posY = y; posY < (y + h); posY++) {
-                for (let posX = x; posX < (x + w); posX++) {
-                  backData[posY][posX] = element;
-                }
+          if (values.length !== 5) {
+            break;
+          }
+          w = tryParseInt(values[2], -1);
+          h = tryParseInt(values[3], -1);
+          element = tryParseInt(values[4], -1);
+          if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
+            ([20, 23, 25, 80, 90, 137].includes(element))) {
+            for (let posY = y; posY < (y + h); posY++) {
+              for (let posX = x; posX < (x + w); posX++) {
+                backData[posY][posX] = element;
               }
             }
           }
           break;
         case "$bgcolor":
         case "$fgcolor":
-          if (values.length === 5) {
-            w = tryParseInt(values[2], -1);
-            h = tryParseInt(values[3], -1);
-            color = values[4];
-            if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
-              if (name === "$bgcolor") {
-                gameVars.bgcolor.push({ x, y, w, h, color });
-              } else {
-                gameVars.fgcolor.push({ x, y, w, h, color });
-              }
+          if (values.length !== 5) {
+            break;
+          }
+          w = tryParseInt(values[2], -1);
+          h = tryParseInt(values[3], -1);
+          color = values[4];
+          if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0) && (color !== "")) {
+            if (name === "$bgcolor") {
+              gameVars.bgcolor.push({ x, y, w, h, color });
+            } else {
+              gameVars.fgcolor.push({ x, y, w, h, color });
             }
           }
           break;
         case "$changer":
-          if (values.length === 5) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.changers);
-              if (idx >= 0) {
-                switch (valuesLowerCase[2]) {
-                  case "no":
-                    gameInfo.changers[idx].horizontal = false;
-                    break;
-                  case "yes":
-                    gameInfo.changers[idx].horizontal = true;
-                    break;
-                  default:
-                    break;
-                }
-                gameInfo.changers[idx].color1 = valuesLowerCase[3];
-                gameInfo.changers[idx].color2 = valuesLowerCase[4];
-              }
+          if (values.length !== 5 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.changers);
+          if (idx >= 0) {
+            switch (valuesLowerCase[2]) {
+              case "no":
+                gameInfo.changers[idx].horizontal = false;
+                break;
+              case "yes":
+                gameInfo.changers[idx].horizontal = true;
+                break;
+              default:
+                break;
             }
+            gameInfo.changers[idx].color1 = valuesLowerCase[3];
+            gameInfo.changers[idx].color2 = valuesLowerCase[4];
           }
           break;
         case "$color":
-          if (values.length === 2) {
-            if (["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
-              color = valuesLowerCase[1];
-              switch (valuesLowerCase[0]) {
-                case "elevator":
-                  gameVars.colorElevator = color;
-                  break;
-                case "elevatorarrow":
-                  gameVars.colorElevatorArrow = color;
-                  break;
-                case "water":
-                  gameVars.colorWater = color;
-                  break;
-                default:
-                  break;
-              }
+          if (values.length !== 2) {
+            break;
+          }
+          if (["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
+            color = valuesLowerCase[1];
+            switch (valuesLowerCase[0]) {
+              case "elevator":
+                gameVars.colorElevator = color;
+                break;
+              case "elevatorarrow":
+                gameVars.colorElevatorArrow = color;
+                break;
+              case "water":
+                gameVars.colorWater = color;
+                break;
+              default:
+                break;
             }
           }
           break;
         case "$conveyorbeltmode":
-          if (values.length === 3) {
-            if (validXY && (conveyorBeltModes().includes(valuesLowerCase[2]))) {
-              changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
-            }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (conveyorBeltModes().includes(valuesLowerCase[2])) {
+            changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
           }
           break;
         case "$direction":
-          if (values.length === 3) {
-            if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
-              changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
-            }
+          if (values.length !== 3) {
+            break;
+          }
+          if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
+            changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
           }
           break;
         case "$displaysize":
@@ -1601,86 +1612,90 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$fins":
-          if (values.length === 3) {
-            val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishFinVariations)) {
-              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-              if (idx >= 0) {
-                gameInfo.tropicalFish[idx].fins = val_int;
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 1) && (val_int <= tropicalFishFinVariations)) {
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+              gameInfo.tropicalFish[idx].fins = val_int;
             }
           }
           break;
         case "$gameticks":
-          if (values.length === 2) {
-            gameTicks = tryParseInt(values[1], -1);
-            if ((gameTicks >= 1) || ((gameTicks >= 0) && ["mover", "tropicalfish"].includes(valuesLowerCase[0]))) {
-              switch (valuesLowerCase[0]) {
-                case "brownball":
-                  gameVars.brownCountTo = gameTicks;
-                  break;
-                case "conveyorbelt":
-                  gameVars.conveyorBeltCountTo = gameTicks;
-                  break;
-                case "disappearingstone":
-                  gameVars.disappearingStonesCountTo = gameTicks;
-                  break;
-                case "elevator":
-                  gameVars.elevatorCountTo = gameTicks;
-                  break;
-                case "fish":
-                  gameVars.fishCountTo = gameTicks;
-                  break;
-                case "ice":
-                  gameVars.iceCountTo = gameTicks;
-                  break;
-                case "lava":
-                  gameVars.lavaCountTo = gameTicks;
-                  break;
-                case "mover":
-                  gameVars.moverCountTo = gameTicks;
-                  break;
-                case "phaseability":
-                  gameVars.phaseTicks = gameTicks;
-                  break;
-                case "pinkball":
-                  gameVars.pinkCountTo = gameTicks;
-                  break;
-                case "piston":
-                  gameVars.pistonsRepeatFastModeCountTo = gameTicks;
-                  break;
-                case "timebomb":
-                  gameVars.timeBombsTime = gameTicks;
-                  break;
-                case "tropicalfish":
-                  gameVars.tropicalFishCountToOverride = gameTicks;
-                  break;
-                case "yellowslowdowner":
-                  gameVars.yellowSlowdownerDurationTicks = gameTicks;
-                  break;
-                default:
-                  break;
-              }
+          if (values.length !== 2) {
+            break;
+          }
+          gameTicks = tryParseInt(values[1], -1);
+          if ((gameTicks >= 1) || ((gameTicks >= 0) && ["mover", "tropicalfish"].includes(valuesLowerCase[0]))) {
+            switch (valuesLowerCase[0]) {
+              case "brownball":
+                gameVars.brownCountTo = gameTicks;
+                break;
+              case "conveyorbelt":
+                gameVars.conveyorBeltCountTo = gameTicks;
+                break;
+              case "disappearingstone":
+                gameVars.disappearingStonesCountTo = gameTicks;
+                break;
+              case "elevator":
+                gameVars.elevatorCountTo = gameTicks;
+                break;
+              case "fish":
+                gameVars.fishCountTo = gameTicks;
+                break;
+              case "ice":
+                gameVars.iceCountTo = gameTicks;
+                break;
+              case "lava":
+                gameVars.lavaCountTo = gameTicks;
+                break;
+              case "mover":
+                gameVars.moverCountTo = gameTicks;
+                break;
+              case "phaseability":
+                gameVars.phaseTicks = gameTicks;
+                break;
+              case "pinkball":
+                gameVars.pinkCountTo = gameTicks;
+                break;
+              case "piston":
+                gameVars.pistonsRepeatFastModeCountTo = gameTicks;
+                break;
+              case "timebomb":
+                gameVars.timeBombsTime = gameTicks;
+                break;
+              case "tropicalfish":
+                gameVars.tropicalFishCountToOverride = gameTicks;
+                break;
+              case "yellowslowdowner":
+                gameVars.yellowSlowdownerDurationTicks = gameTicks;
+                break;
+              default:
+                break;
             }
           }
           break;
         case "$gameticksxy":
-          if (values.length === 3) {
-            gameTicks = tryParseInt(values[2], -1);
-            if (validXY && (gameTicks >= 1)) {
-              idx = findElementByCoordinates(x, y, gameInfo.delays);
-              if (idx >= 0) {
-                gameInfo.delays[idx].gameTicks = gameTicks;
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          gameTicks = tryParseInt(values[2], -1);
+          if (gameTicks >= 1) {
+            idx = findElementByCoordinates(x, y, gameInfo.delays);
+            if (idx >= 0) {
+              gameInfo.delays[idx].gameTicks = gameTicks;
             }
           }
           break;
         case "$group":
-          if (values.length === 3) {
-            group = tryParseInt(values[2], -1);
-            if (validXY && (group >= 1) && (group <= 32)) {
-              changeGroup(gameInfo, x, y, group);
-            }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          group = tryParseInt(values[2], -1);
+          if ((group >= 1) && (group <= 32)) {
+            changeGroup(gameInfo, x, y, group);
           }
           break;
         case "$has":
@@ -1775,209 +1790,217 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           gameVars.hint = value;
           break;
         case "$ignorepattern":
-          if (values.length === 4) {
-            w = tryParseInt(values[2], -1);
-            h = tryParseInt(values[3], -1);
-            if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0)) {
-              gameVars.ignorePattern.push({ x, y, w, h })
-            }
+          if (values.length !== 4) {
+            break;
+          }
+          w = tryParseInt(values[2], -1);
+          h = tryParseInt(values[3], -1);
+          if ((x >= 0) && (y >= 0) && (w > 0) && (h > 0)) {
+            gameVars.ignorePattern.push({ x, y, w, h })
           }
           break;
         case "$instrument":
-          if (values.length >= 4) {
-            instrument = valuesLowerCase[2];
-            volume = tryParseInt(values[3], -1);
-            if (validXY && (volume >= 0) && (volume <= 100)) {
-              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-              if (idx >= 0) {
-                gameInfo.musicBoxes[idx].instrument = instrument;
-                gameInfo.musicBoxes[idx].volume = volume;
-              }
+          if (values.length < 4 || !validXY) {
+            break;
+          }
+          instrument = valuesLowerCase[2];
+          volume = tryParseInt(values[3], -1);
+          if ((volume >= 0) && (volume <= 100)) {
+            idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+            if (idx >= 0) {
+              gameInfo.musicBoxes[idx].instrument = instrument;
+              gameInfo.musicBoxes[idx].volume = volume;
             }
           }
           break;
         case "$inverted":
-          if (values.length === 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.pistons);
-              if (idx >= 0) {
-                switch (valuesLowerCase[2]) {
-                  case "no":
-                    gameInfo.pistons[idx].inverted = false;
-                    break;
-                  case "yes":
-                    gameInfo.pistons[idx].inverted = true;
-                    break;
-                  default:
-                    break;
-                }
-              }
-              if (idx === -1) {
-                idx = findElementByCoordinates(x, y, gameInfo.movers);
-                if (idx >= 0) {
-                  switch (valuesLowerCase[2]) {
-                    case "no":
-                      gameInfo.movers[idx].inverted = false;
-                      break;
-                    case "yes":
-                      gameInfo.movers[idx].inverted = true;
-                      break;
-                    default:
-                      break;
-                  }
-                }
-              }
-            }
+          if (values.length !== 3 || !validXY) {
+            break;
           }
-          break;
-        case "$lavacanmove":
-          if (values.length === 1) {
-            switch (valuesLowerCase[0]) {
+          idx = findElementByCoordinates(x, y, gameInfo.pistons);
+          if (idx >= 0) {
+            switch (valuesLowerCase[2]) {
               case "no":
-                gameVars.lavaCanMove = false;
+                gameInfo.pistons[idx].inverted = false;
                 break;
               case "yes":
-                gameVars.lavaCanMove = true;
+                gameInfo.pistons[idx].inverted = true;
                 break;
               default:
                 break;
             }
           }
+          if (idx === -1) {
+            idx = findElementByCoordinates(x, y, gameInfo.movers);
+            if (idx >= 0) {
+              switch (valuesLowerCase[2]) {
+                case "no":
+                  gameInfo.movers[idx].inverted = false;
+                  break;
+                case "yes":
+                  gameInfo.movers[idx].inverted = true;
+                  break;
+                default:
+                  break;
+              }
+            }
+          }
+          break;
+        case "$lavacanmove":
+          if (values.length !== 1) {
+            break;
+          }
+          switch (valuesLowerCase[0]) {
+            case "no":
+              gameVars.lavaCanMove = false;
+              break;
+            case "yes":
+              gameVars.lavaCanMove = true;
+              break;
+            default:
+              break;
+          }
           break;
         case "$maxdistx":
-          if (values.length === 3) {
-            val_int = tryParseInt(values[2], -1);
-            if (validXY && (val_int >= 0)) {
-              idx = findElementByCoordinates(x, y, gameInfo.redFish);
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if (val_int >= 0) {
+            idx = findElementByCoordinates(x, y, gameInfo.redFish);
+            if (idx >= 0) {
+              gameInfo.redFish[idx].maxDistX = val_int;
+            } else {
+              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
               if (idx >= 0) {
-                gameInfo.redFish[idx].maxDistX = val_int;
-              } else {
-                idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-                if (idx >= 0) {
-                  gameInfo.tropicalFish[idx].maxDistX = val_int;
-                }
+                gameInfo.tropicalFish[idx].maxDistX = val_int;
               }
             }
           }
           break;
         case "$movermode":
-          if (values.length === 3) {
-            if (validXY && (moverModes().includes(valuesLowerCase[2]))) {
-              idx = findElementByCoordinates(x, y, gameInfo.movers);
-              if (idx >= 0) {
-                gameInfo.movers[idx].mode = valuesLowerCase[2];
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (moverModes().includes(valuesLowerCase[2])) {
+            idx = findElementByCoordinates(x, y, gameInfo.movers);
+            if (idx >= 0) {
+              gameInfo.movers[idx].mode = valuesLowerCase[2];
             }
           }
           break;
         case "$musicbox":
-          if (values.length === 4) {
-            mode = valuesLowerCase[2];
-            gameTicks = tryParseInt(values[3], -1);
-            if (validXY && musicBoxModes().includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
-              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-              if (idx >= 0) {
-                gameInfo.musicBoxes[idx].mode = mode;
-                gameInfo.musicBoxes[idx].delay = gameTicks;
-              }
+          if (values.length !== 4 || !validXY) {
+            break;
+          }
+          mode = valuesLowerCase[2];
+          gameTicks = tryParseInt(values[3], -1);
+          if (musicBoxModes().includes(mode) && (gameTicks >= 1) && (gameTicks <= 100)) {
+            idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+            if (idx >= 0) {
+              gameInfo.musicBoxes[idx].mode = mode;
+              gameInfo.musicBoxes[idx].delay = gameTicks;
             }
           }
           break;
         case "$noteoverride":
-          if (values.length === 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-              if (idx >= 0) {
-                gameInfo.musicBoxes[idx].noteOverride = values[2];
-              }
-            }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+          if (idx >= 0) {
+            gameInfo.musicBoxes[idx].noteOverride = values[2];
           }
           break;
         case "$notes":
-          if (values.length >= 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-              if (idx >= 0) {
-                gameInfo.musicBoxes[idx].notes.length = 0;
-                gameInfo.musicBoxes[idx].notes = [];
-                gameInfo.musicBoxes[idx].noteIndex = 0;
-                for (let note = 2; note < values.length; note++) {
-                  gameInfo.musicBoxes[idx].notes.push(values[note]);
-                }
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+          if (idx >= 0) {
+            gameInfo.musicBoxes[idx].notes.length = 0;
+            gameInfo.musicBoxes[idx].notes = [];
+            gameInfo.musicBoxes[idx].noteIndex = 0;
+            for (let note = 2; note < values.length; note++) {
+              gameInfo.musicBoxes[idx].notes.push(values[note]);
             }
           }
           break;
         case "$octaves":
-          if (values.length === 3) {
-            val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 1) && (val_int <= 2)) {
-              changeMusicBoxProperty(gameInfo, x, y, "octaves", val_int);
-            }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 1) && (val_int <= 2)) {
+            changeMusicBoxProperty(gameInfo, x, y, "octaves", val_int);
           }
           break;
         case "$palette":
-          if ((values.length === 3) && validXY) {
-            val_int = tryParseInt(values[2], -1);
-            if ((val_int >= 1) && (val_int <= tropicalFishPalettes)) {
-              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-              if (idx >= 0) {
-                gameInfo.tropicalFish[idx].palette = val_int;
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 1) && (val_int <= tropicalFishPalettes)) {
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+              gameInfo.tropicalFish[idx].palette = val_int;
             }
-            if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesPalettes)) {
-              idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-              if (idx >= 0) {
-                gameInfo.seaAnemones[idx].palette = val_int;
-              }
+          }
+          if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesPalettes)) {
+            idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+            if (idx >= 0) {
+              gameInfo.seaAnemones[idx].palette = val_int;
             }
           }
           break;
         case "$part":
-          if (values.length === 3) {
-            if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
-              changeMusicBoxProperty(gameInfo, x, y, "part", valuesLowerCase[2]);
-            }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (["top", "middle", "bottom"].includes(valuesLowerCase[2])) {
+            changeMusicBoxProperty(gameInfo, x, y, "part", valuesLowerCase[2]);
           }
           break;
         case "$pattern":
-          if (values.length >= 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
-              if (idx >= 0) {
-                gameInfo.disappearingStones[idx].pattern = [];
-                gameInfo.disappearingStones[idx].patternIndex = 0;
-                for (let value = 2; value < values.length; value++) {
-                  gameInfo.disappearingStones[idx].pattern.push(tryParseInt(values[value], 1));
-                }
-              }
+          if (values.length < 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+          if (idx >= 0) {
+            gameInfo.disappearingStones[idx].pattern = [];
+            gameInfo.disappearingStones[idx].patternIndex = 0;
+            for (let value = 2; value < values.length; value++) {
+              gameInfo.disappearingStones[idx].pattern.push(tryParseInt(values[value], 1));
             }
           }
           break;
         case "$pistonmode":
-          if (values.length === 3) {
-            if (validXY && (pistonModes().includes(valuesLowerCase[2]))) {
-              idx = findElementByCoordinates(x, y, gameInfo.pistons);
-              if (idx >= 0) {
-                gameInfo.pistons[idx].mode = valuesLowerCase[2];
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (pistonModes().includes(valuesLowerCase[2])) {
+            idx = findElementByCoordinates(x, y, gameInfo.pistons);
+            if (idx >= 0) {
+              gameInfo.pistons[idx].mode = valuesLowerCase[2];
             }
           }
           break;
         case "$plantsswayamount":
-          if (values.length === 1) {
-            val_int = tryParseInt(values[0], -1);
-            if ((val_int >= 0) && (val_int <= 100)) {
-              gameVars.plantsSwayAmount = val_int;
-            }
+          if (values.length !== 1) {
+            break;
+          }
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 100)) {
+            gameVars.plantsSwayAmount = val_int;
           }
           break;
         case "$plantsswayspeed":
-          if (values.length === 1) {
-            val_int = tryParseInt(values[0], -1);
-            if ((val_int >= 0) && (val_int <= 100)) {
-              gameVars.plantsSwaySpeed = val_int;
-            }
+          if (values.length !== 1) {
+            break;
+          }
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 100)) {
+            gameVars.plantsSwaySpeed = val_int;
           }
           break;
         case "$question":
@@ -1996,50 +2019,54 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$seaanemonesswayamount":
-          if (values.length === 1) {
-            val_int = tryParseInt(values[0], -1);
-            if ((val_int >= 0) && (val_int <= 100)) {
-              gameVars.seaAnemonesSwayAmount = val_int;
-            }
+          if (values.length !== 1) {
+            break;
+          }
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 100)) {
+            gameVars.seaAnemonesSwayAmount = val_int;
           }
           break;
         case "$seaanemonesswayspeed":
-          if (values.length === 1) {
-            val_int = tryParseInt(values[0], -1);
-            if ((val_int >= 0) && (val_int <= 100)) {
-              gameVars.seaAnemonesSwaySpeed = val_int;
-            }
+          if (values.length !== 1) {
+            break;
+          }
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 100)) {
+            gameVars.seaAnemonesSwaySpeed = val_int;
           }
           break;
         case "$shape":
-          if ((values.length === 3) && validXY) {
-            val_int = tryParseInt(values[2], -1);
-            if ((val_int >= 1) && (val_int <= tropicalFishShapes)) {
-              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-              if (idx >= 0) {
-                gameInfo.tropicalFish[idx].shape = val_int;
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 1) && (val_int <= tropicalFishShapes)) {
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+              gameInfo.tropicalFish[idx].shape = val_int;
             }
-            if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesShapes)) {
-              idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-              if (idx >= 0) {
-                gameInfo.seaAnemones[idx].shape = val_int;
-              }
+          }
+          if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesShapes)) {
+            idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
+            if (idx >= 0) {
+              gameInfo.seaAnemones[idx].shape = val_int;
             }
           }
           break;
         case "$sound":
-          if (values.length === 2) {
-            element = tryParseInt(values[0], -1);
-            sound = valuesLowerCase[1];
-            if (["default", "never", "player"].includes(sound)) {
-              switch (element) {
-                case 22:
-                  gameVars.soundLava = sound;
-                  break;
-                default:
-                  break;
-              }
+          if (values.length !== 2) {
+            break;
+          }
+          element = tryParseInt(values[0], -1);
+          sound = valuesLowerCase[1];
+          if (["default", "never", "player"].includes(sound)) {
+            switch (element) {
+              case 22:
+                gameVars.soundLava = sound;
+                break;
+              default:
+                break;
             }
           }
           break;
@@ -2053,21 +2080,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$sticky":
-          if (values.length === 3) {
-            if (validXY) {
-              idx = findElementByCoordinates(x, y, gameInfo.pistons);
-              if (idx >= 0) {
-                switch (valuesLowerCase[2]) {
-                  case "no":
-                    gameInfo.pistons[idx].sticky = false;
-                    break;
-                  case "yes":
-                    gameInfo.pistons[idx].sticky = true;
-                    break;
-                  default:
-                    break;
-                }
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.pistons);
+          if (idx >= 0) {
+            switch (valuesLowerCase[2]) {
+              case "no":
+                gameInfo.pistons[idx].sticky = false;
+                break;
+              case "yes":
+                gameInfo.pistons[idx].sticky = true;
+                break;
+              default:
+                break;
             }
           }
           break;
@@ -2078,24 +2104,26 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$stripes":
-          if (values.length === 3) {
-            val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 0) && (val_int <= tropicalFishStripes)) {
-              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-              if (idx >= 0) {
-                gameInfo.tropicalFish[idx].stripes = val_int;
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 0) && (val_int <= tropicalFishStripes)) {
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+              gameInfo.tropicalFish[idx].stripes = val_int;
             }
           }
           break;
         case "$tail":
-          if (values.length === 3) {
-            val_int = tryParseInt(values[2], -1);
-            if ((validXY) && (val_int >= 1) && (val_int <= tropicalFishTails)) {
-              idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-              if (idx >= 0) {
-                gameInfo.tropicalFish[idx].tail = val_int;
-              }
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 1) && (val_int <= tropicalFishTails)) {
+            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+            if (idx >= 0) {
+              gameInfo.tropicalFish[idx].tail = val_int;
             }
           }
           break;

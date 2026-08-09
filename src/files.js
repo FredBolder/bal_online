@@ -347,6 +347,21 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    for (let i = 0; i < gameInfo.detectors.length; i++) {
+        const detector = gameInfo.detectors[i];
+        if (JSON.stringify(detector.activeSides) !== JSON.stringify(["top"])) {
+            line = `$activesides: ${detector.x}, ${detector.y}`;
+            for (let j = 0; j < detector.activeSides.length; j++) {
+                line += ", " + detector.activeSides[j];
+            }
+            lines.push(line);
+        }
+        if (detector.group > 1) {
+            line = `$group: ${detector.x}, ${detector.y}, ${detector.group}`;
+            lines.push(line);
+        }
+    }
+
     for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
         const disappearingStone = gameInfo.disappearingStones[i];
         if (JSON.stringify(disappearingStone.pattern) !== JSON.stringify([5, 3])) {

@@ -234,6 +234,10 @@ export function changeGroup(gameInfo, x, y, group) {
   if (idx >= 0) {
     gameInfo.conveyorBelts[idx].group = group;
   }
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    gameInfo.detectors[idx].group = group;
+  }
   if (idx === -1) {
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
@@ -365,6 +369,15 @@ export function changeSides(gameInfo, x, y, sides) {
       gameInfo.movers[idx].activeSides.length = 0;
       for (let i = 0; i < sides.length; i++) {
         gameInfo.movers[idx].activeSides.push(sides[i]);
+      }
+    }
+    if (idx < 0) {
+      idx = findElementByCoordinates(x, y, gameInfo.detectors);
+      if (idx >= 0) {
+        gameInfo.detectors[idx].activeSides.length = 0;
+        for (let i = 0; i < sides.length; i++) {
+          gameInfo.detectors[idx].activeSides.push(sides[i]);
+        }
       }
     }
   }

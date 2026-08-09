@@ -697,14 +697,17 @@ function drawLevel(
 
   function drawDetector(x, y) {
     let activeSides = ["top"];
+    let group = 1;
     let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.detectors);
     if (idx >= 0) {
       activeSides = gameInfo.detectors[idx].activeSides;
+      group = gameInfo.detectors[idx].group;
     }
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawActiveSides(activeSides);
+    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.6, w1 * 0.6);
   }
 
   function drawDetonator(x, y) {

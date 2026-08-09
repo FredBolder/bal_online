@@ -47,7 +47,7 @@ export function checkDetectors(gameData, gameInfo, gameVars) {
                 default:
                     break;
             }
-            if (!mover.activeSides.includes(sideStr)) {
+            if (!detector.activeSides.includes(sideStr)) {
                 continue;
             }
             //TODO

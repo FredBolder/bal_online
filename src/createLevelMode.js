@@ -199,6 +199,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 for (let i = 0; i < gameInfo.detectors[idx1].activeSides.length; i++) {
                     gameInfo.detectors[idx2].activeSides.push(gameInfo.detectors[idx1].activeSides[i]);
                 }
+                gameInfo.detectors[idx2].group = gameInfo.detectors[idx1].group;
             }
             break;
         default:

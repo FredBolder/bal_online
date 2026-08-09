@@ -141,6 +141,45 @@ describe("Rotate game", () => {
         );
     });
 
+    it("rotateGame right D", () => {
+        const inputBack = zeroArray(6, 6);
+        const input = [
+            [1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 0, 2, 178, 0, 1],
+            [1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 3, 1],
+            [1, 2, 0, 0, 0, 1],
+            [1, 178, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1],
+        ];
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall1: { x: 2, y: 4 },
+            movers: [
+                { x: 3, y: 4, direction: "right", activeSides: ["top", "right"], mode: "all", inverted: false, counter: 0 }
+            ]
+        };
+        gameInfo.blueBall = gameInfo.blueBall1;
+        const info = rotateGame(inputBack, input, gameInfo);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(info).toBe(true);
+        expect(JSON.stringify(gameInfo.blueBall)).toBe(
+            JSON.stringify({ x: 1, y: 2 })
+        );
+        expect(JSON.stringify(gameInfo.movers)).toBe(
+            JSON.stringify([
+                { x: 1, y: 3, direction: "down", activeSides: ["right", "bottom"], mode: "all", inverted: false, counter: 0 }
+            ])
+        );
+    });
+
     // ROTATE LEFT
 
     it("rotateGame left A", () => {
@@ -254,6 +293,45 @@ describe("Rotate game", () => {
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(true);
         expect(JSON.stringify(gameInfo.pinkBalls)).toBe(JSON.stringify([{ x: 4, y: 1 }, { x: 5, y: 2 }]));
+    });
+
+    it("rotateGame left D", () => {
+        const inputBack = zeroArray(6, 6);
+        const input = [
+            [1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 0, 2, 178, 0, 1],
+            [1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 178, 1],
+            [1, 0, 0, 0, 2, 1],
+            [1, 3, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1],
+        ];
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall1: { x: 2, y: 4 },
+            movers: [
+                { x: 3, y: 4, direction: "right", activeSides: ["top", "right"], mode: "all", inverted: false, counter: 0 }
+            ]
+        };
+        gameInfo.blueBall = gameInfo.blueBall1;
+        const info = rotateGame(inputBack, input, gameInfo, true);
+        expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
+        expect(info).toBe(true);
+        expect(JSON.stringify(gameInfo.blueBall)).toBe(
+            JSON.stringify({ x: 4, y: 3 })
+        );
+        expect(JSON.stringify(gameInfo.movers)).toBe(
+            JSON.stringify([
+                { x: 4, y: 2, direction: "up", activeSides: ["left", "top"], mode: "all", inverted: false, counter: 0 }
+            ])
+        );
     });
 
     // Insert new tests here

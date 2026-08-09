@@ -397,7 +397,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         }
         case 255: {
-            let detector = { x, y, activeSides: ["top"] };
+            let detector = { x, y, activeSides: ["top"], group: 1 };
             gameInfo.detectors.push(detector);
             break;
         }

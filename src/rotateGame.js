@@ -1,3 +1,39 @@
+function rotateActiveSides(activeSides, rotateLeft) {
+  const bottom = activeSides.includes("bottom");
+  const left = activeSides.includes("left");
+  const right = activeSides.includes("right");
+  const top = activeSides.includes("top");
+
+  activeSides.length = 0;
+  if (rotateLeft) {
+    if (top) {
+      activeSides.push("left");
+    }
+    if (bottom) {
+      activeSides.push("right");
+    }
+    if (left) {
+      activeSides.push("bottom");
+    }
+    if (right) {
+      activeSides.push("top");
+    }
+  } else {
+    if (top) {
+      activeSides.push("right");
+    }
+    if (bottom) {
+      activeSides.push("left");
+    }
+    if (left) {
+      activeSides.push("top");
+    }
+    if (right) {
+      activeSides.push("bottom");
+    }
+  }
+}
+
 function rotateDirection(direction, rotateLeft) {
   let result = direction;
 
@@ -254,7 +290,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       // Detectors
       for (let i = 0; i < gameInfo.detectors.length; i++) {
         rotateXY(gameInfo.detectors[i], rows, rotateLeft);
-        // TODO: Active sides
+        rotateActiveSides(gameInfo.movers[i].activeSides, rotateLeft);
       }
 
       // Disappearing stones
@@ -348,7 +384,7 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
       for (let i = 0; i < gameInfo.movers.length; i++) {
         rotateXY(gameInfo.movers[i], rows, rotateLeft);
         gameInfo.movers[i].direction = rotateDirection(gameInfo.movers[i].direction, rotateLeft);
-        // TODO: Active sides
+        rotateActiveSides(gameInfo.movers[i].activeSides, rotateLeft);
       }
 
       // Music boxes
