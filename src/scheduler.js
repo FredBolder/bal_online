@@ -5,7 +5,6 @@ import { checkChangers } from "./changers.js";
 import { checkCopiers } from "./copiers.js";
 import { checkDamagedStones } from "./damagedStones.js";
 import { checkDelays } from "./delays.js";
-import { checkDetectors } from "./detectors.js";
 import { checkDetonator } from "./detonator.js";
 import { checkDisappearingStones } from "./disappearingStones.js";
 import { checkGameOver } from "./gameOver.js";
@@ -292,10 +291,6 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
                 updateCanvas = true;
             }
         }
-    }
-
-    if (checkDetectors(gameData, gameInfo, gameVars)) {
-        updateCanvas = true;
     }
 
     if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0) ||

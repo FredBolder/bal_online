@@ -1053,7 +1053,7 @@ export function charToNumber(c) {
     case "ъ":
       result = 254;
       break;
-    case "Ⴀ":
+    case "ђ":
       result = 255;
       break;
     case "|":
@@ -1065,7 +1065,6 @@ export function charToNumber(c) {
   }
   // More possible characters
   // https://www.w3schools.com/charsets/ref_utf_cyrillic.asp
-  // https://www.w3schools.com/charsets/ref_utf_georgian.asp
   return result;
 }
 
@@ -2471,7 +2470,7 @@ export function numberToChar(n) {
       result = "ъ";
       break;
     case 255:
-      result = "Ⴀ";
+      result = "ђ";
       break;
     case 1000:
       // For manual only
@@ -2716,6 +2715,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.delays.length; i++) {
     refs.push(gameInfo.delays[i]);
+  }
+
+  for (let i = 0; i < gameInfo.detectors.length; i++) {
+    refs.push(gameInfo.detectors[i]);
   }
 
   for (let i = 0; i < gameInfo.disappearingStones.length; i++) {

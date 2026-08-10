@@ -374,7 +374,7 @@ export function checkSettings(data, settings) {
               if (values.length < 3) {
                 msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
               }
-              if (validXY && !["η", 178, "Ⴀ", 255].includes(data[y][x])) {
+              if (validXY && !["η", 178, "ђ", 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No mover or detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -1495,10 +1495,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$answerballmode":
-          if (values.length !== 3) {
+          if (values.length !== 3 || !validXY) {
             break;
           }
-          if (validXY && (answerBallModes().includes(valuesLowerCase[2]))) {
+          if (answerBallModes().includes(valuesLowerCase[2])) {
             idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
             if (idx >= 0) {
               gameInfo.answerBalls[idx].mode = valuesLowerCase[2];
@@ -1590,7 +1590,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$direction":
-          if (values.length !== 3) {
+          if (values.length !== 3 || !validXY) {
             break;
           }
           if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
@@ -1913,7 +1913,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$notes":
-          if (values.length !== 3 || !validXY) {
+          if (values.length < 3 || !validXY) {
             break;
           }
           idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);

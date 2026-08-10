@@ -1,4 +1,4 @@
-import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove, getGameDataValue, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { movePusher } from "./pushers.js";
 
@@ -62,11 +62,69 @@ export function checkPistonsDetector(gameData, gameInfo) {
 }
 
 export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pushingDown) {
-    let groupsWithWeight = [];
+    const top = 0;
+    const bottom = 1;
+    const left = 2;
+    const right = 3;
+    let activeGroups = [];
+    let detect = false;
+    let el = -1;
+    let sideStr = "?";
     let result = { updated: false };
     let weight = false;
     let xTrigger = -1;
     let yTrigger = -1;
+
+    for (let i = 0; i < gameInfo.detectors.length; i++) {
+        const detector = gameInfo.detectors[i];
+        const elTop = getGameDataValue(gameData, detector.x, detector.y - 1);
+        const elBottom = getGameDataValue(gameData, detector.x, detector.y + 1);
+        const elLeft = getGameDataValue(gameData, detector.x - 1, detector.y);
+        const elRight = getGameDataValue(gameData, detector.x + 1, detector.y);
+
+        detect = false;
+        for (let side = 0; side < 4; side++) {
+            switch (side) {
+                case top:
+                    el = elTop;
+                    sideStr = "top";
+                    break;
+                case bottom:
+                    el = elBottom;
+                    sideStr = "bottom";
+                    break;
+                case left:
+                    el = elLeft;
+                    sideStr = "left";
+                    break;
+                case right:
+                    el = elRight;
+                    sideStr = "right";
+                    break;
+                default:
+                    break;
+            }
+            if (el > 0 && detector.activeSides.includes(sideStr)) {
+                detect = true;
+            }
+        }
+        if (detect && !activeGroups.includes(detector.group)) {
+            activeGroups.push(detector.group);
+        }
+        if (detector.activated) {
+            if (!detect) {
+                detector.activated = false;
+            }
+        } else {
+            if (detect) {
+                detector.activated = true;
+                gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
+                if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
+                    result.updated = true;
+                }
+            }
+        }
+    }
 
     for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
         const pistonsTrigger = gameInfo.pistonsTriggers[i];
@@ -74,8 +132,8 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         yTrigger = pistonsTrigger.y;
         weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xTrigger, xTrigger, yTrigger, pushingDown);
         if (weight) {
-            if (!groupsWithWeight.includes(pistonsTrigger.group)) {
-                groupsWithWeight.push(pistonsTrigger.group);
+            if (!activeGroups.includes(pistonsTrigger.group)) {
+                activeGroups.push(pistonsTrigger.group);
             }
         }
         if (pistonsTrigger.pressed) {
@@ -86,59 +144,18 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             if (weight) {
                 pistonsTrigger.pressed = true;
                 gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] = !gameVars.pistonGroupsActivated[pistonsTrigger.group - 1];
-                for (let j = 0; j < gameInfo.conveyorBelts.length; j++) {
-                    const conveyorBelt = gameInfo.conveyorBelts[j];
-                    if (conveyorBelt.group === pistonsTrigger.group) {
-                        nextConveyorBeltDirection(conveyorBelt);
-                        result.updated = true;
-                    }
-                }
-                for (let j = 0; j < gameInfo.pushers.length; j++) {
-                    const pusher = gameInfo.pushers[j];
-                    if (pusher.group === pistonsTrigger.group) {
-                        if (movePusher(gameData, gameInfo, pusher)) {
-                            result.updated = true;
-                        }
-                    }
-                }
-            }
-        }
-        for (let j = 0; j < gameInfo.pistons.length; j++) {
-            const piston = gameInfo.pistons[j];
-            if (piston.group === pistonsTrigger.group) {
-                if (gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] !== piston.inverted) {
-                    if (activatePiston(gameData, gameInfo, piston, "toggle")) {
-                        result.updated = true;
-                    }
-                } else {
-                    if (deactivatePiston(gameData, gameInfo, piston, "toggle")) {
-                        result.updated = true;
-                    }
-                }
-            }
-        }
-        for (let j = 0; j < gameInfo.musicBoxes.length; j++) {
-            const musicBox = gameInfo.musicBoxes[j];
-            if (["firstcount", "song"].includes(musicBox.mode) && (musicBox.group === pistonsTrigger.group)) {
-                if (gameVars.pistonGroupsActivated[pistonsTrigger.group - 1]) {
-                    if (!musicBox.active) {
-                        musicBox.ended = false;
-                        musicBox.noteIndex = -1;
-                        musicBox.tripletStart = -1;
-                        musicBox.delayCounter = 0;
-                    }
-                    musicBox.active = true;
-                } else {
-                    musicBox.active = false;
+                if (updateGroup(gameData, gameInfo, gameVars, pistonsTrigger.group)) {
+                    result.updated = true;
                 }
             }
         }
     }
+
     for (let j = 0; j < gameInfo.pistons.length; j++) {
         const piston = gameInfo.pistons[j];
         if (piston.mode === "momentary") {
             // xor
-            if (groupsWithWeight.includes(piston.group) !== piston.inverted) {
+            if (activeGroups.includes(piston.group) !== piston.inverted) {
                 if (activatePiston(gameData, gameInfo, piston, "momentary")) {
                     result.updated = true;
                 }
@@ -149,6 +166,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             }
         }
     }
+
     return result;
 }
 
@@ -398,6 +416,60 @@ export function changePistonSticky(gameInfo, x, y) {
 
 export function pistonModes() {
     return ["toggle", "momentary", "repeatfast", "repeatslow", "blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball", "brownball"];
+}
+
+function updateGroup(gameData, gameInfo, gameVars, group) {
+    let needsRefresh = false;
+
+    for (let i = 0; i < gameInfo.pistons.length; i++) {
+        const piston = gameInfo.pistons[i];
+        if (piston.group === group) {
+            if (gameVars.pistonGroupsActivated[group - 1] !== piston.inverted) {
+                if (activatePiston(gameData, gameInfo, piston, "toggle")) {
+                    needsRefresh = true;
+                }
+            } else {
+                if (deactivatePiston(gameData, gameInfo, piston, "toggle")) {
+                    needsRefresh = true;
+                }
+            }
+        }
+    }
+    for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+        const musicBox = gameInfo.musicBoxes[i];
+        if (["firstcount", "song"].includes(musicBox.mode) && (musicBox.group === group)) {
+            if (gameVars.pistonGroupsActivated[group - 1]) {
+                if (!musicBox.active) {
+                    musicBox.ended = false;
+                    musicBox.noteIndex = -1;
+                    musicBox.tripletStart = -1;
+                    musicBox.delayCounter = 0;
+                }
+                musicBox.active = true;
+            } else {
+                musicBox.active = false;
+            }
+        }
+    }
+
+    for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
+        const conveyorBelt = gameInfo.conveyorBelts[i];
+        if (conveyorBelt.group === group) {
+            nextConveyorBeltDirection(conveyorBelt);
+            needsRefresh = true;
+        }
+    }
+    
+    for (let i = 0; i < gameInfo.pushers.length; i++) {
+        const pusher = gameInfo.pushers[i];
+        if (pusher.group === group) {
+            if (movePusher(gameData, gameInfo, pusher)) {
+                needsRefresh = true;
+            }
+        }
+    }
+
+    return needsRefresh;
 }
 
 

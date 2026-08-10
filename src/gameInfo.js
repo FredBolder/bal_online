@@ -376,7 +376,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 255: {
-                    let detector = { x: j, y: i, activeSides: ["top"], group: 1 };
+                    let detector = { x: j, y: i, activeSides: ["top"], activated: false, group: 1 };
                     result.detectors.push(detector);
                     break;
                 }
@@ -462,7 +462,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.teleports);
                 if (idx >= 0) {
                     obj = gameInfo.teleports[idx];
-                    extraBackInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
+                    extraBackInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, Group: ${obj.group}`;
                 }
                 backInfo = `Purple self-destructing teleport, ` + extraBackInfo;
                 break;
@@ -670,7 +670,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.teleports);
                 if (idx >= 0) {
                     obj = gameInfo.teleports[idx];
-                    extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
+                    extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, Group: ${obj.group}`;
                 }
                 info = `Teleport, ` + extraInfo;
                 break;
@@ -739,7 +739,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.teleports);
                 if (idx >= 0) {
                     obj = gameInfo.teleports[idx];
-                    extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, group: ${obj.group}`;
+                    extraInfo = `Self-destructing: ${obj.selfDestructing}, Color: ${obj.color}, Group: ${obj.group}`;
                 }
                 info = `Self-destructing teleport, ` + extraInfo;
                 break;
@@ -1095,7 +1095,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.pushers);
                 if (idx >= 0) {
                     obj = gameInfo.pushers[idx];
-                    extraInfo = `Direction: ${obj.direction}, group: ${obj.group}`;
+                    extraInfo = `Direction: ${obj.direction}, Group: ${obj.group}`;
                 }
                 info = `Pusher, ` + extraInfo;
                 break;
@@ -1202,7 +1202,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.detectors);
                 if (idx >= 0) {
                     obj = gameInfo.detectors[idx];
-                    extraInfo = `Active sides: ${obj.activeSides}, group: ${obj.group}`;
+                    extraInfo = `Active sides: ${obj.activeSides}, Activated: ${obj.activated}, Group: ${obj.group}`;
                 }
                 info = `Detector, ` + extraInfo;
                 break;
