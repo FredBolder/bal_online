@@ -3,6 +3,7 @@ import { answerBallModes } from "./answerBalls.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
+import { displayModes } from "./detectors.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
@@ -296,6 +297,7 @@ export function checkSettings(data, settings) {
     { name: "$color", params: 2, xy: false },
     { name: "$conveyorbeltmode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
+    { name: "$display", params: 3, xy: true },
     { name: "$displaysize", params: 2, xy: false },
     { name: "$extra", params: 1, xy: false },
     { name: "$fgcolor", params: 5, xy: true },
@@ -479,6 +481,14 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No conveyor belt, mover, music box or pusher found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$display":
+              if (!displayModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid value for display ${values[2]}.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$displaysize":
@@ -1595,6 +1605,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
             changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
+          }
+          break;
+        case "$display":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (displayModes().includes(valuesLowerCase[2])) {
+            idx = findElementByCoordinates(x, y, gameInfo.detectors);
+            if (idx >= 0) {
+              gameInfo.detectors[idx].display = valuesLowerCase[2];
+            }
           }
           break;
         case "$displaysize":

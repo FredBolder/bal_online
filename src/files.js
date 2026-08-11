@@ -356,6 +356,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             }
             lines.push(line);
         }
+        if (detector.display !== "default") {
+            line = `$display: ${detector.x}, ${detector.y}, ${detector.display}`;
+            lines.push(line);
+        }
         if (detector.group > 1) {
             line = `$group: ${detector.x}, ${detector.y}, ${detector.group}`;
             lines.push(line);

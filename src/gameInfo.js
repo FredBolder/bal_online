@@ -376,7 +376,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 255: {
-                    let detector = { x: j, y: i, activeSides: ["top"], activated: false, group: 1 };
+                    let detector = { x: j, y: i, activeSides: ["top"], display: "default", activated: false, group: 1 };
                     result.detectors.push(detector);
                     break;
                 }
@@ -1202,7 +1202,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.detectors);
                 if (idx >= 0) {
                     obj = gameInfo.detectors[idx];
-                    extraInfo = `Active sides: ${obj.activeSides}, Activated: ${obj.activated}, Group: ${obj.group}`;
+                    extraInfo = `Active sides: ${obj.activeSides}, Display: ${obj.display}, Activated: ${obj.activated}, Group: ${obj.group}`;
                 }
                 info = `Detector, ` + extraInfo;
                 break;

@@ -9,6 +9,7 @@ import { answerBallModes, changeAnswerBallMode } from "../answerBalls.js";
 import {
   changeAnswer,
   changeChangerColors,
+  changeDisplay,
   changeGroup,
   changeDirection,
   changeIntelligence,
@@ -1156,7 +1157,7 @@ function BalPage() {
             break;
           case 7:
             // Pistons
-            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 255, 2144];
+            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 255, 2144, 2202];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 8:
@@ -2765,6 +2766,13 @@ function BalPage() {
                 if (changeSides(gameInfo, column, row, createLevelSides) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a mover or a detector to set valid sides.");
+                  }
+                }
+              }
+              if (createLevelObject === 2202) {
+                if (changeDisplay(gameInfo, column, row, e.altKey) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a mover to change the display.");
                   }
                 }
               }

@@ -697,14 +697,26 @@ function drawLevel(
 
   function drawDetector(x, y) {
     let activeSides = ["top"];
+    let display = "default";
     let group = 1;
     let idx = -1;
+
 
     idx = findElementByCoordinates(x, y, gameInfo.detectors);
     if (idx >= 0) {
       activeSides = gameInfo.detectors[idx].activeSides;
+      display = gameInfo.detectors[idx].display;
       group = gameInfo.detectors[idx].group;
     }
+
+    if (display === "stone") {
+      drawStone(x, y);
+      if (globalVars.createLevel) {
+        drawBox(ctx, xmin, ymin, w1, w2, "white");
+      }
+      return;
+    }
+
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawActiveSides(activeSides);
     drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.6, w1 * 0.6);
@@ -4431,6 +4443,9 @@ function drawLevel(
           break;
         case 2201:
           drawAbbreviation("TA");
+          break;
+        case 2202:
+          drawAbbreviation("disp");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

@@ -1,5 +1,6 @@
 import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
+import { displayModes } from "./detectors.js";
 import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
@@ -223,6 +224,23 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
         gameInfo.changers[idx].horizontal = (direction === "horizontal");
       }
     }
+  }
+  return idx;
+}
+
+export function changeDisplay(gameInfo, x, y, decrease) {
+  const step = decrease ? -1 : 1;
+  const values = displayModes();
+  let idx = -1;
+  let n = 0;
+
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    n = values.indexOf(gameInfo.detectors[idx].display) + step;
+    if (n < 0 || n >= values.length) {
+      n = 0;
+    }
+    gameInfo.detectors[idx].display = values[n];
   }
   return idx;
 }
