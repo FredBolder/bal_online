@@ -1,6 +1,8 @@
 import { findElementByCoordinates, hasWeightAbove, getGameDataValue, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
+import { checkSettings, loadLevelSettings } from "./levels.js";
 import { movePusher } from "./pushers.js";
+import { setTimeBombsTime } from "./timeBombs.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
@@ -67,8 +69,10 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     const left = 2;
     const right = 3;
     let activeGroups = [];
+    let checkSettingsResult = "";
     let detect = false;
     let el = -1;
+    let setting = "";
     let sideStr = "?";
     let result = { updated: false };
     let weight = false;
@@ -108,7 +112,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                 detect = true;
             }
         }
-        if (detect && !activeGroups.includes(detector.group)) {
+        if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {
             activeGroups.push(detector.group);
         }
         if (detector.activated) {
@@ -118,9 +122,25 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         } else {
             if (detect) {
                 detector.activated = true;
-                gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
-                if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
-                    result.updated = true;
+                if (detector.target === "group") {
+                    gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
+                    if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
+                        result.updated = true;
+                    }
+                }
+                if (detector.target === "setting") {
+                    setting = detector.value;
+                    if (!setting.startsWith("$")) {
+                        setting = "$" + setting;
+                    }
+                    checkSettingsResult = checkSettings(gameData, [setting]);
+                    if (checkSettingsResult === "") {
+                        loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
+                        setTimeBombsTime(gameVars.timeBombsTime);
+                        result.updated = true;
+                    } else {
+                        console.log(checkSettingsResult);
+                    }
                 }
             }
         }
@@ -459,7 +479,7 @@ function updateGroup(gameData, gameInfo, gameVars, group) {
             needsRefresh = true;
         }
     }
-    
+
     for (let i = 0; i < gameInfo.pushers.length; i++) {
         const pusher = gameInfo.pushers[i];
         if (pusher.group === group) {

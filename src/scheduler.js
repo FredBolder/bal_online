@@ -52,6 +52,19 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
     }
 
+    if (gameVars.message !== "") {
+        if (gameVars.messageCounter < gameVars.messageTicks) {
+            if (gameVars.messageCounter === 0) {
+                updateCanvas = true;
+            }
+            gameVars.messageCounter++;
+        } else {
+            gameVars.messageCounter = 0;
+            gameVars.message = "";
+            updateCanvas = true;
+        }
+    }
+
     if (checkAll) {
         if (gameVars.remainingPhaseTicks > 0) {
             gameVars.remainingPhaseTicks--;
@@ -294,7 +307,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     }
 
     if ((gameInfo.pistons.length > 0) || (gameInfo.musicBoxes.length > 0) || (gameInfo.conveyorBelts.length > 0) ||
-        (gameInfo.pushers.length > 0)) {
+        (gameInfo.pushers.length > 0) || (gameInfo.detectors.length > 0)) {
         info = checkPistonsDetector(gameData, gameInfo);
         if (info.updated) {
             updateCanvas = true;

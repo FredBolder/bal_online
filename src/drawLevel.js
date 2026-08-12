@@ -700,6 +700,8 @@ function drawLevel(
     let display = "default";
     let group = 1;
     let idx = -1;
+    let target = "group";
+    let txt = "";
 
 
     idx = findElementByCoordinates(x, y, gameInfo.detectors);
@@ -707,6 +709,7 @@ function drawLevel(
       activeSides = gameInfo.detectors[idx].activeSides;
       display = gameInfo.detectors[idx].display;
       group = gameInfo.detectors[idx].group;
+      target = gameInfo.detectors[idx].target;
     }
 
     if (display === "stone") {
@@ -719,7 +722,18 @@ function drawLevel(
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawActiveSides(activeSides);
-    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.6, w1 * 0.6);
+    switch (target) {
+      case "group":
+        txt = group.toString();
+        break;
+      case "setting":
+        txt = "S";
+        break;
+      default:
+        txt = "?";
+        break;
+    }
+    drawText(ctx, xc, yc, txt, "middle", "white", w2 * 0.6, w1 * 0.6);
   }
 
   function drawDetonator(x, y) {
@@ -4491,6 +4505,16 @@ function drawLevel(
 
   if (status.gameOver) {
     drawGameOver();
+  }
+
+  if (gameVars.message !== "") {
+    const bottom = topMargin + gameHeight;
+    ctx.fillStyle = "black";
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.fillRect(leftMargin, bottom - size1, gameWidth, size1);
+    ctx.strokeRect(leftMargin, bottom - size1, gameWidth, size1);
+    drawText(ctx, leftMargin + (size1 * 0.5), bottom - (size1 * 0.25), gameVars.message, "left", "white", size1 * 0.7, gameWidth * 0.8);
   }
 }
 

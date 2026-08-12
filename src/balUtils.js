@@ -1,6 +1,6 @@
 import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
-import { displayModes } from "./detectors.js";
+import { detectorDisplayModes } from "./detectors.js";
 import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
@@ -230,7 +230,7 @@ export function changeDirection(gameData, gameInfo, x, y, direction) {
 
 export function changeDisplay(gameInfo, x, y, decrease) {
   const step = decrease ? -1 : 1;
-  const values = displayModes();
+  const values = detectorDisplayModes();
   let idx = -1;
   let n = 0;
 

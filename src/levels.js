@@ -3,7 +3,7 @@ import { answerBallModes } from "./answerBalls.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
-import { displayModes } from "./detectors.js";
+import { detectorDisplayModes, detectorTargets } from "./detectors.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
@@ -284,8 +284,8 @@ export function checkLevel(data, settings) {
 export function checkSettings(data, settings) {
   // This function works with code 1 and code 2, so data with characters and data with numbers
 
-  // For $answer, $hint, $question and $startlevelmessage there can be a comma in the text and $notes, $addnotes
-  // and $activesides have a variable number of parameters.
+  // For $answer, $hint, $message, $question, $startlevelmessage and $value there can be a comma in the text and
+  // $notes, $addnotes and $activesides have a variable number of parameters.
   const settingsInfo = [
     { name: "$activesides", params: 0, xy: true },
     { name: "$addnotes", params: 0, xy: true },
@@ -312,6 +312,7 @@ export function checkSettings(data, settings) {
     { name: "$inverted", params: 3, xy: true },
     { name: "$lavacanmove", params: 1, xy: false },
     { name: "$maxdistx", params: 3, xy: true },
+    { name: "$message", params: 0, xy: false },
     { name: "$movermode", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
@@ -335,6 +336,8 @@ export function checkSettings(data, settings) {
     { name: "$stonepattern", params: 1, xy: false },
     { name: "$stripes", params: 3, xy: true },
     { name: "$tail", params: 3, xy: true },
+    { name: "$target", params: 3, xy: true },
+    { name: "$value", params: 0, xy: true },
   ];
 
   let gameTicks = 0;
@@ -484,7 +487,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$display":
-              if (!displayModes().includes(valuesLowerCase[2])) {
+              if (!detectorDisplayModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid value for display ${values[2]}.\n`;
               }
               if (validXY && !["ђ", 255].includes(data[y][x])) {
@@ -522,7 +525,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$gameticks":
-              if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava",
+              if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "message",
                 "mover", "phaseability", "pinkball", "piston", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
@@ -788,6 +791,19 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$target":
+              if (!detectorTargets().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid target ${values[2]}.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$value":
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             default:
@@ -1611,7 +1627,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (displayModes().includes(valuesLowerCase[2])) {
+          if (detectorDisplayModes().includes(valuesLowerCase[2])) {
             idx = findElementByCoordinates(x, y, gameInfo.detectors);
             if (idx >= 0) {
               gameInfo.detectors[idx].display = valuesLowerCase[2];
@@ -1671,6 +1687,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 break;
               case "lava":
                 gameVars.lavaCountTo = gameTicks;
+                break;
+              case "message":
+                gameVars.messageTicks = gameTicks;
                 break;
               case "mover":
                 gameVars.moverCountTo = gameTicks;
@@ -1898,6 +1917,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               }
             }
           }
+          break;
+        case "$message":
+          gameVars.messageCounter = 0;
+          gameVars.message = value;
           break;
         case "$movermode":
           if (values.length !== 3 || !validXY) {
@@ -2146,6 +2169,27 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             if (idx >= 0) {
               gameInfo.tropicalFish[idx].tail = val_int;
             }
+          }
+          break;
+        case "$target":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (detectorTargets().includes(valuesLowerCase[2])) {
+            idx = findElementByCoordinates(x, y, gameInfo.detectors);
+            if (idx >= 0) {
+              gameInfo.detectors[idx].target = valuesLowerCase[2];
+            }
+          }
+          break;
+        case "$value":
+          val_str = getStringAfterCoordinates(value);
+          if (values.length < 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.detectors);
+          if (idx >= 0) {
+            gameInfo.detectors[idx].value = val_str;
           }
           break;
         default:

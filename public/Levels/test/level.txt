@@ -1,9 +1,5 @@
-$activesides: 15, 17, bottom
-$activesides: 17, 17, bottom
-$group: 17, 17, 2
-$pistonmode: 19, 18, momentary
-$group: 21, 18, 2
-$pistonmode: 21, 18, momentary
+$target: 11, 19, setting
+$value: 11, 19, $gameticks: elevator, 2
 11111111111111111111111111111111
 1                              1
 1                              1
@@ -15,12 +11,12 @@ $pistonmode: 21, 18, momentary
 1                              1
 1                              1
 1                              1
+1            D                 1
 1                              1
 1                              1
 1                              1
 1                              1
 1                              1
-1                              1
-13             ђ ђ             1
-1             2    Ù Ù         1
-11111111111111111111111111111111
+13                             1
+1        2                     1
+11111111111ђ11111111111111111111

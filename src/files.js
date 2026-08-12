@@ -146,6 +146,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.messageTicks !== 100) {
+        line = `$gameticks: message, ${gameVars.messageTicks}`;
+        lines.push(line);
+    }
+
     if (gameVars.moverCountTo !== 0) {
         line = `$gameticks: mover, ${gameVars.moverCountTo}`;
         lines.push(line);
@@ -362,6 +367,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
         if (detector.group > 1) {
             line = `$group: ${detector.x}, ${detector.y}, ${detector.group}`;
+            lines.push(line);
+        }
+        if (detector.target !== "group") {
+            line = `$target: ${detector.x}, ${detector.y}, ${detector.target}`;
+            lines.push(line);
+        }
+        if (detector.value !== "") {
+            line = `$value: ${detector.x}, ${detector.y}, ${detector.value}`;
             lines.push(line);
         }
     }
