@@ -1,3 +1,6 @@
+$messagebackground: green
+$messageborder: none
+$messagecolor: yellow
 $gameticks: message, 25
 $stonepattern: 1
 $target: 11, 14, setting

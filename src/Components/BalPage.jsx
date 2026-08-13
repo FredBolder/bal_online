@@ -13,6 +13,7 @@ import {
   changeGroup,
   changeDirection,
   changeIntelligence,
+  changeMessage,
   changePalette,
   changeQuestion,
   changeShape,
@@ -117,6 +118,7 @@ let createLevelDirection = "";
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
+let createLevelMessage = "";
 let createLevelMode = "";
 let createLevelObject = -1;
 let createLevelQuestion = "";
@@ -1157,7 +1159,7 @@ function BalPage() {
             break;
           case 7:
             // Pistons
-            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 255, 2144, 2202];
+            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 255, 2144, 2202, 2203];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 8:
@@ -3065,6 +3067,13 @@ function BalPage() {
                     }
                   }
                 }
+                if (createLevelObject === 2203) {
+                  if (changeMessage(gameInfo, column, row, createLevelMessage) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to change the message.");
+                    }
+                  }
+                }
               }
 
               if (createLevelMenu === menuToNumber("conveyorbelts")) {
@@ -3409,6 +3418,16 @@ function BalPage() {
               if (!ok) {
                 createLevelMode = "";
                 createLevelObject = -1;
+              }
+              break;
+            case 2203:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Detector", "Message", "");
+                if (newValue !== null) {
+                  createLevelMessage = newValue.trim();
+                  ok = true;
+                }
               }
               break;
             default:

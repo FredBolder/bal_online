@@ -4461,6 +4461,9 @@ function drawLevel(
         case 2202:
           drawAbbreviation("disp");
           break;
+        case 2203:
+          drawAbbreviation("msg");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;
@@ -4509,12 +4512,30 @@ function drawLevel(
 
   if (gameVars.message !== "") {
     const bottom = topMargin + gameHeight;
+    let boxTop = 0; 
+    let textY = 0;
+    switch (gameVars.messagePosition) {
+      case "top":
+        boxTop = topMargin;
+        textY = topMargin + size1 - (size1 * 0.25);
+        break;
+      default:
+        boxTop = bottom - size1;
+        textY = bottom - (size1 * 0.25);
+        break;
+    }
     ctx.fillStyle = "black";
     ctx.strokeStyle = "white";
     ctx.lineWidth = 1;
-    ctx.fillRect(leftMargin, bottom - size1, gameWidth, size1);
-    ctx.strokeRect(leftMargin, bottom - size1, gameWidth, size1);
-    drawText(ctx, leftMargin + (size1 * 0.5), bottom - (size1 * 0.25), gameVars.message, "left", "white", size1 * 0.7, gameWidth * 0.8);
+    if (gameVars.messageBackground !== "none") {
+      ctx.fillStyle = gameVars.messageBackground;
+      ctx.fillRect(leftMargin, boxTop, gameWidth, size1);
+    }
+    if (gameVars.messageBorder !== "none") {
+      ctx.strokeStyle = gameVars.messageBorder;
+      ctx.strokeRect(leftMargin, boxTop, gameWidth, size1);
+    }
+    drawText(ctx, leftMargin + (size1 * 0.5), textY, gameVars.message, "left", gameVars.messageColor, size1 * 0.7, gameWidth * 0.8);
   }
 }
 

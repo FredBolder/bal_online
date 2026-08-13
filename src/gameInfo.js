@@ -1352,6 +1352,10 @@ export function initGameVars(vars) {
     vars.lavaCounter = 0;
     vars.lavaCountTo = 10;
     vars.message = "";
+    vars.messageBackground = "black";
+    vars.messageBorder = "white";
+    vars.messageColor = "white";
+    vars.messagePosition = "bottom";
     vars.messageCounter = 0;
     vars.messageTicks = 100;
     vars.moverCountTo = 0;

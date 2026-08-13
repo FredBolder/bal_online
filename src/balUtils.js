@@ -300,6 +300,18 @@ export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   return idx;
 }
 
+export function changeMessage(gameInfo, x, y, message) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    gameInfo.detectors[idx].display = "stone";
+    gameInfo.detectors[idx].target = "setting";
+    gameInfo.detectors[idx].value = "$message: " + message;
+  }
+  return idx;
+}
+
 export function changePalette(gameInfo, x, y, decrease) {
   const step = decrease ? -1 : 1;
   let idx = -1;

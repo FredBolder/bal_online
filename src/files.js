@@ -146,6 +146,26 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.messageBackground !== "black") {
+        line = `$messagebackground: ${gameVars.messageBackground}`;
+        lines.push(line);
+    }
+
+    if (gameVars.messageBorder !== "white") {
+        line = `$messageborder: ${gameVars.messageBorder}`;
+        lines.push(line);
+    }
+
+    if (gameVars.messageColor !== "white") {
+        line = `$messagecolor: ${gameVars.messageColor}`;
+        lines.push(line);
+    }
+
+    if (gameVars.messagePosition !== "bottom") {
+        line = `$messageposition: ${gameVars.messagePosition}`;
+        lines.push(line);
+    }
+
     if (gameVars.messageTicks !== 100) {
         line = `$gameticks: message, ${gameVars.messageTicks}`;
         lines.push(line);

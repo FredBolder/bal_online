@@ -313,6 +313,10 @@ export function checkSettings(data, settings) {
     { name: "$lavacanmove", params: 1, xy: false },
     { name: "$maxdistx", params: 3, xy: true },
     { name: "$message", params: 0, xy: false },
+    { name: "$messagebackground", params: 1, xy: false },
+    { name: "$messageborder", params: 1, xy: false },
+    { name: "$messagecolor", params: 1, xy: false },
+    { name: "$messageposition", params: 1, xy: false },
     { name: "$movermode", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
@@ -1921,6 +1925,30 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$message":
           gameVars.messageCounter = 0;
           gameVars.message = value;
+          break;
+        case "$messagebackground":
+          if (values.length !== 1) {
+            break;
+          }
+          gameVars.messageBackground = valuesLowerCase[0];
+          break;
+        case "$messageborder":
+          if (values.length !== 1) {
+            break;
+          }
+          gameVars.messageBorder = valuesLowerCase[0];
+          break;
+        case "$messagecolor":
+          if (values.length !== 1) {
+            break;
+          }
+          gameVars.messageColor = valuesLowerCase[0];
+          break;
+        case "$messageposition":
+          if (values.length !== 1) {
+            break;
+          }
+          gameVars.messagePosition = valuesLowerCase[0];
           break;
         case "$movermode":
           if (values.length !== 3 || !validXY) {

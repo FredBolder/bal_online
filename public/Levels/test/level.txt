@@ -1,5 +1,12 @@
-$target: 11, 19, setting
-$value: 11, 19, $gameticks: elevator, 2
+$display: 16, 19, stone
+$target: 16, 19, setting
+$value: 16, 19, $message: Hallo
+$display: 19, 19, stone
+$target: 19, 19, setting
+$value: 19, 19, $message: Hallo
+$display: 22, 19, stone
+$target: 22, 19, setting
+$value: 22, 19, $message: Fred
 11111111111111111111111111111111
 1                              1
 1                              1
@@ -11,12 +18,13 @@ $value: 11, 19, $gameticks: elevator, 2
 1                              1
 1                              1
 1                              1
-1            D                 1
+1                              1
 1                              1
 1                              1
 1                              1
 1                              1
 1                              1
 13                             1
-1        2                     1
-11111111111ђ11111111111111111111
+1             2                1
+1111111111111111ђ11ђ11ђ111111111
+11111111111111111111111111111111
