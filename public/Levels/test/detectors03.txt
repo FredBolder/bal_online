@@ -3,6 +3,10 @@ $messageborder: none
 $messagecolor: yellow
 $gameticks: message, 25
 $stonepattern: 1
+$direction: 12, 2, none
+$group: 12, 2, 5
+$conveyorbeltmode: 12, 2, noneleft
+$display: 6, 14, stone
 $target: 11, 14, setting
 $value: 11, 14, $gameticks: elevator, 2
 $target: 15, 14, setting
@@ -10,19 +14,20 @@ $value: 15, 14, $gameticks: elevator, 5
 $display: 19, 14, stone
 $target: 19, 14, setting
 $value: 19, 14, $message: This is a test
+$group: 23, 14, 5
 1111111111111111111111111111
+1              4           1
+1           {ØØØØØ}        1
+1           1111111        1
 1                          1
 1                          1
 1                          1
 1                          1
 1                          1
 1                          1
-1                          1
-1                          1
-1                          1
-1                          1
-1                          1
+1i                         1
 13                         1
-1      2     D             1
-11111111111ђ111ђ111ђ11111111
+1                          1
+1  4   2     D             1
+111111ђ1111ђ111ђ111ђ111ђ1111
 1111111111111111111111111111

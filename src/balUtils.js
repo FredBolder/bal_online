@@ -2578,6 +2578,45 @@ function getCodePartMessage(n) {
   return msg;
 }
 
+export function modeToColor(mode) {
+  let color = "gray";
+
+  switch (mode) {
+    case "blueball":
+      color = "blue";
+      break;
+    case "brownball":
+      color = displayColor("brown");
+      break;
+    case "whiteball":
+      color = "white";
+      break;
+    case "lightblueball":
+      color = displayColor("lightblue");
+      break;
+    case "yellowball":
+      color = "yellow";
+      break;
+    case "redball":
+      color = "red";
+      break;
+    case "purpleball":
+      color = displayColor("purple");
+      break;
+    case "orangeball":
+      color = displayColor("orange");
+      break;
+    case "pinkball":
+      color = displayColor("pink");
+      break;
+    default:
+      color = "gray";
+      break;
+  }
+  return color;
+}
+
+
 export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
   const element = gameData[oldY][oldX];
   let idx = -1;

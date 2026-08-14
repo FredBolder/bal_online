@@ -3,7 +3,7 @@ import { answerBallModes } from "./answerBalls.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
-import { detectorDisplayModes, detectorTargets } from "./detectors.js";
+import { detectorDisplayModes, detectorModes, detectorTargets } from "./detectors.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
@@ -296,6 +296,7 @@ export function checkSettings(data, settings) {
     { name: "$changer", params: 5, xy: true },
     { name: "$color", params: 2, xy: false },
     { name: "$conveyorbeltmode", params: 3, xy: true },
+    { name: "$detectormode", params: 3, xy: true },
     { name: "$direction", params: 3, xy: true },
     { name: "$display", params: 3, xy: true },
     { name: "$displaysize", params: 2, xy: false },
@@ -457,6 +458,14 @@ export function checkSettings(data, settings) {
             case "$color":
               if (!["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
+              }
+              break;
+            case "$detectormode":
+              if (!detectorModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid detector mode ${values[2]}.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$direction":
@@ -1617,6 +1626,17 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           if (conveyorBeltModes().includes(valuesLowerCase[2])) {
             changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
+          }
+          break;
+        case "$detectormode":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          if (detectorModes().includes(valuesLowerCase[2])) {
+            idx = findElementByCoordinates(x, y, gameInfo.detector);
+            if (idx >= 0) {
+              gameInfo.detector[idx].mode = valuesLowerCase[2];
+            }
           }
           break;
         case "$direction":

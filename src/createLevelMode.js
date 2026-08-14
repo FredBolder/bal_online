@@ -201,6 +201,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 }
                 gameInfo.detectors[idx2].display = gameInfo.detectors[idx1].display;
                 gameInfo.detectors[idx2].group = gameInfo.detectors[idx1].group;
+                gameInfo.detectors[idx2].mode = gameInfo.detectors[idx1].mode;
                 gameInfo.detectors[idx2].target = gameInfo.detectors[idx1].target;
                 gameInfo.detectors[idx2].value = gameInfo.detectors[idx1].value;
             }
@@ -423,10 +424,10 @@ export function menuToNumber(s) {
                 case "conveyorbelts":
                     result = 9;
                     break;
-                case "doors":
+                case "detectors":
                     result = 10;
                     break;
-                case "water":
+                case "doors":
                     result = 11;
                     break;
                 case "groups":
@@ -454,20 +455,23 @@ export function menuToNumber(s) {
                 case "select":
                     result = 2;
                     break;
-                case "teleports":
+                case "water":
                     result = 3;
                     break;
-                case "musicboxes":
+                case "teleports":
                     result = 4;
                     break;
-                case "patterns":
+                case "musicboxes":
                     result = 5;
                     break;
-                case "misc":
+                case "patterns":
                     result = 6;
                     break;
-                case "answerballs":
+                case "misc":
                     result = 7;
+                    break;
+                case "answerballs":
+                    result = 8;
                     break;
                 case "info":
                     result = 15;

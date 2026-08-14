@@ -1,5 +1,5 @@
 import { drawCar, drawFlower, drawHeart, drawHouse, drawStar, drawTrain, drawTree } from "./drawAnswerBallIcons.js"
-import { displayColor, findElementByCoordinates } from "./balUtils.js";
+import { displayColor, findElementByCoordinates, modeToColor } from "./balUtils.js";
 import { indexToColor } from "./colorUtils.js";
 import { drawCoralReefPlant } from "./coralReefPlants.js";
 import {
@@ -697,23 +697,35 @@ function drawLevel(
 
   function drawDetector(x, y) {
     let activeSides = ["top"];
+    let balColor = "gray";
+    let d1 = w1 * 0.2;
     let display = "default";
     let group = 1;
     let idx = -1;
+    let mode = "all";
     let target = "group";
     let txt = "";
-
 
     idx = findElementByCoordinates(x, y, gameInfo.detectors);
     if (idx >= 0) {
       activeSides = gameInfo.detectors[idx].activeSides;
       display = gameInfo.detectors[idx].display;
       group = gameInfo.detectors[idx].group;
+      mode = gameInfo.detectors[idx].mode;
       target = gameInfo.detectors[idx].target;
     }
 
-    if (display === "stone") {
-      drawStone(x, y);
+    switch (display) {
+      case "stone":
+        drawStone(x, y);
+        break;
+      case "grayball":
+        drawGrayBall(0);
+        break;
+      default:
+        break;
+    }
+    if (display !== "default") {
       if (globalVars.createLevel) {
         drawBox(ctx, xmin, ymin, w1, w2, "white");
       }
@@ -734,6 +746,10 @@ function drawLevel(
         break;
     }
     drawText(ctx, xc, yc, txt, "middle", "white", w2 * 0.6, w1 * 0.6);
+    if (mode !== "all") {
+      balColor = modeToColor(mode);
+      drawFilledCircle(ctx, xmin + d1, ymin + d1, w1 * 0.14, balColor);
+    }
   }
 
   function drawDetonator(x, y) {
@@ -2266,38 +2282,8 @@ function drawLevel(
       sticky = gameInfo.pistons[idx].sticky;
     }
     showGroup = !mode.includes("ball");
-    switch (mode) {
-      case "blueball":
-        color = "blue";
-        break;
-      case "brownball":
-        color = displayColor("brown");
-        break;
-      case "whiteball":
-        color = "white";
-        break;
-      case "lightblueball":
-        color = displayColor("lightblue");
-        break;
-      case "yellowball":
-        color = "yellow";
-        break;
-      case "redball":
-        color = "red";
-        break;
-      case "purpleball":
-        color = displayColor("purple");
-        break;
-      case "orangeball":
-        color = displayColor("orange");
-        break;
-      case "pinkball":
-        color = displayColor("pink");
-        break;
-      default:
-        color = "gray";
-        break;
-    }
+
+    color = modeToColor(mode);
     if ((mode === "toggle") && (gameVars.pistonGroupsActivated[group - 1] !== inverted)) {
       triesToActivate = true;
     }
@@ -4512,7 +4498,7 @@ function drawLevel(
 
   if (gameVars.message !== "") {
     const bottom = topMargin + gameHeight;
-    let boxTop = 0; 
+    let boxTop = 0;
     let textY = 0;
     switch (gameVars.messagePosition) {
       case "top":

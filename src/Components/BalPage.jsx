@@ -40,6 +40,7 @@ import {
 } from "../colorUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
+import { changeDetectorMode, detectorModes } from "../detectors.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { feedFish } from "../fishFood.js";
@@ -1093,10 +1094,10 @@ function BalPage() {
 
     switch (globalVars.createLevelMenuPage) {
       case 1:
-        arr0 = [2083, 2084, 1, 4, 8, 9, 159, 6, 171, 10, 20, 2033, 2050, 2051, 2097, 2101];
+        arr0 = [2083, 2084, 1, 4, 8, 9, 159, 6, 171, 255, 10, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 31, 157, 153, 91, 241, 0, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 20, 31, 157, 153, 91, 241, 0, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -1159,7 +1160,7 @@ function BalPage() {
             break;
           case 7:
             // Pistons
-            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 255, 2144, 2202, 2203];
+            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 8:
@@ -1173,23 +1174,14 @@ function BalPage() {
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 10:
+            // detectors  
+            arr1 = [255, 2092, 2144, 2202, 2203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            break;
+          case 11:
             // Doors
             arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
             arr2 = [0];
-            break;
-          case 11:
-            // Water
-            switch (globalVars.createLevelWaterPage) {
-              case 2:
-                arr1 = [248, 2200, 250, 251];
-                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
-                break;
-              default:
-                // page 1
-                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 249, 252, 205, 206];
-                arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2101];
-                break;
-            }
             break;
           case 12:
             // Groups
@@ -1226,26 +1218,40 @@ function BalPage() {
             arr2 = [0];
             break;
           case 3:
+            // Water
+            switch (globalVars.createLevelWaterPage) {
+              case 2:
+                arr1 = [248, 2200, 250, 251];
+                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
+                break;
+              default:
+                // page 1
+                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 249, 252, 205, 206];
+                arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2101];
+                break;
+            }
+            break;
+          case 4:
             // Teleports
             arr1 = [31, 92, 170, 193, 194];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
-          case 4:
+          case 5:
             // Music box
             arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103, 2146, 2147];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
-          case 5:
+          case 6:
             // Patterns
             arr1 = [153, 154, 234, 235, 236, 237, 238, 239, 240];
             arr2 = [0];
             break;
-          case 6:
+          case 7:
             // Misc
             arr1 = [91, 119, 120, 97, 208, 157, 167, 2145, 89, 183, 184, 185, 21];
             arr2 = [0];
             break;
-          case 7:
+          case 8:
             // Answer balls
             arr1 = [241, 2142, 2201, 242, 245, 2143, 2092];
             arr2 = [0];
@@ -3067,13 +3073,6 @@ function BalPage() {
                     }
                   }
                 }
-                if (createLevelObject === 2203) {
-                  if (changeMessage(gameInfo, column, row, createLevelMessage) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a detector to change the message.");
-                    }
-                  }
-                }
               }
 
               if (createLevelMenu === menuToNumber("conveyorbelts")) {
@@ -3085,6 +3084,26 @@ function BalPage() {
 
                 if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
+                }
+              }
+
+              if (createLevelMenu === menuToNumber("detectors")) {
+                if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
+                  changeGroup(gameInfo, column, row, createLevelObject - 2000);
+                }
+                if (createLevelObject === 2203) {
+                  if (changeMessage(gameInfo, column, row, createLevelMessage) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to change the message.");
+                    }
+                  }
+                }
+                if ((createLevelObject === 2092) && detectorModes().includes(createLevelMode)) {
+                  if (changeDetectorMode(gameInfo, column, row, createLevelMode) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to set the mode of it.");
+                    }
+                  }
                 }
               }
 
@@ -3420,16 +3439,6 @@ function BalPage() {
                 createLevelObject = -1;
               }
               break;
-            case 2203:
-              ok = false;
-              if (row > 0) {
-                newValue = await showInput("Detector", "Message", "");
-                if (newValue !== null) {
-                  createLevelMessage = newValue.trim();
-                  ok = true;
-                }
-              }
-              break;
             default:
               break;
           }
@@ -3471,6 +3480,37 @@ function BalPage() {
               if (!ok) {
                 createLevelMode = "";
                 createLevelObject = -1;
+              }
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (createLevelMenu === menuToNumber("detectors")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Detectors", "Mode:", ["all", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball", "brown ball"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                createLevelMode = "";
+                createLevelObject = -1;
+              }
+              break;
+            case 2203:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Detector", "Message", "");
+                if (newValue !== null) {
+                  createLevelMessage = newValue.trim();
+                  ok = true;
+                }
               }
               break;
             default:
@@ -3666,7 +3706,7 @@ function BalPage() {
             ok = false;
             if (row > 0) {
               newValue = null;
-              if (createLevelMenu === menuToNumber("elevators") || createLevelMenu === menuToNumber("pistons")) {
+              if (createLevelMenu === menuToNumber("elevators") || createLevelMenu === menuToNumber("detectors")) {
                 newValue = await showSelect("Active sides", "Sides:", ["top", "bottom", "left", "right", "top and bottom",
                   "left and right", "top, bottom, left and right", "left and top", "top and right", "left and bottom",
                   "bottom and right"], 0);

@@ -108,8 +108,61 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                 default:
                     break;
             }
-            if (el > 0 && detector.activeSides.includes(sideStr)) {
-                detect = true;
+            if (detector.activeSides.includes(sideStr)) {
+                switch (detector.mode) {
+                    case "all":
+                        if (el > 0) {
+                            detect = true;
+                        }
+                        break;
+                    case "blueball":
+                        if (el === 2) {
+                            detect = true;
+                        }
+                        break;
+                    case "whiteball":
+                        if (el === 4 || el === 245) {
+                            detect = true;
+                        }
+                        break;
+                    case "lightblueball":
+                        if (el === 5) {
+                            detect = true;
+                        }
+                        break;
+                    case "yellowball":
+                        if (el === 9) {
+                            detect = true;
+                        }
+                        break;
+                    case "redball":
+                        if (el === 8 || el === 93 || el === 94) {
+                            detect = true;
+                        }
+                        break;
+                    case "purpleball":
+                        if (el === 28 || el === 242) {
+                            detect = true;
+                        }
+                        break;
+                    case "orangeball":
+                        if (el === 40) {
+                            detect = true;
+                        }
+                        break;
+                    case "pinkball":
+                        if (el === 203) {
+                            detect = true;
+                        }
+                        break;
+                    case "brownball":
+                        if (el === 253) {
+                            detect = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {

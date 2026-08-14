@@ -1,30 +1,32 @@
-$display: 16, 19, stone
-$target: 16, 19, setting
-$value: 16, 19, $message: Hallo
-$display: 19, 19, stone
-$target: 19, 19, setting
-$value: 19, 19, $message: Hallo
-$display: 22, 19, stone
-$target: 22, 19, setting
-$value: 22, 19, $message: Fred
-11111111111111111111111111111111
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-13                             1
-1             2                1
-1111111111111111ђ11ђ11ђ111111111
-11111111111111111111111111111111
+$messagebackground: green
+$messageborder: none
+$messagecolor: yellow
+$gameticks: message, 25
+$stonepattern: 1
+$target: 11, 14, setting
+$value: 11, 14, $gameticks: elevator, 2
+$target: 15, 14, setting
+$value: 15, 14, $gameticks: elevator, 5
+$display: 19, 14, stone
+$target: 19, 14, setting
+$value: 19, 14, $message: This is a test
+$display: 6, 14, stone
+$detectormode: 6, 14, whiteball
+$target: 6, 14, setting
+$value: 6, 14, $message: White ball detected
+1111111111111111111111111111
+1                          1
+1                          1
+1                          1
+1                          1
+1                          1
+1                          1
+1                          1
+1                          1
+1                          1
+1i                         1
+13                         1
+1                          1
+1  4   2     D             1
+111111ђ1111ђ111ђ111ђ11111111
+1111111111111111111111111111

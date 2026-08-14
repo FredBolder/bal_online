@@ -389,6 +389,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${detector.x}, ${detector.y}, ${detector.group}`;
             lines.push(line);
         }
+        if (detector.mode !== "all") {
+            line = `$detectormode: ${detector.x}, ${detector.y}, ${detector.mode}`;
+            lines.push(line);
+        }
         if (detector.target !== "group") {
             line = `$target: ${detector.x}, ${detector.y}, ${detector.target}`;
             lines.push(line);
