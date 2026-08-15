@@ -34,7 +34,7 @@ function rotateActiveSides(activeSides, rotateLeft) {
   }
 }
 
-function rotateDirection(direction, rotateLeft) {
+export function rotateDirection(direction, rotateLeft) {
   let result = direction;
 
   if (rotateLeft) {

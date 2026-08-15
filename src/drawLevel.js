@@ -741,6 +741,12 @@ function drawLevel(
       case "setting":
         txt = "S";
         break;
+      case "rotategroupleft":
+        txt = "L" + group.toString();
+        break;
+      case "rotategroupright":
+        txt = "R" + group.toString();
+        break;
       default:
         txt = "?";
         break;
@@ -4449,6 +4455,12 @@ function drawLevel(
           break;
         case 2203:
           drawAbbreviation("msg");
+          break;
+        case 2204:
+          drawAbbreviation("RGL");
+          break;
+        case 2205:
+          drawAbbreviation("RGR");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

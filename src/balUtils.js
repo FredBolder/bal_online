@@ -428,6 +428,16 @@ export function changeStyle(gameInfo, x, y, style) {
   return idx;
 }
 
+export function changeTarget(gameInfo, x, y, target) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    gameInfo.detectors[idx].target = target;
+  }
+  return idx;
+}
+
 export function changeTicks(gameInfo, x, y, ticks) {
   let idx = -1;
 

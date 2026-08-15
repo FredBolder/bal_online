@@ -19,6 +19,7 @@ import {
   changeShape,
   changeStyle,
   changeSides,
+  changeTarget,
   changeTicks,
   dropObject,
   inWater,
@@ -1175,7 +1176,7 @@ function BalPage() {
             break;
           case 10:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 0, 0, 0, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 11:
@@ -3095,6 +3096,20 @@ function BalPage() {
                   if (changeMessage(gameInfo, column, row, createLevelMessage) === -1) {
                     if (oneSelected) {
                       showMessage("Info", "Click on a detector to change the message.");
+                    }
+                  }
+                }
+                if (createLevelObject === 2204) {
+                  if (changeTarget(gameInfo, column, row, "rotategroupleft") === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to change the target to rotategroupleft.");
+                    }
+                  }
+                }
+                if (createLevelObject === 2205) {
+                  if (changeTarget(gameInfo, column, row, "rotategroupright") === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to change the target to rotategroupright.");
                     }
                   }
                 }

@@ -1,4 +1,5 @@
 import { findElementByCoordinates } from "./balUtils.js";
+import { rotateDirection } from "./rotateGame.js";
 
 export function changeDetectorMode(gameInfo, x, y, mode) {
     let idx = -1;
@@ -19,5 +20,16 @@ export function detectorModes() {
 }
 
 export function detectorTargets() {
-    return ["group", "setting"];
+    return ["group", "setting", "rotategroupleft", "rotategroupright"];
+}
+
+export function rotateGroup(gameData, gameInfo, group, rotateLeft) {
+      // Pushers
+      for (let i = 0; i < gameInfo.pushers.length; i++) {
+        const pusher = gameInfo.pushers[i];
+        if (pusher.group === group) {
+            pusher.direction = rotateDirection(pusher.direction, rotateLeft);
+        }
+      }
+
 }
