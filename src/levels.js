@@ -42,7 +42,7 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5024;
+export const series6End = 5025;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6021;
 export const seriesMusic2Start = 6200;
@@ -1633,9 +1633,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             break;
           }
           if (detectorModes().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.detector);
+            idx = findElementByCoordinates(x, y, gameInfo.detectors);
             if (idx >= 0) {
-              gameInfo.detector[idx].mode = valuesLowerCase[2];
+              gameInfo.detectors[idx].mode = valuesLowerCase[2];
             }
           }
           break;

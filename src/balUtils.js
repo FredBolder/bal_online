@@ -57,12 +57,12 @@ function canBeTakenOrIsEmpty(gameInfo, object) {
 }
 
 function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
-  // Object that can move, but not together with another object
+  // Object that can be moved by the blue ball, but not together with another object
   let result = false;
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251].includes(el)) {
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251, 255].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -1648,6 +1648,9 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
     case 253:
       result = gameInfo.brownBalls;
       break;
+    case 255:
+      result = gameInfo.detectors;
+      break;
     default:
       result = null;
       break;
@@ -2723,6 +2726,9 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
       break;
     case 253:
       updateObject(gameInfo.brownBalls, oldX, oldY, newX, newY);
+      break;
+    case 255:
+      updateObject(gameInfo.detectors, oldX, oldY, newX, newY);
       break;
     default:
       break;

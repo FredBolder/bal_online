@@ -182,5 +182,32 @@ describe("balUtils moveLeft", () => {
     expect(gameInfo.yellowBars).toEqual([{ x: 2, y: 2, direction: "left" }]);
   });
 
+  it("moveLeft J", () => {
+    const gameInfo = {
+      ...defaultGameInfo,
+      blueBall: { x: 3, y: 1 },
+      detectors: [
+        { x: 2, y: 1, mode: "pinkball", activeSides: ["top"], target: "group", value: "", display: "default", activated: false, group: 2 }
+      ],
+    };
+    const input = [
+      [1, 1, 1, 1, 1, 1],
+      [1, 0, 255, 2, 0, 1],
+      [1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = [
+      [1, 1, 1, 1, 1, 1],
+      [1, 255, 2, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1],
+    ];
+    const info = moveLeft(inputBack01_3_6, input, gameInfo, defaultGameVars);
+    expect(input).toEqual(expectedOutput);
+    expect(info.eating).toBe(false);
+    expect(info.player).toBe(true);
+    expect(gameInfo.detectors).toEqual([
+        { x: 1, y: 1, mode: "pinkball", activeSides: ["top"], target: "group", value: "", display: "default", activated: false, group: 2 }
+    ]);
+  });
+
   // Insert new tests here
 });
