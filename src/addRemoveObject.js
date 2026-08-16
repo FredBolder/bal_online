@@ -2,6 +2,8 @@ import { findElementByCoordinates } from "./balUtils.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
 export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
+    let ignore = false;
+
     if (!backData || !gameData || !gameInfo) {
         return;
     }
@@ -12,11 +14,16 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
     removeObject(backData, gameData, gameInfo, x, y);
     switch (objectNumber) {
         case 2:
-            if ((gameInfo.blueBall.x !== -1) && (gameInfo.blueBall.y !== -1)) {
-                gameData[gameInfo.blueBall.y][gameInfo.blueBall.x] = 0;
+            if ((gameInfo.blueBall1.x === -1) && (gameInfo.blueBall1.y === -1)) {
+                gameInfo.blueBall1.x = x;
+                gameInfo.blueBall1.y = y;
+                gameInfo.blueBall = gameInfo.blueBall1;
+            } else if ((gameInfo.blueBall2.x === -1) && (gameInfo.blueBall2.y === -1)) {
+                gameInfo.blueBall2.x = x;
+                gameInfo.blueBall2.y = y;
+            } else {
+                ignore = true;
             }
-            gameInfo.blueBall.x = x;
-            gameInfo.blueBall.y = y;
             break;
         case 3:
             gameInfo.greenBalls += 1;
@@ -404,6 +411,9 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
         default:
             break;
     }
+    if (ignore) {
+        return;
+    }
     switch (objectNumber) {
         case 20:
         case 22:
@@ -466,8 +476,15 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
     objectNumber = gameData[y][x];
     switch (objectNumber) {
         case 2:
-            gameInfo.blueBall.x = -1;
-            gameInfo.blueBall.y = -1;
+            if (gameInfo.blueBall1.x === x && gameInfo.blueBall1.y === y) {
+                gameInfo.blueBall1.x = -1;
+                gameInfo.blueBall1.y = -1;
+            }
+            if (gameInfo.blueBall2.x === x && gameInfo.blueBall2.y === y) {
+                gameInfo.blueBall2.x = -1;
+                gameInfo.blueBall2.y = -1;
+            }
+            gameInfo.blueBall = gameInfo.blueBall1;
             break;
         case 3:
             gameInfo.greenBalls -= 1;

@@ -231,8 +231,8 @@ export function checkLevel(data, settings) {
     if (nBlueBalls < 1) {
       msg += "There is no blue ball (player).\n";
     }
-    if (nBlueBalls > 1) {
-      msg += "There can be only one blue ball (player).\n";
+    if (nBlueBalls > 2) {
+      msg += "There can be no more than two blue balls (players).\n";
     }
     if (nDetonators > 1) {
       msg += "There can be only one detonator.\n";
@@ -248,6 +248,9 @@ export function checkLevel(data, settings) {
     }
     if ((nSmallBlueBalls > 0) && (nTravelgates > 0)) {
       msg += "When there is a travel gate, there can not be a small blue ball.\n";
+    }
+    if ((nSmallBlueBalls > 0) && (nBlueBalls > 0)) {
+      msg += "When there are two blue balls (players), there can not be a small blue ball.\n";
     }
     if (nSmallGreenBalls < 1) {
       msg += "There is no small green ball.\n";
@@ -1021,7 +1024,7 @@ export function fixLevel(backData, gameData, gameInfo) {
   let result = "";
   let deleteCells = [];
   let errorGameRotatorInNonSquareLevel = false;
-  let errorMoreThanOneBlueBall = false;
+  let errorMoreThanTwoBlueBalls = false;
   let errorMoreThanOneSmallBlueBall = false;
   let foundBlue = false;
   let foundGravityChanger = false;
@@ -1029,6 +1032,7 @@ export function fixLevel(backData, gameData, gameInfo) {
   let foundSmallblue = false;
   let foundSmallGreen = false;
   let foundWater = false;
+  let nBlueBalls = 0;
   let nPurpleSelfDestructingTeleports = [];
   let nSelfDestructingTeleports = [];
   let nSmallGreenBalls = 0;
@@ -1060,14 +1064,13 @@ export function fixLevel(backData, gameData, gameInfo) {
           nSmallGreenBalls++;
           break;
         case 2:
-          if (foundBlue) {
-            errorMoreThanOneBlueBall = true;
-            gameData[i][j] = 0;
-          } else {
-            gameInfo.blueBall.x = j;
-            gameInfo.blueBall.y = i;
-          }
           foundBlue = true;
+          nBlueBalls++;
+          if (nBlueBalls > 2) {
+            errorMoreThanTwoBlueBalls = true;
+            gameData[i][j] = 0;
+            nBlueBalls--;
+          }
           break;
         case 22:
           foundLava = true;
@@ -1110,8 +1113,8 @@ export function fixLevel(backData, gameData, gameInfo) {
   if (errorGameRotatorInNonSquareLevel) {
     result += "There was a game rotator in a non square level.\n";
   }
-  if (errorMoreThanOneBlueBall) {
-    result += "There was more than one blue ball.\n";
+  if (errorMoreThanTwoBlueBalls) {
+    result += "There were more than two blue balls.\n";
   }
   if (errorMoreThanOneSmallBlueBall) {
     result += "There was more than one small blue ball.\n";
@@ -1208,6 +1211,20 @@ export function fixLevel(backData, gameData, gameInfo) {
     nSmallGreenBalls = 1;
   }
   gameInfo.greenBalls = nSmallGreenBalls;
+
+  gameInfo.twoBlue = (nBlueBalls === 2);
+
+  if (gameInfo.twoBlue && foundSmallblue) {
+    result += "There was a small blue ball together with two blue balls.\n";
+    for (let i = gameData.length - 1; i >= 0; i--) {
+      for (let j = 0; j <= xMax; j++) {
+        const gd = gameData[i][j];
+        if (gd === 168) {
+          gameData[i][j] = 0;
+        }
+      }
+    }
+  }
 
   if (result !== "") {
     result = "The folowing problems were fixed. Please review the level.\n" + result;
@@ -2273,6 +2290,38 @@ export function numberOfLevels() {
 
 function settingNr(index) {
   return `Setting ${index + 1}: `;
+}
+
+export function updateBlue(gameData, gameInfo) {
+  let nBlueBalls = 0;
+
+  gameInfo.blueBall1.x = -1;
+  gameInfo.blueBall1.y = -1;
+  gameInfo.blueBall2.x = -1;
+  gameInfo.blueBall2.y = -1;
+  for (let i = gameData.length - 1; i >= 0; i--) {
+    const n = gameData[i].length;
+    for (let j = 0; j < n; j++) {
+      const gd = gameData[i][j];
+      if (gd === 2) {
+        if ((gameInfo.blueBall1.x === -1) && (gameInfo.blueBall1.y === -1)) {
+          gameInfo.blueBall1.x = j;
+          gameInfo.blueBall1.y = i;
+        } else if ((gameInfo.blueBall2.x === -1) && (gameInfo.blueBall2.y === -1)) {
+          gameInfo.blueBall2.x = j;
+          gameInfo.blueBall2.y = i;
+        }
+        nBlueBalls++;
+        if (nBlueBalls > 2) {
+          gameData[i][j] = 0;
+          nBlueBalls--;
+        }
+      }
+    }
+  }
+
+  gameInfo.twoBlue = (nBlueBalls === 2);
+  gameInfo.blueBall = gameInfo.blueBall1;
 }
 
 

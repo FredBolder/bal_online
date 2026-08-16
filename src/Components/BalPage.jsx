@@ -50,7 +50,7 @@ import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPl
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
 import { deleteIfLava } from "../lava.js";
-import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels } from "../levels.js";
+import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels, updateBlue } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { changeMoverInverted, changeMoverMode, moverModes } from "../movers.js";
@@ -306,6 +306,7 @@ function BalPage() {
         await handleLoadFromMemory(3);
         clearPlayedNotes();
         fixDoors(gameInfo);
+        updateBlue(gameData, gameInfo);
         return;
       } else {
         await initLevel(gameVars.currentLevel);
@@ -852,6 +853,7 @@ function BalPage() {
       gameVars.gameOver = false;
       gameVars.currentLevel = 9999;
       fixDoors(gameInfo);
+      updateBlue(gameData, gameInfo);
       updateGameCanvas();
       updateGreen();
       updateProgressText();
@@ -1069,6 +1071,7 @@ function BalPage() {
     }
     clearPlayedNotes();
     fixDoors(gameInfo);
+    updateBlue(gameData, gameInfo);
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
     updateMenuItemsDisplay();
@@ -1323,6 +1326,7 @@ function BalPage() {
       gameVars.gameOver = false;
       setTimeBombsTime(gameVars.timeBombsTime);
       fixDoors(gameInfo);
+      updateBlue(gameData, gameInfo);
       updateProgressText();
       updateGameCanvas();
       updateGreen();
@@ -2156,6 +2160,7 @@ function BalPage() {
         await handleLoadFromMemory(3);
         clearPlayedNotes();
         fixDoors(gameInfo);
+        updateBlue(gameData, gameInfo);
       } else {
         await initLevel(gameVars.currentLevel);
       }

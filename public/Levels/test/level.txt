@@ -1,118 +1,20 @@
-$extra: 1
-$stonepattern: 1
-$activesides: 5, 6, right
-$target: 5, 6, rotategroupright
-$activesides: 5, 7, right
-$activesides: 5, 8, right
-$target: 5, 8, rotategroupright
-$activesides: 5, 9, right
-$activesides: 5, 10, right
-$target: 5, 10, rotategroupright
-$activesides: 5, 11, right
-$target: 5, 11, rotategroupright
-$activesides: 5, 12, right
-$group: 5, 12, 8
-$activesides: 5, 13, right
-$group: 5, 13, 8
-$activesides: 3, 6, right
-$group: 3, 6, 3
-$target: 3, 6, rotategroupleft
-$activesides: 3, 7, right
-$group: 3, 7, 3
-$target: 3, 7, rotategroupleft
-$activesides: 3, 8, right
-$group: 3, 8, 3
-$activesides: 3, 9, right
-$group: 3, 9, 3
-$activesides: 3, 10, right
-$group: 3, 10, 3
-$activesides: 3, 11, right
-$group: 3, 11, 3
-$target: 3, 11, rotategroupleft
-$activesides: 3, 12, right
-$group: 3, 12, 3
-$activesides: 3, 13, right
-$group: 3, 13, 3
-$activesides: 1, 6, right
-$group: 1, 6, 8
-$target: 1, 6, rotategroupright
-$activesides: 1, 11, right
-$group: 1, 11, 5
-$target: 1, 11, rotategroupleft
-$activesides: 1, 12, right
-$group: 1, 12, 5
-$activesides: 1, 13, right
-$group: 1, 13, 5
-$target: 1, 13, rotategroupright
-$activesides: 7, 6, right
-$group: 7, 6, 2
-$target: 7, 6, rotategroupleft
-$activesides: 7, 7, right
-$group: 7, 7, 7
-$target: 7, 7, rotategroupleft
-$activesides: 7, 8, right
-$group: 7, 8, 7
-$activesides: 7, 9, right
-$group: 7, 9, 7
-$activesides: 7, 10, right
-$group: 7, 10, 8
-$target: 7, 10, rotategroupright
-$activesides: 7, 11, right
-$group: 7, 11, 5
-$activesides: 7, 12, right
-$group: 7, 12, 5
-$target: 7, 12, rotategroupright
-$activesides: 1, 14, right
-$group: 1, 14, 5
-$target: 1, 14, rotategroupright
-$activesides: 3, 14, right
-$target: 3, 14, rotategroupright
-$activesides: 5, 14, right
-$group: 5, 14, 2
-$activesides: 7, 14, right
-$group: 7, 14, 2
-$activesides: 1, 7, right
-$group: 1, 7, 8
-$activesides: 1, 8, right
-$group: 1, 8, 8
-$target: 1, 8, rotategroupright
-$activesides: 1, 10, right
-$group: 1, 10, 5
-$activesides: 1, 9, right
-$group: 1, 9, 8
-$target: 1, 9, rotategroupright
-$activesides: 7, 13, right
-$group: 7, 13, 2
-$group: 19, 6, 2
-$direction: 19, 6, left
-$group: 23, 8, 3
-$group: 21, 10, 4
-$direction: 21, 10, down
-$group: 21, 12, 5
-$direction: 21, 12, up
-$group: 23, 10, 6
-$direction: 23, 10, down
-$group: 24, 8, 7
-$direction: 24, 8, left
-$group: 29, 11, 8
-$direction: 29, 11, down
 11111111111111111111111111111111
-11          1                  1
-11          1                  1
-11          1                  1
-1T          1                  1
-11-1-1-1-11-1                  1
-1ђ ђ ђ ђ 11 1      њ        1111
-1ђ ђ ђ ђ 11 18             81131
-1ђ ђ ђ ђ 11 18         њњ  81  1
-1ђ ђ ђ ђ 11 11   4         D   1
-1ђ ђ ђ ђ 11 1111^1   њ њ  111111
-1ђ ђ ђ ђ 11      1           њ 1
-1ђ ђ ђ ђ 111111111  њњ         1
-1ђ ђ ђ ђ 111111111             1
-1ђ ђ ђ ђ 111111111             1
-11 1 1 1 111111111             1
-11               1             1
-11               1             1
-1T            2  1             1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+13                             1
+1             2    2           1
 11111111111111111111111111111111
