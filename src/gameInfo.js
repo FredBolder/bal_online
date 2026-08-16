@@ -1305,6 +1305,7 @@ export function initGameInfo(info) {
     info.travelGate = { x: -1, y: -1 };
     info.tropicalFish = [];
     info.twoBlue = false;
+    info.twoBlueConnected = false;
     info.waterWithIceObjects = [];
     info.whiteBallSynchronisers = [];
     info.yellowBalls = [];

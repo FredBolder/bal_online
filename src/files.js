@@ -331,6 +331,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: yellowball`;
         lines.push(line);
     }
+    if (gameInfo.twoBlueConnected) {
+        line = `$twoblueconnected: yes`;
+        lines.push(line);
+    }
 
     for (let i = 0; i < gameInfo.answerBalls.length; i++) {
         const answerBall = gameInfo.answerBalls[i];

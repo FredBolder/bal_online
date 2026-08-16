@@ -1,0 +1,24 @@
+$has: divingglasses
+$twoblueconnected: yes
+$background: 10, 18, 1, 1, 23
+$background: 12, 18, 1, 1, 23
+11111111111111111111111111111111
+13                             1
+1WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwwwwwwwwwwwwwwwwwwwwwwww1
+1wwwwwwwww2w2wwwwwwwwwwwwwwwwww1
+11111111111111111111111111111111

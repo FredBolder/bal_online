@@ -3392,7 +3392,7 @@ function drawLevel(
   }
 
   function highlightBlueBall(x, y) {
-    if (!gameInfo.twoBlue) {
+    if (!gameInfo.twoBlue || gameInfo.twoBlueConnected) {
       return;
     }
 
@@ -4487,7 +4487,7 @@ function drawLevel(
         drawBox(ctx, xmin, ymin, w1, w2, raster.color);
         ctx.setLineDash([]);
       }
-
+      
       highlightBlueBall(currentCol, currentRow);
       highlightSelectedCell(currentCol, currentRow);
       highlightTelekinesisObject(currentCol, currentRow);

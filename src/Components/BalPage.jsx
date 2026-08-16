@@ -221,7 +221,7 @@ function BalPage() {
     const handleKeyDownEvent = (e) => {
       if (modalStateRef.current) return; // Ignore when modal is open
 
-      handleKeyDown(e);
+      handleKeyDown1(e);
     };
 
     document.addEventListener("keydown", handleKeyDownEvent);
@@ -1344,9 +1344,13 @@ function BalPage() {
   }
 
   async function pressKeysSequentially(keys) {
+    if (gameInfo.twoBlue && gameInfo.twoBlueConnected) {
+      return;
+    }
+
     for (let i = 0; i < keys.length; i++) {
       const e = { key: keys[i], altKey: false, ctrlKey: false, shiftKey: false };
-      handleKeyDown(e);
+      handleKeyDown2(e);
       await sleep(150);
     }
   }
@@ -1363,7 +1367,49 @@ function BalPage() {
     return result;
   }
 
-  async function handleKeyDown(e) {
+  async function handleKeyDown1(e) {
+    let playerKey = false;
+
+    switch (e.key) {
+      case "ArrowLeft":
+      case "ArrowRight":
+        playerKey = true;
+        break;
+      case "q":
+      case "w":
+      case "e":
+      case "a":
+      case "s":
+      case "d":
+      case "y":
+      case "z":
+      case "c":
+      case "ArrowUp":
+      case "ArrowDown":
+        playerKey = !e.shiftKey;
+        break;
+      default:
+        break;
+    }
+    if (e.altKey || e.ctrlKey) {
+      playerKey = false;
+    }
+
+    if (!globalVars.createLevel && !globalVars.reading && !kPressed && !dropPressed && gameInfo.twoBlue && gameInfo.twoBlueConnected && playerKey) {
+      for (let i = 0; i < 2; i++) {
+        if (i === 0) {
+          gameInfo.blueBall = gameInfo.blueBall1;
+        } else {
+          gameInfo.blueBall = gameInfo.blueBall2;
+        }
+        handleKeyDown2(e);
+      }
+    } else {
+      handleKeyDown2(e);
+    }
+  }
+
+  async function handleKeyDown2(e) {
     let info = {
       action: "",
       aug: false,
@@ -1740,7 +1786,7 @@ function BalPage() {
     switch (e.key) {
       case "b":
       case "B": {
-        if (gameInfo.twoBlue) {
+        if (gameInfo.twoBlue && !gameInfo.twoBlueConnected) {
           switchPlayer(gameInfo);
           info.update = true;
         }
@@ -2538,43 +2584,43 @@ function BalPage() {
   }
 
   function buttonAction() {
-    handleKeyDown({ key: " ", shiftKey: false });
+    handleKeyDown1({ key: " ", shiftKey: false });
   }
 
   function buttonDown() {
-    handleKeyDown({ key: "s", shiftKey: false });
+    handleKeyDown1({ key: "s", shiftKey: false });
   }
 
   function buttonDownLeft() {
-    handleKeyDown({ key: "z", shiftKey: false });
+    handleKeyDown1({ key: "z", shiftKey: false });
   }
 
   function buttonDownRight() {
-    handleKeyDown({ key: "c", shiftKey: false });
+    handleKeyDown1({ key: "c", shiftKey: false });
   }
 
   function buttonLeft() {
-    handleKeyDown({ key: "a", shiftKey: false });
+    handleKeyDown1({ key: "a", shiftKey: false });
   }
 
   function buttonRight() {
-    handleKeyDown({ key: "d", shiftKey: false });
+    handleKeyDown1({ key: "d", shiftKey: false });
   }
 
   function buttonUp() {
-    handleKeyDown({ key: "w", shiftKey: false });
+    handleKeyDown1({ key: "w", shiftKey: false });
   }
 
   function buttonUpLeft() {
-    handleKeyDown({ key: "q", shiftKey: false });
+    handleKeyDown1({ key: "q", shiftKey: false });
   }
 
   function buttonUpRight() {
-    handleKeyDown({ key: "e", shiftKey: false });
+    handleKeyDown1({ key: "e", shiftKey: false });
   }
 
   function buttonSelect() {
-    handleKeyDown({ key: "B", shiftKey: false });
+    handleKeyDown1({ key: "b", shiftKey: false });
   }
 
   function handleGameCanvasClick(e) {

@@ -42,7 +42,7 @@ export const series4End = 749;
 export const series5Start = 3300;
 export const series5End = 3323;
 export const series6Start = 5000;
-export const series6End = 5026;
+export const series6End = 5027;
 export const seriesEasy2Start = 6000;
 export const seriesEasy2End = 6021;
 export const seriesMusic2Start = 6200;
@@ -345,6 +345,7 @@ export function checkSettings(data, settings) {
     { name: "$stripes", params: 3, xy: true },
     { name: "$tail", params: 3, xy: true },
     { name: "$target", params: 3, xy: true },
+    { name: "$twoblueconnected", params: 1, xy: false },
     { name: "$value", params: 0, xy: true },
   ];
 
@@ -815,6 +816,11 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["ђ", 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$twoblueconnected":
+              if (!["yes", "no"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
               }
               break;
             case "$value":
@@ -2245,6 +2251,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             if (idx >= 0) {
               gameInfo.detectors[idx].target = valuesLowerCase[2];
             }
+          }
+          break;
+        case "$twoblueconnected":
+          if (values.length !== 1) {
+            break;
+          }
+          switch (valuesLowerCase[0]) {
+            case "no":
+              gameInfo.twoBlueConnected = false;
+              break;
+            case "yes":
+              gameInfo.twoBlueConnected = true;
+              break;
+            default:
+              break;
           }
           break;
         case "$value":
