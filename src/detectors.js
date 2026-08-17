@@ -24,12 +24,11 @@ export function detectorTargets() {
 }
 
 export function rotateGroup(gameData, gameInfo, group, rotateLeft) {
-      // Pushers
-      for (let i = 0; i < gameInfo.pushers.length; i++) {
+    // Pushers
+    for (let i = 0; i < gameInfo.pushers.length; i++) {
         const pusher = gameInfo.pushers[i];
         if (pusher.group === group) {
             pusher.direction = rotateDirection(pusher.direction, rotateLeft);
         }
-      }
-
+    }
 }

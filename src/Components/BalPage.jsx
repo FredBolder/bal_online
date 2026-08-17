@@ -790,7 +790,7 @@ function BalPage() {
         backData = data.backData;
         gameInfo = null;
         gameInfo = data.gameInfo;
-        if (gameInfo.player === 2) {
+        if (gameInfo.twoBlue && !gameInfo.twoBlueConnected && gameInfo.player === 2) {
           gameInfo.blueBall = gameInfo.blueBall2;
         } else {
           gameInfo.blueBall = gameInfo.blueBall1;

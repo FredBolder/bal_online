@@ -3064,8 +3064,10 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       break;
     case 168:
       gameInfo.twoBlue = true;
-      result.message = "You are duplicated! By pressing the B key or the S button you can set ";
-      result.message += "which one you control."
+      result.message = "You are duplicated!";
+      if (!gameInfo.twoBlueConnected) {
+        result.message += " By pressing the B key or the S button you can set which one you control."
+      }
       break;
     case 179:
       result.message = "The code for the hidden mini series 1 is: " + numberToCode(getHiddenMiniStart());
