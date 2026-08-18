@@ -62,7 +62,7 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251, 255].includes(el)) {
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251, 255, 256].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -1096,6 +1096,9 @@ export function charToNumber(c) {
     case "ђ":
       result = 255;
       break;
+    case "Ѓ":
+      result = 256;
+      break;
     case "|":
       result = 1000;
       break;
@@ -1109,7 +1112,7 @@ export function charToNumber(c) {
 }
 
 export function checkFalling(backData, gameData, gameInfo, gameVars) {
-  const canFall = [2, 4, 8, 40, 93, 94, 245];
+  const canFall = [2, 4, 8, 40, 93, 94, 245, 256];
   let forceDown = false;
   let forceUp = false;
   let idx = -1;
@@ -1191,7 +1194,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
         forceUp = hasForceUp(gameData, gameInfo, j, i);
 
         if (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
-          ([4, 40, 245].includes(element1) && !forceUp) ||
+          ([4, 40, 245, 256].includes(element1) && !forceUp) ||
           ([27, 243, 248].includes(element1) && !forceUp && backData[i][j] !== 23)) {
           skip = ((element1 === 2) && (gameVars.skipFalling > 0));
           if (skip) {
@@ -1278,7 +1281,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
 
         if (element2 === 0 &&
           (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
-            ([4, 40, 245].includes(element1) && !forceDown))) {
+            ([4, 40, 245, 256].includes(element1) && !forceDown))) {
           skip = ((element1 === 2) && (gameVars.skipFalling > 0));
           if (skip) {
             gameVars.skipFalling--;
@@ -1742,7 +1745,22 @@ function isTravelGate(x, y, travelGate) {
 }
 
 export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTriangle = false) {
-  const element = gameData[y][x];
+  // Numbers are like numeric keyboard
+  const backObj2 = getGameDataValue(backData, x, y + 1);
+  const backObj5 = getGameDataValue(backData, x, y);
+  const backObj8 = getGameDataValue(backData, x, y - 1);
+  const obj1 = getGameDataValue(gameData, x - 1, y + 1);
+  const obj2 = getGameDataValue(gameData, x, y + 1);
+  const obj3 = getGameDataValue(gameData, x + 1, y + 1);
+  const obj4 = getGameDataValue(gameData, x - 1, y);
+  const obj5 = getGameDataValue(gameData, x, y);
+  const obj6 = getGameDataValue(gameData, x + 1, y);
+  const obj7 = getGameDataValue(gameData, x - 1, y - 1);
+  const obj8 = getGameDataValue(gameData, x, y - 1);
+  const obj9 = getGameDataValue(gameData, x + 1, y - 1);  
+  const isBlue = (obj5 === 2);
+  const spikeBallAbove = (obj8 === 256);
+  const spikeBallBelow = (obj2 === 256);
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
 
@@ -1753,36 +1771,36 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
       return false;
     }
 
-    if ((gameData[y + 1][x] === 0) ||
-      (!ignoreTriangle && hasTopGlideLeftToRight(gameData[y + 1][x]) && (gameData[y + 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      (!ignoreTriangle && hasTopGlideRightToLeft(gameData[y + 1][x]) && (gameData[y + 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+    if ((obj2 === 0) ||
+      (!ignoreTriangle && hasTopGlideLeftToRight(obj2) && (obj3 === 0) && (obj6 === 0)) ||
+      (!ignoreTriangle && hasTopGlideRightToLeft(obj2) && (obj1 === 0) && (obj4 === 0))
     ) {
       result = true;
       // ladder
-      if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y + 1, backData))) {
+      if (isBlue && !spikeBallAbove && (isLadder(x, y, backData) || isLadder(x, y + 1, backData))) {
         result = false;
       }
       // teleport
-      if ([2].includes(element) && isWhiteTeleport(x, y, gameInfo.teleports)) {
+      if (isBlue && isWhiteTeleport(x, y, gameInfo.teleports)) {
         result = false;
       }
       // Water
-      if ([2].includes(element) && inWater(x, y, backData)) {
+      if (isBlue && !spikeBallAbove && inWater(x, y, backData)) {
         result = false;
       }
       // Rope
-      if ([2].includes(element)) {
-        if ((backData[y + 1][x] === 80) || (backData[y][x] === 137)) {
+      if (isBlue && !spikeBallAbove) {
+        if ((backObj2 === 80) || (backObj5 === 137)) {
           result = false;
         }
         if (y > 0) {
-          if (backData[y - 1][x] === 80) {
+          if (backObj8 === 80) {
             result = false;
           }
         }
       }
       // Propeller
-      if ([2].includes(element) && gameInfo.hasPropeller) {
+      if (isBlue && !spikeBallAbove && gameInfo.hasPropeller) {
         result = false;
       }
       // Force up
@@ -1797,36 +1815,36 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
       return false;
     }
 
-    if ((gameData[y - 1][x] === 0) ||
-      (!ignoreTriangle && hasBottomGlideLeftToRight(gameData[y - 1][x]) && (gameData[y - 1][x + 1] === 0) && (gameData[y][x + 1] === 0)) ||
-      (!ignoreTriangle && hasBottomGlideRightToLeft(gameData[y - 1][x]) && (gameData[y - 1][x - 1] === 0) && (gameData[y][x - 1] === 0))
+    if ((obj8 === 0) ||
+      (!ignoreTriangle && hasBottomGlideLeftToRight(obj8) && (obj9 === 0) && (obj6 === 0)) ||
+      (!ignoreTriangle && hasBottomGlideRightToLeft(obj8) && (obj7 === 0) && (obj4 === 0))
     ) {
       result = true;
       // ladder
-      if ([2].includes(element) && (isLadder(x, y, backData) || isLadder(x, y - 1, backData))) {
+      if (isBlue && !spikeBallBelow && (isLadder(x, y, backData) || isLadder(x, y - 1, backData))) {
         result = false;
       }
       // teleport
-      if ([2].includes(element) && isWhiteTeleport(x, y, gameInfo.teleports)) {
+      if (isBlue && isWhiteTeleport(x, y, gameInfo.teleports)) {
         result = false;
       }
       // Water
-      if ([2].includes(element) && inWater(x, y, backData)) {
+      if (isBlue && !spikeBallBelow && inWater(x, y, backData)) {
         result = false;
       }
       // Rope
-      if ([2].includes(element)) {
-        if ((backData[y - 1][x] === 80) || (backData[y][x] === 137)) {
+      if (isBlue && !spikeBallBelow) {
+        if ((backObj8 === 80) || (backObj5 === 137)) {
           result = false;
         }
         if (y < (backData.length - 1)) {
-          if (backData[y + 1][x] === 80) {
+          if (backObj2 === 80) {
             result = false;
           }
         }
       }
       // Propeller
-      if ([2].includes(element) && gameInfo.hasPropeller) {
+      if (isBlue && !spikeBallBelow && gameInfo.hasPropeller) {
         result = false;
       }
       // Force up
@@ -2514,6 +2532,9 @@ export function numberToChar(n) {
       break;
     case 255:
       result = "ђ";
+      break;
+    case 256:
+      result = "Ѓ";
       break;
     case 1000:
       // For manual only

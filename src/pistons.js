@@ -7,7 +7,7 @@ import { setTimeBombsTime } from "./timeBombs.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
-    return [2, 4, 5, 8, 9, 27, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 243, 244, 245, 246, 247, 248, 253, 255].includes(element);
+    return [2, 4, 5, 8, 9, 27, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 243, 244, 245, 246, 247, 248, 253, 255, 256].includes(element);
 }
 
 export function checkPistonsDetector(gameData, gameInfo) {

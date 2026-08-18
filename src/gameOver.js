@@ -4,6 +4,7 @@ import { checkFirstCount } from "./musicBoxes.js";
 import { checkRedBalls } from "./redBalls.js";
 import { checkSeaAnemones } from "./seaAnemone.js";
 import { checkSpikes } from "./spikes.js";
+import { checkSpikeBalls } from "./spikeBalls.js";
 
 export function checkGameOver(backData, gameData, gameInfo, gameVars) {
     let playSounds = [];
@@ -39,7 +40,7 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
         }
     }
 
-    if (checkSpikes(backData, gameData, gameInfo, gameVars)) {
+    if (checkSpikes(backData, gameData, gameInfo, gameVars) || checkSpikeBalls(backData, gameData, gameInfo, gameVars)) {
         gameVars.gameOver = true;
         playSounds.push("pain");
     }

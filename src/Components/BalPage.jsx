@@ -1142,7 +1142,7 @@ function BalPage() {
             // Balls
             switch (globalVars.createLevelBallsPage) {
               case 2:
-                arr1 = [199, 207, 244, 2133, 2148];
+                arr1 = [199, 207, 244, 2133, 2148, 256];
                 arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
                 break;
               default:

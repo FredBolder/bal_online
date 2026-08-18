@@ -1206,6 +1206,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Detector, ` + extraInfo;
                 break;
+            case 256:
+                info = `Spike ball`;
+                break;
             default:
                 break;
         }

@@ -19,6 +19,7 @@ import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
 import { removeStyle } from "./questionStones.js";
 import { drawSeaAnemone } from "./seaAnemone.js";
+import { drawSpikeBall } from "./spikeBalls.js"
 import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { drawFish } from "./tropicalFish.js";
@@ -3976,7 +3977,7 @@ function drawLevel(
           drawSpike(currentCol, currentRow, "right");
           break;
         case 177:
-          drawSpike(currentCol, currentRow, "left");
+          drawSpike(currentCol, currentRow, "left",);
           break;
         case 178:
           drawMover(currentCol, currentRow);
@@ -4163,6 +4164,9 @@ function drawLevel(
           break;
         case 255:
           drawDetector(currentCol, currentRow);
+          break;
+        case 256:
+          drawSpikeBall(ctx, xc, yc, w1, 0.125 * Math.PI);
           break;
         case 1000:
           // For manual only (empty)
@@ -4487,7 +4491,7 @@ function drawLevel(
         drawBox(ctx, xmin, ymin, w1, w2, raster.color);
         ctx.setLineDash([]);
       }
-      
+
       highlightBlueBall(currentCol, currentRow);
       highlightSelectedCell(currentCol, currentRow);
       highlightTelekinesisObject(currentCol, currentRow);

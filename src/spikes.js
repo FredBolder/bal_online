@@ -4,8 +4,6 @@ import { hasForceLeft, hasForceRight } from "./force.js";
 export function checkSpikes(backData, gameData, gameInfo, gameVars) {
     let gameOver = false;
     const points = [];
-    let x = -1;
-    let y = -1;
     const xMax = gameData[0].length - 1;
     const yMax = gameData.length - 1;
 
@@ -17,39 +15,42 @@ export function checkSpikes(backData, gameData, gameInfo, gameVars) {
     }
 
     for (let i = 0; i < points.length; i++) {
-        x = points[i].x;
-        y = points[i].y;
-        if ((x !== -1) && (y !== -1)) {
-            if (y < yMax) {
-                if (gameData[y + 1][x] === 174) {
-                    // Spike up
-                    if (hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + 1, false)) {
-                        gameOver = true;
-                    }
+        const x = points[i].x;
+        const y = points[i].y;
+
+        if ((x === -1) || (y === -1)) {
+            continue;
+        }
+
+        if (y < yMax) {
+            if (gameData[y + 1][x] === 174) {
+                // Spike up
+                if (hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, y + 1, false)) {
+                    return true;
                 }
             }
-            if (y > 0) {
-                if (gameData[y - 1][x] === 175) {
-                    // Spike down
-                    if (hasWeightBelow(backData, gameData, gameInfo, gameVars, x, x, y - 1, false)) {
-                        gameOver = true;
-                    }
+        }
+        if (y > 0) {
+            if (gameData[y - 1][x] === 175) {
+                // Spike down
+                if (hasWeightBelow(backData, gameData, gameInfo, gameVars, x, x, y - 1, false)) {
+                    return true;
                 }
             }
-            if (x > 0) {
-                if (gameData[y][x - 1] === 176) {
-                    // Spike right
-                    if (hasForceLeft(gameData, gameInfo, x, y)) {
-                        gameOver = true;
-                    }
+        }
+        if (x > 0) {
+            if (gameData[y][x - 1] === 176) {
+                // Spike right
+                if (hasForceLeft(gameData, gameInfo, x, y)) {
+                    return true;
                 }
             }
-            if (x < xMax) {
-                if (gameData[y][x + 1] === 177) {
-                    // Spike left
-                    if (hasForceRight(gameData, gameInfo, x, y)) {
-                        gameOver = true;
-                    }
+        }
+        if (x < xMax) {
+            if (gameData[y][x + 1] === 177) {
+                // Spike left
+                if (hasForceRight(gameData, gameInfo, x, y)) {
+                    return true;
                 }
             }
         }

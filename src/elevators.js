@@ -12,6 +12,7 @@ function moveableByElevator(gameInfo, n) {
     case 203:
     case 245:
     case 253:
+    case 256:
       result = true;
       break;
     case 2:
