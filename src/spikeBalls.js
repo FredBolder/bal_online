@@ -1,5 +1,5 @@
-import { getGameDataValue } from "./balUtils.js";
-import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
+import { canFall, getGameDataValue } from "./balUtils.js";
+import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp, moveableByForceOrEmpty } from "./force.js";
 
 export function drawSpikeBall(ctx, xc, yc, size, angle = 0) {
     const R = size * 0.5;
@@ -146,9 +146,91 @@ export function drawSpikeBall(ctx, xc, yc, size, angle = 0) {
     ctx.restore();
 }
 
+export function hasSpikeBallWeightBelow(gameData, x, y) {
+    const maxY = gameData.length - 1;
+    for (let i = y + 1; i <= maxY; i++) {
+        const obj = gameData[i][x];
+        if (obj === 256) {
+            return true;
+        }
+        if (obj === 0 || !canFall.includes(obj)) {
+            return false;
+        }
+    }
+    return false;
+}
+
+export function hasSpikeBallWeightAbove(gameData, x, y) {
+    for (let i = y - 1; i >= 0; i--) {
+        const obj = gameData[i][x];
+        if (obj === 256) {
+            return true;
+        }
+        if (obj === 0 || !canFall.includes(obj)) {
+            return false;
+        }
+    }
+    return false;
+}
+
+function canMoveDown(gameData, x, y) {
+    const maxY = gameData.length - 1;
+    for (let i = y + 1; i <= maxY; i++) {
+        const obj = gameData[i][x];
+        if (obj === 0) {
+            return true;
+        }
+        if (!moveableByForceOrEmpty.includes(obj)) {
+            return false;
+        }
+    }
+    return false;
+}
+
+function canMoveLeft(gameData, x, y) {
+    for (let i = x - 1; i >= 0; i--) {
+        const obj = gameData[y][i];
+        if (obj === 0) {
+            return true;
+        }
+        if (!moveableByForceOrEmpty.includes(obj)) {
+            return false;
+        }
+    }
+    return false;
+}
+
+function canMoveRight(gameData, x, y) {
+    const maxX = gameData[0].length - 1;
+    for (let i = x + 1; i <= maxX; i++) {
+        const obj = gameData[y][i];
+        if (obj === 0) {
+            return true;
+        }
+        if (!moveableByForceOrEmpty.includes(obj)) {
+            return false;
+        }
+    }
+    return false;
+}
+
+function canMoveUp(gameData, x, y) {
+    for (let i = y - 1; i >= 0; i--) {
+        const obj = gameData[i][x];
+        if (obj === 0) {
+            return true;
+        }
+        if (!moveableByForceOrEmpty.includes(obj)) {
+            return false;
+        }
+    }
+    return false;
+}
+
 export function checkSpikeBalls(backData, gameData, gameInfo, gameVars) {
     const points = [];
     const gravityDown = (gameVars.gravity === "down");
+    const gravityUp = !gravityDown;
 
     if (gameInfo.twoBlue) {
         points.push({ x: gameInfo.blueBall1.x, y: gameInfo.blueBall1.y });
@@ -180,10 +262,10 @@ export function checkSpikeBalls(backData, gameData, gameInfo, gameVars) {
         const spikeAbove = (cellAbove === 256);
         const spikeBelow = (cellBelow === 256);
 
-        const emptyLeft = (cellLeft === 0);
-        const emptyRight = (cellRight === 0);
-        const emptyAbove = (cellAbove === 0);
-        const emptyBelow = (cellBelow === 0);
+        const blockedLeft = !canMoveLeft(gameData, x, y);
+        const blockedRight = !canMoveRight(gameData, x, y);
+        const blockedAbove = !canMoveUp(gameData, x, y);
+        const blockedBelow = !canMoveDown(gameData, x, y);
 
         if (!spikeLeft && !spikeRight && !spikeAbove && !spikeBelow) {
             continue;
@@ -205,23 +287,29 @@ export function checkSpikeBalls(backData, gameData, gameInfo, gameVars) {
             }
         }
         
-        if (gravityDown && !forceUp) {
-            forceDown = true;
+        if ((forceDown || gravityDown) && spikeAbove && blockedBelow) {
+            return true;
         }
-        if (!gravityDown && !forceDown) {
-            forceUp = true;
+        if ((forceUp || gravityUp) && spikeBelow && blockedAbove) {
+            return true;
+        }
+        if (forceRight && spikeLeft && blockedRight) {
+            return true;
+        }
+        if (forceLeft && spikeRight && blockedLeft) {
+            return true;
         }
 
-        if (forceDown && spikeAbove && !emptyBelow) {
+        if (forceDown && spikeBelow && blockedBelow) {
             return true;
         }
-        if (forceUp && spikeBelow && !emptyAbove) {
+        if (forceUp && spikeAbove && blockedAbove) {
             return true;
         }
-        if (forceRight && spikeLeft && !emptyRight) {
+        if (forceRight && spikeRight && blockedRight) {
             return true;
         }
-        if (forceLeft && spikeRight && !emptyLeft) {
+        if (forceLeft && spikeLeft && blockedLeft) {
             return true;
         }
     }

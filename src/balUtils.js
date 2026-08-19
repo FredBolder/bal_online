@@ -11,6 +11,7 @@ import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
 import { removeStyle } from "./questionStones.js";
 import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
+import { hasSpikeBallWeightAbove, hasSpikeBallWeightBelow } from "./spikeBalls.js";
 import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
@@ -21,6 +22,7 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 
+export const canFall = [2, 4, 8, 40, 93, 94, 245, 256];
 const phaseThroughObjects = [1, 10, 11, 12, 15, 16, 17, 18, 21, 30, 35, 87, 88, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 169, 198];
 
 function canBeTakenOrIsEmpty(gameInfo, object) {
@@ -1112,7 +1114,6 @@ export function charToNumber(c) {
 }
 
 export function checkFalling(backData, gameData, gameInfo, gameVars) {
-  const canFall = [2, 4, 8, 40, 93, 94, 245, 256];
   let forceDown = false;
   let forceUp = false;
   let idx = -1;
@@ -1759,8 +1760,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
   const obj8 = getGameDataValue(gameData, x, y - 1);
   const obj9 = getGameDataValue(gameData, x + 1, y - 1);  
   const isBlue = (obj5 === 2);
-  const spikeBallAbove = (obj8 === 256);
-  const spikeBallBelow = (obj2 === 256);
+  const spikeBallAbove = hasSpikeBallWeightAbove(gameData, x, y);
+  const spikeBallBelow = hasSpikeBallWeightBelow(gameData, x, y);
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
 

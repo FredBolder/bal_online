@@ -5,7 +5,7 @@ import {
 } from "./triangleStones.js";
 
 
-const moveableOrEmpty = [0, 2, 4, 8, 27, 40, 93, 94, 203, 243, 245, 253, 256];
+export const moveableByForceOrEmpty = [0, 2, 4, 8, 27, 40, 93, 94, 203, 243, 245, 253, 256];
 
 export function checkForces(gameData, gameInfo) {
     let elBottom = -1;
@@ -65,7 +65,7 @@ export function checkForces(gameData, gameInfo) {
                                 emptyOrTriangle = -1;
                             }
                         } else {
-                            if (!moveableOrEmpty.includes(element)) {
+                            if (!moveableByForceOrEmpty.includes(element)) {
                                 possible = false;
                                 emptyOrTriangle = -1;
                             }
@@ -122,7 +122,7 @@ export function checkForces(gameData, gameInfo) {
                                 emptyOrTriangle = -1;
                             }
                         } else {
-                            if (!moveableOrEmpty.includes(element)) {
+                            if (!moveableByForceOrEmpty.includes(element)) {
                                 possible = false;
                                 emptyOrTriangle = -1;
                             }
@@ -179,7 +179,7 @@ export function checkForces(gameData, gameInfo) {
                                 emptyOrTriangle = -1;
                             }
                         } else {
-                            if (!moveableOrEmpty.includes(element)) {
+                            if (!moveableByForceOrEmpty.includes(element)) {
                                 possible = false;
                                 emptyOrTriangle = -1;
                             }
@@ -236,7 +236,7 @@ export function checkForces(gameData, gameInfo) {
                                 emptyOrTriangle = -1;
                             }
                         } else {
-                            if (!moveableOrEmpty.includes(element)) {
+                            if (!moveableByForceOrEmpty.includes(element)) {
                                 possible = false;
                                 emptyOrTriangle = -1;
                             }
@@ -279,7 +279,7 @@ export function hasForceDown(gameData, gameInfo, x, y) {
             if (force.y < y - 1) {
                 for (let j = y - 1; j > force.y; j--) {
                     const element = gameData[j][x];
-                    if (!moveableOrEmpty.includes(element)) {
+                    if (!moveableByForceOrEmpty.includes(element)) {
                         found = false;
                     }
                 }
@@ -303,7 +303,7 @@ export function hasForceLeft(gameData, gameInfo, x, y) {
             if (force.x > x + 1) {
                 for (let j = x + 1; j < force.x; j++) {
                     const element = gameData[y][j];
-                    if (!moveableOrEmpty.includes(element)) {
+                    if (!moveableByForceOrEmpty.includes(element)) {
                         found = false;
                     }
                 }
@@ -327,7 +327,7 @@ export function hasForceRight(gameData, gameInfo, x, y) {
             if (force.x < x - 1) {
                 for (let j = x - 1; j > force.x; j--) {
                     const element = gameData[y][j];
-                    if (!moveableOrEmpty.includes(element)) {
+                    if (!moveableByForceOrEmpty.includes(element)) {
                         found = false;
                     }
                 }
@@ -351,7 +351,7 @@ export function hasForceUp(gameData, gameInfo, x, y) {
             if (force.y > y + 1) {
                 for (let j = y + 1; j < force.y; j++) {
                     const element = gameData[j][x];
-                    if (!moveableOrEmpty.includes(element)) {
+                    if (!moveableByForceOrEmpty.includes(element)) {
                         found = false;
                     }
                 }
