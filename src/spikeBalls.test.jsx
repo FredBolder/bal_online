@@ -10,6 +10,7 @@ describe("Spikes", () => {
     beforeEach(() => {
         defaultGameInfo = {};
         initGameInfo(defaultGameInfo);
+        defaultGameInfo.levelCanHaveSpikeBalls = true;
         defaultGameVars = {};
         initGameVars(defaultGameVars);
     });

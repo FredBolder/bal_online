@@ -569,10 +569,43 @@ function drawLevel(
         dist = h / colors.length;
         for (let c = 0; c < colors.length; c++) {
           drawFilledBox(ctx, x, y + (c * dist), w, dist, displayColor(colors[c]));
+          ctx.e
         }
       }
     } else {
-      drawFilledBox(ctx, x, y, w, h, displayColor(color));
+      if (color === "spike") {
+        drawFilledBox(ctx, x, y, w, h, displayColor("#303030"));
+
+        const xc = x + w / 2.0;
+        const yc = y + h / 2.0;
+        const r = Math.min(w, h) * 0.28;
+
+        const gradient = ctx.createRadialGradient(
+          xc - r * 0.10,
+          yc - r * 0.12,
+          0,
+          xc,
+          yc,
+          r
+        );
+
+        gradient.addColorStop(0.00, "#ffffff");
+        gradient.addColorStop(0.015, "#ffffff");
+        gradient.addColorStop(0.045, "#eeeeee");
+        gradient.addColorStop(0.10, "#bdbdbd");
+        gradient.addColorStop(0.20, "#858585");
+        gradient.addColorStop(0.38, "#5d5d5d");
+        gradient.addColorStop(0.65, "#454545");
+        gradient.addColorStop(1.00, "#303030");
+
+        ctx.fillStyle = gradient;
+
+        ctx.beginPath();
+        ctx.arc(xc, yc, r, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        drawFilledBox(ctx, x, y, w, h, displayColor(color));
+      }
     }
   }
 

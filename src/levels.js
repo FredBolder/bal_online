@@ -2313,30 +2313,38 @@ function settingNr(index) {
   return `Setting ${index + 1}: `;
 }
 
-export function updateBlue(gameData, gameInfo) {
+export function updateGameInfo(gameData, gameInfo) {
   let nBlueBalls = 0;
-
+  
   gameInfo.blueBall1.x = -1;
   gameInfo.blueBall1.y = -1;
   gameInfo.blueBall2.x = -1;
   gameInfo.blueBall2.y = -1;
+  gameInfo.levelCanHaveSpikeBalls = false;
   for (let i = gameData.length - 1; i >= 0; i--) {
     const n = gameData[i].length;
     for (let j = 0; j < n; j++) {
       const gd = gameData[i][j];
-      if (gd === 2) {
-        if ((gameInfo.blueBall1.x === -1) && (gameInfo.blueBall1.y === -1)) {
-          gameInfo.blueBall1.x = j;
-          gameInfo.blueBall1.y = i;
-        } else if ((gameInfo.blueBall2.x === -1) && (gameInfo.blueBall2.y === -1)) {
-          gameInfo.blueBall2.x = j;
-          gameInfo.blueBall2.y = i;
-        }
-        nBlueBalls++;
-        if (nBlueBalls > 2) {
-          gameData[i][j] = 0;
-          nBlueBalls--;
-        }
+      switch (gd) {
+        case 2:
+          if ((gameInfo.blueBall1.x === -1) && (gameInfo.blueBall1.y === -1)) {
+            gameInfo.blueBall1.x = j;
+            gameInfo.blueBall1.y = i;
+          } else if ((gameInfo.blueBall2.x === -1) && (gameInfo.blueBall2.y === -1)) {
+            gameInfo.blueBall2.x = j;
+            gameInfo.blueBall2.y = i;
+          }
+          nBlueBalls++;
+          if (nBlueBalls > 2) {
+            gameData[i][j] = 0;
+            nBlueBalls--;
+          }
+          break;
+        case 256:
+          gameInfo.levelCanHaveSpikeBalls = true;
+          break;  
+        default:
+          break;
       }
     }
   }

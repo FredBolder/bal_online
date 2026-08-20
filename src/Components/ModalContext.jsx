@@ -173,6 +173,83 @@ export const ModalProvider = ({ children }) => {
     ));
   };
 
+  const showSelect2 = (
+    title,
+    labelOptions1,
+    options1,
+    default1,
+    labelOptions2,
+    options2,
+    default2
+  ) => {
+    if (options1.length === 0 || options2.length === 0) {
+      return Promise.resolve(null);
+    }
+
+    const safeIndex1 =
+      default1 >= 0 && default1 < options1.length ? default1 : 0;
+
+    const safeIndex2 =
+      default2 >= 0 && default2 < options2.length ? default2 : 0;
+
+    let selectValue1 = options1[safeIndex1];
+    let selectValue2 = options2[safeIndex2];
+
+    return showModal(title, ({ close }) => (
+      <div>
+        <p>{labelOptions1}</p>
+        <select
+          className="modal-select"
+          autoFocus
+          defaultValue={options1[safeIndex1]}
+          onChange={(e) => (selectValue1 = e.target.value)}
+        >
+          {options1.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+
+        <p>{labelOptions2}</p>
+        <select
+          className="modal-select"
+          defaultValue={options2[safeIndex2]}
+          onChange={(e) => (selectValue2 = e.target.value)}
+        >
+          {options2.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+
+        <div className="modal-button-container">
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() =>
+                close([selectValue1, selectValue2])
+              );
+            }}
+          >
+            OK
+          </button>
+
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(null));
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <ModalContext.Provider value={{
@@ -180,6 +257,7 @@ export const ModalProvider = ({ children }) => {
       showConfirm,
       showInput,
       showSelect,
+      showSelect2,
       modalState
     }}>
       {children}

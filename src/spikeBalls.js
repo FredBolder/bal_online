@@ -1,4 +1,4 @@
-import { canFall, getGameDataValue } from "./balUtils.js";
+import { canFall, getGameDataValue, findElementByCoordinates } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp, moveableByForceOrEmpty } from "./force.js";
 
 export function drawSpikeBall(ctx, xc, yc, size, angle = 0) {
@@ -146,9 +146,12 @@ export function drawSpikeBall(ctx, xc, yc, size, angle = 0) {
     ctx.restore();
 }
 
-export function hasSpikeBallWeightBelow(gameData, x, y) {
-    const maxY = gameData.length - 1;
-    for (let i = y + 1; i <= maxY; i++) {
+export function hasSpikeBallWeightAbove(gameData, gameInfo, x, y) {
+    if (!gameInfo.levelCanHaveSpikeBalls) {
+        return false;
+    }
+
+    for (let i = y - 1; i >= 0; i--) {
         const obj = gameData[i][x];
         if (obj === 256) {
             return true;
@@ -160,8 +163,13 @@ export function hasSpikeBallWeightBelow(gameData, x, y) {
     return false;
 }
 
-export function hasSpikeBallWeightAbove(gameData, x, y) {
-    for (let i = y - 1; i >= 0; i--) {
+export function hasSpikeBallWeightBelow(gameData, gameInfo, x, y) {
+    if (!gameInfo.levelCanHaveSpikeBalls) {
+        return false;
+    }
+
+    const maxY = gameData.length - 1;
+    for (let i = y + 1; i <= maxY; i++) {
         const obj = gameData[i][x];
         if (obj === 256) {
             return true;
@@ -228,15 +236,86 @@ function canMoveUp(gameData, x, y) {
 }
 
 export function checkSpikeBalls(backData, gameData, gameInfo, gameVars) {
+    let gameOver = false;
+    let idx = -1;
     const points = [];
     const gravityDown = (gameVars.gravity === "down");
     const gravityUp = !gravityDown;
+    let x = -1;
+    let y = -1;
+
+    if (!gameInfo.levelCanHaveSpikeBalls) {
+        return false;
+    }
+
+    function spike() {
+        const obj = getGameDataValue(gameData, x, y);
+
+        switch (obj) {
+            case 2:
+                gameOver = true;
+                break;
+            case 27:
+                idx = findElementByCoordinates(x, y, gameInfo.redFish);
+                if (idx >= 0) {
+                    gameInfo.redFish[idx].isDead = true;
+                }
+                break;
+            case 93:
+            case 94:
+                idx = findElementByCoordinates(x, y, gameInfo.redBalls);
+                if (idx >= 0) {
+                    gameInfo.redBalls[idx].direction = "none";
+                    gameInfo.redBalls[idx].smart = 0;
+                    gameData[y][x] = 8;
+                }
+                break;
+            case 243:
+                idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+                if (idx >= 0) {
+                    gameInfo.tropicalFish[idx].isDead = true;
+                }
+                break;
+            case 248:
+                idx = findElementByCoordinates(x, y, gameInfo.jellyfish);
+                if (idx >= 0) {
+                    gameInfo.jellyfish[idx].isDead = true;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     if (gameInfo.twoBlue) {
         points.push({ x: gameInfo.blueBall1.x, y: gameInfo.blueBall1.y });
         points.push({ x: gameInfo.blueBall2.x, y: gameInfo.blueBall2.y });
     } else {
         points.push({ x: gameInfo.blueBall.x, y: gameInfo.blueBall.y });
+    }
+    for (let i = 0; i < gameInfo.redFish.length; i++) {
+        const fish = gameInfo.redFish[i];
+        if (!fish.isDead) {
+            points.push({ x: fish.x, y: fish.y });
+        }
+    }
+    for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
+        const fish = gameInfo.tropicalFish[i];
+        if (!fish.isDead) {
+            points.push({ x: fish.x, y: fish.y });
+        }
+    }
+    for (let i = 0; i < gameInfo.jellyfish.length; i++) {
+        const jellyfish = gameInfo.jellyfish[i];
+        if (!jellyfish.isDead) {
+            points.push({ x: jellyfish.x, y: jellyfish.y });
+        }
+    }
+    for (let i = 0; i < gameInfo.redBalls.length; i++) {
+        const redBall = gameInfo.redBalls[i];
+        if (redBall.smart > 0) {
+            points.push({ x: redBall.x, y: redBall.y });
+        }
     }
 
     for (let i = 0; i < points.length; i++) {
@@ -245,8 +324,8 @@ export function checkSpikeBalls(backData, gameData, gameInfo, gameVars) {
         let forceRight = false;
         let forceUp = false;
 
-        const x = points[i].x;
-        const y = points[i].y;
+        x = points[i].x;
+        y = points[i].y;
 
         if ((x === -1) || (y === -1)) {
             continue;
@@ -278,40 +357,50 @@ export function checkSpikeBalls(backData, gameData, gameInfo, gameVars) {
 
         if (forceLeft && forceRight) {
             if (spikeLeft || spikeRight) {
-                return true;
+                spike();
+                continue;
             }
         }
         if (forceDown && forceUp) {
             if (spikeAbove || spikeBelow) {
-                return true;
+                spike();
+                continue;
             }
         }
-        
+
         if ((forceDown || gravityDown) && spikeAbove && blockedBelow) {
-            return true;
+            spike();
+            continue;
         }
         if ((forceUp || gravityUp) && spikeBelow && blockedAbove) {
-            return true;
+            spike();
+            continue;
         }
         if (forceRight && spikeLeft && blockedRight) {
-            return true;
+            spike();
+            continue;
         }
         if (forceLeft && spikeRight && blockedLeft) {
-            return true;
+            spike();
+            continue;
         }
 
         if (forceDown && spikeBelow && blockedBelow) {
-            return true;
+            spike();
+            continue;
         }
         if (forceUp && spikeAbove && blockedAbove) {
-            return true;
+            spike();
+            continue;
         }
         if (forceRight && spikeRight && blockedRight) {
-            return true;
+            spike();
+            continue;
         }
         if (forceLeft && spikeLeft && blockedLeft) {
-            return true;
+            spike();
+            continue;
         }
     }
-    return false;
+    return gameOver;
 }

@@ -6,12 +6,16 @@ function moveableByConveyorBelt(gameInfo, n) {
     switch (n) {
         case 4:
         case 8:
+        case 27:
         case 40:
         case 93:
         case 94:
         case 203:
+        case 243:
         case 245:
+        case 248:
         case 253:
+        case 256:
             result = true;
             break;
         case 2:

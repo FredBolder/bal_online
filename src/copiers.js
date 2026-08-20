@@ -29,7 +29,7 @@ export function checkCopiers(gameData, gameInfo) {
                 redBall2 = null;
                 if ((copier.x > 2) && (copier.x < (gameData[0].length - 2))) {
                     element = gameData[copier.y - 1][copier.x];
-                    if (([4, 40, 93, 94, 203, 253].includes(element)) && (gameData[copier.y][copier.x - 1] === 0) && (gameData[copier.y][copier.x + 1] === 0)) {
+                    if (([4, 40, 93, 94, 203, 253, 256].includes(element)) && (gameData[copier.y][copier.x - 1] === 0) && (gameData[copier.y][copier.x + 1] === 0)) {
                         info.updated = true;
                         gameData[copier.y - 1][copier.x] = 0;
                         if (gameData[copier.y][copier.x - 2] === 0) {

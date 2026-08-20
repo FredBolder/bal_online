@@ -34,6 +34,7 @@ import {
   zeroArray,
   findElementByCoordinates,
 } from "../balUtils.js";
+import { changerColors } from "../changers.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart, stringToCode } from "../codes.js";
 import {
   changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
@@ -50,7 +51,7 @@ import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPl
 import { checkGameOver } from "../gameOver.js";
 import { globalVars } from "../glob.js";
 import { deleteIfLava } from "../lava.js";
-import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels, updateBlue } from "../levels.js";
+import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels, updateGameInfo } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
 import { changeMoverInverted, changeMoverMode, moverModes } from "../movers.js";
@@ -156,7 +157,7 @@ initGameVars(gameVarsMenu);
 
 function BalPage() {
   const navigate = useNavigate();
-  const { showMessage, showConfirm, showInput, showSelect } = useModal();
+  const { showMessage, showConfirm, showInput, showSelect, showSelect2 } = useModal();
   const { modalState } = useContext(ModalContext);
 
   const actionButtonRef = useRef(null);
@@ -306,7 +307,7 @@ function BalPage() {
         await handleLoadFromMemory(3);
         clearPlayedNotes();
         fixDoors(gameInfo);
-        updateBlue(gameData, gameInfo);
+        updateGameInfo(gameData, gameInfo);
         return;
       } else {
         await initLevel(gameVars.currentLevel);
@@ -853,7 +854,7 @@ function BalPage() {
       gameVars.gameOver = false;
       gameVars.currentLevel = 9999;
       fixDoors(gameInfo);
-      updateBlue(gameData, gameInfo);
+      updateGameInfo(gameData, gameInfo);
       updateGameCanvas();
       updateGreen();
       updateProgressText();
@@ -1071,7 +1072,7 @@ function BalPage() {
     }
     clearPlayedNotes();
     fixDoors(gameInfo);
-    updateBlue(gameData, gameInfo);
+    updateGameInfo(gameData, gameInfo);
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
     updateMenuItemsDisplay();
@@ -1326,7 +1327,7 @@ function BalPage() {
       gameVars.gameOver = false;
       setTimeBombsTime(gameVars.timeBombsTime);
       fixDoors(gameInfo);
-      updateBlue(gameData, gameInfo);
+      updateGameInfo(gameData, gameInfo);
       updateProgressText();
       updateGameCanvas();
       updateGreen();
@@ -2206,7 +2207,7 @@ function BalPage() {
         await handleLoadFromMemory(3);
         clearPlayedNotes();
         fixDoors(gameInfo);
-        updateBlue(gameData, gameInfo);
+        updateGameInfo(gameData, gameInfo);
       } else {
         await initLevel(gameVars.currentLevel);
       }
@@ -3846,83 +3847,23 @@ function BalPage() {
             if (row > 0) {
               newValue = null;
               if (createLevelMenu === menuToNumber("balls")) {
-                newValue = await showSelect("Changers", "Colors:", [
-                  "all, brown",
-                  "all, light blue",
-                  "all, orange",
-                  "all, pink",
-                  "all, purple",
-                  "all, red",
-                  "all, white",
-                  "all, yellow",
-                  "brown, light blue",
-                  "brown, orange",
-                  "brown, pink",
-                  "brown, purple",
-                  "brown, red",
-                  "brown, white",
-                  "brown, yellow",
-                  "light blue, all",
-                  "light blue, brown",
-                  "light blue, orange",
-                  "light blue, pink",
-                  "light blue, purple",
-                  "light blue, red",
-                  "light blue, white",
-                  "light blue, yellow",
-                  "orange, all",
-                  "orange, brown",
-                  "orange, light blue",
-                  "orange, pink",
-                  "orange, purple",
-                  "orange, red",
-                  "orange, white",
-                  "orange, yellow",
-                  "pink, all",
-                  "pink, brown",
-                  "pink, light blue",
-                  "pink, orange",
-                  "pink, purple",
-                  "pink, red",
-                  "pink, white",
-                  "pink, yellow",
-                  "purple, all",
-                  "purple, brown",
-                  "purple, light blue",
-                  "purple, orange",
-                  "purple, pink",
-                  "purple, red",
-                  "purple, white",
-                  "purple, yellow",
-                  "red, all",
-                  "red, brown",
-                  "red, light blue",
-                  "red, orange",
-                  "red, pink",
-                  "red, purple",
-                  "red, white",
-                  "red, yellow",
-                  "white, all",
-                  "white, brown",
-                  "white, light blue",
-                  "white, orange",
-                  "white, pink",
-                  "white, purple",
-                  "white, red",
-                  "white, yellow",
-                  "yellow, all",
-                  "yellow, brown",
-                  "yellow, light blue",
-                  "yellow, orange",
-                  "yellow, pink",
-                  "yellow, purple",
-                  "yellow, red",
-                  "yellow, white",
-                ], 0);
+                newValue = await showSelect2(
+                  "Changers",
+                  "Color 1:",
+                  changerColors,
+                  7,
+                  "Color 2:",
+                  changerColors,
+                  2
+                );
               }
               if (newValue !== null) {
-                createLevelChangerColors = removeChar(newValue, " ");
-                ok = true;
+                if (newValue[0] !== newValue[1]) {
+                  createLevelChangerColors = newValue.join(",");
+                  ok = true;
+                } else {
+                  showMessage("Error", "The colors can not be the same.");
+                }
               }
             }
             if (!ok) {

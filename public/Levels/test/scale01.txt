@@ -1,0 +1,29 @@
+$answer: 4, 13, 2
+$answerballmode: 4, 13, scale
+$answer: 6, 13, 2
+$answerballmode: 6, 13, scale
+$answer: 7, 13, 2
+$answerballmode: 7, 13, scale
+$answer: 8, 13, 2
+$answerballmode: 8, 13, scale
+$answer: 9, 13, 2
+$answerballmode: 9, 13, scale
+$answer: 10, 13, 2
+$answerballmode: 10, 13, scale
+$answer: 11, 13, 2
+$answerballmode: 11, 13, scale
+111111111111111
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1    1        1
+13  2148OѤЬЃ  1
+1   Ӆ1ӅӅӅӅӅӅ  1
+111111111111111

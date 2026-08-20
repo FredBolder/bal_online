@@ -1196,7 +1196,7 @@ export function checkFalling(backData, gameData, gameInfo, gameVars) {
 
         if (([2, 8, 93, 94].includes(element1) && falling(j, i, backData, gameData, gameInfo, gameVars)) ||
           ([4, 40, 245, 256].includes(element1) && !forceUp) ||
-          ([27, 243, 248].includes(element1) && !forceUp && backData[i][j] !== 23)) {
+          ([27, 243, 248].includes(element1) && !forceUp && (backData[i][j] !== 23 || hasSpikeBallWeightAbove(gameData, gameInfo, j, i)))) {
           skip = ((element1 === 2) && (gameVars.skipFalling > 0));
           if (skip) {
             gameVars.skipFalling--;
@@ -1452,7 +1452,7 @@ export function hasWeightAbove(backData, gameData, gameInfo, gameVars, xmin, xma
       const elAbove = getGameDataValue(gameData, i, y - 1);
       const forceDown = hasForceDown(gameData, gameInfo, i, y - 1);
       const pushing = (pushingDown && (i === gameInfo.blueBall.x) && ((y - 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 27, 40, 93, 94, 203, 243, 245, 248, 253].includes(elAbove)) {
+      if ([2, 4, 8, 27, 40, 93, 94, 203, 243, 245, 248, 253, 256].includes(elAbove)) {
         if (pushing || gravityDown || forceDown) {
           weight = true;
         }
@@ -1505,7 +1505,7 @@ export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xma
       const elBelow = gameData[y + 1][i];
       const forceUp = hasForceUp(gameData, gameInfo, i, y + 1);
       const pushing = (pushingUp && (i === gameInfo.blueBall.x) && ((y + 1) === gameInfo.blueBall.y));
-      if ([2, 4, 8, 40, 93, 94, 203, 245, 253].includes(elBelow)) {
+      if ([2, 4, 8, 40, 93, 94, 203, 245, 253, 256].includes(elBelow)) {
         if (pushing || gravityUp || forceUp) {
           weight = true;
         }
@@ -1760,8 +1760,8 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
   const obj8 = getGameDataValue(gameData, x, y - 1);
   const obj9 = getGameDataValue(gameData, x + 1, y - 1);  
   const isBlue = (obj5 === 2);
-  const spikeBallAbove = hasSpikeBallWeightAbove(gameData, x, y);
-  const spikeBallBelow = hasSpikeBallWeightBelow(gameData, x, y);
+  const spikeBallAbove = hasSpikeBallWeightAbove(gameData, gameInfo, x, y);
+  const spikeBallBelow = hasSpikeBallWeightBelow(gameData, gameInfo, x, y);
   let forceUp = hasForceUp(gameData, gameInfo, x, y);
   let result = false;
 

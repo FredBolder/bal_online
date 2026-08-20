@@ -1289,6 +1289,7 @@ export function initGameInfo(info) {
     info.jellyfish = [];
     info.lastMusicBox = null;
     info.lava = [];
+    info.levelCanHaveSpikeBalls = false;
     info.magnets = [];
     info.movers = [];
     info.musicBoxes = [];
