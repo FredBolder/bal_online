@@ -26,8 +26,8 @@ export const seriesSmallStart = 750;
 export const seriesSmallEnd = 764;
 export const seriesExtremeStart = 901;
 export const seriesExtremeEnd = 906;
-export const seriesChoniaPollaStart = 990;
-export const seriesChoniaPollaEnd = 993;
+export const seriesChroniaPollaStart = 990;
+export const seriesChroniaPollaEnd = 993;
 export const seriesSecretStart = 2000;
 export const seriesSecretEnd = 2016;
 export const seriesEasy1Start = 3000;
@@ -1295,6 +1295,11 @@ export function getAllLevels() {
   for (let i = seriesProgrammingStart; i <= seriesProgrammingEnd; i++) {
     levels.push(i);
   }
+  if (globalVars.uf) {
+    for (let i = seriesChroniaPollaStart; i <= seriesChroniaPollaEnd; i++) {
+      levels.push(i);
+    }
+  }
   return levels;
 }
 
@@ -1331,7 +1336,7 @@ export async function getLevel(n, gateTravelling = false) {
     (n >= seriesMusic1Start && n <= seriesMusic1End) ||
     (n >= seriesSecretStart && n <= seriesSecretEnd) ||
     (n >= hiddenMiniSeries1Start && n <= hiddenMiniSeries1End) ||
-    (n >= seriesChoniaPollaStart && n <= seriesChoniaPollaEnd) ||
+    (n >= seriesChroniaPollaStart && n <= seriesChroniaPollaEnd) ||
     ((globalVars.uf || globalVars.up) && (
       (n >= series6Start && n <= series6End) ||
       (n >= seriesEasy2Start && n <= seriesEasy2End) ||
@@ -1397,7 +1402,7 @@ function getStringAfterCoordinates(value) {
 }
 
 export function isChroniaPolla(n) {
-  return ((n >= seriesChoniaPollaStart) && (n <= seriesChoniaPollaEnd));
+  return ((n >= seriesChroniaPollaStart) && (n <= seriesChroniaPollaEnd));
 }
 
 export function isExtra(n) {
@@ -2314,8 +2319,9 @@ function settingNr(index) {
 }
 
 export function updateGameInfo(gameData, gameInfo) {
+  let idx = -1;
   let nBlueBalls = 0;
-  
+
   gameInfo.blueBall1.x = -1;
   gameInfo.blueBall1.y = -1;
   gameInfo.blueBall2.x = -1;
@@ -2340,9 +2346,17 @@ export function updateGameInfo(gameData, gameInfo) {
             nBlueBalls--;
           }
           break;
+        case 244:
+          idx = findElementByCoordinates(j, i, gameInfo.changers);
+          if (idx >= 0) {
+            if (gameInfo.changers[idx].color1 === "spike" || gameInfo.changers[idx].color2 === "spike") {
+              gameInfo.levelCanHaveSpikeBalls = true;
+            }
+          }
+          break;
         case 256:
           gameInfo.levelCanHaveSpikeBalls = true;
-          break;  
+          break;
         default:
           break;
       }
