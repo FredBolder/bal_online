@@ -1,6 +1,6 @@
 import { findElementByCoordinates, hasWeightAbove, getGameDataValue, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
-import { rotateGroup } from "./detectors.js";
+import { command, rotateGroup } from "./detectors.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
@@ -202,6 +202,10 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                 }
                 if (detector.target === "rotategroupright") {
                     rotateGroup(gameData, gameInfo, detector.group, false);
+                    result.updated = true;
+                }
+                if (detector.target === "command") {
+                    command(gameData, gameInfo, detector);
                     result.updated = true;
                 }
             }

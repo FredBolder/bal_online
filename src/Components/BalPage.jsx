@@ -9,6 +9,7 @@ import { answerBallModes, changeAnswerBallMode } from "../answerBalls.js";
 import {
   changeAnswer,
   changeChangerColors,
+  changeCommand,
   changeDisplay,
   changeGroup,
   changeDirection,
@@ -117,6 +118,7 @@ let createLevelAnswer = "";
 let createLevelBallsPages = 2;
 let createLevelChangerColors = "";
 let createLevelColorPages = 2;
+let createLevelCommand = "";
 let createLevelDirection = "";
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
@@ -1180,7 +1182,7 @@ function BalPage() {
             break;
           case 10:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 0, 0, 0, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 0, 0, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 11:
@@ -3165,6 +3167,13 @@ function BalPage() {
                     }
                   }
                 }
+                if (createLevelObject === 2206) {
+                  if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to change the command.");
+                    }
+                  }
+                }
                 if ((createLevelObject === 2092) && detectorModes().includes(createLevelMode)) {
                   if (changeDetectorMode(gameInfo, column, row, createLevelMode) === -1) {
                     if (oneSelected) {
@@ -3322,6 +3331,12 @@ function BalPage() {
   }
 
   async function handleCreateLevelCanvasClick(e) {
+    function handleCancel() {
+      if (!ok) {
+        createLevelObject = -1;
+      }
+    }
+
     if (!globalVars.createLevel || !gameDataMenu || (gameDataMenu.length < 1)) {
       return false;
     }
@@ -3480,10 +3495,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelMode = "";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             default:
               break;
@@ -3501,10 +3513,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelMode = "";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             default:
               break;
@@ -3523,10 +3532,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelMode = "";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             default:
               break;
@@ -3544,10 +3550,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelMode = "";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             default:
               break;
@@ -3565,10 +3568,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelMode = "";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             case 2203:
               ok = false;
@@ -3579,6 +3579,18 @@ function BalPage() {
                   ok = true;
                 }
               }
+              handleCancel();
+              break;
+            case 2206:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Detector", "Command", "");
+                if (newValue !== null) {
+                  createLevelCommand = newValue.trim();
+                  ok = true;
+                }
+              }
+              handleCancel();
               break;
             default:
               break;
@@ -3596,10 +3608,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelInstrument = "none";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             case 2092:
               ok = false;
@@ -3610,10 +3619,7 @@ function BalPage() {
                   ok = true;
                 }
               }
-              if (!ok) {
-                createLevelMode = "";
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             case 2131:
               ok = false;
@@ -3624,10 +3630,7 @@ function BalPage() {
                   ok = ((createLevelTranspose >= -24) && (createLevelTranspose <= 24));
                 }
               }
-              if (!ok) {
-                createLevelTranspose = 0;
-                createLevelObject = -1;
-              }
+              handleCancel();
               break;
             default:
               break;
@@ -3645,6 +3648,7 @@ function BalPage() {
                   ok = true;
                 }
               }
+              handleCancel();
               break;
             case 2143:
               if (row > 0) {
@@ -3654,6 +3658,7 @@ function BalPage() {
                   ok = true;
                 }
               }
+              handleCancel();
               break;
             default:
               break;
@@ -3755,10 +3760,7 @@ function BalPage() {
                 ok = true;
               }
             }
-            if (!ok) {
-              createLevelDirection = "";
-              createLevelObject = -1;
-            }
+            handleCancel();
             break;
           case 2139:
             // Next stone pattern
@@ -3820,10 +3822,7 @@ function BalPage() {
                 }
               }
             }
-            if (!ok) {
-              createLevelSides = null;
-              createLevelObject = -1;
-            }
+            handleCancel();
             break;
           case 2145:
             ok = false;
@@ -3837,10 +3836,7 @@ function BalPage() {
                 }
               }
             }
-            if (!ok) {
-              createLevelTicks = -1;
-              createLevelObject = -1;
-            }
+            handleCancel();
             break;
           case 2148:
             ok = false;
@@ -3866,10 +3862,7 @@ function BalPage() {
                 }
               }
             }
-            if (!ok) {
-              createLevelChangerColors = "";
-              createLevelObject = -1;
-            }
+            handleCancel();
             break;
           case 2200:
             if (row > 0) {
@@ -3963,10 +3956,7 @@ function BalPage() {
               }
               updateGameCanvas();
             }
-            if (!ok) {
-              createLevelQuestionStyle = "";
-              createLevelObject = -1;
-            }
+            handleCancel();
             break;
           default:
             break;

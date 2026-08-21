@@ -160,6 +160,18 @@ export function changeChangerColors(gameInfo, x, y, colors) {
   return idx;
 }
 
+export function changeCommand(gameInfo, x, y, command) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    gameInfo.detectors[idx].target = "command";
+    gameInfo.detectors[idx].value = command;
+  }
+  return idx;
+}
+
+
 export function changeDirection(gameData, gameInfo, x, y, direction) {
   let idx = -1;
 
@@ -1758,7 +1770,7 @@ export function falling(x, y, backData, gameData, gameInfo, gameVars, ignoreTria
   const obj6 = getGameDataValue(gameData, x + 1, y);
   const obj7 = getGameDataValue(gameData, x - 1, y - 1);
   const obj8 = getGameDataValue(gameData, x, y - 1);
-  const obj9 = getGameDataValue(gameData, x + 1, y - 1);  
+  const obj9 = getGameDataValue(gameData, x + 1, y - 1);
   const isBlue = (obj5 === 2);
   const spikeBallAbove = hasSpikeBallWeightAbove(gameData, gameInfo, x, y);
   const spikeBallBelow = hasSpikeBallWeightBelow(gameData, gameInfo, x, y);
@@ -2767,7 +2779,7 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
   }
 }
 
-export function moveObjectInDirection(gameData, gameInfo, x, y, direction) {
+export function moveObjectInDirection(gameData, gameInfo, x, y, direction, onlyIfEmpty = false) {
   let newX = x;
   let newY = y;
   switch (direction) {
@@ -2786,7 +2798,10 @@ export function moveObjectInDirection(gameData, gameInfo, x, y, direction) {
     default:
       break;
   }
-  moveObject(gameData, gameInfo, x, y, newX, newY);
+  const obj = getGameDataValue(gameData, newX, newY);
+  if (obj === 0 || !onlyIfEmpty) {
+    moveObject(gameData, gameInfo, x, y, newX, newY);
+  }
 }
 
 export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {

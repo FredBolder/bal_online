@@ -781,6 +781,9 @@ function drawLevel(
       case "rotategroupright":
         txt = "R" + group.toString();
         break;
+      case "command":
+        txt = "cmd";
+        break;
       default:
         txt = "?";
         break;
@@ -4498,6 +4501,9 @@ function drawLevel(
           break;
         case 2205:
           drawAbbreviation("RGR");
+          break;
+        case 2206:
+          drawAbbreviation("cmd");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
