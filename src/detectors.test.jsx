@@ -27,8 +27,8 @@ describe("Pistons", () => {
             blueBall: { x: 2, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 5, mode: "all", activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, group: 1 },
-                { x: 4, y: 5, mode: "all", activeSides: ["top"], target: "group", value: "", display: "default", activated: false, group: 2 }
+                { x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
         }
@@ -62,8 +62,8 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 5, mode: "all", activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, group: 1 },
-                { x: 4, y: 5, mode: "all", activeSides: ["top"], target: "group", value: "", display: "default", activated: false, group: 2 }
+                { x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 1 }],
         }
@@ -97,8 +97,8 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 4, mode: "all", activeSides: ["right"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, group: 1 },
-                { x: 4, y: 4, mode: "all", activeSides: ["right"], target: "group", value: "", display: "default", activated: false, group: 2 }
+                { x: 2, y: 4, mode: "all", oneTime: false, activeSides: ["right"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, group: 1 },
+                { x: 4, y: 4, mode: "all", oneTime: false, activeSides: ["right"], target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
         }
@@ -132,8 +132,8 @@ describe("Pistons", () => {
             blueBall: { x: 3, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 4, mode: "all", activeSides: ["right"], target: "setting", value: "$message: Καλημέρα!", display: "stone", activated: false, group: 1 },
-                { x: 4, y: 4, mode: "all", activeSides: ["left"], target: "group", value: "", display: "default", activated: false, group: 2 }
+                { x: 2, y: 4, mode: "all", oneTime: false, activeSides: ["right"], target: "setting", value: "$message: Καλημέρα!", display: "stone", activated: false, activatedCount: 0, group: 1 },
+                { x: 4, y: 4, mode: "all", oneTime: false, activeSides: ["left"], target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
         }
@@ -167,9 +167,9 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 1, mode: "purpleball", activeSides: ["bottom"], target: "group", value: "", display: "stone", activated: false, group: 3 },
-                { x: 2, y: 5, mode: "lightblueball", activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, group: 1 },
-                { x: 4, y: 5, mode: "all", activeSides: ["top"], target: "group", value: "", display: "default", activated: false, group: 2 }
+                { x: 2, y: 1, mode: "purpleball", oneTime: false, activeSides: ["bottom"], target: "group", value: "", display: "stone", activated: false, activatedCount: 0, group: 3 },
+                { x: 2, y: 5, mode: "lightblueball", oneTime: false, activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
             pushers: [{ x: 7, y: 4, direction: "left", group: 3 }],
@@ -205,9 +205,9 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 1, mode: "purpleball", activeSides: ["bottom"], target: "group", value: "", display: "stone", activated: false, group: 3 },
-                { x: 2, y: 5, mode: "lightblueball", activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, group: 1 },
-                { x: 4, y: 5, mode: "all", activeSides: ["top"], target: "group", value: "", display: "default", activated: false, group: 2 }
+                { x: 2, y: 1, mode: "purpleball", oneTime: false, activeSides: ["bottom"], target: "group", value: "", display: "stone", activated: false, activatedCount: 0, group: 3 },
+                { x: 2, y: 5, mode: "lightblueball", oneTime: false, activeSides: ["top"], target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
             pushers: [{ x: 7, y: 4, direction: "left", group: 3 }],
@@ -235,6 +235,120 @@ describe("Pistons", () => {
         expect(gameVars.message).toBe("Hello, this is a test!");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
         expect(gameInfo.pushers).toEqual([{ x: 6, y: 4, direction: "left", group: 3 }]);
+    });
+
+    it("detectors G", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], target: "command", 
+                    value: "move, smallgreenball, rel, 2, -2, right", display: "stone", activated: false, 
+                    activatedCount: 0, group: 1 }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 3, 0, 0, 0, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 3, 0, 0, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true });
+        expect(gameInfo.detectors).toEqual([
+            { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], target: "command", 
+                value: "move, smallgreenball, rel, 2, -2, right", display: "stone", activated: true, 
+                activatedCount: 1, group: 1 }
+        ]);
+    });
+
+    it("detectors H", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], target: "command", 
+                    value: "create, spikeup, abs, 3, 4", display: "stone", activated: false, 
+                    activatedCount: 0, group: 1 }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 3, 0, 0, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 3, 0, 0, 1],
+            [1, 0, 2, 174, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true });
+        expect(gameInfo.detectors).toEqual([
+            { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], target: "command", 
+                value: "create, spikeup, abs, 3, 4", display: "stone", activated: true, 
+                activatedCount: 1, group: 1 }
+        ]);
+    });
+
+    it("detectors I", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], target: "command", 
+                    value: "delete, spike, rel, 1, -1", display: "stone", activated: false, 
+                    activatedCount: 0, group: 1 }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 3, 0, 0, 1],
+            [1, 0, 2, 174, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 3, 0, 0, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true });
+        expect(gameInfo.detectors).toEqual([
+            { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], target: "command", 
+                value: "delete, spike, rel, 1, -1", display: "stone", activated: true, 
+                activatedCount: 1, group: 1 }
+        ]);
     });
 
 

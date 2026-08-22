@@ -397,6 +397,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$detectormode: ${detector.x}, ${detector.y}, ${detector.mode}`;
             lines.push(line);
         }
+        if (detector.oneTime) {
+            line = `$onetime: ${detector.x}, ${detector.y}, yes`;
+            lines.push(line);
+        }
         if (detector.target !== "group") {
             line = `$target: ${detector.x}, ${detector.y}, ${detector.target}`;
             lines.push(line);

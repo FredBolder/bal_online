@@ -326,6 +326,16 @@ export function changeMessage(gameInfo, x, y, message) {
   return idx;
 }
 
+export function changeOneTime(gameInfo, x, y, oneTime) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    gameInfo.detectors[idx].oneTime = oneTime;
+  }
+  return idx;
+}
+
 export function changePalette(gameInfo, x, y, decrease) {
   const step = decrease ? -1 : 1;
   let idx = -1;

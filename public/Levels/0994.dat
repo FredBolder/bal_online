@@ -8,6 +8,7 @@ $target: 17, 4, rotategroupright
 $display: 11, 7, stone
 $group: 11, 7, 16
 $detectormode: 11, 7, blueball
+$onetime: 11, 7, yes
 $target: 11, 7, setting
 $value: 11, 7, $message: You made it. That is nice on your birthday!
 $display: 16, 7, stone
@@ -106,8 +107,20 @@ $activesides: 0, 15, right
 $display: 0, 15, stone
 $group: 0, 15, 16
 $detectormode: 0, 15, blueball
+$onetime: 0, 15, yes
 $target: 0, 15, setting
 $value: 0, 15, $message: You are lucky!
+$display: 12, 18, stone
+$group: 12, 18, 5
+$detectormode: 12, 18, blueball
+$onetime: 12, 18, yes
+$target: 12, 18, command
+$value: 12, 18, create, elevatorup, rel, 2, -3
+$display: 16, 18, stone
+$group: 16, 18, 4
+$detectormode: 16, 18, blueball
+$target: 16, 18, command
+$value: 16, 18, create, spikeup, rel, -5, -1
 $group: 32, 18, 15
 $musicbox: 32, 1, song, 5
 $notes: 32, 1, D4, G4, G4, A4, B4, G4, D4, A4, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -, D4, G4, G4, A4, B4, G4, D4, A4
@@ -156,17 +169,17 @@ $answer: 30, 10, 2
 11111        1       m1        111
 1            1ђ  ђ11111        111
 1            11^v1 3           111
-1  Π 2                         111
+1  Π  2                        111
 1 1111111ђ1ђ1111ђђђђ           111
 1 1=    111111111111           111
 1 1=4          11111:::        111
 1 1=1Џ111111   311ҸҸҸҸҸҸ1ҸҸҸҸҸҸ111
 1 1=Ӄ 11111     l ђђђђђђ1ђђђђђђ111
 1 1=1Π11111     1                1
-1 1=1111111111111   L          1 1
+1 1=1111111111111      L       1 1
 ђ Џ  τ11        1              1 1
-ђ 111113        1VVVVVVVVVVVVVV1 1
+ђ 111113   111  1VVVVVVVVVVVVVV1 1
 1 oÖ111         1111111111111111 1
-1:111111111                      1
-11111111111111111111111111111111ђ1
+1:111111                         1
+111111111111ђ111ђ111111111111111ђ1
 1111111111111111111111111111111111

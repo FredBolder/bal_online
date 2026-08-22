@@ -15,6 +15,7 @@ import {
   changeDirection,
   changeIntelligence,
   changeMessage,
+  changeOneTime,
   changePalette,
   changeQuestion,
   changeShape,
@@ -126,6 +127,7 @@ let createLevelMenuPages = 2;
 let createLevelMessage = "";
 let createLevelMode = "";
 let createLevelObject = -1;
+let createLevelOneTime = false;
 let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
 let createLevelRaster = false;
@@ -1182,7 +1184,7 @@ function BalPage() {
             break;
           case 10:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 0, 0, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 0, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 11:
@@ -3174,6 +3176,13 @@ function BalPage() {
                     }
                   }
                 }
+                if (createLevelObject === 2207) {
+                  if (changeOneTime(gameInfo, column, row, createLevelOneTime) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a detector to change the one-time setting.");
+                    }
+                  }
+                }
                 if ((createLevelObject === 2092) && detectorModes().includes(createLevelMode)) {
                   if (changeDetectorMode(gameInfo, column, row, createLevelMode) === -1) {
                     if (oneSelected) {
@@ -3573,7 +3582,7 @@ function BalPage() {
             case 2203:
               ok = false;
               if (row > 0) {
-                newValue = await showInput("Detector", "Message", "");
+                newValue = await showInput("Detectors", "Message", "");
                 if (newValue !== null) {
                   createLevelMessage = newValue.trim();
                   ok = true;
@@ -3584,10 +3593,23 @@ function BalPage() {
             case 2206:
               ok = false;
               if (row > 0) {
-                newValue = await showInput("Detector", "Command", "");
+                newValue = await showInput("Detectors", "Command", "");
                 if (newValue !== null) {
                   createLevelCommand = newValue.trim();
                   ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            case 2207:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Detectors", "Trigger only one time:", ["yes", "no"], 0);
+                if (newValue !== null) {
+                  if (newValue === "yes" || newValue === "no") {
+                    ok = true;
+                    createLevelOneTime = (newValue === "yes");
+                  }
                 }
               }
               handleCancel();

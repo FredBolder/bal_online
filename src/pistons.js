@@ -82,6 +82,11 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
 
     for (let i = 0; i < gameInfo.detectors.length; i++) {
         const detector = gameInfo.detectors[i];
+
+        if (detector.oneTime && detector.activatedCount > 0) {
+            continue;
+        }
+
         const elTop = getGameDataValue(gameData, detector.x, detector.y - 1);
         const elBottom = getGameDataValue(gameData, detector.x, detector.y + 1);
         const elLeft = getGameDataValue(gameData, detector.x - 1, detector.y);
@@ -176,6 +181,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         } else {
             if (detect) {
                 detector.activated = true;
+                detector.activatedCount = detector.activatedCount + 1;
                 if (detector.target === "group") {
                     gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
                     if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
@@ -205,7 +211,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                     result.updated = true;
                 }
                 if (detector.target === "command") {
-                    command(gameData, gameInfo, detector);
+                    command(backData, gameData, gameInfo, detector);
                     result.updated = true;
                 }
             }

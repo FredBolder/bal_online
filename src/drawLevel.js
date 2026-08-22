@@ -4505,6 +4505,9 @@ function drawLevel(
         case 2206:
           drawAbbreviation("cmd");
           break;
+        case 2207:
+          drawAbbreviation("1x");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

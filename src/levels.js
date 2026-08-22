@@ -326,6 +326,7 @@ export function checkSettings(data, settings) {
     { name: "$noteoverride", params: 3, xy: true },
     { name: "$octaves", params: 3, xy: true },
     { name: "$notes", params: 0, xy: true },
+    { name: "$onetime", params: 3, xy: true },
     { name: "$palette", params: 3, xy: true },
     { name: "$part", params: 3, xy: true },
     { name: "$pattern", params: 0, xy: true },
@@ -652,6 +653,14 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$onetime":
+              if (!["yes", "no"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$palette":
@@ -2053,6 +2062,24 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[2], -1);
           if ((val_int >= 1) && (val_int <= 2)) {
             changeMusicBoxProperty(gameInfo, x, y, "octaves", val_int);
+          }
+          break;
+        case "$onetime":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.detectors);
+          if (idx >= 0) {
+            switch (valuesLowerCase[2]) {
+              case "no":
+                gameInfo.detectors[idx].oneTime = false;
+                break;
+              case "yes":
+                gameInfo.detectors[idx].oneTime = true;
+                break;
+              default:
+                break;
+            }
           }
           break;
         case "$palette":

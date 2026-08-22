@@ -1,3 +1,4 @@
+import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates, getGameDataValue, moveObjectInDirection } from "./balUtils.js";
 import { rotateDirection } from "./rotateGame.js";
 import { tryParseInt } from "./utils.js";
@@ -12,11 +13,12 @@ export function changeDetectorMode(gameInfo, x, y, mode) {
     return idx;
 }
 
-export function command(gameData, gameInfo, detector) {
+export function command(backData, gameData, gameInfo, detector) {
     let absX = 0;
     let absY = 0;
     const invalidInt = -10000;
     const intValues = [];
+    let objectNumber = 0;
     let val_int = 0;
     const value = detector.value.trim();
     const values = value.split(",");
@@ -34,7 +36,9 @@ export function command(gameData, gameInfo, detector) {
         intValues.push(val_int);
     }
     const cmd = valuesLowerCase[0];
-    if (cmd === "move" && values.length === 6) {
+    if ((cmd === "create" && values.length === 5) || (cmd === "delete" && values.length === 5) || (cmd === "move" && values.length === 6)) {
+        // create, object name, rel or abs, x, y
+        // delete, object name, rel or abs, x, y
         // move, object name, rel or abs, x, y, direction
         if (!["abs", "rel", "absolute", "relative"].includes(valuesLowerCase[2])) {
             return;
@@ -44,8 +48,10 @@ export function command(gameData, gameInfo, detector) {
         if (x === invalidInt || y === invalidInt) {
             return;
         }
-        if (!["left", "right", "up", "down"].includes(valuesLowerCase[5])) {
-            return;
+        if (cmd === "move") {
+            if (!["left", "right", "up", "down"].includes(valuesLowerCase[5])) {
+                return;
+            }
         }
         if (valuesLowerCase[2] === "abs" || valuesLowerCase[2] === "absolute") {
             absX = x;
@@ -58,24 +64,92 @@ export function command(gameData, gameInfo, detector) {
         if (obj === -1) {
             return;
         }
+        
         const objName = valuesLowerCase[1];
-        if (
-            (objName === "all") ||
-            (objName === "brownball" && obj === 253) ||
-            (objName === "changer" && obj === 244) ||
-            (objName === "lightblueball" && obj === 5) ||
-            (objName === "orangeball" && obj === 40) ||
-            (objName === "pinkball" && obj === 203) ||
-            (objName === "purpleball" && obj === 28) ||
-            (objName === "purpleballs" && [28, 242].includes(obj)) ||
-            (objName === "pusher" && obj === 209) ||
-            (objName === "smallgreenball" && obj === 3) ||
-            (objName === "spike" && obj === [174, 175, 176, 177].includes(obj)) ||
-            (objName === "stone" && obj === 1) ||
-            (objName === "whiteball" && obj === 4) ||
-            (objName === "whiteballs" && [4, 245].includes(obj)) ||
-            (objName === "yellowball" &&  obj === 9)
-        ) {
+        if (cmd !== "create" && !objectPossible(cmd, objName, obj)) {
+            return;
+        }
+
+        if (cmd === "create") {
+            if (obj !== 0) {
+                return;
+            }
+            switch (objName) {
+                case "brownball":
+                    objectNumber = 253;
+                    break;
+                case "elevatordown":
+                    objectNumber = 6;
+                    break;
+                case "elevatorleft":
+                    objectNumber = 7;
+                    break;
+                case "elevatorright":
+                    objectNumber = 107;
+                    break;
+                case "elevatorup":
+                    objectNumber = 106;
+                    break;
+                case "grayball":
+                    objectNumber = 83;
+                    break;
+                case "grayballonemove":
+                    objectNumber = 82;
+                    break;
+                case "grayballtwomoves":
+                    objectNumber = 98;
+                    break;
+                case "lightblueball":
+                    objectNumber = 5;
+                    break;
+                case "orangeball":
+                    objectNumber = 40;
+                    break;
+                case "pinkball":
+                    objectNumber = 203;
+                    break;
+                case "purpleball":
+                    objectNumber = 28;
+                    break;
+                case "redball":
+                    objectNumber = 8;
+                    break;
+                case "spikeball":
+                    objectNumber = 256;
+                    break;
+                case "spikedown":
+                    objectNumber = 175;
+                    break;
+                case "spikeleft":
+                    objectNumber = 177;
+                    break;
+                case "spikeright":
+                    objectNumber = 176;
+                    break;
+                case "spikeup":
+                    objectNumber = 174;
+                    break;
+                case "stone":
+                    objectNumber = 1;
+                    break;
+                case "whiteball":
+                    objectNumber = 4;
+                    break;
+                case "yellowball":
+                    objectNumber = 9;
+                    break;
+                default:
+                    objectNumber = 0;
+                    break;
+            }
+            if (objectNumber > 0) {
+                addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
+            }
+        }
+        if (cmd === "delete") {
+            removeObject(backData, gameData, gameInfo, absX, absY, false);
+        }
+        if (cmd === "move") {
             moveObjectInDirection(gameData, gameInfo, absX, absY, valuesLowerCase[5], true);
         }
     }
@@ -93,6 +167,73 @@ export function detectorModes() {
 export function detectorTargets() {
     return ["group", "setting", "rotategroupleft", "rotategroupright", "command"];
 }
+
+function objectPossible(cmd, objName, obj) {
+    if (cmd === "delete" || cmd === "move") {
+        if (
+            (objName === "brownball" && obj === 253) ||
+            (objName === "changer" && obj === 244) ||
+            (objName === "grayballs" && [82, 83, 98].includes(obj)) ||
+            (objName === "lightblueball" && obj === 5) ||
+            (objName === "onedirectionportdown" && obj === 88) ||
+            (objName === "onedirectionportleft" && obj === 11) ||
+            (objName === "onedirectionportright" && obj === 10) ||
+            (objName === "onedirectionports" && [88, 11, 10, 87].includes(obj)) ||
+            (objName === "onedirectionportup" && obj === 87) ||
+            (objName === "orangeball" && obj === 40) ||
+            (objName === "phaseability" && obj === 207) ||
+            (objName === "pinkball" && obj === 203) ||
+            (objName === "purpleball" && obj === 28) ||
+            (objName === "purpleballs" && [28, 242].includes(obj)) ||
+            (objName === "pusher" && obj === 209) ||
+            (objName === "redball" && [8, 93, 94].includes(obj)) ||
+            (objName === "shrinker" && obj === 199) ||
+            (objName === "smallbrownball" && obj === 254) ||
+            (objName === "smalllightblueball" && obj === 195) ||
+            (objName === "smallorangeball" && obj === 202) ||
+            (objName === "smallpinkball" && obj === 204) ||
+            (objName === "smallpurpleball" && obj === 197) ||
+            (objName === "smallredball" && obj === 201) ||
+            (objName === "smallwhiteball" && obj === 192) ||
+            (objName === "smallyellowball" && obj === 196) ||
+            (objName === "spike" && [174, 175, 176, 177].includes(obj)) ||
+            (objName === "spikeball" && obj === 256) ||
+            (objName === "stone" && obj === 1) ||
+            (objName === "whiteball" && obj === 4) ||
+            (objName === "whiteballs" && [4, 245].includes(obj)) ||
+            (objName === "whiteballsynchroniser" && obj === 200) ||
+            (objName === "yellowball" && obj === 9) ||
+            (objName === "yellowdirectionchanger1" && obj === 84) ||
+            (objName === "yellowdirectionchanger2" && obj === 85) ||
+            (objName === "yellowdirectionchanger3" && obj === 86) ||
+            (objName === "yellowdirectionchanger4" && obj === 138) ||
+            (objName === "yellowdirectionchanger5" && obj === 139) ||
+            (objName === "yellowdirectionchangers" && [84, 85, 86, 138, 139].includes(obj)) ||
+            (objName === "yellowballsynchroniser" && obj === 155)
+        ) {
+            return true;
+        }
+    }
+    if (cmd === "delete") {
+        if (
+            (objName === "smallballs" && [254, 195, 202, 204, 197, 201, 192, 196].includes(obj))
+        ) {
+            return true;
+        }
+    }
+    if (cmd === "move") {
+        if (
+            (objName === "pistonstrigger" && obj === 158) ||
+            (objName === "smallballs" && [254, 3, 195, 202, 204, 197, 201, 192, 196].includes(obj)) ||
+            (objName === "smallgreenball" && obj === 3)
+        ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 
 export function rotateGroup(gameData, gameInfo, group, rotateLeft) {
     // Pushers
