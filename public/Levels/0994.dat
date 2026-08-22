@@ -1,20 +1,16 @@
 $stonepattern: 2
-$changer: 9, 2, no, lightblue, spike
 $changer: 10, 2, no, lightblue, spike
-$changer: 4, 11, no, white, purple
-$group: 14, 4, 3
-$group: 17, 4, 3
-$target: 17, 4, rotategroupright
-$display: 11, 7, stone
-$group: 11, 7, 16
-$detectormode: 11, 7, blueball
-$onetime: 11, 7, yes
-$target: 11, 7, setting
-$value: 11, 7, $message: You made it. That is nice on your birthday!
-$display: 16, 7, stone
-$detectormode: 16, 7, blueball
-$target: 16, 7, command
-$value: 16, 7, move, smallgreenball, rel, 3, -2, right
+$changer: 11, 2, no, lightblue, spike
+$changer: 5, 11, no, white, purple
+$group: 15, 4, 3
+$group: 18, 4, 3
+$target: 18, 4, rotategroupright
+$display: 13, 7, stone
+$group: 13, 7, 16
+$detectormode: 13, 7, blueball
+$onetime: 13, 7, yes
+$target: 13, 7, setting
+$value: 13, 7, $message: You made it. That is nice on your birthday!
 $display: 17, 7, stone
 $detectormode: 17, 7, blueball
 $target: 17, 7, command
@@ -27,60 +23,58 @@ $display: 19, 7, stone
 $detectormode: 19, 7, blueball
 $target: 19, 7, command
 $value: 19, 7, move, smallgreenball, rel, 3, -2, right
-$activesides: 18, 11, bottom
-$display: 18, 11, stone
-$group: 18, 11, 16
-$detectormode: 18, 11, blueball
-$target: 18, 11, setting
-$value: 18, 11, $question: 18, 10, Χ
+$display: 20, 7, stone
+$detectormode: 20, 7, blueball
+$target: 20, 7, command
+$value: 20, 7, move, smallgreenball, rel, 3, -2, right
 $activesides: 19, 11, bottom
 $display: 19, 11, stone
 $group: 19, 11, 16
 $detectormode: 19, 11, blueball
 $target: 19, 11, setting
-$value: 19, 11, $question: 19, 10, Ρ
+$value: 19, 11, $question: 19, 10, Χ
 $activesides: 20, 11, bottom
 $display: 20, 11, stone
 $group: 20, 11, 16
 $detectormode: 20, 11, blueball
 $target: 20, 11, setting
-$value: 20, 11, $question: 20, 10, Ο
+$value: 20, 11, $question: 20, 10, Ρ
 $activesides: 21, 11, bottom
 $display: 21, 11, stone
 $group: 21, 11, 16
 $detectormode: 21, 11, blueball
 $target: 21, 11, setting
-$value: 21, 11, $question: 21, 10, Ν
+$value: 21, 11, $question: 21, 10, Ο
 $activesides: 22, 11, bottom
 $display: 22, 11, stone
 $group: 22, 11, 16
 $detectormode: 22, 11, blueball
 $target: 22, 11, setting
-$value: 22, 11, $question: 22, 10, Ι
+$value: 22, 11, $question: 22, 10, Ν
 $activesides: 23, 11, bottom
 $display: 23, 11, stone
 $group: 23, 11, 16
 $detectormode: 23, 11, blueball
 $target: 23, 11, setting
-$value: 23, 11, $question: 23, 10, Α
-$activesides: 25, 11, bottom
-$display: 25, 11, stone
-$group: 25, 11, 16
-$detectormode: 25, 11, blueball
-$target: 25, 11, setting
-$value: 25, 11, $question: 25, 10, Π
+$value: 23, 11, $question: 23, 10, Ι
+$activesides: 24, 11, bottom
+$display: 24, 11, stone
+$group: 24, 11, 16
+$detectormode: 24, 11, blueball
+$target: 24, 11, setting
+$value: 24, 11, $question: 24, 10, Α
 $activesides: 26, 11, bottom
 $display: 26, 11, stone
 $group: 26, 11, 16
 $detectormode: 26, 11, blueball
 $target: 26, 11, setting
-$value: 26, 11, $question: 26, 10, Ο
+$value: 26, 11, $question: 26, 10, Π
 $activesides: 27, 11, bottom
 $display: 27, 11, stone
 $group: 27, 11, 16
 $detectormode: 27, 11, blueball
 $target: 27, 11, setting
-$value: 27, 11, $question: 27, 10, Λ
+$value: 27, 11, $question: 27, 10, Ο
 $activesides: 28, 11, bottom
 $display: 28, 11, stone
 $group: 28, 11, 16
@@ -92,55 +86,59 @@ $display: 29, 11, stone
 $group: 29, 11, 16
 $detectormode: 29, 11, blueball
 $target: 29, 11, setting
-$value: 29, 11, $question: 29, 10, Α
+$value: 29, 11, $question: 29, 10, Λ
 $activesides: 30, 11, bottom
 $display: 30, 11, stone
 $group: 30, 11, 16
 $detectormode: 30, 11, blueball
 $target: 30, 11, setting
-$value: 30, 11, $question: 30, 10, !
-$activesides: 0, 14, right
-$display: 0, 14, stone
-$group: 0, 14, 2
-$detectormode: 0, 14, blueball
-$activesides: 0, 15, right
-$display: 0, 15, stone
-$group: 0, 15, 16
-$detectormode: 0, 15, blueball
-$onetime: 0, 15, yes
-$target: 0, 15, setting
-$value: 0, 15, $message: You are lucky!
-$display: 12, 18, stone
-$group: 12, 18, 5
-$detectormode: 12, 18, blueball
-$onetime: 12, 18, yes
-$target: 12, 18, command
-$value: 12, 18, create, elevatorup, rel, 2, -3
-$display: 16, 18, stone
-$group: 16, 18, 4
-$detectormode: 16, 18, blueball
-$target: 16, 18, command
-$value: 16, 18, create, spikeup, rel, -5, -1
-$group: 32, 18, 15
-$musicbox: 32, 1, song, 5
-$notes: 32, 1, D4, G4, G4, A4, B4, G4, D4, A4, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -, D4, G4, G4, A4, B4, G4, D4, A4
-$addnotes: 32, 1, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -
-$instrument: 32, 1, vibraphone, 90
-$group: 32, 1, 15
-$musicbox: 32, 2, song, 5
-$notes: 32, 2, -, G2, -, -, D3, -, -, A2, -, -, E3, -, -, A2, -, -, E3, -, -, D3, -, -, G2, -, -, G2, -, -, D3, -, -, A2
-$addnotes: 32, 2, -, -, E3, -, -, A2, -, -, E3, -, -, D3, E3, F#3, G3, -
-$instrument: 32, 2, bass, 70
-$group: 32, 2, 15
-$pistonmode: 7, 1, momentary
-$pistonmode: 12, 1, momentary
-$group: 3, 16, 2
-$pistonmode: 3, 16, momentary
-$group: 21, 3, 2
-$group: 23, 1, 3
-$direction: 23, 1, down
-$question: 18, 10, .
-$answer: 18, 10, 2
+$value: 30, 11, $question: 30, 10, Α
+$activesides: 31, 11, bottom
+$display: 31, 11, stone
+$group: 31, 11, 16
+$detectormode: 31, 11, blueball
+$target: 31, 11, setting
+$value: 31, 11, $question: 31, 10, !
+$activesides: 1, 14, right
+$display: 1, 14, stone
+$group: 1, 14, 2
+$detectormode: 1, 14, blueball
+$activesides: 1, 15, right
+$display: 1, 15, stone
+$group: 1, 15, 16
+$detectormode: 1, 15, blueball
+$onetime: 1, 15, yes
+$target: 1, 15, setting
+$value: 1, 15, $message: You are lucky!
+$display: 13, 18, stone
+$group: 13, 18, 5
+$detectormode: 13, 18, blueball
+$onetime: 13, 18, yes
+$target: 13, 18, command
+$value: 13, 18, create, elevatorup, rel, 2, -3
+$display: 17, 18, stone
+$group: 17, 18, 4
+$detectormode: 17, 18, blueball
+$target: 17, 18, command
+$value: 17, 18, create, spikeup, rel, -5, -1
+$group: 33, 18, 15
+$musicbox: 33, 1, song, 5
+$notes: 33, 1, D4, G4, G4, A4, B4, G4, D4, A4, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -, D4, G4, G4, A4, B4, G4, D4, A4
+$addnotes: 33, 1, A4, B4, C5, -, D4, A4, A4, B4, C5, A4, A4, D5, C5, A4, G4, -
+$instrument: 33, 1, vibraphone, 90
+$group: 33, 1, 15
+$musicbox: 33, 2, song, 5
+$notes: 33, 2, -, G2, -, -, D3, -, -, A2, -, -, E3, -, -, A2, -, -, E3, -, -, D3, -, -, G2, -, -, G2, -, -, D3, -, -, A2
+$addnotes: 33, 2, -, -, E3, -, -, A2, -, -, E3, -, -, D3, E3, F#3, G3, -
+$instrument: 33, 2, bass, 70
+$group: 33, 2, 15
+$pistonmode: 8, 1, momentary
+$pistonmode: 13, 1, momentary
+$group: 4, 16, 2
+$pistonmode: 4, 16, momentary
+$group: 22, 3, 2
+$group: 24, 1, 3
+$direction: 24, 1, down
 $question: 19, 10, .
 $answer: 19, 10, 2
 $question: 20, 10, .
@@ -151,8 +149,8 @@ $question: 22, 10, .
 $answer: 22, 10, 2
 $question: 23, 10, .
 $answer: 23, 10, 2
-$question: 25, 10, .
-$answer: 25, 10, 2
+$question: 24, 10, .
+$answer: 24, 10, 2
 $question: 26, 10, .
 $answer: 26, 10, 2
 $question: 27, 10, .
@@ -163,23 +161,25 @@ $question: 29, 10, .
 $answer: 29, 10, 2
 $question: 30, 10, .
 $answer: 30, 10, 2
-1111111111111111111111111111111111
-1τ    1Ë5  5Ö11111I   1њ       1M1
-11  4 111ӃӃ111k       1        1M1
-11111        1       m1        111
-1            1ђ  ђ11111        111
-1            11^v1 3           111
-1  Π  2                        111
-1 1111111ђ1ђ1111ђђђђ           111
-1 1=    111111111111           111
-1 1=4          11111:::        111
-1 1=1Џ111111   311ҸҸҸҸҸҸ1ҸҸҸҸҸҸ111
-1 1=Ӄ 11111     l ђђђђђђ1ђђђђђђ111
-1 1=1Π11111     1                1
-1 1=1111111111111      L       1 1
-ђ Џ  τ11        1              1 1
-ђ 111113   111  1VVVVVVVVVVVVVV1 1
-1 oÖ111         1111111111111111 1
-1:111111                         1
-111111111111ђ111ђ111111111111111ђ1
-1111111111111111111111111111111111
+$question: 31, 10, .
+$answer: 31, 10, 2
+11111111111111111111111111111111111
+11τ    1Ë5  5Ö11111I   1њ       1M1
+111  4 111ӃӃ111k       1        1M1
+111111        1       m1        111
+11Џ           1ђ  ђ11111        111
+18Џ         Џ 11^v1 3           111
+11  Π  2    1                   111
+11 1111111ђђ1ђ111ђђђђ           111
+11 1=    111111111111           111
+11 1=4          11111:::        111
+11 1=1Џ111111   311ҸҸҸҸҸҸ1ҸҸҸҸҸҸ111
+11 1=Ӄ 11111     l ђђђђђђ1ђђђђђђ111
+11 1=1Π11111     1                1
+11 1=1111111111111      L       1 1
+1ђ Џ  τ11        1              1 1
+1ђ 111113   111  1VVVVVVVVVVVVVV1 1
+11 oÖ111         1111111111111111 1
+11:111111                         1
+1111111111111ђ111ђ111111111111111ђ1
+11111111111111111111111111111111111
