@@ -782,7 +782,7 @@ function drawLevel(
         txt = "R" + group.toString();
         break;
       case "command":
-        txt = "cmd";
+        txt = "C";
         break;
       default:
         txt = "?";

@@ -583,3 +583,24 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
     }
     return update;
 }
+
+export function presetTropicalFish(gameInfo, idx, preset) {
+    switch (preset) {
+        case "bluediamonddiscus":
+            gameInfo.tropicalFish[idx].palette = 16;
+            gameInfo.tropicalFish[idx].shape = 5;
+            gameInfo.tropicalFish[idx].tail = 4;
+            gameInfo.tropicalFish[idx].fins = 8;
+            gameInfo.tropicalFish[idx].stripes = 0;
+            break;
+        case "zebraangelfish":
+            gameInfo.tropicalFish[idx].palette = 13;
+            gameInfo.tropicalFish[idx].shape = 5;
+            gameInfo.tropicalFish[idx].tail = 3;
+            gameInfo.tropicalFish[idx].fins = 6;
+            gameInfo.tropicalFish[idx].stripes = 4;
+            break;
+        default:
+            break;
+    }
+}

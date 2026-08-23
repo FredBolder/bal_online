@@ -1,6 +1,9 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates, getGameDataValue, moveObjectInDirection } from "./balUtils.js";
+import { checkSettings, loadLevelSettings } from "./levels.js";
 import { rotateDirection } from "./rotateGame.js";
+import { setTimeBombsTime } from "./timeBombs.js";
+import { presetTropicalFish } from "./tropicalFish.js";
 import { tryParseInt } from "./utils.js";
 
 export function changeDetectorMode(gameInfo, x, y, mode) {
@@ -13,14 +16,16 @@ export function changeDetectorMode(gameInfo, x, y, mode) {
     return idx;
 }
 
-export function command(backData, gameData, gameInfo, detector) {
+export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, commandLine) {
     let absX = 0;
     let absY = 0;
+    let checkSettingsResult = "";
+    let idx = -1;
     const invalidInt = -10000;
     const intValues = [];
     let objectNumber = 0;
     let val_int = 0;
-    const value = detector.value.trim();
+    const value = commandLine.trim();
     const values = value.split(",");
     const valuesLowerCase = [];
     let x = 0;
@@ -29,6 +34,17 @@ export function command(backData, gameData, gameInfo, detector) {
     if (value === "" || values.length < 1) {
         return;
     }
+
+    if (value.startsWith("$")) {
+        checkSettingsResult = checkSettings(gameData, [value]);
+        if (checkSettingsResult === "") {
+            loadLevelSettings(backData, gameData, gameInfo, gameVars, [value], false);
+            setTimeBombsTime(gameVars.timeBombsTime);
+        } else {
+            console.log(checkSettingsResult);
+        }
+    }
+
     for (let i = 0; i < values.length; i++) {
         values[i] = values[i].trim();
         valuesLowerCase.push(values[i].toLowerCase());
@@ -57,14 +73,14 @@ export function command(backData, gameData, gameInfo, detector) {
             absX = x;
             absY = y;
         } else {
-            absX = detector.x + x;
-            absY = detector.y + y;
+            absX = xRef + x;
+            absY = yRef + y;
         }
         const obj = getGameDataValue(gameData, absX, absY);
         if (obj === -1) {
             return;
         }
-        
+
         const objName = valuesLowerCase[1];
         if (cmd !== "create" && !objectPossible(cmd, objName, obj)) {
             return;
@@ -77,6 +93,9 @@ export function command(backData, gameData, gameInfo, detector) {
             switch (objName) {
                 case "brownball":
                     objectNumber = 253;
+                    break;
+                case "detector":
+                    objectNumber = 255;
                     break;
                 case "elevatordown":
                     objectNumber = 6;
@@ -108,8 +127,26 @@ export function command(backData, gameData, gameInfo, detector) {
                 case "pinkball":
                     objectNumber = 203;
                     break;
+                case "pistondown":
+                    objectNumber = 161;
+                    break;
+                case "pistonleft":
+                    objectNumber = 163;
+                    break;
+                case "pistonright":
+                    objectNumber = 165;
+                    break;
+                case "pistonstrigger":
+                    objectNumber = 158;
+                    break;
+                case "pistonup":
+                    objectNumber = 159;
+                    break;
                 case "purpleball":
                     objectNumber = 28;
+                    break;
+                case "pusher":
+                    objectNumber = 209;
                     break;
                 case "redball":
                     objectNumber = 8;
@@ -138,12 +175,44 @@ export function command(backData, gameData, gameInfo, detector) {
                 case "yellowball":
                     objectNumber = 9;
                     break;
+                case "yellowdirectionchanger1":
+                    objectNumber = 84;
+                    break;
+                case "yellowdirectionchanger2":
+                    objectNumber = 85;
+                    break;
+                case "yellowdirectionchanger3":
+                    objectNumber = 86;
+                    break;
+                case "yellowdirectionchanger4":
+                    objectNumber = 138;
+                    break;
+                case "yellowdirectionchanger5":
+                    objectNumber = 139;
+                    break;
+                case "yellowpusher":
+                    objectNumber = 115;
+                    break;
+                case "yellowpusherstrigger":
+                    objectNumber = 116;
+                    break;
+                case "bluediamonddiscus":
+                case "zebraangelfish":
+                    objectNumber = 243;
+                    break;
                 default:
                     objectNumber = 0;
                     break;
             }
             if (objectNumber > 0) {
                 addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
+            }
+            if (objectNumber === 243) {
+                idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
+                if (idx < 0) {
+                    return;
+                }
+                presetTropicalFish(gameInfo, idx, objName);
             }
         }
         if (cmd === "delete") {
@@ -156,6 +225,20 @@ export function command(backData, gameData, gameInfo, detector) {
 
 }
 
+export function commands(backData, gameData, gameInfo, gameVars, detector) {
+    const value = detector.value.trim();
+    const commandList = value.split("|");
+
+    if (value === "" || commandList.length < 1) {
+        return;
+    }
+
+    for (let i = 0; i < commandList.length; i++) {
+        const commandLine = commandList[i].trim();
+        command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine);
+    }
+}
+
 export function detectorDisplayModes() {
     return ["default", "stone", "grayball"];
 }
@@ -166,6 +249,25 @@ export function detectorModes() {
 
 export function detectorTargets() {
     return ["group", "setting", "rotategroupleft", "rotategroupright", "command"];
+}
+
+function isStone(obj) {
+    if ([1, 241, 35, 12].includes(obj)) {
+        return true;
+    }
+    if (obj >= 15 && obj <= 18) {
+        return true;
+    }
+    if (obj >= 210 && obj <= 225) {
+        return true;
+    }
+    if (obj >= 141 && obj <= 154) {
+        return true;
+    }
+    if (obj >= 234 && obj <= 240) {
+        return true;
+    }
+    return false;
 }
 
 function objectPossible(cmd, objName, obj) {
@@ -183,7 +285,8 @@ function objectPossible(cmd, objName, obj) {
             (objName === "orangeball" && obj === 40) ||
             (objName === "phaseability" && obj === 207) ||
             (objName === "pinkball" && obj === 203) ||
-            (objName === "purpleball" && obj === 28) ||
+            (objName === "pinkball" && obj === 203) ||
+            (objName === "pistonstrigger" && obj === 158) ||
             (objName === "purpleballs" && [28, 242].includes(obj)) ||
             (objName === "pusher" && obj === 209) ||
             (objName === "redball" && [8, 93, 94].includes(obj)) ||
@@ -199,6 +302,7 @@ function objectPossible(cmd, objName, obj) {
             (objName === "spike" && [174, 175, 176, 177].includes(obj)) ||
             (objName === "spikeball" && obj === 256) ||
             (objName === "stone" && obj === 1) ||
+            (objName === "stones" && isStone(obj)) ||
             (objName === "whiteball" && obj === 4) ||
             (objName === "whiteballs" && [4, 245].includes(obj)) ||
             (objName === "whiteballsynchroniser" && obj === 200) ||
@@ -209,7 +313,8 @@ function objectPossible(cmd, objName, obj) {
             (objName === "yellowdirectionchanger4" && obj === 138) ||
             (objName === "yellowdirectionchanger5" && obj === 139) ||
             (objName === "yellowdirectionchangers" && [84, 85, 86, 138, 139].includes(obj)) ||
-            (objName === "yellowballsynchroniser" && obj === 155)
+            (objName === "yellowballsynchroniser" && obj === 155) ||
+            (objName === "yellowpusherstrigger" && obj === 116)
         ) {
             return true;
         }
@@ -223,7 +328,6 @@ function objectPossible(cmd, objName, obj) {
     }
     if (cmd === "move") {
         if (
-            (objName === "pistonstrigger" && obj === 158) ||
             (objName === "smallballs" && [254, 3, 195, 202, 204, 197, 201, 192, 196].includes(obj)) ||
             (objName === "smallgreenball" && obj === 3)
         ) {

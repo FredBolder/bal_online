@@ -74,7 +74,7 @@ import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
-import { changeFins, changeStripes, changeTail } from "../tropicalFish.js";
+import { changeFins, changeStripes, changeTail, presetTropicalFish } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -2955,11 +2955,7 @@ function BalPage() {
                       break;
                     case 2160:
                       // Zebra Angelfish
-                      gameInfo.tropicalFish[idx].palette = 13;
-                      gameInfo.tropicalFish[idx].shape = 5;
-                      gameInfo.tropicalFish[idx].tail = 3;
-                      gameInfo.tropicalFish[idx].fins = 6;
-                      gameInfo.tropicalFish[idx].stripes = 4;
+                      presetTropicalFish(gameInfo, idx, "zebraangelfish");
                       break;
                     case 2161:
                       // Smallmouth Grunt
@@ -2979,11 +2975,7 @@ function BalPage() {
                       break;
                     case 2163:
                       // Blue Diamond Discus
-                      gameInfo.tropicalFish[idx].palette = 16;
-                      gameInfo.tropicalFish[idx].shape = 5;
-                      gameInfo.tropicalFish[idx].tail = 4;
-                      gameInfo.tropicalFish[idx].fins = 8;
-                      gameInfo.tropicalFish[idx].stripes = 0;
+                      presetTropicalFish(gameInfo, idx, "bluediamonddiscus");
                       break;
                     case 2164:
                       // Orange-red Discus
