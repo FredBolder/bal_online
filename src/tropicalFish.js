@@ -586,14 +586,120 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
 
 export function presetTropicalFish(gameInfo, idx, preset) {
     switch (preset) {
+        case "bicoloranthias":
+            // Bicolor Anthias
+            gameInfo.tropicalFish[idx].palette = 15;
+            gameInfo.tropicalFish[idx].shape = 1;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 4;
+            gameInfo.tropicalFish[idx].stripes = 18;
+            break;
+        case "blackneontetra":
+            // Black Neon Tetra
+            gameInfo.tropicalFish[idx].palette = 18;
+            gameInfo.tropicalFish[idx].shape = 6;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 9;
+            gameInfo.tropicalFish[idx].stripes = 20;
+            break;
         case "bluediamonddiscus":
+            // Blue Diamond Discus
             gameInfo.tropicalFish[idx].palette = 16;
             gameInfo.tropicalFish[idx].shape = 5;
             gameInfo.tropicalFish[idx].tail = 4;
             gameInfo.tropicalFish[idx].fins = 8;
             gameInfo.tropicalFish[idx].stripes = 0;
             break;
+        case "brighamssnapper":
+            // Brigham’s snapper
+            gameInfo.tropicalFish[idx].palette = 21;
+            gameInfo.tropicalFish[idx].shape = 8;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 4;
+            gameInfo.tropicalFish[idx].stripes = 21;
+            break;
+        case "clownfish":
+            // Clownfish
+            gameInfo.tropicalFish[idx].palette = 8;
+            gameInfo.tropicalFish[idx].shape = 2;
+            gameInfo.tropicalFish[idx].tail = 6;
+            gameInfo.tropicalFish[idx].fins = 1;
+            gameInfo.tropicalFish[idx].stripes = 15;
+            break;
+        case "juvenilegoldentrevally":
+            // Juvenile Golden Trevally
+            gameInfo.tropicalFish[idx].palette = 3;
+            gameInfo.tropicalFish[idx].shape = 2;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 3;
+            gameInfo.tropicalFish[idx].stripes = 12;
+            break;
+        case "orangereddiscus":
+            // Orange-red Discus
+            gameInfo.tropicalFish[idx].palette = 17;
+            gameInfo.tropicalFish[idx].shape = 5;
+            gameInfo.tropicalFish[idx].tail = 3;
+            gameInfo.tropicalFish[idx].fins = 8;
+            gameInfo.tropicalFish[idx].stripes = 5;
+            break;
+        case "purpletang":
+            // Purple Tang
+            gameInfo.tropicalFish[idx].palette = 20;
+            gameInfo.tropicalFish[idx].shape = 7;
+            gameInfo.tropicalFish[idx].tail = 4;
+            gameInfo.tropicalFish[idx].fins = 10;
+            gameInfo.tropicalFish[idx].stripes = 0;
+            break;
+        case "redtailshark":
+            // Red Tail Shark
+            gameInfo.tropicalFish[idx].palette = 9;
+            gameInfo.tropicalFish[idx].shape = 1;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 2;
+            gameInfo.tropicalFish[idx].stripes = 0;
+            break;
+        case "siamesealgaeeater":
+            // Siamese Algae Eater
+            gameInfo.tropicalFish[idx].palette = 11;
+            gameInfo.tropicalFish[idx].shape = 9;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 5;
+            gameInfo.tropicalFish[idx].stripes = 17;
+            break;
+        case "smallmouthgrunt":
+            // Smallmouth Grunt
+            gameInfo.tropicalFish[idx].palette = 14;
+            gameInfo.tropicalFish[idx].shape = 2;
+            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].fins = 7;
+            gameInfo.tropicalFish[idx].stripes = 19;
+            break;
+        case "yellowtailaceicichlid":
+            // Yellow Tail Acei Cichlid
+            gameInfo.tropicalFish[idx].palette = 10;
+            gameInfo.tropicalFish[idx].shape = 1;
+            gameInfo.tropicalFish[idx].tail = 4;
+            gameInfo.tropicalFish[idx].fins = 4;
+            gameInfo.tropicalFish[idx].stripes = 0;
+            break;
+        case "yellowtaildamselfish":
+            // Yellow Tail Damselfish
+            gameInfo.tropicalFish[idx].palette = 12;
+            gameInfo.tropicalFish[idx].shape = 3;
+            gameInfo.tropicalFish[idx].tail = 8;
+            gameInfo.tropicalFish[idx].fins = 11;
+            gameInfo.tropicalFish[idx].stripes = 0;
+            break;
+        case "yellowtang":
+            // Yellow Tang
+            gameInfo.tropicalFish[idx].palette = 19;
+            gameInfo.tropicalFish[idx].shape = 7;
+            gameInfo.tropicalFish[idx].tail = 4;
+            gameInfo.tropicalFish[idx].fins = 10;
+            gameInfo.tropicalFish[idx].stripes = 0;
+            break;
         case "zebraangelfish":
+            // Zebra Angelfish
             gameInfo.tropicalFish[idx].palette = 13;
             gameInfo.tropicalFish[idx].shape = 5;
             gameInfo.tropicalFish[idx].tail = 3;

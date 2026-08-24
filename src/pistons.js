@@ -87,90 +87,101 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             continue;
         }
 
-        const elTop = getGameDataValue(gameData, detector.x, detector.y - 1);
-        const elBottom = getGameDataValue(gameData, detector.x, detector.y + 1);
-        const elLeft = getGameDataValue(gameData, detector.x - 1, detector.y);
-        const elRight = getGameDataValue(gameData, detector.x + 1, detector.y);
-
         detect = false;
-        for (let side = 0; side < 4; side++) {
-            switch (side) {
-                case top:
-                    el = elTop;
-                    sideStr = "top";
-                    break;
-                case bottom:
-                    el = elBottom;
-                    sideStr = "bottom";
-                    break;
-                case left:
-                    el = elLeft;
-                    sideStr = "left";
-                    break;
-                case right:
-                    el = elRight;
-                    sideStr = "right";
-                    break;
-                default:
-                    break;
+        for (let r = 1; r <= detector.range; r++) {
+            if (detect) {
+                break;
             }
-            if (detector.activeSides.includes(sideStr)) {
-                switch (detector.mode) {
-                    case "all":
-                        if (el > 0) {
-                            detect = true;
-                        }
+
+            const elTop = getGameDataValue(gameData, detector.x, detector.y - r);
+            const elBottom = getGameDataValue(gameData, detector.x, detector.y + r);
+            const elLeft = getGameDataValue(gameData, detector.x - r, detector.y);
+            const elRight = getGameDataValue(gameData, detector.x + r, detector.y);
+
+            for (let side = 0; side < 4; side++) {
+                if (detect) {
+                    break;
+                }
+                switch (side) {
+                    case top:
+                        el = elTop;
+                        sideStr = "top";
                         break;
-                    case "blueball":
-                        if (el === 2) {
-                            detect = true;
-                        }
+                    case bottom:
+                        el = elBottom;
+                        sideStr = "bottom";
                         break;
-                    case "whiteball":
-                        if (el === 4 || el === 245) {
-                            detect = true;
-                        }
+                    case left:
+                        el = elLeft;
+                        sideStr = "left";
                         break;
-                    case "lightblueball":
-                        if (el === 5) {
-                            detect = true;
-                        }
-                        break;
-                    case "yellowball":
-                        if (el === 9) {
-                            detect = true;
-                        }
-                        break;
-                    case "redball":
-                        if (el === 8 || el === 93 || el === 94) {
-                            detect = true;
-                        }
-                        break;
-                    case "purpleball":
-                        if (el === 28 || el === 242) {
-                            detect = true;
-                        }
-                        break;
-                    case "orangeball":
-                        if (el === 40) {
-                            detect = true;
-                        }
-                        break;
-                    case "pinkball":
-                        if (el === 203) {
-                            detect = true;
-                        }
-                        break;
-                    case "brownball":
-                        if (el === 253) {
-                            detect = true;
-                        }
+                    case right:
+                        el = elRight;
+                        sideStr = "right";
                         break;
                     default:
                         break;
                 }
+                if (detector.activeSides.includes(sideStr)) {
+                    switch (detector.mode) {
+                        case "all":
+                            if (el > 0) {
+                                detect = true;
+                            }
+                            break;
+                        case "blueball":
+                            if (el === 2) {
+                                detect = true;
+                            }
+                            break;
+                        case "whiteball":
+                            if (el === 4 || el === 245) {
+                                detect = true;
+                            }
+                            break;
+                        case "lightblueball":
+                            if (el === 5) {
+                                detect = true;
+                            }
+                            break;
+                        case "yellowball":
+                            if (el === 9) {
+                                detect = true;
+                            }
+                            break;
+                        case "redball":
+                            if (el === 8 || el === 93 || el === 94) {
+                                detect = true;
+                            }
+                            break;
+                        case "purpleball":
+                            if (el === 28 || el === 242) {
+                                detect = true;
+                            }
+                            break;
+                        case "orangeball":
+                            if (el === 40) {
+                                detect = true;
+                            }
+                            break;
+                        case "pinkball":
+                            if (el === 203) {
+                                detect = true;
+                            }
+                            break;
+                        case "brownball":
+                            if (el === 253) {
+                                detect = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
+
+
         if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {
             activeGroups.push(detector.group);
         }

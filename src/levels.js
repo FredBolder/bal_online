@@ -334,6 +334,7 @@ export function checkSettings(data, settings) {
     { name: "$plantsswayamount", params: 1, xy: false },
     { name: "$plantsswayspeed", params: 1, xy: false },
     { name: "$question", params: 0, xy: true },
+    { name: "$range", params: 3, xy: true },
     { name: "$restorepoint", params: 1, xy: false },
     { name: "$seaanemonesswayamount", params: 1, xy: false },
     { name: "$seaanemonesswayspeed", params: 1, xy: false },
@@ -729,6 +730,20 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ҹ", 241].includes(data[y][x])) {
                 msg += `${settingNr(i)}No question stone found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$range":
+              switch (data[y][x]) {
+                case "ђ":
+                case 255:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > 10)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for range.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+                  break;
               }
               break;
             case "$restorepoint":
@@ -2156,6 +2171,18 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             idx = findElementByCoordinates(x, y, gameInfo.questionStones);
             if (idx >= 0) {
               gameInfo.questionStones[idx].question = val_str;
+            }
+          }
+          break;
+        case "$range":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          if ((val_int >= 1) && (val_int <= 10)) {
+            idx = findElementByCoordinates(x, y, gameInfo.detectors);
+            if (idx >= 0) {
+              gameInfo.detectors[idx].range = val_int;
             }
           }
           break;

@@ -107,7 +107,19 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     objectNumber = 107;
                     break;
                 case "elevatorup":
-                    objectNumber = 106;
+                    objectNumber = 109;
+                    break;
+                case "forcedown":
+                    objectNumber = 110;
+                    break;
+                case "forceleft":
+                    objectNumber = 112;
+                    break;
+                case "forceright":
+                    objectNumber = 111;
+                    break;
+                case "forceup":
+                    objectNumber = 0;
                     break;
                 case "grayball":
                     objectNumber = 83;
@@ -118,8 +130,23 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 case "grayballtwomoves":
                     objectNumber = 98;
                     break;
+                case "jellyfish":
+                    objectNumber = 248;
+                    break;
                 case "lightblueball":
                     objectNumber = 5;
+                    break;
+                case "onedirectionportdown":
+                    objectNumber = 88;
+                    break;
+                case "onedirectionportleft":
+                    objectNumber = 11;
+                    break;
+                case "onedirectionportright":
+                    objectNumber = 10;
+                    break;
+                case "onedirectionportup":
+                    objectNumber = 87;
                     break;
                 case "orangeball":
                     objectNumber = 40;
@@ -150,6 +177,9 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     break;
                 case "redball":
                     objectNumber = 8;
+                    break;
+                case "redfish":
+                    objectNumber = 27;
                     break;
                 case "spikeball":
                     objectNumber = 256;
@@ -196,7 +226,20 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 case "yellowpusherstrigger":
                     objectNumber = 116;
                     break;
+                case "bicoloranthias":
+                case "blackneontetra":
                 case "bluediamonddiscus":
+                case "brighamssnapper":
+                case "clownfish":
+                case "juvenilegoldentrevally":
+                case "orangereddiscus":
+                case "purpletang":
+                case "redtailshark":
+                case "siamesealgaeeater":
+                case "smallmouthgrunt":
+                case "yellowtang":
+                case "yellowtailaceicichlid":
+                case "yellowtaildamselfish":
                 case "zebraangelfish":
                     objectNumber = 243;
                     break;

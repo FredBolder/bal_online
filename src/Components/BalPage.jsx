@@ -140,6 +140,7 @@ let createLevelWaterPages = 2;
 let ctx;
 let ignoreGravity = true;
 let initialized = false;
+let lastSetting = "";
 let modalOpen = false;
 let redoPossible = false;
 let undoBuffer = [];
@@ -684,11 +685,12 @@ function BalPage() {
     let checkSettingsResult = "";
     let setting = null;
 
-    setting = await showInput("Level setting", "Enter a setting (example: $gameticks: conveyorbelt, 10).", "");
+    setting = await showInput("Level setting", "Enter a setting (example: $gameticks: conveyorbelt, 10).", lastSetting);
     if (setting !== null) {
       if (!setting.startsWith("$")) {
         setting = "$" + setting;
       }
+      lastSetting = setting;
       checkSettingsResult = checkSettings(gameData, [setting]);
       if (checkSettingsResult === "") {
         loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
@@ -2906,116 +2908,49 @@ function BalPage() {
                 if (idx >= 0) {
                   switch (createLevelObject) {
                     case 2154:
-                      // Clownfish
-                      gameInfo.tropicalFish[idx].palette = 8;
-                      gameInfo.tropicalFish[idx].shape = 2;
-                      gameInfo.tropicalFish[idx].tail = 6;
-                      gameInfo.tropicalFish[idx].fins = 1;
-                      gameInfo.tropicalFish[idx].stripes = 15;
+                      presetTropicalFish(gameInfo, idx, "clownfish");
                       break;
                     case 2155:
-                      // Red Tail Shark
-                      gameInfo.tropicalFish[idx].palette = 9;
-                      gameInfo.tropicalFish[idx].shape = 1;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 2;
-                      gameInfo.tropicalFish[idx].stripes = 0;
+                      presetTropicalFish(gameInfo, idx, "redtailshark");
                       break;
                     case 2156:
-                      // Juvenile Golden Trevally
-                      gameInfo.tropicalFish[idx].palette = 3;
-                      gameInfo.tropicalFish[idx].shape = 2;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 3;
-                      gameInfo.tropicalFish[idx].stripes = 12;
+                      presetTropicalFish(gameInfo, idx, "juvenilegoldentrevally");
                       break;
                     case 2157:
-                      // Yellow Tail Acei Cichlid
-                      gameInfo.tropicalFish[idx].palette = 10;
-                      gameInfo.tropicalFish[idx].shape = 1;
-                      gameInfo.tropicalFish[idx].tail = 4;
-                      gameInfo.tropicalFish[idx].fins = 4;
-                      gameInfo.tropicalFish[idx].stripes = 0;
+                      presetTropicalFish(gameInfo, idx, "yellowtailaceicichlid");
                       break;
                     case 2158:
-                      // Siamese Algae Eater
-                      gameInfo.tropicalFish[idx].palette = 11;
-                      gameInfo.tropicalFish[idx].shape = 9;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 5;
-                      gameInfo.tropicalFish[idx].stripes = 17;
+                      presetTropicalFish(gameInfo, idx, "siamesealgaeeater");
                       break;
                     case 2159:
-                      // Yellow Tail Damselfish
-                      gameInfo.tropicalFish[idx].palette = 12;
-                      gameInfo.tropicalFish[idx].shape = 3;
-                      gameInfo.tropicalFish[idx].tail = 8;
-                      gameInfo.tropicalFish[idx].fins = 11;
-                      gameInfo.tropicalFish[idx].stripes = 0;
+                      presetTropicalFish(gameInfo, idx, "yellowtaildamselfish");
                       break;
                     case 2160:
-                      // Zebra Angelfish
                       presetTropicalFish(gameInfo, idx, "zebraangelfish");
                       break;
                     case 2161:
-                      // Smallmouth Grunt
-                      gameInfo.tropicalFish[idx].palette = 14;
-                      gameInfo.tropicalFish[idx].shape = 2;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 7;
-                      gameInfo.tropicalFish[idx].stripes = 19;
+                      presetTropicalFish(gameInfo, idx, "smallmouthgrunt");
                       break;
                     case 2162:
-                      // Bicolor Anthias
-                      gameInfo.tropicalFish[idx].palette = 15;
-                      gameInfo.tropicalFish[idx].shape = 1;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 4;
-                      gameInfo.tropicalFish[idx].stripes = 18;
+                      presetTropicalFish(gameInfo, idx, "bicoloranthias");
                       break;
                     case 2163:
-                      // Blue Diamond Discus
                       presetTropicalFish(gameInfo, idx, "bluediamonddiscus");
                       break;
                     case 2164:
-                      // Orange-red Discus
-                      gameInfo.tropicalFish[idx].palette = 17;
-                      gameInfo.tropicalFish[idx].shape = 5;
-                      gameInfo.tropicalFish[idx].tail = 3;
-                      gameInfo.tropicalFish[idx].fins = 8;
-                      gameInfo.tropicalFish[idx].stripes = 5;
+                      presetTropicalFish(gameInfo, idx, "orangereddiscus");
                       break;
                     case 2165:
-                      // Black Neon Tetra
-                      gameInfo.tropicalFish[idx].palette = 18;
-                      gameInfo.tropicalFish[idx].shape = 6;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 9;
-                      gameInfo.tropicalFish[idx].stripes = 20;
+                      presetTropicalFish(gameInfo, idx, "blackneontetra");
                       break;
                     case 2166:
-                      // Yellow Tang
-                      gameInfo.tropicalFish[idx].palette = 19;
-                      gameInfo.tropicalFish[idx].shape = 7;
-                      gameInfo.tropicalFish[idx].tail = 4;
-                      gameInfo.tropicalFish[idx].fins = 10;
-                      gameInfo.tropicalFish[idx].stripes = 0;
+                      presetTropicalFish(gameInfo, idx, "yellowtang");
                       break;
                     case 2167:
-                      // Purple Tang
-                      gameInfo.tropicalFish[idx].palette = 20;
-                      gameInfo.tropicalFish[idx].shape = 7;
-                      gameInfo.tropicalFish[idx].tail = 4;
-                      gameInfo.tropicalFish[idx].fins = 10;
-                      gameInfo.tropicalFish[idx].stripes = 0;
+                      presetTropicalFish(gameInfo, idx, "purpletang");
                       break;
                     case 2168:
-                      // Brigham’s snapper
-                      gameInfo.tropicalFish[idx].palette = 21;
-                      gameInfo.tropicalFish[idx].shape = 8;
-                      gameInfo.tropicalFish[idx].tail = 7;
-                      gameInfo.tropicalFish[idx].fins = 4;
-                      gameInfo.tropicalFish[idx].stripes = 21;
+                      presetTropicalFish(gameInfo, idx, "brighamssnapper");
                       break;
                     default:
                       break;
