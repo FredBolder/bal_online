@@ -64,7 +64,7 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251, 255, 256].includes(el)) {
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251, 256].includes(el)) {
     result = true;
   } else {
     switch (el) {
@@ -109,6 +109,12 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
           ) {
             result = false;
           }
+        }
+        break;
+      case 255:
+        idx = findElementByCoordinates(x, y, gameInfo.detectors);
+        if (idx >= 0) {
+          result = gameInfo.detectors[idx].movable;
         }
         break;
       default:
@@ -322,6 +328,16 @@ export function changeMessage(gameInfo, x, y, message) {
     gameInfo.detectors[idx].display = "stone";
     gameInfo.detectors[idx].target = "setting";
     gameInfo.detectors[idx].value = "$message: " + message;
+  }
+  return idx;
+}
+
+export function changeMovable(gameInfo, x, y, movable) {
+  let idx = -1;
+
+  idx = findElementByCoordinates(x, y, gameInfo.detectors);
+  if (idx >= 0) {
+    gameInfo.detectors[idx].movable = movable;
   }
   return idx;
 }

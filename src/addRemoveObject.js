@@ -404,7 +404,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         }
         case 255: {
-            let detector = { x, y, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, group: 1 };
+            let detector = { x, y, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", 
+                display: "default", activated: false, activatedCount: 0, movable: true, group: 1 };
             gameInfo.detectors.push(detector);
             break;
         }

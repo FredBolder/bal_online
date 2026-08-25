@@ -3,7 +3,7 @@ import { answerBallModes } from "./answerBalls.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
-import { detectorDisplayModes, detectorModes, detectorTargets } from "./detectors.js";
+import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
@@ -55,6 +55,8 @@ export const seriesFishStart = 6350;
 export const seriesFishEnd = 6363;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
+export const seriesAnnoyingStart = 6450;
+export const seriesAnnoyingEnd = 6451;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -321,6 +323,7 @@ export function checkSettings(data, settings) {
     { name: "$messageborder", params: 1, xy: false },
     { name: "$messagecolor", params: 1, xy: false },
     { name: "$messageposition", params: 1, xy: false },
+    { name: "$movable", params: 3, xy: true },
     { name: "$movermode", params: 3, xy: true },
     { name: "$musicbox", params: 4, xy: true },
     { name: "$noteoverride", params: 3, xy: true },
@@ -609,6 +612,14 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid value ${values[2]} for distance.\n`;
               }
               break;
+            case "$movable":
+              if (!["yes", "no"].includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}yes or no expected.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
             case "$movermode":
               if (!moverModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid mover mode ${values[2]}.\n`;
@@ -737,7 +748,7 @@ export function checkSettings(data, settings) {
                 case "ђ":
                 case 255:
                   val_int = tryParseInt(values[2], -1);
-                  if ((val_int < 1) || (val_int > 10)) {
+                  if ((val_int < 1) || (val_int > detectorMaxRange)) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for range.\n`;
                   }
                   break;
@@ -1024,6 +1035,10 @@ export function displayLevelNumber(level, addInfo = false) {
     current = (level - seriesProgrammingStart) + 1;
     total = (seriesProgrammingEnd - seriesProgrammingStart) + 1;
     series = "Programming";
+  } else if ((level >= seriesAnnoyingStart) && (level <= seriesAnnoyingEnd)) {
+    current = (level - seriesAnnoyingStart) + 1;
+    total = (seriesAnnoyingEnd - seriesAnnoyingStart) + 1;
+    series = "Annoying";
   }
 
   if (current === -1) {
@@ -1045,7 +1060,7 @@ export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
     seriesSmallStart, seriesEasy1Start, seriesExtremeStart, seriesMusic1Start, series6Start,
     seriesEasy2Start, seriesMusic2Start, seriesMathStart, seriesLanguageStart, seriesFishStart,
-    seriesProgrammingStart].includes(level)
+    seriesProgrammingStart, seriesAnnoyingStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -1319,6 +1334,9 @@ export function getAllLevels() {
   for (let i = seriesProgrammingStart; i <= seriesProgrammingEnd; i++) {
     levels.push(i);
   }
+  for (let i = seriesAnnoyingStart; i <= seriesAnnoyingEnd; i++) {
+    levels.push(i);
+  }
   if (globalVars.uf) {
     for (let i = seriesChroniaPollaStart; i <= seriesChroniaPollaEnd; i++) {
       levels.push(i);
@@ -1368,7 +1386,8 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= seriesMathStart && n <= seriesMathEnd) ||
       (n >= seriesLanguageStart && n <= seriesLanguageEnd) ||
       (n >= seriesFishStart && n <= seriesFishEnd) ||
-      (n >= seriesProgrammingStart && n <= seriesProgrammingEnd)
+      (n >= seriesProgrammingStart && n <= seriesProgrammingEnd) ||
+      (n >= seriesAnnoyingStart && n <= seriesAnnoyingEnd)
     )) ||
     ((n >= 9995) && (n <= 9999)) ||
     (n === 0)
@@ -1439,7 +1458,8 @@ export function isExtra(n) {
     ((n >= seriesMathStart) && (n <= seriesMathEnd)) ||
     ((n >= seriesLanguageStart) && (n <= seriesLanguageEnd)) ||
     ((n >= seriesFishStart) && (n <= seriesFishEnd)) ||
-    ((n >= seriesProgrammingStart) && (n <= seriesProgrammingEnd))
+    ((n >= seriesProgrammingStart) && (n <= seriesProgrammingEnd)) ||
+    ((n >= seriesAnnoyingStart) && (n <= seriesAnnoyingEnd))
   )
 }
 
@@ -2022,6 +2042,24 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           gameVars.messagePosition = valuesLowerCase[0];
           break;
+        case "$movable":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          idx = findElementByCoordinates(x, y, gameInfo.detectors);
+          if (idx >= 0) {
+            switch (valuesLowerCase[2]) {
+              case "no":
+                gameInfo.detectors[idx].movable = false;
+                break;
+              case "yes":
+                gameInfo.detectors[idx].movable = true;
+                break;
+              default:
+                break;
+            }
+          }
+          break;
         case "$movermode":
           if (values.length !== 3 || !validXY) {
             break;
@@ -2179,7 +2217,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             break;
           }
           val_int = tryParseInt(values[2], -1);
-          if ((val_int >= 1) && (val_int <= 10)) {
+          if ((val_int >= 1) && (val_int <= detectorMaxRange)) {
             idx = findElementByCoordinates(x, y, gameInfo.detectors);
             if (idx >= 0) {
               gameInfo.detectors[idx].range = val_int;
@@ -2365,6 +2403,7 @@ export function numberOfLevels() {
   n += (seriesLanguageEnd - seriesLanguageStart) + 1;
   n += (seriesFishEnd - seriesFishStart) + 1;
   n += (seriesProgrammingEnd - seriesProgrammingStart) + 1;
+  n += (seriesAnnoyingEnd - seriesAnnoyingStart) + 1;
   return n;
 }
 

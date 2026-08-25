@@ -15,6 +15,7 @@ import {
   changeDirection,
   changeIntelligence,
   changeMessage,
+  changeMovable,
   changeOneTime,
   changePalette,
   changeQuestion,
@@ -126,6 +127,7 @@ let createLevelMenu = -1;
 let createLevelMenuPages = 2;
 let createLevelMessage = "";
 let createLevelMode = "";
+let createLevelMovable = false;
 let createLevelObject = -1;
 let createLevelOneTime = false;
 let createLevelQuestion = "";
@@ -1186,7 +1188,7 @@ function BalPage() {
             break;
           case 10:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 0, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 11:
@@ -3106,7 +3108,14 @@ function BalPage() {
                 if (createLevelObject === 2207) {
                   if (changeOneTime(gameInfo, column, row, createLevelOneTime) === -1) {
                     if (oneSelected) {
-                      showMessage("Info", "Click on a detector to change the one-time setting.");
+                      showMessage("Info", `Click on a detector to set movable to ${createLevelOneTime}.`);
+                    }
+                  }
+                }
+                if (createLevelObject === 2208) {
+                  if (changeMovable(gameInfo, column, row, createLevelMovable) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", `Click on a detector to set movable to ${createLevelMovable}.`);
                     }
                   }
                 }
@@ -3536,6 +3545,19 @@ function BalPage() {
                   if (newValue === "yes" || newValue === "no") {
                     ok = true;
                     createLevelOneTime = (newValue === "yes");
+                  }
+                }
+              }
+              handleCancel();
+              break;
+            case 2208:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Detectors", "Movable by player:", ["yes", "no"], 0);
+                if (newValue !== null) {
+                  if (newValue === "yes" || newValue === "no") {
+                    ok = true;
+                    createLevelMovable = (newValue === "yes");
                   }
                 }
               }

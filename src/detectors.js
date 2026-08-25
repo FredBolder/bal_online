@@ -6,6 +6,8 @@ import { setTimeBombsTime } from "./timeBombs.js";
 import { presetTropicalFish } from "./tropicalFish.js";
 import { tryParseInt } from "./utils.js";
 
+export const detectorMaxRange = 50;
+
 export function changeDetectorMode(gameInfo, x, y, mode) {
     let idx = -1;
 
@@ -52,7 +54,11 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         intValues.push(val_int);
     }
     const cmd = valuesLowerCase[0];
-    if ((cmd === "create" && values.length === 5) || (cmd === "delete" && values.length === 5) || (cmd === "move" && values.length === 6)) {
+    if (cmd === "changedirection" && values.length === 2) {
+        commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], -1, -1);
+    }
+    if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && values.length === 5) ||
+        (cmd === "delete" && values.length === 5) || (cmd === "move" && values.length === 6)) {
         // create, object name, rel or abs, x, y
         // delete, object name, rel or abs, x, y
         // move, object name, rel or abs, x, y, direction
@@ -82,10 +88,13 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         }
 
         const objName = valuesLowerCase[1];
-        if (cmd !== "create" && !objectPossible(cmd, objName, obj)) {
+        if (cmd !== "changedirection" && cmd !== "create" && !objectPossible(cmd, objName, obj)) {
             return;
         }
 
+        if (cmd === "changedirection") {
+            commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
+        }
         if (cmd === "create") {
             if (obj !== 0) {
                 return;
@@ -266,6 +275,81 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         }
     }
 
+}
+
+function commandChangeDirection(gameData, gameInfo, target, x, y) {
+    let gd = -1;
+
+    if (x >= 0 && y >= 0) {
+        gd = getGameDataValue(gameData, x, y);
+        if (gd <= 0) {
+            return;
+        }
+        if (target === "onedirectionport") {
+            switch (gd) {
+                case 10:
+                    gameData[y][x] = 11;
+                    break;
+                case 11:
+                    gameData[y][x] = 10;
+                    break;
+                case 87:
+                    gameData[y][x] = 88;
+                    break;
+                case 88:
+                    gameData[y][x] = 87;
+                    break;
+                default:
+                    break;
+            }
+            return;
+        }
+        return;
+    }
+    if (target === "elevator") {
+        for (let i = 0; i < gameInfo.elevators.length; i++) {
+            const elevator = gameInfo.elevators[i];
+            if (elevator.up) {
+                elevator.up = false;
+                gameData[elevator.y][elevator.x] = 6;
+            } else {
+                elevator.up = true;
+                gameData[elevator.y][elevator.x] = 106;
+            }
+        }
+        for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
+            const elevator = gameInfo.horizontalElevators[i];
+            if (elevator.right) {
+                elevator.right = false;
+                gameData[elevator.y][elevator.x] = 7;
+            } else {
+                elevator.right = true;
+                gameData[elevator.y][elevator.x] = 107;
+            }
+        }
+        return;
+    }
+    if (target === "pusher") {
+        for (let i = 0; i < gameInfo.pushers.length; i++) {
+            const pusher = gameInfo.pushers[i];
+            switch (pusher.direction) {
+                case "left":
+                    pusher.direction = "right";
+                    break;
+                case "right":
+                    pusher.direction = "left";
+                    break;
+                case "up":
+                    pusher.direction = "down";
+                    break;
+                case "down":
+                    pusher.direction = "up";
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 export function commands(backData, gameData, gameInfo, gameVars, detector) {

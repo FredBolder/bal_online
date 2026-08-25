@@ -385,10 +385,6 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             }
             lines.push(line);
         }
-        if (detector.range !== 1) {
-            line = `$range: ${detector.x}, ${detector.y}, ${detector.range}`;
-            lines.push(line);
-        }
         if (detector.display !== "default") {
             line = `$display: ${detector.x}, ${detector.y}, ${detector.display}`;
             lines.push(line);
@@ -401,8 +397,16 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$detectormode: ${detector.x}, ${detector.y}, ${detector.mode}`;
             lines.push(line);
         }
+        if (!detector.movable) {
+            line = `$movable: ${detector.x}, ${detector.y}, no`;
+            lines.push(line);
+        }
         if (detector.oneTime) {
             line = `$onetime: ${detector.x}, ${detector.y}, yes`;
+            lines.push(line);
+        }
+        if (detector.range !== 1) {
+            line = `$range: ${detector.x}, ${detector.y}, ${detector.range}`;
             lines.push(line);
         }
         if (detector.target !== "group") {
