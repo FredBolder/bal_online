@@ -187,7 +187,7 @@ describe("balUtils moveLeft", () => {
       ...defaultGameInfo,
       blueBall: { x: 3, y: 1 },
       detectors: [
-        { x: 2, y: 1, mode: "pinkball", activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, movable: true, group: 2 }
+        { x: 2, y: 1, mode: "pinkball", activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 2 }
       ],
     };
     const input = [
@@ -205,7 +205,7 @@ describe("balUtils moveLeft", () => {
     expect(info.eating).toBe(false);
     expect(info.player).toBe(true);
     expect(gameInfo.detectors).toEqual([
-        { x: 1, y: 1, mode: "pinkball", activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, movable: true, group: 2 }
+        { x: 1, y: 1, mode: "pinkball", activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 2 }
     ]);
   });
 

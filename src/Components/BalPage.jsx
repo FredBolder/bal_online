@@ -15,14 +15,11 @@ import {
   changeDirection,
   changeIntelligence,
   changeMessage,
-  changeMovable,
-  changeOneTime,
   changePalette,
   changeQuestion,
   changeShape,
   changeStyle,
   changeSides,
-  changeTarget,
   changeTicks,
   dropObject,
   inWater,
@@ -45,7 +42,7 @@ import {
 } from "../colorUtils.js";
 import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
-import { changeDetectorMode, detectorModes } from "../detectors.js";
+import { detectorModes } from "../detectors.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { feedFish } from "../fishFood.js";
@@ -62,6 +59,7 @@ import { closeAudio, getAudioContext, instruments } from "../music.js";
 import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
 import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
+import { setProp } from "../props.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
 import {
   changeIgnoreByArea, changeIgnoreByCell, deleteIgnoreAtColumn, deleteIgnoreAtRow, insertIgnoreAtColumn,
@@ -134,6 +132,7 @@ let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
 let createLevelRaster = false;
 let createLevelSelectedCell = null;
+let createLevelSequence = false;
 let createLevelSides = null;
 let createLevelStonesPages = 2;
 let createLevelTicks = -1;
@@ -1188,7 +1187,7 @@ function BalPage() {
             break;
           case 10:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 2209, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 11:
@@ -2636,6 +2635,7 @@ function BalPage() {
     let idx = -1;
     let info = "";
     let move = false;
+    let msg = "";
     let newValue = "";
 
     if (!gameData || !backData) {
@@ -2829,6 +2829,7 @@ function BalPage() {
           for (let c = xmin; c <= xmax; c++) {
             row = r;
             column = c;
+            msg = "";
 
             if (createLevelObject >= 2000) {
               if ((createLevelObject === 2144) && (createLevelSides !== null)) {
@@ -3085,19 +3086,12 @@ function BalPage() {
                   }
                 }
                 if (createLevelObject === 2204) {
-                  if (changeTarget(gameInfo, column, row, "rotategroupleft") === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a detector to change the target to rotategroupleft.");
-                    }
-                  }
+                  msg = setProp(gameInfo, column, row, "target", "rotategroupleft", oneSelected);
                 }
                 if (createLevelObject === 2205) {
-                  if (changeTarget(gameInfo, column, row, "rotategroupright") === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a detector to change the target to rotategroupright.");
-                    }
-                  }
+                  msg = setProp(gameInfo, column, row, "target", "rotategroupright", oneSelected);
                 }
+
                 if (createLevelObject === 2206) {
                   if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
                     if (oneSelected) {
@@ -3105,26 +3099,18 @@ function BalPage() {
                     }
                   }
                 }
+
                 if (createLevelObject === 2207) {
-                  if (changeOneTime(gameInfo, column, row, createLevelOneTime) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", `Click on a detector to set movable to ${createLevelOneTime}.`);
-                    }
-                  }
+                  msg = setProp(gameInfo, column, row, "oneTime", createLevelOneTime, oneSelected);
                 }
                 if (createLevelObject === 2208) {
-                  if (changeMovable(gameInfo, column, row, createLevelMovable) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", `Click on a detector to set movable to ${createLevelMovable}.`);
-                    }
-                  }
+                  msg = setProp(gameInfo, column, row, "movable", createLevelMovable, oneSelected);
+                }
+                if (createLevelObject === 2209) {
+                  msg = setProp(gameInfo, column, row, "sequence", createLevelSequence, oneSelected);
                 }
                 if ((createLevelObject === 2092) && detectorModes().includes(createLevelMode)) {
-                  if (changeDetectorMode(gameInfo, column, row, createLevelMode) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a detector to set the mode of it.");
-                    }
-                  }
+                  msg = setProp(gameInfo, column, row, "mode", createLevelMode, oneSelected);
                 }
               }
 
@@ -3234,6 +3220,9 @@ function BalPage() {
               } else {
                 removeObject(backData, gameData, gameInfo, column, row, true);
               }
+            }
+            if (msg !== "") {
+              showMessage("Info", msg);
             }
           }
         }
@@ -3558,6 +3547,19 @@ function BalPage() {
                   if (newValue === "yes" || newValue === "no") {
                     ok = true;
                     createLevelMovable = (newValue === "yes");
+                  }
+                }
+              }
+              handleCancel();
+              break;
+            case 2209:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Detectors", "Sequence:", ["yes", "no"], 0);
+                if (newValue !== null) {
+                  if (newValue === "yes" || newValue === "no") {
+                    ok = true;
+                    createLevelSequence = (newValue === "yes");
                   }
                 }
               }

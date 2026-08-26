@@ -4511,6 +4511,9 @@ function drawLevel(
         case 2208:
           drawAbbreviation("mov");
           break;
+        case 2209:
+          drawAbbreviation("seq");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

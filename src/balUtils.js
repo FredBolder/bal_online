@@ -332,26 +332,6 @@ export function changeMessage(gameInfo, x, y, message) {
   return idx;
 }
 
-export function changeMovable(gameInfo, x, y, movable) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.detectors);
-  if (idx >= 0) {
-    gameInfo.detectors[idx].movable = movable;
-  }
-  return idx;
-}
-
-export function changeOneTime(gameInfo, x, y, oneTime) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.detectors);
-  if (idx >= 0) {
-    gameInfo.detectors[idx].oneTime = oneTime;
-  }
-  return idx;
-}
-
 export function changePalette(gameInfo, x, y, decrease) {
   const step = decrease ? -1 : 1;
   let idx = -1;
@@ -464,16 +444,6 @@ export function changeStyle(gameInfo, x, y, style) {
     question = removeStyle(question);
     question = "{" + style + "}" + question;
     gameInfo.questionStones[idx].question = question;
-  }
-  return idx;
-}
-
-export function changeTarget(gameInfo, x, y, target) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.detectors);
-  if (idx >= 0) {
-    gameInfo.detectors[idx].target = target;
   }
   return idx;
 }

@@ -378,43 +378,52 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.detectors.length; i++) {
         const detector = gameInfo.detectors[i];
+        const coordinates = `${detector.x}, ${detector.y}`;
         if (JSON.stringify(detector.activeSides) !== JSON.stringify(["top"])) {
-            line = `$activesides: ${detector.x}, ${detector.y}`;
+            line = `$activesides: ${coordinates}`;
             for (let j = 0; j < detector.activeSides.length; j++) {
                 line += ", " + detector.activeSides[j];
             }
             lines.push(line);
         }
         if (detector.display !== "default") {
-            line = `$display: ${detector.x}, ${detector.y}, ${detector.display}`;
+            line = `$display: ${coordinates}, ${detector.display}`;
             lines.push(line);
         }
         if (detector.group > 1) {
-            line = `$group: ${detector.x}, ${detector.y}, ${detector.group}`;
+            line = `$group: ${coordinates}, ${detector.group}`;
             lines.push(line);
         }
         if (detector.mode !== "all") {
-            line = `$detectormode: ${detector.x}, ${detector.y}, ${detector.mode}`;
+            line = `$detectormode: ${coordinates}, ${detector.mode}`;
             lines.push(line);
         }
         if (!detector.movable) {
-            line = `$movable: ${detector.x}, ${detector.y}, no`;
+            line = `$movable: ${coordinates}, no`;
             lines.push(line);
         }
         if (detector.oneTime) {
-            line = `$onetime: ${detector.x}, ${detector.y}, yes`;
+            line = `$onetime: ${coordinates}, yes`;
             lines.push(line);
         }
         if (detector.range !== 1) {
-            line = `$range: ${detector.x}, ${detector.y}, ${detector.range}`;
+            line = `$range: ${coordinates}, ${detector.range}`;
+            lines.push(line);
+        }
+        if (detector.sequence) {
+            line = `$sequence: ${coordinates}, yes`;
             lines.push(line);
         }
         if (detector.target !== "group") {
-            line = `$target: ${detector.x}, ${detector.y}, ${detector.target}`;
+            line = `$target: ${coordinates}, ${detector.target}`;
+            lines.push(line);
+        }
+        if (detector.text !== "") {
+            line = `$text: ${coordinates}, ${detector.text}`;
             lines.push(line);
         }
         if (detector.value !== "") {
-            line = `$value: ${detector.x}, ${detector.y}, ${detector.value}`;
+            line = `$value: ${coordinates}, ${detector.value}`;
             lines.push(line);
         }
     }

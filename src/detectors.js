@@ -8,16 +8,6 @@ import { tryParseInt } from "./utils.js";
 
 export const detectorMaxRange = 50;
 
-export function changeDetectorMode(gameInfo, x, y, mode) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.detectors);
-    if (idx >= 0) {
-        gameInfo.detectors[idx].mode = mode;
-    }
-    return idx;
-}
-
 export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, commandLine) {
     let absX = 0;
     let absY = 0;

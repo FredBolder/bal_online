@@ -205,7 +205,9 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.detectors[idx2].mode = gameInfo.detectors[idx1].mode;
                 gameInfo.detectors[idx2].oneTime = gameInfo.detectors[idx1].oneTime;
                 gameInfo.detectors[idx2].range = gameInfo.detectors[idx1].range;
+                gameInfo.detectors[idx2].sequence = gameInfo.detectors[idx1].sequence;
                 gameInfo.detectors[idx2].target = gameInfo.detectors[idx1].target;
+                gameInfo.detectors[idx2].text = gameInfo.detectors[idx1].text;
                 gameInfo.detectors[idx2].value = gameInfo.detectors[idx1].value;
             }
             break;

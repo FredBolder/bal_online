@@ -292,66 +292,67 @@ export function checkSettings(data, settings) {
   // For $answer, $hint, $message, $question, $startlevelmessage and $value there can be a comma in the text and
   // $notes, $addnotes and $activesides have a variable number of parameters.
   const settingsInfo = [
-    { name: "$activesides", params: 0, xy: true },
-    { name: "$addnotes", params: 0, xy: true },
-    { name: "$answer", params: 0, xy: true },
-    { name: "$answerballmode", params: 3, xy: true },
-    { name: "$background", params: 5, xy: true },
-    { name: "$bgcolor", params: 5, xy: true },
-    { name: "$changer", params: 5, xy: true },
-    { name: "$color", params: 2, xy: false },
-    { name: "$conveyorbeltmode", params: 3, xy: true },
-    { name: "$detectormode", params: 3, xy: true },
-    { name: "$direction", params: 3, xy: true },
-    { name: "$display", params: 3, xy: true },
-    { name: "$displaysize", params: 2, xy: false },
-    { name: "$extra", params: 1, xy: false },
-    { name: "$fgcolor", params: 5, xy: true },
-    { name: "$fins", params: 3, xy: true },
-    { name: "$gameticks", params: 2, xy: false },
-    { name: "$gameticksxy", params: 3, xy: true },
-    { name: "$group", params: 3, xy: true },
-    { name: "$has", params: 1, xy: false },
-    { name: "$hint", params: 0, xy: false },
-    { name: "$ignorepattern", params: 4, xy: true },
-    { name: "$instrument", params: 4, xy: true },
-    { name: "$inverted", params: 3, xy: true },
-    { name: "$lavacanmove", params: 1, xy: false },
-    { name: "$maxdistx", params: 3, xy: true },
-    { name: "$message", params: 0, xy: false },
-    { name: "$messagebackground", params: 1, xy: false },
-    { name: "$messageborder", params: 1, xy: false },
-    { name: "$messagecolor", params: 1, xy: false },
-    { name: "$messageposition", params: 1, xy: false },
-    { name: "$movable", params: 3, xy: true },
-    { name: "$movermode", params: 3, xy: true },
-    { name: "$musicbox", params: 4, xy: true },
-    { name: "$noteoverride", params: 3, xy: true },
-    { name: "$octaves", params: 3, xy: true },
-    { name: "$notes", params: 0, xy: true },
-    { name: "$onetime", params: 3, xy: true },
-    { name: "$palette", params: 3, xy: true },
-    { name: "$part", params: 3, xy: true },
-    { name: "$pattern", params: 0, xy: true },
-    { name: "$pistonmode", params: 3, xy: true },
-    { name: "$plantsswayamount", params: 1, xy: false },
-    { name: "$plantsswayspeed", params: 1, xy: false },
-    { name: "$question", params: 0, xy: true },
-    { name: "$range", params: 3, xy: true },
-    { name: "$restorepoint", params: 1, xy: false },
-    { name: "$seaanemonesswayamount", params: 1, xy: false },
-    { name: "$seaanemonesswayspeed", params: 1, xy: false },
-    { name: "$shape", params: 3, xy: true },
-    { name: "$sound", params: 2, xy: false },
-    { name: "$startlevelmessage", params: 0, xy: false },
-    { name: "$stepspermeasure", params: 3, xy: true },
-    { name: "$sticky", params: 3, xy: true },
-    { name: "$stonepattern", params: 1, xy: false },
-    { name: "$stripes", params: 3, xy: true },
-    { name: "$tail", params: 3, xy: true },
-    { name: "$target", params: 3, xy: true },
-    { name: "$twoblueconnected", params: 1, xy: false },
-    { name: "$value", params: 0, xy: true },
+    { name: "$activesides", params: 0, xy: true, yesno: -1 },
+    { name: "$addnotes", params: 0, xy: true, yesno: -1 },
+    { name: "$answer", params: 0, xy: true, yesno: -1 },
+    { name: "$answerballmode", params: 3, xy: true, yesno: -1 },
+    { name: "$background", params: 5, xy: true, yesno: -1 },
+    { name: "$bgcolor", params: 5, xy: true, yesno: -1 },
+    { name: "$changer", params: 5, xy: true, yesno: 2 },
+    { name: "$color", params: 2, xy: false, yesno: -1 },
+    { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
+    { name: "$detectormode", params: 3, xy: true, yesno: -1 },
+    { name: "$direction", params: 3, xy: true, yesno: -1 },
+    { name: "$display", params: 3, xy: true, yesno: -1 },
+    { name: "$displaysize", params: 2, xy: false, yesno: -1 },
+    { name: "$extra", params: 1, xy: false, yesno: -1 },
+    { name: "$fgcolor", params: 5, xy: true, yesno: -1 },
+    { name: "$fins", params: 3, xy: true, yesno: -1 },
+    { name: "$gameticks", params: 2, xy: false, yesno: -1 },
+    { name: "$gameticksxy", params: 3, xy: true, yesno: -1 },
+    { name: "$group", params: 3, xy: true, yesno: -1 },
+    { name: "$has", params: 1, xy: false, yesno: -1 },
+    { name: "$hint", params: 0, xy: false, yesno: -1 },
+    { name: "$ignorepattern", params: 4, xy: true, yesno: -1 },
+    { name: "$instrument", params: 4, xy: true, yesno: -1 },
+    { name: "$inverted", params: 3, xy: true, yesno: 2 },
+    { name: "$lavacanmove", params: 1, xy: false, yesno: 0 },
+    { name: "$maxdistx", params: 3, xy: true, yesno: -1 },
+    { name: "$message", params: 0, xy: false, yesno: -1 },
+    { name: "$messagebackground", params: 1, xy: false, yesno: -1 },
+    { name: "$messageborder", params: 1, xy: false, yesno: -1 },
+    { name: "$messagecolor", params: 1, xy: false, yesno: -1 },
+    { name: "$messageposition", params: 1, xy: false, yesno: -1 },
+    { name: "$movable", params: 3, xy: true, yesno: 2 },
+    { name: "$movermode", params: 3, xy: true, yesno: -1 },
+    { name: "$musicbox", params: 4, xy: true, yesno: -1 },
+    { name: "$noteoverride", params: 3, xy: true, yesno: -1 },
+    { name: "$octaves", params: 3, xy: true, yesno: -1 },
+    { name: "$notes", params: 0, xy: true, yesno: -1 },
+    { name: "$onetime", params: 3, xy: true, yesno: 2 },
+    { name: "$palette", params: 3, xy: true, yesno: -1 },
+    { name: "$part", params: 3, xy: true, yesno: -1 },
+    { name: "$pattern", params: 0, xy: true, yesno: -1 },
+    { name: "$pistonmode", params: 3, xy: true, yesno: -1 },
+    { name: "$plantsswayamount", params: 1, xy: false, yesno: -1 },
+    { name: "$plantsswayspeed", params: 1, xy: false, yesno: -1 },
+    { name: "$question", params: 0, xy: true, yesno: -1 },
+    { name: "$range", params: 3, xy: true, yesno: -1 },
+    { name: "$restorepoint", params: 1, xy: false, yesno: -1 },
+    { name: "$seaanemonesswayamount", params: 1, xy: false, yesno: -1 },
+    { name: "$seaanemonesswayspeed", params: 1, xy: false, yesno: -1 },
+    { name: "$sequence", params: 3, xy: true, yesno: -1 },
+    { name: "$shape", params: 3, xy: true, yesno: -1 },
+    { name: "$sound", params: 2, xy: false, yesno: -1 },
+    { name: "$startlevelmessage", params: 0, xy: false, yesno: -1 },
+    { name: "$stepspermeasure", params: 3, xy: true, yesno: -1 },
+    { name: "$sticky", params: 3, xy: true, yesno: 2 },
+    { name: "$stonepattern", params: 1, xy: false, yesno: -1 },
+    { name: "$stripes", params: 3, xy: true, yesno: -1 },
+    { name: "$tail", params: 3, xy: true, yesno: -1 },
+    { name: "$target", params: 3, xy: true, yesno: -1 },
+    { name: "$twoblueconnected", params: 1, xy: false, yesno: 0 },
+    { name: "$value", params: 0, xy: true, yesno: -1 },
   ];
 
   let gameTicks = 0;
@@ -386,6 +387,11 @@ export function checkSettings(data, settings) {
       if (info !== null) {
         if (info.xy && !validXY) {
           msg += `${settingNr(i)}Invalid or missing coordinates.\n`;
+        }
+        if (info.yesno >= 0 && values.length > info.yesno) {
+            if (valuesLowerCase[info.yesno] !== "yes" && valuesLowerCase[info.yesno] !== "no") {
+              msg += `${settingNr(i)}yes or no expected.\n`;
+            }
         }
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
@@ -440,9 +446,6 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$changer":
-              if (!["yes", "no"].includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
-              }
               if (validXY && !["Ӄ", 244].includes(data[y][x])) {
                 msg += `${settingNr(i)}No changer found at the coordinates ${x}, ${y}.\n`;
               }
@@ -591,16 +594,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$inverted":
-              if (!["yes", "no"].includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
-              }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", "η", 159, 161, 163, 165, 178].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston or mover found at the coordinates ${x}, ${y}.\n`;
-              }
-              break;
-            case "$lavacanmove":
-              if (!["yes", "no"].includes(valuesLowerCase[0])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
               }
               break;
             case "$maxdistx":
@@ -613,9 +608,6 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$movable":
-              if (!["yes", "no"].includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
-              }
               if (validXY && !["ђ", 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
@@ -668,9 +660,6 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$onetime":
-              if (!["yes", "no"].includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
-              }
               if (validXY && !["ђ", 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
@@ -804,9 +793,6 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$sticky":
-              if (!["yes", "no"].includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
-              }
               if (validXY && !["Ù", "Ì", "Ö", "Ë", 159, 161, 163, 165].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
               }
@@ -854,9 +840,6 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$twoblueconnected":
-              if (!["yes", "no"].includes(valuesLowerCase[0])) {
-                msg += `${settingNr(i)}yes or no expected.\n`;
-              }
               break;
             case "$value":
               if (validXY && !["ђ", 255].includes(data[y][x])) {

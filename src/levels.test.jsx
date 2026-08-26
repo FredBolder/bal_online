@@ -101,13 +101,27 @@ describe("levels", () => {
         expect(info).toBe("Setting 2: Invalid value 1000 for group.\n");
     });
 
+    it("checkLevel G info", () => {
+        const data = [
+            "1111111111",
+            "13       1",
+            "1        1",
+            "1        1",
+            "1Ù 2     1",
+            "1111111111"
+        ];
+        const settings = ["$sticky: 1, 4, ja", "$group: 1, 4, 2"];
+        const info = checkLevel(data, settings);
+        expect(info).toBe("Setting 1: yes or no expected.\n");
+    });
+
     it("loadLevelSettings A", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
             detectors: [
-                { x: 1, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, movable: true, group: 1 },
-                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, movable: true, group: 1 }
+                { x: 1, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 1 }
             ],
             greenBalls: 1,
             movers: [
@@ -137,8 +151,8 @@ describe("levels", () => {
         ];
         loadLevelSettings(backData, data, gameInfo, { ...defaultGameVars }, settings, true)
         expect(gameInfo.detectors).toEqual([
-            { x: 1, y: 4, mode: "yellowball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, movable: true, group: 3 },
-            { x: 4, y: 5, mode: "whiteball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: White ball detected", display: "default", activated: false, activatedCount: 0, movable: true, group: 1 }
+            { x: 1, y: 4, mode: "yellowball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 3 },
+            { x: 4, y: 5, mode: "whiteball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: White ball detected", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 1 }
         ]);
         expect(gameInfo.movers).toEqual([
             { x: 5, y: 2, direction: "up", activeSides: ["left", "right"], mode: "purpleball", inverted: true, counter: 0 }
