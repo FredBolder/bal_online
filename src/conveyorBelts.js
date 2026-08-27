@@ -1,4 +1,4 @@
-import { findElementByCoordinates, moveObject } from "./balUtils.js";
+import { moveObject } from "./balUtils.js";
 
 function moveableByConveyorBelt(gameInfo, n) {
     let result = false;
@@ -26,20 +26,6 @@ function moveableByConveyorBelt(gameInfo, n) {
             break;
     }
     return result;
-}
-
-export function changeConveyorBeltMode(gameInfo, x, y, mode) {
-    let idx = -1;
-
-    if (conveyorBeltModes().includes(mode)) {
-        if (idx === -1) {
-            idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
-            if (idx >= 0) {
-                gameInfo.conveyorBelts[idx].mode = mode;
-            }
-        }
-    }
-    return idx;
 }
 
 export function conveyorBeltModes() {

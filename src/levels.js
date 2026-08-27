@@ -2,7 +2,7 @@ import { removeObject } from "./addRemoveObject.js";
 import { answerBallModes } from "./answerBalls.js";
 import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
-import { changeConveyorBeltMode, conveyorBeltModes } from "./conveyorBelts.js";
+import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
@@ -10,6 +10,7 @@ import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
+import { setProp } from "./props.js";
 import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
@@ -1446,6 +1447,10 @@ export function isExtra(n) {
   )
 }
 
+function isYesOrNo(s) {
+  return (s === "yes" || s === "no");
+}
+
 async function loadFromFile(n, gateTravelling = false) {
   let levelData = [];
   let levelSettings = [];
@@ -1592,15 +1597,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (answerBallModes().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-            if (idx >= 0) {
-              gameInfo.answerBalls[idx].mode = valuesLowerCase[2];
-              if (gameInfo.answerBalls[idx].mode === "scale") {
-                gameInfo.answerBalls[idx].answer = "0";
-              }
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
           break;
         case "$background":
           if (values.length !== 5) {
@@ -1679,20 +1676,13 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (conveyorBeltModes().includes(valuesLowerCase[2])) {
-            changeConveyorBeltMode(gameInfo, x, y, valuesLowerCase[2]);
-          }
+          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
           break;
         case "$detectormode":
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (detectorModes().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.detectors);
-            if (idx >= 0) {
-              gameInfo.detectors[idx].mode = valuesLowerCase[2];
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
           break;
         case "$direction":
           if (values.length !== 3 || !validXY) {
@@ -1706,12 +1696,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (detectorDisplayModes().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.detectors);
-            if (idx >= 0) {
-              gameInfo.detectors[idx].display = valuesLowerCase[2];
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "display", valuesLowerCase[2], false);
           break;
         case "$displaysize":
           w = tryParseInt(values[0], -1);
@@ -2026,33 +2011,16 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           gameVars.messagePosition = valuesLowerCase[0];
           break;
         case "$movable":
-          if (values.length !== 3 || !validXY) {
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
             break;
           }
-          idx = findElementByCoordinates(x, y, gameInfo.detectors);
-          if (idx >= 0) {
-            switch (valuesLowerCase[2]) {
-              case "no":
-                gameInfo.detectors[idx].movable = false;
-                break;
-              case "yes":
-                gameInfo.detectors[idx].movable = true;
-                break;
-              default:
-                break;
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "movable", valuesLowerCase[2] === "yes", false);
           break;
         case "$movermode":
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (moverModes().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.movers);
-            if (idx >= 0) {
-              gameInfo.movers[idx].mode = valuesLowerCase[2];
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
           break;
         case "$musicbox":
           if (values.length !== 4 || !validXY) {
@@ -2101,22 +2069,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$onetime":
-          if (values.length !== 3 || !validXY) {
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
             break;
           }
-          idx = findElementByCoordinates(x, y, gameInfo.detectors);
-          if (idx >= 0) {
-            switch (valuesLowerCase[2]) {
-              case "no":
-                gameInfo.detectors[idx].oneTime = false;
-                break;
-              case "yes":
-                gameInfo.detectors[idx].oneTime = true;
-                break;
-              default:
-                break;
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "oneTime", valuesLowerCase[2] === "yes", false);
           break;
         case "$palette":
           if (values.length !== 3 || !validXY) {
@@ -2161,12 +2117,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (pistonModes().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.pistons);
-            if (idx >= 0) {
-              gameInfo.pistons[idx].mode = valuesLowerCase[2];
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
           break;
         case "$plantsswayamount":
           if (values.length !== 1) {
@@ -2200,12 +2151,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             break;
           }
           val_int = tryParseInt(values[2], -1);
-          if ((val_int >= 1) && (val_int <= detectorMaxRange)) {
-            idx = findElementByCoordinates(x, y, gameInfo.detectors);
-            if (idx >= 0) {
-              gameInfo.detectors[idx].range = val_int;
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "range", val_int, false);
           break;
         case "$restorepoint":
           val_int = tryParseInt(values[0], -1);
@@ -2327,10 +2273,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             break;
           }
           if (detectorTargets().includes(valuesLowerCase[2])) {
-            idx = findElementByCoordinates(x, y, gameInfo.detectors);
-            if (idx >= 0) {
-              gameInfo.detectors[idx].target = valuesLowerCase[2];
-            }
+            setProp(gameData, gameInfo, x, y, "target", valuesLowerCase[2], false);
           }
           break;
         case "$twoblueconnected":
@@ -2353,10 +2296,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length < 3 || !validXY) {
             break;
           }
-          idx = findElementByCoordinates(x, y, gameInfo.detectors);
-          if (idx >= 0) {
-            gameInfo.detectors[idx].value = val_str;
-          }
+          setProp(gameData, gameInfo, x, y, "value", val_str, false);
           break;
         default:
           break;

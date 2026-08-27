@@ -61,16 +61,6 @@ export function changeMoverInverted(gameInfo, x, y) {
     return idx;
 }
 
-export function changeMoverMode(gameInfo, x, y, mode) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.movers);
-    if (idx >= 0) {
-        gameInfo.movers[idx].mode = mode;
-    }
-    return idx;
-}
-
 export function checkMovers(gameData, gameInfo, gameVars, checkBlue = false) {
     const top = 0;
     const bottom = 1;

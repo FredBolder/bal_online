@@ -5,7 +5,6 @@ import { ModalContext } from "./ModalContext";
 
 import { actionKeys, actionList, hasAction } from "../actions.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
-import { answerBallModes, changeAnswerBallMode } from "../answerBalls.js";
 import {
   changeAnswer,
   changeChangerColors,
@@ -40,9 +39,7 @@ import {
   changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
   insertColorsAtColumn, insertColorsAtRow, moveColor
 } from "../colorUtils.js";
-import { changeConveyorBeltMode, conveyorBeltModes } from "../conveyorBelts.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
-import { detectorModes } from "../detectors.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { feedFish } from "../fishFood.js";
@@ -54,10 +51,10 @@ import { deleteIfLava } from "../lava.js";
 import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels, updateGameInfo } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
 import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../memory.js";
-import { changeMoverInverted, changeMoverMode, moverModes } from "../movers.js";
+import { changeMoverInverted } from "../movers.js";
 import { closeAudio, getAudioContext, instruments } from "../music.js";
-import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, musicBoxModes, transposeMusicBox } from "../musicBoxes.js";
-import { changePistonInverted, changePistonMode, changePistonSticky, pistonModes } from "../pistons.js";
+import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, transposeMusicBox } from "../musicBoxes.js";
+import { changePistonInverted, changePistonSticky } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { setProp } from "../props.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
@@ -2832,6 +2829,10 @@ function BalPage() {
             msg = "";
 
             if (createLevelObject >= 2000) {
+              if (createLevelObject === 2092) {
+                msg = setProp(gameData, gameInfo, column, row, "mode", createLevelMode, oneSelected);
+              }
+
               if ((createLevelObject === 2144) && (createLevelSides !== null)) {
                 if (changeSides(gameInfo, column, row, createLevelSides) === -1) {
                   if (oneSelected) {
@@ -2992,16 +2993,6 @@ function BalPage() {
                 }
               }
 
-              if (createLevelMenu === menuToNumber("answerballs")) {
-                if ((createLevelObject === 2092) && answerBallModes().includes(createLevelMode)) {
-                  if (changeAnswerBallMode(gameInfo, column, row, createLevelMode) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on an answer ball to set the mode of it.");
-                    }
-                  }
-                }
-              }
-
               if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2201)) {
                 if (changeStyle(gameInfo, column, row, createLevelQuestionStyle) === -1) {
                   if (oneSelected) {
@@ -3019,13 +3010,6 @@ function BalPage() {
               }
 
               if (createLevelMenu === menuToNumber("elevators")) {
-                if ((createLevelObject === 2092) && moverModes().includes(createLevelMode)) {
-                  if (changeMoverMode(gameInfo, column, row, createLevelMode) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a mover to set the mode of it.");
-                    }
-                  }
-                }
                 if (createLevelObject === 2039) {
                   if (changeMoverInverted(gameInfo, column, row) === -1) {
                     if (oneSelected) {
@@ -3038,13 +3022,6 @@ function BalPage() {
               if (createLevelMenu === menuToNumber("pistons")) {
                 if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
-                }
-                if ((createLevelObject === 2092) && pistonModes().includes(createLevelMode)) {
-                  if (changePistonMode(gameInfo, column, row, createLevelMode) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a piston to set the mode of it.");
-                    }
-                  }
                 }
                 if (createLevelObject === 2038) {
                   if (changePistonSticky(gameInfo, column, row) === -1) {
@@ -3063,12 +3040,6 @@ function BalPage() {
               }
 
               if (createLevelMenu === menuToNumber("conveyorbelts")) {
-                if ((createLevelObject === 2092) && conveyorBeltModes().includes(createLevelMode)) {
-                  if (changeConveyorBeltMode(gameInfo, column, row, createLevelMode) === -1) {
-                    showMessage("Info", "Click on a conveyor belt to set the mode of it.");
-                  }
-                }
-
                 if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
                   changeGroup(gameInfo, column, row, createLevelObject - 2000);
                 }
@@ -3086,10 +3057,10 @@ function BalPage() {
                   }
                 }
                 if (createLevelObject === 2204) {
-                  msg = setProp(gameInfo, column, row, "target", "rotategroupleft", oneSelected);
+                  msg = setProp(gameData, gameInfo, column, row, "target", "rotategroupleft", oneSelected);
                 }
                 if (createLevelObject === 2205) {
-                  msg = setProp(gameInfo, column, row, "target", "rotategroupright", oneSelected);
+                  msg = setProp(gameData, gameInfo, column, row, "target", "rotategroupright", oneSelected);
                 }
 
                 if (createLevelObject === 2206) {
@@ -3101,16 +3072,13 @@ function BalPage() {
                 }
 
                 if (createLevelObject === 2207) {
-                  msg = setProp(gameInfo, column, row, "oneTime", createLevelOneTime, oneSelected);
+                  msg = setProp(gameData, gameInfo, column, row, "oneTime", createLevelOneTime, oneSelected);
                 }
                 if (createLevelObject === 2208) {
-                  msg = setProp(gameInfo, column, row, "movable", createLevelMovable, oneSelected);
+                  msg = setProp(gameData, gameInfo, column, row, "movable", createLevelMovable, oneSelected);
                 }
                 if (createLevelObject === 2209) {
-                  msg = setProp(gameInfo, column, row, "sequence", createLevelSequence, oneSelected);
-                }
-                if ((createLevelObject === 2092) && detectorModes().includes(createLevelMode)) {
-                  msg = setProp(gameInfo, column, row, "mode", createLevelMode, oneSelected);
+                  msg = setProp(gameData, gameInfo, column, row, "sequence", createLevelSequence, oneSelected);
                 }
               }
 
@@ -3121,12 +3089,6 @@ function BalPage() {
               if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2117)) {
                 if (changeMusicBoxProperty(gameInfo, column, row, "note", ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"][createLevelObject - 2104]) === -1) {
                   showMessage("Info", "Click on a music box to set the note of it.");
-                }
-              }
-
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2092) && musicBoxModes().includes(createLevelMode)) {
-                if (changeMusicBoxProperty(gameInfo, column, row, "mode", createLevelMode) === -1) {
-                  showMessage("Info", "Click on a music box to set the mode of it.");
                 }
               }
 

@@ -497,16 +497,6 @@ export function changePistonInverted(gameInfo, x, y) {
     return idx;
 }
 
-export function changePistonMode(gameInfo, x, y, mode) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.pistons);
-    if (idx >= 0) {
-        gameInfo.pistons[idx].mode = mode;
-    }
-    return idx;
-}
-
 export function changePistonSticky(gameInfo, x, y) {
     let idx = -1;
 

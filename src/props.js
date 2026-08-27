@@ -1,13 +1,171 @@
-export function setProp(gameInfo, x, y, prop, value, oneSelected) {
-    let found = false;
-    let msg = "";
-    let objectsStr = "";
-    const lists = [];
-    const objects = [];
+import { answerBallModes } from "./answerBalls.js";
+import { getGameDataValue } from "./balUtils.js";
+import { conveyorBeltModes } from "./conveyorBelts.js";
+import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
+import { moverModes } from "./movers.js";
+import { musicBoxModes } from "./musicBoxes.js";
+import { pistonModes } from "./pistons.js";
 
-    if (["display", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
+export function setProp(gameData, gameInfo, x, y, prop, value, message) {
+    let error = false;
+    let found = false;
+    let isAnswerBall = false;
+    let isConveyorBelt = false;
+    let isDetector = false;
+    let isMover = false;
+    let isMusicBox = false;
+    let isPiston = false;
+    let msg = "";
+    let objectName = "";
+    const lists = [];
+
+    const objectNumber = getGameDataValue(gameData, x, y);
+
+    switch (objectNumber) {
+        case 157:
+            isMusicBox = true;
+            objectName = "music box";
+            break;
+        case 159:
+        case 161:
+        case 163:
+        case 165:
+            isPiston = true;
+            objectName = "piston";
+            break;
+        case 171:
+            isConveyorBelt = true;
+            objectName = "conveyor belt";
+            break;
+        case 178:
+            isMover = true;
+            objectName = "mover";
+            break;
+        case 242:
+        case 245:
+            isAnswerBall = true;
+            objectName = "answer ball";
+            break;
+        case 255:
+            isDetector = true;
+            objectName = "detector";
+            break;
+        default:
+            break;
+    }
+
+    // Check value
+    switch (prop) {
+        case "group":
+            if (typeof value !== "number") {
+                error = true;
+                break;
+            }
+            if ((value < 1) || (value > 32)) {
+                error = true;
+            }
+            break;
+        case "movable":
+        case "oneTime":
+        case "sequence":
+            if (typeof value !== "boolean") {
+                error = true;
+            }
+            break;
+        case "display":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            if (isDetector && !detectorDisplayModes().includes(value)) {
+                error = true;
+            }
+            break;
+        case "mode":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            if (isAnswerBall && !answerBallModes().includes(value)) {
+                error = true;
+            }
+            if (isConveyorBelt && !conveyorBeltModes().includes(value)) {
+                error = true;
+            }
+            if (isDetector && !detectorModes().includes(value)) {
+                error = true;
+            }
+            if (isMover && !moverModes().includes(value)) {
+                error = true;
+            }
+            if (isMusicBox && !musicBoxModes().includes(value)) {
+                error = true;
+            }
+            if (isPiston && !pistonModes().includes(value)) {
+                error = true;
+            }
+            break;
+        case "range":
+            if (typeof value !== "number") {
+                error = true;
+                break;
+            }
+            if ((value < 1) || (value > detectorMaxRange)) {
+                error = true;
+            }
+            break;
+        case "target":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            if (isDetector && !detectorTargets().includes(value)) {
+                error = true;
+            }
+            break;
+        case "text":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            break;
+        case "value":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            break;
+        default:
+            break;
+    }
+    if (error) {
+        if (message) {
+            msg = `Invalid value ${value} for `;
+            if (objectName !== "") {
+                msg += objectName + " ";
+            }
+            msg += `property ${prop}`;
+        }
+        return msg;
+    }
+
+    if (isAnswerBall && ["mode"].includes(prop)) {
+        lists.push("answerBalls");
+    }
+    if (isConveyorBelt && ["group", "mode"].includes(prop)) {
+        lists.push("conveyorBelts");
+    }
+    if (isDetector && ["display", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
         lists.push("detectors");
-        objects.push("detector");
+    }
+    if (isMover && ["mode"].includes(prop)) {
+        lists.push("movers");
+    }
+    if (isMusicBox && ["group", "mode"].includes(prop)) {
+        lists.push("musicBoxes");
+    }
+    if (isPiston && ["group", "mode"].includes(prop)) {
+        lists.push("pistons");
     }
 
     for (let i = 0; i < lists.length; i++) {
@@ -25,18 +183,8 @@ export function setProp(gameInfo, x, y, prop, value, oneSelected) {
         }
     }
 
-    if (!found && oneSelected) {
-        for (let i = 0; i < objects.length; i++) {
-            if (i > 0) {
-                if (i === (objects.length - 1)) {
-                    objectsStr += " or ";
-                } else {
-                    objectsStr += ", ";
-                }
-            }
-            objectsStr += "a " + objects[i];
-        }
-        msg = `Click on ${objectsStr} to set the property ${prop} to ${value}.`;
+    if (!found && message) {
+        msg = `Property ${prop} does not exist on object.`;
     }
     return msg;
 }

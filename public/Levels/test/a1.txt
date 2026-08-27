@@ -1,50 +1,22 @@
-$stonepattern: 2
-$activesides: 7, 5, bottom
-$display: 7, 5, stone
-$detectormode: 7, 5, blueball
-$movable: 7, 5, no
-$range: 7, 5, 10
-$target: 7, 5, command
-$value: 7, 5, changedirection, elevator
-$activesides: 17, 7, right
-$display: 17, 7, stone
-$detectormode: 17, 7, blueball
-$movable: 17, 7, no
-$target: 17, 7, command
-$value: 17, 7, $pistonmode: 10, 4, repeatfast
-$display: 14, 10, stone
-$detectormode: 14, 10, blueball
-$movable: 14, 10, no
-$onetime: 14, 10, yes
-$range: 14, 10, 2
-$target: 14, 10, command
-$value: 14, 10, create, stone, rel, -2, -1
-$activesides: 8, 12, left
-$display: 8, 12, stone
-$detectormode: 8, 12, blueball
-$movable: 8, 12, no
-$onetime: 8, 12, yes
-$target: 8, 12, command
-$value: 8, 12, changedirection, onedirectionport, rel, 0, 1 | changedirection, onedirectionport, rel, -2, 1
-$group: 10, 4, 10
-$sticky: 10, 4, yes
-$pistonmode: 11, 4, momentary
-$sticky: 11, 4, yes
-1111111111111111111111111
-1=                      1
-1=            4 11 1    1
-1=ЏЏ11111111111111=1    1
-1=  111111ÌÌ111111=1    1
-1=  111ђ11 p113111=1    1
-1=  18  1Φp             1
-1=  111 111111y11ђ=1    1
-1=    1 11111   31=1    1
-1=    1 < 2      1=1    1
-1=    1D111111ђ111=1    1
-1=    1 1        1=1    1
-1=    1 ђ        1=1    1
-1=    < <        1=1    1
-1=   í1 1        1=1    1
-1=   Y1 1        1=1    1
-1=m   1:1         =1::::1
-1111111111111111111111111
+$activesides: 17, 17, left
+$detectormode: 19, 17, blueball
+11111111111111111111111111111111
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1            4                 1
+1                   4          1
+1                              1
+1                              1
+1                              1
+13               ђ ђ           1
+1             2                1
+11111111111111111111111111111111

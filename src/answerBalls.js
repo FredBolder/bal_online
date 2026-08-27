@@ -4,16 +4,6 @@ export function answerBallModes() {
     return ["answerball", "scale"];
 }
 
-export function changeAnswerBallMode(gameInfo, x, y, mode) {
-    let idx = -1;
-
-    idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-    if (idx >= 0) {
-        gameInfo.answerBalls[idx].mode = mode;
-    }
-    return idx;
-}
-
 function complete(expr) {
     return !/[+\-*/]\s*$/.test(expr);
 }
