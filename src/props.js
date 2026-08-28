@@ -15,9 +15,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isMover = false;
     let isMusicBox = false;
     let isPiston = false;
+    let list = "";
     let msg = "";
     let objectName = "";
-    const lists = [];
 
     const objectNumber = getGameDataValue(gameData, x, y);
 
@@ -65,9 +65,11 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "inverted":
         case "movable":
         case "oneTime":
         case "sequence":
+        case "sticky":
             if (typeof value !== "boolean") {
                 error = true;
             }
@@ -150,26 +152,25 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     }
 
     if (isAnswerBall && ["mode"].includes(prop)) {
-        lists.push("answerBalls");
+        list = "answerBalls";
     }
     if (isConveyorBelt && ["group", "mode"].includes(prop)) {
-        lists.push("conveyorBelts");
+        list = "conveyorBelts";
     }
     if (isDetector && ["display", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
-        lists.push("detectors");
+        list = "detectors";
     }
-    if (isMover && ["mode"].includes(prop)) {
-        lists.push("movers");
+    if (isMover && ["inverted", "mode"].includes(prop)) {
+        list = "movers";
     }
     if (isMusicBox && ["group", "mode"].includes(prop)) {
-        lists.push("musicBoxes");
+        list = "musicBoxes";
     }
-    if (isPiston && ["group", "mode"].includes(prop)) {
-        lists.push("pistons");
+    if (isPiston && ["group", "inverted", "mode", "sticky"].includes(prop)) {
+        list = "pistons";
     }
 
-    for (let i = 0; i < lists.length; i++) {
-        const list = lists[i];
+    if (list !== "") {
         for (let j = 0; j < gameInfo[list].length; j++) {
             const obj = gameInfo[list][j];
             if (obj.x === x && obj.y === y) {
@@ -177,9 +178,6 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 found = true;
                 break;
             }
-        }
-        if (found) {
-            break;
         }
     }
 

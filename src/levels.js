@@ -342,7 +342,7 @@ export function checkSettings(data, settings) {
     { name: "$restorepoint", params: 1, xy: false, yesno: -1 },
     { name: "$seaanemonesswayamount", params: 1, xy: false, yesno: -1 },
     { name: "$seaanemonesswayspeed", params: 1, xy: false, yesno: -1 },
-    { name: "$sequence", params: 3, xy: true, yesno: -1 },
+    { name: "$sequence", params: 3, xy: true, yesno: 2 },
     { name: "$shape", params: 3, xy: true, yesno: -1 },
     { name: "$sound", params: 2, xy: false, yesno: -1 },
     { name: "$startlevelmessage", params: 0, xy: false, yesno: -1 },
@@ -751,6 +751,11 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 1)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for restore point.\n`;
+              }
+              break;
+            case "$sequence":
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$shape":
@@ -1918,37 +1923,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$inverted":
-          if (values.length !== 3 || !validXY) {
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
             break;
           }
-          idx = findElementByCoordinates(x, y, gameInfo.pistons);
-          if (idx >= 0) {
-            switch (valuesLowerCase[2]) {
-              case "no":
-                gameInfo.pistons[idx].inverted = false;
-                break;
-              case "yes":
-                gameInfo.pistons[idx].inverted = true;
-                break;
-              default:
-                break;
-            }
-          }
-          if (idx === -1) {
-            idx = findElementByCoordinates(x, y, gameInfo.movers);
-            if (idx >= 0) {
-              switch (valuesLowerCase[2]) {
-                case "no":
-                  gameInfo.movers[idx].inverted = false;
-                  break;
-                case "yes":
-                  gameInfo.movers[idx].inverted = true;
-                  break;
-                default:
-                  break;
-              }
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "inverted", valuesLowerCase[2] === "yes", false);
           break;
         case "$lavacanmove":
           if (values.length !== 1) {
@@ -2177,6 +2155,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             gameVars.seaAnemonesSwaySpeed = val_int;
           }
           break;
+        case "$sequence":
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, "sequence", valuesLowerCase[2] === "yes", false);
+          break;
         case "$shape":
           if (values.length !== 3 || !validXY) {
             break;
@@ -2221,22 +2205,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$sticky":
-          if (values.length !== 3 || !validXY) {
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
             break;
           }
-          idx = findElementByCoordinates(x, y, gameInfo.pistons);
-          if (idx >= 0) {
-            switch (valuesLowerCase[2]) {
-              case "no":
-                gameInfo.pistons[idx].sticky = false;
-                break;
-              case "yes":
-                gameInfo.pistons[idx].sticky = true;
-                break;
-              default:
-                break;
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "sticky", valuesLowerCase[2] === "yes", false);
           break;
         case "$stonepattern":
           val_int = tryParseInt(values[0], -1);

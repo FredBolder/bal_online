@@ -344,14 +344,23 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
 
 export function commands(backData, gameData, gameInfo, gameVars, detector) {
     const value = detector.value.trim();
+    let commandLine = "";
     const commandList = value.split("|");
 
     if (value === "" || commandList.length < 1) {
         return;
     }
 
+    if (detector.sequence) {
+        if (detector.activatedCount > commandList.length) {
+            detector.activatedCount = 1;
+        }
+        commandLine = commandList[detector.activatedCount - 1].trim();
+        command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine);
+        return;
+    }
     for (let i = 0; i < commandList.length; i++) {
-        const commandLine = commandList[i].trim();
+        commandLine = commandList[i].trim();
         command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine);
     }
 }
