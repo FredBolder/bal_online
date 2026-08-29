@@ -1,23 +1,75 @@
-$sequence: 15, 19, yes
-$target: 15, 19, command
-$value: 15, 19, create, whiteball, rel, 1, -1 | create, whiteball, rel, 2, -1
-11111111111111111111111111111111
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-13                             1
-1             2                1
-111111111111111ђ1111111111111111
+$extra: 1
+$stonepattern: 2
+$activesides: 6, 0, bottom
+$display: 6, 0, stone
+$detectormode: 6, 0, blueball
+$movable: 6, 0, no
+$range: 6, 0, 4
+$target: 6, 0, command
+$value: 6, 0, create, pinkball, rel, 0, 4 | create, pinkball, rel, -1, 4 | create, pinkball, rel, -2, 4
+$display: 17, 2, stone
+$detectormode: 17, 2, blueball
+$movable: 17, 2, no
+$target: 17, 2, command
+$value: 17, 2, $gameticks: elevator, 5
+$activesides: 7, 5, left
+$display: 7, 5, stone
+$detectormode: 7, 5, pinkball
+$movable: 7, 5, no
+$target: 7, 5, command
+$value: 7, 5, delete, pinkball, rel, -1, 0
+$activesides: 7, 6, left
+$display: 7, 6, stone
+$detectormode: 7, 6, pinkball
+$movable: 7, 6, no
+$range: 7, 6, 2
+$target: 7, 6, command
+$value: 7, 6, delete, pinkball, rel, -2, 0
+$activesides: 7, 7, left
+$display: 7, 7, stone
+$detectormode: 7, 7, pinkball
+$movable: 7, 7, no
+$range: 7, 7, 3
+$target: 7, 7, command
+$value: 7, 7, delete, pinkball, rel, -3, 0
+$display: 19, 10, stone
+$detectormode: 19, 10, blueball
+$movable: 19, 10, no
+$onetime: 19, 10, yes
+$range: 19, 10, 6
+$target: 19, 10, command
+$value: 19, 10, delete, stone, abs, 8, 6 | $gameticks: elevator, 1
+$display: 4, 17, stone
+$group: 4, 17, 2
+$detectormode: 4, 17, blueball
+$movable: 4, 17, no
+$onetime: 4, 17, yes
+$group: 21, 7, 2
+$group: 2, 14, 3
+$pistonmode: 2, 14, momentary
+$sticky: 2, 14, yes
+$group: 3, 14, 4
+$pistonmode: 3, 14, momentary
+$sticky: 3, 14, yes
+$group: 22, 9, 3
+$group: 23, 12, 4
+$group: 23, 10, 3
+$group: 24, 13, 4
+111111ђ111111111111111111111
+1      1               1   1
+1      1      111ђ     1   1
+1      l   1111111     1   1
+1      11^^11111k1     1   1
+1      ђ1            2 1   1
+1      ђ1  L        1111   1
+1      ђ            1ËѤ    1
+1      1            111    1
+1   :::1::::::::::::11Ë    1
+1   111111111111111ђ111m   1
+1                    111   1
+1                    11Ë   1
+111G                 111m  1
+11ÌÌ                 3111  1
+11                         1
+1855     1                 1
+1111ђ11111111111111111111111

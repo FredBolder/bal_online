@@ -1,6 +1,6 @@
 import { removeObject } from "./addRemoveObject.js";
 import { answerBallModes } from "./answerBalls.js";
-import { changeDirection, changeGroup, charToNumber, findElementByCoordinates } from "./balUtils.js";
+import { changeDirection, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
@@ -57,7 +57,7 @@ export const seriesFishEnd = 6363;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6451;
+export const seriesAnnoyingEnd = 6452;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -390,9 +390,9 @@ export function checkSettings(data, settings) {
           msg += `${settingNr(i)}Invalid or missing coordinates.\n`;
         }
         if (info.yesno >= 0 && values.length > info.yesno) {
-            if (valuesLowerCase[info.yesno] !== "yes" && valuesLowerCase[info.yesno] !== "no") {
-              msg += `${settingNr(i)}yes or no expected.\n`;
-            }
+          if (valuesLowerCase[info.yesno] !== "yes" && valuesLowerCase[info.yesno] !== "no") {
+            msg += `${settingNr(i)}yes or no expected.\n`;
+          }
         }
         if ((info.params === 0) || (values.length === info.params)) {
           switch (name) {
@@ -1513,7 +1513,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
   let color = "";
   let element = 0;
   let gameTicks = 0;
-  let group = -1;
   let instrument = "kalimba";
   let h = -1;
   let idx = -1;
@@ -1584,18 +1583,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$answer":
           val_str = getStringAfterCoordinates(value);
           if (validXY && (val_str !== "")) {
-            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-            if (idx >= 0) {
-              gameInfo.answerBalls[idx].answer = val_str;
-            }
-            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-            if (idx >= 0) {
-              gameInfo.questionStones[idx].answer = val_str;
-            }
-            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-            if (idx >= 0) {
-              gameInfo.tropicalFish[idx].answer = val_str;
-            }
+            setProp(gameData, gameInfo, x, y, "answer", val_str, false);
           }
           break;
         case "$answerballmode":
@@ -1802,10 +1790,8 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          group = tryParseInt(values[2], -1);
-          if ((group >= 1) && (group <= 32)) {
-            changeGroup(gameInfo, x, y, group);
-          }
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "group", val_int, false);
           break;
         case "$has":
           switch (valuesLowerCase[0]) {
@@ -2118,10 +2104,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$question":
           val_str = getStringAfterCoordinates(value);
           if (validXY && (val_str !== "")) {
-            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-            if (idx >= 0) {
-              gameInfo.questionStones[idx].question = val_str;
-            }
+            setProp(gameData, gameInfo, x, y, "question", val_str, false);
           }
           break;
         case "$range":

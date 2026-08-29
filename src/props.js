@@ -15,6 +15,11 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isMover = false;
     let isMusicBox = false;
     let isPiston = false;
+    let isPistonsTrigger = false;
+    let isPusher = false;
+    let isQuestionStone = false;
+    let isTeleport = false;
+    let isTropicalFish = false;
     let list = "";
     let msg = "";
     let objectName = "";
@@ -22,9 +27,19 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     const objectNumber = getGameDataValue(gameData, x, y);
 
     switch (objectNumber) {
+        case 31:
+        case 92:
+        case 170:
+            isTeleport = true;
+            objectName = "teleport";
+            break;
         case 157:
             isMusicBox = true;
             objectName = "music box";
+            break;
+        case 158:
+            isPistonsTrigger = true;
+            objectName = "pistons trigger";
             break;
         case 159:
         case 161:
@@ -41,10 +56,22 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             isMover = true;
             objectName = "mover";
             break;
+        case 209:
+            isPusher = true;
+            objectName = "pusher";
+            break;
+        case 241:
+            isQuestionStone = true;
+            objectName = "question stone";
+            break;
         case 242:
         case 245:
             isAnswerBall = true;
             objectName = "answer ball";
+            break;
+        case 243:
+            isTropicalFish = true;
+            objectName = "tropical fish";
             break;
         case 255:
             isDetector = true;
@@ -56,6 +83,14 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
 
     // Check value
     switch (prop) {
+        case "answer":
+        case "question":
+        case "text":
+        case "value":
+            if (typeof value !== "string") {
+                error = true;
+            }
+            break;
         case "group":
             if (typeof value !== "number") {
                 error = true;
@@ -125,18 +160,6 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
-        case "text":
-            if (typeof value !== "string") {
-                error = true;
-                break;
-            }
-            break;
-        case "value":
-            if (typeof value !== "string") {
-                error = true;
-                break;
-            }
-            break;
         default:
             break;
     }
@@ -151,7 +174,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         return msg;
     }
 
-    if (isAnswerBall && ["mode"].includes(prop)) {
+    if (isAnswerBall && ["answer", "mode"].includes(prop)) {
         list = "answerBalls";
     }
     if (isConveyorBelt && ["group", "mode"].includes(prop)) {
@@ -168,6 +191,21 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     }
     if (isPiston && ["group", "inverted", "mode", "sticky"].includes(prop)) {
         list = "pistons";
+    }
+    if (isPistonsTrigger && ["group"].includes(prop)) {
+        list = "pistonsTriggers";
+    }
+    if (isPusher && ["group"].includes(prop)) {
+        list = "pushers";
+    }
+    if (isQuestionStone && ["answer", "question"].includes(prop)) {
+        list = "questionStones";
+    }
+    if (isTeleport && ["group"].includes(prop)) {
+        list = "teleports";
+    }
+    if (isTropicalFish && ["answer"].includes(prop)) {
+        list = "tropicalFish";
     }
 
     if (list !== "") {

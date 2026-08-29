@@ -6,16 +6,13 @@ import { ModalContext } from "./ModalContext";
 import { actionKeys, actionList, hasAction } from "../actions.js";
 import { addObject, removeObject } from "../addRemoveObject.js";
 import {
-  changeAnswer,
   changeChangerColors,
   changeCommand,
   changeDisplay,
-  changeGroup,
   changeDirection,
   changeIntelligence,
   changeMessage,
   changePalette,
-  changeQuestion,
   changeShape,
   changeStyle,
   changeSides,
@@ -2829,6 +2826,9 @@ function BalPage() {
             msg = "";
 
             if (createLevelObject >= 2000) {
+              if ((createLevelObject >= 2001) && (createLevelObject <= 2032)) {
+                msg = setProp(gameData, gameInfo, column, row, "group", createLevelObject - 2000, oneSelected);
+              }
               if (createLevelObject === 2092) {
                 msg = setProp(gameData, gameInfo, column, row, "mode", createLevelMode, oneSelected);
               }
@@ -2979,18 +2979,10 @@ function BalPage() {
               }
 
               if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2142)) {
-                if (changeQuestion(gameInfo, column, row, createLevelQuestion) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on a question stone to set the question.");
-                  }
-                }
+                msg = setProp(gameData, gameInfo, column, row, "question", createLevelQuestion, oneSelected);
               }
               if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2143)) {
-                if (changeAnswer(gameInfo, column, row, createLevelAnswer) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on a question stone or an answer ball to set the answer.");
-                  }
-                }
+                msg = setProp(gameData, gameInfo, column, row, "answer", createLevelAnswer, oneSelected);
               }
 
               if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2201)) {
@@ -3020,9 +3012,6 @@ function BalPage() {
               }
 
               if (createLevelMenu === menuToNumber("pistons")) {
-                if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                  changeGroup(gameInfo, column, row, createLevelObject - 2000);
-                }
                 if (createLevelObject === 2038) {
                   if (changePistonSticky(gameInfo, column, row) === -1) {
                     if (oneSelected) {
@@ -3039,16 +3028,7 @@ function BalPage() {
                 }
               }
 
-              if (createLevelMenu === menuToNumber("conveyorbelts")) {
-                if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                  changeGroup(gameInfo, column, row, createLevelObject - 2000);
-                }
-              }
-
               if (createLevelMenu === menuToNumber("detectors")) {
-                if ((createLevelObject >= 2001) && (createLevelObject <= 2016)) {
-                  changeGroup(gameInfo, column, row, createLevelObject - 2000);
-                }
                 if (createLevelObject === 2203) {
                   if (changeMessage(gameInfo, column, row, createLevelMessage) === -1) {
                     if (oneSelected) {
@@ -3080,10 +3060,6 @@ function BalPage() {
                 if (createLevelObject === 2209) {
                   msg = setProp(gameData, gameInfo, column, row, "sequence", createLevelSequence, oneSelected);
                 }
-              }
-
-              if (((createLevelMenu === menuToNumber("groups")) || (createLevelMenu === menuToNumber("teleports"))) && (createLevelObject >= 2001) && (createLevelObject <= 2032)) {
-                changeGroup(gameInfo, column, row, createLevelObject - 2000);
               }
 
               if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2117)) {

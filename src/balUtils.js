@@ -125,28 +125,6 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   return result;
 }
 
-export function changeAnswer(gameInfo, x, y, answer) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-  if (idx >= 0) {
-    gameInfo.answerBalls[idx].answer = answer;
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-    if (idx >= 0) {
-      gameInfo.questionStones[idx].answer = answer;
-    }
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-    if (idx >= 0) {
-      gameInfo.tropicalFish[idx].answer = answer;
-    }
-  }
-  return idx;
-}
-
 export function changeChangerColors(gameInfo, x, y, colors) {
   let idx = -1;
   const colorList = colors.split(",");
@@ -265,50 +243,6 @@ export function changeDisplay(gameInfo, x, y, decrease) {
   return idx;
 }
 
-export function changeGroup(gameInfo, x, y, group) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
-  if (idx >= 0) {
-    gameInfo.conveyorBelts[idx].group = group;
-  }
-  idx = findElementByCoordinates(x, y, gameInfo.detectors);
-  if (idx >= 0) {
-    gameInfo.detectors[idx].group = group;
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-    if (idx >= 0) {
-      gameInfo.musicBoxes[idx].group = group;
-    }
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.pistonsTriggers);
-    if (idx >= 0) {
-      gameInfo.pistonsTriggers[idx].group = group;
-    }
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.pistons);
-    if (idx >= 0) {
-      gameInfo.pistons[idx].group = group;
-    }
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.pushers);
-    if (idx >= 0) {
-      gameInfo.pushers[idx].group = group;
-    }
-  }
-  if (idx === -1) {
-    idx = findElementByCoordinates(x, y, gameInfo.teleports);
-    if (idx >= 0) {
-      gameInfo.teleports[idx].group = group;
-    }
-  }
-  return idx;
-}
-
 export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
   let idx = -1;
 
@@ -363,16 +297,6 @@ export function changePalette(gameInfo, x, y, decrease) {
     return idx;
   }
 
-  return idx;
-}
-
-export function changeQuestion(gameInfo, x, y, question) {
-  let idx = -1;
-
-  idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-  if (idx >= 0) {
-    gameInfo.questionStones[idx].question = question;
-  }
   return idx;
 }
 
