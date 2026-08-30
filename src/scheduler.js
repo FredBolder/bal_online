@@ -23,6 +23,7 @@ import { checkBrownBalls, moveBrownBalls } from "./brownBalls.js";
 import { moveOrangeBalls } from "./orangeBalls.js";
 import { movePinkBalls } from "./pinkBalls.js";
 import { checkPistonsDetector, checkPistonsTriggers, pistonsRepeatFast, pistonsRepeatSlow } from "./pistons.js";
+import { checkPushers } from "./pushers.js";
 import { checkQuestionStones } from "./questionStones.js";
 import { checkPurpleTeleports, deleteTeleports, findTheOtherTeleport } from "./teleports.js";
 import { moveRedBalls } from "./redBalls.js";
@@ -316,6 +317,16 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         if (info.updated) {
             updateCanvas = true;
         }
+
+        if (gameVars.pushersCounter >= gameVars.pushersCountTo) {
+            gameVars.pushersCounter = 0;
+            info = checkPushers(gameData, gameInfo);
+            if (info.updated) {
+                updateCanvas = true;
+            }
+        }
+        gameVars.pushersCounter++;
+
         if (gameVars.pistonsRepeatFastModeCounter > 0) {
             gameVars.pistonsRepeatFastModeCounter--;
         } else {

@@ -5,6 +5,7 @@ import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets 
 import { moverModes } from "./movers.js";
 import { musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
+import { pusherModes } from "./pushers.js";
 
 export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let error = false;
@@ -141,6 +142,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             if (isPiston && !pistonModes().includes(value)) {
                 error = true;
             }
+            if (isPusher && !pusherModes().includes(value)) {
+                error = true;
+            }
             break;
         case "range":
             if (typeof value !== "number") {
@@ -195,7 +199,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isPistonsTrigger && ["group"].includes(prop)) {
         list = "pistonsTriggers";
     }
-    if (isPusher && ["group"].includes(prop)) {
+    if (isPusher && ["group", "mode", "movable"].includes(prop)) {
         list = "pushers";
     }
     if (isQuestionStone && ["answer", "question"].includes(prop)) {

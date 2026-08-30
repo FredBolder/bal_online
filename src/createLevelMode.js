@@ -133,6 +133,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.pushers[idx2].direction = gameInfo.pushers[idx1].direction;
                 gameInfo.pushers[idx2].group = gameInfo.pushers[idx1].group;
+                gameInfo.pushers[idx2].mode = gameInfo.pushers[idx1].mode;
             }
             break;
         case 241:
@@ -423,16 +424,16 @@ export function menuToNumber(s) {
                 case "pistons":
                     result = 7;
                     break;
-                case "elevators":
+                case "pushers":
                     result = 8;
                     break;
-                case "conveyorbelts":
+                case "elevators":
                     result = 9;
                     break;
-                case "detectors":
+                case "conveyorbelts":
                     result = 10;
                     break;
-                case "doors":
+                case "detectors":
                     result = 11;
                     break;
                 case "groups":
@@ -460,23 +461,26 @@ export function menuToNumber(s) {
                 case "select":
                     result = 2;
                     break;
-                case "water":
+                case "doors":
                     result = 3;
                     break;
-                case "teleports":
+                case "water":
                     result = 4;
                     break;
-                case "musicboxes":
+                case "teleports":
                     result = 5;
                     break;
-                case "patterns":
+                case "musicboxes":
                     result = 6;
                     break;
-                case "misc":
+                case "patterns":
                     result = 7;
                     break;
-                case "answerballs":
+                case "misc":
                     result = 8;
+                    break;
+                case "answerballs":
+                    result = 9;
                     break;
                 case "info":
                     result = 15;

@@ -172,7 +172,7 @@ describe("Pistons", () => {
                 { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
-            pushers: [{ x: 7, y: 4, direction: "left", group: 3 }],
+            pushers: [{ x: 7, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }],
         }
         const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
         const input = [
@@ -196,7 +196,7 @@ describe("Pistons", () => {
         expect(info).toEqual({ updated: true });
         expect(gameVars.message).toBe("");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
-        expect(gameInfo.pushers).toEqual([{ x: 7, y: 4, direction: "left", group: 3 }]);
+        expect(gameInfo.pushers).toEqual([{ x: 7, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }]);
     });
 
     it("detectors F", () => {
@@ -210,7 +210,7 @@ describe("Pistons", () => {
                 { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
-            pushers: [{ x: 7, y: 4, direction: "left", group: 3 }],
+            pushers: [{ x: 7, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }],
         }
         const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
         const input = [
@@ -234,7 +234,7 @@ describe("Pistons", () => {
         expect(info).toEqual({ updated: true });
         expect(gameVars.message).toBe("Hello, this is a test!");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
-        expect(gameInfo.pushers).toEqual([{ x: 6, y: 4, direction: "left", group: 3 }]);
+        expect(gameInfo.pushers).toEqual([{ x: 6, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }]);
     });
 
     it("detectors G", () => {

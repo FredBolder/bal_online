@@ -5,10 +5,27 @@ function canMove(element) {
     return [2, 4, 5, 8, 9, 27, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 157, 158, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 243, 244, 245, 246, 247, 248, 253, 255, 256].includes(element);
 }
 
+export function checkPushers(gameData, gameInfo) {
+    let result = { updated: false };
+
+    for (let i = 0; i < gameInfo.pushers.length; i++) {
+        const pusher = gameInfo.pushers[i];
+        if (pusher.keepMoving) {
+            if (movePusher(gameData, gameInfo, pusher)) {
+                result.updated = true;
+            } else {
+                pusher.keepMoving = false;
+            }
+        }
+    }
+    return result;
+}
+
 export function movePusher(gameData, gameInfo, pusher) {
     let stop = false;
     let updated = false;
     let zeroPos = -1;
+
 
     switch (pusher.direction) {
         case "down":
@@ -108,4 +125,8 @@ export function movePusher(gameData, gameInfo, pusher) {
     }
 
     return updated;
+}
+
+export function pusherModes() {
+    return ["onestep", "continue"];
 }

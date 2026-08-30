@@ -61,12 +61,14 @@ import {
 } from "../stonePatterns.js";
 import { rotateGame } from "../rotateGame.js";
 import { startSchedulers, stopSchedulers } from "../schedulerState.js";
+import { deleteIfSeaAnemone } from "../seaAnemone.js";
 import { getSettings, loadSettings, saveSettings, setSettings, settings } from "../settings.js";
 import { shrinkObject } from "../shrink.js";
 import { playSound } from "../sound.js";
 import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
+import { setTimeBombsTime } from "../timeBombs.js";
 import { changeFins, changeStripes, changeTail, presetTropicalFish } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
@@ -99,8 +101,6 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowUpLeft from "../Images/arrow_up_left.svg";
 import arrowUpRight from "../Images/arrow_up_right.svg";
 import selectButton from "../Images/select_button.png";
-import { setTimeBombsTime } from "../timeBombs.js";
-import { deleteIfSeaAnemone } from "../seaAnemone.js";
 
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
@@ -1100,10 +1100,10 @@ function BalPage() {
 
     switch (globalVars.createLevelMenuPage) {
       case 1:
-        arr0 = [2083, 2084, 1, 4, 8, 9, 159, 6, 171, 255, 10, 2033, 2050, 2051, 2097, 2101];
+        arr0 = [2083, 2084, 1, 4, 8, 9, 159, 209, 6, 171, 255, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 20, 31, 157, 153, 91, 241, 0, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 10, 20, 31, 157, 153, 91, 241, 0, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -1166,28 +1166,28 @@ function BalPage() {
             break;
           case 7:
             // Pistons
-            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 209, 2133, 0, 0, 0, 0];
+            arr1 = [158, 159, 161, 163, 165, 2092, 2038, 2039, 0, 0, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 8:
+            // Pushers
+            arr1 = [209, 2092, 2133, 2208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            break;
+          case 9:
             // Elevators
             arr1 = [6, 7, 246, 247, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
             arr2 = [178, 2133, 2144, 2092, 2039];
             break;
-          case 9:
+          case 10:
             // Conveyor belts
             arr1 = [171, 172, 173, 2092, 2133];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
-          case 10:
+          case 11:
             // detectors  
             arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 2209, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
-            break;
-          case 11:
-            // Doors
-            arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
-            arr2 = [0];
             break;
           case 12:
             // Groups
@@ -1224,6 +1224,11 @@ function BalPage() {
             arr2 = [0];
             break;
           case 3:
+            // Doors
+            arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
+            arr2 = [0];
+            break;
+          case 4:
             // Water
             switch (globalVars.createLevelWaterPage) {
               case 2:
@@ -1237,27 +1242,27 @@ function BalPage() {
                 break;
             }
             break;
-          case 4:
+          case 5:
             // Teleports
             arr1 = [31, 92, 170, 193, 194];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
-          case 5:
+          case 6:
             // Music box
             arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103, 2146, 2147];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
-          case 6:
+          case 7:
             // Patterns
             arr1 = [153, 154, 234, 235, 236, 237, 238, 239, 240];
             arr2 = [0];
             break;
-          case 7:
+          case 8:
             // Misc
             arr1 = [91, 119, 120, 97, 208, 157, 167, 2145, 89, 183, 184, 185, 21];
             arr2 = [0];
             break;
-          case 8:
+          case 9:
             // Answer balls
             arr1 = [241, 2142, 2201, 242, 245, 2143, 2092];
             arr2 = [0];
@@ -2832,6 +2837,9 @@ function BalPage() {
               if (createLevelObject === 2092) {
                 msg = setProp(gameData, gameInfo, column, row, "mode", createLevelMode, oneSelected);
               }
+              if (createLevelObject === 2208) {
+                msg = setProp(gameData, gameInfo, column, row, "movable", createLevelMovable, oneSelected);
+              }
 
               if ((createLevelObject === 2144) && (createLevelSides !== null)) {
                 if (changeSides(gameInfo, column, row, createLevelSides) === -1) {
@@ -3053,9 +3061,6 @@ function BalPage() {
 
                 if (createLevelObject === 2207) {
                   msg = setProp(gameData, gameInfo, column, row, "oneTime", createLevelOneTime, oneSelected);
-                }
-                if (createLevelObject === 2208) {
-                  msg = setProp(gameData, gameInfo, column, row, "movable", createLevelMovable, oneSelected);
                 }
                 if (createLevelObject === 2209) {
                   msg = setProp(gameData, gameInfo, column, row, "sequence", createLevelSequence, oneSelected);
@@ -3356,6 +3361,24 @@ function BalPage() {
           }
         }
 
+        switch (createLevelObject) {
+          case 2208:
+            ok = false;
+            if (row > 0) {
+              newValue = await showSelect("Detectors / Pushers", "Movable by player:", ["yes", "no"], 0);
+              if (newValue !== null) {
+                if (newValue === "yes" || newValue === "no") {
+                  ok = true;
+                  createLevelMovable = (newValue === "yes");
+                }
+              }
+            }
+            handleCancel();
+            break;
+          default:
+            break;
+        }
+
         if (createLevelMenu === menuToNumber("answerballs")) {
           switch (createLevelObject) {
             case 2092:
@@ -3380,6 +3403,24 @@ function BalPage() {
               ok = false;
               if (row > 0) {
                 newValue = await showSelect("Pistons", "Mode:", ["toggle", "momentary", "repeat fast", "repeat slow", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball", "brown ball"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (createLevelMenu === menuToNumber("pushers")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Pushers", "Mode:", ["one step", "continue"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;
@@ -3472,19 +3513,6 @@ function BalPage() {
                   if (newValue === "yes" || newValue === "no") {
                     ok = true;
                     createLevelOneTime = (newValue === "yes");
-                  }
-                }
-              }
-              handleCancel();
-              break;
-            case 2208:
-              ok = false;
-              if (row > 0) {
-                newValue = await showSelect("Detectors", "Movable by player:", ["yes", "no"], 0);
-                if (newValue !== null) {
-                  if (newValue === "yes" || newValue === "no") {
-                    ok = true;
-                    createLevelMovable = (newValue === "yes");
                   }
                 }
               }
@@ -3660,7 +3688,7 @@ function BalPage() {
               if (createLevelMenu === menuToNumber("musicboxes")) {
                 newValue = await showSelect("Music boxes", "Direction:", ["left", "right", "up", "down"], 0);
               }
-              if (createLevelMenu === menuToNumber("pistons")) {
+              if (createLevelMenu === menuToNumber("pushers")) {
                 newValue = await showSelect("Pushers", "Direction:", ["left", "right", "up", "down"], 0);
               }
               if (createLevelMenu === menuToNumber("balls")) {

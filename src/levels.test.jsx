@@ -131,7 +131,7 @@ describe("levels", () => {
                 { x: 8, y: 4, activated: false, sticky: false, inverted: false, direction: "up", mode: "toggle", group: 1 }
             ],
             pushers: [
-                { x: 6, y: 4, direction: "right", group: 1 }
+                { x: 6, y: 4, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 1 }
             ],
         }
         const data = [
@@ -161,7 +161,7 @@ describe("levels", () => {
             { x: 8, y: 4, activated: false, sticky: true, inverted: true, direction: "up", mode: "momentary", group: 10 }
         ]);
         expect(gameInfo.pushers).toEqual([
-            { x: 6, y: 4, direction: "left", group: 5 }
+            { x: 6, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 5 }
         ]);
     });
 

@@ -64,10 +64,14 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 209, 242, 243, 244, 246, 247, 251, 256].includes(el)) {
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 242, 243, 244, 246, 247, 251, 256].includes(el)) {
     result = true;
   } else {
     switch (el) {
+      case 1:
+      case 35:
+        result = gameInfo.playerCanMoveStones;
+        break;
       case 109:
         result = (parent !== "pushObject");
         break;
@@ -109,6 +113,12 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
           ) {
             result = false;
           }
+        }
+        break;
+      case 209:
+        idx = findElementByCoordinates(x, y, gameInfo.pushers);
+        if (idx >= 0) {
+          result = gameInfo.pushers[idx].movable;
         }
         break;
       case 255:

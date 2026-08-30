@@ -556,6 +556,10 @@ function updateGroup(gameData, gameInfo, gameVars, group) {
     for (let i = 0; i < gameInfo.pushers.length; i++) {
         const pusher = gameInfo.pushers[i];
         if (pusher.group === group) {
+            if (pusher.mode === "continue") {
+                pusher.keepMoving = true;
+                continue;
+            }
             if (movePusher(gameData, gameInfo, pusher)) {
                 needsRefresh = true;
             }

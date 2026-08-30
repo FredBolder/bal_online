@@ -316,7 +316,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         }
         case 209: {
-            let pusher = { x, y, direction: "right", group: 1 };
+            let pusher = { x, y, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 1 };
             gameInfo.pushers.push(pusher);
             break;
         }

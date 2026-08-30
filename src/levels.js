@@ -11,6 +11,7 @@ import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
 import { solvedLevels } from "./progress.js";
 import { setProp } from "./props.js";
+import { pusherModes } from "./pushers.js";
 import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
@@ -57,7 +58,7 @@ export const seriesFishEnd = 6363;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6452;
+export const seriesAnnoyingEnd = 6454;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -337,6 +338,8 @@ export function checkSettings(data, settings) {
     { name: "$pistonmode", params: 3, xy: true, yesno: -1 },
     { name: "$plantsswayamount", params: 1, xy: false, yesno: -1 },
     { name: "$plantsswayspeed", params: 1, xy: false, yesno: -1 },
+    { name: "$playercanmovestones", params: 1, xy: false, yesno: 0 },
+    { name: "$pushermode", params: 3, xy: true, yesno: -1 },
     { name: "$question", params: 0, xy: true, yesno: -1 },
     { name: "$range", params: 3, xy: true, yesno: -1 },
     { name: "$restorepoint", params: 1, xy: false, yesno: -1 },
@@ -552,7 +555,7 @@ export function checkSettings(data, settings) {
               break;
             case "$gameticks":
               if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "message",
-                "mover", "phaseability", "pinkball", "piston", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
+                "mover", "phaseability", "pinkball", "piston", "pusher", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               gameTicks = tryParseInt(values[1], -1);
@@ -609,7 +612,7 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$movable":
-              if (validXY && !["ђ", 255].includes(data[y][x])) {
+              if (validXY && !["њ", "ђ", 209, 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
@@ -722,6 +725,14 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for percentage.\n`;
+              }
+              break;
+            case "$pushermode":
+              if (!pusherModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid pusher mode ${values[2]}.\n`;
+              }
+              if (validXY && !["њ", 209].includes(data[y][x])) {
+                msg += `${settingNr(i)}No pusher found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$question":
@@ -1587,6 +1598,11 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$answerballmode":
+        case "$conveyorbeltmode":
+        case "$detectormode":
+        case "$movermode":
+        case "$pistonmode":
+        case "$pushermode":
           if (values.length !== 3 || !validXY) {
             break;
           }
@@ -1664,18 +1680,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 break;
             }
           }
-          break;
-        case "$conveyorbeltmode":
-          if (values.length !== 3 || !validXY) {
-            break;
-          }
-          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
-          break;
-        case "$detectormode":
-          if (values.length !== 3 || !validXY) {
-            break;
-          }
-          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
           break;
         case "$direction":
           if (values.length !== 3 || !validXY) {
@@ -1759,6 +1763,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
                 break;
               case "piston":
                 gameVars.pistonsRepeatFastModeCountTo = gameTicks;
+                break;
+              case "pusher":
+                gameVars.pushersCountTo = gameTicks;
                 break;
               case "timebomb":
                 gameVars.timeBombsTime = gameTicks;
@@ -1980,12 +1987,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           setProp(gameData, gameInfo, x, y, "movable", valuesLowerCase[2] === "yes", false);
           break;
-        case "$movermode":
-          if (values.length !== 3 || !validXY) {
-            break;
-          }
-          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
-          break;
         case "$musicbox":
           if (values.length !== 4 || !validXY) {
             break;
@@ -2077,12 +2078,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
-        case "$pistonmode":
-          if (values.length !== 3 || !validXY) {
-            break;
-          }
-          setProp(gameData, gameInfo, x, y, "mode", valuesLowerCase[2], false);
-          break;
         case "$plantsswayamount":
           if (values.length !== 1) {
             break;
@@ -2099,6 +2094,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= 100)) {
             gameVars.plantsSwaySpeed = val_int;
+          }
+          break;
+        case "$playercanmovestones":
+          if (values.length !== 1) {
+            break;
+          }
+          switch (valuesLowerCase[0]) {
+            case "no":
+              gameInfo.playerCanMoveStones = false;
+              break;
+            case "yes":
+              gameInfo.playerCanMoveStones = true;
+              break;
+            default:
+              break;
           }
           break;
         case "$question":

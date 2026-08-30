@@ -298,7 +298,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 209: {
-                    let pusher = { x: j, y: i, direction: "right", group: 1 };
+                    let pusher = { x: j, y: i, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 1 };
                     result.pushers.push(pusher);
                     break;
                 }
@@ -1095,7 +1095,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.pushers);
                 if (idx >= 0) {
                     obj = gameInfo.pushers[idx];
-                    extraInfo = `Direction: ${obj.direction}, Group: ${obj.group}`;
+                    extraInfo = `Mode: ${obj.mode}, Direction: ${obj.direction}, Keep moving: ${obj.keepMoving}, Movable: ${obj.movable}, Group: ${obj.group}`;
                 }
                 info = `Pusher, ` + extraInfo;
                 break;
@@ -1301,6 +1301,7 @@ export function initGameInfo(info) {
     info.pistons = [];
     info.pistonsTriggers = [];
     info.player = 1;
+    info.playerCanMoveStones = false;
     info.pushers = [];
     info.questionStones = [];
     info.redBalls = [];
@@ -1382,6 +1383,8 @@ export function initGameVars(vars) {
     vars.pistonsRepeatSlowModeCountTo = 1;
     vars.plantsSwayAmount = 10;
     vars.plantsSwaySpeed = 10;
+    vars.pushersCounter = 0;
+    vars.pushersCountTo = 5;
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;

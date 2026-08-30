@@ -201,6 +201,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.pushersCountTo !== 5) {
+        line = `$gameticks: pusher, ${gameVars.pushersCountTo}`;
+        lines.push(line);
+    }
+
     if (gameVars.seaAnemonesSwayAmount !== 50) {
         line = `$seaanemonesswayamount: ${gameVars.seaAnemonesSwayAmount}`;
         lines.push(line);
@@ -329,6 +334,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     }
     if (gameInfo.hasYellowBall) {
         line = `$has: yellowball`;
+        lines.push(line);
+    }
+    if (gameInfo.playerCanMoveStones) {
+        line = `$playercanmovestones: yes`;
         lines.push(line);
     }
     if (gameInfo.twoBlueConnected) {
@@ -542,12 +551,21 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.pushers.length; i++) {
         const pusher = gameInfo.pushers[i];
+        const coordinates = `${pusher.x}, ${pusher.y}`;
         if (pusher.group > 1) {
-            line = `$group: ${pusher.x}, ${pusher.y}, ${pusher.group}`;
+            line = `$group: ${coordinates}, ${pusher.group}`;
             lines.push(line);
         }
         if (pusher.direction !== "right") {
-            line = `$direction: ${pusher.x}, ${pusher.y}, ${pusher.direction}`;
+            line = `$direction: ${coordinates}, ${pusher.direction}`;
+            lines.push(line);
+        }
+        if (!pusher.movable) {
+            line = `$movable: ${coordinates}, no`;
+            lines.push(line);
+        }
+        if (pusher.mode !== "onestep") {
+            line = `$pushermode: ${coordinates}, ${pusher.mode}`;
             lines.push(line);
         }
     }
