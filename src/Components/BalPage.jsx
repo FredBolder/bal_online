@@ -9,7 +9,6 @@ import {
   changeChangerColors,
   changeCommand,
   changeDisplay,
-  changeDirection,
   changeIntelligence,
   changeMessage,
   changePalette,
@@ -1186,7 +1185,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 2209, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2210, 2211, 2206, 2207, 2208, 2209, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -2831,6 +2830,9 @@ function BalPage() {
             msg = "";
 
             if (createLevelObject >= 2000) {
+              if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
+                msg = setProp(gameData, gameInfo, column, row, "direction", createLevelDirection, oneSelected);
+              }
               if ((createLevelObject >= 2001) && (createLevelObject <= 2032)) {
                 msg = setProp(gameData, gameInfo, column, row, "group", createLevelObject - 2000, oneSelected);
               }
@@ -2840,6 +2842,7 @@ function BalPage() {
               if (createLevelObject === 2208) {
                 msg = setProp(gameData, gameInfo, column, row, "movable", createLevelMovable, oneSelected);
               }
+
 
               if ((createLevelObject === 2144) && (createLevelSides !== null)) {
                 if (changeSides(gameInfo, column, row, createLevelSides) === -1) {
@@ -2859,13 +2862,6 @@ function BalPage() {
                 if (changeTicks(gameInfo, column, row, createLevelTicks) === -1) {
                   if (oneSelected) {
                     showMessage("Info", "Click on a delay to set the number of game ticks.");
-                  }
-                }
-              }
-              if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
-                if (changeDirection(gameData, gameInfo, column, row, createLevelDirection) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on an elevator, a conveyor belt, a mover, a music box, a pusher or a changer to set a valid direction.");
                   }
                 }
               }
@@ -3049,6 +3045,12 @@ function BalPage() {
                 }
                 if (createLevelObject === 2205) {
                   msg = setProp(gameData, gameInfo, column, row, "target", "rotategroupright", oneSelected);
+                }
+                if (createLevelObject === 2210) {
+                  msg = setProp(gameData, gameInfo, column, row, "target", "gravitydown", oneSelected);
+                }
+                if (createLevelObject === 2211) {
+                  msg = setProp(gameData, gameInfo, column, row, "target", "gravityup", oneSelected);
                 }
 
                 if (createLevelObject === 2206) {

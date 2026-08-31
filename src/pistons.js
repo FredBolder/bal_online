@@ -225,6 +225,14 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                     commands(backData, gameData, gameInfo, gameVars, detector);
                     result.updated = true;
                 }
+                if (detector.target === "gravitydown") {
+                    gameVars.gravity = "down";
+                    result.updated = true;
+                }
+                if (detector.target === "gravityup") {
+                    gameVars.gravity = "up";
+                    result.updated = true;
+                }
             }
         }
     }

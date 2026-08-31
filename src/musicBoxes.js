@@ -410,6 +410,10 @@ function isChordOrIntervalMode(mode) {
     return ["chord1", "chord2", "chord3", "chord4", "interval1", "interval2"].includes(mode);
 }
 
+export function musicBoxDirections() {
+    return ["left", "right", "up", "down"];
+}
+
 export function musicBoxModes() {
     return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard",
         "near", "note", "song"];

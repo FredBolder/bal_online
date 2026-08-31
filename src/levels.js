@@ -1,6 +1,6 @@
 import { removeObject } from "./addRemoveObject.js";
 import { answerBallModes } from "./answerBalls.js";
-import { changeDirection, charToNumber, findElementByCoordinates } from "./balUtils.js";
+import { charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
@@ -58,7 +58,7 @@ export const seriesFishEnd = 6363;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6454;
+export const seriesAnnoyingEnd = 6455;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -129,6 +129,7 @@ export function checkLevel(data, settings) {
   let nTeleports = [];
   let nTravelgates = 0;
   let p1 = -1;
+  let target = "";
   let validXY = false;
   let x = -1;
   let y = -1;
@@ -150,10 +151,16 @@ export function checkLevel(data, settings) {
         y = tryParseInt(values[1], -1);
         validXY = ((x >= 0) && (y >= 0) && (x < data[0].length) && (y < data.length));
       }
-      if ((name === "$group") && validXY) {
+      if ((name === "$group") && validXY && (values.length === 3)) {
         group = tryParseInt(values[2], -1);
         if ((group >= 1) && (group <= 32)) {
           groups.push({ x, y, group });
+        }
+      }
+      if ((name === "$target") && validXY && (values.length === 3)) {
+        target = values[2].toLowerCase();
+        if ((target === "gravitydown") || (target === "gravityup")) {
+          foundGravityChanger = true;
         }
       }
     }
@@ -1685,9 +1692,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 3 || !validXY) {
             break;
           }
-          if (["left", "right", "up", "down", "upleft", "upright", "downleft", "downright", "none"].includes(valuesLowerCase[2])) {
-            changeDirection(gameData, gameInfo, x, y, valuesLowerCase[2]);
-          }
+          setProp(gameData, gameInfo, x, y, "direction", valuesLowerCase[2], false);
           break;
         case "$display":
           if (values.length !== 3 || !validXY) {

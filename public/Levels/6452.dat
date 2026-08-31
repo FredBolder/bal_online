@@ -45,14 +45,17 @@ $detectormode: 4, 17, blueball
 $movable: 4, 17, no
 $onetime: 4, 17, yes
 $group: 21, 7, 2
+$pistonmode: 21, 7, momentary
+$group: 22, 9, 3
+$pistonmode: 22, 9, momentary
+$group: 23, 12, 4
+$pistonmode: 23, 12, momentary
 $group: 2, 14, 3
 $pistonmode: 2, 14, momentary
 $sticky: 2, 14, yes
 $group: 3, 14, 4
 $pistonmode: 3, 14, momentary
 $sticky: 3, 14, yes
-$group: 22, 9, 3
-$group: 23, 12, 4
 $group: 23, 10, 3
 $group: 24, 13, 4
 111111ђ111111111111111111111

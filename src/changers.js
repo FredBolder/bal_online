@@ -3,6 +3,10 @@ import { addObject, removeObject } from "./addRemoveObject.js";
 
 export const changerColors = ["all", "brown", "lightblue", "orange", "pink", "purple", "red", "white", "yellow", "spike"];
 
+export function changerDirections() {
+    return ["horizontal", "vertical"];
+}
+
 export function checkColor(color) {
     return changerColors.includes(color.toLowerCase());
 }

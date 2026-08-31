@@ -374,7 +374,7 @@ export function detectorModes() {
 }
 
 export function detectorTargets() {
-    return ["group", "setting", "rotategroupleft", "rotategroupright", "command"];
+    return ["command", "gravitydown", "gravityup", "group", "rotategroupleft", "rotategroupright", "setting"];
 }
 
 function isStone(obj) {

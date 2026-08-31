@@ -28,6 +28,10 @@ function moveableByConveyorBelt(gameInfo, n) {
     return result;
 }
 
+export function conveyorBeltDirections() {
+    return ["left", "right", "none"];
+}
+
 export function conveyorBeltModes() {
     return ["notrigger", "nonerightleft", "rightleft", "noneright", "noneleft", "none", "right", "left"];
 }

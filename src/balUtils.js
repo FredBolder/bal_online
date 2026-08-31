@@ -5,7 +5,7 @@ import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
-import { moverIsMovingBlueBall, moverDirections } from "./movers.js";
+import { moverIsMovingBlueBall } from "./movers.js";
 import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
 import { movePurpleBar } from "./purpleBar.js";
@@ -161,77 +161,6 @@ export function changeCommand(gameInfo, x, y, command) {
   if (idx >= 0) {
     gameInfo.detectors[idx].target = "command";
     gameInfo.detectors[idx].value = command;
-  }
-  return idx;
-}
-
-
-export function changeDirection(gameData, gameInfo, x, y, direction) {
-  let idx = -1;
-
-  if (["left", "right", "up", "down"].includes(direction)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-      if (idx >= 0) {
-        gameInfo.musicBoxes[idx].direction = direction;
-      }
-    }
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.pushers);
-      if (idx >= 0) {
-        gameInfo.pushers[idx].direction = direction;
-      }
-    }
-  }
-  if (["left", "right", "none"].includes(direction)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
-      if (idx >= 0) {
-        gameInfo.conveyorBelts[idx].direction = direction;
-      }
-    }
-  }
-  if (["left", "right"].includes(direction)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
-      if (idx >= 0) {
-        gameInfo.horizontalElevators[idx].right = (direction === "right");
-        if (direction === "right") {
-          gameData[y][x] = 107;
-        } else {
-          gameData[y][x] = 7;
-        }
-      }
-    }
-  }
-  if (["up", "down"].includes(direction)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.elevators);
-      if (idx >= 0) {
-        gameInfo.elevators[idx].up = (direction === "up");
-        if (direction === "up") {
-          gameData[y][x] = 106;
-        } else {
-          gameData[y][x] = 6;
-        }
-      }
-    }
-  }
-  if (moverDirections().includes(direction)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.movers);
-      if (idx >= 0) {
-        gameInfo.movers[idx].direction = direction;
-      }
-    }
-  }
-  if (["horizontal", "vertical"].includes(direction)) {
-    if (idx === -1) {
-      idx = findElementByCoordinates(x, y, gameInfo.changers);
-      if (idx >= 0) {
-        gameInfo.changers[idx].horizontal = (direction === "horizontal");
-      }
-    }
   }
   return idx;
 }

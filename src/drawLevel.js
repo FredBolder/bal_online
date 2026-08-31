@@ -769,11 +769,17 @@ function drawLevel(
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawActiveSides(activeSides);
     switch (target) {
+      case "command":
+        txt = "C";
+        break;
+      case "gravitydown":
+        txt = "GD";
+        break;
+      case "gravityup":
+        txt = "GU";
+        break;
       case "group":
         txt = group.toString();
-        break;
-      case "setting":
-        txt = "S";
         break;
       case "rotategroupleft":
         txt = "L" + group.toString();
@@ -781,8 +787,8 @@ function drawLevel(
       case "rotategroupright":
         txt = "R" + group.toString();
         break;
-      case "command":
-        txt = "C";
+      case "setting":
+        txt = "S";
         break;
       default:
         txt = "?";
@@ -4513,6 +4519,12 @@ function drawLevel(
           break;
         case 2209:
           drawAbbreviation("seq");
+          break;
+        case 2210:
+          drawAbbreviation("GD");
+          break;
+        case 2211:
+          drawAbbreviation("GU");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

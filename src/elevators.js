@@ -1,5 +1,13 @@
 import { getGameDataValue, hasWeightAbove, hasWeightBelow, moveObject } from "./balUtils.js";
 
+export function elevatorDirections() {
+    return ["up", "down"];
+}
+
+export function horizontalElevatorDirections() {
+    return ["left", "right"];
+}
+
 function moveableByElevator(gameInfo, n) {
   let result = false;
 

@@ -127,6 +127,10 @@ export function movePusher(gameData, gameInfo, pusher) {
     return updated;
 }
 
+export function pusherDirections() {
+    return ["left", "right", "up", "down"];
+}
+
 export function pusherModes() {
     return ["onestep", "continue"];
 }
