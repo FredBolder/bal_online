@@ -790,6 +790,9 @@ function drawLevel(
       case "setting":
         txt = "S";
         break;
+      case "yellowpushers":
+        txt = "YP";
+        break;
       default:
         txt = "?";
         break;
@@ -4525,6 +4528,9 @@ function drawLevel(
           break;
         case 2211:
           drawAbbreviation("GU");
+          break;
+        case 2212:
+          drawAbbreviation("YP");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

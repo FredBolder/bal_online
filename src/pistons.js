@@ -4,6 +4,7 @@ import { commands, rotateGroup } from "./detectors.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
+import { activateYellowPushers } from "./yellowPushers.js";
 
 function canMove(element) {
     // Contains also objects that normally can not be moved
@@ -231,6 +232,10 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                 }
                 if (detector.target === "gravityup") {
                     gameVars.gravity = "up";
+                    result.updated = true;
+                }
+                if (detector.target === "yellowpushers") {
+                    activateYellowPushers(backData, gameData, gameInfo, gameVars);
                     result.updated = true;
                 }
             }

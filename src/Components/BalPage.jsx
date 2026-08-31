@@ -1185,7 +1185,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2210, 2211, 2206, 2207, 2208, 2209, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2210, 2211, 2212, 2206, 2207, 2208, 2209, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -3051,6 +3051,9 @@ function BalPage() {
                 }
                 if (createLevelObject === 2211) {
                   msg = setProp(gameData, gameInfo, column, row, "target", "gravityup", oneSelected);
+                }
+                if (createLevelObject === 2212) {
+                  msg = setProp(gameData, gameInfo, column, row, "target", "yellowpushers", oneSelected);
                 }
 
                 if (createLevelObject === 2206) {
