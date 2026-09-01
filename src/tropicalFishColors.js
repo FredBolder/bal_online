@@ -359,6 +359,17 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#050505"
             }
             break;
+        case 35:
+            // Blue Chromis
+            colors = {
+                body: "#1689B5",
+                stripe: "#0B5F87",
+                fin: "#14759A",
+                tail: "#1B8EAF",
+                eye: "#D8A62A",
+                eyePupil: "#07141A"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",

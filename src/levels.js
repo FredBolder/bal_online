@@ -346,6 +346,7 @@ export function checkSettings(data, settings) {
     { name: "$plantsswayamount", params: 1, xy: false, yesno: -1 },
     { name: "$plantsswayspeed", params: 1, xy: false, yesno: -1 },
     { name: "$playercanmovestones", params: 1, xy: false, yesno: 0 },
+    { name: "$pupilpercentage", params: 3, xy: true, yesno: -1 },
     { name: "$pushermode", params: 3, xy: true, yesno: -1 },
     { name: "$question", params: 0, xy: true, yesno: -1 },
     { name: "$range", params: 3, xy: true, yesno: -1 },
@@ -732,6 +733,15 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for percentage.\n`;
+              }
+              break;
+            case "$pupilpercentage":
+              val_int = tryParseInt(values[2], -1);
+              if ((val_int < 0) || (val_int > 100)) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for percentage.\n`;
+              }
+              if (validXY && !["Ҽ", 243].includes(data[y][x])) {
+                msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$pushermode":
@@ -2115,6 +2125,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             default:
               break;
           }
+          break;
+        case "$pupilpercentage":
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "pupilPercentage", val_int, false);
           break;
         case "$question":
           val_str = getStringAfterCoordinates(value);

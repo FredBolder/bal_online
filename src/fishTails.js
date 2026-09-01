@@ -27,7 +27,15 @@ function buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connect
     ctx.closePath();
 }
 
-function buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight) {
+export function buildForkedTail(
+    ctx,
+    xLeft,
+    yCenter,
+    tailWidth,
+    tailHeight,
+    connectionHeight,
+    innerBending = 0.5
+) {
     const rightX = xLeft + tailWidth;
 
     const yTopConn = yCenter - connectionHeight * 0.5;
@@ -42,9 +50,13 @@ function buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionH
     // Robust geometric scale
     const scale = Math.sqrt(tailWidth * tailHeight);
 
-    // Dimensionless curvature parameters
     const outerCurvature = 0.08 * scale / tailWidth;
-    const innerCurvature = 0.05 * scale / tailWidth;
+
+    // Inner bending:
+    // -1 = maximum concave
+    //  0 = straight
+    // +1 = maximum convex
+    const innerCurvature = innerBending * 0.10;
 
     const P0 = { x: rightX, y: yTopConn };
     const P1 = { x: tipX, y: yTopTip };
@@ -57,25 +69,45 @@ function buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionH
     // Outer upper
     {
         const { c1, c2 } = cubicFromMid(P0, P1, outerCurvature, +1);
-        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P1.x, P1.y);
+
+        ctx.bezierCurveTo(
+            c1.x, c1.y,
+            c2.x, c2.y,
+            P1.x, P1.y
+        );
     }
 
     // Inner upper
     {
         const { c1, c2 } = cubicFromMid(P1, P2, innerCurvature, +1);
-        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P2.x, P2.y);
+
+        ctx.bezierCurveTo(
+            c1.x, c1.y,
+            c2.x, c2.y,
+            P2.x, P2.y
+        );
     }
 
     // Inner lower
     {
         const { c1, c2 } = cubicFromMid(P2, P3, innerCurvature, +1);
-        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P3.x, P3.y);
+
+        ctx.bezierCurveTo(
+            c1.x, c1.y,
+            c2.x, c2.y,
+            P3.x, P3.y
+        );
     }
 
     // Outer lower
     {
         const { c1, c2 } = cubicFromMid(P3, P4, outerCurvature, +1);
-        ctx.bezierCurveTo(c1.x, c1.y, c2.x, c2.y, P4.x, P4.y);
+
+        ctx.bezierCurveTo(
+            c1.x, c1.y,
+            c2.x, c2.y,
+            P4.x, P4.y
+        );
     }
 }
 
@@ -120,6 +152,9 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
         case 7:
         case 8:
             buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight);
+            break;
+        case 9:
+            buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.7);
             break;
         default:
             // 1
@@ -187,6 +222,11 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             // Forked
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.6;
+            break;
+        case 9:
+            // Forked concave innner curves
+            tailWidth = bodyLength * 0.25;
+            tailHeight = bodyHeight * 0.9;
             break;
         default:
             tailWidth = bodyLength * 0.25;

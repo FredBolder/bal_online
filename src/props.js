@@ -192,6 +192,15 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "pupilPercentage":
+            if (typeof value !== "number") {
+                error = true;
+                break;
+            }
+            if ((value < 0) || (value > 100)) {
+                error = true;
+            }
+            break;
         case "range":
             if (typeof value !== "number") {
                 error = true;
@@ -282,7 +291,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isTeleport && ["group"].includes(prop)) {
         list = "teleports";
     }
-    if (isTropicalFish && ["answer"].includes(prop)) {
+    if (isTropicalFish && ["answer", "pupilPercentage"].includes(prop)) {
         list = "tropicalFish";
     }
 

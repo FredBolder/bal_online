@@ -50,7 +50,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
     });
 
     it("checkPistonsTriggers B", () => {
@@ -80,7 +80,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.yellowBalls).toEqual([{ x: 5, y: 3, direction: "none" }]);
     });
 
@@ -111,7 +111,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.yellowBalls).toEqual([{ x: 4, y: 2, direction: "none" }]);
     });
 
@@ -147,7 +147,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.yellowBalls).toEqual([{ x: 6, y: 3, direction: "none" }]);
     });
 
@@ -170,7 +170,7 @@ describe("Pistons", () => {
         const expectedOutput = copy2dArray(input);
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: false });
+        expect(info).toEqual({ updated: false, explosion: false });
     });
 
     it("checkPistonsTriggers F", () => {
@@ -204,7 +204,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
     });
 
     it("checkPistonsTriggers G", () => {
@@ -235,7 +235,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
     });
 
     it("checkPistonsTriggers H", () => {
@@ -266,7 +266,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
     });
 
     it("checkPistonsTriggers I", () => {
@@ -295,7 +295,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
     });
 
     it("checkPistonsTriggers J", () => {
@@ -317,7 +317,7 @@ describe("Pistons", () => {
         const expectedOutput = copy2dArray(input);
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: false });
+        expect(info).toEqual({ updated: false, explosion: false });
     });
 
     it("checkPistonsTriggers K", () => {
@@ -338,7 +338,7 @@ describe("Pistons", () => {
         const expectedOutput = copy2dArray(input);
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: false });
+        expect(info).toEqual({ updated: false, explosion: false });
     });
 
     // checkPistonsDetector

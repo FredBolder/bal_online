@@ -628,6 +628,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$stripes: ${fish.x}, ${fish.y}, ${fish.stripes}`;
             lines.push(line);
         }
+        if (fish.pupilPercentage !== 40) {
+            line = `$pupilpercentage: ${fish.x}, ${fish.y}, ${fish.pupilPercentage}`;
+            lines.push(line);
+        }
         if (fish.tail !== 2) {
             line = `$tail: ${fish.x}, ${fish.y}, ${fish.tail}`;
             lines.push(line);

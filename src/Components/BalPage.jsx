@@ -117,6 +117,7 @@ let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
 let createLevelMessage = "";
+let createLevelTarget = "";
 let createLevelMode = "";
 let createLevelMovable = false;
 let createLevelObject = -1;
@@ -1185,7 +1186,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2203, 2204, 2205, 2210, 2211, 2212, 2206, 2207, 2208, 2209, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2204, 2203, 2206, 2207, 2208, 2209, 0, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -1232,7 +1233,7 @@ function BalPage() {
             switch (globalVars.createLevelWaterPage) {
               case 2:
                 arr1 = [248, 2200, 250, 251];
-                arr2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
+                arr2 = [2169, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
                 // page 1
@@ -2907,7 +2908,7 @@ function BalPage() {
                   }
                 }
               }
-              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168].includes(createLevelObject)) {
+              if ([2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169].includes(createLevelObject)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfSeaAnemone(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -2959,6 +2960,9 @@ function BalPage() {
                       break;
                     case 2168:
                       presetTropicalFish(gameInfo, idx, "brighamssnapper");
+                      break;
+                    case 2169:
+                      presetTropicalFish(gameInfo, idx, "bluechromis");
                       break;
                     default:
                       break;
@@ -3041,21 +3045,8 @@ function BalPage() {
                   }
                 }
                 if (createLevelObject === 2204) {
-                  msg = setProp(gameData, gameInfo, column, row, "target", "rotategroupleft", oneSelected);
+                  msg = setProp(gameData, gameInfo, column, row, "target", createLevelTarget, oneSelected);
                 }
-                if (createLevelObject === 2205) {
-                  msg = setProp(gameData, gameInfo, column, row, "target", "rotategroupright", oneSelected);
-                }
-                if (createLevelObject === 2210) {
-                  msg = setProp(gameData, gameInfo, column, row, "target", "gravitydown", oneSelected);
-                }
-                if (createLevelObject === 2211) {
-                  msg = setProp(gameData, gameInfo, column, row, "target", "gravityup", oneSelected);
-                }
-                if (createLevelObject === 2212) {
-                  msg = setProp(gameData, gameInfo, column, row, "target", "yellowpushers", oneSelected);
-                }
-
                 if (createLevelObject === 2206) {
                   if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
                     if (oneSelected) {
@@ -3063,7 +3054,6 @@ function BalPage() {
                     }
                   }
                 }
-
                 if (createLevelObject === 2207) {
                   msg = setProp(gameData, gameInfo, column, row, "oneTime", createLevelOneTime, oneSelected);
                 }
@@ -3494,6 +3484,17 @@ function BalPage() {
                 newValue = await showInput("Detectors", "Message", "");
                 if (newValue !== null) {
                   createLevelMessage = newValue.trim();
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            case 2204:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Detectors", "Target:", ["bombs", "command", "gravity down", "gravity up", "group", "rotate group left", "rotate group right", "setting", "yellow pushers"], 0);
+                if (newValue !== null) {
+                  createLevelTarget = removeChar(newValue, " ");
                   ok = true;
                 }
               }

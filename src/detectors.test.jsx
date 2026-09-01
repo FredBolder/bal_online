@@ -51,7 +51,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Hello, this is a test!");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
     });
@@ -86,7 +86,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Hello, this is a test!");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 1 }]);
     });
@@ -121,7 +121,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
     });
@@ -156,7 +156,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Καλημέρα!");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
     });
@@ -193,7 +193,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
         expect(gameInfo.pushers).toEqual([{ x: 7, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }]);
@@ -231,7 +231,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Hello, this is a test!");
         expect(gameInfo.pistons).toEqual([{ x: 7, y: 1, activated: true, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }]);
         expect(gameInfo.pushers).toEqual([{ x: 6, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }]);
@@ -267,7 +267,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
             { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
                 value: "move, smallgreenball, rel, 2, -2, right", display: "stone", activated: true, 
@@ -305,7 +305,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
             { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
                 value: "create, spikeup, abs, 3, 4", display: "stone", activated: true, 
@@ -343,7 +343,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
             { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
                 value: "delete, spike, rel, 1, -1", display: "stone", activated: true, 
@@ -381,7 +381,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
             { x: 2, y: 3, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
                 value: "delete, stone, rel, 1, 0 | delete, stone, rel, 1, 1", display: "stone", activated: true, 
@@ -419,7 +419,7 @@ describe("Pistons", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
             { x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
                 value: "create, pistonright, abs, 1, 1 | $group: 1, 1, 2", display: "stone", activated: true, 

@@ -49,7 +49,7 @@ describe("Pushers", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.pushers).toEqual([{ x: 4, y: 3, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 1 }]);
     });
 
@@ -87,7 +87,7 @@ describe("Pushers", () => {
         ];
         const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
         expect(input).toEqual(expectedOutput);
-        expect(info).toEqual({ updated: true });
+        expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.pushers).toEqual([
             { x: 4, y: 2, direction: "down", mode: "onestep", keepMoving: false, movable: true, group: 1 },
             { x: 4, y: 3, direction: "up", mode: "onestep", keepMoving: false, movable: true, group: 2 },

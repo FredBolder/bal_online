@@ -1603,13 +1603,7 @@ function isLadder(x, y, backData) {
 }
 
 export function isHorizontalRope(x, y, backData) {
-  let result = false;
-  if (y < backData.length) {
-    if (x < backData[0].length) {
-      result = (backData[y][x] === 80);
-    }
-  }
-  return result;
+  return (getGameDataValue(backData, x, y) === 80);
 }
 
 function isTravelGate(x, y, travelGate) {

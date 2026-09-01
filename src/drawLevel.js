@@ -254,7 +254,7 @@ function drawLevel(
           drawCar(ctx, xc, yc, w1 * 0.8);
           break;
         case "%fish":
-          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 2, 1, 3, 5);
+          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 2, 1, 3, 5, 40);
           break;
         case "%flower":
           drawFlower(ctx, xc, yc, w1 * 0.65);
@@ -769,6 +769,9 @@ function drawLevel(
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
     drawActiveSides(activeSides);
     switch (target) {
+      case "bombs":
+        txt = "B";
+        break;
       case "command":
         txt = "C";
         break;
@@ -3238,6 +3241,7 @@ function drawLevel(
     let direction = -1
     let fins = 1;
     let palette = 2;
+    let pupilPercentage = 40;
     let shape = 2;
     let stripes = 5;
     let tail = 1;
@@ -3248,11 +3252,12 @@ function drawLevel(
       direction = gameInfo.tropicalFish[idx].direction;
       fins = gameInfo.tropicalFish[idx].fins;
       palette = gameInfo.tropicalFish[idx].palette;
+      pupilPercentage = gameInfo.tropicalFish[idx].pupilPercentage;
       shape = gameInfo.tropicalFish[idx].shape;
       stripes = gameInfo.tropicalFish[idx].stripes;
       tail = gameInfo.tropicalFish[idx].tail;
     }
-    drawFish(ctx, xc, yc, w1, direction !== 6, palette, shape, tail, fins, stripes);
+    drawFish(ctx, xc, yc, w1, direction !== 6, palette, shape, tail, fins, stripes, pupilPercentage);
   }
 
   function drawVerticalRope() {
@@ -4421,77 +4426,82 @@ function drawLevel(
         case 2154:
           // Tropical fish - Clownfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 8, 2, 6, 1, 15);
+          drawFish(ctx, xc, yc, w1, false, 8, 2, 6, 1, 15, 40);
           break;
         case 2155:
           // Tropical fish - Red Tail Shark
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 9, 1, 7, 2, 0);
+          drawFish(ctx, xc, yc, w1, false, 9, 1, 7, 2, 0, 40);
           break;
         case 2156:
           // Tropical fish - Juvenile Golden Trevally
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 3, 2, 7, 3, 12);
+          drawFish(ctx, xc, yc, w1, false, 3, 2, 7, 3, 12, 40);
           break;
         case 2157:
           // Tropical fish - Yellow Tail Acei Cichlid
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 10, 1, 4, 4, 0);
+          drawFish(ctx, xc, yc, w1, false, 10, 1, 4, 4, 0, 40);
           break;
         case 2158:
           // Tropical fish - Siamese Algae Eater
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 11, 9, 7, 5, 17);
+          drawFish(ctx, xc, yc, w1, false, 11, 9, 7, 5, 17, 40);
           break;
         case 2159:
           // Tropical fish - Yellow Tail Damselfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 11, 0);
+          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 11, 0, 40);
           break;
         case 2160:
           // Tropical fish - Zebra Angelfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4);
+          drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4, 40);
           break;
         case 2161:
           // Tropical fish - Smallmouth Grunt
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 19);
+          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 19, 40);
           break;
         case 2162:
           // Tropical fish - Bicolor Anthias
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 15, 1, 7, 4, 18);
+          drawFish(ctx, xc, yc, w1, false, 15, 1, 7, 4, 18, 40);
           break;
         case 2163:
           // Tropical fish - Blue Diamond Discus
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0);
+          drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0, 40);
           break;
         case 2164:
           // Tropical fish - Orange-red Discus
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 17, 5, 3, 8, 5);
+          drawFish(ctx, xc, yc, w1, false, 17, 5, 3, 8, 5, 40);
           break;
         case 2165:
           // Tropical fish - Black Neon Tetra
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20);
+          drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20, 40);
           break;
         case 2166:
           // Tropical fish - Yellow Tang
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0);
+          drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0, 40);
           break;
         case 2167:
           // Tropical fish - Purple Tang
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0);
+          drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0, 40);
           break;
         case 2168:
           // Tropical fish - Brigham’s snapper
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 21, 8, 7, 4, 21);
+          drawFish(ctx, xc, yc, w1, false, 21, 8, 7, 4, 21, 40);
+          break;
+        case 2169:
+          // Tropical fish - Blue Chromis
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 35, 1, 9, 4, 0, 60);
           break;
         case 2200:
           drawWaterColors();
@@ -4506,10 +4516,10 @@ function drawLevel(
           drawAbbreviation("msg");
           break;
         case 2204:
-          drawAbbreviation("RGL");
+          drawAbbreviation("targ");
           break;
         case 2205:
-          drawAbbreviation("RGR");
+          drawAbbreviation("??");
           break;
         case 2206:
           drawAbbreviation("cmd");
@@ -4524,13 +4534,13 @@ function drawLevel(
           drawAbbreviation("seq");
           break;
         case 2210:
-          drawAbbreviation("GD");
+          drawAbbreviation("??");
           break;
         case 2211:
-          drawAbbreviation("GU");
+          drawAbbreviation("??");
           break;
         case 2212:
-          drawAbbreviation("YP");
+          drawAbbreviation("??");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

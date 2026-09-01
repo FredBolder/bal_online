@@ -227,6 +227,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     break;
                 case "bicoloranthias":
                 case "blackneontetra":
+                case "bluechromis":
                 case "bluediamonddiscus":
                 case "brighamssnapper":
                 case "clownfish":
@@ -374,7 +375,7 @@ export function detectorModes() {
 }
 
 export function detectorTargets() {
-    return ["command", "gravitydown", "gravityup", "group", "rotategroupleft", "rotategroupright", "setting", "yellowpushers"];
+    return ["bombs", "command", "gravitydown", "gravityup", "group", "rotategroupleft", "rotategroupright", "setting", "yellowpushers"];
 }
 
 function isStone(obj) {

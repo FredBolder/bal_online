@@ -314,6 +314,10 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
         info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, false);
+        if (info.explosion) {
+            addSound("explosion");
+            gameVars.explosionCounter = 2;
+        }
         if (info.updated) {
             updateCanvas = true;
         }

@@ -1,6 +1,7 @@
 import { findElementByCoordinates, hasWeightAbove, getGameDataValue, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { commands, rotateGroup } from "./detectors.js";
+import { activateAllBombs } from "./detonator.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
@@ -71,172 +72,184 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     const left = 2;
     const right = 3;
     let activeGroups = [];
+    let bombResult = null;
     let checkSettingsResult = "";
     let detect = false;
     let el = -1;
     let setting = "";
     let sideStr = "?";
-    let result = { updated: false };
+    let result = { updated: false, explosion: false };
     let weight = false;
     let xTrigger = -1;
     let yTrigger = -1;
 
-    for (let i = 0; i < gameInfo.detectors.length; i++) {
-        const detector = gameInfo.detectors[i];
+    if (!pushingDown) {
+        for (let i = 0; i < gameInfo.detectors.length; i++) {
+            const detector = gameInfo.detectors[i];
 
-        if (detector.oneTime && detector.activatedCount > 0) {
-            continue;
-        }
-
-        detect = false;
-        for (let r = 1; r <= detector.range; r++) {
-            if (detect) {
-                break;
+            if (detector.oneTime && detector.activatedCount > 0) {
+                continue;
             }
 
-            const elTop = getGameDataValue(gameData, detector.x, detector.y - r);
-            const elBottom = getGameDataValue(gameData, detector.x, detector.y + r);
-            const elLeft = getGameDataValue(gameData, detector.x - r, detector.y);
-            const elRight = getGameDataValue(gameData, detector.x + r, detector.y);
-
-            for (let side = 0; side < 4; side++) {
+            detect = false;
+            for (let r = 1; r <= detector.range; r++) {
                 if (detect) {
                     break;
                 }
-                switch (side) {
-                    case top:
-                        el = elTop;
-                        sideStr = "top";
+
+                const elTop = getGameDataValue(gameData, detector.x, detector.y - r);
+                const elBottom = getGameDataValue(gameData, detector.x, detector.y + r);
+                const elLeft = getGameDataValue(gameData, detector.x - r, detector.y);
+                const elRight = getGameDataValue(gameData, detector.x + r, detector.y);
+
+                for (let side = 0; side < 4; side++) {
+                    if (detect) {
                         break;
-                    case bottom:
-                        el = elBottom;
-                        sideStr = "bottom";
-                        break;
-                    case left:
-                        el = elLeft;
-                        sideStr = "left";
-                        break;
-                    case right:
-                        el = elRight;
-                        sideStr = "right";
-                        break;
-                    default:
-                        break;
-                }
-                if (detector.activeSides.includes(sideStr)) {
-                    switch (detector.mode) {
-                        case "all":
-                            if (el > 0) {
-                                detect = true;
-                            }
+                    }
+                    switch (side) {
+                        case top:
+                            el = elTop;
+                            sideStr = "top";
                             break;
-                        case "blueball":
-                            if (el === 2) {
-                                detect = true;
-                            }
+                        case bottom:
+                            el = elBottom;
+                            sideStr = "bottom";
                             break;
-                        case "whiteball":
-                            if (el === 4 || el === 245) {
-                                detect = true;
-                            }
+                        case left:
+                            el = elLeft;
+                            sideStr = "left";
                             break;
-                        case "lightblueball":
-                            if (el === 5) {
-                                detect = true;
-                            }
-                            break;
-                        case "yellowball":
-                            if (el === 9) {
-                                detect = true;
-                            }
-                            break;
-                        case "redball":
-                            if (el === 8 || el === 93 || el === 94) {
-                                detect = true;
-                            }
-                            break;
-                        case "purpleball":
-                            if (el === 28 || el === 242) {
-                                detect = true;
-                            }
-                            break;
-                        case "orangeball":
-                            if (el === 40) {
-                                detect = true;
-                            }
-                            break;
-                        case "pinkball":
-                            if (el === 203) {
-                                detect = true;
-                            }
-                            break;
-                        case "brownball":
-                            if (el === 253) {
-                                detect = true;
-                            }
+                        case right:
+                            el = elRight;
+                            sideStr = "right";
                             break;
                         default:
                             break;
                     }
+                    if (detector.activeSides.includes(sideStr)) {
+                        switch (detector.mode) {
+                            case "all":
+                                if (el > 0) {
+                                    detect = true;
+                                }
+                                break;
+                            case "blueball":
+                                if (el === 2) {
+                                    detect = true;
+                                }
+                                break;
+                            case "whiteball":
+                                if (el === 4 || el === 245) {
+                                    detect = true;
+                                }
+                                break;
+                            case "lightblueball":
+                                if (el === 5) {
+                                    detect = true;
+                                }
+                                break;
+                            case "yellowball":
+                                if (el === 9) {
+                                    detect = true;
+                                }
+                                break;
+                            case "redball":
+                                if (el === 8 || el === 93 || el === 94) {
+                                    detect = true;
+                                }
+                                break;
+                            case "purpleball":
+                                if (el === 28 || el === 242) {
+                                    detect = true;
+                                }
+                                break;
+                            case "orangeball":
+                                if (el === 40) {
+                                    detect = true;
+                                }
+                                break;
+                            case "pinkball":
+                                if (el === 203) {
+                                    detect = true;
+                                }
+                                break;
+                            case "brownball":
+                                if (el === 253) {
+                                    detect = true;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
-        }
 
 
-        if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {
-            activeGroups.push(detector.group);
-        }
-        if (detector.activated) {
-            if (!detect) {
-                detector.activated = false;
+            if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {
+                activeGroups.push(detector.group);
             }
-        } else {
-            if (detect) {
-                detector.activated = true;
-                detector.activatedCount = detector.activatedCount + 1;
-                if (detector.target === "group") {
-                    gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
-                    if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
+            if (detector.activated) {
+                if (!detect) {
+                    detector.activated = false;
+                }
+            } else {
+                if (detect) {
+                    detector.activated = true;
+                    detector.activatedCount = detector.activatedCount + 1;
+                    if (detector.target === "bombs") {
+                        bombResult = activateAllBombs(gameData);
+                        if (bombResult.explosion) {
+                            result.explosion = true;
+                        }
+                        if (bombResult.updated) {
+                            result.updated = true;
+                        }
+                    }
+                    if (detector.target === "command") {
+                        commands(backData, gameData, gameInfo, gameVars, detector);
                         result.updated = true;
                     }
-                }
-                if (detector.target === "setting") {
-                    setting = detector.value;
-                    if (!setting.startsWith("$")) {
-                        setting = "$" + setting;
-                    }
-                    checkSettingsResult = checkSettings(gameData, [setting]);
-                    if (checkSettingsResult === "") {
-                        loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
-                        setTimeBombsTime(gameVars.timeBombsTime);
+                    if (detector.target === "gravitydown") {
+                        gameVars.gravity = "down";
                         result.updated = true;
-                    } else {
-                        console.log(checkSettingsResult);
                     }
-                }
-                if (detector.target === "rotategroupleft") {
-                    rotateGroup(gameData, gameInfo, detector.group, true);
-                    result.updated = true;
-                }
-                if (detector.target === "rotategroupright") {
-                    rotateGroup(gameData, gameInfo, detector.group, false);
-                    result.updated = true;
-                }
-                if (detector.target === "command") {
-                    commands(backData, gameData, gameInfo, gameVars, detector);
-                    result.updated = true;
-                }
-                if (detector.target === "gravitydown") {
-                    gameVars.gravity = "down";
-                    result.updated = true;
-                }
-                if (detector.target === "gravityup") {
-                    gameVars.gravity = "up";
-                    result.updated = true;
-                }
-                if (detector.target === "yellowpushers") {
-                    activateYellowPushers(backData, gameData, gameInfo, gameVars);
-                    result.updated = true;
+                    if (detector.target === "gravityup") {
+                        gameVars.gravity = "up";
+                        result.updated = true;
+                    }
+                    if (detector.target === "group") {
+                        gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
+                        if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
+                            result.updated = true;
+                        }
+                    }
+                    if (detector.target === "rotategroupleft") {
+                        rotateGroup(gameData, gameInfo, detector.group, true);
+                        result.updated = true;
+                    }
+                    if (detector.target === "rotategroupright") {
+                        rotateGroup(gameData, gameInfo, detector.group, false);
+                        result.updated = true;
+                    }
+                    if (detector.target === "setting") {
+                        setting = detector.value;
+                        if (!setting.startsWith("$")) {
+                            setting = "$" + setting;
+                        }
+                        checkSettingsResult = checkSettings(gameData, [setting]);
+                        if (checkSettingsResult === "") {
+                            loadLevelSettings(backData, gameData, gameInfo, gameVars, [setting], false);
+                            setTimeBombsTime(gameVars.timeBombsTime);
+                            result.updated = true;
+                        } else {
+                            console.log(checkSettingsResult);
+                        }
+                    }
+                    if (detector.target === "yellowpushers") {
+                        activateYellowPushers(backData, gameData, gameInfo, gameVars);
+                        result.updated = true;
+                    }
                 }
             }
         }
