@@ -370,6 +370,18 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#07141A"
             }
             break;
+        case 36:
+            // Yellowfin Tuna
+            colors = {
+                body: "#8FA8B2",
+                upperBody: "#174A70",
+                stripe: "#D5A928",
+                fin: "#E0B52A",
+                tail: "#C99F24",
+                eye: "#D5B62E",
+                eyePupil: "#080B10"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",

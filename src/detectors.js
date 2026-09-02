@@ -237,6 +237,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 case "redtailshark":
                 case "siamesealgaeeater":
                 case "smallmouthgrunt":
+                case "yellowfintuna":
                 case "yellowtang":
                 case "yellowtailaceicichlid":
                 case "yellowtaildamselfish":

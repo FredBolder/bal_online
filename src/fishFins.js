@@ -18,7 +18,7 @@ function normalizeFinT(startT, endT, isReversed) {
     return { startT, endT };
 }
 
-export function drawAngelfishFin(ctx, bodyCurves, opts) {
+export function drawPointedFin(ctx, bodyCurves, opts) {
     let {
         startT,
         endT,
@@ -27,9 +27,18 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
         bendInner = 0.3,
         overlap = 0,
         frameFunc,
-        filamentLength = 0,          // pixels
-        filamentCurved = false,      // straight lines or small curves
-        filamentBendFactor = 0.2     // how strongly the filament curve bends relative to length
+
+        // 1 = current apex position at the tail connection
+        // 0 = apex at the outer start of the fin
+        apexPosition = 1,
+
+        // Factor of the p0 -> p1 distance
+        filamentLength = 0,
+
+        filamentCurved = false,
+
+        // Factor of filament length
+        filamentBendFactor = 0.2
     } = opts;
 
     const isBottom = frameFunc === getBodyBottomFrame;
@@ -42,12 +51,14 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
 
     const f0 = frameFunc(bodyCurves, startT);
     const f2 = frameFunc(bodyCurves, endT);
+
     const p0 = f0.p;
     const p2 = f2.p;
 
     function bodyCenterAtT(t) {
         const ft = getBodyTopFrame(bodyCurves, t).p;
         const fb = getBodyBottomFrame(bodyCurves, t).p;
+
         return {
             x: (ft.x + fb.x) * 0.5,
             y: (ft.y + fb.y) * 0.5
@@ -67,15 +78,20 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
             nx = -nx;
             ny = -ny;
         }
+
         return { x: nx, y: ny };
     }
 
 
-    // fin apex
+    // ------------------------------------------------------------
+    // Fin apex
+    // ------------------------------------------------------------
+
     const p1 = {
-        x: right.x,
+        x: p0.x + (right.x - p0.x) * apexPosition,
         y: top.y + bendSign * height
     };
+
 
     const n0 = inwardNormal(f0, startT);
     const n2 = inwardNormal(f2, endT);
@@ -90,89 +106,168 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
         y: p2.y + n2.y * overlap
     };
 
+
+    // ------------------------------------------------------------
+    // Fin curves
+    // ------------------------------------------------------------
+
     const firstCurveBend = isBottom ? bendInner : bendOuter;
     const secondCurveBend = isBottom ? bendOuter : bendInner;
 
     const cp1 = midPoint(p0, p1);
+
     cp1.x += Math.abs(p0.y - p1.y) * firstCurveBend;
     cp1.y += bendSign * Math.abs(p0.x - p1.x) * firstCurveBend;
 
+
     const cp2 = midPoint(p1, p2);
+
     cp2.x += Math.abs(p1.y - p2.y) * secondCurveBend;
     cp2.y += bendSign * Math.abs(p1.x - p2.x) * secondCurveBend;
 
-    // fin 
+
+    // ------------------------------------------------------------
+    // Fin
+    // ------------------------------------------------------------
+
     ctx.beginPath();
+
     if (overlap > 0) {
         ctx.moveTo(p0o.x, p0o.y);
         ctx.lineTo(p0.x, p0.y);
     } else {
         ctx.moveTo(p0.x, p0.y);
     }
+
     ctx.quadraticCurveTo(cp1.x, cp1.y, p1.x, p1.y);
     ctx.quadraticCurveTo(cp2.x, cp2.y, p2.x, p2.y);
+
     if (overlap > 0) {
         ctx.lineTo(p2o.x, p2o.y);
     }
+
     ctx.closePath();
+
     if (!globalVars.debug) {
         ctx.fill();
     }
+
     ctx.stroke();
 
-    // filaments
+
+    // ------------------------------------------------------------
+    // Filament
+    // ------------------------------------------------------------
+
     if (filamentLength > 0) {
-        const tanTop = normalize({ x: p1.x - cp1.x, y: p1.y - cp1.y });
-        const tanBottom = normalize({ x: cp2.x - p1.x, y: cp2.y - p1.y });
+
+        // Direction of the fin at the apex
+        const tanTop = normalize({
+            x: p1.x - cp1.x,
+            y: p1.y - cp1.y
+        });
+
+        const tanBottom = normalize({
+            x: cp2.x - p1.x,
+            y: cp2.y - p1.y
+        });
+
         let tan = isBottom ? tanBottom : tanTop;
 
-        // ensure tangent points away from the fin apex
+
+        // Ensure tangent points away from the fin apex
         {
             const testX = p1.x + tan.x;
             const testY = p1.y + tan.y;
+
             const vx = testX - p1.x;
             const vy = testY - p1.y;
+
             const bx = top.x - p1.x;
             const by = top.y - p1.y;
-            // if tangent points toward body, flip it
+
+            // If tangent points toward body, flip it
             if (vx * bx + vy * by > 0) {
                 tan.x = -tan.x;
                 tan.y = -tan.y;
             }
         }
-        // perpendicular normal
-        let n = { x: -tan.y, y: tan.x };
 
-        // make normal point toward fin interior first
+
+        // Perpendicular normal
+        let n = {
+            x: -tan.y,
+            y: tan.x
+        };
+
+
+        // Make normal point toward fin interior first
         {
             const vx = top.x - p1.x;
             const vy = top.y - p1.y;
+
             if (n.x * vx + n.y * vy < 0) {
                 n.x = -n.x;
                 n.y = -n.y;
             }
         }
 
-        // filament bends away from fin curvature
+
+        // Filament bends away from fin curvature
         n.x *= -1;
         n.y *= -1;
 
+
+        // --------------------------------------------------------
+        // Scale filament length from the fin's outer-to-apex
+        // distance instead of using pixels.
+        // --------------------------------------------------------
+
+        const apexDistance = Math.hypot(
+            p1.x - p0.x,
+            p1.y - p0.y
+        );
+
+        const actualFilamentLength =
+            apexDistance * filamentLength;
+
+
         const end = {
-            x: p1.x + tan.x * filamentLength,
-            y: p1.y + tan.y * filamentLength
+            x: p1.x + tan.x * actualFilamentLength,
+            y: p1.y + tan.y * actualFilamentLength
         };
 
+
+        // --------------------------------------------------------
+        // Curved filament
+        // --------------------------------------------------------
+
         if (filamentCurved) {
+
+            const bend = filamentBendFactor * actualFilamentLength;
+
             const c = {
-                x: p1.x + tan.x * (filamentLength * 0.5) + n.x * (filamentBendFactor * filamentLength),
-                y: p1.y + tan.y * (filamentLength * 0.5) + n.y * (filamentBendFactor * filamentLength)
+                x: p1.x +
+                    tan.x * (actualFilamentLength * 0.5) +
+                    n.x * bend,
+
+                y: p1.y +
+                    tan.y * (actualFilamentLength * 0.5) +
+                    n.y * bend
             };
 
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
-            ctx.quadraticCurveTo(c.x, c.y, end.x, end.y);
+            ctx.quadraticCurveTo(
+                c.x,
+                c.y,
+                end.x,
+                end.y
+            );
             ctx.stroke();
+
         } else {
+
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(end.x, end.y);
@@ -180,7 +275,6 @@ export function drawAngelfishFin(ctx, bodyCurves, opts) {
         }
     }
 }
-
 
 function drawFinAlongCurve(ctx, bodyCurves, opts) {
     let { startT, endT, height, taper = 0.5, lean = 0, overlap = 0, steps = 10, frameFunc, curvature = 1 } = opts;
@@ -548,14 +642,14 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             // Zebra Angelfish
             // Dorsal fin
             setColors(true);
-            drawAngelfishFin(ctx, bodyCurves, {
+            drawPointedFin(ctx, bodyCurves, {
                 frameFunc: getBodyTopFrame,
                 startT: 0.3,
                 endT: 0.8,
                 height: bodyHeight * 0.3,
                 bendOuter: 0.1,
                 bendInner: 0.2,
-                filamentLength: bodyHeight * 0.2,
+                filamentLength: 0.3,
                 filamentCurved: true,
                 filamentBendFactor: 0.1,
                 overlap: bodyHeight * 0.1,
@@ -563,14 +657,14 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             setColors(false);
 
             // Anal fin
-            drawAngelfishFin(ctx, bodyCurves, {
+            drawPointedFin(ctx, bodyCurves, {
                 frameFunc: getBodyBottomFrame,
                 startT: 0.45,
                 endT: 0.85,
                 height: bodyHeight * 0.3,
                 bendOuter: 0.1,
                 bendInner: 0.2,
-                filamentLength: bodyHeight * 0.2,
+                filamentLength: 0.4,
                 filamentCurved: true,
                 filamentBendFactor: 0.1,
                 overlap: bodyHeight * 0.1,
@@ -807,6 +901,70 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 6
             });
             break;
+        case 12:
+            // Yellowfin Tuna
+
+            setColors(true);
+
+            // Dorsal fins
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.35,
+                endT: 0.55,
+                height: bodyHeight * 0.25,
+                bendOuter: 0.3,
+                bendInner: -0.3,
+                apexPosition: 0.1,
+                filamentLength: 0,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.65,
+                endT: 0.75,
+                height: bodyHeight * 0.3,
+                bendOuter: 0.15,
+                bendInner: 0.25,
+                apexPosition: 0.5,
+                filamentLength: 0.2,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+
+            setColors(false);
+
+            // Anal fin
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.7,
+                endT: 0.77,
+                height: bodyHeight * 0.3,
+                bendOuter: 0.15,
+                bendInner: 0.25,
+                apexPosition: 0.3,
+                filamentLength: 0.2,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.3,
+                endT: 0.36,
+                height: bodyHeight * 0.3,
+                taper: 0.8,
+                lean: 0.9,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
+
+            break;
         default:
             break;
     }
@@ -934,6 +1092,16 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             finHeight = bodyHeight * 0.6;
             rotation = 1.45 * Math.PI;
             options.widestPoint = 0.9;
+            break;
+        case 12:
+            // Yellowfin Tuna
+            cx = bodyRight - (bodyLength * 0.27);
+            cy = yCenter + (bodyHeight * 0.1);
+            finWidth = bodyLength * 0.1;
+            connectionWidth = finWidth * 0.15;
+            finHeight = bodyHeight * 0.7;
+            rotation = 1.55 * Math.PI;
+            options.widestPoint = 0.05;
             break;
         default:
             break;

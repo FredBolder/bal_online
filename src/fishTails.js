@@ -27,14 +27,16 @@ function buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connect
     ctx.closePath();
 }
 
-export function buildForkedTail(
+export function buildForkTail(
     ctx,
     xLeft,
     yCenter,
     tailWidth,
     tailHeight,
     connectionHeight,
-    innerBending = 0.5
+    innerBending,
+    outerBending,
+    notchPosition
 ) {
     const rightX = xLeft + tailWidth;
 
@@ -45,17 +47,30 @@ export function buildForkedTail(
     const yBotTip = yCenter + tailHeight * 0.5;
 
     const tipX = xLeft;
-    const notchX = xLeft + tailWidth * 0.5;
 
-    // Robust geometric scale
-    const scale = Math.sqrt(tailWidth * tailHeight);
+    // Notch position:
+    // 0 = at the tips
+    // 1 = at the connection
+    const notchX = tipX + tailWidth * notchPosition;
 
-    const outerCurvature = 0.08 * scale / tailWidth;
+    /*
+     * Outer bending
+     *
+     * -1 = maximum inward curve
+     *  0 = straight
+     * +1 = maximum outward curve
+     *
+     */
+    const outerCurvature = outerBending * 0.10;
 
-    // Inner bending:
-    // -1 = maximum concave
-    //  0 = straight
-    // +1 = maximum convex
+    /*
+     * Inner bending
+     *
+     * -1 = maximum concave
+     *  0 = straight
+     * +1 = maximum convex
+     *
+     */
     const innerCurvature = innerBending * 0.10;
 
     const P0 = { x: rightX, y: yTopConn };
@@ -151,10 +166,14 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
             break;
         case 7:
         case 8:
-            buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight);
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.5, 0.8, 0.5);
             break;
         case 9:
-            buildForkedTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.7);
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.7, 0.8, 0.5);
+            break;
+        case 10:
+            // Lunate
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.5, 0.5, 0.6);
             break;
         default:
             // 1
@@ -227,6 +246,11 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             // Forked concave innner curves
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 0.9;
+            break;
+        case 10:
+            // Lunate
+            tailWidth = bodyLength * 0.15;
+            tailHeight = bodyHeight * 1.3;
             break;
         default:
             tailWidth = bodyLength * 0.25;

@@ -4503,6 +4503,11 @@ function drawLevel(
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 35, 1, 9, 4, 0, 60);
           break;
+        case 2170:
+          // Tropical fish - Yellowfin Tuna
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 36, 10, 10, 12, 18, 40);
+          break;
         case 2200:
           drawWaterColors();
           break;
