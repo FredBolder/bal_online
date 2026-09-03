@@ -8,11 +8,11 @@ import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 12;
-export const tropicalFishPalettes = 36;
-export const tropicalFishShapes = 10;
+export const tropicalFishFinVariations = 13;
+export const tropicalFishPalettes = 37;
+export const tropicalFishShapes = 11;
 export const tropicalFishStripes = 21;
-export const tropicalFishTails = 10;
+export const tropicalFishTails = 11;
 
 export function changeFins(gameInfo, x, y, decrease) {
     const step = decrease ? -1 : 1;
@@ -127,6 +127,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             break;
         case 10:
             // Yellowfin Tuna
+            bodyHeight = h * 0.25;
+            bodyLength = w * 0.74;
+            break;
+        case 11:
+            // Rusty Jobfish
             bodyHeight = h * 0.25;
             bodyLength = w * 0.74;
             break;
@@ -261,6 +266,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
                 bottomRearBodyCpDist: 0.05,
             };
             break;
+        case 11:
+            // Rusty Jobfish
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.6,
+                topFrontBodyCpDist: 0.25,
+                topRearBodyCpPos: 0.7,
+                topRearBodyCpDist: 0.05,
+                bottomFrontBodyCpPos: 0.6,
+                bottomFrontBodyCpDist: 0.25,
+                bottomRearBodyCpPos: 0.7,
+                bottomRearBodyCpDist: 0.05,
+            };
+            noseYOffset = bodyHeight * 0.1;
+            break;
         default:
             bodyCurvature = {
                 topFrontBodyCpPos: 0.7, // 0 = left, 1 = right (towards head)
@@ -343,7 +362,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.lineWidth = 1;
     const xEye = bodyOptions.isTang ? geom.headRight - bodyLength * 0.04 : geom.headRight - bodyLength * 0.15;
     const yEye = yc - bodyHeight * 0.1;
-    const eyeRadius = ([1, 4, 9, 10].includes(shape)) ? size * 0.03 : size * 0.04;
+    const eyeRadius = ([1, 4, 9, 10, 11].includes(shape)) ? size * 0.03 : size * 0.04;
     ctx.beginPath();
     ctx.arc(xEye, yEye, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
@@ -436,6 +455,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
                     countTo = 6;
                     break;
                 case 10:
+                case 11:
                     // lunate
                     countTo = 5;
                     break;
@@ -613,7 +633,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             // Bicolor Anthias
             gameInfo.tropicalFish[idx].palette = 15;
             gameInfo.tropicalFish[idx].shape = 1;
-            gameInfo.tropicalFish[idx].tail = 7;
+            gameInfo.tropicalFish[idx].tail = 9;
             gameInfo.tropicalFish[idx].fins = 4;
             gameInfo.tropicalFish[idx].stripes = 18;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
@@ -698,6 +718,15 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].fins = 2;
             gameInfo.tropicalFish[idx].stripes = 0;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            break;
+        case "rustyjobfish":
+            // Rusty Jobfish
+            gameInfo.tropicalFish[idx].palette = 37;
+            gameInfo.tropicalFish[idx].shape = 11;
+            gameInfo.tropicalFish[idx].tail = 11;
+            gameInfo.tropicalFish[idx].fins = 13;
+            gameInfo.tropicalFish[idx].stripes = 18;
+            gameInfo.tropicalFish[idx].pupilPercentage = 50;
             break;
         case "siamesealgaeeater":
             // Siamese Algae Eater

@@ -235,6 +235,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 case "orangereddiscus":
                 case "purpletang":
                 case "redtailshark":
+                case "rustyjobfish":
                 case "siamesealgaeeater":
                 case "smallmouthgrunt":
                 case "yellowfintuna":

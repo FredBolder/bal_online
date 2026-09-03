@@ -4466,7 +4466,7 @@ function drawLevel(
         case 2162:
           // Tropical fish - Bicolor Anthias
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 15, 1, 7, 4, 18, 40);
+          drawFish(ctx, xc, yc, w1, false, 15, 1, 9, 4, 18, 40);
           break;
         case 2163:
           // Tropical fish - Blue Diamond Discus
@@ -4507,6 +4507,11 @@ function drawLevel(
           // Tropical fish - Yellowfin Tuna
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 36, 10, 10, 12, 18, 40);
+          break;
+        case 2171:
+          // Tropical fish - Rusty Jobfish
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 37, 11, 11, 13, 18, 50);
           break;
         case 2200:
           drawWaterColors();

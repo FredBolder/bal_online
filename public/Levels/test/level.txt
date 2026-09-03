@@ -1,67 +1,45 @@
+$extra: 1
 $stonepattern: 2
-$has: propeller
-$activesides: 18, 1, left
-$detectormode: 18, 1, yellowball
-$movable: 18, 1, no
-$range: 18, 1, 17
-$target: 18, 1, command
-$value: 18, 1, create, stone, abs, 18, 17
-$activesides: 19, 3, right
-$detectormode: 19, 3, pinkball
-$target: 19, 3, command
-$value: 19, 3, create, yellowball, abs, 17, 5
-$activesides: 19, 4, right
-$detectormode: 19, 4, pinkball
-$target: 19, 4, yellowpushers
-$activesides: 19, 7, right
-$detectormode: 19, 7, pinkball
-$target: 19, 7, command
-$value: 19, 7, create, yellowball, abs, 17, 12
-$activesides: 19, 8, right
-$detectormode: 19, 8, pinkball
-$target: 19, 8, yellowpushers
-$activesides: 19, 10, right
-$detectormode: 19, 10, pinkball
-$target: 19, 10, command
-$value: 19, 10, create, yellowball, abs, 17, 15
-$activesides: 19, 11, right
-$detectormode: 19, 11, pinkball
-$target: 19, 11, yellowpushers
-$activesides: 19, 13, right
-$detectormode: 19, 13, pinkball
-$target: 19, 13, command
-$value: 19, 13, create, yellowball, abs, 17, 14
-$activesides: 19, 14, right
-$detectormode: 19, 14, pinkball
-$target: 19, 14, yellowpushers
-$activesides: 18, 18, left
-$detectormode: 18, 18, yellowball
-$movable: 18, 18, no
-$range: 18, 18, 17
-$target: 18, 18, command
-$value: 18, 18, create, stone, abs, 18, 17
-$detectormode: 1, 19, yellowball
-$movable: 1, 19, no
-$range: 1, 19, 18
-$target: 1, 19, command
-$value: 1, 19, create, stone, abs, 18, 17
-11111111111111111111111111111111
-1                 ђ1Ѥ         31
-1                 Ψ1           1
-1                 Ψђ           1
-1                 Ψђ           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψђ           1
-1     2           Ψђ           1
-1                 Ψ1           1
-1                 Ψђ           1
-1                 Ψђ           1
-1                 Ψ1           1
-1                 Ψђ           1
-1                 Ψђ         111
-1                 ΨΦ          81
-1                 1111111111^111
-1                              1
-1                 ђ            1
-1ђ111111111111111111111111111111
+$pistonmode: 8, 9, momentary
+$group: 8, 10, 2
+$pistonmode: 8, 10, momentary
+$group: 3, 12, 3
+$inverted: 3, 12, yes
+$pistonmode: 3, 12, momentary
+$sticky: 3, 12, yes
+$group: 6, 6, 2
+$group: 10, 13, 3
+$group: 17, 2, 2
+$group: 6, 13, 2
+$fins: 11, 10, 4
+$palette: 11, 10, 15
+$shape: 11, 10, 1
+$stripes: 11, 10, 18
+$tail: 11, 10, 9
+$fins: 13, 11, 4
+$palette: 13, 11, 15
+$shape: 13, 11, 1
+$stripes: 13, 11, 18
+$tail: 13, 11, 9
+$background: 10, 8, 1, 1, 23
+$background: 8, 9, 1, 1, 23
+$background: 8, 10, 1, 1, 23
+$background: 11, 10, 1, 1, 23
+$background: 8, 11, 1, 1, 23
+$background: 13, 11, 1, 1, 23
+$background: 10, 13, 1, 1, 23
+1111111111111111111
+1   4 31    3 1  11
+1 4 4  1      l  T1
+1 1=1 11     111111
+1  =           d 11
+1m = 2           T1
+111=11m1wwwwwwww111
+1  =1111wwwwwwww111
+1 111111wwfwwwww111
+1 111111Ùwwwwwww111
+1  o  T1ËwwҼwwww111
+111 1v11kwwwwҼww111
+111Ù1 11wwwwwwww111
+11111 T1wwmwwwww111
+1111111111111111111

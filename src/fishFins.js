@@ -935,7 +935,33 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
             });
 
+            // Finlets
+            for (let i = 0; i < 7; i++) {
+                drawFinAlongCurve(ctx, bodyCurves, {
+                    frameFunc: getBodyTopFrame,
+                    startT: 0.78 + (i * 0.03),
+                    endT: 0.8 + (i * 0.03),
+                    height: bodyHeight * 0.07,
+                    taper: 1,
+                    lean: 0,
+                    overlap: bodyHeight * 0.1,
+                    steps: 2
+                });
+            }
+
             setColors(false);
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.3,
+                endT: 0.36,
+                height: bodyHeight * 0.3,
+                taper: 0.8,
+                lean: 0.9,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
 
             // Anal fin
             drawPointedFin(ctx, bodyCurves, {
@@ -952,18 +978,60 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
             });
 
+            // Finlets
+            for (let i = 0; i < 7; i++) {
+                drawFinAlongCurve(ctx, bodyCurves, {
+                    frameFunc: getBodyBottomFrame,
+                    startT: 0.78 + (i * 0.03),
+                    endT: 0.8 + (i * 0.03),
+                    height: bodyHeight * 0.07,
+                    taper: 1,
+                    lean: 0,
+                    overlap: bodyHeight * 0.1,
+                    steps: 2
+                });
+            }
+            break;
+        case 13:
+            // Rusty Jobfish
+            setColors(true);
+
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.35,
+                endT: 0.85,
+                height: bodyHeight * 0.2,
+                taper: 0,
+                lean: 2,
+                overlap: bodyHeight * 0.1,
+                steps: 3
+            });
+
+            setColors(false);
+
             // Pelvic fin
             drawFinAlongCurve(ctx, bodyCurves, {
                 frameFunc: getBodyBottomFrame,
-                startT: 0.3,
-                endT: 0.36,
+                startT: 0.35,
+                endT: 0.45,
                 height: bodyHeight * 0.3,
-                taper: 0.8,
+                taper: 1,
                 lean: 0.9,
                 overlap: bodyHeight * 0.1,
                 steps: 6
             });
 
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.75,
+                endT: 0.9,
+                height: bodyHeight * 0.2,
+                taper: 1,
+                lean: -0.3,
+                overlap: bodyHeight * 0.1,
+                steps: 5
+            });
             break;
         default:
             break;
@@ -1100,6 +1168,16 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             finWidth = bodyLength * 0.1;
             connectionWidth = finWidth * 0.15;
             finHeight = bodyHeight * 0.7;
+            rotation = 1.55 * Math.PI;
+            options.widestPoint = 0.05;
+            break;
+        case 13:
+            // Rusty
+            cx = bodyRight - (bodyLength * 0.27);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.1;
+            connectionWidth = finWidth * 0.14;
+            finHeight = bodyHeight * 0.85;
             rotation = 1.55 * Math.PI;
             options.widestPoint = 0.05;
             break;

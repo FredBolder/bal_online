@@ -175,6 +175,10 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
             // Lunate
             buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.5, 0.5, 0.6);
             break;
+        case 11:
+            // Lunate
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.9, 0.6, 0.55);
+            break;
         default:
             // 1
             buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight);
@@ -251,6 +255,11 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             // Lunate
             tailWidth = bodyLength * 0.15;
             tailHeight = bodyHeight * 1.3;
+            break;
+        case 11:
+            // Lunate
+            tailWidth = bodyLength * 0.25;
+            tailHeight = bodyHeight * 1.4;
             break;
         default:
             tailWidth = bodyLength * 0.25;

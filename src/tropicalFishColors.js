@@ -382,6 +382,19 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#080B10"
             }
             break;
+        case 37:
+            // Rusty Jobfish
+            colors = {
+                body: "#9A7180",
+                upperBody: "#67566F",
+                stripe: "#806675",
+                fin: "#A85C68",
+                upperFin: "#D5A04A",
+                tail: "#A85E69",
+                eye: "#D2A83A",
+                eyePupil: "#100B0E"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",
