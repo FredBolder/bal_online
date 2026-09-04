@@ -22,7 +22,7 @@ describe("levels", () => {
             detectors: [
                 {
                     x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                    display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, text: "", group: 1
+                    display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
                 }
             ]
         };
@@ -39,7 +39,7 @@ describe("levels", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, text: "", group: 1
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", text: "", group: 1
             }
         ]);
         msg = setProp(gameData, gameInfo, 3, 5, "movable", true, true);
@@ -47,7 +47,7 @@ describe("levels", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, text: "", group: 1
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", text: "", group: 1
             }
         ]);
         msg = setProp(gameData, gameInfo, 2, 5, "mode", "fred", true);
@@ -55,7 +55,7 @@ describe("levels", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, text: "", group: 1
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", text: "", group: 1
             }
         ]);
         msg = setProp(gameData, gameInfo, 2, 5, "group", 900, true);
@@ -63,7 +63,7 @@ describe("levels", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, text: "", group: 1
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", text: "", group: 1
             }
         ]);
         msg = setProp(gameData, gameInfo, 2, 5, "group", 32, true);
@@ -71,7 +71,7 @@ describe("levels", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, text: "", group: 32
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", text: "", group: 32
             }
         ]);
         msg = setProp(gameData, gameInfo, 3, 5, "group", 16, true);
@@ -79,7 +79,7 @@ describe("levels", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, text: "", group: 32
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", text: "", group: 32
             }
         ]);
     });

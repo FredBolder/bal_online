@@ -112,6 +112,7 @@ let createLevelBallsPages = 2;
 let createLevelChangerColors = "";
 let createLevelColorPages = 2;
 let createLevelCommand = "";
+let createLevelCondition = "";
 let createLevelDirection = "";
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
@@ -1186,7 +1187,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2204, 2203, 2206, 2207, 2208, 2209, 0, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2202, 2204, 2203, 2206, 2207, 2208, 2209, 2205, 0, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -3053,6 +3054,9 @@ function BalPage() {
                 if (createLevelObject === 2204) {
                   msg = setProp(gameData, gameInfo, column, row, "target", createLevelTarget, oneSelected);
                 }
+                if (createLevelObject === 2205) {
+                  msg = setProp(gameData, gameInfo, column, row, "condition", createLevelCondition, oneSelected);
+                }
                 if (createLevelObject === 2206) {
                   if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
                     if (oneSelected) {
@@ -3506,10 +3510,21 @@ function BalPage() {
               }
               handleCancel();
               break;
+            case 2205:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Detectors", "Condition", createLevelCondition);
+                if (newValue !== null) {
+                  createLevelCondition = newValue.trim();
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
             case 2206:
               ok = false;
               if (row > 0) {
-                newValue = await showInput("Detectors", "Command", "");
+                newValue = await showInput("Detectors", "Command", createLevelCommand);
                 if (newValue !== null) {
                   createLevelCommand = newValue.trim();
                   ok = true;

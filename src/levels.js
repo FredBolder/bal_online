@@ -298,7 +298,8 @@ export function checkLevel(data, settings) {
 export function checkSettings(data, settings) {
   // This function works with code 1 and code 2, so data with characters and data with numbers
 
-  // For $answer, $hint, $message, $question, $startlevelmessage and $value there can be a comma in the text and
+  // For $answer, $condition, $hint, $message, $question, $startlevelmessage, $text and $value 
+  // there can be a comma in the text and
   // $notes, $addnotes and $activesides have a variable number of parameters.
   const settingsInfo = [
     { name: "$activesides", params: 0, xy: true, yesno: -1 },
@@ -309,6 +310,7 @@ export function checkSettings(data, settings) {
     { name: "$bgcolor", params: 5, xy: true, yesno: -1 },
     { name: "$changer", params: 5, xy: true, yesno: 2 },
     { name: "$color", params: 2, xy: false, yesno: -1 },
+    { name: "$condition", params: 0, xy: true, yesno: -1 },
     { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
     { name: "$detectormode", params: 3, xy: true, yesno: -1 },
     { name: "$direction", params: 3, xy: true, yesno: -1 },
@@ -363,6 +365,7 @@ export function checkSettings(data, settings) {
     { name: "$stripes", params: 3, xy: true, yesno: -1 },
     { name: "$tail", params: 3, xy: true, yesno: -1 },
     { name: "$target", params: 3, xy: true, yesno: -1 },
+    { name: "$text", params: 0, xy: true, yesno: -1 },
     { name: "$twoblueconnected", params: 1, xy: false, yesno: 0 },
     { name: "$value", params: 0, xy: true, yesno: -1 },
   ];
@@ -469,6 +472,11 @@ export function checkSettings(data, settings) {
               }
               if (valuesLowerCase[3] === valuesLowerCase[4]) {
                 msg += `${settingNr(i)}A changer must have two different colors.\n`;
+              }
+              break;
+            case "$condition":
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$conveyorbeltmode":
@@ -869,6 +877,11 @@ export function checkSettings(data, settings) {
               if (!detectorTargets().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid target ${values[2]}.\n`;
               }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$text":
               if (validXY && !["ђ", 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
@@ -1546,6 +1559,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
   let idx = -1;
   let mode = "";
   let p1 = -1;
+  let propName = "";
   let sound = "";
   let val_int = 0;
   let val_str = "";
@@ -1566,6 +1580,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
     p1 = setting.indexOf(":");
     if (p1 >= 0) {
       const name = setting.slice(0, p1).toLowerCase().trim();
+      propName = name;
+      if (propName.startsWith("$")) {
+        propName = propName.slice(1);
+      }
       const value = setting.slice(p1 + 1).trim();
       const values = setting.slice(p1 + 1).split(",").map(value => value.trim());
       const valuesLowerCase = values.map(value => value.toLowerCase());
@@ -1608,11 +1626,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
-        case "$answer":
-          val_str = getStringAfterCoordinates(value);
-          if (validXY && (val_str !== "")) {
-            setProp(gameData, gameInfo, x, y, "answer", val_str, false);
+        case "$target":
+          if (values.length !== 3 || !validXY) {
+            break;
           }
+          setProp(gameData, gameInfo, x, y, propName, valuesLowerCase[2], false);
+          break;
+        case "$answer":
+        case "$condition":
+        case "$text":
+        case "$value":
+          val_str = getStringAfterCoordinates(value);
+          if (values.length < 3 || !validXY) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, propName, val_str, false);
           break;
         case "$answerballmode":
         case "$conveyorbeltmode":
@@ -2252,14 +2280,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
-        case "$target":
-          if (values.length !== 3 || !validXY) {
-            break;
-          }
-          if (detectorTargets().includes(valuesLowerCase[2])) {
-            setProp(gameData, gameInfo, x, y, "target", valuesLowerCase[2], false);
-          }
-          break;
         case "$twoblueconnected":
           if (values.length !== 1) {
             break;
@@ -2274,13 +2294,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             default:
               break;
           }
-          break;
-        case "$value":
-          val_str = getStringAfterCoordinates(value);
-          if (values.length < 3 || !validXY) {
-            break;
-          }
-          setProp(gameData, gameInfo, x, y, "value", val_str, false);
           break;
         default:
           break;

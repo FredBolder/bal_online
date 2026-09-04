@@ -2,14 +2,14 @@ $condition: 4, 9, stripes = 16
 $range: 4, 9, 6
 $pistonmode: 8, 2, momentary
 $sticky: 8, 2, yes
-$fins: 2, 8, 1
-$palette: 2, 8, 8
-$stripes: 2, 8, 15
-$tail: 2, 8, 6
 $fins: 6, 7, 1
 $palette: 6, 7, 8
 $stripes: 6, 7, 16
 $tail: 6, 7, 6
+$fins: 2, 8, 1
+$palette: 2, 8, 8
+$stripes: 2, 8, 15
+$tail: 2, 8, 6
 $background: 6, 7, 1, 1, 23
 $background: 2, 8, 1, 1, 23
 1111111111

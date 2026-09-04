@@ -4529,7 +4529,7 @@ function drawLevel(
           drawAbbreviation("targ");
           break;
         case 2205:
-          drawAbbreviation("??");
+          drawAbbreviation("if");
           break;
         case 2206:
           drawAbbreviation("cmd");

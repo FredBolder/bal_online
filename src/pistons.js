@@ -1,4 +1,4 @@
-import { findElementByCoordinates, hasWeightAbove, getGameDataValue, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, hasWeightAbove, getGameDataValue, getListByObjectNumber, moveObject } from "./balUtils.js";
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { commands, rotateGroup } from "./detectors.js";
 import { activateAllBombs } from "./detonator.js";
@@ -10,6 +10,86 @@ import { activateYellowPushers } from "./yellowPushers.js";
 function canMove(element) {
     // Contains also objects that normally can not be moved
     return [2, 4, 5, 8, 9, 27, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 243, 244, 245, 246, 247, 248, 253, 255, 256].includes(element);
+}
+
+function checkCondition(gameData, gameInfo, x, y, condition) {
+    // Result 
+    // -1 = invalid, 0 = false, 1 = true
+    const compChars = "=<>";
+    let n = 0;
+    let sComp = "";
+    let sVal1 = "";
+    let sVal2 = "";
+    let sVar = "";
+
+    condition = condition.trim();
+    if (condition === "") {
+        return 1;
+    }
+
+    n = 0;
+    for (let i = 0; i < condition.length; i++) {
+        const s = condition[i];
+        if (s === " ") {
+            continue;
+        }
+        if ((n === 0) && compChars.includes(s)) {
+            n = 1;
+        }
+        if ((n === 1) && !compChars.includes(s)) {
+            n = 2;
+        }
+        switch (n) {
+            case 0:
+                sVar = sVar + s;
+                break;
+            case 1:
+                sComp = sComp + s;
+                break;
+            case 2:
+                sVal2 = sVal2 + s;
+                break;
+            default:
+                break;
+        }
+    }
+    if ((sVar === "") || !["=", "<>", ">", "<", ">=", "<="].includes(sComp)) {
+        return -1;
+    }
+
+    const elementNumber = getGameDataValue(gameData, x, y);
+    const list = getListByObjectNumber(gameInfo, elementNumber);
+    if (list === null) {
+        return -1;
+    }
+    
+    const idx = findElementByCoordinates(x, y, list);
+    if (idx < 0) {
+        return -1;
+    }
+    const element = list[idx];
+    if (Object.hasOwn(element, sVar)) {
+        console.log(sVar, sComp, sVal2);
+        sVal1 = element[sVar].toString();
+        switch (sComp) {
+            case "=":
+                return sVal1 === sVal2 ? 1 : 0;
+            case "<>":
+                return sVal1 !== sVal2 ? 1 : 0;
+            case ">":
+                return sVal1 > sVal2 ? 1 : 0;
+            case "<":
+                return sVal1 < sVal2 ? 1 : 0;
+            case ">=":
+                return sVal1 >= sVal2 ? 1 : 0;
+            case "<=":
+                return sVal1 <= sVal2 ? 1 : 0;
+            default:
+                return -1;
+        }
+    } else {
+        return -1;
+    }
 }
 
 export function checkPistonsDetector(gameData, gameInfo) {
@@ -80,6 +160,8 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     let sideStr = "?";
     let result = { updated: false, explosion: false };
     let weight = false;
+    let x = -1;
+    let y = -1;
     let xTrigger = -1;
     let yTrigger = -1;
 
@@ -110,18 +192,26 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                         case top:
                             el = elTop;
                             sideStr = "top";
+                            x = detector.x;
+                            y = detector.y - r;
                             break;
                         case bottom:
                             el = elBottom;
                             sideStr = "bottom";
+                            x = detector.x;
+                            y = detector.y + r;
                             break;
                         case left:
                             el = elLeft;
                             sideStr = "left";
+                            x = detector.x - r;
+                            y = detector.y;
                             break;
                         case right:
                             el = elRight;
                             sideStr = "right";
+                            x = detector.x + r;
+                            y = detector.y;
                             break;
                         default:
                             break;
@@ -182,9 +272,13 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                                 break;
                         }
                     }
+                    if (detect) {
+                        if (checkCondition(gameData, gameInfo, x, y, detector.condition) !== 1) {
+                            detect = false;
+                        }
+                    }
                 }
             }
-
 
             if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {
                 activeGroups.push(detector.group);
