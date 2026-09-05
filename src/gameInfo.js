@@ -876,13 +876,13 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 info = `Travel gate`;
                 break;
             case 133:
-                info = `Yellow diamant`;
+                info = `Yellow diamond`;
                 break;
             case 134:
-                info = `Blue diamant`;
+                info = `Blue diamond`;
                 break;
             case 135:
-                info = `Red diamant`;
+                info = `Red diamond`;
                 break;
             case 136:
                 idx = findElementByCoordinates(x, y, gameInfo.yellowPausers);

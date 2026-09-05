@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, expect } from "vitest";
 import { zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { checkPistonsDetector, checkPistonsTriggers } from "./pistons.js";
+import { checkCondition, checkPistonsDetector, checkPistonsTriggers } from "./pistons.js";
 import { copy2dArray } from "./utils.js";
 
 describe("Pistons", () => {
@@ -487,6 +487,53 @@ describe("Pistons", () => {
         expect(gameInfo.pistons).toEqual([{ x: 3, y: 3, activated: true, sticky: false, inverted: false, direction: "right", mode: "pinkball", group: 1 }]);
         expect(gameInfo.pinkBalls).toEqual([{ x: 5, y: 3, delete: false, skipFalling: 0 }]);
     });
+
+    it("checkCondition A", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            answerBalls: [
+                { x: 6, y: 4, answer: "This is a TEST!", color: "purple", mode: "answerball", delete: false },
+            ],
+            blueBall: { x: 1, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                { x: 3, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting", 
+                    value: "$message: Detected", display: "default", activated: false, activatedCount: 0, 
+                    sequence: false, movable: true, condition: "", text: "", group: 1 },
+            ],        
+            pushers: [{ x: 3, y: 3, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 2 }],
+        }
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 209, 0, 0, 0, 0, 1],
+            [1, 2, 0, 255, 0, 0, 242, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+
+        let info = checkCondition(input, gameInfo, 3, 3, "group > 10")
+        expect(info).toBe(0); // false
+        info = checkCondition(input, gameInfo, 3, 3, "group > 1")
+        expect(info).toBe(1); // true
+        info = checkCondition(input, gameInfo, 3, 3, "groep > 1")
+        expect(info).toBe(-1); // invalid
+        info = checkCondition(input, gameInfo, 3, 3, "group = 2")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 3, 3, "group <> 4")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 4, "answer = This is a TEST!")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 4, "answer = ThisisaTEST!")
+        expect(info).toBe(0);
+        info = checkCondition(input, gameInfo, 6, 4, "name = Purple answer ball")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 1, 1, "name = small green ball")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 4, "delete = false")
+        expect(info).toBe(1);
+    });
+
 
     // Insert new tests here
 });

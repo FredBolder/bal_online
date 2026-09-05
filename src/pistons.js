@@ -3,6 +3,7 @@ import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { commands, rotateGroup } from "./detectors.js";
 import { activateAllBombs } from "./detonator.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
+import { objectNumberToObjectName } from "./objects.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
 import { activateYellowPushers } from "./yellowPushers.js";
@@ -12,15 +13,18 @@ function canMove(element) {
     return [2, 4, 5, 8, 9, 27, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 243, 244, 245, 246, 247, 248, 253, 255, 256].includes(element);
 }
 
-function checkCondition(gameData, gameInfo, x, y, condition) {
+export function checkCondition(gameData, gameInfo, x, y, condition) {
     // Result 
     // -1 = invalid, 0 = false, 1 = true
     const compChars = "=<>";
+    let element = null;
+    let idx = -1;
+    let list = "";
     let n = 0;
     let sComp = "";
-    let sVal1 = "";
-    let sVal2 = "";
     let sVar = "";
+    let value1 = null;
+    let value2 = "";
 
     condition = condition.trim();
     if (condition === "") {
@@ -30,9 +34,7 @@ function checkCondition(gameData, gameInfo, x, y, condition) {
     n = 0;
     for (let i = 0; i < condition.length; i++) {
         const s = condition[i];
-        if (s === " ") {
-            continue;
-        }
+
         if ((n === 0) && compChars.includes(s)) {
             n = 1;
         }
@@ -47,48 +49,75 @@ function checkCondition(gameData, gameInfo, x, y, condition) {
                 sComp = sComp + s;
                 break;
             case 2:
-                sVal2 = sVal2 + s;
+                value2 = value2 + s;
                 break;
             default:
                 break;
         }
     }
-    if ((sVar === "") || !["=", "<>", ">", "<", ">=", "<="].includes(sComp)) {
+    sVar = sVar.trim();
+    sComp = sComp.trim();
+    value2 = value2.trim();
+    if ((sVar === "") || (sComp === "")) {
+        return -1;
+    }
+    if (sComp.includes(" ") || !["=", "<>", ">", "<", ">=", "<="].includes(sComp)) {
         return -1;
     }
 
-    const elementNumber = getGameDataValue(gameData, x, y);
-    const list = getListByObjectNumber(gameInfo, elementNumber);
-    if (list === null) {
-        return -1;
-    }
-    
-    const idx = findElementByCoordinates(x, y, list);
-    if (idx < 0) {
-        return -1;
-    }
-    const element = list[idx];
-    if (Object.hasOwn(element, sVar)) {
-        console.log(sVar, sComp, sVal2);
-        sVal1 = element[sVar].toString();
-        switch (sComp) {
-            case "=":
-                return sVal1 === sVal2 ? 1 : 0;
-            case "<>":
-                return sVal1 !== sVal2 ? 1 : 0;
-            case ">":
-                return sVal1 > sVal2 ? 1 : 0;
-            case "<":
-                return sVal1 < sVal2 ? 1 : 0;
-            case ">=":
-                return sVal1 >= sVal2 ? 1 : 0;
-            case "<=":
-                return sVal1 <= sVal2 ? 1 : 0;
-            default:
+    const objectNumber = getGameDataValue(gameData, x, y);
+    const objectName = objectNumberToObjectName(objectNumber);
+
+    switch (sVar) {
+        case "name":
+            value1 = objectName;
+            break;
+        default:
+            list = getListByObjectNumber(gameInfo, objectNumber);
+            if (list === null) {
                 return -1;
+            }
+            idx = findElementByCoordinates(x, y, list);
+            if (idx < 0) {
+                return -1;
+            }
+            element = list[idx];
+            if (Object.hasOwn(element, sVar)) {
+                value1 = element[sVar];
+            } else {
+                return -1;
+            }
+            break;
+    }
+
+    if (typeof value1 === "number") {
+        value2 = parseFloat(value2);
+        if (Number.isNaN(value2)) {
+            return -1;
         }
     } else {
-        return -1;
+        value1 = value1.toString();
+    }
+    if (sVar === "name") {
+        value1 = value1.toLowerCase();
+        value2 = value2.toLowerCase();
+    }
+
+    switch (sComp) {
+        case "=":
+            return value1 === value2 ? 1 : 0;
+        case "<>":
+            return value1 !== value2 ? 1 : 0;
+        case ">":
+            return value1 > value2 ? 1 : 0;
+        case "<":
+            return value1 < value2 ? 1 : 0;
+        case ">=":
+            return value1 >= value2 ? 1 : 0;
+        case "<=":
+            return value1 <= value2 ? 1 : 0;
+        default:
+            return -1;
     }
 }
 
