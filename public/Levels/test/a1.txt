@@ -1,46 +1,41 @@
 $stonepattern: 2
-$has: propeller
-$detectormode: 1, 19, yellowball
-$movable: 1, 19, no
-$range: 1, 19, 18
-$target: 1, 19, command
-$value: 1, 19, create, stone, abs, 18, 17
-$activesides: 19, 3, right
-$detectormode: 19, 3, pinkball
-$target: 19, 3, command
-$value: 19, 3, create, yellowball, abs, 17, 5
-$activesides: 19, 4, right
-$detectormode: 19, 4, pinkball
-$target: 19, 4, yellowpushers
-$activesides: 18, 1, left
-$detectormode: 18, 1, yellowball
-$movable: 18, 1, no
-$range: 18, 1, 17
-$target: 18, 1, command
-$value: 18, 1, create, stone, abs, 18, 17
-$activesides: 18, 18, left
-$detectormode: 18, 18, yellowball
-$movable: 18, 18, no
-$range: 18, 18, 17
-$target: 18, 18, command
-$value: 18, 18, create, stone, abs, 18, 17
+$electricitymode: command
+$condition: 18, 19, name = tropical fish
+$movable: 18, 19, no
+$range: 18, 19, 14
+$target: 18, 19, command
+$value: 18, 19, activateelectricity, 15
+$fins: 16, 11, 13
+$palette: 16, 11, 38
+$pupilpercentage: 16, 11, 35
+$shape: 16, 11, 11
+$stripes: 16, 11, 18
+$tail: 16, 11, 5
+$fins: 25, 13, 13
+$palette: 25, 13, 38
+$pupilpercentage: 25, 13, 35
+$shape: 25, 13, 11
+$stripes: 25, 13, 18
+$tail: 25, 13, 5
+$background: 16, 11, 1, 1, 23
+$background: 25, 13, 1, 1, 23
 11111111111111111111111111111111
-1                 ђ1Ѥ         31
-1                 Ψ1           1
-1                 Ψђ           1
-1                 Ψђ           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1     2           Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 Ψ1           1
-1                 11           1
+1      !                       1
 1                              1
-1                 ђ            1
-1ђ111111111111111111111111111111
+1                              1
+1                              1
+1            1WWWWWWWWWWWWWWWWW1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwҼwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwҼwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+13           1wwwwwwwwwwwwwwwww1
+1   2        1wwwwwwwwwwwwwwwww1
+111111111111111111ђ1111111111111

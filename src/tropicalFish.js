@@ -9,7 +9,7 @@ import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 13;
-export const tropicalFishPalettes = 37;
+export const tropicalFishPalettes = 38;
 export const tropicalFishShapes = 11;
 export const tropicalFishStripes = 21;
 export const tropicalFishTails = 11;
@@ -72,7 +72,7 @@ export function changeTail(gameInfo, x, y, decrease) {
 }
 
 // This drawing is also used for answer balls.
-export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, tail, fins, stripes, pupilPercentage) {
+export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, tail, fins, stripes, eyePercentage, pupilPercentage) {
     if (flipHorizontally) {
         ctx.save();
         ctx.translate(xc, 0);
@@ -362,7 +362,8 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
     ctx.lineWidth = 1;
     const xEye = bodyOptions.isTang ? geom.headRight - bodyLength * 0.04 : geom.headRight - bodyLength * 0.15;
     const yEye = yc - bodyHeight * 0.1;
-    const eyeRadius = ([1, 4, 9, 10, 11].includes(shape)) ? size * 0.03 : size * 0.04;
+    //const eyeRadius = ([1, 4, 9, 10, 11].includes(shape)) ? size * 0.03 : size * 0.04;
+    const eyeRadius = bodyHeight * 0.25 * eyePercentage * 0.01;
     ctx.beginPath();
     ctx.arc(xEye, yEye, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
@@ -636,6 +637,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 9;
             gameInfo.tropicalFish[idx].fins = 4;
             gameInfo.tropicalFish[idx].stripes = 18;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "blackneontetra":
@@ -645,6 +647,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 7;
             gameInfo.tropicalFish[idx].fins = 9;
             gameInfo.tropicalFish[idx].stripes = 20;
+            gameInfo.tropicalFish[idx].eyePercentage = 55;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "bluechromis":
@@ -654,6 +657,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 9;
             gameInfo.tropicalFish[idx].fins = 4;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 60;
             break;
         case "bluediamonddiscus":
@@ -663,15 +667,17 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 4;
             gameInfo.tropicalFish[idx].fins = 8;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 40;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "brighamssnapper":
-            // Brigham’s snapper
+            // Brigham's Snapper
             gameInfo.tropicalFish[idx].palette = 21;
             gameInfo.tropicalFish[idx].shape = 8;
             gameInfo.tropicalFish[idx].tail = 7;
             gameInfo.tropicalFish[idx].fins = 4;
             gameInfo.tropicalFish[idx].stripes = 21;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "clownfish":
@@ -681,7 +687,18 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 6;
             gameInfo.tropicalFish[idx].fins = 1;
             gameInfo.tropicalFish[idx].stripes = 15;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            break;
+        case "electriccatfish":
+            // Electric Catfish
+            gameInfo.tropicalFish[idx].palette = 38;
+            gameInfo.tropicalFish[idx].shape = 11;
+            gameInfo.tropicalFish[idx].tail = 5;
+            gameInfo.tropicalFish[idx].fins = 13;
+            gameInfo.tropicalFish[idx].stripes = 18;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
+            gameInfo.tropicalFish[idx].pupilPercentage = 35;
             break;
         case "juvenilegoldentrevally":
             // Juvenile Golden Trevally
@@ -690,6 +707,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 7;
             gameInfo.tropicalFish[idx].fins = 3;
             gameInfo.tropicalFish[idx].stripes = 12;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "orangereddiscus":
@@ -699,6 +717,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 3;
             gameInfo.tropicalFish[idx].fins = 8;
             gameInfo.tropicalFish[idx].stripes = 5;
+            gameInfo.tropicalFish[idx].eyePercentage = 40;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "purpletang":
@@ -708,6 +727,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 4;
             gameInfo.tropicalFish[idx].fins = 10;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 35;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "redtailshark":
@@ -717,6 +737,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 7;
             gameInfo.tropicalFish[idx].fins = 2;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "rustyjobfish":
@@ -726,6 +747,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 11;
             gameInfo.tropicalFish[idx].fins = 13;
             gameInfo.tropicalFish[idx].stripes = 18;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 50;
             break;
         case "siamesealgaeeater":
@@ -735,6 +757,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 7;
             gameInfo.tropicalFish[idx].fins = 5;
             gameInfo.tropicalFish[idx].stripes = 17;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "smallmouthgrunt":
@@ -744,6 +767,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 7;
             gameInfo.tropicalFish[idx].fins = 7;
             gameInfo.tropicalFish[idx].stripes = 19;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "yellowfintuna":
@@ -753,6 +777,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 10;
             gameInfo.tropicalFish[idx].fins = 12;
             gameInfo.tropicalFish[idx].stripes = 18;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "yellowtailaceicichlid":
@@ -762,6 +787,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 4;
             gameInfo.tropicalFish[idx].fins = 4;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "yellowtaildamselfish":
@@ -771,6 +797,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 8;
             gameInfo.tropicalFish[idx].fins = 11;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 50;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "yellowtang":
@@ -780,6 +807,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 4;
             gameInfo.tropicalFish[idx].fins = 10;
             gameInfo.tropicalFish[idx].stripes = 0;
+            gameInfo.tropicalFish[idx].eyePercentage = 35;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         case "zebraangelfish":
@@ -789,6 +817,7 @@ export function presetTropicalFish(gameInfo, idx, preset) {
             gameInfo.tropicalFish[idx].tail = 3;
             gameInfo.tropicalFish[idx].fins = 6;
             gameInfo.tropicalFish[idx].stripes = 4;
+            gameInfo.tropicalFish[idx].eyePercentage = 40;
             gameInfo.tropicalFish[idx].pupilPercentage = 40;
             break;
         default:

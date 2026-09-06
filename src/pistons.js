@@ -3,7 +3,7 @@ import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { commands, rotateGroup } from "./detectors.js";
 import { activateAllBombs } from "./detonator.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
-import { objectNumberToObjectName } from "./objects.js";
+import { coordinatesToFishName, objectNumberToObjectGeneralName, objectNumberToObjectName } from "./objects.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
 import { activateYellowPushers } from "./yellowPushers.js";
@@ -66,9 +66,16 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     }
 
     const objectNumber = getGameDataValue(gameData, x, y);
+    const objectGeneralName = objectNumberToObjectGeneralName(objectNumber);
     const objectName = objectNumberToObjectName(objectNumber);
 
     switch (sVar) {
+        case "fishName":
+            value1 = coordinatesToFishName(gameData, gameInfo, x, y);
+            break;
+        case "generalName":
+            value1 = objectGeneralName;
+            break;
         case "name":
             value1 = objectName;
             break;
@@ -98,7 +105,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     } else {
         value1 = value1.toString();
     }
-    if (sVar === "name") {
+    if ((sVar === "name") || (sVar === "fishName") || (sVar === "generalName")) {
         value1 = value1.toLowerCase();
         value2 = value2.toLowerCase();
     }

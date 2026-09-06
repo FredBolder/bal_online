@@ -327,6 +327,7 @@ export function getGameInfo(backData, gameData) {
                         tail: 2,
                         fins: 3,
                         stripes: 5,
+                        eyePercentage: 50,
                         pupilPercentage: 40,
                         blocked: false,
                         outOfWater: 0,
@@ -1147,8 +1148,8 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     obj = gameInfo.tropicalFish[idx];
                     extraInfo = `Start position: (${obj.xStart}, ${obj.yStart}), Max horizontal distance: ${obj.maxDistX}, `;
                     extraInfo += `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `;
-                    extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Pupil percentage: ${obj.pupilPercentage}, `;
-                    extraInfo += `Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
+                    extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Eye percentage: ${obj.eyePercentage}, `;
+                    extraInfo += `Pupil percentage: ${obj.pupilPercentage}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
                 }
                 info = `Tropical fish, ` + extraInfo;
                 break;
@@ -1262,6 +1263,7 @@ export function initGameInfo(info) {
     info.detonator = { x: -1, y: -1 };
     info.electricity = [];
     info.electricityActive = false;
+    info.electricityMode = "pattern";
     info.elevatorInOuts = [];
     info.elevators = [];
     info.fishFood = [];

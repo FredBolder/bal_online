@@ -18,21 +18,24 @@ $sticky: 11, 8, yes
 $group: 6, 2, 2
 $group: 17, 8, 2
 $direction: 17, 8, down
+$eyepercentage: 15, 10, 55
 $fins: 15, 10, 9
 $palette: 15, 10, 18
 $shape: 15, 10, 6
 $stripes: 15, 10, 20
 $tail: 15, 10, 7
-$fins: 19, 11, 9
-$palette: 19, 11, 18
-$shape: 19, 11, 6
-$stripes: 19, 11, 20
-$tail: 19, 11, 7
+$eyepercentage: 13, 12, 55
 $fins: 13, 12, 9
 $palette: 13, 12, 18
 $shape: 13, 12, 6
 $stripes: 13, 12, 20
 $tail: 13, 12, 7
+$eyepercentage: 19, 11, 55
+$fins: 19, 11, 9
+$palette: 19, 11, 18
+$shape: 19, 11, 6
+$stripes: 19, 11, 20
+$tail: 19, 11, 7
 $background: 15, 10, 1, 1, 23
 $background: 1, 11, 1, 1, 23
 $background: 19, 11, 1, 1, 23

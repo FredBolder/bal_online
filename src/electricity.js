@@ -27,6 +27,12 @@ export function checkElectricity(backData, gameData, gameInfo, gameVars) {
                             gameInfo.tropicalFish[idx].isDead = true;
                         }
                         break;
+                    case 248:
+                        idx = findElementByCoordinates(elec.x, target, gameInfo.jellyfish);
+                        if (idx >= 0) {
+                            gameInfo.jellyfish[idx].isDead = true;
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -64,6 +70,10 @@ export function checkElectricity(backData, gameData, gameInfo, gameVars) {
             }
         }
     }
+}
+
+export function electricityModes() {
+    return ["command", "pattern"];
 }
 
 export function electricityTarget(backData, gameData, x, y) {

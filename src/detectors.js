@@ -16,6 +16,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     const invalidInt = -10000;
     const intValues = [];
     let objectNumber = 0;
+    let ticks = 50;
     let val_int = 0;
     const value = commandLine.trim();
     const values = value.split(",");
@@ -44,9 +45,20 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         intValues.push(val_int);
     }
     const cmd = valuesLowerCase[0];
+
+    if (cmd === "activateelectricity" && values.length === 2) {
+        ticks = intValues[1];
+        if ((ticks > 0) && (ticks <= 50)) {
+            gameVars.electricityCounter = ticks;
+            gameInfo.electricityActive = true;
+        }
+        return;
+    }
     if (cmd === "changedirection" && values.length === 2) {
         commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], -1, -1);
+        return;
     }
+
     if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && values.length === 5) ||
         (cmd === "delete" && values.length === 5) || (cmd === "move" && values.length === 6)) {
         // create, object name, rel or abs, x, y

@@ -209,7 +209,7 @@ export function getTropicalFishColors(palette) {
             }
             break;
         case 21:
-            // Brigham’s snapper or Gindai
+            // Brigham's Snapper or Gindai
             colors = {
                 body: "#E76F7D",
                 stripe: "#F9D342",
@@ -393,6 +393,18 @@ export function getTropicalFishColors(palette) {
                 tail: "#A85E69",
                 eye: "#D2A83A",
                 eyePupil: "#100B0E"
+            }
+            break;
+        case 38:
+            // Electric Catfish
+            colors = {
+                body: "#8A8174",
+                upperBody: "#5E5A50",
+                stripe: "#716B60",
+                fin: "#4E4B43",
+                tail: "#4E4B43",
+                eye: "#8C9AA0",
+                eyePupil: "#08090A"
             }
             break;
         default:

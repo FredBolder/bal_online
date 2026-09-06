@@ -5,24 +5,24 @@ $answer: 20, 9, 3
 $answer: 16, 16, +
 $answer: 16, 17, +
 $changer: 13, 2, no, lightblue, yellow
-$fins: 5, 12, 10
-$palette: 5, 12, 19
-$shape: 5, 12, 7
-$stripes: 5, 12, 0
-$tail: 5, 12, 4
-$answer: 5, 12, 1
-$fins: 13, 10, 10
-$palette: 13, 10, 19
-$shape: 13, 10, 7
-$stripes: 13, 10, 0
-$tail: 13, 10, 4
-$answer: 13, 10, 1
+$eyepercentage: 3, 8, 35
 $fins: 3, 8, 10
 $palette: 3, 8, 19
 $shape: 3, 8, 7
 $stripes: 3, 8, 0
 $tail: 3, 8, 4
-$answer: 3, 8, 1
+$eyepercentage: 5, 12, 35
+$fins: 5, 12, 10
+$palette: 5, 12, 19
+$shape: 5, 12, 7
+$stripes: 5, 12, 0
+$tail: 5, 12, 4
+$eyepercentage: 13, 10, 35
+$fins: 13, 10, 10
+$palette: 13, 10, 19
+$shape: 13, 10, 7
+$stripes: 13, 10, 0
+$tail: 13, 10, 4
 $background: 3, 8, 1, 1, 23
 $background: 19, 9, 2, 1, 23
 $background: 13, 10, 1, 1, 23

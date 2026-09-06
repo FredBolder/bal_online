@@ -4,6 +4,7 @@ import { charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
+import { electricityModes } from "./electricity.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
@@ -316,7 +317,9 @@ export function checkSettings(data, settings) {
     { name: "$direction", params: 3, xy: true, yesno: -1 },
     { name: "$display", params: 3, xy: true, yesno: -1 },
     { name: "$displaysize", params: 2, xy: false, yesno: -1 },
+    { name: "$electricitymode", params: 1, xy: false, yesno: -1 },
     { name: "$extra", params: 1, xy: false, yesno: -1 },
+    { name: "$eyepercentage", params: 3, xy: true, yesno: -1 },
     { name: "$fgcolor", params: 5, xy: true, yesno: -1 },
     { name: "$fins", params: 3, xy: true, yesno: -1 },
     { name: "$gameticks", params: 2, xy: false, yesno: -1 },
@@ -549,10 +552,25 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid value ${values[1]} for rows.\n`;
               }
               break;
+            case "$electricitymode":
+              if (!electricityModes().includes(values[0])) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for electricitymode.\n`;
+              }
+              break;
             case "$extra":
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 1)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for extra.\n`;
+              }
+              break;
+            case "$eyepercentage":
+            case "$pupilpercentage":
+              val_int = tryParseInt(values[2], -1);
+              if ((val_int < 0) || (val_int > 100)) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for percentage.\n`;
+              }
+              if (validXY && !["Ҽ", 243].includes(data[y][x])) {
+                msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$fins":
@@ -741,15 +759,6 @@ export function checkSettings(data, settings) {
               val_int = tryParseInt(values[0], -1);
               if ((val_int < 0) || (val_int > 100)) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for percentage.\n`;
-              }
-              break;
-            case "$pupilpercentage":
-              val_int = tryParseInt(values[2], -1);
-              if ((val_int < 0) || (val_int > 100)) {
-                msg += `${settingNr(i)}Invalid value ${values[2]} for percentage.\n`;
-              }
-              if (validXY && !["Ҽ", 243].includes(data[y][x])) {
-                msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$pushermode":
@@ -1580,7 +1589,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
     p1 = setting.indexOf(":");
     if (p1 >= 0) {
       const name = setting.slice(0, p1).toLowerCase().trim();
-      propName = name;
+      propName = name; // Can be only used for properties that contain no uppercase characters
       if (propName.startsWith("$")) {
         propName = propName.slice(1);
       }
@@ -1746,11 +1755,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             gameVars.displaySize.rows = h;
           }
           break;
+        case "$electricitymode":
+          if (electricityModes().includes(values[0])) {
+            gameInfo.electricityMode = values[0];
+          }
+          break;
         case "$extra":
           val_int = tryParseInt(values[0], -1);
           if ((val_int >= 0) && (val_int <= 1)) {
             gameVars.extra = val_int;
           }
+          break;
+        case "$eyepercentage":
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "eyePercentage", val_int, false);
           break;
         case "$fins":
           if (values.length !== 3 || !validXY) {

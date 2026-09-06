@@ -1,6 +1,6 @@
 $color: water, #001a66
 $plantsswayspeed: 20
-$answer: 7, 5, %fish
+$answer: 9, 5, %fish
 $fins: 0, 0, 1
 $palette: 0, 0, 8
 $stripes: 0, 0, 15
@@ -28,69 +28,101 @@ $palette: 10, 0, 12
 $shape: 10, 0, 3
 $stripes: 10, 0, 0
 $tail: 10, 0, 8
-$fins: 0, 2, 6
-$palette: 0, 2, 13
-$shape: 0, 2, 5
-$stripes: 0, 2, 4
-$tail: 0, 2, 3
-$fins: 2, 2, 7
-$palette: 2, 2, 14
-$stripes: 2, 2, 19
-$tail: 2, 2, 7
+$eyepercentage: 12, 0, 40
+$fins: 12, 0, 6
+$palette: 12, 0, 13
+$shape: 12, 0, 5
+$stripes: 12, 0, 4
+$tail: 12, 0, 3
+$fins: 0, 2, 7
+$palette: 0, 2, 14
+$stripes: 0, 2, 19
+$tail: 0, 2, 7
+$fins: 2, 2, 4
+$palette: 2, 2, 15
+$shape: 2, 2, 1
+$stripes: 2, 2, 18
+$tail: 2, 2, 9
+$eyepercentage: 4, 2, 40
+$fins: 4, 2, 8
+$palette: 4, 2, 16
+$shape: 4, 2, 5
+$stripes: 4, 2, 0
+$tail: 4, 2, 4
+$eyepercentage: 6, 2, 40
 $fins: 6, 2, 8
-$palette: 6, 2, 16
+$palette: 6, 2, 17
 $shape: 6, 2, 5
-$stripes: 6, 2, 0
-$tail: 6, 2, 4
-$fins: 8, 2, 8
-$palette: 8, 2, 17
-$shape: 8, 2, 5
-$tail: 8, 2, 3
-$fins: 10, 2, 9
-$palette: 10, 2, 18
-$shape: 10, 2, 6
-$stripes: 10, 2, 20
-$tail: 10, 2, 7
-$fins: 0, 4, 10
-$palette: 0, 4, 19
-$shape: 0, 4, 7
-$stripes: 0, 4, 0
-$tail: 0, 4, 4
-$fins: 2, 4, 10
-$palette: 2, 4, 20
-$shape: 2, 4, 7
+$tail: 6, 2, 3
+$eyepercentage: 8, 2, 55
+$fins: 8, 2, 9
+$palette: 8, 2, 18
+$shape: 8, 2, 6
+$stripes: 8, 2, 20
+$tail: 8, 2, 7
+$eyepercentage: 10, 2, 35
+$fins: 10, 2, 10
+$palette: 10, 2, 19
+$shape: 10, 2, 7
+$stripes: 10, 2, 0
+$tail: 10, 2, 4
+$eyepercentage: 12, 2, 35
+$fins: 12, 2, 10
+$palette: 12, 2, 20
+$shape: 12, 2, 7
+$stripes: 12, 2, 0
+$tail: 12, 2, 4
+$fins: 0, 4, 4
+$palette: 0, 4, 21
+$shape: 0, 4, 8
+$stripes: 0, 4, 21
+$tail: 0, 4, 7
+$fins: 2, 4, 4
+$palette: 2, 4, 35
+$pupilpercentage: 2, 4, 60
+$shape: 2, 4, 1
 $stripes: 2, 4, 0
-$tail: 2, 4, 4
-$fins: 4, 4, 4
-$palette: 4, 4, 21
-$shape: 4, 4, 8
-$stripes: 4, 4, 21
-$tail: 4, 4, 7
-$fins: 4, 2, 4
-$palette: 4, 2, 15
-$shape: 4, 2, 1
-$stripes: 4, 2, 18
-$tail: 4, 2, 9
+$tail: 2, 4, 9
+$fins: 4, 4, 12
+$palette: 4, 4, 36
+$shape: 4, 4, 10
+$stripes: 4, 4, 18
+$tail: 4, 4, 10
+$fins: 6, 4, 13
+$palette: 6, 4, 37
+$pupilpercentage: 6, 4, 50
+$shape: 6, 4, 11
+$stripes: 6, 4, 18
+$tail: 6, 4, 11
+$fins: 8, 4, 13
+$palette: 8, 4, 38
+$shape: 8, 4, 11
+$stripes: 8, 4, 18
+$tail: 8, 4, 5
 $background: 0, 0, 1, 1, 23
 $background: 2, 0, 1, 1, 23
 $background: 4, 0, 1, 1, 23
 $background: 6, 0, 1, 1, 23
 $background: 8, 0, 1, 1, 23
 $background: 10, 0, 1, 1, 23
+$background: 12, 0, 1, 1, 23
 $background: 0, 2, 1, 1, 23
 $background: 2, 2, 1, 1, 23
 $background: 4, 2, 1, 1, 23
 $background: 6, 2, 1, 1, 23
 $background: 8, 2, 1, 1, 23
 $background: 10, 2, 1, 1, 23
+$background: 12, 2, 1, 1, 23
 $background: 0, 4, 1, 1, 23
 $background: 2, 4, 1, 1, 23
 $background: 4, 4, 1, 1, 23
-$background: 10, 4, 1, 1, 23
-Ҽ0Ҽ0Ҽ0Ҽ0Ҽ0Ҽ
-0         0
-Ҽ Ҽ Ҽ Ҽ Ҽ Ҽ
-0         0
-Ҽ Ҽ Ҽ   3 Ҽ
-0      ҹ2 0
-11111111111
+$background: 6, 4, 1, 1, 23
+$background: 8, 4, 1, 1, 23
+$background: 12, 4, 1, 1, 23
+Ҽ0Ҽ0Ҽ0Ҽ0Ҽ0Ҽ0Ҽ
+0           0
+Ҽ Ҽ Ҽ Ҽ Ҽ Ҽ Ҽ
+0           0
+Ҽ Ҽ Ҽ Ҽ Ҽ 3 Ҽ
+0        ҹ2 0
+1111111111111

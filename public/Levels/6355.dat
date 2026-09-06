@@ -19,6 +19,7 @@ $group: 19, 9, 2
 $pistonmode: 19, 9, momentary
 $group: 16, 7, 2
 $group: 18, 10, 2
+$eyepercentage: 4, 8, 40
 $fins: 4, 8, 8
 $palette: 4, 8, 16
 $shape: 4, 8, 5

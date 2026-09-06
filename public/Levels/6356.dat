@@ -1,22 +1,24 @@
-$extra: 1
 $bgcolor: 0, 0, 19, 9, #87CEFA
 $fgcolor: 5, 8, 6, 1, #411E10
 $fgcolor: 17, 6, 1, 1, #000000
-$color: water, #004C99
+$color: water, #004c99
+$extra: 1
+$fins: 3, 13, 7
+$palette: 3, 13, 14
+$stripes: 3, 13, 19
+$tail: 3, 13, 7
+$eyepercentage: 5, 11, 35
 $fins: 5, 11, 10
 $palette: 5, 11, 19
 $shape: 5, 11, 7
 $stripes: 5, 11, 0
 $tail: 5, 11, 4
+$eyepercentage: 10, 12, 35
 $fins: 10, 12, 10
 $palette: 10, 12, 19
 $shape: 10, 12, 7
 $stripes: 10, 12, 0
 $tail: 10, 12, 4
-$fins: 3, 13, 7
-$palette: 3, 13, 14
-$stripes: 3, 13, 19
-$tail: 3, 13, 7
 $background: 12, 9, 5, 1, 23
 $background: 5, 11, 1, 1, 23
 $background: 1, 12, 1, 1, 23

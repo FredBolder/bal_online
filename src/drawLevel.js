@@ -254,7 +254,7 @@ function drawLevel(
           drawCar(ctx, xc, yc, w1 * 0.8);
           break;
         case "%fish":
-          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 2, 1, 3, 5, 40);
+          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 2, 1, 3, 5, 50, 40);
           break;
         case "%flower":
           drawFlower(ctx, xc, yc, w1 * 0.65);
@@ -3239,17 +3239,19 @@ function drawLevel(
 
   function drawTropicalFish(x, y) {
     let direction = -1
+    let eyePercentage = 50;
     let fins = 1;
+    let idx = -1;
     let palette = 2;
     let pupilPercentage = 40;
     let shape = 2;
     let stripes = 5;
     let tail = 1;
-    let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
+      eyePercentage = gameInfo.tropicalFish[idx].eyePercentage;
       fins = gameInfo.tropicalFish[idx].fins;
       palette = gameInfo.tropicalFish[idx].palette;
       pupilPercentage = gameInfo.tropicalFish[idx].pupilPercentage;
@@ -3257,7 +3259,7 @@ function drawLevel(
       stripes = gameInfo.tropicalFish[idx].stripes;
       tail = gameInfo.tropicalFish[idx].tail;
     }
-    drawFish(ctx, xc, yc, w1, direction !== 6, palette, shape, tail, fins, stripes, pupilPercentage);
+    drawFish(ctx, xc, yc, w1, direction !== 6, palette, shape, tail, fins, stripes, eyePercentage, pupilPercentage);
   }
 
   function drawVerticalRope() {
@@ -4426,92 +4428,97 @@ function drawLevel(
         case 2154:
           // Tropical fish - Clownfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 8, 2, 6, 1, 15, 40);
+          drawFish(ctx, xc, yc, w1, false, 8, 2, 6, 1, 15, 50, 40);
           break;
         case 2155:
           // Tropical fish - Red Tail Shark
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 9, 1, 7, 2, 0, 40);
+          drawFish(ctx, xc, yc, w1, false, 9, 1, 7, 2, 0, 50, 40);
           break;
         case 2156:
           // Tropical fish - Juvenile Golden Trevally
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 3, 2, 7, 3, 12, 40);
+          drawFish(ctx, xc, yc, w1, false, 3, 2, 7, 3, 12, 50, 40);
           break;
         case 2157:
           // Tropical fish - Yellow Tail Acei Cichlid
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 10, 1, 4, 4, 0, 40);
+          drawFish(ctx, xc, yc, w1, false, 10, 1, 4, 4, 0, 50, 40);
           break;
         case 2158:
           // Tropical fish - Siamese Algae Eater
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 11, 9, 7, 5, 17, 40);
+          drawFish(ctx, xc, yc, w1, false, 11, 9, 7, 5, 17, 50, 40);
           break;
         case 2159:
           // Tropical fish - Yellow Tail Damselfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 11, 0, 40);
+          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 11, 0, 50, 40);
           break;
         case 2160:
           // Tropical fish - Zebra Angelfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4, 40);
+          drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4, 40, 40);
           break;
         case 2161:
           // Tropical fish - Smallmouth Grunt
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 19, 40);
+          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 19, 50, 40);
           break;
         case 2162:
           // Tropical fish - Bicolor Anthias
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 15, 1, 9, 4, 18, 40);
+          drawFish(ctx, xc, yc, w1, false, 15, 1, 9, 4, 18, 50, 40);
           break;
         case 2163:
           // Tropical fish - Blue Diamond Discus
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0, 40);
+          drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0, 40, 40);
           break;
         case 2164:
           // Tropical fish - Orange-red Discus
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 17, 5, 3, 8, 5, 40);
+          drawFish(ctx, xc, yc, w1, false, 17, 5, 3, 8, 5, 40, 40);
           break;
         case 2165:
           // Tropical fish - Black Neon Tetra
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20, 40);
+          drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20, 55, 40);
           break;
         case 2166:
           // Tropical fish - Yellow Tang
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0, 40);
+          drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0, 35, 40);
           break;
         case 2167:
           // Tropical fish - Purple Tang
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0, 40);
+          drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0, 35, 40);
           break;
         case 2168:
-          // Tropical fish - Brigham’s snapper
+          // Tropical fish - Brigham's Snapper
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 21, 8, 7, 4, 21, 40);
+          drawFish(ctx, xc, yc, w1, false, 21, 8, 7, 4, 21, 50, 40);
           break;
         case 2169:
           // Tropical fish - Blue Chromis
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 35, 1, 9, 4, 0, 60);
+          drawFish(ctx, xc, yc, w1, false, 35, 1, 9, 4, 0, 50, 60);
           break;
         case 2170:
           // Tropical fish - Yellowfin Tuna
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 36, 10, 10, 12, 18, 40);
+          drawFish(ctx, xc, yc, w1, false, 36, 10, 10, 12, 18, 50, 40);
           break;
         case 2171:
           // Tropical fish - Rusty Jobfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 37, 11, 11, 13, 18, 50);
+          drawFish(ctx, xc, yc, w1, false, 37, 11, 11, 13, 18, 50, 50);
+          break;
+        case 2172:
+          // Tropical fish - Electric Catfish
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 38, 11, 5, 13, 18, 50, 35);
           break;
         case 2200:
           drawWaterColors();

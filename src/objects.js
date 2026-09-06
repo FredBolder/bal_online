@@ -1,3 +1,280 @@
+import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
+
+export function coordinatesToFishName(gameData, gameInfo, x, y) {
+    const objectNumber = getGameDataValue(gameData, x, y);
+    if (objectNumber !== 243) {
+        return "";
+    }
+    const idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+    if (idx < 0) {
+        return "";
+    }
+    const fish = gameInfo.tropicalFish[idx];
+
+    if ((fish.palette === 15) && (fish.shape === 1) && (fish.tail === 9) &&
+        (fish.fins === 4) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Bicolor Anthias";
+
+    if ((fish.palette === 18) && (fish.shape === 6) && (fish.tail === 7) &&
+        (fish.fins === 9) && (fish.stripes === 20) && (fish.eyePercentage === 55) && (fish.pupilPercentage === 40))
+        return "Black Neon Tetra";
+
+    if ((fish.palette === 35) && (fish.shape === 1) && (fish.tail === 9) &&
+        (fish.fins === 4) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 60))
+        return "Blue Chromis";
+
+    if ((fish.palette === 16) && (fish.shape === 5) && (fish.tail === 4) &&
+        (fish.fins === 8) && (fish.stripes === 0) && (fish.eyePercentage === 40) && (fish.pupilPercentage === 40))
+        return "Blue Diamond Discus";
+
+    if ((fish.palette === 21) && (fish.shape === 8) && (fish.tail === 7) &&
+        (fish.fins === 4) && (fish.stripes === 21) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Brigham's Snapper";
+
+    if ((fish.palette === 8) && (fish.shape === 2) && (fish.tail === 6) &&
+        (fish.fins === 1) && (fish.stripes === 15) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Clownfish";
+
+    if ((fish.palette === 3) && (fish.shape === 2) && (fish.tail === 7) &&
+        (fish.fins === 3) && (fish.stripes === 12) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Juvenile Golden Trevally";
+
+    if ((fish.palette === 17) && (fish.shape === 5) && (fish.tail === 3) &&
+        (fish.fins === 8) && (fish.stripes === 5) && (fish.eyePercentage === 40) && (fish.pupilPercentage === 40))
+        return "Orange-red Discus";
+
+    if ((fish.palette === 20) && (fish.shape === 7) && (fish.tail === 4) &&
+        (fish.fins === 10) && (fish.stripes === 0) && (fish.eyePercentage === 35) && (fish.pupilPercentage === 40))
+        return "Purple Tang";
+
+    if ((fish.palette === 9) && (fish.shape === 1) && (fish.tail === 7) &&
+        (fish.fins === 2) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Red Tail Shark";
+
+    if ((fish.palette === 37) && (fish.shape === 11) && (fish.tail === 11) &&
+        (fish.fins === 13) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 50))
+        return "Rusty Jobfish";
+
+    if ((fish.palette === 11) && (fish.shape === 9) && (fish.tail === 7) &&
+        (fish.fins === 5) && (fish.stripes === 17) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Siamese Algae Eater";
+
+    if ((fish.palette === 14) && (fish.shape === 2) && (fish.tail === 7) &&
+        (fish.fins === 7) && (fish.stripes === 19) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Smallmouth Grunt";
+
+    if ((fish.palette === 36) && (fish.shape === 10) && (fish.tail === 10) &&
+        (fish.fins === 12) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Yellowfin Tuna";
+
+    if ((fish.palette === 10) && (fish.shape === 1) && (fish.tail === 4) &&
+        (fish.fins === 4) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Yellow Tail Acei Cichlid";
+
+    if ((fish.palette === 12) && (fish.shape === 3) && (fish.tail === 8) &&
+        (fish.fins === 11) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return "Yellow Tail Damselfish";
+
+    if ((fish.palette === 19) && (fish.shape === 7) && (fish.tail === 4) &&
+        (fish.fins === 10) && (fish.stripes === 0) && (fish.eyePercentage === 35) && (fish.pupilPercentage === 40))
+        return "Yellow Tang";
+
+    if ((fish.palette === 13) && (fish.shape === 5) && (fish.tail === 3) &&
+        (fish.fins === 6) && (fish.stripes === 4) && (fish.eyePercentage === 40) && (fish.pupilPercentage === 40))
+        return "Zebra Angelfish";
+
+    return "";
+}
+
+
+export function objectNumberToObjectGeneralName(objectNumber) {
+    switch (objectNumber) {
+        case 242:
+        case 245: return "Answer ball";
+
+        case 2:
+        case 4:
+        case 5:
+        case 8:
+        case 9:
+        case 28:
+        case 40:
+        case 82:
+        case 83:
+        case 93:
+        case 94:
+        case 98:
+        case 203:
+        case 253:
+        case 256: return "Ball";
+
+        case 36:
+        case 117: return "Bomb";
+
+        case 186:
+        case 187:
+        case 188:
+        case 189:
+        case 190:
+        case 191:
+        case 226:
+        case 227: return "Chord";
+
+        case 171:
+        case 172:
+        case 173: return "Conveyor belt";
+
+        case 97:
+        case 208: return "Copier";
+
+        case 133:
+        case 134:
+        case 135: return "Diamond";
+
+        case 30:
+        case 169: return "Door";
+
+        case 6:
+        case 7:
+        case 106:
+        case 107: return "Elevator";
+
+        case 246:
+        case 247: return "Elevator direction changer";
+
+        case 27:
+        case 243: return "Fish";
+
+        case 250:
+        case 251: return "Fish food";
+
+        case 109:
+        case 110:
+        case 111:
+        case 112: return "Force";
+
+        case 89:
+        case 183: return "Game rotator";
+
+        case 184:
+        case 185: return "Gravity changer";
+
+        case 145:
+        case 146:
+        case 147:
+        case 148: return "Half stone";
+
+        case 228:
+        case 229:
+        case 230:
+        case 231:
+        case 232:
+        case 233: return "Interval";
+
+        case 126:
+        case 127:
+        case 128:
+        case 129:
+        case 130: return "Light blue bar";
+
+        case 95:
+        case 96: return "Mirror";
+
+        case 10:
+        case 11:
+        case 87:
+        case 88: return "One direction port";
+
+        case 159:
+        case 161:
+        case 163:
+        case 165: return "Piston";
+
+        case 160:
+        case 162:
+        case 164:
+        case 166: return "Piston extended part";
+
+        case 100:
+        case 101:
+        case 102:
+        case 103:
+        case 104: return "Purple bar";
+
+        case 141:
+        case 142:
+        case 143:
+        case 144: return "Quarter circle stone";
+
+        case 149:
+        case 150:
+        case 151:
+        case 152: return "Quarter stone";
+
+        case 3:
+        case 140:
+        case 168:
+        case 192:
+        case 195:
+        case 196:
+        case 197:
+        case 201:
+        case 202:
+        case 204:
+        case 254: return "Small ball";
+
+        case 174:
+        case 175:
+        case 176:
+        case 177: return "Spike";
+
+        case 179:
+        case 180:
+        case 181:
+        case 182: return "Star";
+
+        case 153:
+        case 154: return "Stone pattern";
+
+        case 155:
+        case 200: return "Synchroniser";
+
+        case 31:
+        case 92:
+        case 170: return "Teleport";
+
+        case 193:
+        case 194: return "Teleports creator";
+
+        case 13:
+        case 14: return "Trap door";
+
+        case 15:
+        case 16:
+        case 17:
+        case 18: return "Triangle stone";
+
+        case 113:
+        case 114:
+        case 206: return "Water surface";
+
+        case 121:
+        case 122:
+        case 123:
+        case 124:
+        case 125: return "Yellow bar";
+
+        case 84:
+        case 85:
+        case 86:
+        case 138:
+        case 139: return "Yellow direction changer";
+
+        default:
+            return objectNumberToObjectName(objectNumber);
+    }
+}
+
 export function objectNumberToObjectName(objectNumber) {
     switch (objectNumber) {
         case 1: return "Stone";

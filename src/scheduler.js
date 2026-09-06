@@ -399,12 +399,18 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             if (gameVars.electricityCounter > 110) {
                 gameVars.electricityCounter = 0;
             }
-            gameInfo.electricityActive = false;
-            if (
-                (gameVars.electricityCounter > 50 && gameVars.electricityCounter < 60) ||
-                (gameVars.electricityCounter > 90 && gameVars.electricityCounter < 100)
-            ) {
-                gameInfo.electricityActive = true;
+            if (gameInfo.electricityMode === "pattern") {
+                if (
+                    (gameVars.electricityCounter > 50 && gameVars.electricityCounter < 60) ||
+                    (gameVars.electricityCounter > 90 && gameVars.electricityCounter < 100)
+                ) {
+                    gameInfo.electricityActive = true;
+                } else {
+                    gameInfo.electricityActive = false;
+                }
+            }
+            if ((gameInfo.electricityMode === "command") && (gameVars.electricityCounter <= 0)) {
+                gameInfo.electricityActive = false;
             }
             if (!gameVars.elecActiveSaved && gameInfo.electricityActive) {
                 addSound("electricity");
@@ -416,7 +422,13 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
                 updateCanvas = true;
             }
             gameVars.elecActiveSaved = gameInfo.electricityActive;
-            gameVars.electricityCounter++;
+            if (gameInfo.electricityMode === "command") {
+                if (gameVars.electricityCounter > 0) {
+                    gameVars.electricityCounter--;
+                }
+            } else {
+                gameVars.electricityCounter++;
+            }
         }
 
         if (movePinkBalls(backData, gameData, gameInfo, gameVars)) {

@@ -1,24 +1,41 @@
-$condition: 4, 9, stripes = 16
-$range: 4, 9, 6
-$pistonmode: 8, 2, momentary
-$sticky: 8, 2, yes
-$fins: 2, 8, 1
-$palette: 2, 8, 8
-$stripes: 2, 8, 15
-$tail: 2, 8, 6
-$fins: 6, 7, 1
-$palette: 6, 7, 8
-$stripes: 6, 7, 16
-$tail: 6, 7, 6
-$background: 6, 7, 1, 1, 23
-$background: 2, 8, 1, 1, 23
-1111111111
-12      31
-11     5Ö1
-1        1
-1wwwwwwww1
-1wwwwwwww1
-1wwwwwwww1
-1wwwwwҼww1
-1wҼwwwwww1
-1111ђ11111
+$stonepattern: 2
+$electricitymode: command
+$condition: 18, 19, name = tropical fish
+$movable: 18, 19, no
+$range: 18, 19, 14
+$target: 18, 19, command
+$value: 18, 19, activateelectricity, 15
+$fins: 16, 11, 13
+$palette: 16, 11, 38
+$pupilpercentage: 16, 11, 35
+$shape: 16, 11, 11
+$stripes: 16, 11, 18
+$tail: 16, 11, 5
+$fins: 25, 13, 13
+$palette: 25, 13, 38
+$pupilpercentage: 25, 13, 35
+$shape: 25, 13, 11
+$stripes: 25, 13, 18
+$tail: 25, 13, 5
+$background: 16, 11, 1, 1, 23
+$background: 25, 13, 1, 1, 23
+11111111111111111111111111111111
+1      !                       1
+1                              1
+1                              1
+1                              1
+1            1WWWWWWWWWWWWWWWWW1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwҼwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwҼwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+1            1wwwwwwwwwwwwwwwww1
+13           1wwwwwwwwwwwwwwwww1
+1   2        1wwwwwwwwwwwwwwwww1
+111111111111111111ђ1111111111111

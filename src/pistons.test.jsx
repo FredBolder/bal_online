@@ -7,13 +7,13 @@ import { copy2dArray } from "./utils.js";
 describe("Pistons", () => {
     let defaultGameInfo;
     let defaultGameVars;
- 
+
     beforeEach(() => {
         defaultGameInfo = {};
         initGameInfo(defaultGameInfo);
         defaultGameVars = {};
         initGameVars(defaultGameVars);
-    });    
+    });
 
     const defaultPistonGroupsActivated = [];
     for (let i = 0; i < 32; i++) {
@@ -497,16 +497,40 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 3, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting", 
-                    value: "$message: Detected", display: "default", activated: false, activatedCount: 0, 
-                    sequence: false, movable: true, condition: "", text: "", group: 1 },
-            ],        
+                {
+                    x: 3, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting",
+                    value: "$message: Detected", display: "default", activated: false, activatedCount: 0,
+                    sequence: false, movable: true, condition: "", text: "", group: 1
+                },
+            ],
             pushers: [{ x: 3, y: 3, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 2 }],
+            tropicalFish: [
+                {
+                    x: 3,
+                    y: 1,
+                    xStart: 3,
+                    yStart: 1,
+                    maxDistX: 0,
+                    direction: 6,
+                    palette: 13,
+                    shape: 5,
+                    tail: 3,
+                    fins: 6,
+                    stripes: 4,
+                    eyePercentage: 40,
+                    pupilPercentage: 40,
+                    blocked: false,
+                    outOfWater: 0,
+                    isDead: false,
+                    counter: 0,
+                    answer: "fish"
+                }
+            ],
         }
         const input = [
-            [1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 3, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 0, 0, 1, 1, 1, 1],
+            [1, 3, 1, 243, 0, 1, 28, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 0, 1],
             [1, 0, 0, 209, 0, 0, 0, 0, 1],
             [1, 2, 0, 255, 0, 0, 242, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -531,6 +555,20 @@ describe("Pistons", () => {
         info = checkCondition(input, gameInfo, 1, 1, "name = small green ball")
         expect(info).toBe(1);
         info = checkCondition(input, gameInfo, 6, 4, "delete = false")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 1, "name = purple ball")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 1, "generalName = ball")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 3, 1, "name = Tropical fish")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 3, 1, "generalName = Fish")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 3, 1, "fishName = zebra angelfish")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 3, 1, "generalName = Piston")
+        expect(info).toBe(0);
+        info = checkCondition(input, gameInfo, 3, 1, "generalName <> Piston")
         expect(info).toBe(1);
     });
 

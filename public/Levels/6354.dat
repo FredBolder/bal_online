@@ -1,6 +1,7 @@
 $extra: 1
 $stonepattern: 2
 $pistonmode: 6, 4, repeatslow
+$eyepercentage: 4, 7, 40
 $fins: 4, 7, 8
 $palette: 4, 7, 17
 $shape: 4, 7, 5

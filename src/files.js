@@ -256,6 +256,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameInfo.electricityMode !== "pattern") {
+        line = `$electricitymode: ${gameInfo.electricityMode}`;
+        lines.push(line);
+    }
     if (gameInfo.hasCoilSpring) {
         line = `$has: coilspring`;
         lines.push(line);
@@ -612,16 +616,28 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
         const fish = gameInfo.tropicalFish[i];
-        if (fish.maxDistX > 0) {
-            line = `$maxdistx: ${fish.x}, ${fish.y}, ${fish.maxDistX}`;
+        if (fish.answer !== "fish") {
+            line = `$answer: ${fish.x}, ${fish.y}, ${fish.answer}`;
+            lines.push(line);
+        }
+        if (fish.eyePercentage !== 50) {
+            line = `$eyepercentage: ${fish.x}, ${fish.y}, ${fish.eyePercentage}`;
             lines.push(line);
         }
         if (fish.fins !== 3) {
             line = `$fins: ${fish.x}, ${fish.y}, ${fish.fins}`;
             lines.push(line);
         }
+        if (fish.maxDistX > 0) {
+            line = `$maxdistx: ${fish.x}, ${fish.y}, ${fish.maxDistX}`;
+            lines.push(line);
+        }
         if (fish.palette !== 2) {
             line = `$palette: ${fish.x}, ${fish.y}, ${fish.palette}`;
+            lines.push(line);
+        }
+        if (fish.pupilPercentage !== 40) {
+            line = `$pupilpercentage: ${fish.x}, ${fish.y}, ${fish.pupilPercentage}`;
             lines.push(line);
         }
         if (fish.shape !== 2) {
@@ -632,16 +648,8 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$stripes: ${fish.x}, ${fish.y}, ${fish.stripes}`;
             lines.push(line);
         }
-        if (fish.pupilPercentage !== 40) {
-            line = `$pupilpercentage: ${fish.x}, ${fish.y}, ${fish.pupilPercentage}`;
-            lines.push(line);
-        }
         if (fish.tail !== 2) {
             line = `$tail: ${fish.x}, ${fish.y}, ${fish.tail}`;
-            lines.push(line);
-        }
-        if (fish.answer !== "fish") {
-            line = `$answer: ${fish.x}, ${fish.y}, ${fish.answer}`;
             lines.push(line);
         }
     }
