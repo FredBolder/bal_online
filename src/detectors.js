@@ -12,6 +12,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let absX = 0;
     let absY = 0;
     let checkSettingsResult = "";
+    let fish = null;
     let idx = -1;
     const invalidInt = -10000;
     const intValues = [];
@@ -269,7 +270,8 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 if (idx < 0) {
                     return;
                 }
-                presetTropicalFish(gameInfo, idx, objName);
+                fish = gameInfo.tropicalFish[idx];
+                presetTropicalFish(fish, objName);
             }
         }
         if (cmd === "delete") {

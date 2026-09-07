@@ -1,28 +1,53 @@
-import { inWater } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue, inWater } from "./balUtils.js";
 import { dist } from "./graphicUtils.js";
 import { getConnectedWater } from "./water.js";
 
-export function fishIsCloseToBlueBall(gameInfo) {
-  let result = false;
+export function fishIsCloseToBlueBall(gameData, gameInfo, x, y) {
+  let idx = -1;
+  let list = "";
+  const points = [];
 
-  for (let i = 0; i < gameInfo.redFish.length && !result; i++) {
-    const fish = gameInfo.redFish[i];
-    if (!fish.isDead) {
-      if (!result && (fish.y === gameInfo.blueBall1.y) && (Math.abs(fish.x - gameInfo.blueBall1.x) <= 1)) {
-        result = true;
-      }
-      if (!result && (fish.x === gameInfo.blueBall1.x) && (Math.abs(fish.y - gameInfo.blueBall1.y) <= 1)) {
-        result = true;
-      }
-      if (!result && gameInfo.twoBlue && (fish.y === gameInfo.blueBall2.y) && (Math.abs(fish.x - gameInfo.blueBall2.x) <= 1)) {
-        result = true;
-      }
-      if (!result && gameInfo.twoBlue && (fish.x === gameInfo.blueBall2.x) && (Math.abs(fish.y - gameInfo.blueBall2.y) <= 1)) {
-        result = true;
-      }
+  points.push({ x: x, y: y + 1 });
+  points.push({ x: x, y: y - 1 });
+  points.push({ x: x + 1, y: y });
+  points.push({ x: x - 1, y: y });
+
+  for (let i = 0; i < points.length; i++) {
+    const xp = points[i].x;
+    const yp = points[i].y;
+    const objectNumber = getGameDataValue(gameData, xp, yp);
+    switch (objectNumber) {
+      case 27:
+        list = "redFish";
+        break;
+      case 243:
+        list = "tropicalFish";
+        break;
+      default:
+        list = "";
+        break;
+    }
+    if (list === "") {
+      continue;
+    }
+    idx = findElementByCoordinates(xp, yp, gameInfo[list]);
+    if (idx < 0) {
+      continue;
+    }
+    const fish = gameInfo[list][idx];
+    if (fish.isDead) {
+      continue;
+    }
+    if (objectNumber === 243) {
+      // Electric Catfish
+      if ((fish.palette === 38) && (fish.shape === 12) && (fish.tail === 5) &&
+        (fish.fins === 14) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 35))
+        return true;
+    } else {
+      return true;
     }
   }
-  return result;
+  return false;
 }
 
 export function freeToSwim(x1, x2, y, backData, gameData, clownFish) {

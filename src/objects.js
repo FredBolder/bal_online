@@ -34,6 +34,10 @@ export function coordinatesToFishName(gameData, gameInfo, x, y) {
     if ((fish.palette === 8) && (fish.shape === 2) && (fish.tail === 6) &&
         (fish.fins === 1) && (fish.stripes === 15) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
         return "Clownfish";
+        
+    if ((fish.palette === 38) && (fish.shape === 12) && (fish.tail === 5) &&
+        (fish.fins === 14) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 35))
+        return "Electric Catfish";
 
     if ((fish.palette === 3) && (fish.shape === 2) && (fish.tail === 7) &&
         (fish.fins === 3) && (fish.stripes === 12) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))

@@ -34,8 +34,12 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
         }
     }
 
-    if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && (gameInfo.redFish.length > 0)) {
-        if (fishIsCloseToBlueBall(gameInfo)) {
+    if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && ((gameInfo.redFish.length > 0) || (gameInfo.tropicalFish.length > 0))) {
+        if (fishIsCloseToBlueBall(gameData, gameInfo, gameInfo.blueBall1.x, gameInfo.blueBall1.y)) {
+            gameVars.gameOver = true;
+        }
+        if (!gameVars.gameOver && gameInfo.twoBlue && 
+            fishIsCloseToBlueBall(gameData, gameInfo, gameInfo.blueBall2.x, gameInfo.blueBall2.y)) {
             gameVars.gameOver = true;
         }
     }

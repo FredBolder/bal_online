@@ -91,10 +91,10 @@ $pupilpercentage: 7, 3, 50
 $shape: 7, 3, 11
 $stripes: 7, 3, 18
 $tail: 7, 3, 11
-$fins: 8, 3, 13
+$fins: 8, 3, 14
 $palette: 8, 3, 38
 $pupilpercentage: 8, 3, 35
-$shape: 8, 3, 11
+$shape: 8, 3, 12
 $stripes: 8, 3, 18
 $tail: 8, 3, 5
 $background: 2, 2, 12, 1, 23

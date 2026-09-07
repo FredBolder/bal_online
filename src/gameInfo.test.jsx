@@ -120,6 +120,5 @@ describe("Game info", () => {
         expect(getGameInfo(inputBack, input)).toEqual(expectedOutput);
     });
 
-
     // Insert new tests here
 });

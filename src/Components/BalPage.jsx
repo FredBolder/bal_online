@@ -2632,6 +2632,7 @@ function BalPage() {
   }
 
   function handleGameCanvasClick(e) {
+    let fish = null;
     let idx = -1;
     let info = "";
     let move = false;
@@ -2916,63 +2917,64 @@ function BalPage() {
                 addObject(backData, gameData, gameInfo, column, row, 243);
                 idx = findElementByCoordinates(column, row, gameInfo.tropicalFish);
                 if (idx >= 0) {
+                  fish = gameInfo.tropicalFish[idx];
                   switch (createLevelObject) {
                     case 2154:
-                      presetTropicalFish(gameInfo, idx, "clownfish");
+                      presetTropicalFish(fish, "clownfish");
                       break;
                     case 2155:
-                      presetTropicalFish(gameInfo, idx, "redtailshark");
+                      presetTropicalFish(fish, "redtailshark");
                       break;
                     case 2156:
-                      presetTropicalFish(gameInfo, idx, "juvenilegoldentrevally");
+                      presetTropicalFish(fish, "juvenilegoldentrevally");
                       break;
                     case 2157:
-                      presetTropicalFish(gameInfo, idx, "yellowtailaceicichlid");
+                      presetTropicalFish(fish, "yellowtailaceicichlid");
                       break;
                     case 2158:
-                      presetTropicalFish(gameInfo, idx, "siamesealgaeeater");
+                      presetTropicalFish(fish, "siamesealgaeeater");
                       break;
                     case 2159:
-                      presetTropicalFish(gameInfo, idx, "yellowtaildamselfish");
+                      presetTropicalFish(fish, "yellowtaildamselfish");
                       break;
                     case 2160:
-                      presetTropicalFish(gameInfo, idx, "zebraangelfish");
+                      presetTropicalFish(fish, "zebraangelfish");
                       break;
                     case 2161:
-                      presetTropicalFish(gameInfo, idx, "smallmouthgrunt");
+                      presetTropicalFish(fish, "smallmouthgrunt");
                       break;
                     case 2162:
-                      presetTropicalFish(gameInfo, idx, "bicoloranthias");
+                      presetTropicalFish(fish, "bicoloranthias");
                       break;
                     case 2163:
-                      presetTropicalFish(gameInfo, idx, "bluediamonddiscus");
+                      presetTropicalFish(fish, "bluediamonddiscus");
                       break;
                     case 2164:
-                      presetTropicalFish(gameInfo, idx, "orangereddiscus");
+                      presetTropicalFish(fish, "orangereddiscus");
                       break;
                     case 2165:
-                      presetTropicalFish(gameInfo, idx, "blackneontetra");
+                      presetTropicalFish(fish, "blackneontetra");
                       break;
                     case 2166:
-                      presetTropicalFish(gameInfo, idx, "yellowtang");
+                      presetTropicalFish(fish, "yellowtang");
                       break;
                     case 2167:
-                      presetTropicalFish(gameInfo, idx, "purpletang");
+                      presetTropicalFish(fish, "purpletang");
                       break;
                     case 2168:
-                      presetTropicalFish(gameInfo, idx, "brighamssnapper");
+                      presetTropicalFish(fish, "brighamssnapper");
                       break;
                     case 2169:
-                      presetTropicalFish(gameInfo, idx, "bluechromis");
+                      presetTropicalFish(fish, "bluechromis");
                       break;
                     case 2170:
-                      presetTropicalFish(gameInfo, idx, "yellowfintuna");
+                      presetTropicalFish(fish, "yellowfintuna");
                       break;
                     case 2171:
-                      presetTropicalFish(gameInfo, idx, "rustyjobfish");
+                      presetTropicalFish(fish, "rustyjobfish");
                       break;
                     case 2172:
-                      presetTropicalFish(gameInfo, idx, "electriccatfish");
+                      presetTropicalFish(fish, "electriccatfish");
                       break;
                     default:
                       break;

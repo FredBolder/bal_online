@@ -4518,7 +4518,7 @@ function drawLevel(
         case 2172:
           // Tropical fish - Electric Catfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 38, 11, 5, 13, 18, 50, 35);
+          drawFish(ctx, xc, yc, w1, false, 38, 12, 5, 14, 18, 50, 35);
           break;
         case 2200:
           drawWaterColors();

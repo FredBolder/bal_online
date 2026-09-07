@@ -8,9 +8,9 @@ import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 13;
+export const tropicalFishFinVariations = 14;
 export const tropicalFishPalettes = 38;
-export const tropicalFishShapes = 11;
+export const tropicalFishShapes = 12;
 export const tropicalFishStripes = 21;
 export const tropicalFishTails = 11;
 
@@ -133,6 +133,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
         case 11:
             // Rusty Jobfish
             bodyHeight = h * 0.25;
+            bodyLength = w * 0.74;
+            break;
+        case 12:
+            // Electric Catfish
+            bodyHeight = h * 0.2;
             bodyLength = w * 0.74;
             break;
         default:
@@ -280,13 +285,27 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, palette, shape, ta
             };
             noseYOffset = bodyHeight * 0.1;
             break;
+        case 12:
+            // Electric Catfish
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.8,
+                topFrontBodyCpDist: 0.2,
+                topRearBodyCpPos: 0.5,
+                topRearBodyCpDist: 0.1,
+                bottomFrontBodyCpPos: 0.8,
+                bottomFrontBodyCpDist: 0.25,
+                bottomRearBodyCpPos: 0.5,
+                bottomRearBodyCpDist: 0.1,
+            };
+            noseYOffset = bodyHeight * 0.1;
+            break;
         default:
             bodyCurvature = {
                 topFrontBodyCpPos: 0.7, // 0 = left, 1 = right (towards head)
                 topFrontBodyCpDist: 0.3,
                 topRearBodyCpPos: 0.5,
                 topRearBodyCpDist: 0.1,
-                bottomFrontBodyCpPos: 0.7,
+                bottomFrontBodyCpPos: 0.5,
                 bottomFrontBodyCpDist: 0.3,
                 bottomRearBodyCpPos: 0.5,
                 bottomRearBodyCpDist: 0.1,
@@ -628,197 +647,197 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
     return update;
 }
 
-export function presetTropicalFish(gameInfo, idx, preset) {
+export function presetTropicalFish(fish, preset) {
     switch (preset) {
         case "bicoloranthias":
             // Bicolor Anthias
-            gameInfo.tropicalFish[idx].palette = 15;
-            gameInfo.tropicalFish[idx].shape = 1;
-            gameInfo.tropicalFish[idx].tail = 9;
-            gameInfo.tropicalFish[idx].fins = 4;
-            gameInfo.tropicalFish[idx].stripes = 18;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 15;
+            fish.shape = 1;
+            fish.tail = 9;
+            fish.fins = 4;
+            fish.stripes = 18;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "blackneontetra":
             // Black Neon Tetra
-            gameInfo.tropicalFish[idx].palette = 18;
-            gameInfo.tropicalFish[idx].shape = 6;
-            gameInfo.tropicalFish[idx].tail = 7;
-            gameInfo.tropicalFish[idx].fins = 9;
-            gameInfo.tropicalFish[idx].stripes = 20;
-            gameInfo.tropicalFish[idx].eyePercentage = 55;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 18;
+            fish.shape = 6;
+            fish.tail = 7;
+            fish.fins = 9;
+            fish.stripes = 20;
+            fish.eyePercentage = 55;
+            fish.pupilPercentage = 40;
             break;
         case "bluechromis":
             // Blue Chromis
-            gameInfo.tropicalFish[idx].palette = 35;
-            gameInfo.tropicalFish[idx].shape = 1;
-            gameInfo.tropicalFish[idx].tail = 9;
-            gameInfo.tropicalFish[idx].fins = 4;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 60;
+            fish.palette = 35;
+            fish.shape = 1;
+            fish.tail = 9;
+            fish.fins = 4;
+            fish.stripes = 0;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 60;
             break;
         case "bluediamonddiscus":
             // Blue Diamond Discus
-            gameInfo.tropicalFish[idx].palette = 16;
-            gameInfo.tropicalFish[idx].shape = 5;
-            gameInfo.tropicalFish[idx].tail = 4;
-            gameInfo.tropicalFish[idx].fins = 8;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 40;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 16;
+            fish.shape = 5;
+            fish.tail = 4;
+            fish.fins = 8;
+            fish.stripes = 0;
+            fish.eyePercentage = 40;
+            fish.pupilPercentage = 40;
             break;
         case "brighamssnapper":
             // Brigham's Snapper
-            gameInfo.tropicalFish[idx].palette = 21;
-            gameInfo.tropicalFish[idx].shape = 8;
-            gameInfo.tropicalFish[idx].tail = 7;
-            gameInfo.tropicalFish[idx].fins = 4;
-            gameInfo.tropicalFish[idx].stripes = 21;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 21;
+            fish.shape = 8;
+            fish.tail = 7;
+            fish.fins = 4;
+            fish.stripes = 21;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "clownfish":
             // Clownfish
-            gameInfo.tropicalFish[idx].palette = 8;
-            gameInfo.tropicalFish[idx].shape = 2;
-            gameInfo.tropicalFish[idx].tail = 6;
-            gameInfo.tropicalFish[idx].fins = 1;
-            gameInfo.tropicalFish[idx].stripes = 15;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 8;
+            fish.shape = 2;
+            fish.tail = 6;
+            fish.fins = 1;
+            fish.stripes = 15;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "electriccatfish":
             // Electric Catfish
-            gameInfo.tropicalFish[idx].palette = 38;
-            gameInfo.tropicalFish[idx].shape = 11;
-            gameInfo.tropicalFish[idx].tail = 5;
-            gameInfo.tropicalFish[idx].fins = 13;
-            gameInfo.tropicalFish[idx].stripes = 18;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 35;
+            fish.palette = 38;
+            fish.shape = 12;
+            fish.tail = 5;
+            fish.fins = 14;
+            fish.stripes = 18;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 35;
             break;
         case "juvenilegoldentrevally":
             // Juvenile Golden Trevally
-            gameInfo.tropicalFish[idx].palette = 3;
-            gameInfo.tropicalFish[idx].shape = 2;
-            gameInfo.tropicalFish[idx].tail = 7;
-            gameInfo.tropicalFish[idx].fins = 3;
-            gameInfo.tropicalFish[idx].stripes = 12;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 3;
+            fish.shape = 2;
+            fish.tail = 7;
+            fish.fins = 3;
+            fish.stripes = 12;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "orangereddiscus":
             // Orange-red Discus
-            gameInfo.tropicalFish[idx].palette = 17;
-            gameInfo.tropicalFish[idx].shape = 5;
-            gameInfo.tropicalFish[idx].tail = 3;
-            gameInfo.tropicalFish[idx].fins = 8;
-            gameInfo.tropicalFish[idx].stripes = 5;
-            gameInfo.tropicalFish[idx].eyePercentage = 40;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 17;
+            fish.shape = 5;
+            fish.tail = 3;
+            fish.fins = 8;
+            fish.stripes = 5;
+            fish.eyePercentage = 40;
+            fish.pupilPercentage = 40;
             break;
         case "purpletang":
             // Purple Tang
-            gameInfo.tropicalFish[idx].palette = 20;
-            gameInfo.tropicalFish[idx].shape = 7;
-            gameInfo.tropicalFish[idx].tail = 4;
-            gameInfo.tropicalFish[idx].fins = 10;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 35;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 20;
+            fish.shape = 7;
+            fish.tail = 4;
+            fish.fins = 10;
+            fish.stripes = 0;
+            fish.eyePercentage = 35;
+            fish.pupilPercentage = 40;
             break;
         case "redtailshark":
             // Red Tail Shark
-            gameInfo.tropicalFish[idx].palette = 9;
-            gameInfo.tropicalFish[idx].shape = 1;
-            gameInfo.tropicalFish[idx].tail = 7;
-            gameInfo.tropicalFish[idx].fins = 2;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 9;
+            fish.shape = 1;
+            fish.tail = 7;
+            fish.fins = 2;
+            fish.stripes = 0;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "rustyjobfish":
             // Rusty Jobfish
-            gameInfo.tropicalFish[idx].palette = 37;
-            gameInfo.tropicalFish[idx].shape = 11;
-            gameInfo.tropicalFish[idx].tail = 11;
-            gameInfo.tropicalFish[idx].fins = 13;
-            gameInfo.tropicalFish[idx].stripes = 18;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 50;
+            fish.palette = 37;
+            fish.shape = 11;
+            fish.tail = 11;
+            fish.fins = 13;
+            fish.stripes = 18;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 50;
             break;
         case "siamesealgaeeater":
             // Siamese Algae Eater
-            gameInfo.tropicalFish[idx].palette = 11;
-            gameInfo.tropicalFish[idx].shape = 9;
-            gameInfo.tropicalFish[idx].tail = 7;
-            gameInfo.tropicalFish[idx].fins = 5;
-            gameInfo.tropicalFish[idx].stripes = 17;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 11;
+            fish.shape = 9;
+            fish.tail = 7;
+            fish.fins = 5;
+            fish.stripes = 17;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "smallmouthgrunt":
             // Smallmouth Grunt
-            gameInfo.tropicalFish[idx].palette = 14;
-            gameInfo.tropicalFish[idx].shape = 2;
-            gameInfo.tropicalFish[idx].tail = 7;
-            gameInfo.tropicalFish[idx].fins = 7;
-            gameInfo.tropicalFish[idx].stripes = 19;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 14;
+            fish.shape = 2;
+            fish.tail = 7;
+            fish.fins = 7;
+            fish.stripes = 19;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "yellowfintuna":
             // Yellowfin Tuna
-            gameInfo.tropicalFish[idx].palette = 36;
-            gameInfo.tropicalFish[idx].shape = 10;
-            gameInfo.tropicalFish[idx].tail = 10;
-            gameInfo.tropicalFish[idx].fins = 12;
-            gameInfo.tropicalFish[idx].stripes = 18;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 36;
+            fish.shape = 10;
+            fish.tail = 10;
+            fish.fins = 12;
+            fish.stripes = 18;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "yellowtailaceicichlid":
             // Yellow Tail Acei Cichlid
-            gameInfo.tropicalFish[idx].palette = 10;
-            gameInfo.tropicalFish[idx].shape = 1;
-            gameInfo.tropicalFish[idx].tail = 4;
-            gameInfo.tropicalFish[idx].fins = 4;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 10;
+            fish.shape = 1;
+            fish.tail = 4;
+            fish.fins = 4;
+            fish.stripes = 0;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "yellowtaildamselfish":
             // Yellow Tail Damselfish
-            gameInfo.tropicalFish[idx].palette = 12;
-            gameInfo.tropicalFish[idx].shape = 3;
-            gameInfo.tropicalFish[idx].tail = 8;
-            gameInfo.tropicalFish[idx].fins = 11;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 50;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 12;
+            fish.shape = 3;
+            fish.tail = 8;
+            fish.fins = 11;
+            fish.stripes = 0;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
             break;
         case "yellowtang":
             // Yellow Tang
-            gameInfo.tropicalFish[idx].palette = 19;
-            gameInfo.tropicalFish[idx].shape = 7;
-            gameInfo.tropicalFish[idx].tail = 4;
-            gameInfo.tropicalFish[idx].fins = 10;
-            gameInfo.tropicalFish[idx].stripes = 0;
-            gameInfo.tropicalFish[idx].eyePercentage = 35;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 19;
+            fish.shape = 7;
+            fish.tail = 4;
+            fish.fins = 10;
+            fish.stripes = 0;
+            fish.eyePercentage = 35;
+            fish.pupilPercentage = 40;
             break;
         case "zebraangelfish":
             // Zebra Angelfish
-            gameInfo.tropicalFish[idx].palette = 13;
-            gameInfo.tropicalFish[idx].shape = 5;
-            gameInfo.tropicalFish[idx].tail = 3;
-            gameInfo.tropicalFish[idx].fins = 6;
-            gameInfo.tropicalFish[idx].stripes = 4;
-            gameInfo.tropicalFish[idx].eyePercentage = 40;
-            gameInfo.tropicalFish[idx].pupilPercentage = 40;
+            fish.palette = 13;
+            fish.shape = 5;
+            fish.tail = 3;
+            fish.fins = 6;
+            fish.stripes = 4;
+            fish.eyePercentage = 40;
+            fish.pupilPercentage = 40;
             break;
         default:
             break;

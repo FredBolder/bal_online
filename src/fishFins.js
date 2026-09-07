@@ -1,6 +1,7 @@
 import { getBodyBottomFrame, getBodyTopFrame } from "./fishBody.js";
 import { globalVars } from "./glob.js";
 import { cubicFromMid, midPoint } from "./graphicUtils.js";
+import { polar } from "./utils.js";
 
 function normalize(v) {
     const L = Math.hypot(v.x, v.y) || 1;
@@ -16,6 +17,42 @@ function normalizeFinT(startT, endT, isReversed) {
         [startT, endT] = [endT, startT];
     }
     return { startT, endT };
+}
+
+function drawBarbelAlongCurve(ctx, bodyCurves, opts) {
+    let {
+        startT,
+        dist,
+        angle = 0,
+        curve = 0,
+        frameFunc
+    } = opts;
+
+    const isBottom = frameFunc === getBodyBottomFrame;
+    const t = isBottom ? 1 - startT : startT;
+
+    const { p } = frameFunc(bodyCurves, t);
+    const startPoint = { x: p.x, y: p.y };
+
+    const { p: pStart } = getBodyTopFrame(bodyCurves, 0);
+    const { p: pEnd } = getBodyTopFrame(bodyCurves, 1);
+    const bodyLength = Math.abs(pStart.x - pEnd.x);
+    const barbelLength = dist * bodyLength;
+
+    const endPoint = polar(startPoint.x, startPoint.y, angle, barbelLength);
+    const middle = midPoint(startPoint, endPoint);
+    const control = polar(middle.x, middle.y, angle - (90 * Math.sign(curve)), barbelLength * Math.abs(curve));
+
+    ctx.beginPath();
+    ctx.moveTo(startPoint.x, startPoint.y);
+    ctx.quadraticCurveTo(
+        control.x,
+        control.y,
+        endPoint.x,
+        endPoint.y
+    );
+
+    ctx.stroke();
 }
 
 export function drawPointedFin(ctx, bodyCurves, opts) {
@@ -1033,6 +1070,71 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 5
             });
             break;
+        case 14:
+            // Electric Catfish
+            setColors(true);
+
+            // Small adipose fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.65,
+                endT: 0.9,
+                height: bodyHeight * 0.3,
+                taper: 1,
+                lean: 2,
+                overlap: bodyHeight * 0.1,
+                steps: 5
+            });
+
+            setColors(false);
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.5,
+                endT: 0.6,
+                height: bodyHeight * 0.35,
+                taper: 1,
+                lean: 0.5,
+                overlap: bodyHeight * 0.1,
+                steps: 7
+            });
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.65,
+                endT: 0.85,
+                height: bodyHeight * 0.35,
+                taper: 1,
+                lean: 1.5,
+                overlap: bodyHeight * 0.1,
+                steps: 5
+            });
+
+            // Barbels
+            drawBarbelAlongCurve(ctx, bodyCurves, {
+                startT: 0.05,
+                dist: 0.18,
+                angle: 240,
+                curve: -0.4,
+                frameFunc: getBodyTopFrame
+            });
+            drawBarbelAlongCurve(ctx, bodyCurves, {
+                startT: 0.05,
+                dist: 0.15,
+                angle: 90,
+                curve: 0.2,
+                frameFunc: getBodyBottomFrame
+            });
+            drawBarbelAlongCurve(ctx, bodyCurves, {
+                startT: 0.1,
+                dist: 0.2,
+                angle: 120,
+                curve: 0.4,
+                frameFunc: getBodyBottomFrame
+            });
+            break;
         default:
             break;
     }
@@ -1180,6 +1282,16 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             finHeight = bodyHeight * 0.85;
             rotation = 1.55 * Math.PI;
             options.widestPoint = 0.05;
+            break;
+        case 14:
+            // Electric Catfish
+            cx = bodyRight - (bodyLength * 0.23);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.08;
+            connectionWidth = finWidth * 0.5;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.45 * Math.PI;
+            options.widestPoint = 0.9;
             break;
         default:
             break;

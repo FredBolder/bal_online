@@ -1,41 +1,19 @@
-$stonepattern: 2
-$electricitymode: command
-$condition: 18, 19, name = tropical fish
-$movable: 18, 19, no
-$range: 18, 19, 14
-$target: 18, 19, command
-$value: 18, 19, activateelectricity, 15
-$fins: 16, 11, 13
-$palette: 16, 11, 38
-$pupilpercentage: 16, 11, 35
-$shape: 16, 11, 11
-$stripes: 16, 11, 18
-$tail: 16, 11, 5
-$fins: 25, 13, 13
-$palette: 25, 13, 38
-$pupilpercentage: 25, 13, 35
-$shape: 25, 13, 11
-$stripes: 25, 13, 18
-$tail: 25, 13, 5
-$background: 16, 11, 1, 1, 23
-$background: 25, 13, 1, 1, 23
-11111111111111111111111111111111
-1      !                       1
-1                              1
-1                              1
-1                              1
-1            1WWWWWWWWWWWWWWWWW1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwҼwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwҼwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-1            1wwwwwwwwwwwwwwwww1
-13           1wwwwwwwwwwwwwwwww1
-1   2        1wwwwwwwwwwwwwwwww1
-111111111111111111ђ1111111111111
+$fins: 2, 1, 14
+$palette: 2, 1, 38
+$pupilpercentage: 2, 1, 35
+$shape: 2, 1, 12
+$stripes: 2, 1, 18
+$tail: 2, 1, 5
+$fins: 2, 3, 14
+$palette: 2, 3, 38
+$pupilpercentage: 2, 3, 35
+$shape: 2, 3, 12
+$stripes: 2, 3, 18
+$tail: 2, 3, 5
+$background: 2, 1, 1, 1, 23
+$background: 2, 3, 1, 1, 23
+00000
+0 Ҽ 0
+3   0
+2 Ҽ 0
+11111
