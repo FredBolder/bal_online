@@ -1,6 +1,6 @@
 import { findElementByCoordinates, getGameDataValue } from "./balUtils.js";
 
-export function coordinatesToFishName(gameData, gameInfo, x, y) {
+export function coordinatesToFishName(gameData, gameInfo, x, y, generalName) {
     const objectNumber = getGameDataValue(gameData, x, y);
     if (objectNumber !== 243) {
         return "";
@@ -11,45 +11,53 @@ export function coordinatesToFishName(gameData, gameInfo, x, y) {
     }
     const fish = gameInfo.tropicalFish[idx];
 
+    if (((fish.palette === 39) || (fish.palette === 40)) && (fish.shape === 1) && (fish.tail === 4) &&
+        (fish.fins === 4) && (fish.stripes === 7) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
+        return generalName ? "Tilapia" : "Banded Tilapia";
+
     if ((fish.palette === 15) && (fish.shape === 1) && (fish.tail === 9) &&
         (fish.fins === 4) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Bicolor Anthias";
+        return generalName ? "Anthias" : "Bicolor Anthias";
 
     if ((fish.palette === 18) && (fish.shape === 6) && (fish.tail === 7) &&
         (fish.fins === 9) && (fish.stripes === 20) && (fish.eyePercentage === 55) && (fish.pupilPercentage === 40))
-        return "Black Neon Tetra";
+        return generalName ? "Tetra" : "Black Neon Tetra";
 
     if ((fish.palette === 35) && (fish.shape === 1) && (fish.tail === 9) &&
         (fish.fins === 4) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 60))
-        return "Blue Chromis";
+        return generalName ? "Chromis" : "Blue Chromis";
 
     if ((fish.palette === 16) && (fish.shape === 5) && (fish.tail === 4) &&
         (fish.fins === 8) && (fish.stripes === 0) && (fish.eyePercentage === 40) && (fish.pupilPercentage === 40))
-        return "Blue Diamond Discus";
+        return generalName ? "Discus" : "Blue Diamond Discus";
 
     if ((fish.palette === 21) && (fish.shape === 8) && (fish.tail === 7) &&
         (fish.fins === 4) && (fish.stripes === 21) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Brigham's Snapper";
+        return generalName ? "Snapper" : "Brigham's Snapper";
 
-    if ((fish.palette === 8) && (fish.shape === 2) && (fish.tail === 6) &&
+    if ((fish.palette === 34) && (fish.shape === 2) && (fish.tail === 6) &&
         (fish.fins === 1) && (fish.stripes === 15) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Clownfish";
-        
+        return generalName ? "Clownfish" : "Darwin Clownfish";
+
     if ((fish.palette === 38) && (fish.shape === 12) && (fish.tail === 5) &&
         (fish.fins === 14) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 35))
-        return "Electric Catfish";
+        return generalName ? "Catfish" : "Electric Catfish";
 
     if ((fish.palette === 3) && (fish.shape === 2) && (fish.tail === 7) &&
         (fish.fins === 3) && (fish.stripes === 12) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Juvenile Golden Trevally";
+        return generalName ? "Golden Trevally" : "Juvenile Golden Trevally";
 
     if ((fish.palette === 17) && (fish.shape === 5) && (fish.tail === 3) &&
         (fish.fins === 8) && (fish.stripes === 5) && (fish.eyePercentage === 40) && (fish.pupilPercentage === 40))
-        return "Orange-red Discus";
+        return generalName ? "Discus" : "Orange-red Discus";
 
+    if ((fish.palette === 8) && (fish.shape === 2) && (fish.tail === 6) &&
+        (fish.fins === 1) && (fish.stripes === 15) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) 
+        return generalName ? "Clownfish" : "Percula Clownfish";
+        
     if ((fish.palette === 20) && (fish.shape === 7) && (fish.tail === 4) &&
         (fish.fins === 10) && (fish.stripes === 0) && (fish.eyePercentage === 35) && (fish.pupilPercentage === 40))
-        return "Purple Tang";
+        return generalName ? "Tang" : "Purple Tang";
 
     if ((fish.palette === 9) && (fish.shape === 1) && (fish.tail === 7) &&
         (fish.fins === 2) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
@@ -57,35 +65,35 @@ export function coordinatesToFishName(gameData, gameInfo, x, y) {
 
     if ((fish.palette === 37) && (fish.shape === 11) && (fish.tail === 11) &&
         (fish.fins === 13) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 50))
-        return "Rusty Jobfish";
+        return generalName ? "Jobfish" : "Rusty Jobfish";
 
     if ((fish.palette === 11) && (fish.shape === 9) && (fish.tail === 7) &&
         (fish.fins === 5) && (fish.stripes === 17) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Siamese Algae Eater";
+        return generalName ? "Algae Eater" : "Siamese Algae Eater";
 
     if ((fish.palette === 14) && (fish.shape === 2) && (fish.tail === 7) &&
         (fish.fins === 7) && (fish.stripes === 19) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Smallmouth Grunt";
+        return generalName ? "Grunt" : "Smallmouth Grunt";
 
     if ((fish.palette === 36) && (fish.shape === 10) && (fish.tail === 10) &&
         (fish.fins === 12) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Yellowfin Tuna";
+        return generalName ? "Tuna" : "Yellowfin Tuna";
 
     if ((fish.palette === 10) && (fish.shape === 1) && (fish.tail === 4) &&
         (fish.fins === 4) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Yellow Tail Acei Cichlid";
+        return generalName ? "Cichlid" : "Yellow Tail Acei Cichlid";
 
     if ((fish.palette === 12) && (fish.shape === 3) && (fish.tail === 8) &&
         (fish.fins === 11) && (fish.stripes === 0) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 40))
-        return "Yellow Tail Damselfish";
+        return generalName ? "Damselfish" : "Yellow Tail Damselfish";
 
     if ((fish.palette === 19) && (fish.shape === 7) && (fish.tail === 4) &&
         (fish.fins === 10) && (fish.stripes === 0) && (fish.eyePercentage === 35) && (fish.pupilPercentage === 40))
-        return "Yellow Tang";
+        return generalName ? "Tang" : "Yellow Tang";
 
     if ((fish.palette === 13) && (fish.shape === 5) && (fish.tail === 3) &&
         (fish.fins === 6) && (fish.stripes === 4) && (fish.eyePercentage === 40) && (fish.pupilPercentage === 40))
-        return "Zebra Angelfish";
+        return generalName ? "Angelfish" : "Zebra Angelfish";
 
     return "";
 }

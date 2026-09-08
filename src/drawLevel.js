@@ -4520,6 +4520,11 @@ function drawLevel(
           drawWater();
           drawFish(ctx, xc, yc, w1, false, 38, 12, 5, 14, 18, 50, 35);
           break;
+        case 2173:
+          // Tropical fish - Banded Tilapia
+          drawWater();
+          drawFish(ctx, xc, yc, w1, false, 39, 1, 4, 4, 7, 50, 40);
+          break;
         case 2200:
           drawWaterColors();
           break;

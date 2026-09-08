@@ -97,11 +97,16 @@ $pupilpercentage: 8, 3, 35
 $shape: 8, 3, 12
 $stripes: 8, 3, 18
 $tail: 8, 3, 5
+$fins: 9, 3, 4
+$palette: 9, 3, 39
+$shape: 9, 3, 1
+$stripes: 9, 3, 7
+$tail: 9, 3, 4
 $background: 2, 2, 12, 1, 23
-$background: 2, 3, 7, 1, 23
+$background: 2, 3, 8, 1, 23
 $background: 13, 3, 1, 1, 23
 230000000000000
 11wwwwwwwwwwww1
 11ҼҼҼҼҼҼҼҼҼҼҼҼ1
-11ҼҼҼҼҼҼҼwwwwҼ1
+11ҼҼҼҼҼҼҼҼwwwҼ1
 111111111111111

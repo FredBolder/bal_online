@@ -238,6 +238,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 case "yellowpusherstrigger":
                     objectNumber = 116;
                     break;
+                case "bandedtilapia":
                 case "bicoloranthias":
                 case "blackneontetra":
                 case "bluechromis":

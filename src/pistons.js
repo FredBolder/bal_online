@@ -71,7 +71,10 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
 
     switch (sVar) {
         case "fishName":
-            value1 = coordinatesToFishName(gameData, gameInfo, x, y);
+            value1 = coordinatesToFishName(gameData, gameInfo, x, y, false);
+            break;
+        case "generalFishName":
+            value1 = coordinatesToFishName(gameData, gameInfo, x, y, true);
             break;
         case "generalName":
             value1 = objectGeneralName;
@@ -105,7 +108,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     } else {
         value1 = value1.toString();
     }
-    if ((sVar === "name") || (sVar === "fishName") || (sVar === "generalName")) {
+    if ((sVar === "name") || (sVar === "fishName") || (sVar === "generalFishName") || (sVar === "generalName")) {
         value1 = value1.toLowerCase();
         value2 = value2.toLowerCase();
     }

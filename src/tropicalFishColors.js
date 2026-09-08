@@ -407,6 +407,31 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#08090A"
             }
             break;
+        case 39:
+            // Banded Tilapia
+            colors = {
+                body: "#8C9A48",
+                stripe: "#3E4430",
+                fin: "#59605A",
+                upperFin: "#75634D",
+                tail: "#62675A",
+                eye: "#C8A83D",
+                eyePupil: "#100B0E"
+            }
+            break;
+        case 40:
+            // Banded Tilapia (variation)
+            colors = {
+                body: "#8C9A48",
+                upperBody: "#59653A",
+                stripe: "#3E4430",
+                fin: "#59605A",
+                upperFin: "#75634D",
+                tail: "#62675A",
+                eye: "#C8A83D",
+                eyePupil: "#100B0E"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",

@@ -9,7 +9,7 @@ import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 14;
-export const tropicalFishPalettes = 38;
+export const tropicalFishPalettes = 40;
 export const tropicalFishShapes = 12;
 export const tropicalFishStripes = 21;
 export const tropicalFishTails = 11;
@@ -649,6 +649,16 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
 
 export function presetTropicalFish(fish, preset) {
     switch (preset) {
+        case "bandedtilapia":
+            // Banded Tilapia
+            fish.palette = 39;
+            fish.shape = 1;
+            fish.tail = 4;
+            fish.fins = 4;
+            fish.stripes = 7;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 40;
+            break;
         case "bicoloranthias":
             // Bicolor Anthias
             fish.palette = 15;
