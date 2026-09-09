@@ -1135,6 +1135,45 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 frameFunc: getBodyBottomFrame
             });
             break;
+        case 15:
+            // Rainbow Runner
+            // Dorsal fin
+            setColors(true);
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.45,
+                endT: 0.7,
+                height: bodyHeight * 0.35,
+                taper: 1,
+                lean: 0.5,
+                overlap: bodyHeight * 0.1,
+                steps: 2
+            });
+            setColors(false);
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.7,
+                endT: 0.85,
+                height: bodyHeight * 0.2,
+                taper: 1,
+                lean: -0.8,
+                overlap: bodyHeight * 0.1
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.3,
+                endT: 0.4,
+                height: bodyHeight * 0.3,
+                taper: 1,
+                lean: 0.6,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
+            break;
         default:
             break;
     }
@@ -1274,7 +1313,7 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             options.widestPoint = 0.05;
             break;
         case 13:
-            // Rusty
+            // Rusty Jobfish
             cx = bodyRight - (bodyLength * 0.27);
             cy = yCenter + (bodyHeight * 0.25);
             finWidth = bodyLength * 0.1;
@@ -1292,6 +1331,16 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             finHeight = bodyHeight * 0.6;
             rotation = 1.45 * Math.PI;
             options.widestPoint = 0.9;
+            break;
+        case 15:
+            // Rainbow Runner
+            cx = bodyRight - (bodyLength * 0.27);
+            cy = yCenter + (bodyHeight * 0.2);
+            finWidth = bodyLength * 0.07;
+            connectionWidth = finWidth * 0.14;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.55 * Math.PI;
+            options.widestPoint = 0.05;
             break;
         default:
             break;

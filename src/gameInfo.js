@@ -329,6 +329,7 @@ export function getGameInfo(backData, gameData) {
                         stripes: 5,
                         eyePercentage: 50,
                         pupilPercentage: 40,
+                        eyeOffsetY: -10,
                         blocked: false,
                         outOfWater: 0,
                         isDead: false,
@@ -1149,7 +1150,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraInfo = `Start position: (${obj.xStart}, ${obj.yStart}), Max horizontal distance: ${obj.maxDistX}, `;
                     extraInfo += `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `;
                     extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Eye percentage: ${obj.eyePercentage}, `;
-                    extraInfo += `Pupil percentage: ${obj.pupilPercentage}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
+                    extraInfo += `Pupil percentage: ${obj.pupilPercentage}, Eye offset Y: ${obj.eyeOffsetY}, Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
                 }
                 info = `Tropical fish, ` + extraInfo;
                 break;

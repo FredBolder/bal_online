@@ -620,6 +620,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$answer: ${fish.x}, ${fish.y}, ${fish.answer}`;
             lines.push(line);
         }
+        if (fish.eyeOffsetY !== -10) {
+            line = `$eyeoffsety: ${fish.x}, ${fish.y}, ${fish.eyeOffsetY}`;
+            lines.push(line);
+        }
         if (fish.eyePercentage !== 50) {
             line = `$eyepercentage: ${fish.x}, ${fish.y}, ${fish.eyePercentage}`;
             lines.push(line);

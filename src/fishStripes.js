@@ -69,6 +69,23 @@ export function drawStripes(ctx, bodyPath, size, bodyLeft, bodyRight, bodyTop, b
         positions.push((bodyLength * 0.32) + bodyLeft);
         positions.push((bodyLength * 0.54) + bodyLeft);
         positions.push((bodyLength * 0.76) + bodyLeft);
+    } else if (stripes === 22) {
+        const widthFactorNormal = 0.85;
+        const widthFactorThin = 0.4;
+        ctx.lineWidth = stripeWidth * widthFactorNormal;
+        ctx.strokeStyle = colors.stripe;
+        ctx.beginPath();
+        ctx.moveTo(bodyLeft, yc);
+        ctx.lineTo(bodyRight, yc);
+        ctx.stroke();
+        if (colors.secondStripe !== null) {
+            ctx.lineWidth = stripeWidth * widthFactorThin;
+            ctx.strokeStyle = colors.secondStripe;
+            ctx.beginPath();
+            ctx.moveTo(bodyLeft, yc);
+            ctx.lineTo(bodyRight, yc);
+            ctx.stroke();
+        }
     } else if (stripes > 12) {
         numberOfStripes = stripes - 7;
         stripeWidth = stripeWidth * 1.3;

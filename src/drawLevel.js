@@ -22,7 +22,7 @@ import { drawSeaAnemone } from "./seaAnemone.js";
 import { drawSpikeBall } from "./spikeBalls.js"
 import { buildPatternLayer, ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
-import { drawFish } from "./tropicalFish.js";
+import { drawFish, presetTropicalFish } from "./tropicalFish.js";
 import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
 
 let bitmapLava = null;
@@ -217,6 +217,7 @@ function drawLevel(
 
   function drawAnswerBall(x, y, color) {
     let answer = "2";
+    const fish = {};
     let foreColor = color === "purple" ? "white" : "black";
     let idx = 0;
     let mode = "answerball";
@@ -254,7 +255,15 @@ function drawLevel(
           drawCar(ctx, xc, yc, w1 * 0.8);
           break;
         case "%fish":
-          drawFish(ctx, xc, yc, w1 * 0.8, false, 1, 2, 1, 3, 5, 50, 40);
+          fish.eyeOffsetY = -10,
+          fish.eyePercentage = 50;
+          fish.fins = 3;
+          fish.palette = 2;
+          fish.pupilPercentage = 40;
+          fish.shape = 2;
+          fish.stripes = 5;
+          fish.tail = 1;
+          drawFish(ctx, xc, yc, w1 * 0.8, false, fish);
           break;
         case "%flower":
           drawFlower(ctx, xc, yc, w1 * 0.65);
@@ -357,6 +366,9 @@ function drawLevel(
           break;
         case "%forkedtail":
           drawTail(ctx, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          break;
+        case "%lunatetail":
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 11, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
           break;
         case "%roundedtail":
           drawTail(ctx, xmin + (w1 * 0.27), yc, 5, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
@@ -3238,28 +3250,32 @@ function drawLevel(
   }
 
   function drawTropicalFish(x, y) {
-    let direction = -1
-    let eyePercentage = 50;
-    let fins = 1;
+    let direction = -1;
     let idx = -1;
-    let palette = 2;
-    let pupilPercentage = 40;
-    let shape = 2;
-    let stripes = 5;
-    let tail = 1;
+    const fish = {
+      eyeOffsetY: -10,
+      eyePercentage: 50,
+      fins: 1,
+      palette: 2,
+      pupilPercentage: 40,
+      shape: 2,
+      stripes: 5,
+      tail: 1,
+    };
 
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
-      eyePercentage = gameInfo.tropicalFish[idx].eyePercentage;
-      fins = gameInfo.tropicalFish[idx].fins;
-      palette = gameInfo.tropicalFish[idx].palette;
-      pupilPercentage = gameInfo.tropicalFish[idx].pupilPercentage;
-      shape = gameInfo.tropicalFish[idx].shape;
-      stripes = gameInfo.tropicalFish[idx].stripes;
-      tail = gameInfo.tropicalFish[idx].tail;
+      fish.eyeOffsetY = gameInfo.tropicalFish[idx].eyeOffsetY;
+      fish.eyePercentage = gameInfo.tropicalFish[idx].eyePercentage;
+      fish.fins = gameInfo.tropicalFish[idx].fins;
+      fish.palette = gameInfo.tropicalFish[idx].palette;
+      fish.pupilPercentage = gameInfo.tropicalFish[idx].pupilPercentage;
+      fish.shape = gameInfo.tropicalFish[idx].shape;
+      fish.stripes = gameInfo.tropicalFish[idx].stripes;
+      fish.tail = gameInfo.tropicalFish[idx].tail;
     }
-    drawFish(ctx, xc, yc, w1, direction !== 6, palette, shape, tail, fins, stripes, eyePercentage, pupilPercentage);
+    drawFish(ctx, xc, yc, w1, direction !== 6, fish);
   }
 
   function drawVerticalRope() {
@@ -3525,6 +3541,7 @@ function drawLevel(
     size1 = size2;
   }
   size1 = Math.trunc(size1);
+  const fish = {};
   let gameWidth = columns * size1;
   let gameHeight = rows * size1;
   let leftMargin = Math.trunc((canvas.width - gameWidth) / 2);
@@ -4426,104 +4443,109 @@ function drawLevel(
           drawAbbreviation("fins");
           break;
         case 2154:
-          // Tropical fish - Clownfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 8, 2, 6, 1, 15, 50, 40);
+          presetTropicalFish(fish, "clownfish")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2155:
-          // Tropical fish - Red Tail Shark
+          presetTropicalFish(fish, "redtailshark")
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 9, 1, 7, 2, 0, 50, 40);
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2156:
-          // Tropical fish - Juvenile Golden Trevally
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 3, 2, 7, 3, 12, 50, 40);
+          presetTropicalFish(fish, "juvenilegoldentrevally")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2157:
-          // Tropical fish - Yellow Tail Acei Cichlid
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 10, 1, 4, 4, 0, 50, 40);
+          presetTropicalFish(fish, "yellowtailaceicichlid")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2158:
-          // Tropical fish - Siamese Algae Eater
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 11, 9, 7, 5, 17, 50, 40);
+          presetTropicalFish(fish, "siamesealgaeeater")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2159:
-          // Tropical fish - Yellow Tail Damselfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 12, 3, 8, 11, 0, 50, 40);
+          presetTropicalFish(fish, "yellowtaildamselfish")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2160:
-          // Tropical fish - Zebra Angelfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 13, 5, 3, 6, 4, 40, 40);
+          presetTropicalFish(fish, "zebraangelfish")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2161:
-          // Tropical fish - Smallmouth Grunt
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 14, 2, 7, 7, 19, 50, 40);
+          presetTropicalFish(fish, "smallmouthgrunt")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2162:
-          // Tropical fish - Bicolor Anthias
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 15, 1, 9, 4, 18, 50, 40);
+          presetTropicalFish(fish, "bicoloranthias")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2163:
-          // Tropical fish - Blue Diamond Discus
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 16, 5, 4, 8, 0, 40, 40);
+          presetTropicalFish(fish, "bluediamonddiscus")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2164:
-          // Tropical fish - Orange-red Discus
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 17, 5, 3, 8, 5, 40, 40);
+          presetTropicalFish(fish, "orangereddiscus")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2165:
-          // Tropical fish - Black Neon Tetra
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 18, 6, 7, 9, 20, 55, 40);
+          presetTropicalFish(fish, "blackneontetra")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2166:
-          // Tropical fish - Yellow Tang
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 19, 7, 4, 10, 0, 35, 40);
+          presetTropicalFish(fish, "yellowtang")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2167:
-          // Tropical fish - Purple Tang
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 20, 7, 4, 10, 0, 35, 40);
+          presetTropicalFish(fish, "purpletang")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2168:
-          // Tropical fish - Brigham's Snapper
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 21, 8, 7, 4, 21, 50, 40);
+          presetTropicalFish(fish, "brighamssnapper")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2169:
-          // Tropical fish - Blue Chromis
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 35, 1, 9, 4, 0, 50, 60);
+          presetTropicalFish(fish, "bluechromis")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2170:
-          // Tropical fish - Yellowfin Tuna
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 36, 10, 10, 12, 18, 50, 40);
+          presetTropicalFish(fish, "yellowfintuna")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2171:
-          // Tropical fish - Rusty Jobfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 37, 11, 11, 13, 18, 50, 50);
+          presetTropicalFish(fish, "rustyjobfish")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2172:
-          // Tropical fish - Electric Catfish
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 38, 12, 5, 14, 18, 50, 35);
+          presetTropicalFish(fish, "electriccatfish")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2173:
-          // Tropical fish - Banded Tilapia
           drawWater();
-          drawFish(ctx, xc, yc, w1, false, 39, 1, 4, 4, 7, 50, 40);
+          presetTropicalFish(fish, "bandedtilapia")
+          drawFish(ctx, xc, yc, w1, false, fish);
+          break;
+        case 2174:
+          drawWater();
+          presetTropicalFish(fish, "rainbowrunner")
+          drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2200:
           drawWaterColors();

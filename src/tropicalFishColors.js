@@ -432,6 +432,20 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#100B0E"
             }
             break;
+        case 41:
+            // Rainbow Runner
+            colors = {
+                body: "#4FA99F",
+                upperBody: "#287C82",
+                stripe: "#D5E8E1",
+                secondStripe: "#D8C84A",
+                fin: "#789D65",
+                upperFin: "#789D65",
+                tail: "#65A54F",
+                eye: "#D8E4D5",
+                eyePupil: "#0A1715"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",
