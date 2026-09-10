@@ -519,6 +519,7 @@ describe("Pistons", () => {
                     stripes: 4,
                     eyePercentage: 40,
                     pupilPercentage: 40,
+                    eyeOffsetX: 0,
                     eyeOffsetY: -10,
                     blocked: false,
                     outOfWater: 0,

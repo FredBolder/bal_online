@@ -1,7 +1,33 @@
-$answer: 2, 3, %forkedtail
-$answer: 3, 3, %lunatetail
-00000
-0   0
-3   0
-2 ӅӅ0
-11111
+$has: divingglasses
+$fins: 4, 5, 14
+$palette: 4, 5, 38
+$pupilpercentage: 4, 5, 35
+$shape: 4, 5, 12
+$stripes: 4, 5, 18
+$tail: 4, 5, 5
+$eyeoffsety: 4, 7, 0
+$fins: 4, 7, 16
+$palette: 4, 7, 42
+$pupilpercentage: 4, 7, 50
+$shape: 4, 7, 13
+$stripes: 4, 7, 22
+$tail: 4, 7, 12
+$eyepercentage: 5, 4, 40
+$fins: 5, 4, 6
+$palette: 5, 4, 13
+$shape: 5, 4, 5
+$stripes: 5, 4, 4
+$tail: 5, 4, 3
+$background: 5, 4, 1, 1, 23
+$background: 4, 5, 1, 1, 23
+$background: 4, 7, 1, 1, 23
+1111111111
+12  3    1
+11       1
+1        1
+1wwwwҼwww1
+1wwwҼwwww1
+1wwwwwwww1
+1wwwҼwwww1
+1wwwwwwww1
+1111111111

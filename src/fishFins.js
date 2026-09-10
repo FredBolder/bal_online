@@ -1174,12 +1174,61 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 6
             });
             break;
+        case 16:
+            // Caribbean Reef Shark
+            // Dorsal fins
+            setColors(true);
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.43,
+                endT: 0.6,
+                height: bodyHeight * 0.5,
+                taper: 1,
+                lean: 0.6,
+                overlap: bodyHeight * 0.1,
+                steps: 2
+            });
+
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.8,
+                endT: 0.9,
+                height: bodyHeight * 0.2,
+                taper: 1,
+                lean: 0.4,
+                overlap: bodyHeight * 0.1
+            });
+            setColors(false);
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.85,
+                endT: 0.9,
+                height: bodyHeight * 0.15,
+                taper: 1,
+                lean: 0.4,
+                overlap: bodyHeight * 0.1
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.7,
+                endT: 0.8,
+                height: bodyHeight * 0.25,
+                taper: 1,
+                lean: 0.3,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
+            break;
         default:
             break;
     }
 }
 
-export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, bodyRight, colors) {
+export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, bodyRight, bodyCurves, colors) {
     ctx.fillStyle = colors.fin;
     let cx = 0;
     let cy = 0;
@@ -1341,6 +1390,19 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             finHeight = bodyHeight * 0.6;
             rotation = 1.55 * Math.PI;
             options.widestPoint = 0.05;
+            break;
+        case 16:
+            // Caribbean Reef Shark
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.3,
+                endT: 0.42,
+                height: bodyHeight * 0.6,
+                taper: 1,
+                lean: 0.6,
+                overlap: bodyHeight * 0.16,
+                steps: 2
+            });
             break;
         default:
             break;

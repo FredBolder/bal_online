@@ -4,11 +4,6 @@ $pistonmode: 14, 9, momentary
 $sticky: 14, 9, yes
 $pistonmode: 6, 10, momentary
 $sticky: 6, 10, yes
-$fins: 9, 13, 5
-$palette: 9, 13, 11
-$shape: 9, 13, 9
-$stripes: 9, 13, 17
-$tail: 9, 13, 7
 $eyepercentage: 9, 8, 40
 $fins: 9, 8, 8
 $palette: 9, 8, 16
@@ -21,6 +16,12 @@ $palette: 11, 10, 16
 $shape: 11, 10, 5
 $stripes: 11, 10, 0
 $tail: 11, 10, 4
+$eyeoffsety: 9, 13, 0
+$fins: 9, 13, 5
+$palette: 9, 13, 11
+$shape: 9, 13, 9
+$stripes: 9, 13, 17
+$tail: 9, 13, 7
 $background: 9, 8, 1, 1, 23
 $background: 14, 8, 2, 1, 23
 $background: 5, 9, 2, 1, 23

@@ -193,6 +193,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "eyeOffsetX":
         case "eyeOffsetY":
             if (typeof value !== "number") {
                 error = true;
@@ -302,7 +303,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isTeleport && ["group"].includes(prop)) {
         list = "teleports";
     }
-    if (isTropicalFish && ["answer", "eyeOffsetY", "eyePercentage", "pupilPercentage"].includes(prop)) {
+    if (isTropicalFish && ["answer", "eyeOffsetX", "eyeOffsetY", "eyePercentage", "pupilPercentage"].includes(prop)) {
         list = "tropicalFish";
     }
 

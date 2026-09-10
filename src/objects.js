@@ -13,138 +13,147 @@ export function coordinatesToFishName(gameData, gameInfo, x, y, generalName) {
 
     const fish = gameInfo.tropicalFish[idx];
 
+    return fishToFishName(fish, generalName);
+}
+
+export function fishToFishName(fish, generalName) {
     if (((fish.palette === 39) || (fish.palette === 40)) && (fish.shape === 1) && (fish.tail === 4) &&
-        (fish.fins === 4) && (fish.stripes === 7) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 4) && (fish.stripes === 7) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Tilapia" : "Banded Tilapia";
     }
 
     if ((fish.palette === 15) && (fish.shape === 1) && (fish.tail === 9) &&
-        (fish.fins === 4) && (fish.stripes === 18) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 4) && (fish.stripes === 18) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Anthias" : "Bicolor Anthias";
     }
 
     if ((fish.palette === 18) && (fish.shape === 6) && (fish.tail === 7) &&
-        (fish.fins === 9) && (fish.stripes === 20) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 9) && (fish.stripes === 20) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 55) && (fish.pupilPercentage === 40)) {
         return generalName ? "Tetra" : "Black Neon Tetra";
     }
 
     if ((fish.palette === 35) && (fish.shape === 1) && (fish.tail === 9) &&
-        (fish.fins === 4) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 4) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Chromis" : "Blue Chromis";
     }
 
     if ((fish.palette === 16) && (fish.shape === 5) && (fish.tail === 4) &&
-        (fish.fins === 8) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 8) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 40) && (fish.pupilPercentage === 40)) {
         return generalName ? "Discus" : "Blue Diamond Discus";
     }
 
     if ((fish.palette === 21) && (fish.shape === 8) && (fish.tail === 7) &&
-        (fish.fins === 4) && (fish.stripes === 21) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 4) && (fish.stripes === 21) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Snapper" : "Brigham's Snapper";
     }
 
+    if ((fish.palette === 42) && (fish.shape === 13) && (fish.tail === 12) &&
+        (fish.fins === 16) && (fish.stripes === 22) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) && 
+        (fish.eyePercentage === 50) && (fish.pupilPercentage === 50)) {
+        return generalName ? "Shark" : "Caribbean Reef Shark";
+    }
+
     if ((fish.palette === 34) && (fish.shape === 2) && (fish.tail === 6) &&
-        (fish.fins === 1) && (fish.stripes === 15) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 1) && (fish.stripes === 15) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Clownfish" : "Darwin Clownfish";
     }
 
     if ((fish.palette === 38) && (fish.shape === 12) && (fish.tail === 5) &&
-        (fish.fins === 14) && (fish.stripes === 18) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 14) && (fish.stripes === 18) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 35)) {
         return generalName ? "Catfish" : "Electric Catfish";
     }
 
     if ((fish.palette === 3) && (fish.shape === 2) && (fish.tail === 7) &&
-        (fish.fins === 3) && (fish.stripes === 12) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 3) && (fish.stripes === 12) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Golden Trevally" : "Juvenile Golden Trevally";
     }
 
     if ((fish.palette === 17) && (fish.shape === 5) && (fish.tail === 3) &&
-        (fish.fins === 8) && (fish.stripes === 5) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 8) && (fish.stripes === 5) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 40) && (fish.pupilPercentage === 40)) {
         return generalName ? "Discus" : "Orange-red Discus";
     }
 
     if ((fish.palette === 8) && (fish.shape === 2) && (fish.tail === 6) &&
-        (fish.fins === 1) && (fish.stripes === 15) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 1) && (fish.stripes === 15) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Clownfish" : "Percula Clownfish";
     }
 
     if ((fish.palette === 20) && (fish.shape === 7) && (fish.tail === 4) &&
-        (fish.fins === 10) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 10) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 35) && (fish.pupilPercentage === 40)) {
         return generalName ? "Tang" : "Purple Tang";
     }
 
     if ((fish.palette === 41) && (fish.shape === 13) && (fish.tail === 11) &&
-        (fish.fins === 15) && (fish.stripes === 22) && (fish.eyeOffsetY === 0) && 
+        (fish.fins === 15) && (fish.stripes === 22) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return "Rainbow Runner";
     }
 
     if ((fish.palette === 9) && (fish.shape === 1) && (fish.tail === 7) &&
-        (fish.fins === 2) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 2) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return "Red Tail Shark";
     }
 
     if ((fish.palette === 37) && (fish.shape === 11) && (fish.tail === 11) &&
-        (fish.fins === 13) && (fish.stripes === 18) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 13) && (fish.stripes === 18) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 50)) {
         return generalName ? "Jobfish" : "Rusty Jobfish";
     }
 
     if ((fish.palette === 11) && (fish.shape === 9) && (fish.tail === 7) &&
-        (fish.fins === 5) && (fish.stripes === 17) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 5) && (fish.stripes === 17) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Algae Eater" : "Siamese Algae Eater";
     }
 
     if ((fish.palette === 14) && (fish.shape === 2) && (fish.tail === 7) &&
-        (fish.fins === 7) && (fish.stripes === 19) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 7) && (fish.stripes === 19) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Grunt" : "Smallmouth Grunt";
     }
 
     if ((fish.palette === 36) && (fish.shape === 10) && (fish.tail === 10) &&
-        (fish.fins === 12) && (fish.stripes === 18) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 12) && (fish.stripes === 18) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Tuna" : "Yellowfin Tuna";
     }
 
     if ((fish.palette === 10) && (fish.shape === 1) && (fish.tail === 4) &&
-        (fish.fins === 4) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 4) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Cichlid" : "Yellow Tail Acei Cichlid";
     }
 
     if ((fish.palette === 12) && (fish.shape === 3) && (fish.tail === 8) &&
-        (fish.fins === 11) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 11) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Damselfish" : "Yellow Tail Damselfish";
     }
 
     if ((fish.palette === 19) && (fish.shape === 7) && (fish.tail === 4) &&
-        (fish.fins === 10) && (fish.stripes === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 10) && (fish.stripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 35) && (fish.pupilPercentage === 40)) {
         return generalName ? "Tang" : "Yellow Tang";
     }
 
     if ((fish.palette === 13) && (fish.shape === 5) && (fish.tail === 3) &&
-        (fish.fins === 6) && (fish.stripes === 4) && (fish.eyeOffsetY === -10) && 
+        (fish.fins === 6) && (fish.stripes === 4) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 40) && (fish.pupilPercentage === 40)) {
         return generalName ? "Angelfish" : "Zebra Angelfish";
     }
-
     return "";
 }
 

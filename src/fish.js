@@ -1,8 +1,9 @@
 import { findElementByCoordinates, getGameDataValue, inWater } from "./balUtils.js";
 import { dist } from "./graphicUtils.js";
+import { fishToFishName } from "./objects.js";
 import { getConnectedWater } from "./water.js";
 
-export function fishIsCloseToBlueBall(gameData, gameInfo, x, y) {
+export function fishAttacksBlueBall(gameData, gameInfo, x, y) {
   let idx = -1;
   let list = "";
   const points = [];
@@ -39,10 +40,13 @@ export function fishIsCloseToBlueBall(gameData, gameInfo, x, y) {
       continue;
     }
     if (objectNumber === 243) {
-      // Electric Catfish
-      if ((fish.palette === 38) && (fish.shape === 12) && (fish.tail === 5) &&
-        (fish.fins === 14) && (fish.stripes === 18) && (fish.eyePercentage === 50) && (fish.pupilPercentage === 35))
+      if (fishToFishName(fish, false) === "Electric Catfish") {
         return true;
+      }
+      if ((((i === 2) && (fish.direction === 4)) || ((i === 3) && (fish.direction === 6))) &&
+        (fishToFishName(fish, true) === "Shark")) {
+        return true;
+      }
     } else {
       return true;
     }

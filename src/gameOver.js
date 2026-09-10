@@ -1,4 +1,4 @@
-import { fishIsCloseToBlueBall } from "./fish.js";
+import { fishAttacksBlueBall } from "./fish.js";
 import { checkElectricity } from "./electricity.js";
 import { checkFirstCount } from "./musicBoxes.js";
 import { checkRedBalls } from "./redBalls.js";
@@ -35,11 +35,11 @@ export function checkGameOver(backData, gameData, gameInfo, gameVars) {
     }
 
     if ((gameVars.timeFreezer === 0) && !gameVars.gameOver && ((gameInfo.redFish.length > 0) || (gameInfo.tropicalFish.length > 0))) {
-        if (fishIsCloseToBlueBall(gameData, gameInfo, gameInfo.blueBall1.x, gameInfo.blueBall1.y)) {
+        if (fishAttacksBlueBall(gameData, gameInfo, gameInfo.blueBall1.x, gameInfo.blueBall1.y)) {
             gameVars.gameOver = true;
         }
         if (!gameVars.gameOver && gameInfo.twoBlue && 
-            fishIsCloseToBlueBall(gameData, gameInfo, gameInfo.blueBall2.x, gameInfo.blueBall2.y)) {
+            fishAttacksBlueBall(gameData, gameInfo, gameInfo.blueBall2.x, gameInfo.blueBall2.y)) {
             gameVars.gameOver = true;
         }
     }

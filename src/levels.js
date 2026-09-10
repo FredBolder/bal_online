@@ -319,6 +319,7 @@ export function checkSettings(data, settings) {
     { name: "$displaysize", params: 2, xy: false, yesno: -1 },
     { name: "$electricitymode", params: 1, xy: false, yesno: -1 },
     { name: "$extra", params: 1, xy: false, yesno: -1 },
+    { name: "$eyeoffsetx", params: 3, xy: true, yesno: -1 },
     { name: "$eyeoffsety", params: 3, xy: true, yesno: -1 },
     { name: "$eyepercentage", params: 3, xy: true, yesno: -1 },
     { name: "$fgcolor", params: 5, xy: true, yesno: -1 },
@@ -564,10 +565,11 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for extra.\n`;
               }
               break;
+            case "$eyeoffsetx":
             case "$eyeoffsety":
               val_int = tryParseInt(values[2], -1);
               if ((val_int < -50) || (val_int > 50)) {
-                msg += `${settingNr(i)}Invalid value ${values[0]} for eye offset y.\n`;
+                msg += `${settingNr(i)}Invalid value ${values[0]} for eye offset.\n`;
               }
               break;
             case "$eyepercentage":
@@ -1772,6 +1774,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if ((val_int >= 0) && (val_int <= 1)) {
             gameVars.extra = val_int;
           }
+          break;
+        case "$eyeoffsetx":
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "eyeOffsetX", val_int, false);
           break;
         case "$eyeoffsety":
           val_int = tryParseInt(values[2], -1);

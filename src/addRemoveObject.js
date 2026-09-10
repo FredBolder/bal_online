@@ -347,6 +347,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 stripes: 5,
                 eyePercentage: 50,
                 pupilPercentage: 40,
+                eyeOffsetX: 0,
                 eyeOffsetY: -10,
                 blocked: false,
                 outOfWater: 0,

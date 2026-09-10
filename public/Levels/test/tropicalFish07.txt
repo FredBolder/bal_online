@@ -15,6 +15,7 @@ $palette: 5, 2, 10
 $shape: 5, 2, 1
 $stripes: 5, 2, 0
 $tail: 5, 2, 4
+$eyeoffsety: 6, 2, 0
 $fins: 6, 2, 5
 $palette: 6, 2, 11
 $shape: 6, 2, 9
@@ -108,11 +109,18 @@ $palette: 10, 3, 41
 $shape: 10, 3, 13
 $stripes: 10, 3, 22
 $tail: 10, 3, 11
+$eyeoffsety: 11, 3, 0
+$fins: 11, 3, 16
+$palette: 11, 3, 42
+$pupilpercentage: 11, 3, 50
+$shape: 11, 3, 13
+$stripes: 11, 3, 22
+$tail: 11, 3, 12
 $background: 2, 2, 12, 1, 23
-$background: 2, 3, 9, 1, 23
+$background: 2, 3, 10, 1, 23
 $background: 13, 3, 1, 1, 23
 230000000000000
 11wwwwwwwwwwww1
 11ҼҼҼҼҼҼҼҼҼҼҼҼ1
-11ҼҼҼҼҼҼҼҼҼwwҼ1
+11ҼҼҼҼҼҼҼҼҼҼwҼ1
 111111111111111

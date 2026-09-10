@@ -8,11 +8,11 @@ import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 15;
-export const tropicalFishPalettes = 41;
+export const tropicalFishFinVariations = 16;
+export const tropicalFishPalettes = 42;
 export const tropicalFishShapes = 13;
 export const tropicalFishStripes = 22;
-export const tropicalFishTails = 11;
+export const tropicalFishTails = 12;
 
 export function changeFins(gameInfo, x, y, decrease) {
     const step = decrease ? -1 : 1;
@@ -74,7 +74,7 @@ export function changeTail(gameInfo, x, y, decrease) {
 // This drawing is also used for answer balls.
 
 export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
-    const { palette, shape, tail, fins, stripes, eyePercentage, pupilPercentage, eyeOffsetY } = fish;
+    const { palette, shape, tail, fins, stripes, eyePercentage, pupilPercentage, eyeOffsetX, eyeOffsetY } = fish;
     if (flipHorizontally) {
         ctx.save();
         ctx.translate(xc, 0);
@@ -389,7 +389,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
 
     // ---- Pectoral fins ----
     if (!globalVars.debug) {
-        drawForegroundFins(ctx, fins, yc, bodyHeight, bodyLength, bodyRight, colors);
+        drawForegroundFins(ctx, fins, yc, bodyHeight, bodyLength, bodyRight, bodyCurves, colors);
     }
 
     // ---- Tail ----
@@ -399,7 +399,8 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
     ctx.fillStyle = colors.eye;
     ctx.strokeStyle = colors.body;
     ctx.lineWidth = 1;
-    const xEye = bodyOptions.isTang ? geom.headRight - bodyLength * 0.04 : geom.headRight - bodyLength * 0.15;
+    let xEye = bodyOptions.isTang ? geom.headRight - bodyLength * 0.04 : geom.headRight - bodyLength * 0.15;
+    xEye = xEye + (bodyLength * eyeOffsetX * 0.002);
     const yEye = yc + (bodyHeight * eyeOffsetY * 0.01);
     const eyeRadius = bodyHeight * 0.25 * eyePercentage * 0.01;
     ctx.beginPath();
@@ -497,6 +498,10 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
                 case 11:
                     // lunate
                     countTo = 5;
+                    break;
+                case 12:
+                    // heterocercal
+                    countTo = 6;
                     break;
                 default:
                     // normal (rounded)
@@ -677,6 +682,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 7;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "bicoloranthias":
@@ -688,6 +694,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 18;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "blackneontetra":
@@ -699,6 +706,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 20;
             fish.eyePercentage = 55;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "bluechromis":
@@ -710,6 +718,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 60;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "bluediamonddiscus":
@@ -721,6 +730,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 40;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "brighamssnapper":
@@ -732,7 +742,20 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 21;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            break;
+        case "caribbeanreefshark":
+            // Caribbean Reef Shark
+            fish.palette = 42;
+            fish.shape = 13;
+            fish.tail = 12;
+            fish.fins = 16;
+            fish.stripes = 22;
+            fish.eyePercentage = 50;
+            fish.pupilPercentage = 50;
+            fish.eyeOffsetX = 0;
+            fish.eyeOffsetY = 0;
             break;
         case "clownfish":
             // Clownfish
@@ -743,6 +766,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 15;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "electriccatfish":
@@ -754,6 +778,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 18;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 35;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "juvenilegoldentrevally":
@@ -765,6 +790,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 12;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "orangereddiscus":
@@ -776,6 +802,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 5;
             fish.eyePercentage = 40;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "purpletang":
@@ -787,6 +814,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 35;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "rainbowrunner":
@@ -798,6 +826,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 22;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = 0;
             break;
         case "redtailshark":
@@ -809,6 +838,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "rustyjobfish":
@@ -820,6 +850,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 18;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 50;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "siamesealgaeeater":
@@ -831,7 +862,8 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 17;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
-            fish.eyeOffsetY = -10;
+            fish.eyeOffsetX = 0;
+            fish.eyeOffsetY = 0;
             break;
         case "smallmouthgrunt":
             // Smallmouth Grunt
@@ -842,6 +874,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 19;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "yellowfintuna":
@@ -853,6 +886,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 18;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "yellowtailaceicichlid":
@@ -864,6 +898,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "yellowtaildamselfish":
@@ -875,6 +910,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 50;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "yellowtang":
@@ -886,6 +922,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 0;
             fish.eyePercentage = 35;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         case "zebraangelfish":
@@ -897,6 +934,7 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 4;
             fish.eyePercentage = 40;
             fish.pupilPercentage = 40;
+            fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
             break;
         default:

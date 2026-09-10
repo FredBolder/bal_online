@@ -36,7 +36,10 @@ export function buildForkTail(
     connectionHeight,
     innerBending,
     outerBending,
-    notchPosition
+    notchX,
+    notchY,
+    bottomTipX,
+    bottomTipY
 ) {
     const rightX = xLeft + tailWidth;
 
@@ -44,14 +47,20 @@ export function buildForkTail(
     const yBotConn = yCenter + connectionHeight * 0.5;
 
     const yTopTip = yCenter - tailHeight * 0.5;
-    const yBotTip = yCenter + tailHeight * 0.5;
-
-    const tipX = xLeft;
 
     // Notch position:
-    // 0 = at the tips
-    // 1 = at the connection
-    const notchX = tipX + tailWidth * notchPosition;
+    // X: 0 = at the tips, 1 = at the connection
+    // Y: 0 = yCenter - 0.25 * tailHeight
+    //    0.5 = yCenter
+    //    1 = yCenter + 0.25 * tailHeight
+    const notchXPosition = xLeft + tailWidth * notchX;
+    const notchYPosition = yCenter + (notchY - 0.5) * tailHeight * 0.5;
+
+    // Bottom tip position:
+    // X: 0 = xLeft, 1 = rightX
+    // Y: 0 = yCenter, 1 = yCenter + 0.5 * tailHeight
+    const bottomTipXPosition = xLeft + tailWidth * bottomTipX;
+    const bottomTipYPosition = yCenter + tailHeight * 0.5 * bottomTipY;
 
     /*
      * Outer bending
@@ -74,9 +83,9 @@ export function buildForkTail(
     const innerCurvature = innerBending * 0.10;
 
     const P0 = { x: rightX, y: yTopConn };
-    const P1 = { x: tipX, y: yTopTip };
-    const P2 = { x: notchX, y: yCenter };
-    const P3 = { x: tipX, y: yBotTip };
+    const P1 = { x: xLeft, y: yTopTip };
+    const P2 = { x: notchXPosition, y: notchYPosition };
+    const P3 = { x: bottomTipXPosition, y: bottomTipYPosition };
     const P4 = { x: rightX, y: yBotConn };
 
     ctx.moveTo(P0.x, P0.y);
@@ -166,18 +175,22 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
             break;
         case 7:
         case 8:
-            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.5, 0.8, 0.5);
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.5, 0.8, 0.5, 0.5, 0, 1);
             break;
         case 9:
-            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.7, 0.8, 0.5);
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.7, 0.8, 0.5, 0.5, 0, 1);
             break;
         case 10:
             // Lunate
-            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.5, 0.5, 0.6);
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.5, 0.5, 0.6, 0.5, 0, 1);
             break;
         case 11:
             // Lunate
-            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.9, 0.6, 0.55);
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.9, 0.6, 0.55, 0.5, 0, 1);
+            break;
+        case 12:
+            // Heterocercal
+            buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.3, 0.3, 0.6, 0.65, 0.3, 0.7);
             break;
         default:
             // 1
@@ -258,6 +271,11 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             break;
         case 11:
             // Lunate
+            tailWidth = bodyLength * 0.25;
+            tailHeight = bodyHeight * 1.4;
+            break;
+        case 12:
+            // Heterocercal
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 1.4;
             break;

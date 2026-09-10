@@ -160,6 +160,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx2 = findElementByCoordinates(x2, y2, gameInfo.tropicalFish);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.tropicalFish[idx2].answer = gameInfo.tropicalFish[idx1].answer;
+                gameInfo.tropicalFish[idx2].eyeOffsetX = gameInfo.tropicalFish[idx1].eyeOffsetX;
                 gameInfo.tropicalFish[idx2].eyeOffsetY = gameInfo.tropicalFish[idx1].eyeOffsetY;
                 gameInfo.tropicalFish[idx2].eyePercentage = gameInfo.tropicalFish[idx1].eyePercentage;
                 gameInfo.tropicalFish[idx2].fins = gameInfo.tropicalFish[idx1].fins;

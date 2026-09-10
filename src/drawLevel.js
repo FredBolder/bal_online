@@ -255,6 +255,7 @@ function drawLevel(
           drawCar(ctx, xc, yc, w1 * 0.8);
           break;
         case "%fish":
+          fish.eyeOffsetX = 0,
           fish.eyeOffsetY = -10,
           fish.eyePercentage = 50;
           fish.fins = 3;
@@ -366,6 +367,9 @@ function drawLevel(
           break;
         case "%forkedtail":
           drawTail(ctx, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          break;
+        case "%heterocercaltail":
+          drawTail(ctx, xmin + (w1 * 0.27), yc, 12, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
           break;
         case "%lunatetail":
           drawTail(ctx, xmin + (w1 * 0.27), yc, 11, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
@@ -3253,6 +3257,7 @@ function drawLevel(
     let direction = -1;
     let idx = -1;
     const fish = {
+      eyeOffsetX: 0,
       eyeOffsetY: -10,
       eyePercentage: 50,
       fins: 1,
@@ -3266,6 +3271,7 @@ function drawLevel(
     idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
     if (idx >= 0) {
       direction = gameInfo.tropicalFish[idx].direction;
+      fish.eyeOffsetX = gameInfo.tropicalFish[idx].eyeOffsetX;
       fish.eyeOffsetY = gameInfo.tropicalFish[idx].eyeOffsetY;
       fish.eyePercentage = gameInfo.tropicalFish[idx].eyePercentage;
       fish.fins = gameInfo.tropicalFish[idx].fins;
@@ -4545,6 +4551,11 @@ function drawLevel(
         case 2174:
           drawWater();
           presetTropicalFish(fish, "rainbowrunner")
+          drawFish(ctx, xc, yc, w1, false, fish);
+          break;
+        case 2175:
+          drawWater();
+          presetTropicalFish(fish, "caribbeanreefshark")
           drawFish(ctx, xc, yc, w1, false, fish);
           break;
         case 2200:

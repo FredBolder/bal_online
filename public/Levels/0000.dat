@@ -1,31 +1,21 @@
 $eyeoffsety: 2, 1, 0
-$fins: 2, 1, 15
-$palette: 2, 1, 41
+$fins: 2, 1, 16
+$palette: 2, 1, 42
+$pupilpercentage: 2, 1, 50
 $shape: 2, 1, 13
 $stripes: 2, 1, 22
-$tail: 2, 1, 11
-$eyeoffsety: 3, 1, 0
-$fins: 3, 1, 15
-$palette: 3, 1, 41
-$shape: 3, 1, 13
-$stripes: 3, 1, 22
-$tail: 3, 1, 11
+$tail: 2, 1, 12
 $eyeoffsety: 2, 2, 0
-$fins: 2, 2, 15
-$palette: 2, 2, 41
+$fins: 2, 2, 16
+$palette: 2, 2, 42
+$pupilpercentage: 2, 2, 50
 $shape: 2, 2, 13
 $stripes: 2, 2, 22
-$tail: 2, 2, 11
-$eyeoffsety: 3, 2, 0
-$fins: 3, 2, 15
-$palette: 3, 2, 41
-$shape: 3, 2, 13
-$stripes: 3, 2, 22
-$tail: 3, 2, 11
-$background: 2, 1, 2, 1, 23
-$background: 2, 2, 2, 1, 23
+$tail: 2, 2, 12
+$background: 2, 1, 1, 1, 23
+$background: 2, 2, 1, 1, 23
 00000
-0 ҼҼ0
-3 ҼҼ0
+0 Ҽ 0
+3 Ҽ 0
 2   0
 11111

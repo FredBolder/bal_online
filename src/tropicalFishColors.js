@@ -446,6 +446,19 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#0A1715"
             }
             break;
+        case 42:
+            // Caribbean Reef Shark
+            colors = {
+                body: "#71858A",
+                upperBody: "#3F555B",
+                stripe: "#3F555B", // Trick to make the area bigger
+                fin: "#526A70",
+                upperFin: "#3F555B",
+                tail: "#4B6268",
+                eye: "#B9C4C3",
+                eyePupil: "#080D0F"
+            }
+            break;
         default:
             colors = {
                 body: "#FF6347",
