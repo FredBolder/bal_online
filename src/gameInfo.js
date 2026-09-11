@@ -1,4 +1,5 @@
 import { findElementByCoordinates } from "./balUtils.js";
+import { globalVars } from "./glob.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
 export function getGameInfo(backData, gameData) {
@@ -1132,6 +1133,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 if (idx >= 0) {
                     obj = gameInfo.questionStones[idx];
                     extraInfo = `Question: ${obj.question}`;
+                    if (globalVars.createLevel) {
+                        extraInfo += `, Answer: ${obj.answer}`;
+                    }
                 }
                 info = `Question stone, ` + extraInfo;
                 break;
@@ -1153,6 +1157,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Eye percentage: ${obj.eyePercentage}, `;
                     extraInfo += `Pupil percentage: ${obj.pupilPercentage}, Eye offset X: ${obj.eyeOffsetX}, Eye offset Y: ${obj.eyeOffsetY}, `;
                     extraInfo += `Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`; 
+                    if (globalVars.createLevel) {
+                        extraInfo += `, Answer: ${obj.answer}`;
+                    }
                 }
                 info = `Tropical fish, ` + extraInfo;
                 break;
