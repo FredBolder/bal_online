@@ -550,6 +550,16 @@ describe("Pistons", () => {
         expect(info).toBe(1);
         info = checkCondition(input, gameInfo, 6, 4, "answer = This is a TEST!")
         expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 4, "answer = this is a test!")
+        expect(info).toBe(0);
+        info = checkCondition(input, gameInfo, 6, 4, "answer ~= this is a test!")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 4, "answer *= test")
+        expect(info).toBe(0);
+        info = checkCondition(input, gameInfo, 6, 4, "answer *= TEST")
+        expect(info).toBe(1);
+        info = checkCondition(input, gameInfo, 6, 4, "answer ~*= TeSt")
+        expect(info).toBe(1);
         info = checkCondition(input, gameInfo, 6, 4, "answer = ThisisaTEST!")
         expect(info).toBe(0);
         info = checkCondition(input, gameInfo, 6, 4, "name = Purple answer ball")

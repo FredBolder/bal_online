@@ -16,7 +16,7 @@ function canMove(element) {
 export function checkCondition(gameData, gameInfo, x, y, condition) {
     // Result 
     // -1 = invalid, 0 = false, 1 = true
-    const compChars = "=<>";
+    const compChars = "=<>~*";
     let element = null;
     let idx = -1;
     let list = "";
@@ -61,7 +61,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     if ((sVar === "") || (sComp === "")) {
         return -1;
     }
-    if (sComp.includes(" ") || !["=", "<>", ">", "<", ">=", "<="].includes(sComp)) {
+    if (sComp.includes(" ") || !["=", "~=", "*=", "~*=", "<>", ">", "<", ">=", "<="].includes(sComp)) {
         return -1;
     }
 
@@ -116,6 +116,24 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     switch (sComp) {
         case "=":
             return value1 === value2 ? 1 : 0;
+        case "~=":
+            if (typeof value1 === "string") {
+                return value1.toLowerCase() === value2.toLowerCase() ? 1 : 0;
+            } else {
+                return value1 === value2 ? 1 : 0;
+            }
+        case "*=":
+            if (typeof value1 === "string") {
+                return value1.includes(value2) ? 1 : 0;
+            } else {
+                return value1 === value2 ? 1 : 0;
+            }
+        case "~*=":
+            if (typeof value1 === "string") {
+                return value1.toLowerCase().includes(value2.toLowerCase()) ? 1 : 0;
+            } else {
+                return value1 === value2 ? 1 : 0;
+            }
         case "<>":
             return value1 !== value2 ? 1 : 0;
         case ">":
