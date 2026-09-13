@@ -116,11 +116,18 @@ $pupilpercentage: 11, 3, 50
 $shape: 11, 3, 13
 $stripes: 11, 3, 22
 $tail: 11, 3, 12
+$eyeoffsety: 12, 3, 0
+$fins: 12, 3, 17
+$palette: 12, 3, 43
+$pupilpercentage: 12, 3, 60
+$shape: 12, 3, 14
+$stripes: 12, 3, 0
+$tail: 12, 3, 13
+$tailstripes: 12, 3, 6
 $background: 2, 2, 12, 1, 23
-$background: 2, 3, 10, 1, 23
-$background: 13, 3, 1, 1, 23
+$background: 2, 3, 12, 1, 23
 230000000000000
 11wwwwwwwwwwww1
 11ҼҼҼҼҼҼҼҼҼҼҼҼ1
-11ҼҼҼҼҼҼҼҼҼҼwҼ1
+11ҼҼҼҼҼҼҼҼҼҼҼҼ1
 111111111111111

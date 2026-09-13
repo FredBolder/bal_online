@@ -363,22 +363,22 @@ function drawLevel(
           drawAnswerColor("yellow");
           break;
         case "%emarginatetail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 1, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          drawTail(ctx, w1, xmin + (w1 * 0.27), yc, 1, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null }, 0);
           break;
         case "%forkedtail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
-          break;
-        case "%heterocercaltail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 12, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          drawTail(ctx, w1, xmin + (w1 * 0.27), yc, 7, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null }, 0);
           break;
         case "%lunatetail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 11, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          drawTail(ctx, w1, xmin + (w1 * 0.27), yc, 11, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null }, 0);
           break;
         case "%roundedtail":
-          drawTail(ctx, xmin + (w1 * 0.27), yc, 5, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          drawTail(ctx, w1, xmin + (w1 * 0.27), yc, 5, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null }, 0);
+          break;
+        case "%sharktail":
+          drawTail(ctx, w1, xmin + (w1 * 0.27), yc, 12, w1 * 0.5, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null }, 0);
           break;
         case "%truncatetail":
-          drawTail(ctx, xmin + (w1 * 0.32), yc, 4, w1 * 0.45, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null });
+          drawTail(ctx, w1, xmin + (w1 * 0.32), yc, 4, w1 * 0.45, w2 * 0.5, w2 * 0.1, { tail: "#777777", upperTail: null }, 0);
           break;
         default:
           drawText(ctx, xc, yc, answer, "middle", foreColor, w2 * 0.6, w1 * 0.7);
@@ -3265,6 +3265,7 @@ function drawLevel(
       pupilPercentage: 40,
       shape: 2,
       stripes: 5,
+      tailStripes: 0,
       tail: 1,
     };
 
@@ -3280,6 +3281,7 @@ function drawLevel(
       fish.shape = gameInfo.tropicalFish[idx].shape;
       fish.stripes = gameInfo.tropicalFish[idx].stripes;
       fish.tail = gameInfo.tropicalFish[idx].tail;
+      fish.tailStripes = gameInfo.tropicalFish[idx].tailStripes;
     }
     drawFish(ctx, xc, yc, w1, direction !== 6, fish);
   }
@@ -4241,7 +4243,11 @@ function drawLevel(
           drawDetector(currentCol, currentRow);
           break;
         case 256:
-          drawSpikeBall(ctx, xc, yc, w1, 0.125 * Math.PI);
+          if (gameInfo.spikeBallLooksLikeStone) {
+            drawStone(currentCol, currentRow);
+          } else {
+            drawSpikeBall(ctx, xc, yc, w1, 0.125 * Math.PI);
+          }
           break;
         case 1000:
           // For manual only (empty)
@@ -4558,6 +4564,11 @@ function drawLevel(
           presetTropicalFish(fish, "caribbeanreefshark")
           drawFish(ctx, xc, yc, w1, false, fish);
           break;
+        case 2176:
+          drawWater();
+          presetTropicalFish(fish, "yellowflagtailprochilodus")
+          drawFish(ctx, xc, yc, w1, false, fish);
+          break;        
         case 2200:
           drawWaterColors();
           break;

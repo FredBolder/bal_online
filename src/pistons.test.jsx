@@ -517,6 +517,7 @@ describe("Pistons", () => {
                     tail: 3,
                     fins: 6,
                     stripes: 4,
+                    tailStripes: 0,
                     eyePercentage: 40,
                     pupilPercentage: 40,
                     eyeOffsetX: 0,

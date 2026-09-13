@@ -195,6 +195,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     break;
                 case "spikeball":
                     objectNumber = 256;
+                    gameInfo.levelCanHaveSpikeBalls = true;
                     break;
                 case "spikedown":
                     objectNumber = 175;

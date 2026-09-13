@@ -344,6 +344,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$playercanmovestones: yes`;
         lines.push(line);
     }
+    if (gameInfo.spikeBallLooksLikeStone) {
+        line = `$spikeballlookslikestone: yes`;
+        lines.push(line);
+    }
     if (gameInfo.twoBlueConnected) {
         line = `$twoblueconnected: yes`;
         lines.push(line);
@@ -658,6 +662,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
         if (fish.tail !== 2) {
             line = `$tail: ${fish.x}, ${fish.y}, ${fish.tail}`;
+            lines.push(line);
+        }
+        if (fish.tailStripes !== 0) {
+            line = `$tailstripes: ${fish.x}, ${fish.y}, ${fish.tailStripes}`;
             lines.push(line);
         }
     }

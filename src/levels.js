@@ -16,7 +16,7 @@ import { pusherModes } from "./pushers.js";
 import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
-import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails } from "./tropicalFish.js";
+import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails, tropicalFishTailStripes } from "./tropicalFish.js";
 import { randomInt, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
@@ -363,12 +363,14 @@ export function checkSettings(data, settings) {
     { name: "$sequence", params: 3, xy: true, yesno: 2 },
     { name: "$shape", params: 3, xy: true, yesno: -1 },
     { name: "$sound", params: 2, xy: false, yesno: -1 },
+    { name: "$spikeballlookslikestone", params: 1, xy: false, yesno: 0 },
     { name: "$startlevelmessage", params: 0, xy: false, yesno: -1 },
     { name: "$stepspermeasure", params: 3, xy: true, yesno: -1 },
     { name: "$sticky", params: 3, xy: true, yesno: 2 },
     { name: "$stonepattern", params: 1, xy: false, yesno: -1 },
     { name: "$stripes", params: 3, xy: true, yesno: -1 },
     { name: "$tail", params: 3, xy: true, yesno: -1 },
+    { name: "$tailstripes", params: 3, xy: true, yesno: -1 },
     { name: "$target", params: 3, xy: true, yesno: -1 },
     { name: "$text", params: 0, xy: true, yesno: -1 },
     { name: "$twoblueconnected", params: 1, xy: false, yesno: 0 },
@@ -838,6 +840,8 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid sound mode ${values[1]}.\n`;
               }
               break;
+            case "spikeballlookslikestone":
+              break;  
             case "$stepspermeasure":
               switch (data[y][x]) {
                 case "M":
@@ -884,6 +888,20 @@ export function checkSettings(data, settings) {
                   val_int = tryParseInt(values[2], -1);
                   if ((val_int < 1) || (val_int > tropicalFishTails)) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for tail.\n`;
+                  }
+                  break;
+                default:
+                  msg += `${settingNr(i)}No tropical fish found at the coordinates ${x}, ${y}.\n`;
+                  break;
+              }
+              break;
+            case "$tailstripes":
+              switch (data[y][x]) {
+                case "Ҽ":
+                case 243:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 0) || (val_int > tropicalFishTailStripes)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for tail stripes.\n`;
                   }
                   break;
                 default:
@@ -2270,6 +2288,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$spikeballlookslikestone":
+          if (values.length !== 1) {
+            break;
+          }
+          switch (valuesLowerCase[0]) {
+            case "no":
+              gameInfo.spikeBallLooksLikeStone = false;
+              break;
+            case "yes":
+              gameInfo.spikeBallLooksLikeStone = true;
+              break;
+            default:
+              break;
+          }
+          break;
         case "$startlevelmessage":
           gameVars.startlevelmessage = value;
           break;
@@ -2296,12 +2329,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             break;
           }
           val_int = tryParseInt(values[2], -1);
-          if ((val_int >= 0) && (val_int <= tropicalFishStripes)) {
-            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-            if (idx >= 0) {
-              gameInfo.tropicalFish[idx].stripes = val_int;
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "stripes", val_int, false);
           break;
         case "$tail":
           if (values.length !== 3 || !validXY) {
@@ -2314,6 +2342,13 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.tropicalFish[idx].tail = val_int;
             }
           }
+          break;
+        case "$tailstripes":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "tailStripes", val_int, false);
           break;
         case "$twoblueconnected":
           if (values.length !== 1) {

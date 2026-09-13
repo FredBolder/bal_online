@@ -328,6 +328,7 @@ export function getGameInfo(backData, gameData) {
                         tail: 2,
                         fins: 3,
                         stripes: 5,
+                        tailStripes: 0,
                         eyePercentage: 50,
                         pupilPercentage: 40,
                         eyeOffsetX: 0,
@@ -1154,7 +1155,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     obj = gameInfo.tropicalFish[idx];
                     extraInfo = `Start position: (${obj.xStart}, ${obj.yStart}), Max horizontal distance: ${obj.maxDistX}, `;
                     extraInfo += `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `;
-                    extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Eye percentage: ${obj.eyePercentage}, `;
+                    extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Tail stripes: ${obj.tailStripes}, Eye percentage: ${obj.eyePercentage}, `;
                     extraInfo += `Pupil percentage: ${obj.pupilPercentage}, Eye offset X: ${obj.eyeOffsetX}, Eye offset Y: ${obj.eyeOffsetY}, `;
                     extraInfo += `Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`; 
                     if (globalVars.createLevel) {
@@ -1320,6 +1321,7 @@ export function initGameInfo(info) {
     info.redBalls = [];
     info.redFish = [];
     info.seaAnemones = [];
+    info.spikeBallLooksLikeStone = false;
     info.teleports = [];
     info.timeBombs = [];
     info.trapDoors = [];

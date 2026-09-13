@@ -1223,6 +1223,69 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 steps: 6
             });
             break;
+        case 17:
+            // Yellow Flagtail Prochilodus
+            // Dorsal fin
+            setColors(true);
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.5,
+                endT: 0.67,
+                height: bodyHeight * 0.35,
+                bendOuter: 0.15,
+                bendInner: 0.1,
+                apexPosition: 0.45,
+                filamentLength: 0,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.85,
+                endT: 0.9,
+                height: bodyHeight * -0.15, // negative for lower than top of body
+                bendOuter: 0.1,
+                bendInner: 0.1,
+                apexPosition: 0.4,
+                filamentLength: 0,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+            setColors(false);
+
+            // Anal fin
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.82,
+                endT: 0.95,
+                height: bodyHeight * -0.1,
+                bendOuter: 0.06,
+                bendInner: 0.3,
+                apexPosition: 0.8,
+                filamentLength: 0,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+
+            // Pelvic fin
+            drawPointedFin(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.55,
+                endT: 0.65,
+                height: bodyHeight * 0.2,
+                bendOuter: 0.08,
+                bendInner: 0.2,
+                apexPosition: 0.2,
+                filamentLength: 0,
+                filamentCurved: true,
+                filamentBendFactor: 0.1,
+                overlap: bodyHeight * 0.1,
+            });
+            break;
         default:
             break;
     }
@@ -1404,10 +1467,23 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
                 steps: 2
             });
             break;
+        case 17:
+            // Yellow Flagtail Prochilodus
+            cx = bodyRight - (bodyLength * 0.23);
+            cy = yCenter + (bodyHeight * 0.25);
+            finWidth = bodyLength * 0.09;
+            connectionWidth = finWidth * 0.4;
+            finHeight = bodyHeight * 0.5;
+            rotation = 1.25 * Math.PI;
+            options.widestPoint = 0.7;
+            break;
         default:
             break;
     }
-    drawPectoralFin(ctx, cx, cy, connectionWidth, finWidth, finHeight, rotation, options);
+    if (fins !== 16)
+    {
+        drawPectoralFin(ctx, cx, cy, connectionWidth, finWidth, finHeight, rotation, options);
+    }
 }
 
 

@@ -8,6 +8,7 @@ import { moverDirections, moverModes } from "./movers.js";
 import { musicBoxDirections, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
 import { pusherDirections, pusherModes } from "./pushers.js";
+import { tropicalFishStripes, tropicalFishTailStripes } from "./tropicalFish.js";
 
 export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let error = false;
@@ -27,6 +28,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isTeleport = false;
     let isTropicalFish = false;
     let list = "";
+    let maxValue = 0;
     let msg = "";
     let objectName = "";
 
@@ -222,6 +224,17 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "stripes":
+        case "tailStripes":
+            if (typeof value !== "number") {
+                error = true;
+                break;
+            }
+            maxValue = (prop === "stripes") ? tropicalFishStripes : tropicalFishTailStripes; 
+            if ((value < 0) || (value > maxValue)) {
+                error = true;
+            }
+            break;
         case "target":
             if (typeof value !== "string") {
                 error = true;
@@ -303,7 +316,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isTeleport && ["group"].includes(prop)) {
         list = "teleports";
     }
-    if (isTropicalFish && ["answer", "eyeOffsetX", "eyeOffsetY", "eyePercentage", "pupilPercentage"].includes(prop)) {
+    if (isTropicalFish && ["answer", "eyeOffsetX", "eyeOffsetY", "eyePercentage", "pupilPercentage",  "stripes", "tailStripes"].includes(prop)) {
         list = "tropicalFish";
     }
 

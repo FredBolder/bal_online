@@ -123,10 +123,11 @@ export function buildBody(
     bottomFrontBodyCpDist = 0.08,
     bottomRearBodyCpPos = 0.5,
     bottomRearBodyCpDist = 0.08,
+    offsetMidX = 0,
   } = {}
 ) {
   const headRight = isTang ? bodyRight - noseLength : bodyRight;
-  const midX = (bodyLeft + headRight) / 2;
+  const midX = ((bodyLeft + headRight) / 2) + ((headRight - bodyLeft) * offsetMidX * 0.25);
 
   const headTopY = isTang ? top + headTopYOffset : yc + noseYOffset;
   const headBottomY = isTang ? bottom - headBottomYOffset : yc + noseYOffset;

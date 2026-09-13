@@ -8,11 +8,12 @@ import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 16;
-export const tropicalFishPalettes = 42;
-export const tropicalFishShapes = 13;
+export const tropicalFishFinVariations = 17;
+export const tropicalFishPalettes = 43;
+export const tropicalFishShapes = 14;
 export const tropicalFishStripes = 22;
-export const tropicalFishTails = 12;
+export const tropicalFishTailStripes = 10;
+export const tropicalFishTails = 13;
 
 export function changeFins(gameInfo, x, y, decrease) {
     const step = decrease ? -1 : 1;
@@ -146,6 +147,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
             // Rainbow Runner
             bodyHeight = h * 0.18;
             bodyLength = w * 0.74;
+            break;
+        case 14:
+            // Yellow Flagtail Prochilodus
+            bodyHeight = h * 0.25;
+            bodyLength = w * 0.7;
             break;
         default:
             // 2
@@ -319,6 +325,20 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
                 bottomRearBodyCpDist: 0.1,
             };
             break;
+        case 14:
+            // Yellow Flagtail Prochilodus
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.3,
+                topFrontBodyCpDist: 0.15,
+                topRearBodyCpPos: 0.5,
+                topRearBodyCpDist: 0.05,
+                bottomFrontBodyCpPos: 0.5,
+                bottomFrontBodyCpDist: 0.15,
+                bottomRearBodyCpPos: 0.5,
+                bottomRearBodyCpDist: 0.05,
+            };
+            noseYOffset = bodyHeight * 0.1;
+            break;
         default:
             bodyCurvature = {
                 topFrontBodyCpPos: 0.7, // 0 = left, 1 = right (towards head)
@@ -360,6 +380,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
         headTopYOffset: bodyHeight * 0.25, // was 0.06
         headBottomYOffset: bodyHeight * 0.08, // was 0.08
         noseCurvature: 0.15, // was 0.1
+        offsetMidX: (shape === 14) ? 0.4 : 0,
         ...bodyCurvature,
     }
 
@@ -393,7 +414,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
     }
 
     // ---- Tail ----
-    drawTail(ctx, left, yc, tail, tailWidth, tailHeight, connectionHeight, colors);
+    drawTail(ctx, size, left, yc, tail, tailWidth, tailHeight, connectionHeight, colors, fish.tailStripes);
 
     // ---- Eye ----
     ctx.fillStyle = colors.eye;
@@ -491,6 +512,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
                 case 7:
                 case 8:
                 case 9:
+                case 13:
                     // forked
                     countTo = 6;
                     break;
@@ -675,267 +697,302 @@ export function presetTropicalFish(fish, preset) {
     switch (preset) {
         case "bandedtilapia":
             // Banded Tilapia
-            fish.palette = 39;
-            fish.shape = 1;
-            fish.tail = 4;
-            fish.fins = 4;
-            fish.stripes = 7;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 4;
+            fish.palette = 39;
+            fish.pupilPercentage = 40;
+            fish.shape = 1;
+            fish.stripes = 7;
+            fish.tail = 4;
+            fish.tailStripes = 0;
             break;
         case "bicoloranthias":
             // Bicolor Anthias
-            fish.palette = 15;
-            fish.shape = 1;
-            fish.tail = 9;
-            fish.fins = 4;
-            fish.stripes = 18;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 4;
+            fish.palette = 15;
+            fish.pupilPercentage = 40;
+            fish.shape = 1;
+            fish.stripes = 18;
+            fish.tail = 9;
+            fish.tailStripes = 0;
             break;
         case "blackneontetra":
             // Black Neon Tetra
-            fish.palette = 18;
-            fish.shape = 6;
-            fish.tail = 7;
-            fish.fins = 9;
-            fish.stripes = 20;
-            fish.eyePercentage = 55;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 55;
+            fish.fins = 9;
+            fish.palette = 18;
+            fish.pupilPercentage = 40;
+            fish.shape = 6;
+            fish.stripes = 20;
+            fish.tail = 7;
+            fish.tailStripes = 0;
             break;
         case "bluechromis":
             // Blue Chromis
-            fish.palette = 35;
-            fish.shape = 1;
-            fish.tail = 9;
-            fish.fins = 4;
-            fish.stripes = 0;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 60;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 4;
+            fish.palette = 35;
+            fish.pupilPercentage = 60;
+            fish.shape = 1;
+            fish.stripes = 0;
+            fish.tail = 9;
+            fish.tailStripes = 0;
             break;
         case "bluediamonddiscus":
             // Blue Diamond Discus
-            fish.palette = 16;
-            fish.shape = 5;
-            fish.tail = 4;
-            fish.fins = 8;
-            fish.stripes = 0;
-            fish.eyePercentage = 40;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 40;
+            fish.fins = 8;
+            fish.palette = 16;
+            fish.pupilPercentage = 40;
+            fish.shape = 5;
+            fish.stripes = 0;
+            fish.tail = 4;
+            fish.tailStripes = 0;
             break;
         case "brighamssnapper":
             // Brigham's Snapper
-            fish.palette = 21;
-            fish.shape = 8;
-            fish.tail = 7;
-            fish.fins = 4;
-            fish.stripes = 21;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 4;
+            fish.palette = 21;
+            fish.pupilPercentage = 40;
+            fish.shape = 8;
+            fish.stripes = 21;
+            fish.tail = 7;
+            fish.tailStripes = 0;
             break;
         case "caribbeanreefshark":
             // Caribbean Reef Shark
-            fish.palette = 42;
-            fish.shape = 13;
-            fish.tail = 12;
-            fish.fins = 16;
-            fish.stripes = 22;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 50;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = 0;
+            fish.eyePercentage = 50;
+            fish.fins = 16;
+            fish.palette = 42;
+            fish.pupilPercentage = 50;
+            fish.shape = 13;
+            fish.stripes = 22;
+            fish.tail = 12;
+            fish.tailStripes = 0;
             break;
         case "clownfish":
             // Clownfish
-            fish.palette = 8;
-            fish.shape = 2;
-            fish.tail = 6;
-            fish.fins = 1;
-            fish.stripes = 15;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 1;
+            fish.palette = 8;
+            fish.pupilPercentage = 40;
+            fish.shape = 2;
+            fish.stripes = 15;
+            fish.tail = 6;
+            fish.tailStripes = 0;
             break;
         case "electriccatfish":
             // Electric Catfish
-            fish.palette = 38;
-            fish.shape = 12;
-            fish.tail = 5;
-            fish.fins = 14;
-            fish.stripes = 18;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 35;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 14;
+            fish.palette = 38;
+            fish.pupilPercentage = 35;
+            fish.shape = 12;
+            fish.stripes = 18;
+            fish.tail = 5;
+            fish.tailStripes = 0;
             break;
         case "juvenilegoldentrevally":
             // Juvenile Golden Trevally
-            fish.palette = 3;
-            fish.shape = 2;
-            fish.tail = 7;
-            fish.fins = 3;
-            fish.stripes = 12;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 3;
+            fish.palette = 3;
+            fish.pupilPercentage = 40;
+            fish.shape = 2;
+            fish.stripes = 12;
+            fish.tail = 7;
+            fish.tailStripes = 0;
             break;
         case "orangereddiscus":
             // Orange-red Discus
-            fish.palette = 17;
-            fish.shape = 5;
-            fish.tail = 3;
-            fish.fins = 8;
-            fish.stripes = 5;
-            fish.eyePercentage = 40;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 40;
+            fish.fins = 8;
+            fish.palette = 17;
+            fish.pupilPercentage = 40;
+            fish.shape = 5;
+            fish.stripes = 5;
+            fish.tail = 3;
+            fish.tailStripes = 0;
             break;
         case "purpletang":
             // Purple Tang
-            fish.palette = 20;
-            fish.shape = 7;
-            fish.tail = 4;
-            fish.fins = 10;
-            fish.stripes = 0;
-            fish.eyePercentage = 35;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 35;
+            fish.fins = 10;
+            fish.palette = 20;
+            fish.pupilPercentage = 40;
+            fish.shape = 7;
+            fish.stripes = 0;
+            fish.tail = 4;
+            fish.tailStripes = 0;
             break;
         case "rainbowrunner":
             // Rainbow Runner
-            fish.palette = 41;
-            fish.shape = 13;
-            fish.tail = 11;
-            fish.fins = 15;
-            fish.stripes = 22;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = 0;
+            fish.eyePercentage = 50;
+            fish.fins = 15;
+            fish.palette = 41;
+            fish.pupilPercentage = 40;
+            fish.shape = 13;
+            fish.stripes = 22;
+            fish.tail = 11;
+            fish.tailStripes = 0;
             break;
         case "redtailshark":
             // Red Tail Shark
-            fish.palette = 9;
-            fish.shape = 1;
-            fish.tail = 7;
-            fish.fins = 2;
-            fish.stripes = 0;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 2;
+            fish.palette = 9;
+            fish.pupilPercentage = 40;
+            fish.shape = 1;
+            fish.stripes = 0;
+            fish.tail = 7;
+            fish.tailStripes = 0;
             break;
         case "rustyjobfish":
             // Rusty Jobfish
-            fish.palette = 37;
-            fish.shape = 11;
-            fish.tail = 11;
-            fish.fins = 13;
-            fish.stripes = 18;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 50;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 13;
+            fish.palette = 37;
+            fish.pupilPercentage = 50;
+            fish.shape = 11;
+            fish.stripes = 18;
+            fish.tail = 11;
+            fish.tailStripes = 0;
             break;
         case "siamesealgaeeater":
             // Siamese Algae Eater
-            fish.palette = 11;
-            fish.shape = 9;
-            fish.tail = 7;
-            fish.fins = 5;
-            fish.stripes = 17;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = 0;
+            fish.eyePercentage = 50;
+            fish.fins = 5;
+            fish.palette = 11;
+            fish.pupilPercentage = 40;
+            fish.shape = 9;
+            fish.stripes = 17;
+            fish.tail = 7;
+            fish.tailStripes = 0;
             break;
         case "smallmouthgrunt":
             // Smallmouth Grunt
-            fish.palette = 14;
-            fish.shape = 2;
-            fish.tail = 7;
-            fish.fins = 7;
-            fish.stripes = 19;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 7;
+            fish.palette = 14;
+            fish.pupilPercentage = 40;
+            fish.shape = 2;
+            fish.stripes = 19;
+            fish.tail = 7;
+            fish.tailStripes = 0;
             break;
         case "yellowfintuna":
             // Yellowfin Tuna
-            fish.palette = 36;
-            fish.shape = 10;
-            fish.tail = 10;
-            fish.fins = 12;
-            fish.stripes = 18;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 12;
+            fish.palette = 36;
+            fish.pupilPercentage = 40;
+            fish.shape = 10;
+            fish.stripes = 18;
+            fish.tail = 10;
+            fish.tailStripes = 0;
+            break;
+        case "yellowflagtailprochilodus":
+            // Yellow Flagtail Prochilodus
+            fish.eyeOffsetX = 0;
+            fish.eyeOffsetY = 0;
+            fish.eyePercentage = 50;
+            fish.fins = 17;
+            fish.palette = 43;
+            fish.pupilPercentage = 60;
+            fish.shape = 14;
+            fish.stripes = 0;
+            fish.tail = 13;
+            fish.tailStripes = 6;
             break;
         case "yellowtailaceicichlid":
             // Yellow Tail Acei Cichlid
-            fish.palette = 10;
-            fish.shape = 1;
-            fish.tail = 4;
-            fish.fins = 4;
-            fish.stripes = 0;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 4;
+            fish.palette = 10;
+            fish.pupilPercentage = 40;
+            fish.shape = 1;
+            fish.stripes = 0;
+            fish.tail = 4;
+            fish.tailStripes = 0;
             break;
         case "yellowtaildamselfish":
             // Yellow Tail Damselfish
-            fish.palette = 12;
-            fish.shape = 3;
-            fish.tail = 8;
-            fish.fins = 11;
-            fish.stripes = 0;
-            fish.eyePercentage = 50;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 11;
+            fish.palette = 12;
+            fish.pupilPercentage = 40;
+            fish.shape = 3;
+            fish.stripes = 0;
+            fish.tail = 8;
+            fish.tailStripes = 0;
             break;
         case "yellowtang":
             // Yellow Tang
-            fish.palette = 19;
-            fish.shape = 7;
-            fish.tail = 4;
-            fish.fins = 10;
-            fish.stripes = 0;
-            fish.eyePercentage = 35;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 35;
+            fish.fins = 10;
+            fish.palette = 19;
+            fish.pupilPercentage = 40;
+            fish.shape = 7;
+            fish.stripes = 0;
+            fish.tail = 4;
+            fish.tailStripes = 0;
             break;
         case "zebraangelfish":
             // Zebra Angelfish
-            fish.palette = 13;
-            fish.shape = 5;
-            fish.tail = 3;
-            fish.fins = 6;
-            fish.stripes = 4;
-            fish.eyePercentage = 40;
-            fish.pupilPercentage = 40;
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = -10;
+            fish.eyePercentage = 40;
+            fish.fins = 6;
+            fish.palette = 13;
+            fish.pupilPercentage = 40;
+            fish.shape = 5;
+            fish.stripes = 4;
+            fish.tail = 3;
+            fish.tailStripes = 0;
             break;
         default:
             break;

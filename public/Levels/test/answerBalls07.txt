@@ -4,8 +4,8 @@ $answer: 5, 1, %lunatetail
 $answer: 7, 1, %lunatetail
 $answer: 1, 3, %roundedtail
 $answer: 3, 3, %roundedtail
-$answer: 5, 3, %heterocercaltail
-$answer: 7, 3, %heterocercaltail
+$answer: 5, 3, %sharktail
+$answer: 7, 3, %sharktail
 $answer: 1, 5, %truncatetail
 $answer: 3, 5, %truncatetail
 $answer: 1, 7, %emarginatetail

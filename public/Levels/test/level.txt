@@ -1,60 +1,26 @@
-$bgcolor: 0, 0, 21, 4, #00BFFF
-$color: water, #0099CC
-$extra: 1
-$has: divingglasses
-$pistonmode: 19, 5, repeatslow
-$eyeoffsety: 6, 8, 0
-$fins: 6, 8, 16
-$palette: 6, 8, 42
-$pupilpercentage: 6, 8, 50
-$shape: 6, 8, 13
-$stripes: 6, 8, 22
-$tail: 6, 8, 12
-$eyeoffsety: 13, 4, 0
-$fins: 13, 4, 16
-$palette: 13, 4, 42
-$pupilpercentage: 13, 4, 50
-$shape: 13, 4, 13
-$stripes: 13, 4, 22
-$tail: 13, 4, 12
-$eyeoffsety: 9, 5, 0
-$fins: 9, 5, 16
-$palette: 9, 5, 42
-$pupilpercentage: 9, 5, 50
-$shape: 9, 5, 13
-$stripes: 9, 5, 22
-$tail: 9, 5, 12
-$eyeoffsety: 11, 6, 0
-$fins: 11, 6, 16
-$palette: 11, 6, 42
-$pupilpercentage: 11, 6, 50
-$shape: 11, 6, 13
-$stripes: 11, 6, 22
-$tail: 11, 6, 12
-$eyeoffsety: 12, 8, 0
-$fins: 12, 8, 16
-$palette: 12, 8, 42
-$pupilpercentage: 12, 8, 50
-$shape: 12, 8, 13
-$stripes: 12, 8, 22
-$tail: 12, 8, 12
-$background: 13, 4, 1, 1, 23
-$background: 19, 4, 1, 1, 23
-$background: 9, 5, 1, 1, 23
-$background: 19, 5, 1, 1, 23
-$background: 2, 6, 1, 1, 23
-$background: 11, 6, 1, 1, 23
-$background: 3, 7, 1, 1, 23
-$background: 19, 7, 1, 1, 23
-$background: 6, 8, 1, 1, 23
-$background: 12, 8, 1, 1, 23
-ѵ03000000000000000000
-1                   Ѽ
-1  2                1
-11W1WWWWWWWWWWWWWWWW1
-1wwwwwwwwwwwwҼwwww181
-1wwwwwwwwҼwwwwwwww1Ù1
-11l1wwwwwwwҼwwwwww111
-1wwpwwwwwwwwwwwwww1k1
-1111wwҼwwwwwҼwwwwwww1
-111111111111111111111
+$stonepattern: 2
+$spikeballlookslikestone: yes
+$display: 10, 17, stone
+$detectormode: 10, 17, blueball
+$movable: 10, 17, no
+$onetime: 10, 17, yes
+$target: 10, 17, command
+$value: 10, 17, delete, stone, rel, 1, -6 | create, spikeball, rel, 1, -6
+11111111111111111111111111111111
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1        1111111               1
+1        1111111               1
+1                              1
+1                              1
+1                              1
+13                             1
+1     2                        1
+1111111111ђ111111111111111111111

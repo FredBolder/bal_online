@@ -170,6 +170,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.tropicalFish[idx2].shape = gameInfo.tropicalFish[idx1].shape;
                 gameInfo.tropicalFish[idx2].stripes = gameInfo.tropicalFish[idx1].stripes;
                 gameInfo.tropicalFish[idx2].tail = gameInfo.tropicalFish[idx1].tail;
+                gameInfo.tropicalFish[idx2].tailStripes = gameInfo.tropicalFish[idx1].tailStripes;
             }
             break;
         case 244:

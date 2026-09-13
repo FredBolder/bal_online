@@ -169,3 +169,34 @@ export function drawStripes(ctx, bodyPath, size, bodyLeft, bodyRight, bodyTop, b
     ctx.lineCap = "butt";
     ctx.restore();
 }
+
+export function drawTailStripes(ctx, tailPath, size, xLeft, yCenter, tailWidth, tailHeight, colors, stripes) {
+    let numberOfStripes = stripes;
+    let dy = 0;
+    let stripeWidth = 1;
+    let y = 0;
+
+    if ((numberOfStripes < 1) || (colors.tailStripe === null)) {
+        return;
+    }
+
+    stripeWidth = Math.max(1, tailHeight * 0.5 / numberOfStripes);
+
+    ctx.save();
+    ctx.clip(tailPath);
+
+    y = yCenter - (tailHeight * 0.5);
+    dy = tailHeight / (numberOfStripes + 0);
+    y += dy / 2;
+    for (let i = 0; i < numberOfStripes; i++) {
+        ctx.beginPath();
+        ctx.lineWidth = stripeWidth;
+        ctx.strokeStyle = colors.tailStripe;
+        ctx.moveTo(xLeft - 2, y);
+        ctx.lineTo(xLeft + tailWidth + 2, y);
+        ctx.stroke();
+        y += dy;
+    }
+
+    ctx.restore();
+}

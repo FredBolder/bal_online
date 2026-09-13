@@ -1,3 +1,4 @@
+import { drawTailStripes } from "./fishStripes.js";
 import { globalVars } from "./glob.js";
 import { cubicFromMid } from "./graphicUtils.js";
 
@@ -175,6 +176,7 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
             break;
         case 7:
         case 8:
+        case 13:
             buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.5, 0.8, 0.5, 0.5, 0, 1);
             break;
         case 9:
@@ -189,7 +191,7 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
             buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.9, 0.6, 0.55, 0.5, 0, 1);
             break;
         case 12:
-            // Heterocercal
+            // Shark
             buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.3, 0.3, 0.6, 0.65, 0.3, 0.7);
             break;
         default:
@@ -279,6 +281,11 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 1.4;
             break;
+        case 13:
+            // Forked
+            tailWidth = bodyLength * 0.25;
+            tailHeight = bodyHeight * 1.3;
+            break;
         default:
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 1;
@@ -300,7 +307,7 @@ export function drawCross(ctx, x, y) {
     ctx.stroke();
 }
 
-export function drawTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connectionHeight, colors) {
+export function drawTail(ctx, size, xLeft, yCenter, tailType, tailWidth, tailHeight, connectionHeight, colors, stripes) {
     const color = colors.tail;
     const tailTop = yCenter - (tailHeight * 0.5);
 
@@ -320,6 +327,7 @@ export function drawTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, c
         // Lower
         drawTailClipped(ctx, path, color, [xLeft - 2, yCenter, tailWidth + 4, tailHeight * 0.5 + 2]);
     }
+    drawTailStripes(ctx, path, size, xLeft, yCenter, tailWidth, tailHeight, colors, stripes);
 }
 
 function drawTailClipped(ctx, path, color, clipRect) {
