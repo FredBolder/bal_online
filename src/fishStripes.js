@@ -170,10 +170,11 @@ export function drawStripes(ctx, bodyPath, size, bodyLeft, bodyRight, bodyTop, b
     ctx.restore();
 }
 
-export function drawTailStripes(ctx, tailPath, size, xLeft, yCenter, tailWidth, tailHeight, colors, stripes) {
+export function drawTailStripes(ctx, tailPath, xLeft, yCenter, tailWidth, tailHeight, colors, stripes) {
     let numberOfStripes = stripes;
     let dy = 0;
     let stripeWidth = 1;
+    let x = 0;
     let y = 0;
 
     if ((numberOfStripes < 1) || (colors.tailStripe === null)) {
@@ -185,17 +186,58 @@ export function drawTailStripes(ctx, tailPath, size, xLeft, yCenter, tailWidth, 
     ctx.save();
     ctx.clip(tailPath);
 
-    y = yCenter - (tailHeight * 0.5);
-    dy = tailHeight / (numberOfStripes + 0);
-    y += dy / 2;
-    for (let i = 0; i < numberOfStripes; i++) {
+    if ((stripes >= 11) && (stripes <= 17)) {
+        switch (stripes) {
+            case 11:
+                stripeWidth = tailWidth * 0.25;
+                x = xLeft + tailWidth - (stripeWidth * 0.5);
+                break;
+            case 12:
+                stripeWidth = tailWidth * 0.25;
+                x = xLeft + (stripeWidth * 0.5);
+                break;
+            case 13:
+                stripeWidth = tailWidth * 0.5;
+                x = xLeft + tailWidth - (stripeWidth * 0.5);
+                break;
+            case 14:
+                stripeWidth = tailWidth * 0.5;
+                x = xLeft + (stripeWidth * 0.5);
+                break;
+            case 15:
+                stripeWidth = tailWidth * 0.15;
+                x = xLeft + (tailWidth * 0.5);
+                break;
+            case 16:
+                stripeWidth = tailWidth * 0.3;
+                x = xLeft + (tailWidth * 0.5);
+                break;
+            case 17:
+                stripeWidth = tailWidth * 0.45;
+                x = xLeft + (tailWidth * 0.5);
+                break;
+            default:
+                break;
+        }
         ctx.beginPath();
         ctx.lineWidth = stripeWidth;
         ctx.strokeStyle = colors.tailStripe;
-        ctx.moveTo(xLeft - 2, y);
-        ctx.lineTo(xLeft + tailWidth + 2, y);
+        ctx.moveTo(x, (yCenter - (tailHeight * 0.5)) - 2);
+        ctx.lineTo(x, (yCenter + (tailHeight * 0.5)) + 2);
         ctx.stroke();
-        y += dy;
+    } else {
+        y = yCenter - (tailHeight * 0.5);
+        dy = tailHeight / (numberOfStripes + 0);
+        y += dy / 2;
+        for (let i = 0; i < numberOfStripes; i++) {
+            ctx.beginPath();
+            ctx.lineWidth = stripeWidth;
+            ctx.strokeStyle = colors.tailStripe;
+            ctx.moveTo(xLeft - 2, y);
+            ctx.lineTo(xLeft + tailWidth + 2, y);
+            ctx.stroke();
+            y += dy;
+        }
     }
 
     ctx.restore();

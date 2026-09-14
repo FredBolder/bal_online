@@ -1224,7 +1224,7 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
             });
             break;
         case 17:
-            // Yellow Flagtail Prochilodus
+            // Flagtail Prochilodus
             // Dorsal fin
             setColors(true);
             drawPointedFin(ctx, bodyCurves, {
@@ -1468,7 +1468,7 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             });
             break;
         case 17:
-            // Yellow Flagtail Prochilodus
+            // Flagtail Prochilodus
             cx = bodyRight - (bodyLength * 0.23);
             cy = yCenter + (bodyHeight * 0.25);
             finWidth = bodyLength * 0.09;

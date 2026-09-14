@@ -307,7 +307,7 @@ export function drawCross(ctx, x, y) {
     ctx.stroke();
 }
 
-export function drawTail(ctx, size, xLeft, yCenter, tailType, tailWidth, tailHeight, connectionHeight, colors, stripes) {
+export function drawTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connectionHeight, colors, stripes) {
     const color = colors.tail;
     const tailTop = yCenter - (tailHeight * 0.5);
 
@@ -327,7 +327,7 @@ export function drawTail(ctx, size, xLeft, yCenter, tailType, tailWidth, tailHei
         // Lower
         drawTailClipped(ctx, path, color, [xLeft - 2, yCenter, tailWidth + 4, tailHeight * 0.5 + 2]);
     }
-    drawTailStripes(ctx, path, size, xLeft, yCenter, tailWidth, tailHeight, colors, stripes);
+    drawTailStripes(ctx, path, xLeft, yCenter, tailWidth, tailHeight, colors, stripes);
 }
 
 function drawTailClipped(ctx, path, color, clipRect) {

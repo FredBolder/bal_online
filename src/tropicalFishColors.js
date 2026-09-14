@@ -460,7 +460,18 @@ export function getTropicalFishColors(palette) {
             }
             break;
         case 43:
-            // Yellow Flagtail Prochilodus
+            // Flagtail Prochilodus
+            colors = {
+                body: "#A8B1AE",
+                stripe: "#4E5957",
+                fin: "#C85A2A",
+                tail: "#D5792D",
+                tailStripe: "#20292A",
+                eye: "#B49A4A",
+                eyePupil: "#101416"
+            };
+            break;
+        case 44:
             colors = {
                 body: "#718C8B",
                 stripe: "#465956",

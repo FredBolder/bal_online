@@ -68,7 +68,7 @@ import { loadImage } from "../stonePatterns.js";
 import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
 import { setTimeBombsTime } from "../timeBombs.js";
-import { changeFins, changeStripes, changeTail, presetTropicalFish } from "../tropicalFish.js";
+import { changeFins, changeStripes, changeTail, changeTailStripes, presetTropicalFish } from "../tropicalFish.js";
 import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
@@ -439,16 +439,13 @@ function BalPage() {
 
 
   async function clickNewLevel(silent = false) {
-    const sizes = ["32 x 20 (Landscape)", "10 x 10 (Square)", "15 x 15 (Square)", "20 x 20 (Square)"];
+    const sizes = ["32 x 20 (Landscape)", "20 x 20 (Square)", "15 x 15 (Square)", "10 x 10 (Square)", "5 x 5 (Square)"];
     let level = 9999;
     let value = null;
 
     if (silent) {
       value = "32 x 20 (Landscape)";
     } else {
-      if (globalVars.uf) {
-        sizes.push("5 x 5 (Test)");
-      }
       value = await showSelect("New level", "Size", sizes, 0);
     }
     if (value !== null) {
@@ -466,7 +463,7 @@ function BalPage() {
         case "10 x 10 (Square)":
           level = 9996;
           break;
-        case "5 x 5 (Test)":
+        case "5 x 5 (Square)":
           level = 9995;
           break;
         default:
@@ -1233,12 +1230,12 @@ function BalPage() {
             // Water
             switch (globalVars.createLevelWaterPage) {
               case 2:
-                arr1 = [248, 2200, 250, 251];
+                arr1 = [249, 252, 205, 206, 248, 2200, 250, 251];
                 arr2 = [2169, 2170, 2171, 2172, 2173, 2174, 2175, 2176, 0, 0, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
                 // page 1
-                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 249, 252, 205, 206];
+                arr1 = [23, 20, 113, 114, 26, 27, 243, 2149, 2151, 2152, 2153, 2150, 2213, 0, 0, 0];
                 arr2 = [2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2101];
                 break;
             }
@@ -2885,7 +2882,14 @@ function BalPage() {
               if (createLevelObject === 2150) {
                 if (changeStripes(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish to change the number of stripes.");
+                    showMessage("Info", "Click on a tropical fish to change the stripes on the body.");
+                  }
+                }
+              }
+              if (createLevelObject === 2213) {
+                if (changeTailStripes(gameInfo, column, row, e.altKey) === -1) {
+                  if (oneSelected) {
+                    showMessage("Info", "Click on a tropical fish to change the stripes on the tail.");
                   }
                 }
               }
@@ -2986,7 +2990,7 @@ function BalPage() {
                       presetTropicalFish(fish, "caribbeanreefshark");
                       break;
                     case 2176:
-                      presetTropicalFish(fish, "yellowflagtailprochilodus");
+                      presetTropicalFish(fish, "flagtailprochilodus");
                       break;
                     default:
                       break;

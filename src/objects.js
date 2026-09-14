@@ -128,7 +128,7 @@ export function fishToFishName(fish, generalName) {
     if ((fish.palette === 43) && (fish.shape === 14) && (fish.tail === 13) &&
         (fish.fins === 17) && (fish.stripes === 0) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 60)) {
-        return generalName ? "Prochilodus" : "Yellow Flagtail Prochilodus";
+        return generalName ? "Prochilodus" : "Flagtail Prochilodus";
     }
 
     if ((fish.palette === 36) && (fish.shape === 10) && (fish.tail === 10) &&

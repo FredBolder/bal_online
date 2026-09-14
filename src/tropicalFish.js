@@ -9,10 +9,10 @@ import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
 export const tropicalFishFinVariations = 17;
-export const tropicalFishPalettes = 43;
+export const tropicalFishPalettes = 44;
 export const tropicalFishShapes = 14;
 export const tropicalFishStripes = 22;
-export const tropicalFishTailStripes = 10;
+export const tropicalFishTailStripes = 17;
 export const tropicalFishTails = 13;
 
 export function changeFins(gameInfo, x, y, decrease) {
@@ -68,6 +68,25 @@ export function changeTail(gameInfo, x, y, decrease) {
             tail = tropicalFishTails;
         }
         gameInfo.tropicalFish[idx].tail = tail;
+    }
+    return idx;
+}
+
+export function changeTailStripes(gameInfo, x, y, decrease) {
+    const step = decrease ? -1 : 1;
+    let idx = -1;
+    let stripes = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
+    if (idx >= 0) {
+        stripes = gameInfo.tropicalFish[idx].tailStripes + step;
+        if (stripes > tropicalFishTailStripes) {
+            stripes = 0;
+        }
+        if (stripes < 0) {
+            stripes = tropicalFishTailStripes;
+        }
+        gameInfo.tropicalFish[idx].tailStripes = stripes;
     }
     return idx;
 }
@@ -149,7 +168,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
             bodyLength = w * 0.74;
             break;
         case 14:
-            // Yellow Flagtail Prochilodus
+            // Flagtail Prochilodus
             bodyHeight = h * 0.25;
             bodyLength = w * 0.7;
             break;
@@ -326,7 +345,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
             };
             break;
         case 14:
-            // Yellow Flagtail Prochilodus
+            // Flagtail Prochilodus
             bodyCurvature = {
                 topFrontBodyCpPos: 0.3,
                 topFrontBodyCpDist: 0.15,
@@ -414,7 +433,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
     }
 
     // ---- Tail ----
-    drawTail(ctx, size, left, yc, tail, tailWidth, tailHeight, connectionHeight, colors, fish.tailStripes);
+    drawTail(ctx, left, yc, tail, tailWidth, tailHeight, connectionHeight, colors, fish.tailStripes);
 
     // ---- Eye ----
     ctx.fillStyle = colors.eye;
@@ -929,8 +948,8 @@ export function presetTropicalFish(fish, preset) {
             fish.tail = 10;
             fish.tailStripes = 0;
             break;
-        case "yellowflagtailprochilodus":
-            // Yellow Flagtail Prochilodus
+        case "flagtailprochilodus":
+            // Flagtail Prochilodus
             fish.eyeOffsetX = 0;
             fish.eyeOffsetY = 0;
             fish.eyePercentage = 50;
