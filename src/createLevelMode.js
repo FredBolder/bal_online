@@ -121,6 +121,8 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx1 = findElementByCoordinates(x1, y1, gameInfo.disappearingStones);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.disappearingStones);
             if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.disappearingStones[idx2].group = gameInfo.disappearingStones[idx1].group;
+                gameInfo.disappearingStones[idx2].mode = gameInfo.disappearingStones[idx1].mode;
                 gameInfo.disappearingStones[idx2].pattern.length = 0;
                 for (let i = 0; i < gameInfo.disappearingStones[idx1].pattern.length; i++) {
                     gameInfo.disappearingStones[idx2].pattern.push(gameInfo.disappearingStones[idx1].pattern[i]);

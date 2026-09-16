@@ -4,6 +4,7 @@ import { charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
+import { disappearingStoneModes } from "./disappearingStones.js";
 import { electricityModes } from "./electricity.js";
 import { globalVars } from "./glob.js";
 import { moverDirections, moverModes } from "./movers.js";
@@ -315,6 +316,7 @@ export function checkSettings(data, settings) {
     { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
     { name: "$detectormode", params: 3, xy: true, yesno: -1 },
     { name: "$direction", params: 3, xy: true, yesno: -1 },
+    { name: "$disappearingstonemode", params: 3, xy: true, yesno: -1 },
     { name: "$display", params: 3, xy: true, yesno: -1 },
     { name: "$displaysize", params: 2, xy: false, yesno: -1 },
     { name: "$electricitymode", params: 1, xy: false, yesno: -1 },
@@ -536,6 +538,14 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No conveyor belt, mover, music box or pusher found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$disappearingstonemode":
+              if (!disappearingStoneModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid disappearing stone mode ${values[2]}.\n`;
+              }
+              if (validXY && !["Џ", 198].includes(data[y][x])) {
+                msg += `${settingNr(i)}No disappearing stone found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$display":
@@ -1681,6 +1691,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$answerballmode":
         case "$conveyorbeltmode":
         case "$detectormode":
+        case "$disappearingstonemode":
         case "$movermode":
         case "$pistonmode":
         case "$pushermode":

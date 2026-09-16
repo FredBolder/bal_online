@@ -1,82 +1,10 @@
-$extra: 1
-$gameticks: pusher, 1
-$stonepattern: 3
-$spikeballlookslikestone: yes
-$answer: 27, 9, 0
-$answerballmode: 27, 9, scale
-$answer: 28, 9, =
-$answer: 29, 9, 2
-$display: 15, 5, stone
-$detectormode: 15, 5, blueball
-$onetime: 15, 5, yes
-$display: 19, 14, stone
-$detectormode: 19, 14, blueball
-$movable: 19, 14, no
-$onetime: 19, 14, yes
-$target: 19, 14, command
-$value: 19, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 20, 14, stone
-$detectormode: 20, 14, blueball
-$movable: 20, 14, no
-$onetime: 20, 14, yes
-$target: 20, 14, command
-$value: 20, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 21, 14, stone
-$detectormode: 21, 14, blueball
-$movable: 21, 14, no
-$onetime: 21, 14, yes
-$target: 21, 14, command
-$value: 21, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 22, 14, stone
-$detectormode: 22, 14, blueball
-$movable: 22, 14, no
-$onetime: 22, 14, yes
-$target: 22, 14, command
-$value: 22, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 23, 14, stone
-$detectormode: 23, 14, blueball
-$movable: 23, 14, no
-$onetime: 23, 14, yes
-$target: 23, 14, command
-$value: 23, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 24, 14, stone
-$detectormode: 24, 14, blueball
-$movable: 24, 14, no
-$onetime: 24, 14, yes
-$target: 24, 14, command
-$value: 24, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 25, 14, stone
-$detectormode: 25, 14, blueball
-$movable: 25, 14, no
-$onetime: 25, 14, yes
-$target: 25, 14, command
-$value: 25, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$direction: 14, 7, down
-$movermode: 14, 7, whiteball
-$pistonmode: 30, 17, repeatslow
-$direction: 25, 3, left
-$movable: 25, 3, no
-$pushermode: 25, 3, continue
-$direction: 25, 4, left
-$movable: 25, 4, no
-$pushermode: 25, 4, continue
-11111111111111111111111111111111
-111111111113111111Ѥ1111111111111
-11111111111 111111B1111111111111
-1=         =             њ     1
-1=         =          4  њ     1
-1=  11111111111ђ   1111111111111
-1=  1T            4   2       11
-1=  1111 11111η111111111111   81
-1=       8      11111111111  411
-1=       11               1ҹҹҹ11
-1=      111               111 11
-1=        3    8          111  1
-1=            1D          111b 1
-1=   11   1   1 1         T11111
-1=     L      1   1ђђђђђђђ111111
-1=            1                1
-11   11   1   1              181
-11 L      11  111            1Ù1
-18        111                111
-11111111111111111111111111111111
+$disappearingstonemode: 2, 1, group
+$disappearingstonemode: 3, 1, group
+$disappearingstonemode: 4, 1, group
+$disappearingstonemode: 5, 1, group
+$disappearingstonemode: 6, 1, group
+0000000020
+01ЏЏЏЏЏђ10
+3        0
+0        0
+1111111111

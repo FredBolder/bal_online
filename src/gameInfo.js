@@ -270,7 +270,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 198: {
-                    let disappearingStone = { x: j, y: i, status: 0, countDown: false, pattern: [5, 3], patternIndex: 0, patternCounter: 0 };
+                    let disappearingStone = { x: j, y: i, status: 0, countDown: false, pattern: [5, 3], patternIndex: 0, patternCounter: 0, mode: "pattern", group: 1 };
                     result.disappearingStones.push(disappearingStone);
                     break;
                 }
@@ -1051,7 +1051,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
                 if (idx >= 0) {
                     obj = gameInfo.disappearingStones[idx];
-                    extraInfo = `Status: ${obj.status}, Pattern: ${JSON.stringify(obj.pattern)}`;
+                    extraInfo = `Mode: ${obj.mode}, Status: ${obj.status}, Pattern: ${JSON.stringify(obj.pattern)}, Group: ${obj.group}`;
                 }
                 info = `Disappearing stone, ` + extraInfo;
                 break;

@@ -981,16 +981,28 @@ function drawLevel(
   function drawDisappearingStone(x, y) {
     const color = getFgcolor(x, y, "#464646");
     const idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
+    let mode = 0;
+    let n = 0;
     let status = 0;
 
     if (idx >= 0) {
+      mode = gameInfo.disappearingStones[idx].mode;
       status = gameInfo.disappearingStones[idx].status;
     }
+    if (mode === "group") {
+      if (status >= -1) {
+        n = 0;
+      } else {
+        n = Math.abs(status) - 1;
+      }
+    } else {
+      n = status;
+    }
     drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
-    // status 3 = disappeared
-    if (status < 3) {
+    // 3 = disappeared
+    if (n < 3) {
       ctx.lineWidth = w2;
-      switch (status) {
+      switch (n) {
         case 0:
           ctx.setLineDash([3, 1]);
           break;

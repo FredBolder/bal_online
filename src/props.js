@@ -3,6 +3,7 @@ import { changerDirections } from "./changers.js";
 import { getGameDataValue } from "./balUtils.js";
 import { conveyorBeltDirections, conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
+import { disappearingStoneModes } from "./disappearingStones.js";
 import { elevatorDirections, horizontalElevatorDirections } from "./elevators.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { musicBoxDirections, musicBoxModes } from "./musicBoxes.js";
@@ -17,6 +18,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isChanger = false;
     let isConveyorBelt = false;
     let isDetector = false;
+    let isDisappearingStone = false;
     let isElevator = false;
     let isHorizontalElevator = false;
     let isMover = false;
@@ -73,6 +75,10 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         case 178:
             isMover = true;
             objectName = "mover";
+            break;
+        case 198:    
+            isDisappearingStone = true;
+            objectName = "disappearing stone";
             break;
         case 209:
             isPusher = true;
@@ -180,6 +186,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             if (isDetector && !detectorModes().includes(value)) {
+                error = true;
+            }
+            if (isDisappearingStone && !disappearingStoneModes().includes(value)) {
                 error = true;
             }
             if (isMover && !moverModes().includes(value)) {
@@ -294,6 +303,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     }
     if (isDetector && ["condition", "display", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
         list = "detectors";
+    }
+    if (isDisappearingStone && ["group", "mode"].includes(prop)) {
+        list = "disappearingStones";
     }
     if (isMover && ["direction", "inverted", "mode"].includes(prop)) {
         list = "movers";

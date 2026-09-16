@@ -730,6 +730,14 @@ function updateGroup(gameData, gameInfo, gameVars, group) {
         }
     }
 
+    for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
+        const disappearingStone = gameInfo.disappearingStones[i];
+        if (disappearingStone.group === group) {
+            disappearingStone.status = -1;
+            needsRefresh = true;
+        }
+    }
+
     for (let i = 0; i < gameInfo.pushers.length; i++) {
         const pusher = gameInfo.pushers[i];
         if (pusher.group === group) {
