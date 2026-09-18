@@ -2538,6 +2538,14 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
         gameInfo.blueBall2.y = newY;
       }
       break;
+    case 6:
+    case 106:
+      updateObject(gameInfo.elevators, oldX, oldY, newX, newY);
+      break;
+    case 7:
+    case 107:
+      updateObject(gameInfo.horizontalElevators, oldX, oldY, newX, newY);
+      break;
     case 8:
     case 93:
     case 94:

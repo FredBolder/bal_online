@@ -60,7 +60,7 @@ export const seriesFishEnd = 6365;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6458;
+export const seriesAnnoyingEnd = 6459;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;

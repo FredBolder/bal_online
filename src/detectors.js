@@ -12,6 +12,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let absX = 0;
     let absY = 0;
     let checkSettingsResult = "";
+    let direction = "";
     let fish = null;
     let idx = -1;
     const invalidInt = -10000;
@@ -22,8 +23,10 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     const value = commandLine.trim();
     const values = value.split(",");
     const valuesLowerCase = [];
-    let x = 0;
-    let y = 0;
+    let x1 = 0;
+    let y1 = 0;
+    let x2 = 0;
+    let y2 = 0;
 
     if (value === "" || values.length < 1) {
         return;
@@ -60,230 +63,257 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         return;
     }
 
-    if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && values.length === 5) ||
-        (cmd === "delete" && values.length === 5) || (cmd === "move" && values.length === 6)) {
+    if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && (values.length === 5 || values.length === 7)) ||
+        (cmd === "delete" && (values.length === 5 || values.length === 7)) || (cmd === "move" && (values.length === 6 || values.length === 8))) {
         // create, object name, rel or abs, x, y
+        // create, object name, rel or abs, x1, y1, x2, y2
         // delete, object name, rel or abs, x, y
+        // delete, object name, rel or abs, x1, y1, x2, y2
         // move, object name, rel or abs, x, y, direction
+        // move, object name, rel or abs, x1, y1, x2, y2, direction
+        if (cmd === "move") {
+            direction = valuesLowerCase[values.length - 1];
+            if (!["left", "right", "up", "down"].includes(direction)) {
+                return;
+            }
+        }
         if (!["abs", "rel", "absolute", "relative"].includes(valuesLowerCase[2])) {
             return;
         }
-        x = intValues[3];
-        y = intValues[4];
-        if (x === invalidInt || y === invalidInt) {
+        x1 = intValues[3];
+        y1 = intValues[4];
+        if (x1 === invalidInt || y1 === invalidInt) {
             return;
         }
-        if (cmd === "move") {
-            if (!["left", "right", "up", "down"].includes(valuesLowerCase[5])) {
+        if ((cmd === "create" || cmd === "delete" || cmd === "move") && values.length >= 7) {
+            x2 = intValues[5];
+            y2 = intValues[6];
+            if (x2 === invalidInt || y2 === invalidInt) {
                 return;
             }
-        }
-        if (valuesLowerCase[2] === "abs" || valuesLowerCase[2] === "absolute") {
-            absX = x;
-            absY = y;
         } else {
-            absX = xRef + x;
-            absY = yRef + y;
+            x2 = x1;
+            y2 = y1;
         }
-        const obj = getGameDataValue(gameData, absX, absY);
-        if (obj === -1) {
-            return;
+        // Swap if needed
+        if (x1 > x2) {
+            [x1, x2] = [x2, x1];
         }
-
-        const objName = valuesLowerCase[1];
-        if (cmd !== "changedirection" && cmd !== "create" && !objectPossible(cmd, objName, obj)) {
-            return;
+        if (y1 > y2) {
+            [y1, y2] = [y2, y1];
         }
-
-        if (cmd === "changedirection") {
-            commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
-        }
-        if (cmd === "create") {
-            if (obj !== 0) {
-                return;
-            }
-            switch (objName) {
-                case "brownball":
-                    objectNumber = 253;
-                    break;
-                case "detector":
-                    objectNumber = 255;
-                    break;
-                case "elevatordown":
-                    objectNumber = 6;
-                    break;
-                case "elevatorleft":
-                    objectNumber = 7;
-                    break;
-                case "elevatorright":
-                    objectNumber = 107;
-                    break;
-                case "elevatorup":
-                    objectNumber = 109;
-                    break;
-                case "forcedown":
-                    objectNumber = 110;
-                    break;
-                case "forceleft":
-                    objectNumber = 112;
-                    break;
-                case "forceright":
-                    objectNumber = 111;
-                    break;
-                case "forceup":
-                    objectNumber = 0;
-                    break;
-                case "grayball":
-                    objectNumber = 83;
-                    break;
-                case "grayballonemove":
-                    objectNumber = 82;
-                    break;
-                case "grayballtwomoves":
-                    objectNumber = 98;
-                    break;
-                case "jellyfish":
-                    objectNumber = 248;
-                    break;
-                case "lightblueball":
-                    objectNumber = 5;
-                    break;
-                case "onedirectionportdown":
-                    objectNumber = 88;
-                    break;
-                case "onedirectionportleft":
-                    objectNumber = 11;
-                    break;
-                case "onedirectionportright":
-                    objectNumber = 10;
-                    break;
-                case "onedirectionportup":
-                    objectNumber = 87;
-                    break;
-                case "orangeball":
-                    objectNumber = 40;
-                    break;
-                case "pinkball":
-                    objectNumber = 203;
-                    break;
-                case "pistondown":
-                    objectNumber = 161;
-                    break;
-                case "pistonleft":
-                    objectNumber = 163;
-                    break;
-                case "pistonright":
-                    objectNumber = 165;
-                    break;
-                case "pistonstrigger":
-                    objectNumber = 158;
-                    break;
-                case "pistonup":
-                    objectNumber = 159;
-                    break;
-                case "purpleball":
-                    objectNumber = 28;
-                    break;
-                case "pusher":
-                    objectNumber = 209;
-                    break;
-                case "redball":
-                    objectNumber = 8;
-                    break;
-                case "redfish":
-                    objectNumber = 27;
-                    break;
-                case "spikeball":
-                    objectNumber = 256;
-                    gameInfo.levelCanHaveSpikeBalls = true;
-                    break;
-                case "spikedown":
-                    objectNumber = 175;
-                    break;
-                case "spikeleft":
-                    objectNumber = 177;
-                    break;
-                case "spikeright":
-                    objectNumber = 176;
-                    break;
-                case "spikeup":
-                    objectNumber = 174;
-                    break;
-                case "stone":
-                    objectNumber = 1;
-                    break;
-                case "whiteball":
-                    objectNumber = 4;
-                    break;
-                case "yellowball":
-                    objectNumber = 9;
-                    break;
-                case "yellowdirectionchanger1":
-                    objectNumber = 84;
-                    break;
-                case "yellowdirectionchanger2":
-                    objectNumber = 85;
-                    break;
-                case "yellowdirectionchanger3":
-                    objectNumber = 86;
-                    break;
-                case "yellowdirectionchanger4":
-                    objectNumber = 138;
-                    break;
-                case "yellowdirectionchanger5":
-                    objectNumber = 139;
-                    break;
-                case "yellowpusher":
-                    objectNumber = 115;
-                    break;
-                case "yellowpusherstrigger":
-                    objectNumber = 116;
-                    break;
-                case "bandedtilapia":
-                case "bicoloranthias":
-                case "blackneontetra":
-                case "bluechromis":
-                case "bluediamonddiscus":
-                case "brighamssnapper":
-                case "clownfish":
-                case "juvenilegoldentrevally":
-                case "orangereddiscus":
-                case "purpletang":
-                case "redtailshark":
-                case "rustyjobfish":
-                case "siamesealgaeeater":
-                case "smallmouthgrunt":
-                case "yellowfintuna":
-                case "yellowtang":
-                case "yellowtailaceicichlid":
-                case "yellowtaildamselfish":
-                case "zebraangelfish":
-                    objectNumber = 243;
-                    break;
-                default:
-                    objectNumber = 0;
-                    break;
-            }
-            if (objectNumber > 0) {
-                addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
-            }
-            if (objectNumber === 243) {
-                idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
-                if (idx < 0) {
-                    return;
+        for (let x = x1; x <= x2; x++) {
+            for (let y = y1; y <= y2; y++) {
+                if (valuesLowerCase[2] === "abs" || valuesLowerCase[2] === "absolute") {
+                    absX = x;
+                    absY = y;
+                } else {
+                    absX = xRef + x;
+                    absY = yRef + y;
                 }
-                fish = gameInfo.tropicalFish[idx];
-                presetTropicalFish(fish, objName);
+                const obj = getGameDataValue(gameData, absX, absY);
+                if (obj === -1) {
+                    continue;
+                }
+
+                const objName = valuesLowerCase[1];
+                if (cmd !== "changedirection" && cmd !== "create" && !objectPossible(cmd, objName, obj)) {
+                    continue;
+                }
+
+                if (cmd === "changedirection") {
+                    commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
+                }
+                if (cmd === "create") {
+                    if (obj !== 0) {
+                        continue;
+                    }
+                    switch (objName) {
+                        case "brownball":
+                            objectNumber = 253;
+                            break;
+                        case "detector":
+                            objectNumber = 255;
+                            break;
+                        case "elevatordown":
+                            objectNumber = 6;
+                            break;
+                        case "elevatorleft":
+                            objectNumber = 7;
+                            break;
+                        case "elevatorright":
+                            objectNumber = 107;
+                            break;
+                        case "elevatorup":
+                            objectNumber = 109;
+                            break;
+                        case "forcedown":
+                            objectNumber = 110;
+                            break;
+                        case "forceleft":
+                            objectNumber = 112;
+                            break;
+                        case "forceright":
+                            objectNumber = 111;
+                            break;
+                        case "forceup":
+                            objectNumber = 0;
+                            break;
+                        case "grayball":
+                            objectNumber = 83;
+                            break;
+                        case "grayballonemove":
+                            objectNumber = 82;
+                            break;
+                        case "grayballtwomoves":
+                            objectNumber = 98;
+                            break;
+                        case "jellyfish":
+                            objectNumber = 248;
+                            break;
+                        case "ladder":
+                            objectNumber = 25;
+                            break;
+                        case "lightblueball":
+                            objectNumber = 5;
+                            break;
+                        case "onedirectionportdown":
+                            objectNumber = 88;
+                            break;
+                        case "onedirectionportleft":
+                            objectNumber = 11;
+                            break;
+                        case "onedirectionportright":
+                            objectNumber = 10;
+                            break;
+                        case "onedirectionportup":
+                            objectNumber = 87;
+                            break;
+                        case "orangeball":
+                            objectNumber = 40;
+                            break;
+                        case "pinkball":
+                            objectNumber = 203;
+                            break;
+                        case "pistondown":
+                            objectNumber = 161;
+                            break;
+                        case "pistonleft":
+                            objectNumber = 163;
+                            break;
+                        case "pistonright":
+                            objectNumber = 165;
+                            break;
+                        case "pistonstrigger":
+                            objectNumber = 158;
+                            break;
+                        case "pistonup":
+                            objectNumber = 159;
+                            break;
+                        case "purpleball":
+                            objectNumber = 28;
+                            break;
+                        case "pusher":
+                            objectNumber = 209;
+                            break;
+                        case "redball":
+                            objectNumber = 8;
+                            break;
+                        case "redfish":
+                            objectNumber = 27;
+                            break;
+                        case "spikeball":
+                            objectNumber = 256;
+                            gameInfo.levelCanHaveSpikeBalls = true;
+                            break;
+                        case "spikedown":
+                            objectNumber = 175;
+                            break;
+                        case "spikeleft":
+                            objectNumber = 177;
+                            break;
+                        case "spikeright":
+                            objectNumber = 176;
+                            break;
+                        case "spikeup":
+                            objectNumber = 174;
+                            break;
+                        case "stone":
+                            objectNumber = 1;
+                            break;
+                        case "whiteball":
+                            objectNumber = 4;
+                            break;
+                        case "yellowball":
+                            objectNumber = 9;
+                            break;
+                        case "yellowdirectionchanger1":
+                            objectNumber = 84;
+                            break;
+                        case "yellowdirectionchanger2":
+                            objectNumber = 85;
+                            break;
+                        case "yellowdirectionchanger3":
+                            objectNumber = 86;
+                            break;
+                        case "yellowdirectionchanger4":
+                            objectNumber = 138;
+                            break;
+                        case "yellowdirectionchanger5":
+                            objectNumber = 139;
+                            break;
+                        case "yellowpusher":
+                            objectNumber = 115;
+                            break;
+                        case "yellowpusherstrigger":
+                            objectNumber = 116;
+                            break;
+                        case "bandedtilapia":
+                        case "bicoloranthias":
+                        case "blackneontetra":
+                        case "bluechromis":
+                        case "bluediamonddiscus":
+                        case "brighamssnapper":
+                        case "clownfish":
+                        case "juvenilegoldentrevally":
+                        case "orangereddiscus":
+                        case "purpletang":
+                        case "redtailshark":
+                        case "rustyjobfish":
+                        case "siamesealgaeeater":
+                        case "smallmouthgrunt":
+                        case "yellowfintuna":
+                        case "yellowtang":
+                        case "yellowtailaceicichlid":
+                        case "yellowtaildamselfish":
+                        case "zebraangelfish":
+                            objectNumber = 243;
+                            break;
+                        default:
+                            objectNumber = 0;
+                            break;
+                    }
+                    if (objectNumber > 0) {
+                        addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
+                    }
+                    if (objectNumber === 243) {
+                        idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
+                        if (idx < 0) {
+                            continue;
+                        }
+                        fish = gameInfo.tropicalFish[idx];
+                        presetTropicalFish(fish, objName);
+                    }
+                }
+                if (cmd === "delete") {
+                    removeObject(backData, gameData, gameInfo, absX, absY, false);
+                }
+                if (cmd === "move") {
+                    moveObjectInDirection(gameData, gameInfo, absX, absY, direction, true);
+                }
             }
-        }
-        if (cmd === "delete") {
-            removeObject(backData, gameData, gameInfo, absX, absY, false);
-        }
-        if (cmd === "move") {
-            moveObjectInDirection(gameData, gameInfo, absX, absY, valuesLowerCase[5], true);
         }
     }
-
 }
 
 function commandChangeDirection(gameData, gameInfo, target, x, y) {
@@ -420,7 +450,9 @@ function objectPossible(cmd, objName, obj) {
         if (
             (objName === "brownball" && obj === 253) ||
             (objName === "changer" && obj === 244) ||
+            (objName === "elevator" && (obj === 6 || obj === 106)) ||
             (objName === "grayballs" && [82, 83, 98].includes(obj)) ||
+            (objName === "horizontalelevator" && (obj === 7 || obj === 107)) ||
             (objName === "lightblueball" && obj === 5) ||
             (objName === "onedirectionportdown" && obj === 88) ||
             (objName === "onedirectionportleft" && obj === 11) ||

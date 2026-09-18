@@ -129,12 +129,6 @@ export function rotatePoints(points, basePoint, angle) {
   });
 }
 
-export function swap(a, b) {
-  let temp = a;
-  a = b;
-  b = temp;
-}
-
 export function stringToBoolean(value) {
   return value === "1" ? true: false;
 }

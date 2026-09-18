@@ -1134,7 +1134,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 22, 0, 0, 0, 0, 2101];
+                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 2092, 22, 0, 0, 0, 2101];
                 break;
             }
             break;
@@ -3411,6 +3411,24 @@ function BalPage() {
               ok = false;
               if (row > 0) {
                 newValue = await showSelect("Answer balls", "Mode:", ["answer ball", "scale"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (createLevelMenu === menuToNumber("stones")) {
+          switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Disappearing stones", "Mode:", ["group", "pattern"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

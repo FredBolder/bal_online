@@ -431,5 +431,81 @@ describe("Pistons", () => {
         ]);
     });
 
+    it("detectors L", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 3 },
+            greenBalls: 1,
+            detectors: [
+                { x: 2, y: 4, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
+                    value: "create, stone, rel, 1, -1, 2, -3", display: "stone", activated: false, 
+                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 5, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 3, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 5, 1, 0, 0, 1, 1],
+            [1, 0, 0, 1, 1, 0, 0, 3, 1],
+            [1, 0, 2, 1, 1, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true, explosion: false });
+        expect(gameInfo.detectors).toEqual([
+            { x: 2, y: 4, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
+                value: "create, stone, rel, 1, -1, 2, -3", display: "stone", activated: true, 
+                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1 }
+        ]);
+    });
+
+    it("detectors M", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 1 },
+            greenBalls: 1,
+            detectors: [
+                { x: 2, y: 2, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
+                    value: "delete, stone, rel, 1, 0, 2, 2", display: "stone", activated: false, 
+                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 2, 0, 0, 0, 0, 3, 1],
+            [1, 1, 255, 1, 1, 1, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 2, 0, 0, 0, 0, 3, 1],
+            [1, 1, 255, 0, 0, 1, 0, 0, 1],
+            [1, 1, 1, 0, 0, 1, 1, 1, 1],
+            [1, 1, 1, 0, 0, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true, explosion: false });
+        expect(gameInfo.detectors).toEqual([
+            { x: 2, y: 2, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command", 
+                value: "delete, stone, rel, 1, 0, 2, 2", display: "stone", activated: true, 
+                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1 }
+        ]);
+    });
+
     // Insert new tests here
 });
