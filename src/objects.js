@@ -17,6 +17,12 @@ export function coordinatesToFishName(gameData, gameInfo, x, y, generalName) {
 }
 
 export function fishToFishName(fish, generalName) {
+    if ((fish.palette === 46) && (fish.shape === 5) && (fish.tail === 14) &&
+        (fish.fins === 6) && (fish.stripes === 0) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.eyePercentage === 40) && (fish.pupilPercentage === 40)) {
+        return generalName ? "Angelfish" : "Albino Angelfish";
+    }
+
     if (((fish.palette === 39) || (fish.palette === 40)) && (fish.shape === 1) && (fish.tail === 4) &&
         (fish.fins === 4) && (fish.stripes === 7) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
@@ -71,10 +77,22 @@ export function fishToFishName(fish, generalName) {
         return generalName ? "Catfish" : "Electric Catfish";
     }
 
+    if ((fish.palette === 43) && (fish.shape === 14) && (fish.tail === 13) &&
+        (fish.fins === 17) && (fish.stripes === 0) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) && 
+        (fish.eyePercentage === 50) && (fish.pupilPercentage === 60)) {
+        return generalName ? "Prochilodus" : "Flagtail Prochilodus";
+    }
+
     if ((fish.palette === 3) && (fish.shape === 2) && (fish.tail === 7) &&
         (fish.fins === 3) && (fish.stripes === 12) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Golden Trevally" : "Juvenile Golden Trevally";
+    }
+
+    if ((fish.palette === 45) && (fish.shape === 15) && (fish.tail === 11) &&
+        (fish.fins === 18) && (fish.stripes === 18) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
+        (fish.eyePercentage === 50) && (fish.pupilPercentage === 35)) {
+        return generalName ? "Snapper" : "Longtail Red Snapper";
     }
 
     if ((fish.palette === 17) && (fish.shape === 5) && (fish.tail === 3) &&
@@ -123,12 +141,6 @@ export function fishToFishName(fish, generalName) {
         (fish.fins === 7) && (fish.stripes === 19) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) && 
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
         return generalName ? "Grunt" : "Smallmouth Grunt";
-    }
-
-    if ((fish.palette === 43) && (fish.shape === 14) && (fish.tail === 13) &&
-        (fish.fins === 17) && (fish.stripes === 0) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) && 
-        (fish.eyePercentage === 50) && (fish.pupilPercentage === 60)) {
-        return generalName ? "Prochilodus" : "Flagtail Prochilodus";
     }
 
     if ((fish.palette === 36) && (fish.shape === 10) && (fish.tail === 10) &&

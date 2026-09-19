@@ -8,12 +8,12 @@ import { drawTail, getTailDimensions } from "./fishTails.js";
 import { globalVars } from "./glob.js";
 import { getTropicalFishColors } from "./tropicalFishColors.js";
 
-export const tropicalFishFinVariations = 17;
-export const tropicalFishPalettes = 44;
-export const tropicalFishShapes = 14;
+export const tropicalFishFinVariations = 18;
+export const tropicalFishPalettes = 46;
+export const tropicalFishShapes = 15;
 export const tropicalFishStripes = 22;
 export const tropicalFishTailStripes = 17;
-export const tropicalFishTails = 13;
+export const tropicalFishTails = 14;
 
 export function changeFins(gameInfo, x, y, decrease) {
     const step = decrease ? -1 : 1;
@@ -172,6 +172,11 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
             bodyHeight = h * 0.25;
             bodyLength = w * 0.7;
             break;
+        case 15:
+            // Longtail Red Snapper
+            bodyHeight = h * 0.19;
+            bodyLength = w * 0.74;
+            break;
         default:
             // 2
             bodyHeight = h * 0.3;
@@ -191,11 +196,10 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
     // ---- Body outline ----
     const bodyLeft = left + tailWidth;
     const bodyRight = right;
-    const connectionHeight = bodyHeight * 0.15;
-
-
     let bodyCurvature = null;
+    let connectionHeight = bodyHeight * 0.15;
     let noseYOffset = 0;
+    let offsetMidX = 0;
     switch (shape) {
         case 3:
             // Yellow Tail Damselfish
@@ -357,6 +361,23 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
                 bottomRearBodyCpDist: 0.05,
             };
             noseYOffset = bodyHeight * 0.1;
+            offsetMidX = 0.4;
+            break;
+        case 15:
+            // Longtail Red Snapper
+            bodyCurvature = {
+                topFrontBodyCpPos: 0.8,
+                topFrontBodyCpDist: 0.2,
+                topRearBodyCpPos: 0.7,
+                topRearBodyCpDist: 0.05,
+                bottomFrontBodyCpPos: 0.9,
+                bottomFrontBodyCpDist: 0.15,
+                bottomRearBodyCpPos: 0.7,
+                bottomRearBodyCpDist: 0.05,
+            };
+            connectionHeight = connectionHeight * 1.2;
+            noseYOffset = bodyHeight * 0.1;
+            offsetMidX = 0.4;
             break;
         default:
             bodyCurvature = {
@@ -399,7 +420,7 @@ export function drawFish(ctx, xc, yc, size, flipHorizontally, fish) {
         headTopYOffset: bodyHeight * 0.25, // was 0.06
         headBottomYOffset: bodyHeight * 0.08, // was 0.08
         noseCurvature: 0.15, // was 0.1
-        offsetMidX: (shape === 14) ? 0.4 : 0,
+        offsetMidX,
         ...bodyCurvature,
     }
 
@@ -525,6 +546,7 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
                 case 1:
                 case 2:
                 case 3:
+                case 14:
                     // emarginate
                     countTo = 7;
                     break;
@@ -714,6 +736,19 @@ export function moveTropicalFish(backData, gameData, gameInfo, gameVars) {
 
 export function presetTropicalFish(fish, preset) {
     switch (preset) {
+        case "albinoangelfish":
+            // Albino Angelfish
+            fish.eyeOffsetX = 0;
+            fish.eyeOffsetY = -10;
+            fish.eyePercentage = 40;
+            fish.fins = 6;
+            fish.palette = 46;
+            fish.pupilPercentage = 40;
+            fish.shape = 5;
+            fish.stripes = 0;
+            fish.tail = 14;
+            fish.tailStripes = 0;
+            break;
         case "bandedtilapia":
             // Banded Tilapia
             fish.eyeOffsetX = 0;
@@ -831,6 +866,19 @@ export function presetTropicalFish(fish, preset) {
             fish.tail = 5;
             fish.tailStripes = 0;
             break;
+        case "flagtailprochilodus":
+            // Flagtail Prochilodus
+            fish.eyeOffsetX = 0;
+            fish.eyeOffsetY = 0;
+            fish.eyePercentage = 50;
+            fish.fins = 17;
+            fish.palette = 43;
+            fish.pupilPercentage = 60;
+            fish.shape = 14;
+            fish.stripes = 0;
+            fish.tail = 13;
+            fish.tailStripes = 6;
+            break;
         case "juvenilegoldentrevally":
             // Juvenile Golden Trevally
             fish.eyeOffsetX = 0;
@@ -842,6 +890,19 @@ export function presetTropicalFish(fish, preset) {
             fish.shape = 2;
             fish.stripes = 12;
             fish.tail = 7;
+            fish.tailStripes = 0;
+            break;
+        case "longtailredsnapper":
+            // Longtail Red Snapper
+            fish.eyeOffsetX = 0;
+            fish.eyeOffsetY = -10;
+            fish.eyePercentage = 50;
+            fish.fins = 18;
+            fish.palette = 45;
+            fish.pupilPercentage = 35;
+            fish.shape = 15;
+            fish.stripes = 18;
+            fish.tail = 11;
             fish.tailStripes = 0;
             break;
         case "orangereddiscus":
@@ -947,19 +1008,6 @@ export function presetTropicalFish(fish, preset) {
             fish.stripes = 18;
             fish.tail = 10;
             fish.tailStripes = 0;
-            break;
-        case "flagtailprochilodus":
-            // Flagtail Prochilodus
-            fish.eyeOffsetX = 0;
-            fish.eyeOffsetY = 0;
-            fish.eyePercentage = 50;
-            fish.fins = 17;
-            fish.palette = 43;
-            fish.pupilPercentage = 60;
-            fish.shape = 14;
-            fish.stripes = 0;
-            fish.tail = 13;
-            fish.tailStripes = 6;
             break;
         case "yellowtailaceicichlid":
             // Yellow Tail Acei Cichlid

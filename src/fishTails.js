@@ -2,7 +2,7 @@ import { drawTailStripes } from "./fishStripes.js";
 import { globalVars } from "./glob.js";
 import { cubicFromMid } from "./graphicUtils.js";
 
-function buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, variation = false) {
+function buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, curveFactor) {
     const rightX = xLeft + tailWidth;
 
     const yTopConn = yCenter - connectionHeight * 0.5;
@@ -13,7 +13,7 @@ function buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connect
 
     const scale = Math.sqrt(tailWidth * tailHeight);
 
-    const curvature = (variation ? 0.16 : 0.25) * scale / tailHeight;
+    const curvature = curveFactor * scale / tailHeight;
 
     const P0 = { x: rightX, y: yBotConn };
     const P1 = { x: xLeft, y: yBotTip };
@@ -165,7 +165,7 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
     switch (tailType) {
         case 2:
         case 3:
-            buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, true);
+            buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.16);
             break;
         case 4:
             buildTruncateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight);
@@ -194,9 +194,12 @@ function buildTail(ctx, xLeft, yCenter, tailType, tailWidth, tailHeight, connect
             // Shark
             buildForkTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, -0.3, 0.3, 0.6, 0.65, 0.3, 0.7);
             break;
+        case 14:
+            buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.12);
+            break;
         default:
             // 1
-            buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight);
+            buildEmarginateTail(ctx, xLeft, yCenter, tailWidth, tailHeight, connectionHeight, 0.25);
             break;
     }
 }
@@ -285,6 +288,11 @@ export function getTailDimensions(tail, bodyLength, bodyHeight) {
             // Forked
             tailWidth = bodyLength * 0.25;
             tailHeight = bodyHeight * 1.3;
+            break;
+        case 14:
+            // Emarginate
+            tailWidth = bodyLength * 0.35;
+            tailHeight = bodyHeight * 0.6;
             break;
         default:
             tailWidth = bodyLength * 0.25;

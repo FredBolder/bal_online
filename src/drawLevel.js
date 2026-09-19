@@ -4581,6 +4581,16 @@ function drawLevel(
           presetTropicalFish(fish, "flagtailprochilodus")
           drawFish(ctx, xc, yc, w1, false, fish);
           break;
+        case 2177:
+          drawWater();
+          presetTropicalFish(fish, "longtailredsnapper")
+          drawFish(ctx, xc, yc, w1, false, fish);
+          break;
+        case 2178:
+          drawWater();
+          presetTropicalFish(fish, "albinoangelfish")
+          drawFish(ctx, xc, yc, w1, false, fish);
+          break;
         case 2200:
           drawWaterColors();
           break;

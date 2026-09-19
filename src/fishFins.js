@@ -1286,6 +1286,56 @@ export function drawBackgroundFins(ctx, fins, bodyHeight, bodyCurves, colors) {
                 overlap: bodyHeight * 0.1,
             });
             break;
+        case 18:
+            // Longtail Red Snapper
+            // Dorsal fins
+            setColors(true);
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.45,
+                endT: 0.75,
+                height: bodyHeight * 0.35,
+                taper: 1,
+                lean: -0.5,
+                overlap: bodyHeight * 0.1,
+                steps: 4,
+                curvature: 1
+            });
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyTopFrame,
+                startT: 0.75,
+                endT: 0.9,
+                height: bodyHeight * 0.25,
+                taper: 1,
+                lean: -0.5,
+                overlap: bodyHeight * 0.1,
+                steps: 2
+            });
+            setColors(false);
+
+            // Anal fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.78,
+                endT: 0.93,
+                height: bodyHeight * 0.25,
+                taper: 0.8,
+                lean: -0.9,
+                overlap: bodyHeight * 0.1
+            });
+
+            // Pelvic fin
+            drawFinAlongCurve(ctx, bodyCurves, {
+                frameFunc: getBodyBottomFrame,
+                startT: 0.45,
+                endT: 0.55,
+                height: bodyHeight * 0.3,
+                taper: 1,
+                lean: 0.6,
+                overlap: bodyHeight * 0.1,
+                steps: 6
+            });
+            break;
         default:
             break;
     }
@@ -1476,6 +1526,16 @@ export function drawForegroundFins(ctx, fins, yCenter, bodyHeight, bodyLength, b
             finHeight = bodyHeight * 0.5;
             rotation = 1.25 * Math.PI;
             options.widestPoint = 0.7;
+            break;
+        case 18:
+            // Longtail Red Snapper
+            cx = bodyRight - (bodyLength * 0.27);
+            cy = yCenter + (bodyHeight * 0.2);
+            finWidth = bodyLength * 0.07;
+            connectionWidth = finWidth * 0.14;
+            finHeight = bodyHeight * 0.6;
+            rotation = 1.55 * Math.PI;
+            options.widestPoint = 0.05;
             break;
         default:
             break;

@@ -1231,7 +1231,7 @@ function BalPage() {
             switch (globalVars.createLevelWaterPage) {
               case 2:
                 arr1 = [249, 252, 205, 206, 248, 2200, 250, 251];
-                arr2 = [2169, 2170, 2171, 2172, 2173, 2174, 2175, 2176, 0, 0, 0, 0, 0, 0, 0, 2101];
+                arr2 = [2169, 2170, 2171, 2172, 2173, 2174, 2175, 2176, 2177, 2178, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
                 // page 1
@@ -2914,7 +2914,7 @@ function BalPage() {
                   }
                 }
               }
-              if ((createLevelObject >= 2154) && (createLevelObject <= 2176)) {
+              if ((createLevelObject >= 2154) && (createLevelObject <= 2178)) {
                 deleteIfLava(backData, gameInfo, column, row);
                 deleteIfSeaAnemone(backData, gameInfo, column, row);
                 deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -2991,6 +2991,12 @@ function BalPage() {
                       break;
                     case 2176:
                       presetTropicalFish(fish, "flagtailprochilodus");
+                      break;
+                    case 2177:
+                      presetTropicalFish(fish, "longtailredsnapper");
+                      break;
+                    case 2178:
+                      presetTropicalFish(fish, "albinoangelfish");
                       break;
                     default:
                       break;

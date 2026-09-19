@@ -483,6 +483,29 @@ export function getTropicalFishColors(palette) {
                 eyePupil: "#101817"
             }
             break;
+        case 45:
+            // Longtail Red Snapper
+            colors = {
+                body: "#C96A70",
+                upperBody: "#B83F4B",
+                stripe: "#B9545D",
+                fin: "#D65E68",
+                tail: "#C94B56",
+                eye: "#D2A15A",
+                eyePupil: "#111417"
+            };
+            break;
+        case 46:
+            // Albino Angelfish
+            colors = {
+                body: "#F1E8D2",
+                stripe: "#C9BDA5",
+                fin: "#E8D7B8",
+                tail: "#E6D2AE",
+                eye: "#E58A55",
+                eyePupil: "#7A2118"
+            };
+            break;
         default:
             colors = {
                 body: "#FF6347",
