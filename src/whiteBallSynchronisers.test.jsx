@@ -87,7 +87,7 @@ describe("checkWhiteBallSynchronisers", () => {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 6 },
             greenBalls: 1,
-            forces: [{ x: 2, y: 1, direction: "right" }, { x: 7, y: 4, direction: "left" }, { x: 7, y: 5, direction: "left" }, { x: 7, y: 6, direction: "left" }],
+            forces: [{ x: 2, y: 1, direction: "right", movable: true }, { x: 7, y: 4, direction: "left", movable: true }, { x: 7, y: 5, direction: "left", movable: true }, { x: 7, y: 6, direction: "left", movable: true }],
             whiteBallSynchronisers: [{ x: 5, y: 1 }, { x: 4, y: 4 }, { x: 4, y: 5 }, { x: 4, y: 6 }]
         };
         const input = [
@@ -144,7 +144,7 @@ describe("checkWhiteBallSynchronisers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 6 },
-            forces: [{ x: 2, y: 7, direction: "up" }, { x: 7, y: 4, direction: "left" }, { x: 7, y: 5, direction: "left" }],
+            forces: [{ x: 2, y: 7, direction: "up", movable: true }, { x: 7, y: 4, direction: "left", movable: true }, { x: 7, y: 5, direction: "left", movable: true }],
             greenBalls: 1,
             whiteBallSynchronisers: [{ x: 2, y: 3 }, { x: 4, y: 4 }, { x: 4, y: 5 }, { x: 4, y: 6 }]
         };

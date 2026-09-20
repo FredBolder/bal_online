@@ -60,79 +60,95 @@ function canBeTakenOrIsEmpty(gameInfo, object) {
 
 function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   // Object that can be moved by the blue ball, but not together with another object
-  let result = false;
   let idx = -1;
   const el = gameData[y][x];
 
-  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 109, 110, 111, 112, 115, 117, 138, 139, 155, 171, 172, 173, 200, 242, 243, 244, 246, 247, 251, 256].includes(el)) {
-    result = true;
-  } else {
-    switch (el) {
-      case 1:
-      case 35:
-        result = gameInfo.playerCanMoveStones;
-        break;
-      case 109:
-        result = (parent !== "pushObject");
-        break;
-      case 110:
-        result = (parent !== "jump");
-        break;
-      case 111:
-        result = (parent !== "moveLeft");
-        break;
-      case 112:
-        result = (parent !== "moveRight");
-        break;
-      case 157:
-        idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-        if (idx >= 0) {
-          result = (gameInfo.musicBoxes[idx].mode === "keyboard");
+  switch (el) {
+    case 9:
+    case 27:
+    case 28:
+    case 40:
+    case 82:
+    case 84:
+    case 85:
+    case 86:
+    case 98:
+    case 115:
+    case 117:
+    case 138:
+    case 139:
+    case 155:
+    case 171:
+    case 172:
+    case 173:
+    case 200:
+    case 242:
+    case 243:
+    case 244:
+    case 246:
+    case 247:
+    case 251:
+    case 256:
+      return true;
+    case 1:
+    case 35:
+      return gameInfo.playerCanMoveStones;
+    case 109:
+    case 110:
+    case 111:
+    case 112:
+      idx = findElementByCoordinates(x, y, gameInfo.forces);
+      if (idx >= 0) {
+        if (!gameInfo.forces[idx].movable) {
+          return false;
         }
-        break;
-      case 159:
-      case 161:
-      case 163:
-      case 165:
-        idx = findElementByCoordinates(x, y, gameInfo.pistons);
-        if (idx >= 0) {
-          const piston = gameInfo.pistons[idx];
-          result = (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball",
-            "pinkball"].includes(piston.mode) && !piston.activated);
-        }
-        break;
-      case 178:
-        idx = findElementByCoordinates(x, y, gameInfo.movers);
-        if (idx >= 0) {
-          result = true;
-          if (
-            (parent === "moveLeft") && gameInfo.movers[idx].activeSides.includes("right") ||
-            (parent === "moveRight") && gameInfo.movers[idx].activeSides.includes("left") ||
-            (parent === "jump") && gameInfo.movers[idx].activeSides.includes("bottom") ||
-            (parent === "pushObject") && gameInfo.movers[idx].activeSides.includes("top")
-          ) {
-            result = false;
-          }
-        }
-        break;
-      case 209:
-        idx = findElementByCoordinates(x, y, gameInfo.pushers);
-        if (idx >= 0) {
-          result = gameInfo.pushers[idx].movable;
-        }
-        break;
-      case 255:
-        idx = findElementByCoordinates(x, y, gameInfo.detectors);
-        if (idx >= 0) {
-          result = gameInfo.detectors[idx].movable;
-        }
-        break;
-      default:
-        break;
-    }
+        return (el !== 109 || parent !== "pushObject") && (el !== 110 || parent !== "jump") &&
+          (el !== 111 || parent !== "moveLeft") && (el !== 112 || parent !== "moveRight");
+      }
+      return false;
+    case 157:
+      idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+      if (idx >= 0) {
+        return (gameInfo.musicBoxes[idx].mode === "keyboard");
+      }
+      return false;
+    case 159:
+    case 161:
+    case 163:
+    case 165:
+      idx = findElementByCoordinates(x, y, gameInfo.pistons);
+      if (idx >= 0) {
+        const piston = gameInfo.pistons[idx];
+        return (["blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball",
+          "pinkball"].includes(piston.mode) && !piston.activated);
+      }
+      return false;
+    case 178:
+      idx = findElementByCoordinates(x, y, gameInfo.movers);
+      if (idx >= 0) {
+        return (
+          (parent !== "moveLeft") || !gameInfo.movers[idx].activeSides.includes("right") &&
+          (parent !== "moveRight") || !gameInfo.movers[idx].activeSides.includes("left") &&
+          (parent !== "jump") || !gameInfo.movers[idx].activeSides.includes("bottom") &&
+          (parent !== "pushObject") || !gameInfo.movers[idx].activeSides.includes("top")
+        );
+      }
+      return false;
+    case 209:
+      idx = findElementByCoordinates(x, y, gameInfo.pushers);
+      if (idx >= 0) {
+        return gameInfo.pushers[idx].movable;
+      }
+      return false;
+    case 255:
+      idx = findElementByCoordinates(x, y, gameInfo.detectors);
+      if (idx >= 0) {
+        return gameInfo.detectors[idx].movable;
+      }
+      return false;
+    default:
+      return false;
   }
-
-  return result;
 }
 
 export function changeChangerColors(gameInfo, x, y, colors) {

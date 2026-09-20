@@ -101,7 +101,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 6, y: 6 },
-            forces: [{ x: 1, y: 6, direction: "right" }],
+            forces: [{ x: 1, y: 6, direction: "right", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -122,7 +122,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 6 },
-            forces: [{ x: 1, y: 6, direction: "right" }],
+            forces: [{ x: 1, y: 6, direction: "right", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -143,7 +143,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 6 },
-            forces: [{ x: 6, y: 6, direction: "left" }],
+            forces: [{ x: 6, y: 6, direction: "left", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -164,7 +164,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 6 },
-            forces: [{ x: 6, y: 6, direction: "left" }],
+            forces: [{ x: 6, y: 6, direction: "left", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -185,7 +185,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
-            forces: [{ x: 4, y: 6, direction: "up" }],
+            forces: [{ x: 4, y: 6, direction: "up", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -226,7 +226,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 6 },
-            forces: [{ x: 1, y: 6, direction: "right" }],
+            forces: [{ x: 1, y: 6, direction: "right", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -247,7 +247,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 6 },
-            forces: [{ x: 1, y: 6, direction: "right" }],
+            forces: [{ x: 1, y: 6, direction: "right", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -268,7 +268,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 6 },
-            forces: [{ x: 6, y: 6, direction: "left" }],
+            forces: [{ x: 6, y: 6, direction: "left", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -289,7 +289,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 6 },
-            forces: [{ x: 6, y: 6, direction: "left" }],
+            forces: [{ x: 6, y: 6, direction: "left", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -310,7 +310,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
-            forces: [{ x: 4, y: 6, direction: "up" }],
+            forces: [{ x: 4, y: 6, direction: "up", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -331,7 +331,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
-            forces: [{ x: 4, y: 6, direction: "up" }],
+            forces: [{ x: 4, y: 6, direction: "up", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -352,7 +352,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 6 },
-            forces: [{ x: 4, y: 1, direction: "down" }],
+            forces: [{ x: 4, y: 1, direction: "down", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -373,7 +373,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 5 },
-            forces: [{ x: 4, y: 1, direction: "down" }],
+            forces: [{ x: 4, y: 1, direction: "down", movable: true }],
             greenBalls: 1,
         };
         const input = [
@@ -394,7 +394,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 6 },
-            forces: [{ x: 4, y: 1, direction: "down" }],
+            forces: [{ x: 4, y: 1, direction: "down", movable: true }],
             greenBalls: 1,
         };
         const input = [

@@ -112,7 +112,7 @@ describe("balUtils pushObject", () => {
         const gameInfo = { 
             ...defaultGameInfo, 
             blueBall: { x: 3, y: 2 }, 
-            forces: [{ x: 3, y: 6, direction: "up" }],
+            forces: [{ x: 3, y: 6, direction: "up", movable: true }],
             greenBalls: 1,
         };
         const input = [

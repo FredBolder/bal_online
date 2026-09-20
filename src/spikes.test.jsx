@@ -57,7 +57,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
-            forces: [{ x: 3, y: 4, direction: "up" }],
+            forces: [{ x: 3, y: 4, direction: "up", movable: true }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -75,7 +75,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
-            forces: [{ x: 3, y: 4, direction: "up" }],
+            forces: [{ x: 3, y: 4, direction: "up", movable: true }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -93,7 +93,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 2 },
-            forces: [{ x: 3, y: 4, direction: "up" }],
+            forces: [{ x: 3, y: 4, direction: "up", movable: true }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -111,7 +111,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 4 },
-            forces: [{ x: 3, y: 4, direction: "right" }],
+            forces: [{ x: 3, y: 4, direction: "right", movable: true }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -129,7 +129,7 @@ describe("Spikes", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
-            forces: [{ x: 6, y: 4, direction: "left" }],
+            forces: [{ x: 6, y: 4, direction: "left", movable: true }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],
@@ -166,7 +166,7 @@ describe("Spikes", () => {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 3 },
             hasPropeller: true,
-            forces: [{ x: 3, y: 1, direction: "down" }],
+            forces: [{ x: 3, y: 1, direction: "down", movable: true }],
         };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1],

@@ -147,7 +147,7 @@ describe("balUtils moveLeft", () => {
       [1, 1, 1, 1, 1, 1],
     ];
     const expectedOutput = copy2dArray(input);
-    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right" }] }, defaultGameVars);
+    const info = moveLeft(inputBack01_3_6, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 1, y: 1, direction: "right", movable: true }] }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.player).toBe(false);
   });

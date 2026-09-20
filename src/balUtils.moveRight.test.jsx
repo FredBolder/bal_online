@@ -222,7 +222,7 @@ describe("balUtils moveRight", () => {
       [1, 0, 0, 109, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveRight(inputBack_8_6, input, { ...defaultGameInfo, blueBall: { x: 3, y: 1 }, forces: [{ x: 3, y: 6, direction: "up" }] }, defaultGameVars);
+    const info = moveRight(inputBack_8_6, input, { ...defaultGameInfo, blueBall: { x: 3, y: 1 }, forces: [{ x: 3, y: 6, direction: "up", movable: true }] }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.player).toBe(true);
   });
@@ -248,7 +248,7 @@ describe("balUtils moveRight", () => {
       [1, 0, 0, 109, 0, 1],
       [1, 1, 1, 1, 1, 1],
     ];
-    const info = moveRight(inputBack_8_6, input, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: "up" }] }, defaultGameVars);
+    const info = moveRight(inputBack_8_6, input, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 6, direction: "up", movable: true }] }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.player).toBe(false);
   });
@@ -260,7 +260,7 @@ describe("balUtils moveRight", () => {
       [1, 1, 1, 1, 1, 1],
     ];
     const expectedOutput = copy2dArray(input);
-    const info = moveRight(inputBack_3_6, input, { ...defaultGameInfo, blueBall: { x: 1, y: 1 }, forces: [{ x: 4, y: 1, direction: "left" }] }, defaultGameVars);
+    const info = moveRight(inputBack_3_6, input, { ...defaultGameInfo, blueBall: { x: 1, y: 1 }, forces: [{ x: 4, y: 1, direction: "left", movable: true }] }, defaultGameVars);
     expect(input).toEqual(expectedOutput);
     expect(info.player).toBe(false);
   });

@@ -17,7 +17,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
-            forces: [{ x: 4, y: 4, direction: "up" }],
+            forces: [{ x: 4, y: 4, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -46,7 +46,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
-            forces: [{ x: 4, y: 4, direction: "up" }],
+            forces: [{ x: 4, y: 4, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -75,7 +75,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
-            forces: [{ x: 4, y: 4, direction: "up" }],
+            forces: [{ x: 4, y: 4, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -104,7 +104,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
-            forces: [{ x: 4, y: 4, direction: "up" }, { x: 7, y: 4, direction: "up" }],
+            forces: [{ x: 4, y: 4, direction: "up", movable: true }, { x: 7, y: 4, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -133,7 +133,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
-            forces: [{ x: 4, y: 6, direction: "up" }],
+            forces: [{ x: 4, y: 6, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -166,7 +166,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
-            forces: [{ x: 4, y: 6, direction: "up" }],
+            forces: [{ x: 4, y: 6, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -190,7 +190,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 2 },
-            forces: [{ x: 4, y: 6, direction: "up" }, { x: 7, y: 6, direction: "up" }],
+            forces: [{ x: 4, y: 6, direction: "up", movable: true }, { x: 7, y: 6, direction: "up", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -223,7 +223,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
-            forces: [{ x: 4, y: 4, direction: "up" }],
+            forces: [{ x: 4, y: 4, direction: "up", movable: true }],
             greenBalls: 1,
             pinkBalls: [{ x: 4, y: 3, delete: false, skipFalling: 0 }]
         };
@@ -256,7 +256,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 2, y: 4, direction: "right" }],
+            forces: [{ x: 2, y: 4, direction: "right", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -285,7 +285,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 2, y: 4, direction: "right" }],
+            forces: [{ x: 2, y: 4, direction: "right", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -314,7 +314,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 2, y: 4, direction: "right" }],
+            forces: [{ x: 2, y: 4, direction: "right", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -334,7 +334,7 @@ describe("Force", () => {
 
     it("Force right D", () => {
         const gameInfo = {
-            ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: "right" }],
+            ...defaultGameInfo, forces: [{ x: 2, y: 4, direction: "right", movable: true }],
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             orangeBalls: [{ x: 4, y: 4, direction: "none" }]
@@ -366,7 +366,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 1, y: 4, direction: "right" }],
+            forces: [{ x: 1, y: 4, direction: "right", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -395,7 +395,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 1, y: 4, direction: "right" }],
+            forces: [{ x: 1, y: 4, direction: "right", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -417,7 +417,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 1, y: 4, direction: "right" }],
+            forces: [{ x: 1, y: 4, direction: "right", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -448,7 +448,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
-            forces: [{ x: 5, y: 3, direction: "left" }],
+            forces: [{ x: 5, y: 3, direction: "left", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -475,7 +475,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
-            forces: [{ x: 5, y: 3, direction: "left" }],
+            forces: [{ x: 5, y: 3, direction: "left", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -502,7 +502,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 3 },
-            forces: [{ x: 5, y: 3, direction: "left" }],
+            forces: [{ x: 5, y: 3, direction: "left", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -523,7 +523,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 4 },
-            forces: [{ x: 7, y: 4, direction: "left" }],
+            forces: [{ x: 7, y: 4, direction: "left", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -554,7 +554,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
-            forces: [{ x: 4, y: 1, direction: "down" }],
+            forces: [{ x: 4, y: 1, direction: "down", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -585,7 +585,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
-            forces: [{ x: 4, y: 1, direction: "down" }],
+            forces: [{ x: 4, y: 1, direction: "down", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -614,7 +614,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 3 },
-            forces: [{ x: 4, y: 1, direction: "down" }],
+            forces: [{ x: 4, y: 1, direction: "down", movable: true }],
             greenBalls: 1
         };
         const input = [
@@ -638,7 +638,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
-            forces: [{ x: 1, y: 1, direction: "right" }]
+            forces: [{ x: 1, y: 1, direction: "right", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -653,7 +653,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
-            forces: [{ x: 1, y: 1, direction: "right" }]
+            forces: [{ x: 1, y: 1, direction: "right", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -668,7 +668,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 4, y: 1 },
-            forces: [{ x: 1, y: 1, direction: "right" }]
+            forces: [{ x: 1, y: 1, direction: "right", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -685,7 +685,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
-            forces: [{ x: 4, y: 1, direction: "left" }]
+            forces: [{ x: 4, y: 1, direction: "left", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -700,7 +700,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
-            forces: [{ x: 4, y: 1, direction: "left" }]
+            forces: [{ x: 4, y: 1, direction: "left", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -715,7 +715,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
-            forces: [{ x: 4, y: 1, direction: "left" }]
+            forces: [{ x: 4, y: 1, direction: "left", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1, 1],
@@ -730,7 +730,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 1, y: 1 },
-            forces: [{ x: 4, y: 1, direction: "left" }],
+            forces: [{ x: 4, y: 1, direction: "left", movable: true }],
             pinkBalls: [{ x: 2, y: 1, delete: false, skipFalling: 0 }],
         };
         const input = [
@@ -748,7 +748,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
-            forces: [{ x: 2, y: 4, direction: "up" }]
+            forces: [{ x: 2, y: 4, direction: "up", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],
@@ -766,7 +766,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
-            forces: [{ x: 2, y: 4, direction: "up" }]
+            forces: [{ x: 2, y: 4, direction: "up", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],
@@ -784,7 +784,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
-            forces: [{ x: 2, y: 4, direction: "up" }]
+            forces: [{ x: 2, y: 4, direction: "up", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],
@@ -802,7 +802,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 2 },
-            forces: [{ x: 2, y: 4, direction: "up" }, { x: 2, y: 7, direction: "up" }]
+            forces: [{ x: 2, y: 4, direction: "up", movable: true }, { x: 2, y: 7, direction: "up", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],
@@ -825,7 +825,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
-            forces: [{ x: 2, y: 1, direction: "down" }]
+            forces: [{ x: 2, y: 1, direction: "down", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],
@@ -843,7 +843,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
-            forces: [{ x: 2, y: 1, direction: "down" }]
+            forces: [{ x: 2, y: 1, direction: "down", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],
@@ -861,7 +861,7 @@ describe("Force", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 2, y: 4 },
-            forces: [{ x: 2, y: 1, direction: "down" }]
+            forces: [{ x: 2, y: 1, direction: "down", movable: true }]
         };
         const input = [
             [1, 1, 1, 1, 1],

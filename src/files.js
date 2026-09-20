@@ -469,6 +469,15 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    for (let i = 0; i < gameInfo.forces.length; i++) {
+        const force = gameInfo.forces[i];
+        const coordinates = `${force.x}, ${force.y}`;
+        if (!force.movable) {
+            line = `$movable: ${coordinates}, no`;
+            lines.push(line);
+        }
+    }
+
     for (let i = 0; i < gameInfo.movers.length; i++) {
         const mover = gameInfo.movers[i];
         if (JSON.stringify(mover.activeSides) !== JSON.stringify(["top"])) {

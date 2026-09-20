@@ -20,6 +20,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isDetector = false;
     let isDisappearingStone = false;
     let isElevator = false;
+    let isForce = false;
     let isHorizontalElevator = false;
     let isMover = false;
     let isMusicBox = false;
@@ -52,6 +53,12 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         case 170:
             isTeleport = true;
             objectName = "teleport";
+            break;
+        case 109:
+        case 110:
+        case 111:
+        case 112:
+            isForce = true;
             break;
         case 157:
             isMusicBox = true;
@@ -306,6 +313,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     }
     if (isDisappearingStone && ["group", "mode"].includes(prop)) {
         list = "disappearingStones";
+    }
+    if (isForce && ["movable"].includes(prop)) {
+        list = "forces";
     }
     if (isMover && ["direction", "inverted", "mode"].includes(prop)) {
         list = "movers";

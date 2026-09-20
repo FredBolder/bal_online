@@ -1,4 +1,5 @@
 import { findElementByCoordinates } from "./balUtils.js";
+import { objectNumberToDirection } from "./objects.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
 export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
@@ -144,23 +145,12 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             gameInfo.copiers.push(copier);
             break;
         }
-        case 109: {
-            let force = { x, y, direction: "up" };
-            gameInfo.forces.push(force);
-            break;
-        }
-        case 110: {
-            let force = { x, y, direction: "down" };
-            gameInfo.forces.push(force);
-            break;
-        }
-        case 111: {
-            let force = { x, y, direction: "right" };
-            gameInfo.forces.push(force);
-            break;
-        }
+        case 109:
+        case 110:
+        case 111:
         case 112: {
-            let force = { x, y, direction: "left" };
+            const direction = objectNumberToDirection(objectNumber);
+            let force = { x, y, direction, movable: true };
             gameInfo.forces.push(force);
             break;
         }
@@ -243,24 +233,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
         case 161:
         case 163:
         case 165: {
-            let direction = "up";
-            switch (objectNumber) {
-                case 159:
-                    direction = "up";
-                    break;
-                case 161:
-                    direction = "down";
-                    break;
-                case 163:
-                    direction = "left";
-                    break;
-                case 165:
-                    direction = "right";
-                    break;
-                default:
-                    break;
-            }
-            let piston = { x, y, activated: false, sticky: false, inverted: false, direction: direction, mode: "toggle", group: 1 };
+            const direction = objectNumberToDirection(objectNumber);
+            let piston = { x, y, activated: false, sticky: false, inverted: false, direction, mode: "toggle", group: 1 };
             gameInfo.pistons.push(piston);
             break;
         }

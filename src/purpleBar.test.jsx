@@ -201,7 +201,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 4 }, forces: [{ x: 4, y: 1, direction: "down" }] }, defaultGameVars, "up");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 4 }, forces: [{ x: 4, y: 1, direction: "down", movable: true }] }, defaultGameVars, "up");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -216,7 +216,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 4, direction: "up" }] }, defaultGameVars, "down");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 4, direction: "up", movable: true }] }, defaultGameVars, "down");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -230,7 +230,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 7, y: 3 }, forces: [{ x: 0, y: 3, direction: "right" }] }, defaultGameVars, "left");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 7, y: 3 }, forces: [{ x: 0, y: 3, direction: "right", movable: true }] }, defaultGameVars, "left");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -244,7 +244,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, forces: [{ x: 8, y: 3, direction: "left" }] }, defaultGameVars, "right");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 2, y: 3 }, forces: [{ x: 8, y: 3, direction: "left", movable: true }] }, defaultGameVars, "right");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -419,7 +419,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 7 }, forces: [{ x: 4, y: 1, direction: "down" }] }, defaultGameVars, "up");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 7 }, forces: [{ x: 4, y: 1, direction: "down", movable: true }] }, defaultGameVars, "up");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -437,7 +437,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 7, direction: "up" }] }, defaultGameVars, "down");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 4, y: 1 }, forces: [{ x: 4, y: 7, direction: "up", movable: true }] }, defaultGameVars, "down");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -452,7 +452,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, forces: [{ x: 1, y: 4, direction: "right" }] }, defaultGameVars, "left");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 5, y: 4 }, forces: [{ x: 1, y: 4, direction: "right", movable: true }] }, defaultGameVars, "left");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });
@@ -467,7 +467,7 @@ describe("Purple bar", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 3, y: 4 }, forces: [{ x: 7, y: 4, direction: "left" }] }, defaultGameVars, "right");
+        const info = movePurpleBar(backData, input, { ...defaultGameInfo, blueBall: { x: 3, y: 4 }, forces: [{ x: 7, y: 4, direction: "left", movable: true }] }, defaultGameVars, "right");
         expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
         expect(info).toBe(false);
     });

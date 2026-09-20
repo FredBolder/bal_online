@@ -56,7 +56,7 @@ export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
 export const seriesFishStart = 6350;
-export const seriesFishEnd = 6365;
+export const seriesFishEnd = 6366;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
@@ -667,8 +667,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$movable":
-              if (validXY && !["њ", "ђ", 209, 255].includes(data[y][x])) {
-                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["Ω", "ω", "Φ", "φ", "њ", "ђ", 109, 110, 111, 112, 209, 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector, force or pusher found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$movermode":

@@ -1,5 +1,6 @@
 import { findElementByCoordinates } from "./balUtils.js";
 import { globalVars } from "./glob.js";
+import { objectNumberToDirection } from "./objects.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
 export function getGameInfo(backData, gameData) {
@@ -133,23 +134,12 @@ export function getGameInfo(backData, gameData) {
                     result.copiers.push(copier);
                     break;
                 }
-                case 109: {
-                    let force = { x: j, y: i, direction: "up" };
-                    result.forces.push(force);
-                    break;
-                }
-                case 110: {
-                    let force = { x: j, y: i, direction: "down" };
-                    result.forces.push(force);
-                    break;
-                }
-                case 111: {
-                    let force = { x: j, y: i, direction: "right" };
-                    result.forces.push(force);
-                    break;
-                }
+                case 109:
+                case 110:
+                case 111:
                 case 112: {
-                    let force = { x: j, y: i, direction: "left" };
+                    const direction = objectNumberToDirection(objectNumber);
+                    let force = { x: j, y: i, direction, movable: true };
                     result.forces.push(force);
                     break;
                 }
@@ -233,24 +223,8 @@ export function getGameInfo(backData, gameData) {
                 case 161:
                 case 163:
                 case 165: {
-                    let direction = "up";
-                    switch (objectNumber) {
-                        case 159:
-                            direction = "up";
-                            break;
-                        case 161:
-                            direction = "down";
-                            break;
-                        case 163:
-                            direction = "left";
-                            break;
-                        case 165:
-                            direction = "right";
-                            break;
-                        default:
-                            break;
-                    }
-                    let piston = { x: j, y: i, activated: false, sticky: false, inverted: false, direction: direction, mode: "toggle", group: 1 };
+                    const direction = objectNumberToDirection(objectNumber);
+                    let piston = { x: j, y: i, activated: false, sticky: false, inverted: false, direction, mode: "toggle", group: 1 };
                     result.pistons.push(piston);
                     break;
                 }
@@ -798,7 +772,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.forces);
                 if (idx >= 0) {
                     obj = gameInfo.forces[idx];
-                    extraInfo = `Direction: ${obj.direction}`;
+                    extraInfo = `Direction: ${obj.direction}, Movable: ${obj.movable}`;
                 }
                 info = `Force, ` + extraInfo;
                 break;
@@ -1157,7 +1131,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraInfo += `Direction: ${obj.direction}, Palette: ${obj.palette}, Shape: ${obj.shape}, `;
                     extraInfo += `Tail: ${obj.tail}, Fins: ${obj.fins}, Stripes: ${obj.stripes}, Tail stripes: ${obj.tailStripes}, Eye percentage: ${obj.eyePercentage}, `;
                     extraInfo += `Pupil percentage: ${obj.pupilPercentage}, Eye offset X: ${obj.eyeOffsetX}, Eye offset Y: ${obj.eyeOffsetY}, `;
-                    extraInfo += `Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`; 
+                    extraInfo += `Blocked: ${obj.blocked}, Out of water: ${obj.outOfWater}, Dead: ${obj.isDead}`;
                     if (globalVars.createLevel) {
                         extraInfo += `, Answer: ${obj.answer}`;
                     }
@@ -1215,10 +1189,10 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.detectors);
                 if (idx >= 0) {
                     obj = gameInfo.detectors[idx];
-                    extraInfo = `Mode: ${obj.mode}, One-time: ${obj.oneTime}, Active sides: ${obj.activeSides}, ` + 
-                    `Range: ${obj.range}, Target: ${obj.target}, Value: ${obj.value}, Display: ${obj.display}, ` +
-                    `Activated: ${obj.activated}, Activated count: ${obj.activatedCount}, Sequence: ${obj.sequence}, ` +
-                    `Movable: ${obj.movable}, Condition: ${obj.condition}, Text: ${obj.text}, Group: ${obj.group}`;
+                    extraInfo = `Mode: ${obj.mode}, One-time: ${obj.oneTime}, Active sides: ${obj.activeSides}, ` +
+                        `Range: ${obj.range}, Target: ${obj.target}, Value: ${obj.value}, Display: ${obj.display}, ` +
+                        `Activated: ${obj.activated}, Activated count: ${obj.activatedCount}, Sequence: ${obj.sequence}, ` +
+                        `Movable: ${obj.movable}, Condition: ${obj.condition}, Text: ${obj.text}, Group: ${obj.group}`;
                 }
                 info = `Detector, ` + extraInfo;
                 break;

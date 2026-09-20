@@ -87,7 +87,7 @@ describe("Yellow ball pushers", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 7, y: 3 },
-            forces: [{ x: 1, y: 2, direction: "right" }],
+            forces: [{ x: 1, y: 2, direction: "right", movable: true }],
             yellowBallPushers: [{ x: 4, y: 2 }],
             yellowBallPushersTriggers: [{ x: 7, y: 4 }],
             yellowBalls: [{ x: 3, y: 2, direction: "none" }, { x: 5, y: 2, direction: "none" }],

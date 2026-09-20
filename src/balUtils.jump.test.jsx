@@ -94,7 +94,7 @@ describe("balUtils jump", () => {
       [1, 1, 1, 1, 1],
     ];
     const expectedOutput = copy2dArray(input);
-    const info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down" }] }, defaultGameVars);
+    const info = jump(inputBack, input, { ...defaultGameInfo, blueBall: { x: 2, y: 4 }, forces: [{ x: 2, y: 2, direction: "down", movable: true }] }, defaultGameVars);
     expect(JSON.stringify(input)).toBe(JSON.stringify(expectedOutput));
     expect(info.player).toBe(false);
   });

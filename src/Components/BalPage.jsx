@@ -1174,8 +1174,8 @@ function BalPage() {
             break;
           case 9:
             // Elevators
-            arr1 = [6, 7, 246, 247, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 81];
-            arr2 = [178, 2133, 2144, 2092, 2039];
+            arr1 = [6, 7, 246, 247, 39, 25, 90, 108, 80, 137, 118, 109, 110, 111, 112, 2208];
+            arr2 = [81, 178, 2133, 2144, 2092, 2039];
             break;
           case 10:
             // Conveyor belts
@@ -3397,7 +3397,7 @@ function BalPage() {
           case 2208:
             ok = false;
             if (row > 0) {
-              newValue = await showSelect("Detectors / Pushers", "Movable by player:", ["yes", "no"], 0);
+              newValue = await showSelect("Detectors / Forces / Pushers", "Movable by player:", ["yes", "no"], 0);
               if (newValue !== null) {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;

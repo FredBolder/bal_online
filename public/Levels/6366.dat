@@ -1,4 +1,5 @@
 $stonepattern: 1
+$extra: 1
 $has: divingglasses
 $answer: 8, 14, 0
 $answerballmode: 8, 14, scale

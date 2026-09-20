@@ -132,7 +132,7 @@ describe("balUtils falling", () => {
             [1, 0, 0, 0, 0, 1],
             [1, 1, 1, 109, 1, 1],
         ];
-        const info = falling(3, 2, inputBack, input, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 4, direction: "up" }] }, defaultGameVars);
+        const info = falling(3, 2, inputBack, input, { ...defaultGameInfo, blueBall: { x: 3, y: 2 }, forces: [{ x: 3, y: 4, direction: "up", movable: true }] }, defaultGameVars);
         expect(info).toBe(false);
     });
 
