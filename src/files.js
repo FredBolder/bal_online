@@ -276,10 +276,40 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$has: freezegun`;
         lines.push(line);
     }
+
     if (gameInfo.hasKey) {
         line = `$has: key`;
         lines.push(line);
     }
+    if (gameInfo.hasBlueKey) {
+        line = `$has: bluekey`;
+        lines.push(line);
+    }
+    if (gameInfo.hasGreenKey) {
+        line = `$has: greenkey`;
+        lines.push(line);
+    }
+    if (gameInfo.hasPinkKey) {
+        line = `$has: pinkkey`;
+        lines.push(line);
+    }
+    if (gameInfo.hasPurpleKey) {
+        line = `$has: purplekey`;
+        lines.push(line);
+    }
+    if (gameInfo.hasRedKey) {
+        line = `$has: redkey`;
+        lines.push(line);
+    }
+    if (gameInfo.hasWhiteKey) {
+        line = `$has: whitekey`;
+        lines.push(line);
+    }
+    if (gameInfo.hasYellowKey) {
+        line = `$has: yellowkey`;
+        lines.push(line);
+    }
+
     if (gameInfo.hasLadder) {
         line = `$has: ladder`;
         lines.push(line);
@@ -497,6 +527,22 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
         if (mover.mode !== "all") {
             line = `$movermode: ${mover.x}, ${mover.y}, ${mover.mode}`;
+            lines.push(line);
+        }
+    }
+
+    for (let i = 0; i < gameInfo.keys.length; i++) {
+        const key = gameInfo.keys[i];
+        if (key.color !== "default") {
+            line = `$lockeddoorcolor: ${key.x}, ${key.y}, ${key.color}`;
+            lines.push(line);
+        }
+    }
+
+    for (let i = 0; i < gameInfo.lockedDoors.length; i++) {
+        const lockedDoor = gameInfo.lockedDoors[i];
+        if (lockedDoor.color !== "default") {
+            line = `$lockeddoorcolor: ${lockedDoor.x}, ${lockedDoor.y}, ${lockedDoor.color}`;
             lines.push(line);
         }
     }

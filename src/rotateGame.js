@@ -370,6 +370,16 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.jellyfish[i], rows, rotateLeft);
       }
 
+      // Keys
+      for (let i = 0; i < gameInfo.keys.length; i++) {
+        rotateXY(gameInfo.keys[i], rows, rotateLeft);
+      }
+
+      // Locked doors
+      for (let i = 0; i < gameInfo.lockedDoors.length; i++) {
+        rotateXY(gameInfo.lockedDoors[i], rows, rotateLeft);
+      }
+
       // Lava
       for (let i = 0; i < gameInfo.lava.length; i++) {
         rotateXY(gameInfo.lava[i], rows, rotateLeft);

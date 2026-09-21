@@ -106,6 +106,16 @@ export function getGameInfo(backData, gameData) {
                     result.redFish.push(fish);
                     break;
                 }
+                case 29: {
+                    let key = { x: j, y: i, color: "default" }
+                    result.keys.push(key);
+                    break;
+                }
+                case 30: {
+                    let lockedDoor = { x: j, y: i, color: "default" }
+                    result.lockedDoors.push(lockedDoor);
+                    break;
+                }
                 case 91: {
                     let elec = { x: j, y: i };
                     result.electricity.push(elec);
@@ -641,10 +651,20 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 info = `Purple ball`;
                 break;
             case 29:
-                info = `Key`;
+                idx = findElementByCoordinates(x, y, gameInfo.keys);
+                if (idx >= 0) {
+                    obj = gameInfo.keys[idx];
+                    extraInfo = `Color: ${obj.color}`;
+                }
+                info = `Key, ` + extraInfo;
                 break;
             case 30:
-                info = `Locked door`;
+                idx = findElementByCoordinates(x, y, gameInfo.lockedDoors);
+                if (idx >= 0) {
+                    obj = gameInfo.lockedDoors[idx];
+                    extraInfo = `Color: ${obj.color}`;
+                }
+                info = `Locked door, ` + extraInfo;
                 break;
             case 31:
                 idx = findElementByCoordinates(x, y, gameInfo.teleports);
@@ -1254,20 +1274,26 @@ export function initGameInfo(info) {
     info.fishFood = [];
     info.forces = [];
     info.greenBalls = 0;
+    info.hasBlueKey = false;
     info.hasBrownBall = false;
     info.hasCoilSpring = false;
     info.hasDivingGlasses = false;
     info.hasFishFood = false;
     info.hasFreezeGun = false;
+    info.hasGreenKey = false;
     info.hasKey = false;
     info.hasLadder = false;
     info.hasLightBlueBall = false;
+    info.lockedDoors = [];
     info.hasOrangeBall = false;
     info.hasPickaxe = false;
     info.hasPinkBall = false;
+    info.hasPinkKey = false;
     info.hasPropeller = false;
     info.hasPurpleBall = false;
+    info.hasPurpleKey = false;
     info.hasRedBall = false;
+    info.hasRedKey = false;
     info.hasSelfDestructingTeleportsCreator = false;
     info.hasShrinker = false;
     info.hasTelekineticPower = false;
@@ -1275,9 +1301,12 @@ export function initGameInfo(info) {
     info.hasTravelGate = false;
     info.hasWeakStone = false;
     info.hasWhiteBall = false;
+    info.hasWhiteKey = false;
     info.hasYellowBall = false;
+    info.hasYellowKey = false;
     info.horizontalElevators = [];
     info.jellyfish = [];
+    info.keys = [];
     info.lastMusicBox = null;
     info.lava = [];
     info.levelCanHaveSpikeBalls = false;

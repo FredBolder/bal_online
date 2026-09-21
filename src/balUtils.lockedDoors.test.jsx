@@ -19,7 +19,8 @@ describe("balUtils Locked doors", () => {
       ...defaultGameInfo,
       blueBall: { x: 2, y: 2 },
       greenBalls: 1,
-      hasKey: true
+      hasKey: true,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(4, 7);
     const input = [
@@ -45,6 +46,7 @@ describe("balUtils Locked doors", () => {
       ...defaultGameInfo,
       blueBall: { x: 2, y: 2 },
       greenBalls: 1,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(4, 7);
     const input = [
@@ -65,7 +67,8 @@ describe("balUtils Locked doors", () => {
       ...defaultGameInfo,
       blueBall: { x: 4, y: 2 },
       greenBalls: 1,
-      hasKey: true
+      hasKey: true,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(4, 7);
     const input = [
@@ -91,6 +94,7 @@ describe("balUtils Locked doors", () => {
       ...defaultGameInfo,
       blueBall: { x: 4, y: 2 },
       greenBalls: 1,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(4, 7);
     const input = [
@@ -111,7 +115,8 @@ describe("balUtils Locked doors", () => {
       ...defaultGameInfo,
       blueBall: { x: 3, y: 1 },
       greenBalls: 1,
-      hasKey: true
+      hasKey: true,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(5, 7);
     const input = [
@@ -138,7 +143,8 @@ describe("balUtils Locked doors", () => {
     const gameInfo = {
       ...defaultGameInfo,
       blueBall: { x: 3, y: 1 },
-      greenBalls: 1
+      greenBalls: 1,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(5, 7);
     const input = [
@@ -160,7 +166,8 @@ describe("balUtils Locked doors", () => {
       ...defaultGameInfo,
       blueBall: { x: 3, y: 3 },
       greenBalls: 1,
-      hasKey: true
+      hasKey: true,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(5, 7);
     const input = [
@@ -181,13 +188,14 @@ describe("balUtils Locked doors", () => {
     expect(input).toEqual(expectedOutput);
     expect(info).toEqual({ eating: false, freezeTime: -1, player: true, sound: "unlock" });
     expect(gameInfo.blueBall).toEqual({ x: 3, y: 1 });
-});
+  });
 
   it("Locks H", () => {
     const gameInfo = {
       ...defaultGameInfo,
       blueBall: { x: 3, y: 3 },
-      greenBalls: 1
+      greenBalls: 1,
+      lockedDoors: [{ x: 3, y: 2, color: "default" }]
     };
     const inputBack = zeroArray(5, 7);
     const input = [

@@ -5,6 +5,7 @@ import { conveyorBeltDirections, conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
 import { elevatorDirections, horizontalElevatorDirections } from "./elevators.js";
+import { lockedDoorColors } from "./lockedDoors.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { musicBoxDirections, musicBoxModes } from "./musicBoxes.js";
 import { pistonModes } from "./pistons.js";
@@ -22,6 +23,8 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isElevator = false;
     let isForce = false;
     let isHorizontalElevator = false;
+    let isKey = false;
+    let isLockedDoor = false;
     let isMover = false;
     let isMusicBox = false;
     let isPiston = false;
@@ -48,6 +51,12 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             isHorizontalElevator = true;
             objectName = "horizontal elevator";
             break;
+        case 29:
+            isKey = true;
+            break;    
+        case 30:
+            isLockedDoor = true;
+            break;    
         case 31:
         case 92:
         case 170:
@@ -145,6 +154,15 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "color":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            if ((isKey || isLockedDoor) && !lockedDoorColors().includes(value)) {
+                error = true;
+            }
+            break;    
         case "direction":
             if (typeof value !== "string") {
                 error = true;
@@ -316,6 +334,12 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     }
     if (isForce && ["movable"].includes(prop)) {
         list = "forces";
+    }
+    if (isKey && ["color"].includes(prop)) {
+        list = "keys";
+    }
+    if (isLockedDoor && ["color"].includes(prop)) {
+        list = "lockedDoors";
     }
     if (isMover && ["direction", "inverted", "mode"].includes(prop)) {
         list = "movers";

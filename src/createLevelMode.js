@@ -50,6 +50,20 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.redFish[idx2].maxDistX = gameInfo.redFish[idx1].maxDistX;
             }
             break;
+        case 29:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.keys);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.keys);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.keys[idx2].color = gameInfo.keys[idx1].color;
+            }
+            break;
+        case 30:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.lockedDoors);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.lockedDoors);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.lockedDoors[idx2].color = gameInfo.lockedDoors[idx1].color;
+            }
+            break;
         case 157:
             idx1 = findElementByCoordinates(x1, y1, gameInfo.musicBoxes);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.musicBoxes);
@@ -270,6 +284,18 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.lava);
             if (idx >= 0) {
                 return { arr: gameInfo.lava, idx };
+            }
+            break;
+        case 29:
+            idx = findElementByCoordinates(x, y, gameInfo.keys);
+            if (idx >= 0) {
+                return { arr: gameInfo.keys, idx };
+            }
+            break;
+        case 30:
+            idx = findElementByCoordinates(x, y, gameInfo.lockedDoors);
+            if (idx >= 0) {
+                return { arr: gameInfo.lockedDoors, idx };
             }
             break;
         case 157:

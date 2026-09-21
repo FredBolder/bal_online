@@ -1516,7 +1516,7 @@ function drawLevel(
   }
 
   function drawKey(x, y) {
-    let color = getFgcolor(x, y, "silver");
+    let color = "default";
     let d1 = w1 / 4;
     let d2 = w1 / 7;
     let d3 = w1 / 15; // Radius X
@@ -1524,7 +1524,19 @@ function drawLevel(
     let d5 = w1 / 5;
     let d6 = w1 / 4;
     let d7 = w1 / 7;
-    ctx.strokeStyle = color;
+    let idx = -1;
+    let keyColor = "";
+
+    idx = findElementByCoordinates(x, y, gameInfo.keys);
+    if (idx >= 0) {
+      color = gameInfo.keys[idx].color;
+    }    
+    if (color === "default") {
+      keyColor = getFgcolor(x, y, "silver");
+    } else {
+      keyColor = displayColor(color);
+    }
+    ctx.strokeStyle = keyColor;
     // ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
     ctx.beginPath();
     ctx.ellipse(Math.round(xmin + d1), Math.round(yc), Math.round(d3), Math.round(d4), 0, 0, 2 * Math.PI, false);
@@ -1641,7 +1653,20 @@ function drawLevel(
   }
 
   function drawLockedDoor(x, y) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, "brown"));
+    let color = "default";
+    let doorColor = "";
+    let idx = -1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.lockedDoors);
+    if (idx >= 0) {
+      color = gameInfo.lockedDoors[idx].color;
+    }    
+    if (color === "default") {
+      doorColor = getFgcolor(x, y, "brown");
+    } else {
+      doorColor = displayColor(color);
+    }
+    drawFilledBox(ctx, xmin, ymin, w1, w2, getFgcolor(x, y, doorColor));
     const d1 = w2 * 0.35;
     const d2 = w1 * 0.15;
     const d3 = w1 * 0.1;
@@ -1656,6 +1681,13 @@ function drawLevel(
     ctx.lineTo(xc, ymin + d4);
     ctx.stroke();
     ctx.fill();
+  }
+
+  function drawLockedDoorColors() {
+    drawFilledBox(ctx, xmin, ymin, w1 * 0.5, w2 * 0.5, displayColor("red"));
+    drawFilledBox(ctx, xc, ymin, w1 * 0.5, w2 * 0.5, displayColor("green"));
+    drawFilledBox(ctx, xmin, yc, w1 * 0.5, w2 * 0.5, displayColor("blue"));
+    drawFilledBox(ctx, xc, yc, w1 * 0.5, w2 * 0.5, displayColor("yellow"));
   }
 
   function drawMagnet(x, y, rectangular = false) {
@@ -4635,6 +4667,9 @@ function drawLevel(
           drawTail(ctx, xmin + (w1 * 0.25), yc, 1, w1 * 0.5, w2 * 0.6, w2 * 0.1, {
             stripe: "#000000", tail: "#DDDDDD", tailStripe: "#000000", upperTail: null
           }, 5);
+          break;
+        case 2214:
+          drawLockedDoorColors();
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

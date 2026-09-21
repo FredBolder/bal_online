@@ -107,6 +107,16 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             gameInfo.redFish.push(fish);
             break;
         }
+        case 29: {
+            let key = { x, y, color: "default" }
+            gameInfo.keys.push(key);
+            break;
+        }
+        case 30: {
+            let lockedDoor = { x, y, color: "default" }
+            gameInfo.lockedDoors.push(lockedDoor);
+            break;
+        }
         case 31:
         case 92: {
             // Purple teleports (170) are in backData
@@ -513,6 +523,18 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
             idx = findElementByCoordinates(x, y, gameInfo.redFish);
             if (idx >= 0) {
                 gameInfo.redFish.splice(idx, 1);
+            }
+            break;
+        case 29:
+            idx = findElementByCoordinates(x, y, gameInfo.keys);
+            if (idx >= 0) {
+                gameInfo.keys.splice(idx, 1);
+            }
+            break;
+        case 30:
+            idx = findElementByCoordinates(x, y, gameInfo.lockedDoors);
+            if (idx >= 0) {
+                gameInfo.lockedDoors.splice(idx, 1);
             }
             break;
         case 31:

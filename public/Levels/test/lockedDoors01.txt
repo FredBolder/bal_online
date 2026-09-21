@@ -1,18 +1,20 @@
-$has: greenkey
 $lockeddoorcolor: 10, 11, blue
+$lockeddoorcolor: 11, 11, green
 $lockeddoorcolor: 12, 11, white
+$lockeddoorcolor: 13, 11, yellow
 $lockeddoorcolor: 14, 11, pink
 $lockeddoorcolor: 15, 11, purple
 $lockeddoorcolor: 16, 11, red
+$lockeddoorcolor: 18, 11, yellow
 $lockeddoorcolor: 5, 1, pink
 $lockeddoorcolor: 3, 3, blue
 $lockeddoorcolor: 5, 3, purple
 $lockeddoorcolor: 3, 5, green
 $lockeddoorcolor: 5, 5, red
 $lockeddoorcolor: 3, 7, white
-$lockeddoorcolor: 5, 7, white
 $lockeddoorcolor: 3, 9, yellow
 $lockeddoorcolor: 5, 9, yellow
+$lockeddoorcolor: 5, 7, white
 11111111111111111111
 1  l=l             1
 1111=111           1
@@ -24,6 +26,6 @@ $lockeddoorcolor: 5, 9, yellow
 1111=1             1
 1  l=l             1
 1111=1   11111111111
-13μ =    kk k kkk  1
-1   =  2           1
+13μ =    kkkkkkkk k1
+1   =    2         1
 11111111111111111111

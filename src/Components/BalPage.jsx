@@ -110,6 +110,7 @@ let kPressed = false;
 let createLevelAnswer = "";
 let createLevelBallsPages = 2;
 let createLevelChangerColors = "";
+let createLevelColor = "";
 let createLevelColorPages = 2;
 let createLevelCommand = "";
 let createLevelCondition = "";
@@ -236,6 +237,13 @@ function BalPage() {
     let saveDivingGlasses = false;
     let saveFreezeGun = false;
     let saveKey = false;
+    let saveBlueKey = false;
+    let saveGreenKey = false;
+    let savePinkKey = false;
+    let savePurpleKey = false;
+    let saveRedKey = false;
+    let saveWhiteKey = false;
+    let saveYellowKey = false;
     let saveLadder = false;
     let saveLightBlueBall = false;
     let saveOrangeBall = false;
@@ -258,6 +266,13 @@ function BalPage() {
       gameInfo.hasDivingGlasses = saveDivingGlasses;
       gameInfo.hasFreezeGun = saveFreezeGun;
       gameInfo.hasKey = saveKey;
+      gameInfo.hasBlueKey = saveBlueKey;
+      gameInfo.hasGreenKey = saveGreenKey;
+      gameInfo.hasPinkKey = savePinkKey;
+      gameInfo.hasPurpleKey = savePurpleKey;
+      gameInfo.hasRedKey = saveRedKey;
+      gameInfo.hasWhiteKey = saveWhiteKey;
+      gameInfo.hasYellowKey = saveYellowKey;
       gameInfo.hasLadder = saveLadder;
       gameInfo.hasLightBlueBall = saveLightBlueBall;
       gameInfo.hasOrangeBall = saveOrangeBall;
@@ -281,6 +296,13 @@ function BalPage() {
       saveDivingGlasses = gameInfo.hasDivingGlasses;
       saveFreezeGun = gameInfo.hasFreezeGun;
       saveKey = gameInfo.hasKey;
+      saveBlueKey = gameInfo.hasBlueKey;
+      saveGreenKey = gameInfo.hasGreenKey;
+      savePinkKey = gameInfo.hasPinkKey;
+      savePurpleKey = gameInfo.hasPurpleKey;
+      saveRedKey = gameInfo.hasRedKey;
+      saveWhiteKey = gameInfo.hasWhiteKey;
+      saveYellowKey = gameInfo.hasYellowKey;
       saveLadder = gameInfo.hasLadder;
       saveLightBlueBall = gameInfo.hasLightBlueBall;
       saveOrangeBall = gameInfo.hasOrangeBall;
@@ -983,6 +1005,27 @@ function BalPage() {
     if (gameInfo.hasKey) {
       addItem("key");
     }
+    if (gameInfo.hasBlueKey) {
+      addItem("blue key");
+    }
+    if (gameInfo.hasGreenKey) {
+      addItem("green key");
+    }
+    if (gameInfo.hasPinkKey) {
+      addItem("pink key");
+    }
+    if (gameInfo.hasPurpleKey) {
+      addItem("purple key");
+    }
+    if (gameInfo.hasRedKey) {
+      addItem("red key");
+    }
+    if (gameInfo.hasWhiteKey) {
+      addItem("white key");
+    }
+    if (gameInfo.hasYellowKey) {
+      addItem("yellow key");
+    }
     if (gameInfo.hasLadder) {
       addItem("ladder");
     }
@@ -1223,7 +1266,7 @@ function BalPage() {
             break;
           case 3:
             // Doors
-            arr1 = [10, 11, 87, 88, 13, 169, 30, 29];
+            arr1 = [10, 11, 87, 88, 13, 169, 30, 29, 2214];
             arr2 = [0];
             break;
           case 4:
@@ -2830,6 +2873,9 @@ function BalPage() {
             msg = "";
 
             if (createLevelObject >= 2000) {
+              if (createLevelObject === 2214) {
+                msg = setProp(gameData, gameInfo, column, row, "color", createLevelColor, oneSelected);
+              }
               if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
                 msg = setProp(gameData, gameInfo, column, row, "direction", createLevelDirection, oneSelected);
               }
@@ -3599,6 +3645,24 @@ function BalPage() {
                     ok = true;
                     createLevelSequence = (newValue === "yes");
                   }
+                }
+              }
+              handleCancel();
+              break;
+            default:
+              break;
+          }
+        }
+
+        if (createLevelMenu === menuToNumber("doors")) {
+          switch (createLevelObject) {
+            case 2214:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Keys / Locked doors", "Color:", ["default", "blue", "green", "pink", "purple", "red", "white", "yellow"], 0);
+                if (newValue !== null) {
+                  createLevelColor = removeChar(newValue, " ");
+                  ok = true;
                 }
               }
               handleCancel();

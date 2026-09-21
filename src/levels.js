@@ -7,6 +7,7 @@ import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets 
 import { disappearingStoneModes } from "./disappearingStones.js";
 import { electricityModes } from "./electricity.js";
 import { globalVars } from "./glob.js";
+import { lockedDoorColors } from "./lockedDoors.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { instruments } from "./music.js";
 import { changeMusicBoxProperty, musicBoxModes } from "./musicBoxes.js";
@@ -335,6 +336,7 @@ export function checkSettings(data, settings) {
     { name: "$instrument", params: 4, xy: true, yesno: -1 },
     { name: "$inverted", params: 3, xy: true, yesno: 2 },
     { name: "$lavacanmove", params: 1, xy: false, yesno: 0 },
+    { name: "$lockeddoorcolor", params: 3, xy: true, yesno: -1 },
     { name: "$maxdistx", params: 3, xy: true, yesno: -1 },
     { name: "$message", params: 0, xy: false, yesno: -1 },
     { name: "$messagebackground", params: 1, xy: false, yesno: -1 },
@@ -634,7 +636,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$has":
-              if (!["nothing", "coilspring", "divingglasses", "fishfood", "freezegun", "key", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
+              if (!["nothing", "coilspring", "divingglasses", "fishfood", "freezegun", "key", "bluekey", "greenkey", "pinkkey", "purplekey",
+                "redkey", "whitekey", "yellowkey", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
                 "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball",
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
@@ -655,6 +658,14 @@ export function checkSettings(data, settings) {
             case "$inverted":
               if (validXY && !["Ù", "Ì", "Ö", "Ë", "η", 159, 161, 163, 165, 178].includes(data[y][x])) {
                 msg += `${settingNr(i)}No piston or mover found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$lockeddoorcolor":
+              if (!lockedDoorColors().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid locked door color ${values[2]}.\n`;
+              }
+              if (validXY && !["k", "l", 29, 30].includes(data[y][x])) {
+                msg += `${settingNr(i)}No key or locked door found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$maxdistx":
@@ -1915,6 +1926,13 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.hasFishFood = false;
               gameInfo.hasFreezeGun = false;
               gameInfo.hasKey = false;
+              gameInfo.hasBlueKey = false;
+              gameInfo.hasGreenKey = false;
+              gameInfo.hasPinkKey = false;
+              gameInfo.hasPurpleKey = false;
+              gameInfo.hasRedKey = false;
+              gameInfo.hasWhiteKey = false;
+              gameInfo.hasYellowKey = false;
               gameInfo.hasLadder = false;
               gameInfo.hasLightBlueBall = false;
               gameInfo.hasOrangeBall = false;
@@ -1945,6 +1963,27 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             case "key":
               gameInfo.hasKey = true;
+              break;
+            case "bluekey":
+              gameInfo.hasBlueKey = true;
+              break;
+            case "greenkey":
+              gameInfo.hasGreenKey = true;
+              break;
+            case "pinkkey":
+              gameInfo.hasPinkKey = true;
+              break;
+            case "purplekey":
+              gameInfo.hasPurpleKey = true;
+              break;
+            case "redkey":
+              gameInfo.hasRedKey = true;
+              break;
+            case "whitekey":
+              gameInfo.hasWhiteKey = true;
+              break;
+            case "yellowkey":
+              gameInfo.hasYellowKey = true;
               break;
             case "ladder":
               gameInfo.hasLadder = true;
@@ -2042,6 +2081,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             default:
               break;
           }
+          break;
+        case "$lockeddoorcolor":
+          setProp(gameData, gameInfo, x, y, "color", valuesLowerCase[2], false);
           break;
         case "$maxdistx":
           if (values.length !== 3 || !validXY) {

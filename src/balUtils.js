@@ -5,6 +5,7 @@ import { checkDetonator } from "./detonator.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
+import { canOpen } from "./lockedDoors.js";
 import { moverIsMovingBlueBall } from "./movers.js";
 import { updateOrangeBall } from "./orangeBalls.js";
 import { checkPistonsTriggers } from "./pistons.js";
@@ -1411,153 +1412,111 @@ export function hasWeightBelow(backData, gameData, gameInfo, gameVars, xmin, xma
 }
 
 export function getListByObjectNumber(gameInfo, objectNumber) {
-  let result = null;
-
   switch (objectNumber) {
     case 6:
     case 106:
-      result = gameInfo.elevators;
-      break;
+      return gameInfo.elevators;
     case 7:
     case 107:
-      result = gameInfo.horizontalElevators;
-      break;
+      return gameInfo.horizontalElevators;
     case 8:
     case 93:
     case 94:
-      result = gameInfo.redBalls;
-      break;
+      return gameInfo.redBalls;
     case 9:
-      result = gameInfo.yellowBalls;
-      break;
+      return gameInfo.yellowBalls;
     case 12:
-      result = gameInfo.damagedStones;
-      break;
+      return gameInfo.damagedStones;
     case 13:
-      result = gameInfo.trapDoors;
-      break;
+      return gameInfo.trapDoors;
     case 22:
-      result = gameInfo.lava;
-      break;
+      return gameInfo.lava;
     case 27:
-      result = gameInfo.redFish;
-      break;
+      return gameInfo.redFish;
+    case 29:
+      return gameInfo.keys;
+    case 30:
+      return gameInfo.lockedDoors;
     case 31:
     case 92:
     case 170:
-      result = gameInfo.teleports;
-      break;
+      return gameInfo.teleports;
     case 39:
-      result = gameInfo.elevatorInOuts;
-      break;
+      return gameInfo.elevatorInOuts;
     case 40:
-      result = gameInfo.orangeBalls;
-      break;
+      return gameInfo.orangeBalls;
     case 91:
-      result = gameInfo.electricity;
-      break;
+      return gameInfo.electricity;
     case 97:
     case 208:
-      result = gameInfo.copiers;
-      break;
+      return gameInfo.copiers;
     case 109:
     case 110:
     case 111:
     case 112:
-      result = gameInfo.forces;
-      break;
+      return gameInfo.forces;
     case 115:
-      result = gameInfo.yellowBallPushers;
-      break;
+      return gameInfo.yellowBallPushers;
     case 116:
-      result = gameInfo.yellowBallPushersTriggers;
-      break;
+      return gameInfo.yellowBallPushersTriggers;
     case 117:
-      result = gameInfo.timeBombs;
-      break;
+      return gameInfo.timeBombs;
     case 119:
-      result = gameInfo.magnets;
-      break;
+      return gameInfo.magnets;
     case 121:
     case 124:
-      result = gameInfo.yellowBars;
-      break;
+      return gameInfo.yellowBars;
     case 131:
-      result = gameInfo.yellowStoppers;
-      break;
+      return gameInfo.yellowStoppers;
     case 136:
-      result = gameInfo.yellowPausers;
-      break;
+      return gameInfo.yellowPausers;
     case 157:
-      result = gameInfo.musicBoxes;
-      break;
+      return gameInfo.musicBoxes;
     case 158:
-      result = gameInfo.pistonsTriggers;
-      break;
+      return gameInfo.pistonsTriggers;
     case 159:
     case 161:
     case 163:
     case 165:
-      result = gameInfo.pistons;
-      break;
+      return gameInfo.pistons;
     case 167:
-      result = gameInfo.delays;
-      break;
+      return gameInfo.delays;
     case 171:
-      result = gameInfo.conveyorBelts;
-      break;
+      return gameInfo.conveyorBelts;
     case 178:
-      result = gameInfo.movers;
-      break;
+      return gameInfo.movers;
     case 198:
-      result = gameInfo.disappearingStones;
-      break;
+      return gameInfo.disappearingStones;
     case 200:
-      result = gameInfo.whiteBallSynchronisers;
-      break;
+      return gameInfo.whiteBallSynchronisers;
     case 203:
-      result = gameInfo.pinkBalls;
-      break;
+      return gameInfo.pinkBalls;
     case 206:
-      result = gameInfo.waterWithIceObjects;
-      break;
+      return gameInfo.waterWithIceObjects;
     case 209:
-      result = gameInfo.pushers;
-      break;
+      return gameInfo.pushers;
     case 241:
-      result = gameInfo.questionStones;
-      break;
+      return gameInfo.questionStones;
     case 242:
     case 245:
-      result = gameInfo.answerBalls;
-      break;
+      return gameInfo.answerBalls;
     case 243:
-      result = gameInfo.tropicalFish;
-      break;
+      return gameInfo.tropicalFish;
     case 244:
-      result = gameInfo.changers;
-      break;
+      return gameInfo.changers;
     case 248:
-      result = gameInfo.jellyfish;
-      break;
+      return gameInfo.jellyfish;
     case 251:
-      result = gameInfo.fishFood;
-      break;
+      return gameInfo.fishFood;
     case 252:
-      result = gameInfo.seaAnemones;
-      break;
+      return gameInfo.seaAnemones;
     case 253:
-      result = gameInfo.brownBalls;
-      break;
+      return gameInfo.brownBalls;
     case 255:
-      result = gameInfo.detectors;
-      break;
+      return gameInfo.detectors;
     default:
-      result = null;
-      break;
+      return null;
   }
-
-  return result;
 }
 
 export function getGameDataValue(gameData, x, y) {
@@ -2758,8 +2717,16 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
     refs.push(gameInfo.jellyfish[i]);
   }
 
+  for (let i = 0; i < gameInfo.keys.length; i++) {
+    refs.push(gameInfo.keys[i]);
+  }
+
   for (let i = 0; i < gameInfo.lava.length; i++) {
     refs.push(gameInfo.lava[i]);
+  }
+
+  for (let i = 0; i < gameInfo.lockedDoors.length; i++) {
+    refs.push(gameInfo.lockedDoors[i]);
   }
 
   for (let i = 0; i < gameInfo.magnets.length; i++) {
@@ -2936,8 +2903,40 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
       gameInfo.hasDivingGlasses = true;
       break;
     case 29:
-      gameInfo.hasKey = true;
-      result.sound = "key";
+      idx = findElementByCoordinates(x, y, gameInfo.keys);
+      if (idx >= 0) {
+        switch (gameInfo.keys[idx].color) {
+          case "default":
+            gameInfo.hasKey = true;
+            break;
+          case "blue":
+            gameInfo.hasBlueKey = true;
+            break;
+          case "green":
+            gameInfo.hasGreenKey = true;
+            break;
+          case "pink":
+            gameInfo.hasPinkKey = true;
+            break;
+          case "purple":
+            gameInfo.hasPurpleKey = true;
+            break;
+          case "red":
+            gameInfo.hasRedKey = true;
+            break;
+          case "white":
+            gameInfo.hasWhiteKey = true;
+            break;
+          case "yellow":
+            gameInfo.hasYellowKey = true;
+            break;
+          default:
+            gameInfo.hasKey = true;
+            break;
+        }
+        gameInfo.keys.splice(idx, 1);
+        result.sound = "key";
+      }      
       break;
     case 34:
       gameInfo.hasPickaxe = true;
@@ -3263,7 +3262,7 @@ export function moveLeft(backData, gameData, gameInfo, gameVars) {
       }
       result.player = true;
     }
-    if (!result.player && ((row[x - 1] === 11) || ((row[x - 1] === 30) && gameInfo.hasKey)) && (row[x - 2] === 0)) {
+    if (!result.player && ((row[x - 1] === 11) || canOpen(gameData, gameInfo, x - 1, y)) && (row[x - 2] === 0)) {
       row[x - 2] = 2;
       row[x] = element;
       gameInfo.blueBall.x = x - 2;
@@ -3451,7 +3450,7 @@ export function moveRight(backData, gameData, gameInfo, gameVars) {
       }
       result.player = true;
     }
-    if (!result.player && ((row[x + 1] === 10) || ((row[x + 1] === 30) && gameInfo.hasKey)) && (row[x + 2] === 0)) {
+    if (!result.player && ((row[x + 1] === 10) || canOpen(gameData, gameInfo, x + 1, y)) && (row[x + 2] === 0)) {
       row[x + 2] = 2;
       row[x] = element;
       gameInfo.blueBall.x = x + 2;
@@ -3703,7 +3702,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
       result.player = true;
     }
     if (!result.player && (gameData[y + dy2][x] === 0) &&
-      ((gameData[y + dy1][x] === oneDirection) || ((gameData[y + dy1][x] === 30) && gameInfo.hasKey))) {
+      ((gameData[y + dy1][x] === oneDirection) || canOpen(gameData, gameInfo, x, y + dy1))) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
@@ -3961,7 +3960,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
       result.player = true;
     }
 
-    if (!result.player && (element2 === 0) && ((element1 === oneDirection) || ((element1 === 30) && gameInfo.hasKey))) {
+    if (!result.player && (element2 === 0) && ((element1 === oneDirection) || canOpen(gameData, gameInfo, x, y + dy1))) {
       gameData[y + dy2][x] = 2;
       gameData[y][x] = element;
       gameInfo.blueBall.y = y + dy2;
