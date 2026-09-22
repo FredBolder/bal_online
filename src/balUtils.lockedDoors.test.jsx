@@ -212,5 +212,90 @@ describe("balUtils Locked doors", () => {
     expect(gameInfo.blueBall).toEqual({ x: 3, y: 3 });
   });
 
+  it("Locks I", () => {
+    const gameInfo = {
+      ...defaultGameInfo,
+      blueBall: { x: 3, y: 2 },
+      greenBalls: 1,
+      keys: [{ x: 3, y: 1, color: "yellow" }, { x: 5, y: 1, color: "green" }],
+      lockedDoors: [{ x: 2, y: 2, color: "yellow" }, { x: 6, y: 2, color: "green" }]
+    };
+    const inputBack = zeroArray(4, 9);
+    const input = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 1, 29, 0, 29, 1, 0, 1],
+      [1, 0, 30, 2, 0, 0, 30, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 1, 2, 0, 29, 1, 0, 1],
+      [1, 0, 30, 0, 0, 0, 30, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    expect(gameInfo.hasYellowKey).toBe(false);
+    const info = jump(inputBack, input, gameInfo, defaultGameVars);
+    expect(input).toEqual(expectedOutput);
+    expect(info).toEqual({ eating: false, freezeTime: -1, player: true, sound: "key" });
+    expect(gameInfo.blueBall).toEqual({ x: 3, y: 1 });
+    expect(gameInfo.hasYellowKey).toBe(true);
+  });
+
+  it("Locks J", () => {
+    const gameInfo = {
+      ...defaultGameInfo,
+      blueBall: { x: 3, y: 2 },
+      greenBalls: 1,
+      hasYellowKey: true,
+      keys: [{ x: 5, y: 1, color: "green" }],
+      lockedDoors: [{ x: 2, y: 2, color: "yellow" }, { x: 6, y: 2, color: "green" }]
+    };
+    const inputBack = zeroArray(4, 9);
+    const input = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 1, 0, 0, 29, 1, 0, 1],
+      [1, 0, 30, 2, 0, 0, 30, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 1, 0, 0, 29, 1, 0, 1],
+      [1, 2, 30, 0, 0, 0, 30, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    const info = moveLeft(inputBack, input, gameInfo, defaultGameVars);
+    expect(input).toEqual(expectedOutput);
+    expect(info).toEqual({ action: "", eating: false, freezeTime: -1, player: true, sound: "unlock" });
+    expect(gameInfo.blueBall).toEqual({ x: 1, y: 2 });
+  });
+
+  it("Locks K", () => {
+    const gameInfo = {
+      ...defaultGameInfo,
+      blueBall: { x: 3, y: 2 },
+      greenBalls: 1,
+      hasYellowKey: true,
+      keys: [{ x: 5, y: 1, color: "green" }],
+      lockedDoors: [{ x: 2, y: 2, color: "green" }, { x: 6, y: 2, color: "yellow" }]
+    };
+    const inputBack = zeroArray(4, 9);
+    const input = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 1, 0, 0, 29, 1, 0, 1],
+      [1, 0, 30, 2, 0, 0, 30, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    const expectedOutput = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 3, 1, 0, 0, 29, 1, 0, 1],
+      [1, 0, 30, 2, 0, 0, 30, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    const info = moveLeft(inputBack, input, gameInfo, defaultGameVars);
+    expect(input).toEqual(expectedOutput);
+    expect(info).toEqual({ action: "", eating: false, freezeTime: -1, player: false, sound: "" });
+    expect(gameInfo.blueBall).toEqual({ x: 3, y: 2 });
+  });
+
   // Insert new tests here
 });    

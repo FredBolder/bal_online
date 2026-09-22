@@ -2532,6 +2532,12 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 27:
       updateObject(gameInfo.redFish, oldX, oldY, newX, newY);
       break;
+    case 29:
+      updateObject(gameInfo.keys, oldX, oldY, newX, newY);
+      break;
+    case 30:
+      updateObject(gameInfo.lockedDoors, oldX, oldY, newX, newY);
+      break;
     case 40:
       updateOrangeBall(gameInfo.orangeBalls, oldX, oldY, newX, newY, "none");
       break;

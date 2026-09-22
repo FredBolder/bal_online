@@ -1,0 +1,18 @@
+$detectormode: 5, 9, blueball
+$target: 5, 9, command
+$value: 5, 9, move, lockeddoor, rel, 1, -1, up
+$detectormode: 6, 9, blueball
+$target: 6, 9, command
+$value: 6, 9, move, key, rel, 1, -1, up
+$lockeddoorcolor: 7, 8, green
+$lockeddoorcolor: 6, 8, pink
+1111111111
+1        1
+1        1
+1        1
+1        1
+1        1
+1        1
+13       1
+1   2 lk 1
+11111ђђ111

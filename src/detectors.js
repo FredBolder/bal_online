@@ -17,6 +17,8 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let idx = -1;
     const invalidInt = -10000;
     const intValues = [];
+    let key = null;
+    let lockedDoor = null;
     let objectNumber = 0;
     let pusher = null;
     let ticks = 50;
@@ -132,6 +134,22 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     objectNumber = nameToObjectNumber(objName);
                     if (objectNumber > 0) {
                         addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
+                    }
+                    if (objectNumber === 29 && objName.endsWith("key") && objName.length > 3) {
+                        idx = findElementByCoordinates(absX, absY, gameInfo.keys);
+                        if (idx < 0) {
+                            continue;
+                        }
+                        key = gameInfo.keys[idx];
+                        key.color = objName.slice(0, objName.length - 3);
+                    }
+                    if (objectNumber === 30 && objName.endsWith("lockeddoor") && objName.length > 10) {
+                        idx = findElementByCoordinates(absX, absY, gameInfo.lockedDoors);
+                        if (idx < 0) {
+                            continue;
+                        }
+                        lockedDoor = gameInfo.lockedDoors[idx];
+                        lockedDoor.color = objName.slice(0, objName.length - 10);
                     }
                     if (objectNumber === 209 && ["movingpusherdown", "movingpusherleft", "movingpusherright", "movingpusherup"].includes(objName)) {
                         idx = findElementByCoordinates(absX, absY, gameInfo.pushers);
@@ -318,6 +336,15 @@ function nameToObjectNumber(objName) {
             return 253;
         case "detector":
             return 255;
+        case "lockeddoor":
+        case "bluelockeddoor":
+        case "greenlockeddoor":
+        case "pinklockeddoor":
+        case "purplelockeddoor":
+        case "redlockeddoor":
+        case "whitelockeddoor":
+        case "yellowlockeddoor":
+            return 30;
         case "electricity":
             return 91;
         case "elevatordown":
@@ -348,6 +375,15 @@ function nameToObjectNumber(objName) {
             return 80;
         case "jellyfish":
             return 248;
+        case "key":
+        case "bluekey":
+        case "greenkey":
+        case "pinkkey":
+        case "purplekey":
+        case "redkey":
+        case "whitekey":
+        case "yellowkey":
+            return 29;
         case "ladder":
             return 25;
         case "lightblueball":
@@ -459,7 +495,9 @@ function objectPossible(cmd, objName, obj) {
             (objName === "elevator" && (obj === 6 || obj === 106)) ||
             (objName === "grayballs" && [82, 83, 98].includes(obj)) ||
             (objName === "horizontalelevator" && (obj === 7 || obj === 107)) ||
+            (objName === "key" && obj === 29) ||
             (objName === "lightblueball" && obj === 5) ||
+            (objName === "lockeddoor" && obj === 30) ||
             (objName === "onedirectionportdown" && obj === 88) ||
             (objName === "onedirectionportleft" && obj === 11) ||
             (objName === "onedirectionportright" && obj === 10) ||
