@@ -343,662 +343,443 @@ export function changeTicks(gameInfo, x, y, ticks) {
 }
 
 export function charToNumber(c) {
-  let result = 0;
-
+  // More possible characters
+  // https://www.w3schools.com/charsets/ref_utf_cyrillic.asp
   switch (c) {
     case "0":
     case " ":
-      result = 0;
-      break;
+      return 0;
     case "1":
-      result = 1;
-      break;
+      return 1;
     case "2":
-      result = 2;
-      break;
+      return 2;
     case "3":
-      result = 3;
-      break;
+      return 3;
     case "4":
-      result = 4;
-      break;
+      return 4;
     case "5":
-      result = 5;
-      break;
+      return 5;
     case "D":
-      result = 6;
-      break;
+      return 6;
     case "L":
-      result = 7;
-      break;
+      return 7;
     case "8":
-      result = 8;
-      break;
+      return 8;
     case "9":
-      result = 9;
-      break;
+      return 9;
     case ">":
-      result = 10;
-      break;
+      return 10;
     case "<":
-      result = 11;
-      break;
+      return 11;
     case "F":
-      result = 12;
-      break;
+      return 12;
     case "-":
-      result = 13;
-      break;
+      return 13;
     case "G":
-      result = 15;
-      break;
+      return 15;
     case "H":
-      result = 16;
-      break;
+      return 16;
     case "I":
-      result = 17;
-      break;
+      return 17;
     case "J":
-      result = 18;
-      break;
+      return 18;
     case "W":
-      result = 20;
-      break;
+      return 20;
     case "P":
-      result = 21;
-      break;
+      return 21;
     case "V":
-      result = 22;
-      break;
+      return 22;
     case "w":
-      result = 23;
-      break;
+      return 23;
     case "@":
-      result = 24;
-      break;
+      return 24;
     case "=":
-      result = 25;
-      break;
+      return 25;
     case "d":
-      result = 26;
-      break;
+      return 26;
     case "f":
-      result = 27;
-      break;
+      return 27;
     case "p":
-      result = 28;
-      break;
+      return 28;
     case "k":
-      result = 29;
-      break;
+      return 29;
     case "l":
-      result = 30;
-      break;
+      return 30;
     case "T":
-      result = 31;
-      break;
+      return 31;
     case "Y":
-      result = 34;
-      break;
+      return 34;
     case "y":
-      result = 35;
-      break;
+      return 35;
     case "B":
-      result = 36;
-      break;
+      return 36;
     case "b":
-      result = 37;
-      break;
+      return 37;
     case "*":
-      result = 38;
-      break;
+      return 38;
     case "E":
-      result = 39;
-      break;
+      return 39;
     case "O":
-      result = 40;
-      break;
+      return 40;
     case "_":
-      result = 80;
-      break;
+      return 80;
     case "X":
-      result = 81;
-      break;
+      return 81;
     case "o":
-      result = 82;
-      break;
+      return 82;
     case ".":
-      result = 83;
-      break;
+      return 83;
     case "C":
-      result = 84;
-      break;
+      return 84;
     case "c":
-      result = 85;
-      break;
+      return 85;
     case "+":
-      result = 86;
-      break;
+      return 86;
     case "^":
-      result = 87;
-      break;
+      return 87;
     case "v":
-      result = 88;
-      break;
+      return 88;
     case "t":
-      result = 89;
-      break;
+      return 89;
     case "h":
-      result = 90;
-      break;
+      return 90;
     case "!":
-      result = 91;
-      break;
+      return 91;
     case "τ":
-      result = 92;
-      break;
+      return 92;
     case "s":
-      result = 93;
-      break;
+      return 93;
     case "S":
-      result = 94;
-      break;
+      return 94;
     case "α":
-      result = 95;
-      break;
+      return 95;
     case "β":
-      result = 96;
-      break;
+      return 96;
     case "Δ":
-      result = 97;
-      break;
+      return 97;
     case "δ":
-      result = 98;
-      break;
+      return 98;
     case "π":
-      result = 99;
-      break;
+      return 99;
     case "á":
-      result = 100;
-      break;
+      return 100;
     case "à":
-      result = 101;
-      break;
+      return 101;
     case "ä":
-      result = 102;
-      break;
+      return 102;
     case "Á":
-      result = 103;
-      break;
+      return 103;
     case "À":
-      result = 104;
-      break;
+      return 104;
     case "λ":
-      result = 105;
-      break;
+      return 105;
     case "U":
-      result = 106;
-      break;
+      return 106;
     case "R":
-      result = 107;
-      break;
+      return 107;
     case "Λ":
-      result = 108;
-      break;
+      return 108;
     case "Ω":
-      result = 109;
-      break;
+      return 109;
     case "ω":
-      result = 110;
-      break;
+      return 110;
     case "Φ":
-      result = 111;
-      break;
+      return 111;
     case "φ":
-      result = 112;
-      break;
+      return 112;
     case "ς":
-      result = 113;
-      break;
+      return 113;
     case "σ":
-      result = 114;
-      break;
+      return 114;
     case "Ψ":
-      result = 115;
-      break;
+      return 115;
     case "ψ":
-      result = 116;
-      break;
+      return 116;
     case "Ξ":
-      result = 117;
-      break;
+      return 117;
     case "j":
-      result = 118;
-      break;
+      return 118;
     case "μ":
-      result = 119;
-      break;
+      return 119;
     case "u":
-      result = 120;
-      break;
+      return 120;
     case "ó":
-      result = 121;
-      break;
+      return 121;
     case "ò":
-      result = 122;
-      break;
+      return 122;
     case "ö":
-      result = 123;
-      break;
+      return 123;
     case "Ó":
-      result = 124;
-      break;
+      return 124;
     case "Ò":
-      result = 125;
-      break;
+      return 125;
     case "é":
-      result = 126;
-      break;
+      return 126;
     case "è":
-      result = 127;
-      break;
+      return 127;
     case "e": // without two dots
-      result = 128;
-      break;
+      return 128;
     case "É":
-      result = 129;
-      break;
+      return 129;
     case "È":
-      result = 130;
-      break;
+      return 130;
     case "Σ":
-      result = 131;
-      break;
+      return 131;
     case "g":
-      result = 132;
-      break;
+      return 132;
     case "γ":
-      result = 133;
-      break;
+      return 133;
     case "Γ":
-      result = 134;
-      break;
+      return 134;
     case "ξ":
-      result = 135;
-      break;
+      return 135;
     case "ρ":
-      result = 136;
-      break;
+      return 136;
     case "ι":
-      result = 137;
-      break;
+      return 137;
     case "Â":
-      result = 138;
-      break;
+      return 138;
     case "â":
-      result = 139;
-      break;
+      return 139;
     case "°":
-      result = 140;
-      break;
+      return 140;
     case "i":
-      result = 141;
-      break;
+      return 141;
     case "í":
-      result = 142;
-      break;
+      return 142;
     case "ì":
-      result = 143;
-      break;
+      return 143;
     case "î":
-      result = 144;
-      break;
+      return 144;
     case "ü":
-      result = 145;
-      break;
+      return 145;
     case "ú":
-      result = 146;
-      break;
+      return 146;
     case "ù":
-      result = 147;
-      break;
+      return 147;
     case "û":
-      result = 148;
-      break;
+      return 148;
     case "ά":
-      result = 149;
-      break;
+      return 149;
     case "έ":
-      result = 150;
-      break;
+      return 150;
     case "ί":
-      result = 151;
-      break;
+      return 151;
     case "ό":
-      result = 152;
-      break;
+      return 152;
     case "ή":
-      result = 153;
-      break;
+      return 153;
     case "ώ":
-      result = 154;
-      break;
+      return 154;
     case "&":
-      result = 155;
-      break;
+      return 155;
     case "~":
-      result = 156;
-      break;
+      return 156;
     case "M":
-      result = 157;
-      break;
+      return 157;
     case "m":
-      result = 158;
-      break;
+      return 158;
     case "Ù":
-      result = 159;
-      break;
+      return 159;
     case "Û":
-      result = 160;
-      break;
+      return 160;
     case "Ì":
-      result = 161;
-      break;
+      return 161;
     case "Î":
-      result = 162;
-      break;
+      return 162;
     case "Ö":
-      result = 163;
-      break;
+      return 163;
     case "Ô":
-      result = 164;
-      break;
+      return 164;
     case "Ë":
-      result = 165;
-      break;
+      return 165;
     case "Ê":
-      result = 166;
-      break;
+      return 166;
     case ")":
-      result = 167;
-      break;
+      return 167;
     case "%":
-      result = 168;
-      break;
+      return 168;
     case "ß":
-      result = 169;
-      break;
+      return 169;
     case "Π":
-      result = 170;
-      break;
+      return 170;
     case "{":
-      result = 171;
-      break;
+      return 171;
     case "Ø":
-      result = 172;
-      break;
+      return 172;
     case "}":
-      result = 173;
-      break;
+      return 173;
     case ":":
-      result = 174;
-      break;
+      return 174;
     case ";":
-      result = 175;
-      break;
+      return 175;
     case ",":
-      result = 176;
-      break;
+      return 176;
     case "'":
-      result = 177;
-      break;
+      return 177;
     case "η":
-      result = 178;
-      break;
+      return 178;
     case "Ć":
-      result = 179;
-      break;
+      return 179;
     case "Ĉ":
-      result = 180;
-      break;
+      return 180;
     case "Ċ":
-      result = 181;
-      break;
+      return 181;
     case "Č":
-      result = 182;
-      break;
+      return 182;
     case "Ä":
-      result = 183;
-      break;
+      return 183;
     case "Є":
-      result = 184;
-      break;
+      return 184;
     case "З":
-      result = 185;
-      break;
+      return 185;
     case "ш":
-      result = 186;
-      break;
+      return 186;
     case "щ":
-      result = 187;
-      break;
+      return 187;
     case "Ц":
-      result = 188;
-      break;
+      return 188;
     case "Ч":
-      result = 189;
-      break;
+      return 189;
     case "И":
-      result = 190;
-      break;
+      return 190;
     case "Й":
-      result = 191;
-      break;
+      return 191;
     case "б":
-      result = 192;
-      break;
+      return 192;
     case "Я":
-      result = 193;
-      break;
+      return 193;
     case "я":
-      result = 194;
-      break;
+      return 194;
     case "Б":
-      result = 195;
-      break;
+      return 195;
     case "Л":
-      result = 196;
-      break;
+      return 196;
     case "Ъ":
-      result = 197;
-      break;
+      return 197;
     case "Џ":
-      result = 198;
-      break;
+      return 198;
     case "Љ":
-      result = 199;
-      break;
+      return 199;
     case "Ѩ":
-      result = 200;
-      break;
+      return 200;
     case "Ӭ":
-      result = 201;
-      break;
+      return 201;
     case "ӭ":
-      result = 202;
-      break;
+      return 202;
     case "Ѥ":
-      result = 203;
-      break;
+      return 203;
     case "ѥ":
-      result = 204;
-      break;
+      return 204;
     case "Ж":
-      result = 205;
-      break;
+      return 205;
     case "ж":
-      result = 206;
-      break;
+      return 206;
     case "Ѫ":
-      result = 207;
-      break;
+      return 207;
     case "Ѳ":
-      result = 208;
-      break;
+      return 208;
     case "њ":
-      result = 209;
-      break;
+      return 209;
     case "Ѭ":
-      result = 210;
-      break;
+      return 210;
     case "ѭ":
-      result = 211;
-      break;
+      return 211;
     case "Ѯ":
-      result = 212;
-      break;
+      return 212;
     case "ѯ":
-      result = 213;
-      break;
+      return 213;
     case "Ѵ":
-      result = 214;
-      break;
+      return 214;
     case "ѵ":
-      result = 215;
-      break;
+      return 215;
     case "Ѷ":
-      result = 216;
-      break;
+      return 216;
     case "ѷ":
-      result = 217;
-      break;
+      return 217;
     case "Ѹ":
-      result = 218;
-      break;
+      return 218;
     case "ѹ":
-      result = 219;
-      break;
+      return 219;
     case "Ѻ":
-      result = 220;
-      break;
+      return 220;
     case "ѻ":
-      result = 221;
-      break;
+      return 221;
     case "Ѽ":
-      result = 222;
-      break;
+      return 222;
     case "ѽ":
-      result = 223;
-      break;
+      return 223;
     case "Ѿ":
-      result = 224;
-      break;
+      return 224;
     case "ѿ":
-      result = 225;
-      break;
+      return 225;
     case "Ґ":
-      result = 226;
-      break;
+      return 226;
     case "ґ":
-      result = 227;
-      break;
+      return 227;
     case "Ҡ":
-      result = 228;
-      break;
+      return 228;
     case "ҡ":
-      result = 229;
-      break;
+      return 229;
     case "Ң":
-      result = 230;
-      break;
+      return 230;
     case "ң":
-      result = 231;
-      break;
+      return 231;
     case "Ҥ":
-      result = 232;
-      break;
+      return 232;
     case "ҥ":
-      result = 233;
-      break;
+      return 233;
     case "Ҧ":
-      result = 234;
-      break;
+      return 234;
     case "ҧ":
-      result = 235;
-      break;
+      return 235;
     case "Ҩ":
-      result = 236;
-      break;
+      return 236;
     case "ҩ":
-      result = 237;
-      break;
+      return 237;
     case "Ұ":
-      result = 238;
-      break;
+      return 238;
     case "ұ":
-      result = 239;
-      break;
+      return 239;
     case "Ҵ":
-      result = 240;
-      break;
+      return 240;
     case "Ҹ":
-      result = 241;
-      break;
+      return 241;
     case "ҹ":
-      result = 242;
-      break;
+      return 242;
     case "Ҽ":
-      result = 243;
-      break;
+      return 243;
     case "Ӄ":
-      result = 244;
-      break;
+      return 244;
     case "Ӆ":
-      result = 245;
-      break;
+      return 245;
     case "Ӈ":
-      result = 246;
-      break;
+      return 246;
     case "ӈ":
-      result = 247;
-      break;
+      return 247;
     case "Ӊ":
-      result = 248;
-      break;
+      return 248;
     case "Ӌ":
-      result = 249;
-      break;
+      return 249;
     case "Ӎ":
-      result = 250;
-      break;
+      return 250;
     case "ӎ":
-      result = 251;
-      break;
+      return 251;
     case "Ӑ":
-      result = 252;
-      break;
+      return 252;
     case "Ь":
-      result = 253;
-      break;
+      return 253;
     case "ъ":
-      result = 254;
-      break;
+      return 254;
     case "ђ":
-      result = 255;
-      break;
+      return 255;
     case "Ѓ":
-      result = 256;
-      break;
+      return 256;
     case "|":
-      result = 1000;
-      break;
+      return 1000;
     default:
-      result = -1;
-      break;
+      return -1;
   }
-  // More possible characters
-  // https://www.w3schools.com/charsets/ref_utf_cyrillic.asp
-  return result;
 }
 
 export function checkFalling(backData, gameData, gameInfo, gameVars) {
@@ -1732,660 +1513,441 @@ export function rising(x, y, gameData, gameInfo, gameVars) {
 }
 
 export function numberToChar(n) {
-  let result = " ";
-
   switch (n) {
     case 0:
-      result = " ";
-      break;
+      return " ";
     case 1:
-      result = "1";
-      break;
+      return "1";
     case 2:
-      result = "2";
-      break;
+      return "2";
     case 3:
-      result = "3";
-      break;
+      return "3";
     case 4:
-      result = "4";
-      break;
+      return "4";
     case 5:
-      result = "5";
-      break;
+      return "5";
     case 6:
-      result = "D";
-      break;
+      return "D";
     case 7:
-      result = "L";
-      break;
+      return "L";
     case 8:
-      result = "8";
-      break;
+      return "8";
     case 9:
-      result = "9";
-      break;
+      return "9";
     case 10:
-      result = ">";
-      break;
+      return ">";
     case 11:
-      result = "<";
-      break;
+      return "<";
     case 12:
-      result = "F";
-      break;
+      return "F";
     case 13:
-      result = "-";
-      break;
+      return "-";
     case 15:
-      result = "G";
-      break;
+      return "G";
     case 16:
-      result = "H";
-      break;
+      return "H";
     case 17:
-      result = "I";
-      break;
+      return "I";
     case 18:
-      result = "J";
-      break;
+      return "J";
     case 20:
-      result = "W";
-      break;
+      return "W";
     case 21:
-      result = "P";
-      break;
+      return "P";
     case 22:
-      result = "V";
-      break;
+      return "V";
     case 23:
-      result = "w";
-      break;
+      return "w";
     case 24:
-      result = "@";
-      break;
+      return "@";
     case 25:
-      result = "=";
-      break;
+      return "=";
     case 26:
-      result = "d";
-      break;
+      return "d";
     case 27:
-      result = "f";
-      break;
+      return "f";
     case 28:
-      result = "p";
-      break;
+      return "p";
     case 29:
-      result = "k";
-      break;
+      return "k";
     case 30:
-      result = "l";
-      break;
+      return "l";
     case 31:
-      result = "T";
-      break;
+      return "T";
     case 34:
-      result = "Y";
-      break;
+      return "Y";
     case 35:
-      result = "y";
-      break;
+      return "y";
     case 36:
-      result = "B";
-      break;
+      return "B";
     case 37:
-      result = "b";
-      break;
+      return "b";
     case 38:
-      result = "*";
-      break;
+      return "*";
     case 39:
-      result = "E";
-      break;
+      return "E";
     case 40:
-      result = "O";
-      break;
+      return "O";
     case 80:
-      result = "_";
-      break;
+      return "_";
     case 81:
-      result = "X";
-      break;
+      return "X";
     case 82:
-      result = "o";
-      break;
+      return "o";
     case 83:
-      result = ".";
-      break;
+      return ".";
     case 84:
-      result = "C";
-      break;
+      return "C";
     case 85:
-      result = "c";
-      break;
+      return "c";
     case 86:
-      result = "+";
-      break;
+      return "+";
     case 87:
-      result = "^";
-      break;
+      return "^";
     case 88:
-      result = "v";
-      break;
+      return "v";
     case 89:
-      result = "t";
-      break;
+      return "t";
     case 90:
-      result = "h";
-      break;
+      return "h";
     case 91:
-      result = "!";
-      break;
+      return "!";
     case 92:
-      result = "τ";
-      break;
+      return "τ";
     case 93:
-      result = "s";
-      break;
+      return "s";
     case 94:
-      result = "S";
-      break;
+      return "S";
     case 95:
-      result = "α";
-      break;
+      return "α";
     case 96:
-      result = "β";
-      break;
+      return "β";
     case 97:
-      result = "Δ";
-      break;
+      return "Δ";
     case 98:
-      result = "δ";
-      break;
+      return "δ";
     case 99:
-      result = "π";
-      break;
+      return "π";
     case 100:
-      result = "á";
-      break;
+      return "á";
     case 101:
-      result = "à";
-      break;
+      return "à";
     case 102:
-      result = "ä";
-      break;
+      return "ä";
     case 103:
-      result = "Á";
-      break;
+      return "Á";
     case 104:
-      result = "À";
-      break;
+      return "À";
     case 105:
-      result = "λ";
-      break;
+      return "λ";
     case 106:
-      result = "U";
-      break;
+      return "U";
     case 107:
-      result = "R";
-      break;
+      return "R";
     case 108:
-      result = "Λ";
-      break;
+      return "Λ";
     case 109:
-      result = "Ω";
-      break;
+      return "Ω";
     case 110:
-      result = "ω";
-      break;
+      return "ω";
     case 111:
-      result = "Φ";
-      break;
+      return "Φ";
     case 112:
-      result = "φ";
-      break;
+      return "φ";
     case 113:
-      result = "ς";
-      break;
+      return "ς";
     case 114:
-      result = "σ";
-      break;
+      return "σ";
     case 115:
-      result = "Ψ";
-      break;
+      return "Ψ";
     case 116:
-      result = "ψ";
-      break;
+      return "ψ";
     case 117:
-      result = "Ξ";
-      break;
+      return "Ξ";
     case 118:
-      result = "j";
-      break;
+      return "j";
     case 119:
-      result = "μ";
-      break;
+      return "μ";
     case 120:
-      result = "u";
-      break;
+      return "u";
     case 121:
-      result = "ó";
-      break;
+      return "ó";
     case 122:
-      result = "ò";
-      break;
+      return "ò";
     case 123:
-      result = "ö";
-      break;
+      return "ö";
     case 124:
-      result = "Ó";
-      break;
+      return "Ó";
     case 125:
-      result = "Ò";
-      break;
+      return "Ò";
     case 126:
-      result = "é";
-      break;
+      return "é";
     case 127:
-      result = "è";
-      break;
+      return "è";
     case 128:
-      result = "e"; // without two dots
-      break;
+      return "e"; // without two dots
     case 129:
-      result = "É";
-      break;
+      return "É";
     case 130:
-      result = "È";
-      break;
+      return "È";
     case 131:
-      result = "Σ";
-      break;
+      return "Σ";
     case 132:
-      result = "g";
-      break;
+      return "g";
     case 133:
-      result = "γ";
-      break;
+      return "γ";
     case 134:
-      result = "Γ";
-      break;
+      return "Γ";
     case 135:
-      result = "ξ";
-      break;
+      return "ξ";
     case 136:
-      result = "ρ";
-      break;
+      return "ρ";
     case 137:
-      result = "ι";
-      break;
+      return "ι";
     case 138:
-      result = "Â";
-      break;
+      return "Â";
     case 139:
-      result = "â";
-      break;
+      return "â";
     case 140:
-      result = "°";
-      break;
+      return "°";
     case 141:
-      result = "i";
-      break;
+      return "i";
     case 142:
-      result = "í";
-      break;
+      return "í";
     case 143:
-      result = "ì";
-      break;
+      return "ì";
     case 144:
-      result = "î";
-      break;
+      return "î";
     case 145:
-      result = "ü";
-      break;
+      return "ü";
     case 146:
-      result = "ú";
-      break;
+      return "ú";
     case 147:
-      result = "ù";
-      break;
+      return "ù";
     case 148:
-      result = "û";
-      break;
+      return "û";
     case 149:
-      result = "ά";
-      break;
+      return "ά";
     case 150:
-      result = "έ";
-      break;
+      return "έ";
     case 151:
-      result = "ί";
-      break;
+      return "ί";
     case 152:
-      result = "ό";
-      break;
+      return "ό";
     case 153:
-      result = "ή";
-      break;
+      return "ή";
     case 154:
-      result = "ώ";
-      break;
+      return "ώ";
     case 155:
-      result = "&";
-      break;
+      return "&";
     case 156:
-      result = "~";
-      break;
+      return "~";
     case 157:
-      result = "M";
-      break;
+      return "M";
     case 158:
-      result = "m";
-      break;
+      return "m";
     case 159:
-      result = "Ù";
-      break;
+      return "Ù";
     case 160:
-      result = "Û";
-      break;
+      return "Û";
     case 161:
-      result = "Ì";
-      break;
+      return "Ì";
     case 162:
-      result = "Î";
-      break;
+      return "Î";
     case 163:
-      result = "Ö";
-      break;
+      return "Ö";
     case 164:
-      result = "Ô";
-      break;
+      return "Ô";
     case 165:
-      result = "Ë";
-      break;
+      return "Ë";
     case 166:
-      result = "Ê";
-      break;
+      return "Ê";
     case 167:
-      result = ")";
-      break;
+      return ")";
     case 168:
-      result = "%";
-      break;
+      return "%";
     case 169:
-      result = "ß";
-      break;
+      return "ß";
     case 170:
-      result = "Π";
-      break;
+      return "Π";
     case 171:
-      result = "{";
-      break;
+      return "{";
     case 172:
-      result = "Ø";
-      break;
+      return "Ø";
     case 173:
-      result = "}";
-      break;
+      return "}";
     case 174:
-      result = ":";
-      break;
+      return ":";
     case 175:
-      result = ";";
-      break;
+      return ";";
     case 176:
-      result = ",";
-      break;
+      return ",";
     case 177:
-      result = "'";
-      break;
+      return "'";
     case 178:
-      result = "η";
-      break;
+      return "η";
     case 179:
-      result = "Ć";
-      break;
+      return "Ć";
     case 180:
-      result = "Ĉ";
-      break;
+      return "Ĉ";
     case 181:
-      result = "Ċ";
-      break;
+      return "Ċ";
     case 182:
-      result = "Č";
-      break;
+      return "Č";
     case 183:
-      result = "Ä";
-      break;
+      return "Ä";
     case 184:
-      result = "Є";
-      break;
+      return "Є";
     case 185:
-      result = "З";
-      break;
+      return "З";
     case 186:
-      result = "ш";
-      break;
+      return "ш";
     case 187:
-      result = "щ";
-      break;
+      return "щ";
     case 188:
-      result = "Ц";
-      break;
+      return "Ц";
     case 189:
-      result = "Ч";
-      break;
+      return "Ч";
     case 190:
-      result = "И";
-      break;
+      return "И";
     case 191:
-      result = "Й";
-      break;
+      return "Й";
     case 192:
-      result = "б";
-      break;
+      return "б";
     case 193:
-      result = "Я";
-      break;
+      return "Я";
     case 194:
-      result = "я";
-      break;
+      return "я";
     case 195:
-      result = "Б";
-      break;
+      return "Б";
     case 196:
-      result = "Л";
-      break;
+      return "Л";
     case 197:
-      result = "Ъ";
-      break;
+      return "Ъ";
     case 198:
-      result = "Џ";
-      break;
+      return "Џ";
     case 199:
-      result = "Љ";
-      break;
+      return "Љ";
     case 200:
-      result = "Ѩ";
-      break;
+      return "Ѩ";
     case 201:
-      result = "Ӭ";
-      break;
+      return "Ӭ";
     case 202:
-      result = "ӭ";
-      break;
+      return "ӭ";
     case 203:
-      result = "Ѥ";
-      break;
+      return "Ѥ";
     case 204:
-      result = "ѥ";
-      break;
+      return "ѥ";
     case 205:
-      result = "Ж";
-      break;
+      return "Ж";
     case 206:
-      result = "ж";
-      break;
+      return "ж";
     case 207:
-      result = "Ѫ";
-      break;
+      return "Ѫ";
     case 208:
-      result = "Ѳ";
-      break;
+      return "Ѳ";
     case 209:
-      result = "њ";
-      break;
+      return "њ";
     case 210:
-      result = "Ѭ";
-      break;
+      return "Ѭ";
     case 211:
-      result = "ѭ";
-      break;
+      return "ѭ";
     case 212:
-      result = "Ѯ";
-      break;
+      return "Ѯ";
     case 213:
-      result = "ѯ";
-      break;
+      return "ѯ";
     case 214:
-      result = "Ѵ";
-      break;
+      return "Ѵ";
     case 215:
-      result = "ѵ";
-      break;
+      return "ѵ";
     case 216:
-      result = "Ѷ";
-      break;
+      return "Ѷ";
     case 217:
-      result = "ѷ";
-      break;
+      return "ѷ";
     case 218:
-      result = "Ѹ";
-      break;
+      return "Ѹ";
     case 219:
-      result = "ѹ";
-      break;
+      return "ѹ";
     case 220:
-      result = "Ѻ";
-      break;
+      return "Ѻ";
     case 221:
-      result = "ѻ";
-      break;
+      return "ѻ";
     case 222:
-      result = "Ѽ";
-      break;
+      return "Ѽ";
     case 223:
-      result = "ѽ";
-      break;
+      return "ѽ";
     case 224:
-      result = "Ѿ";
-      break;
+      return "Ѿ";
     case 225:
-      result = "ѿ";
-      break;
+      return "ѿ";
     case 226:
-      result = "Ґ";
-      break;
+      return "Ґ";
     case 227:
-      result = "ґ";
-      break;
+      return "ґ";
     case 228:
-      result = "Ҡ";
-      break;
+      return "Ҡ";
     case 229:
-      result = "ҡ";
-      break;
+      return "ҡ";
     case 230:
-      result = "Ң";
-      break;
+      return "Ң";
     case 231:
-      result = "ң";
-      break;
+      return "ң";
     case 232:
-      result = "Ҥ";
-      break;
+      return "Ҥ";
     case 233:
-      result = "ҥ";
-      break;
+      return "ҥ";
     case 234:
-      result = "Ҧ";
-      break;
+      return "Ҧ";
     case 235:
-      result = "ҧ";
-      break;
+      return "ҧ";
     case 236:
-      result = "Ҩ";
-      break;
+      return "Ҩ";
     case 237:
-      result = "ҩ";
-      break;
+      return "ҩ";
     case 238:
-      result = "Ұ";
-      break;
+      return "Ұ";
     case 239:
-      result = "ұ";
-      break;
+      return "ұ";
     case 240:
-      result = "Ҵ";
-      break;
+      return "Ҵ";
     case 241:
-      result = "Ҹ";
-      break;
+      return "Ҹ";
     case 242:
-      result = "ҹ";
-      break;
+      return "ҹ";
     case 243:
-      result = "Ҽ";
-      break;
+      return "Ҽ";
     case 244:
-      result = "Ӄ";
-      break;
+      return "Ӄ";
     case 245:
-      result = "Ӆ";
-      break;
+      return "Ӆ";
     case 246:
-      result = "Ӈ";
-      break;
+      return "Ӈ";
     case 247:
-      result = "ӈ";
-      break;
+      return "ӈ";
     case 248:
-      result = "Ӊ";
-      break;
+      return "Ӊ";
     case 249:
-      result = "Ӌ";
-      break;
+      return "Ӌ";
     case 250:
-      result = "Ӎ";
-      break;
+      return "Ӎ";
     case 251:
-      result = "ӎ";
-      break;
+      return "ӎ";
     case 252:
-      result = "Ӑ";
-      break;
+      return "Ӑ";
     case 253:
-      result = "Ь";
-      break;
+      return "Ь";
     case 254:
-      result = "ъ";
-      break;
+      return "ъ";
     case 255:
-      result = "ђ";
-      break;
+      return "ђ";
     case 256:
-      result = "Ѓ";
-      break;
+      return "Ѓ";
     case 1000:
       // For manual only
-      result = "|";
-      break;
+      return "|";
     default:
-      result = "?";
-      break;
+      return "?";
   }
-  return result;
 }
 
 export function numberArrayToStringArray(arr) {
@@ -2436,65 +1998,48 @@ export function stringArrayToNumberArray(arr, importing = false) {
 
 function getCodePartMessage(n) {
   const codePart = secretSeriesCodePart(n);
-  let msg = "";
   switch (n) {
     case 1:
-      msg = `The first code part to enter the secret series is: ${codePart}`;
-      break;
+      return `The first code part to enter the secret series is: ${codePart}`;
     case 2:
-      msg = `The second code part to enter the secret series is: ${codePart}`;
-      break;
+      return `The second code part to enter the secret series is: ${codePart}`;
     case 3:
-      msg = `The third and last code part to enter the secret series is: ${codePart}`;
-      break;
+      return `The third and last code part to enter the secret series is: ${codePart}`;
     default:
-      break;
+      return "";
   }
-  return msg;
 }
 
 export function modeToColor(mode) {
-  let color = "gray";
-
   switch (mode) {
     case "blueball":
-      color = "blue";
-      break;
+      return "blue";
     case "brownball":
-      color = displayColor("brown");
-      break;
+      return displayColor("brown");
     case "whiteball":
-      color = "white";
-      break;
+      return "white";
     case "lightblueball":
-      color = displayColor("lightblue");
-      break;
+      return displayColor("lightblue");
     case "yellowball":
-      color = "yellow";
-      break;
+      return "yellow";
     case "redball":
-      color = "red";
-      break;
+      return "red";
     case "purpleball":
-      color = displayColor("purple");
-      break;
+      return displayColor("purple");
     case "orangeball":
-      color = displayColor("orange");
-      break;
+      return displayColor("orange");
     case "pinkball":
-      color = displayColor("pink");
-      break;
+      return displayColor("pink");
     default:
-      color = "gray";
-      break;
+      return "gray";
   }
-  return color;
 }
 
 
 export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
   const element = gameData[oldY][oldX];
   let idx = -1;
+  let list = null;
 
   gameData[newY][newX] = element;
   gameData[oldY][oldX] = 0;
@@ -2513,30 +2058,8 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
         gameInfo.blueBall2.y = newY;
       }
       break;
-    case 6:
-    case 106:
-      updateObject(gameInfo.elevators, oldX, oldY, newX, newY);
-      break;
-    case 7:
-    case 107:
-      updateObject(gameInfo.horizontalElevators, oldX, oldY, newX, newY);
-      break;
-    case 8:
-    case 93:
-    case 94:
-      updateObject(gameInfo.redBalls, oldX, oldY, newX, newY);
-      break;
     case 9:
       updateYellowBall(gameInfo.yellowBalls, oldX, oldY, newX, newY, "none");
-      break;
-    case 27:
-      updateObject(gameInfo.redFish, oldX, oldY, newX, newY);
-      break;
-    case 29:
-      updateObject(gameInfo.keys, oldX, oldY, newX, newY);
-      break;
-    case 30:
-      updateObject(gameInfo.lockedDoors, oldX, oldY, newX, newY);
       break;
     case 40:
       updateOrangeBall(gameInfo.orangeBalls, oldX, oldY, newX, newY, "none");
@@ -2547,52 +2070,8 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
     case 98:
       gameData[newY][newX] = 82;
       break;
-    case 97:
-    case 208:
-      updateObject(gameInfo.copiers, oldX, oldY, newX, newY);
-      break;
-    case 109:
-    case 110:
-    case 111:
-    case 112:
-      updateObject(gameInfo.forces, oldX, oldY, newX, newY);
-      break;
     case 117:
       updateTimeBomb(gameInfo.timeBombs, oldX, oldY, newX, newY);
-      break;
-    case 157:
-      updateObject(gameInfo.musicBoxes, oldX, oldY, newX, newY);
-      break;
-    case 158:
-      updateObject(gameInfo.pistonsTriggers, oldX, oldY, newX, newY);
-      break;
-    case 171:
-      updateObject(gameInfo.conveyorBelts, oldX, oldY, newX, newY);
-      break;
-    case 178:
-      updateObject(gameInfo.movers, oldX, oldY, newX, newY);
-      break;
-    case 198:
-      updateObject(gameInfo.disappearingStones, oldX, oldY, newX, newY);
-      break;
-    case 200:
-      updateObject(gameInfo.whiteBallSynchronisers, oldX, oldY, newX, newY);
-      break;
-    case 203:
-      updateObject(gameInfo.pinkBalls, oldX, oldY, newX, newY);
-      break;
-    case 209:
-      updateObject(gameInfo.pushers, oldX, oldY, newX, newY);
-      break;
-    case 241:
-      updateObject(gameInfo.questionStones, oldX, oldY, newX, newY);
-      break;
-    case 242:
-    case 245:
-      updateObject(gameInfo.answerBalls, oldX, oldY, newX, newY);
-      break;
-    case 243:
-      updateObject(gameInfo.tropicalFish, oldX, oldY, newX, newY);
       break;
     case 244:
       updateObject(gameInfo.changers, oldX, oldY, newX, newY);
@@ -2601,22 +2080,11 @@ export function moveObject(gameData, gameInfo, oldX, oldY, newX, newY) {
         gameInfo.changers[idx].ready = true;
       }
       break;
-    case 248:
-      updateObject(gameInfo.jellyfish, oldX, oldY, newX, newY);
-      break;
-    case 251:
-      updateObject(gameInfo.fishFood, oldX, oldY, newX, newY);
-      break;
-    case 252:
-      updateObject(gameInfo.seaAnemones, oldX, oldY, newX, newY);
-      break;
-    case 253:
-      updateObject(gameInfo.brownBalls, oldX, oldY, newX, newY);
-      break;
-    case 255:
-      updateObject(gameInfo.detectors, oldX, oldY, newX, newY);
-      break;
     default:
+      list = getListByObjectNumber(gameInfo, element);
+      if (list !== null) {
+        updateObject(list, oldX, oldY, newX, newY);
+      }
       break;
   }
 }
