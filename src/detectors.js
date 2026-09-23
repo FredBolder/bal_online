@@ -22,6 +22,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let objectNumber = 0;
     let pusher = null;
     let ticks = 50;
+    let yellowBall = null;
     let val_int = 0;
     const value = commandLine.trim();
     const values = value.split(",");
@@ -135,7 +136,15 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     if (objectNumber > 0) {
                         addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
                     }
-                    if (objectNumber === 29 && objName.endsWith("key") && objName.length > 3) {
+                    if (objectNumber === 9 && ["movingyellowballdown", "movingyellowballleft", "movingyellowballright", "movingyellowballup"].includes(objName)) {
+                        idx = findElementByCoordinates(absX, absY, gameInfo.yellowBalls);
+                        if (idx < 0) {
+                            continue;
+                        }
+                        yellowBall = gameInfo.yellowBalls[idx];
+                        yellowBall.direction = objName.slice(16);
+                    }
+                    if (objectNumber === 29 && ["bluekey", "greenkey", "pinkkey", "purplekey", "redkey", "whitekey", "yellowkey"].includes(objName)) {
                         idx = findElementByCoordinates(absX, absY, gameInfo.keys);
                         if (idx < 0) {
                             continue;
@@ -143,7 +152,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                         key = gameInfo.keys[idx];
                         key.color = objName.slice(0, objName.length - 3);
                     }
-                    if (objectNumber === 30 && objName.endsWith("lockeddoor") && objName.length > 10) {
+                    if (objectNumber === 30 && ["bluelockeddoor", "greenlockeddoor", "pinklockeddoor", "purplelockeddoor", "redlockeddoor", "whitelockeddoor", "yellowlockeddoor"].includes(objName)) {
                         idx = findElementByCoordinates(absX, absY, gameInfo.lockedDoors);
                         if (idx < 0) {
                             continue;
@@ -161,22 +170,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                         pusher.mode = "continue";
                         pusher.movable = false;
                         pusher.keepMoving = true;
-                        switch (objName) {
-                            case "movingpusherdown":
-                                pusher.direction = "down";
-                                break;
-                            case "movingpusherleft":
-                                pusher.direction = "left";
-                                break;
-                            case "movingpusherright":
-                                pusher.direction = "right";
-                                break;
-                            case "movingpusherup":
-                                pusher.direction = "up";
-                                break;
-                            default:
-                                break;
-                        }
+                        pusher.direction = objName.slice(0, objName.length - 12);
                     }
                     if (objectNumber === 243) {
                         idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
@@ -441,6 +435,10 @@ function nameToObjectNumber(objName) {
         case "whiteball":
             return 4;
         case "yellowball":
+        case "movingyellowballdown":
+        case "movingyellowballleft":
+        case "movingyellowballright":
+        case "movingyellowballup":
             return 9;
         case "yellowdirectionchanger1":
             return 84;
