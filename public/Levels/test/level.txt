@@ -1,80 +1,22 @@
-$stonepattern: 1
-$spikeballlookslikestone: yes
-$activesides: 0, 1, right
-$display: 0, 1, stone
-$detectormode: 0, 1, blueball
-$movable: 0, 1, no
-$onetime: 0, 1, yes
-$range: 0, 1, 4
-$target: 0, 1, command
-$value: 0, 1, delete, yellowball, rel, 3, 2, 4, 2
-$activesides: 0, 2, right
-$display: 0, 2, stone
-$detectormode: 0, 2, blueball
-$movable: 0, 2, no
-$onetime: 0, 2, yes
-$range: 0, 2, 4
-$target: 0, 2, command
-$value: 0, 2, delete, yellowball, rel, 3, 1, 4, 1
-$display: 8, 3, stone
-$detectormode: 8, 3, blueball
-$movable: 8, 3, no
-$target: 8, 3, command
-$value: 8, 3, create, movingyellowballleft, rel, -1, 0
-$display: 3, 14, stone
-$detectormode: 3, 14, blueball
-$movable: 3, 14, no
-$onetime: 3, 14, yes
-$target: 3, 14, command
-$value: 3, 14, delete, spike, rel, -1, 0 | create, stone, rel, -1, 0 | delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 4, 14, stone
-$detectormode: 4, 14, blueball
-$movable: 4, 14, no
-$onetime: 4, 14, yes
-$target: 4, 14, command
-$value: 4, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 5, 14, stone
-$detectormode: 5, 14, blueball
-$movable: 5, 14, no
-$onetime: 5, 14, yes
-$target: 5, 14, command
-$value: 5, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 6, 14, stone
-$detectormode: 6, 14, blueball
-$movable: 6, 14, no
-$onetime: 6, 14, yes
-$target: 6, 14, command
-$value: 6, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$display: 7, 14, stone
-$detectormode: 7, 14, blueball
-$movable: 7, 14, no
-$onetime: 7, 14, yes
-$target: 7, 14, command
-$value: 7, 14, delete, stone, rel, 0, -6 | create, spikeball, rel, 0, -6
-$activesides: 0, 13, right
-$display: 0, 13, stone
-$detectormode: 0, 13, blueball
-$movable: 0, 13, no
-$onetime: 0, 13, yes
-$range: 0, 13, 2
-$target: 0, 13, command
-$value: 0, 13, delete, spike, rel, 1, 1 | create, stone, rel, 1, 1
-$lockeddoorcolor: 1, 1, yellow
-$lockeddoorcolor: 8, 13, yellow
-$pistonmode: 14, 2, purpleball
-11111111111111111
-ђk             11
-ђ           p Ö11
-111     ђ1Џ11=111
-18      1    = 11
-11      1  p = 11
-11      1    = 11
-1111111111111=111
-111111111    = 31
-11      1    =  1
-11      1    =  1
-11      1    = 11
-13      1    = 11
-ђ       l 52 = 11
-1::ђђђђђ111111111
-11111111111111111
+$target: 14, 19, command
+$value: 14, 19, create, trianglestonebottomright, rellist, 1, -1, 2, -2
+11111111111111111111111111111111
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+13                             1
+1           2                  1
+11111111111111ђ11111111111111111

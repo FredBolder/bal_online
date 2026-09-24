@@ -19,6 +19,10 @@ export function copy2dArray(arr) {
   return arr.map(row => [...row]);
 }
 
+export function isOdd(num) { 
+  return (num % 2) === 1;
+}
+
 export function minMax(value, min, max) {
   let result = value;
   if (max >= min) {

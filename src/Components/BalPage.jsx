@@ -36,6 +36,7 @@ import {
   insertColorsAtColumn, insertColorsAtRow, moveColor
 } from "../colorUtils.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
+import { detectorMaxRange } from "../detectors.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { feedFish } from "../fishFood.js";
@@ -126,6 +127,7 @@ let createLevelObject = -1;
 let createLevelOneTime = false;
 let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
+let createLevelRange = 1;
 let createLevelRaster = false;
 let createLevelSelectedCell = null;
 let createLevelSequence = false;
@@ -1227,7 +1229,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2202, 2204, 2203, 2206, 2207, 2208, 2209, 2205, 0, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2207, 2208, 2209, 2205, 0, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -2888,6 +2890,9 @@ function BalPage() {
               if (createLevelObject === 2208) {
                 msg = setProp(gameData, gameInfo, column, row, "movable", createLevelMovable, oneSelected);
               }
+              if (createLevelObject === 2215) {
+                msg = setProp(gameData, gameInfo, column, row, "range", createLevelRange, oneSelected);
+              }
 
 
               if ((createLevelObject === 2144) && (createLevelSides !== null)) {
@@ -3644,6 +3649,20 @@ function BalPage() {
                   if (newValue === "yes" || newValue === "no") {
                     ok = true;
                     createLevelSequence = (newValue === "yes");
+                  }
+                }
+              }
+              handleCancel();
+              break;
+            case 2215:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Detectors", "Range", "1");
+                if (newValue !== null) {
+                  val_int = tryParseInt(newValue, -1);
+                  if (val_int >= 1 && val_int <= detectorMaxRange) {
+                    createLevelRange = val_int;
+                    ok = true;
                   }
                 }
               }

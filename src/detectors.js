@@ -4,7 +4,7 @@ import { checkSettings, loadLevelSettings } from "./levels.js";
 import { rotateDirection } from "./rotateGame.js";
 import { setTimeBombsTime } from "./timeBombs.js";
 import { presetTropicalFish } from "./tropicalFish.js";
-import { tryParseInt } from "./utils.js";
+import { isOdd, tryParseInt } from "./utils.js";
 
 export const detectorMaxRange = 50;
 
@@ -12,6 +12,8 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let absX = 0;
     let absY = 0;
     let checkSettingsResult = "";
+    const coordinatesList = [];
+    let coordinatesMode = "";
     let direction = "";
     let fish = null;
     let idx = -1;
@@ -27,6 +29,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     const value = commandLine.trim();
     const values = value.split(",");
     const valuesLowerCase = [];
+    let n1 = 0;
     let x1 = 0;
     let y1 = 0;
     let x2 = 0;
@@ -67,129 +70,153 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         return;
     }
 
-    if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && (values.length === 5 || values.length === 7)) ||
-        (cmd === "delete" && (values.length === 5 || values.length === 7)) || (cmd === "move" && (values.length === 6 || values.length === 8))) {
-        // create, object name, rel or abs, x, y
-        // create, object name, rel or abs, x1, y1, x2, y2
-        // delete, object name, rel or abs, x, y
-        // delete, object name, rel or abs, x1, y1, x2, y2
-        // move, object name, rel or abs, x, y, direction
-        // move, object name, rel or abs, x1, y1, x2, y2, direction
+    if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && values.length >= 5 && isOdd(values.length)) ||
+        (cmd === "delete" && values.length >= 5 && isOdd(values.length)) || (cmd === "move" && values.length >= 6 && !isOdd(values.length))) {
+        // create, object name, {abs|rel}, x1, y1 [, x2, y2] 
+        // create, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
+        // delete, object name, {abs|rel}, x1, y1 [, x2, y2] 
+        // delete, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
+        // move, object name, {abs|rel}, x1, y1 [, x2, y2], direction
+        // move, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...], direction
         if (cmd === "move") {
             direction = valuesLowerCase[values.length - 1];
             if (!["left", "right", "up", "down"].includes(direction)) {
                 return;
             }
         }
-        if (!["abs", "rel", "absolute", "relative"].includes(valuesLowerCase[2])) {
+        coordinatesMode = valuesLowerCase[2];
+        if (!["abs", "rel", "abslist", "rellist"].includes(coordinatesMode)) {
             return;
         }
-        x1 = intValues[3];
-        y1 = intValues[4];
-        if (x1 === invalidInt || y1 === invalidInt) {
-            return;
-        }
-        if ((cmd === "create" || cmd === "delete" || cmd === "move") && values.length >= 7) {
-            x2 = intValues[5];
-            y2 = intValues[6];
-            if (x2 === invalidInt || y2 === invalidInt) {
+        if (coordinatesMode === "abslist" || coordinatesMode === "rellist") {
+            n1 = Math.trunc((values.length - 3) / 2);
+            if (n1 < 1) {
                 return;
             }
+            for (let i = 0; i < n1; i++) {
+                x1 = intValues[3 + (i * 2)];
+                y1 = intValues[4 + (i * 2)];
+                if (x1 === invalidInt || y1 === invalidInt) {
+                    return;
+                }
+                coordinatesList.push({ x: x1, y: y1 });
+            }
         } else {
-            x2 = x1;
-            y2 = y1;
-        }
-        // Swap if needed
-        if (x1 > x2) {
-            [x1, x2] = [x2, x1];
-        }
-        if (y1 > y2) {
-            [y1, y2] = [y2, y1];
-        }
-        for (let x = x1; x <= x2; x++) {
-            for (let y = y1; y <= y2; y++) {
-                if (valuesLowerCase[2] === "abs" || valuesLowerCase[2] === "absolute") {
-                    absX = x;
-                    absY = y;
-                } else {
-                    absX = xRef + x;
-                    absY = yRef + y;
+            x1 = intValues[3];
+            y1 = intValues[4];
+            if (x1 === invalidInt || y1 === invalidInt) {
+                return;
+            }
+            if ((cmd === "create" || cmd === "delete" || cmd === "move") && values.length >= 7) {
+                x2 = intValues[5];
+                y2 = intValues[6];
+                if (x2 === invalidInt || y2 === invalidInt) {
+                    return;
                 }
-                const obj = getGameDataValue(gameData, absX, absY);
-                if (obj === -1) {
+            } else {
+                x2 = x1;
+                y2 = y1;
+            }
+
+            // Swap if needed
+            if (x1 > x2) {
+                [x1, x2] = [x2, x1];
+            }
+            if (y1 > y2) {
+                [y1, y2] = [y2, y1];
+            }
+
+            for (let x = x1; x <= x2; x++) {
+                for (let y = y1; y <= y2; y++) {
+                    coordinatesList.push({ x, y });
+                }
+            }
+        }
+
+        for (let i = 0; i < coordinatesList.length; i++) {
+            const x = coordinatesList[i].x;
+            const y = coordinatesList[i].y;
+            if (coordinatesMode === "abs" || coordinatesMode === "abslist") {
+                absX = x;
+                absY = y;
+            } else {
+                absX = xRef + x;
+                absY = yRef + y;
+            }
+            const obj = getGameDataValue(gameData, absX, absY);
+            if (obj === -1) {
+                continue;
+            }
+
+            const objName = valuesLowerCase[1];
+            if (cmd !== "changedirection" && cmd !== "create" && !objectPossible(cmd, objName, obj)) {
+                continue;
+            }
+
+            if (cmd === "changedirection") {
+                commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
+            }
+            if (cmd === "create") {
+                if (obj !== 0) {
                     continue;
                 }
-
-                const objName = valuesLowerCase[1];
-                if (cmd !== "changedirection" && cmd !== "create" && !objectPossible(cmd, objName, obj)) {
-                    continue;
+                objectNumber = nameToObjectNumber(objName);
+                if (objectNumber > 0) {
+                    addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
                 }
-
-                if (cmd === "changedirection") {
-                    commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
-                }
-                if (cmd === "create") {
-                    if (obj !== 0) {
+                if (objectNumber === 9 && ["movingyellowballdown", "movingyellowballleft", "movingyellowballright", "movingyellowballup"].includes(objName)) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.yellowBalls);
+                    if (idx < 0) {
                         continue;
                     }
-                    objectNumber = nameToObjectNumber(objName);
-                    if (objectNumber > 0) {
-                        addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
-                    }
-                    if (objectNumber === 9 && ["movingyellowballdown", "movingyellowballleft", "movingyellowballright", "movingyellowballup"].includes(objName)) {
-                        idx = findElementByCoordinates(absX, absY, gameInfo.yellowBalls);
-                        if (idx < 0) {
-                            continue;
-                        }
-                        yellowBall = gameInfo.yellowBalls[idx];
-                        yellowBall.direction = objName.slice(16);
-                    }
-                    if (objectNumber === 29 && ["bluekey", "greenkey", "pinkkey", "purplekey", "redkey", "whitekey", "yellowkey"].includes(objName)) {
-                        idx = findElementByCoordinates(absX, absY, gameInfo.keys);
-                        if (idx < 0) {
-                            continue;
-                        }
-                        key = gameInfo.keys[idx];
-                        key.color = objName.slice(0, objName.length - 3);
-                    }
-                    if (objectNumber === 30 && ["bluelockeddoor", "greenlockeddoor", "pinklockeddoor", "purplelockeddoor", "redlockeddoor", "whitelockeddoor", "yellowlockeddoor"].includes(objName)) {
-                        idx = findElementByCoordinates(absX, absY, gameInfo.lockedDoors);
-                        if (idx < 0) {
-                            continue;
-                        }
-                        lockedDoor = gameInfo.lockedDoors[idx];
-                        lockedDoor.color = objName.slice(0, objName.length - 10);
-                    }
-                    if (objectNumber === 209 && ["movingpusherdown", "movingpusherleft", "movingpusherright", "movingpusherup"].includes(objName)) {
-                        idx = findElementByCoordinates(absX, absY, gameInfo.pushers);
-                        if (idx < 0) {
-                            continue;
-                        }
-                        pusher = gameInfo.pushers[idx];
-                        pusher.group = 32;
-                        pusher.mode = "continue";
-                        pusher.movable = false;
-                        pusher.keepMoving = true;
-                        pusher.direction = objName.slice(0, objName.length - 12);
-                    }
-                    if (objectNumber === 243) {
-                        idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
-                        if (idx < 0) {
-                            continue;
-                        }
-                        fish = gameInfo.tropicalFish[idx];
-                        presetTropicalFish(fish, objName);
-                    }
-                    if (objectNumber === 256) {
-                        gameInfo.levelCanHaveSpikeBalls = true;
-                    }
+                    yellowBall = gameInfo.yellowBalls[idx];
+                    yellowBall.direction = objName.slice(16);
                 }
-                if (cmd === "delete") {
-                    removeObject(backData, gameData, gameInfo, absX, absY, false);
+                if (objectNumber === 29 && ["bluekey", "greenkey", "pinkkey", "purplekey", "redkey", "whitekey", "yellowkey"].includes(objName)) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.keys);
+                    if (idx < 0) {
+                        continue;
+                    }
+                    key = gameInfo.keys[idx];
+                    key.color = objName.slice(0, objName.length - 3);
                 }
-                if (cmd === "move") {
-                    moveObjectInDirection(gameData, gameInfo, absX, absY, direction, true);
+                if (objectNumber === 30 && ["bluelockeddoor", "greenlockeddoor", "pinklockeddoor", "purplelockeddoor", "redlockeddoor", "whitelockeddoor", "yellowlockeddoor"].includes(objName)) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.lockedDoors);
+                    if (idx < 0) {
+                        continue;
+                    }
+                    lockedDoor = gameInfo.lockedDoors[idx];
+                    lockedDoor.color = objName.slice(0, objName.length - 10);
                 }
+                if (objectNumber === 209 && ["movingpusherdown", "movingpusherleft", "movingpusherright", "movingpusherup"].includes(objName)) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.pushers);
+                    if (idx < 0) {
+                        continue;
+                    }
+                    pusher = gameInfo.pushers[idx];
+                    pusher.group = 32;
+                    pusher.mode = "continue";
+                    pusher.movable = false;
+                    pusher.keepMoving = true;
+                    pusher.direction = objName.slice(0, objName.length - 12);
+                }
+                if (objectNumber === 243) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
+                    if (idx < 0) {
+                        continue;
+                    }
+                    fish = gameInfo.tropicalFish[idx];
+                    presetTropicalFish(fish, objName);
+                }
+                if (objectNumber === 256) {
+                    gameInfo.levelCanHaveSpikeBalls = true;
+                }
+            }
+            if (cmd === "delete") {
+                removeObject(backData, gameData, gameInfo, absX, absY, false);
+            }
+            if (cmd === "move") {
+                moveObjectInDirection(gameData, gameInfo, absX, absY, direction, true);
             }
         }
     }
@@ -430,6 +457,14 @@ function nameToObjectNumber(objName) {
             return 174;
         case "stone":
             return 1;
+        case "trianglestonebottomleft":
+            return 15;    
+        case "trianglestonebottomright":
+            return 16;    
+        case "trianglestonetopleft":
+            return 17;    
+        case "trianglestonetopright":
+            return 18;    
         case "verticalrope":
             return 137;
         case "whiteball":

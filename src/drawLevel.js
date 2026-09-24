@@ -4671,6 +4671,9 @@ function drawLevel(
         case 2214:
           drawLockedDoorColors();
           break;
+        case 2215:
+          drawAbbreviation("range");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;
