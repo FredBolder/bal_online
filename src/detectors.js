@@ -445,6 +445,30 @@ function nameToObjectNumber(objName) {
             return 8;
         case "redfish":
             return 27;
+        case "shrinker":
+            return 199;
+        case "smallblueball":
+            return 168;
+        case "smallbrownball":
+            return 254;
+        case "smallgreenball":
+            return 3;
+        case "smalllightblueball":
+            return 195;
+        case "smallorangeball":
+            return 202;
+        case "smallpinkball":
+            return 204;
+        case "smallpurpleball":
+            return 197;
+        case "smallredball":
+            return 201;
+        case "smallsilverball":
+            return 140;
+        case "smallwhiteball":
+            return 192;
+        case "smallyellowball":
+            return 196;
         case "spikeball":
             return 256;
         case "spikedown":
@@ -545,12 +569,14 @@ function objectPossible(cmd, objName, obj) {
             (objName === "pusher" && obj === 209) ||
             (objName === "redball" && [8, 93, 94].includes(obj)) ||
             (objName === "shrinker" && obj === 199) ||
+            (objName === "smallblueball" && obj === 168) ||
             (objName === "smallbrownball" && obj === 254) ||
             (objName === "smalllightblueball" && obj === 195) ||
             (objName === "smallorangeball" && obj === 202) ||
             (objName === "smallpinkball" && obj === 204) ||
             (objName === "smallpurpleball" && obj === 197) ||
             (objName === "smallredball" && obj === 201) ||
+            (objName === "smallsilverball" && obj === 140) ||
             (objName === "smallwhiteball" && obj === 192) ||
             (objName === "smallyellowball" && obj === 196) ||
             (objName === "spike" && [174, 175, 176, 177].includes(obj)) ||

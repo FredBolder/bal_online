@@ -124,7 +124,7 @@ function drawLevel(
 
   function drawAbbreviation(s) {
     drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
-    drawText(ctx, xc, yc, s, "middle", "white", w2 * 0.7, w1 * 0.8);
+    drawText(ctx, xc, ymax - (w2 * 0.2), s, "center", "white", w2 * 0.7, w1 * 0.8);
   }
 
   function drawRedFish(x, y) {
@@ -4673,6 +4673,9 @@ function drawLevel(
           break;
         case 2215:
           drawAbbreviation("range");
+          break;
+        case 2216:
+          drawAbbreviation("cm|d");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

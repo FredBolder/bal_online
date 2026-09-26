@@ -257,14 +257,8 @@ export function checkLevel(data, settings) {
     if (foundGravityChanger && (foundWater || foundLava || foundFishFood)) {
       msg += "There can be no gravity changer in a level with fish food, lava or water.\n";
     }
-    if (nSmallBlueBalls > 1) {
-      msg += "There can be only one small blue ball.\n";
-    }
     if ((nSmallBlueBalls > 0) && (nTravelgates > 0)) {
       msg += "When there is a travel gate, there can not be a small blue ball.\n";
-    }
-    if ((nSmallBlueBalls > 0) && (nBlueBalls === 2)) {
-      msg += "When there are two blue balls (players), there can not be a small blue ball.\n";
     }
     if (nSmallGreenBalls < 1) {
       msg += "There is no small green ball.\n";

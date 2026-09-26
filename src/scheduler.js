@@ -320,6 +320,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
         if (info.updated) {
             updateCanvas = true;
+            updateGreen = true;
         }
 
         if (gameVars.pushersCounter >= gameVars.pushersCountTo) {

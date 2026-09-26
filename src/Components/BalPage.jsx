@@ -28,6 +28,7 @@ import {
   stringArrayToNumberArray,
   zeroArray,
   findElementByCoordinates,
+  getGameDataValue,
 } from "../balUtils.js";
 import { changerColors } from "../changers.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart, stringToCode } from "../codes.js";
@@ -1229,7 +1230,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2207, 2208, 2209, 2205, 0, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2216, 2207, 2208, 2209, 2205, 0, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -2673,7 +2674,7 @@ function BalPage() {
     handleKeyDown1({ key: "b", shiftKey: false });
   }
 
-  function handleGameCanvasClick(e) {
+  async function handleGameCanvasClick(e) {
     let fish = null;
     let idx = -1;
     let info = "";
@@ -3140,6 +3141,27 @@ function BalPage() {
                     if (oneSelected) {
                       showMessage("Info", "Click on a detector to change the command.");
                     }
+                  }
+                }
+                if (createLevelObject === 2216 && oneSelected) {
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if (objectNumber !== 255) {
+                    continue;
+                  }
+                  const idx = findElementByCoordinates(column, row, gameInfo.detectors);
+                  if (idx < 0) {
+                    continue;
+                  }    
+                  const detector = gameInfo.detectors[idx];     
+                  if (detector.target !== "command") {
+                    continue;
+                  }    
+                  newValue = await showInput("Detectors", "Command", detector.value);
+                  if (newValue === null) {
+                    newValue = "";
+                    continue;
+                  } else {
+                    detector.value = newValue.trim();
                   }
                 }
                 if (createLevelObject === 2207) {
