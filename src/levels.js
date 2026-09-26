@@ -61,7 +61,7 @@ export const seriesFishEnd = 6366;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6461;
+export const seriesAnnoyingEnd = 6462;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -142,7 +142,7 @@ export function checkLevel(data, settings) {
     nSelfDestructingTeleports.push(0);
     nTeleports.push(0);
   }
-  // Read the groups to be able to test more
+  // Read the groups and the target to be able to test more
   for (let i = 0; i < settings.length; i++) {
     const setting = settings[i];
     p1 = setting.indexOf(":");
@@ -1151,11 +1151,9 @@ export function fixLevel(backData, gameData, gameInfo) {
   let deleteCells = [];
   let errorGameRotatorInNonSquareLevel = false;
   let errorMoreThanTwoBlueBalls = false;
-  let errorMoreThanOneSmallBlueBall = false;
   let foundBlue = false;
   let foundGravityChanger = false;
   let foundLava = false;
-  let foundSmallblue = false;
   let foundSmallGreen = false;
   let foundWater = false;
   let nBlueBalls = 0;
@@ -1208,13 +1206,6 @@ export function fixLevel(backData, gameData, gameInfo) {
             gameData[i][j] = 0;
           }
           break;
-        case 168:
-          if (foundSmallblue) {
-            errorMoreThanOneSmallBlueBall = true;
-            gameData[i][j] = 0;
-          }
-          foundSmallblue = true;
-          break;
         case 184:
         case 185:
           foundGravityChanger = true;
@@ -1241,9 +1232,6 @@ export function fixLevel(backData, gameData, gameInfo) {
   }
   if (errorMoreThanTwoBlueBalls) {
     result += "There were more than two blue balls.\n";
-  }
-  if (errorMoreThanOneSmallBlueBall) {
-    result += "There was more than one small blue ball.\n";
   }
   if (foundGravityChanger && (foundWater || foundLava)) {
     result += "There was a gravity changer in a level with water and/or lava.\n";
@@ -1339,18 +1327,6 @@ export function fixLevel(backData, gameData, gameInfo) {
   gameInfo.greenBalls = nSmallGreenBalls;
 
   gameInfo.twoBlue = (nBlueBalls === 2);
-
-  if (gameInfo.twoBlue && foundSmallblue) {
-    result += "There was a small blue ball together with two blue balls.\n";
-    for (let i = gameData.length - 1; i >= 0; i--) {
-      for (let j = 0; j <= xMax; j++) {
-        const gd = gameData[i][j];
-        if (gd === 168) {
-          gameData[i][j] = 0;
-        }
-      }
-    }
-  }
 
   if (result !== "") {
     result = "The folowing problems were fixed. Please review the level.\n" + result;

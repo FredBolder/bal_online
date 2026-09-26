@@ -421,6 +421,8 @@ function nameToObjectNumber(objName) {
             return 87;
         case "orangeball":
             return 40;
+        case "phaseability":
+            return 207;
         case "pinkball":
             return 203;
         case "pistondown":
@@ -481,6 +483,8 @@ function nameToObjectNumber(objName) {
             return 174;
         case "stone":
             return 1;
+        case "timefreezer":
+            return 120;
         case "trianglestonebottomleft":
             return 15;    
         case "trianglestonebottomright":
@@ -583,6 +587,7 @@ function objectPossible(cmd, objName, obj) {
             (objName === "spikeball" && obj === 256) ||
             (objName === "stone" && obj === 1) ||
             (objName === "stones" && isStone(obj)) ||
+            (objName === "timefreezer" && obj === 120) ||
             (objName === "whiteball" && obj === 4) ||
             (objName === "whiteballs" && [4, 245].includes(obj)) ||
             (objName === "whiteballsynchroniser" && obj === 200) ||
