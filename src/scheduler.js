@@ -37,6 +37,7 @@ import { moveYellowBars } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
+import { checkFlames } from "./flamethrowers.js";
 
 export async function gameScheduler(backData, gameData, gameInfo, gameVars, checkAll = true) {
     let info = {};
@@ -50,6 +51,19 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
     function addSound(sound) {
         if (!playSounds.includes(sound)) {
             playSounds.push(sound);
+        }
+    }
+
+    function processResult(result) {
+        if (Object.hasOwn(result, "update") && result.update === true) {
+            updateCanvas = true;
+        }
+        if (Object.hasOwn(result, "sound") && result.sound !== "") {
+            addSound(result.sound);
+        }
+        if (Object.hasOwn(result, "gameOver") && result.gameOver === true) {
+            gameVars.gameOver = true;
+            updateCanvas = true;
         }
     }
 
@@ -448,51 +462,25 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         }
 
         info = checkFalling(backData, gameData, gameInfo, gameVars);
-        if (info.update) {
-            updateCanvas = true;
-        }
-        if (info.sound !== "") {
-            addSound(info.sound);
-        }
+        processResult(info);
 
         if (gameVars.lavaCanMove) {
             if (gameVars.lavaCounter >= gameVars.lavaCountTo) {
                 gameVars.lavaCounter = 0;
                 info = moveLava(backData, gameData, gameInfo, gameVars);
-                if (info.update) {
-                    updateCanvas = true;
-                }
-                if (info.sound !== "") {
-                    addSound(info.sound);
-                }
-                if (info.gameOver) {
-                    gameVars.gameOver = true;
-                    updateCanvas = true;
-                }
+                processResult(info);
             }
             gameVars.lavaCounter++;
         }
 
         info = checkLava(backData, gameData, gameInfo, gameVars);
-        if (info.update) {
-            updateCanvas = true;
-        }
-        if (info.sound !== "") {
-            addSound(info.sound);
-        }
-        if (info.gameOver) {
-            gameVars.gameOver = true;
-            updateCanvas = true;
-        }
+        processResult(info);
+
+        info = checkFlames(backData, gameData, gameInfo);
+        processResult(info);
 
         info = checkJellyfish(backData, gameData, gameInfo);
-        if (info.update) {
-            updateCanvas = true;
-        }
-        if (info.gameOver) {
-            gameVars.gameOver = true;
-            updateCanvas = true;
-        }
+        processResult(info);
     }
 
     if (updateCanvas) {

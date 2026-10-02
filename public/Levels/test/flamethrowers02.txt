@@ -1,0 +1,38 @@
+$direction: 1, 1, down
+$range: 1, 1, 1
+$direction: 13, 8, left
+$direction: 2, 1, down
+$range: 2, 1, 2
+$direction: 3, 1, down
+$direction: 4, 1, down
+$range: 4, 1, 4
+$direction: 5, 1, down
+$range: 5, 1, 5
+$direction: 6, 1, down
+$range: 6, 1, 6
+$direction: 7, 1, down
+$range: 7, 1, 7
+$direction: 8, 1, down
+$range: 8, 1, 8
+$direction: 9, 1, down
+$range: 9, 1, 9
+$direction: 10, 1, down
+$range: 10, 1, 10
+$direction: 11, 1, down
+$direction: 12, 1, down
+$direction: 13, 1, down
+111111111111111
+1ййййййййййййй1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1й           й1
+1             1
+1             1
+1             1
+13            1
+1        2    1
+11111111ђ111111

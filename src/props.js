@@ -5,9 +5,11 @@ import { conveyorBeltDirections, conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
 import { elevatorDirections, horizontalElevatorDirections } from "./elevators.js";
+import { flamethrowerDirections, flamethrowerDisplayModes, flamethrowerMaxRange } from "./flamethrowers.js";
 import { lockedDoorColors } from "./lockedDoors.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { musicBoxDirections, musicBoxModes } from "./musicBoxes.js";
+import { objectNumberToObjectName } from "./objects.js"
 import { pistonModes } from "./pistons.js";
 import { pusherDirections, pusherModes } from "./pushers.js";
 import { tropicalFishStripes, tropicalFishTailStripes } from "./tropicalFish.js";
@@ -21,6 +23,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isDetector = false;
     let isDisappearingStone = false;
     let isElevator = false;
+    let isFlamethrower = false;
     let isForce = false;
     let isHorizontalElevator = false;
     let isKey = false;
@@ -36,20 +39,18 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let list = "";
     let maxValue = 0;
     let msg = "";
-    let objectName = "";
 
     const objectNumber = getGameDataValue(gameData, x, y);
+    const objectName = objectNumberToObjectName(objectNumber).toLowerCase();
 
     switch (objectNumber) {
         case 6:
         case 106:
             isElevator = true;
-            objectName = "elevator";
             break;
         case 7:
         case 107:
             isHorizontalElevator = true;
-            objectName = "horizontal elevator";
             break;
         case 29:
             isKey = true;
@@ -61,7 +62,6 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         case 92:
         case 170:
             isTeleport = true;
-            objectName = "teleport";
             break;
         case 109:
         case 110:
@@ -71,55 +71,46 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             break;
         case 157:
             isMusicBox = true;
-            objectName = "music box";
             break;
         case 158:
             isPistonsTrigger = true;
-            objectName = "pistons trigger";
             break;
         case 159:
         case 161:
         case 163:
         case 165:
             isPiston = true;
-            objectName = "piston";
             break;
         case 171:
             isConveyorBelt = true;
-            objectName = "conveyor belt";
             break;
         case 178:
             isMover = true;
-            objectName = "mover";
             break;
         case 198:    
             isDisappearingStone = true;
-            objectName = "disappearing stone";
             break;
         case 209:
             isPusher = true;
-            objectName = "pusher";
             break;
         case 241:
             isQuestionStone = true;
-            objectName = "question stone";
             break;
         case 242:
         case 245:
             isAnswerBall = true;
-            objectName = "answer ball";
             break;
         case 243:
             isTropicalFish = true;
-            objectName = "tropical fish";
             break;
         case 244:
             isChanger = true;
-            objectName = "changer";
             break;
         case 255:
             isDetector = true;
-            objectName = "detector";
+            break;
+        case 257:
+            isFlamethrower = true;
             break;
         default:
             break;
@@ -177,6 +168,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             if (isElevator && !elevatorDirections().includes(value)) {
                 error = true;
             }
+            if (isFlamethrower && !flamethrowerDirections().includes(value)) {
+                error = true;
+            }
             if (isHorizontalElevator && !horizontalElevatorDirections().includes(value)) {
                 error = true;
             }
@@ -196,6 +190,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 break;
             }
             if (isDetector && !detectorDisplayModes().includes(value)) {
+                error = true;
+            }
+            if (isFlamethrower && !flamethrowerDisplayModes().includes(value)) {
                 error = true;
             }
             break;
@@ -254,7 +251,10 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
                 break;
             }
-            if ((value < 1) || (value > detectorMaxRange)) {
+            if (isDetector && ((value < 1) || (value > detectorMaxRange))) {
+                error = true;
+            }
+            if (isFlamethrower && ((value < 1) || (value > flamethrowerMaxRange))) {
                 error = true;
             }
             break;
@@ -334,6 +334,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     }
     if (isForce && ["movable"].includes(prop)) {
         list = "forces";
+    }
+    if (isFlamethrower && ["direction", "display", "group", "movable", "range"].includes(prop)) {
+        list = "flamethrowers";
     }
     if (isKey && ["color"].includes(prop)) {
         list = "keys";

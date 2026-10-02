@@ -499,6 +499,31 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
+        const flamethrower = gameInfo.flamethrowers[i];
+        const coordinates = `${flamethrower.x}, ${flamethrower.y}`;
+        if (flamethrower.direction !== "right") {
+            line = `$direction: ${coordinates}, ${flamethrower.direction}`;
+            lines.push(line);
+        }
+        if (flamethrower.display !== "default") {
+            line = `$display: ${coordinates}, $flamethrower.display}`;
+            lines.push(line);
+        }
+        if (flamethrower.group > 1) {
+            line = `$group: ${coordinates}, ${flamethrower.group}`;
+            lines.push(line);
+        }
+        if (!flamethrower.movable) {
+            line = `$movable: ${coordinates}, no`;
+            lines.push(line);
+        }
+        if (flamethrower.range !== 3) {
+            line = `$range: ${coordinates}, ${flamethrower.range}`;
+            lines.push(line);
+        }
+    }
+
     for (let i = 0; i < gameInfo.forces.length; i++) {
         const force = gameInfo.forces[i];
         const coordinates = `${force.x}, ${force.y}`;

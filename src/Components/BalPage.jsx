@@ -41,6 +41,7 @@ import { detectorMaxRange } from "../detectors.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { feedFish } from "../fishFood.js";
+import { flamethrowerMaxRange } from "../flamethrowers.js";
 import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
@@ -1304,7 +1305,7 @@ function BalPage() {
           case 8:
             // Misc
             arr1 = [91, 119, 120, 97, 208, 157, 167, 2145, 89, 183, 184, 185, 21];
-            arr2 = [0];
+            arr2 = [257, 2133, 2215, 2202, 2208];
             break;
           case 9:
             // Answer balls
@@ -2906,7 +2907,7 @@ function BalPage() {
               if (createLevelObject === 2202) {
                 if (changeDisplay(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a mover to change the display.");
+                    showMessage("Info", "Click on a flamethrower or a mover to change the display.");
                   }
                 }
               }
@@ -3470,7 +3471,7 @@ function BalPage() {
           case 2208:
             ok = false;
             if (row > 0) {
-              newValue = await showSelect("Detectors / Forces / Pushers", "Movable by player:", ["yes", "no"], 0);
+              newValue = await showSelect("Detectors / Flamethrowers / Forces / Pushers", "Movable by player:", ["yes", "no"], 0);
               if (newValue !== null) {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;
@@ -3695,6 +3696,27 @@ function BalPage() {
           }
         }
 
+        if (createLevelMenu === menuToNumber("misc")) {
+          switch (createLevelObject) {
+            case 2215:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Flamethrowers", "Range", "3");
+                if (newValue !== null) {
+                  val_int = tryParseInt(newValue, -1);
+                  if (val_int >= 1 && val_int <= flamethrowerMaxRange) {
+                    createLevelRange = val_int;
+                    ok = true;
+                  }
+                }
+              }
+              handleCancel();
+              break;
+            default:
+              break;
+          }
+        }
+
         if (createLevelMenu === menuToNumber("doors")) {
           switch (createLevelObject) {
             case 2214:
@@ -3867,6 +3889,9 @@ function BalPage() {
               }
               if (createLevelMenu === menuToNumber("pushers")) {
                 newValue = await showSelect("Pushers", "Direction:", ["left", "right", "up", "down"], 0);
+              }
+              if (createLevelMenu === menuToNumber("misc")) {
+                newValue = await showSelect("Flamethrowers", "Direction:", ["left", "right", "up", "down"], 0);
               }
               if (createLevelMenu === menuToNumber("balls")) {
                 newValue = await showSelect("Changers", "Direction:", ["horizontal", "vertical"], 0);

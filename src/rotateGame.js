@@ -359,6 +359,12 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.fishFood[i], rows, rotateLeft);
       }
 
+      // Flamethrowers
+      for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
+        rotateXY(gameInfo.flamethrowers[i], rows, rotateLeft);
+        gameInfo.flamethrowers[i].direction = rotateDirection(gameInfo.flamethrowers[i].direction, rotateLeft);
+      }
+
       // Forces
       for (let i = 0; i < gameInfo.forces.length; i++) {
         rotateXY(gameInfo.forces[i], rows, rotateLeft);

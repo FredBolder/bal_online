@@ -6,6 +6,7 @@ import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
 import { electricityModes } from "./electricity.js";
+import { flamethrowerMaxRange } from "./flamethrowers.js";
 import { globalVars } from "./glob.js";
 import { lockedDoorColors } from "./lockedDoors.js";
 import { moverDirections, moverModes } from "./movers.js";
@@ -531,8 +532,14 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
+                case "й":
+                case 257:
+                  if (!["left", "right", "up", "down"].includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No conveyor belt, mover, music box or pusher found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No conveyor belt, flamethrower, mover, music box or pusher found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;
@@ -548,8 +555,8 @@ export function checkSettings(data, settings) {
               if (!detectorDisplayModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid value for display ${values[2]}.\n`;
               }
-              if (validXY && !["ђ", 255].includes(data[y][x])) {
-                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["ђ", "й", 255, 257].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector or flamethrower found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$displaysize":
@@ -672,8 +679,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$movable":
-              if (validXY && !["Ω", "ω", "Φ", "φ", "њ", "ђ", 109, 110, 111, 112, 209, 255].includes(data[y][x])) {
-                msg += `${settingNr(i)}No detector, force or pusher found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["Ω", "ω", "Φ", "φ", "њ", "ђ", "й", 109, 110, 111, 112, 209, 255, 257].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector, flamethrower, force or pusher found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$movermode":
@@ -813,8 +820,15 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for range.\n`;
                   }
                   break;
+                case "й":
+                case 257:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > flamethrowerMaxRange)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for range.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No detector or flamethrower found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;

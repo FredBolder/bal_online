@@ -1,4 +1,4 @@
-import { findElementByCoordinates } from "./balUtils.js";
+import { findElementByCoordinates, getListByObjectNumber } from "./balUtils.js";
 import { objectNumberToDirection } from "./objects.js";
 import { getPurpleTeleportColor } from "./teleports.js";
 
@@ -393,9 +393,16 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         }
         case 255: {
-            let detector = { x, y, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", 
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 };
+            let detector = {
+                x, y, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+            };
             gameInfo.detectors.push(detector);
+            break;
+        }
+        case 257: {
+            let flamethrower = { x, y, active: false, direction: "right", range: 3, display: "default", movable: true, group: 1 };
+            gameInfo.flamethrowers.push(flamethrower);
             break;
         }
         default:
@@ -426,6 +433,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
 }
 
 export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData = false) {
+    let list = null;
     let objectNumber = 0;
     let idx = -1;
 
@@ -438,32 +446,24 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
 
     if (deleteBackData) {
         objectNumber = backData[y][x];
-        switch (objectNumber) {
-            case 22:
-                idx = findElementByCoordinates(x, y, gameInfo.lava);
-                if (idx >= 0) {
-                    gameInfo.lava.splice(idx, 1);
-                }
-                break;
-            case 170:
-                idx = findElementByCoordinates(x, y, gameInfo.teleports);
-                if (idx >= 0) {
-                    gameInfo.teleports.splice(idx, 1);
-                }
-                break;
-            case 252:
-                idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-                if (idx >= 0) {
-                    gameInfo.seaAnemones.splice(idx, 1);
-                }
-                break;
-            default:
-                break;
+        list = getListByObjectNumber(gameInfo, objectNumber);
+        if (list !== null) {
+            idx = findElementByCoordinates(x, y, list);
+            if (idx >= 0) {
+                list.splice(idx, 1);
+            }
         }
         backData[y][x] = 0;
     }
 
     objectNumber = gameData[y][x];
+    list = getListByObjectNumber(gameInfo, objectNumber);
+    if (list !== null) {
+        idx = findElementByCoordinates(x, y, list);
+        if (idx >= 0) {
+            list.splice(idx, 1);
+        }
+    }
     switch (objectNumber) {
         case 2:
             if (gameInfo.blueBall1.x === x && gameInfo.blueBall1.y === y) {
@@ -479,120 +479,9 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
         case 3:
             gameInfo.greenBalls -= 1;
             break;
-        case 6:
-        case 106:
-            idx = findElementByCoordinates(x, y, gameInfo.elevators);
-            if (idx >= 0) {
-                gameInfo.elevators.splice(idx, 1);
-            }
-            break;
-        case 7:
-        case 107:
-            idx = findElementByCoordinates(x, y, gameInfo.horizontalElevators);
-            if (idx >= 0) {
-                gameInfo.horizontalElevators.splice(idx, 1);
-            }
-            break;
-        case 8:
-        case 93:
-        case 94:
-            idx = findElementByCoordinates(x, y, gameInfo.redBalls);
-            if (idx >= 0) {
-                gameInfo.redBalls.splice(idx, 1);
-            }
-            break;
-        case 9:
-            idx = findElementByCoordinates(x, y, gameInfo.yellowBalls);
-            if (idx >= 0) {
-                gameInfo.yellowBalls.splice(idx, 1);
-            }
-            break;
-        case 12:
-            idx = findElementByCoordinates(x, y, gameInfo.damagedStones);
-            if (idx >= 0) {
-                gameInfo.damagedStones.splice(idx, 1);
-            }
-            break;
-        case 13:
-            idx = findElementByCoordinates(x, y, gameInfo.trapDoors);
-            if (idx >= 0) {
-                gameInfo.trapDoors.splice(idx, 1);
-            }
-            break;
-        case 27:
-            idx = findElementByCoordinates(x, y, gameInfo.redFish);
-            if (idx >= 0) {
-                gameInfo.redFish.splice(idx, 1);
-            }
-            break;
-        case 29:
-            idx = findElementByCoordinates(x, y, gameInfo.keys);
-            if (idx >= 0) {
-                gameInfo.keys.splice(idx, 1);
-            }
-            break;
-        case 30:
-            idx = findElementByCoordinates(x, y, gameInfo.lockedDoors);
-            if (idx >= 0) {
-                gameInfo.lockedDoors.splice(idx, 1);
-            }
-            break;
-        case 31:
-        case 92:
-            idx = findElementByCoordinates(x, y, gameInfo.teleports);
-            if (idx >= 0) {
-                gameInfo.teleports.splice(idx, 1);
-            }
-            break;
         case 37:
             gameInfo.detonator.x = -1;
             gameInfo.detonator.y = -1;
-            break;
-        case 39:
-            idx = findElementByCoordinates(x, y, gameInfo.elevatorInOuts);
-            if (idx >= 0) {
-                gameInfo.elevatorInOuts.splice(idx, 1);
-            }
-            break;
-        case 40:
-            idx = findElementByCoordinates(x, y, gameInfo.orangeBalls);
-            if (idx >= 0) {
-                gameInfo.orangeBalls.splice(idx, 1);
-            }
-            break;
-        case 91:
-            idx = findElementByCoordinates(x, y, gameInfo.electricity);
-            if (idx >= 0) {
-                gameInfo.electricity.splice(idx, 1);
-            }
-            break;
-        case 97:
-        case 208:
-            idx = findElementByCoordinates(x, y, gameInfo.copiers);
-            if (idx >= 0) {
-                gameInfo.copiers.splice(idx, 1);
-            }
-            break;
-        case 109:
-        case 110:
-        case 111:
-        case 112:
-            idx = findElementByCoordinates(x, y, gameInfo.forces);
-            if (idx >= 0) {
-                gameInfo.forces.splice(idx, 1);
-            }
-            break;
-        case 115:
-            idx = findElementByCoordinates(x, y, gameInfo.yellowBallPushers);
-            if (idx >= 0) {
-                gameInfo.yellowBallPushers.splice(idx, 1);
-            }
-            break;
-        case 116:
-            idx = findElementByCoordinates(x, y, gameInfo.yellowBallPushersTriggers);
-            if (idx >= 0) {
-                gameInfo.yellowBallPushersTriggers.splice(idx, 1);
-            }
             break;
         case 117:
             idx = findElementByCoordinates(x, y, gameInfo.timeBombs);
@@ -600,56 +489,14 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
                 gameInfo.timeBombs[idx].status = -1;
             }
             break;
-        case 119:
-            idx = findElementByCoordinates(x, y, gameInfo.magnets);
-            if (idx >= 0) {
-                gameInfo.magnets.splice(idx, 1);
-            }
-            break;
-        case 121:
-        case 124: {
-            idx = findElementByCoordinates(x, y, gameInfo.yellowBars);
-            if (idx >= 0) {
-                gameInfo.yellowBars.splice(idx, 1);
-            }
-            break;
-        }
-        case 131:
-            idx = findElementByCoordinates(x, y, gameInfo.yellowStoppers);
-            if (idx >= 0) {
-                gameInfo.yellowStoppers.splice(idx, 1);
-            }
-            break;
         case 132:
             gameInfo.travelGate.x = -1;
             gameInfo.travelGate.y = -1;
-            break;
-        case 136:
-            idx = findElementByCoordinates(x, y, gameInfo.yellowPausers);
-            if (idx >= 0) {
-                gameInfo.yellowPausers.splice(idx, 1);
-            }
-            break;
-        case 157:
-            idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
-            if (idx >= 0) {
-                gameInfo.musicBoxes.splice(idx, 1);
-            }
-            break;
-        case 158:
-            idx = findElementByCoordinates(x, y, gameInfo.pistonsTriggers);
-            if (idx >= 0) {
-                gameInfo.pistonsTriggers.splice(idx, 1);
-            }
             break;
         case 159:
         case 161:
         case 163:
         case 165:
-            idx = findElementByCoordinates(x, y, gameInfo.pistons);
-            if (idx >= 0) {
-                gameInfo.pistons.splice(idx, 1);
-            }
             switch (objectNumber) {
                 case 159:
                     if (y > 0) {
@@ -681,103 +528,6 @@ export function removeObject(backData, gameData, gameInfo, x, y, deleteBackData 
                     break;
                 default:
                     break;
-            }
-            break;
-        case 167:
-            idx = findElementByCoordinates(x, y, gameInfo.delays);
-            if (idx >= 0) {
-                gameInfo.delays.splice(idx, 1);
-            }
-            break;
-        case 171:
-            idx = findElementByCoordinates(x, y, gameInfo.conveyorBelts);
-            if (idx >= 0) {
-                gameInfo.conveyorBelts.splice(idx, 1);
-            }
-            break;
-        case 178:
-            idx = findElementByCoordinates(x, y, gameInfo.movers);
-            if (idx >= 0) {
-                gameInfo.movers.splice(idx, 1);
-            }
-            break;
-        case 198:
-            idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
-            if (idx >= 0) {
-                gameInfo.disappearingStones.splice(idx, 1);
-            }
-            break;
-        case 200:
-            idx = findElementByCoordinates(x, y, gameInfo.whiteBallSynchronisers);
-            if (idx >= 0) {
-                gameInfo.whiteBallSynchronisers.splice(idx, 1);
-            }
-            break;
-        case 203:
-            idx = findElementByCoordinates(x, y, gameInfo.pinkBalls);
-            if (idx >= 0) {
-                gameInfo.pinkBalls.splice(idx, 1);
-            }
-            break;
-        case 206:
-            idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
-            if (idx >= 0) {
-                gameInfo.waterWithIceObjects.splice(idx, 1);
-            }
-            break;
-        case 209:
-            idx = findElementByCoordinates(x, y, gameInfo.pushers);
-            if (idx >= 0) {
-                gameInfo.pushers.splice(idx, 1);
-            }
-            break;
-        case 241:
-            idx = findElementByCoordinates(x, y, gameInfo.questionStones);
-            if (idx >= 0) {
-                gameInfo.questionStones.splice(idx, 1);
-            }
-            break;
-        case 242:
-        case 245:
-            idx = findElementByCoordinates(x, y, gameInfo.answerBalls);
-            if (idx >= 0) {
-                gameInfo.answerBalls.splice(idx, 1);
-            }
-            break;
-        case 243:
-            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-            if (idx >= 0) {
-                gameInfo.tropicalFish.splice(idx, 1);
-            }
-            break;
-        case 244:
-            idx = findElementByCoordinates(x, y, gameInfo.changers);
-            if (idx >= 0) {
-                gameInfo.changers.splice(idx, 1);
-            }
-            break;
-        case 248:
-            idx = findElementByCoordinates(x, y, gameInfo.jellyfish);
-            if (idx >= 0) {
-                gameInfo.jellyfish.splice(idx, 1);
-            }
-            break;
-        case 250:
-            idx = findElementByCoordinates(x, y, gameInfo.fishFood);
-            if (idx >= 0) {
-                gameInfo.fishFood.splice(idx, 1);
-            }
-            break;
-        case 253:
-            idx = findElementByCoordinates(x, y, gameInfo.brownBalls);
-            if (idx >= 0) {
-                gameInfo.brownBalls.splice(idx, 1);
-            }
-            break;
-        case 255:
-            idx = findElementByCoordinates(x, y, gameInfo.detectors);
-            if (idx >= 0) {
-                gameInfo.detectors.splice(idx, 1);
             }
             break;
         default:

@@ -366,8 +366,16 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 255: {
-                    let detector = { x: j, y: i, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 };
+                    let detector = { x: j, y: i, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", 
+                        value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, 
+                        condition: "", text: "", group: 1 };
                     result.detectors.push(detector);
+                    break;
+                }
+                case 257: {
+                    let flamethrower = { x: j, y: i, active: false, direction: "right", range: 3, display: "default", 
+                        movable: true, group: 1 };
+                    result.flamethrowers.push(flamethrower);
                     break;
                 }
                 default:
@@ -1219,6 +1227,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
             case 256:
                 info = `Spike ball`;
                 break;
+            case 257:
+                idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
+                if (idx >= 0) {
+                    obj = gameInfo.flamethrowers[idx];
+                    extraInfo = `Active: ${obj.active}, Direction: ${obj.direction}, Range: ${obj.range}, Display: ${obj.display}, Movable: ${obj.movable}, Group:  ${obj.group}`;
+                }
+                info = `Flamethrower, ` + extraInfo;
+                break;
             default:
                 break;
         }
@@ -1272,6 +1288,7 @@ export function initGameInfo(info) {
     info.elevatorInOuts = [];
     info.elevators = [];
     info.fishFood = [];
+    info.flamethrowers = [];
     info.forces = [];
     info.greenBalls = 0;
     info.hasBlueKey = false;

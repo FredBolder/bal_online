@@ -2,6 +2,7 @@ import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
 import { detectorDisplayModes } from "./detectors.js";
 import { checkDetonator } from "./detonator.js";
+import { flamethrowerDisplayModes } from "./flamethrowers.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
@@ -67,33 +68,12 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
   let idx = -1;
   const el = gameData[y][x];
 
+  if ([9, 27, 28, 40, 82, 84, 85, 86, 98, 115, 117, 138, 139, 155, 171, 172, 173, 200, 242, 243,
+    244, 246, 247, 251, 256].includes(el)) {
+    return true
+  }
+
   switch (el) {
-    case 9:
-    case 27:
-    case 28:
-    case 40:
-    case 82:
-    case 84:
-    case 85:
-    case 86:
-    case 98:
-    case 115:
-    case 117:
-    case 138:
-    case 139:
-    case 155:
-    case 171:
-    case 172:
-    case 173:
-    case 200:
-    case 242:
-    case 243:
-    case 244:
-    case 246:
-    case 247:
-    case 251:
-    case 256:
-      return true;
     case 1:
     case 35:
       return gameInfo.playerCanMoveStones;
@@ -150,6 +130,12 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
         return gameInfo.detectors[idx].movable;
       }
       return false;
+    case 257:
+      idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
+      if (idx >= 0) {
+        return gameInfo.flamethrowers[idx].movable;
+      }
+      return false;
     default:
       return false;
   }
@@ -187,19 +173,33 @@ export function changeCommand(gameInfo, x, y, command) {
 
 export function changeDisplay(gameInfo, x, y, decrease) {
   const step = decrease ? -1 : 1;
-  const values = detectorDisplayModes();
+  let values = [];
   let idx = -1;
   let n = 0;
 
   idx = findElementByCoordinates(x, y, gameInfo.detectors);
   if (idx >= 0) {
+    values = detectorDisplayModes();
     n = values.indexOf(gameInfo.detectors[idx].display) + step;
     if (n < 0 || n >= values.length) {
       n = 0;
     }
     gameInfo.detectors[idx].display = values[n];
+    return idx;
   }
-  return idx;
+
+  idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
+  if (idx >= 0) {
+    values = flamethrowerDisplayModes();
+    n = values.indexOf(gameInfo.flamethrowers[idx].display) + step;
+    if (n < 0 || n >= values.length) {
+      n = 0;
+    }
+    gameInfo.flamethrowers[idx].display = values[n];
+    return idx;
+  }
+
+  return -1;
 }
 
 export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {
@@ -778,6 +778,8 @@ export function charToNumber(c) {
       return 255;
     case "Ѓ":
       return 256;
+    case "й":
+      return 257;
     case "|":
       return 1000;
     default:
@@ -1298,6 +1300,8 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       return gameInfo.brownBalls;
     case 255:
       return gameInfo.detectors;
+    case 257:
+      return gameInfo.flamethrowers;
     default:
       return null;
   }
@@ -1945,6 +1949,8 @@ export function numberToChar(n) {
       return "ђ";
     case 256:
       return "Ѓ";
+    case 257:
+      return "й";
     case 1000:
       // For manual only
       return "|";
@@ -2182,6 +2188,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
     refs.push(gameInfo.fishFood[i]);
   }
 
+  for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
+    refs.push(gameInfo.flamethrowers[i]);
+  }
+
   for (let i = 0; i < gameInfo.forces.length; i++) {
     refs.push(gameInfo.forces[i]);
   }
@@ -2413,7 +2423,7 @@ function take(backData, gameData, gameInfo, gameVars, result, x, y) {
         }
         gameInfo.keys.splice(idx, 1);
         result.sound = "key";
-      }      
+      }
       break;
     case 34:
       gameInfo.hasPickaxe = true;

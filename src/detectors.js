@@ -1,6 +1,7 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates, getGameDataValue, moveObjectInDirection } from "./balUtils.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
+import { isSpike, isStone } from "./objects.js";
 import { rotateDirection } from "./rotateGame.js";
 import { setTimeBombsTime } from "./timeBombs.js";
 import { presetTropicalFish } from "./tropicalFish.js";
@@ -332,25 +333,6 @@ export function detectorTargets() {
     return ["bombs", "command", "gravitydown", "gravityup", "group", "rotategroupleft", "rotategroupright", "setting", "yellowpushers"];
 }
 
-function isStone(obj) {
-    if ([1, 241, 35, 12].includes(obj)) {
-        return true;
-    }
-    if (obj >= 15 && obj <= 18) {
-        return true;
-    }
-    if (obj >= 210 && obj <= 225) {
-        return true;
-    }
-    if (obj >= 141 && obj <= 154) {
-        return true;
-    }
-    if (obj >= 234 && obj <= 240) {
-        return true;
-    }
-    return false;
-}
-
 function nameToObjectNumber(objName) {
     switch (objName) {
         case "brownball":
@@ -376,6 +358,8 @@ function nameToObjectNumber(objName) {
             return 107;
         case "elevatorup":
             return 109;
+        case "flamethrower":
+            return 257;
         case "forcedown":
             return 110;
         case "forceleft":
@@ -583,7 +567,7 @@ function objectPossible(cmd, objName, obj) {
             (objName === "smallsilverball" && obj === 140) ||
             (objName === "smallwhiteball" && obj === 192) ||
             (objName === "smallyellowball" && obj === 196) ||
-            (objName === "spike" && [174, 175, 176, 177].includes(obj)) ||
+            (objName === "spike" && isSpike(obj)) ||
             (objName === "spikeball" && obj === 256) ||
             (objName === "stone" && obj === 1) ||
             (objName === "stones" && isStone(obj)) ||

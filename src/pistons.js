@@ -2,6 +2,7 @@ import { findElementByCoordinates, hasWeightAbove, getGameDataValue, getListByOb
 import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { commands, rotateGroup } from "./detectors.js";
 import { activateAllBombs } from "./detonator.js";
+import { setFlamethrowers } from "./flamethrowers.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
 import { coordinatesToFishName, objectNumberToObjectGeneralName, objectNumberToObjectName } from "./objects.js";
 import { movePusher } from "./pushers.js";
@@ -213,6 +214,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     let checkSettingsResult = "";
     let detect = false;
     let el = -1;
+    let flamethrowersResult = null;
     let setting = "";
     let sideStr = "?";
     let result = { updated: false, explosion: false };
@@ -431,8 +433,8 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         }
     }
 
-    for (let j = 0; j < gameInfo.pistons.length; j++) {
-        const piston = gameInfo.pistons[j];
+    for (let i = 0; i < gameInfo.pistons.length; i++) {
+        const piston = gameInfo.pistons[i];
         if (piston.mode === "momentary") {
             // xor
             if (activeGroups.includes(piston.group) !== piston.inverted) {
@@ -447,6 +449,11 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         }
     }
 
+    flamethrowersResult = setFlamethrowers(gameInfo, activeGroups);
+    if (flamethrowersResult.updated) {
+        result.updated = true;
+    }
+    
     return result;
 }
 

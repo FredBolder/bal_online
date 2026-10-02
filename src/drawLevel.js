@@ -14,6 +14,7 @@ import { fixScroll } from "./createLevelMode.js";
 import { electricityTarget } from "./electricity.js";
 import { drawFishFood, drawFishFoodInPot } from "./fishFood.js";
 import { drawTail } from "./fishTails.js";
+import { drawFlames } from "./flamethrowers.js";
 import { globalVars } from "./glob.js";
 import { moverModes } from "./movers.js";
 import { validNotesForKeyboardMode } from "./musicBoxes.js";
@@ -1187,6 +1188,60 @@ function drawLevel(
     drawFishFood(ctx, xc, yc, w1, foodLeft);
   }
 
+  function drawFlamethrower(x, y) {
+    let idx = -1;
+    let direction = "right";
+    let display = "default";
+    let d1 = w1 * 0.07;
+    let d2 = d1 * 2;
+    let group = 1;
+    let width = w1 * 0.1;
+
+    idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
+    if (idx >= 0) {
+      direction = gameInfo.flamethrowers[idx].direction;
+      display = gameInfo.flamethrowers[idx].display;
+      group = gameInfo.flamethrowers[idx].group;
+    }
+
+    switch (display) {
+      case "stone":
+        drawStone(x, y);
+        break;
+      case "grayball":
+        drawGrayBall(0);
+        break;
+      default:
+        break;
+    }
+    if (display !== "default") {
+      if (globalVars.createLevel) {
+        drawBox(ctx, xmin, ymin, w1, w2, "white");
+      }
+      return;
+    }
+
+    drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
+    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.6, w1 * 0.6);
+    switch (direction) {
+      case "down":
+        drawFilledBox(ctx, xmin + d1, ymax - width, w1 - d2, width, "yellow");
+        break;
+      case "left":
+        drawFilledBox(ctx, xmin, ymin + d1, width, w2 - d2, "yellow");
+        break;
+      case "right":
+        drawFilledBox(ctx, xmax - width, ymin + d1, width, w2 - d2, "yellow");
+        break;
+      case "up":
+        drawFilledBox(ctx, xmin + d1, ymin, w1 - d2, width, "yellow");
+        break;
+      default:
+        break;
+    }
+  }
+
+
   function drawForceDown() {
     let d1 = w2 / 8;
     let d2 = w1 / 8;
@@ -1530,7 +1585,7 @@ function drawLevel(
     idx = findElementByCoordinates(x, y, gameInfo.keys);
     if (idx >= 0) {
       color = gameInfo.keys[idx].color;
-    }    
+    }
     if (color === "default") {
       keyColor = getFgcolor(x, y, "silver");
     } else {
@@ -1660,7 +1715,7 @@ function drawLevel(
     idx = findElementByCoordinates(x, y, gameInfo.lockedDoors);
     if (idx >= 0) {
       color = gameInfo.lockedDoors[idx].color;
-    }    
+    }
     if (color === "default") {
       doorColor = getFgcolor(x, y, "brown");
     } else {
@@ -4293,6 +4348,9 @@ function drawLevel(
             drawSpikeBall(ctx, xc, yc, w1, 0.125 * Math.PI);
           }
           break;
+        case 257:
+          drawFlamethrower(currentCol, currentRow);
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -4718,6 +4776,8 @@ function drawLevel(
   if (gameInfo.electricityActive) {
     drawElectricityActive();
   }
+
+  drawFlames(ctx, leftMargin, topMargin, size1, gameData, gameInfo);
 
   if (status.gameOver) {
     drawGameOver();

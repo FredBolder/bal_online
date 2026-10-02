@@ -1,9 +1,8 @@
 $group: 7, 14, 10
-$direction: 12, 13, up
-$group: 12, 13, 10
-$movable: 12, 13, no
 $direction: 4, 14, up
 $group: 4, 14, 10
+$direction: 12, 13, up
+$group: 12, 13, 10
 111111111111111
 1             1
 1             1

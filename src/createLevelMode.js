@@ -234,6 +234,15 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.detectors[idx2].value = gameInfo.detectors[idx1].value;
             }
             break;
+        case 257:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.flamethrowers);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.flamethrowers);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.flamethrowers[idx2].direction = gameInfo.flamethrowers[idx1].direction;
+                gameInfo.flamethrowers[idx2].group = gameInfo.flamethrowers[idx1].group;
+                gameInfo.flamethrowers[idx2].range = gameInfo.flamethrowers[idx1].range;
+            }
+            break;
         default:
             break;
     }
@@ -390,6 +399,12 @@ function getObjectInfo(gameInfo, x, y, n) {
             idx = findElementByCoordinates(x, y, gameInfo.detectors);
             if (idx >= 0) {
                 return { arr: gameInfo.detectors, idx };
+            }
+            break;
+        case 257:
+            idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
+            if (idx >= 0) {
+                return { arr: gameInfo.flamethrowers, idx };
             }
             break;
         default:

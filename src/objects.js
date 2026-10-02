@@ -175,6 +175,29 @@ export function fishToFishName(fish, generalName) {
     return "";
 }
 
+export function isSpike(objectNumber) {
+    return [174, 175, 176, 177].includes(objectNumber)
+}
+
+export function isStone(objectNumber) {
+    if ([1, 241, 35, 12].includes(objectNumber)) {
+        return true;
+    }
+    if (objectNumber >= 15 && objectNumber <= 18) {
+        return true;
+    }
+    if (objectNumber >= 210 && objectNumber <= 225) {
+        return true;
+    }
+    if (objectNumber >= 141 && objectNumber <= 154) {
+        return true;
+    }
+    if (objectNumber >= 234 && objectNumber <= 240) {
+        return true;
+    }
+    return false;
+}
+
 export function objectNumberToDirection(objectNumber) {
     switch (objectNumber) {
         case 109:
@@ -592,6 +615,7 @@ export function objectNumberToObjectName(objectNumber) {
         case 254: return "Small brown ball";
         case 255: return "Detector";
         case 256: return "Spike ball";
+        case 257: return "Flamethrower";
 
         default:
             return "";
