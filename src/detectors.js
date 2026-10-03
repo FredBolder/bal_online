@@ -72,14 +72,17 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         return;
     }
 
-    if ((cmd === "changedirection" && values.length === 5) || (cmd === "create" && values.length >= 5 && isOdd(values.length)) ||
+    if ((["changedirection", "rotateleft", "rotateright"].includes(cmd) && values.length === 5) || (cmd === "create" && values.length >= 5 && isOdd(values.length)) ||
         (cmd === "delete" && values.length >= 5 && isOdd(values.length)) || (cmd === "move" && values.length >= 6 && !isOdd(values.length))) {
+        // changedirection, object name, {abs|rel}, x1, y1
         // create, object name, {abs|rel}, x1, y1 [, x2, y2] 
         // create, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
         // delete, object name, {abs|rel}, x1, y1 [, x2, y2] 
         // delete, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
         // move, object name, {abs|rel}, x1, y1 [, x2, y2], direction
         // move, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...], direction
+        // rotateleft, object name, {abs|rel}, x1, y1
+        // rotateright, object name, {abs|rel}, x1, y1
         if (cmd === "move") {
             direction = valuesLowerCase[values.length - 1];
             if (!["left", "right", "up", "down"].includes(direction)) {
@@ -151,13 +154,23 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             }
 
             const objName = valuesLowerCase[1];
-            if (cmd !== "changedirection" && cmd !== "create" && !objectPossible(cmd, objName, obj)) {
+            if ((cmd === "delete" || cmd === "move") && !objectPossible(cmd, objName, obj)) {
                 continue;
             }
 
             if (cmd === "changedirection") {
                 commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
+                continue;
             }
+            if (cmd === "rotateleft") {
+                commandRotate(backData, gameData, gameInfo, valuesLowerCase[1], absX, absY, true);
+                continue;
+            }
+            if (cmd === "rotateright") {
+                commandRotate(backData, gameData, gameInfo, valuesLowerCase[1], absX, absY, false);
+                continue;
+            }
+
             if (cmd === "create") {
                 if (obj !== 0) {
                     continue;
@@ -200,7 +213,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     pusher.mode = "continue";
                     pusher.movable = false;
                     pusher.keepMoving = true;
-                    pusher.direction = objName.slice(0, objName.length - 12);
+                    pusher.direction = objName.slice(12);
                 }
                 if (objectNumber === 243) {
                     idx = findElementByCoordinates(absX, absY, gameInfo.tropicalFish);
@@ -221,12 +234,15 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     flamethrower = gameInfo.flamethrowers[idx];
                     flamethrower.direction = objName.slice(12);
                 }
+                continue;
             }
             if (cmd === "delete") {
                 removeObject(backData, gameData, gameInfo, absX, absY, false);
+                continue;
             }
             if (cmd === "move") {
                 moveObjectInDirection(gameData, gameInfo, absX, absY, direction, true);
+                continue;
             }
         }
     }
@@ -482,13 +498,13 @@ function nameToObjectNumber(objName) {
         case "timefreezer":
             return 120;
         case "trianglestonebottomleft":
-            return 15;    
+            return 15;
         case "trianglestonebottomright":
-            return 16;    
+            return 16;
         case "trianglestonetopleft":
-            return 17;    
+            return 17;
         case "trianglestonetopright":
-            return 18;    
+            return 18;
         case "verticalrope":
             return 137;
         case "whiteball":
@@ -630,3 +646,105 @@ export function rotateGroup(gameData, gameInfo, group, rotateLeft) {
         }
     }
 }
+
+function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
+    let bd = -1;
+    let gd = -1;
+    let idx = -1;
+    let newObjectNumber = -1;
+
+    if (x < 0 || y < 0) {
+        return;
+    }
+    bd = getGameDataValue(backData, x, y);
+    gd = getGameDataValue(gameData, x, y);
+
+    if (target === "elevator") {
+        newObjectNumber = -1;
+        switch (gd) {
+            case 6:
+                newObjectNumber = rotateLeft ? 107 : 7;                
+                break;
+            case 7:
+                newObjectNumber = rotateLeft ? 6 : 106;                
+                break;
+            case 106:
+                newObjectNumber = rotateLeft ? 7 : 107;                
+                break;
+            case 107:
+                newObjectNumber = rotateLeft ? 106 : 6;                
+                break;
+            default:
+                break;
+        }
+        if (newObjectNumber >= 0) {
+            removeObject(backData, gameData, gameInfo, x, y, false);
+            addObject(backData, gameData, gameInfo, x, y, newObjectNumber);
+        }
+        return;
+    }
+    if (target === "onedirectionport") {
+        switch (gd) {
+            case 10:
+                gameData[y][x] = rotateLeft ? 87 : 88;
+                break;
+            case 11:
+                gameData[y][x] = rotateLeft ? 88 : 87;
+                break;
+            case 87:
+                gameData[y][x] = rotateLeft ? 11 : 10;
+                break;
+            case 88:
+                gameData[y][x] = rotateLeft ? 10 : 11;
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+    if (target === "pusher") {
+        if (gd !== 209) {
+            return;
+        }
+        idx = findElementByCoordinates(x, y, gameInfo.pushers);
+        if (idx < 0) {
+            return;
+        }
+        const pusher = gameInfo.pushers[idx];
+        pusher.direction = rotateDirection(pusher.direction, rotateLeft);
+        return;
+    }
+    if (target === "rope") {
+        switch (bd) {
+            case 80:
+                backData[y][x] = 137;
+                break;
+            case 137:
+                backData[y][x] = 80;
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+    if (target === "spike") {
+        switch (gd) {
+            case 174:
+                gameData[y][x] = rotateLeft ? 177 : 176;
+                break;
+            case 175:
+                gameData[y][x] = rotateLeft ? 176 : 177;
+                break;
+            case 176:
+                gameData[y][x] = rotateLeft ? 174 : 175;
+                break;
+            case 177:
+                gameData[y][x] = rotateLeft ? 175 : 174;
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+}
+

@@ -35,68 +35,49 @@ function rotateActiveSides(activeSides, rotateLeft) {
 }
 
 export function rotateDirection(direction, rotateLeft) {
-  let result = direction;
-
   if (rotateLeft) {
     switch (direction) {
       case "down":
-        result = "right";
-        break;
+        return "right";
       case "right":
-        result = "up";
-        break;
+        return "up";
       case "up":
-        result = "left";
-        break;
+        return "left";
       case "left":
-        result = "down";
-        break;
+        return "down";
       case "downleft":
-        result = "downright";
-        break;
+        return "downright";
       case "downright":
-        result = "upright";
-        break;
+        return "upright";
       case "upright":
-        result = "upleft";
-        break;
+        return "upleft";
       case "upleft":
-        result = "downleft";
-        break;
+        return "downleft";
       default:
-        break;
+        return direction;
     }
   } else {
     switch (direction) {
       case "down":
-        result = "left";
-        break;
+        return "left";
       case "left":
-        result = "up";
-        break;
+        return "up";
       case "up":
-        result = "right";
-        break;
+        return "right";
       case "right":
-        result = "down";
-        break;
+        return "down";
       case "downleft":
-        result = "upleft";
-        break;
+        return "upleft";
       case "upleft":
-        result = "upright";
-        break;
+        return "upright";
       case "upright":
-        result = "downright";
-        break;
+        return "downright";
       case "downright":
-        result = "downleft";
-        break;
+        return "downleft";
       default:
-        break;
+        return direction;
     }
   }
-  return result;
 }
 
 function rotateXY(obj, rows, rotateLeft) {
