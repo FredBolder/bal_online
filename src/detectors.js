@@ -17,6 +17,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let coordinatesMode = "";
     let direction = "";
     let fish = null;
+    let flamethrower = null;
     let idx = -1;
     const invalidInt = -10000;
     const intValues = [];
@@ -212,6 +213,14 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 if (objectNumber === 256) {
                     gameInfo.levelCanHaveSpikeBalls = true;
                 }
+                if (objectNumber === 257 && ["flamethrowerdown", "flamethrowerleft", "flamethrowerright", "flamethrowerup"].includes(objName)) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.flamethrowers);
+                    if (idx < 0) {
+                        continue;
+                    }
+                    flamethrower = gameInfo.flamethrowers[idx];
+                    flamethrower.direction = objName.slice(12);
+                }
             }
             if (cmd === "delete") {
                 removeObject(backData, gameData, gameInfo, absX, absY, false);
@@ -358,7 +367,10 @@ function nameToObjectNumber(objName) {
             return 107;
         case "elevatorup":
             return 109;
-        case "flamethrower":
+        case "flamethrowerdown":
+        case "flamethrowerleft":
+        case "flamethrowerright":
+        case "flamethrowerup":
             return 257;
         case "forcedown":
             return 110;
@@ -538,6 +550,7 @@ function objectPossible(cmd, objName, obj) {
             (objName === "brownball" && obj === 253) ||
             (objName === "changer" && obj === 244) ||
             (objName === "elevator" && (obj === 6 || obj === 106)) ||
+            (objName === "flamethrower" && obj === 257) ||
             (objName === "grayballs" && [82, 83, 98].includes(obj)) ||
             (objName === "horizontalelevator" && (obj === 7 || obj === 107)) ||
             (objName === "key" && obj === 29) ||

@@ -1390,6 +1390,7 @@ export function initGameVars(vars) {
     vars.gravity = "down";
     vars.hint = "";
     vars.iceCountTo = 250;
+    vars.iceMeltsFromAmbientTemperature = true;
     vars.ignorePattern = [];
     vars.laser = null;
     vars.lavaCanMove = false;

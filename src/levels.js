@@ -62,7 +62,7 @@ export const seriesFishEnd = 6366;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6462;
+export const seriesAnnoyingEnd = 6463;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -327,6 +327,7 @@ export function checkSettings(data, settings) {
     { name: "$group", params: 3, xy: true, yesno: -1 },
     { name: "$has", params: 1, xy: false, yesno: -1 },
     { name: "$hint", params: 0, xy: false, yesno: -1 },
+    { name: "$icemeltsfromambienttemperature", params: 1, xy: false, yesno: 0 },
     { name: "$ignorepattern", params: 4, xy: true, yesno: -1 },
     { name: "$instrument", params: 4, xy: true, yesno: -1 },
     { name: "$inverted", params: 3, xy: true, yesno: 2 },
@@ -2020,6 +2021,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$hint":
           gameVars.hint = value;
+          break;
+        case "$icemeltsfromambienttemperature":
+          if (values.length !== 1) {
+            break;
+          }
+          switch (valuesLowerCase[0]) {
+            case "no":
+              gameVars.iceMeltsFromAmbientTemperature = false;
+              break;
+            case "yes":
+              gameVars.iceMeltsFromAmbientTemperature = true;
+              break;
+            default:
+              break;
+          }
           break;
         case "$ignorepattern":
           if (values.length !== 4) {

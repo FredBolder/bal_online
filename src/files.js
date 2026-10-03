@@ -131,6 +131,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (!gameVars.iceMeltsFromAmbientTemperature) {
+        line = `$icemeltsfromambienttemperature: no`;
+        lines.push(line);
+    }
+
     if (gameVars.iceCountTo !== 250) {
         line = `$gameticks: ice, ${gameVars.iceCountTo}`;
         lines.push(line);
@@ -507,7 +512,7 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             lines.push(line);
         }
         if (flamethrower.display !== "default") {
-            line = `$display: ${coordinates}, $flamethrower.display}`;
+            line = `$display: ${coordinates}, ${flamethrower.display}`;
             lines.push(line);
         }
         if (flamethrower.group > 1) {

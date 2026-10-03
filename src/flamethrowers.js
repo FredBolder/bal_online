@@ -1,23 +1,20 @@
 import { removeObject } from "./addRemoveObject";
-import { getGameDataValue } from "./balUtils";
+import { findElementByCoordinates, getGameDataValue } from "./balUtils";
 import { isSpike, isStone } from "./objects";
 
 function isCombustible(objectNumber) {
     if (isSpike(objectNumber) || isStone(objectNumber)) {
         return false;
     }
-    switch (objectNumber) {
-        case 82, 83, 98, 256:
-            return false;
-        default:
-            return true;
-    }
+    return ![20, 22, 23, 82, 83, 98, 99, 113, 114, 198, 256].includes(objectNumber);
 }
 
 export function checkFlames(backData, gameData, gameInfo) {
     let result = { update: false, sound: "", gameOver: false };
+    let backNumber = -1;
     let dx = 0;
     let dy = 0;
+    let idx = -1;
     let objectNumber = -1;
     let x = -1;
     let y = -1;
@@ -50,19 +47,37 @@ export function checkFlames(backData, gameData, gameInfo) {
             for (let j = 0; j < flamethrower.range; j++) {
                 x = x + dx;
                 y = y + dy;
+                backNumber = getGameDataValue(backData, x, y);
                 objectNumber = getGameDataValue(gameData, x, y);
+                if (backNumber === 0 && objectNumber === 0) {
+                    continue;
+                }
                 if (!isCombustible(objectNumber)) {
                     break;
                 }
-                result.update = true;
-                if (objectNumber === 2) {
-                    result.gameOver = true;
-                    result.sound = "pain";
+                if (objectNumber > 0) {
+                    result.update = true;
+                    if (objectNumber === 2) {
+                        result.gameOver = true;
+                        result.sound = "pain";
+                    }
+                    if (objectNumber === 3) {
+                        result.gameOver = true;
+                    }
+                    if (objectNumber === 206) {
+                        // Water with a layer of ice on top
+                        idx = findElementByCoordinates(x, y, gameInfo.waterWithIceObjects);
+                        if (idx >= 0) {
+                            backNumber = gameInfo.waterWithIceObjects[idx].objectNumber;
+                            backData[y][x] = backNumber;
+                        }
+                    }
+                    removeObject(backData, gameData, gameInfo, x, y, false);
                 }
-                if (objectNumber === 3) {
-                    result.gameOver = true;
+                if (backNumber > 0 && isCombustible(backNumber)) {
+                    result.update = true;
+                    removeObject(backData, gameData, gameInfo, x, y, true);
                 }
-                removeObject(backData, gameData, gameInfo, x, y, false);
             }
         }
     }

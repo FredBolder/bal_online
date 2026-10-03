@@ -4,6 +4,10 @@ export function checkIce(backData, gameData, gameInfo, gameVars) {
     let update = false;
     const keep = [];
 
+    if (!gameVars.iceMeltsFromAmbientTemperature) {
+        return false;
+    }
+    
     for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
         const waterWithIce = gameInfo.waterWithIceObjects[i];
         if (waterWithIce.status < gameVars.iceCountTo) {

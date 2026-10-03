@@ -1,13 +1,5 @@
 $extra: 1
 $stonepattern: 2
-$activesides: 3, 4, bottom
-$display: 3, 4, stone
-$detectormode: 3, 4, blueball
-$movable: 3, 4, no
-$onetime: 3, 4, yes
-$range: 3, 4, 2
-$target: 3, 4, command
-$value: 3, 4, delete, Stone, rel, -1, 0 | move, SmallGreenBall, rel, -1, 1, up
 $display: 2, 7, stone
 $detectormode: 2, 7, blueball
 $movable: 2, 7, no
@@ -22,6 +14,14 @@ $movable: 11, 7, no
 $onetime: 11, 7, yes
 $target: 11, 7, command
 $value: 11, 7, create, SpikeBall, rel, 1, -6
+$activesides: 3, 4, bottom
+$display: 3, 4, stone
+$detectormode: 3, 4, blueball
+$movable: 3, 4, no
+$onetime: 3, 4, yes
+$range: 3, 4, 2
+$target: 3, 4, command
+$value: 3, 4, delete, Stone, rel, -1, 0 | move, SmallGreenBall, rel, -1, 1, up
 $activesides: 15, 7, right
 $display: 15, 7, stone
 $movable: 15, 7, no
@@ -32,17 +32,22 @@ $activesides: 0, 18, right
 $display: 0, 18, stone
 $group: 0, 18, 2
 $movable: 0, 18, no
-$display: 9, 19, stone
-$group: 9, 19, 3
-$detectormode: 9, 19, blueball
-$movable: 9, 19, no
 $display: 10, 19, stone
 $group: 10, 19, 4
 $detectormode: 10, 19, blueball
 $movable: 10, 19, no
+$display: 9, 19, stone
+$group: 9, 19, 3
+$detectormode: 9, 19, blueball
+$movable: 9, 19, no
+$movable: 0, 6, no
 $direction: 11, 4, down
 $range: 11, 4, 2
-$movable: 0, 6, no
+$direction: 17, 15, up
+$group: 17, 15, 2
+$movable: 17, 15, no
+$direction: 14, 15, down
+$group: 14, 15, 2
 $direction: 9, 12, down
 $display: 9, 12, stone
 $group: 9, 12, 3
@@ -52,17 +57,12 @@ $direction: 10, 12, down
 $display: 10, 12, stone
 $group: 10, 12, 4
 $range: 10, 12, 6
-$direction: 14, 15, down
-$group: 14, 15, 2
-$direction: 17, 15, up
-$group: 17, 15, 2
-$movable: 17, 15, no
-$group: 15, 15, 10
-$pistonmode: 15, 15, repeatfast
-$sticky: 15, 15, yes
 $group: 16, 15, 10
 $pistonmode: 16, 15, repeatslow
 $sticky: 16, 15, yes
+$group: 15, 15, 10
+$pistonmode: 15, 15, repeatfast
+$sticky: 15, 15, yes
 11111111111111111111
 111111111111       1
 111111111111       1

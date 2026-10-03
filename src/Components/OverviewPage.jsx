@@ -438,7 +438,7 @@ function OverviewPage() {
               {displayLevelNumber(level)}
             </div>))}
           </div>
-          <h2>Annoying</h2>
+          <h2>Annoying, but funny</h2>
           <div className="seriesList">
             {seriesAnnoyingList.map((level) => (<div
               key={level}

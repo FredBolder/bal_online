@@ -1,0 +1,24 @@
+$icemeltsfromambienttemperature: no
+$onetime: 6, 14, yes
+$target: 6, 14, command
+$value: 6, 14, create, flamethrowerup, rel, 1, -2
+$direction: 13, 7, down
+$direction: 10, 8, down
+$direction: 17, 12, up
+$range: 17, 12, 4
+$direction: 17, 13, up
+111111111111111111111
+1                   1
+1                   1
+1                   1
+1                   1
+1                   1
+1                   1
+1            й      1
+1         й         1
+1                   1
+1                   1
+1        1жжжж1     1
+13       1wwww1  й  1
+1    2   1wwww1  њ  1
+1111ђ1ђ11111111111111
