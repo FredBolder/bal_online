@@ -6,7 +6,7 @@ function isCombustible(objectNumber) {
     if (isSpike(objectNumber) || isStone(objectNumber)) {
         return false;
     }
-    return ![20, 22, 23, 82, 83, 98, 99, 113, 114, 198, 256].includes(objectNumber);
+    return ![20, 22, 23, 82, 83, 98, 99, 113, 114, 198, 256, 257].includes(objectNumber);
 }
 
 export function checkFlames(backData, gameData, gameInfo) {

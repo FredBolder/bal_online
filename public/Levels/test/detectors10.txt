@@ -1,0 +1,46 @@
+$has: divingglasses
+$condition: 6, 14, name = tropical fish & direction = 4
+$range: 6, 14, 8
+$target: 6, 14, command
+$value: 6, 14, changedirection, tropicalfish, rel, 0, -1, 0, -8
+$condition: 5, 14, name = tropical fish & direction = 4
+$range: 5, 14, 8
+$target: 5, 14, command
+$value: 5, 14, changedirection, tropicalfish, rel, 0, -1, 0, -8
+$fins: 9, 12, 18
+$palette: 9, 12, 45
+$pupilpercentage: 9, 12, 35
+$shape: 9, 12, 15
+$stripes: 9, 12, 18
+$tail: 9, 12, 11
+$fins: 11, 10, 18
+$palette: 11, 10, 45
+$pupilpercentage: 11, 10, 35
+$shape: 11, 10, 15
+$stripes: 11, 10, 18
+$tail: 11, 10, 11
+$fins: 9, 9, 18
+$palette: 9, 9, 45
+$pupilpercentage: 9, 9, 35
+$shape: 9, 9, 15
+$stripes: 9, 9, 18
+$tail: 9, 9, 11
+$background: 5, 7, 1, 1, 23
+$background: 9, 9, 1, 1, 23
+$background: 11, 10, 1, 1, 23
+$background: 9, 12, 1, 1, 23
+111111111111111
+1             1
+1             1
+1             1
+1             1
+13            1
+1wwwwwwwwwwwww1
+1wwww2wwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwҼwwww1
+1wwwwwwwwwwҼww1
+1wwwwwwwwwwwww1
+1wwwwwwwwҼwwww1
+1wwwwwwwwwwwww1
+11111ђђ11111111

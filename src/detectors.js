@@ -482,6 +482,8 @@ function nameToObjectNumber(objName) {
     switch (objName) {
         case "brownball":
             return 253;
+        case "coilspring":
+            return 118;
         case "conveyorbeltleft":
             return 171;
         case "conveyorbeltmiddle":
@@ -697,6 +699,7 @@ function objectPossible(cmd, objName, obj) {
         if (
             (objName === "brownball" && obj === 253) ||
             (objName === "changer" && obj === 244) ||
+            (objName === "coilspring" && obj === 118) ||
             (objName === "conveyorbelt" && [171, 172, 173].includes(obj)) ||
             (objName === "conveyorbeltleft" && obj === 171) ||
             (objName === "conveyorbeltmiddle" && obj === 172) ||

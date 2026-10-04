@@ -7,6 +7,7 @@ import { checkSettings, loadLevelSettings } from "./levels.js";
 import { coordinatesToFishName, objectNumberToObjectGeneralName, objectNumberToObjectName } from "./objects.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
+import { tryParseInt } from "./utils.js";
 import { activateYellowPushers } from "./yellowPushers.js";
 
 function canMove(element) {
@@ -18,6 +19,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     // Result 
     // -1 = invalid, 0 = false, 1 = true
     const compChars = "=<>~*";
+    let coordinates = null;
     let element = null;
     let idx = -1;
     let list = "";
@@ -26,6 +28,40 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     let sVar = "";
     let value1 = null;
     let value2 = "";
+    let xp = -1;
+    let yp = -1;
+
+    function getCoordinates(s) {
+        let c = "";
+        const invalidInt = -10000;
+        const p1 = s.indexOf("(");
+        const p2 = s.indexOf(")");
+        let sNew = s;
+        let xNew = -1;
+        let yNew = -1;
+
+        if (p1 < 0 || p2 < 0 || p1 > p2 || (p2 - p1) < 2) {
+            return null;
+        }
+        sNew = sNew.slice(0, p1).trim();
+        c = s.slice(p1 + 1, p2).trim();
+        const values = c.split(",");
+        for (let i = 0; i < values.length; i++) {
+            values[i] = values[i].trim().toLowerCase();
+        }
+        if (values.length !== 3) {
+            return null;
+        }
+        if (values[0] !== "abs" && values[0] !== "rel") {
+            return null;
+        }
+        xNew = tryParseInt(values[1], invalidInt);
+        yNew = tryParseInt(values[2], invalidInt);
+        if (xNew === invalidInt || yNew === invalidInt) {
+            return null;
+        }
+        return { name: sNew, absRel: values[0], x: xNew, y: yNew };
+    }
 
     condition = condition.trim();
     if (condition === "") {
@@ -57,6 +93,19 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
         }
     }
     sVar = sVar.trim();
+    xp = x;
+    yp = y;
+    coordinates = getCoordinates(sVar);
+    if (coordinates !== null) {
+        sVar = coordinates.name;
+        if (coordinates.absRel === "rel") {
+            xp = x + xp;
+            yp = y + yp;
+        } else {
+            xp = coordinates.x;
+            yp = coordinates.y;
+        }
+    }
     sComp = sComp.trim();
     value2 = value2.trim();
     if ((sVar === "") || (sComp === "")) {
@@ -66,16 +115,16 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
         return -1;
     }
 
-    const objectNumber = getGameDataValue(gameData, x, y);
+    const objectNumber = getGameDataValue(gameData, xp, yp);
     const objectGeneralName = objectNumberToObjectGeneralName(objectNumber);
     const objectName = objectNumberToObjectName(objectNumber);
 
     switch (sVar) {
         case "fishName":
-            value1 = coordinatesToFishName(gameData, gameInfo, x, y, false);
+            value1 = coordinatesToFishName(gameData, gameInfo, xp, yp, false);
             break;
         case "generalFishName":
-            value1 = coordinatesToFishName(gameData, gameInfo, x, y, true);
+            value1 = coordinatesToFishName(gameData, gameInfo, xp, yp, true);
             break;
         case "generalName":
             value1 = objectGeneralName;
@@ -88,7 +137,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
             if (list === null) {
                 return -1;
             }
-            idx = findElementByCoordinates(x, y, list);
+            idx = findElementByCoordinates(xp, yp, list);
             if (idx < 0) {
                 return -1;
             }
@@ -148,6 +197,47 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
         default:
             return -1;
     }
+}
+
+export function checkConditions(gameData, gameInfo, x, y, condition) {
+    // Result:
+    // -1 = invalid
+    //  0 = false
+    //  1 = true
+
+    condition = condition.trim();
+    if (condition === "") {
+        return 1;
+    }
+
+    for (const orCondition of condition.split("|")) {
+        let andResult = 1;
+
+        for (const andCondition of orCondition.split("&")) {
+            const trimmedCondition = andCondition.trim();
+
+            if (trimmedCondition === "") {
+                return -1;
+            }
+
+            const result = checkCondition(gameData, gameInfo, x, y, trimmedCondition);
+
+            if (result === -1) {
+                return -1;
+            }
+
+            if (result === 0) {
+                andResult = 0;
+                break;
+            }
+        }
+
+        if (andResult === 1) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 export function checkPistonsDetector(gameData, gameInfo) {
@@ -332,7 +422,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
                         }
                     }
                     if (detect) {
-                        if (checkCondition(gameData, gameInfo, x, y, detector.condition) !== 1) {
+                        if (checkConditions(gameData, gameInfo, x, y, detector.condition) !== 1) {
                             detect = false;
                         }
                     }
@@ -453,7 +543,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     if (flamethrowersResult.updated) {
         result.updated = true;
     }
-    
+
     return result;
 }
 
