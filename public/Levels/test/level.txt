@@ -1,51 +1,12 @@
-$gameticks: elevator, 2
-$extra: 1
-$gameticks: pinkball, 20
-$stonepattern: 1
-$activesides: 17, 17, right
-$condition: 17, 17, generalName = elevator
-$movable: 17, 17, no
-$sequence: 17, 17, yes
-$target: 17, 17, command
-$value: 17, 17, rotateright, elevator, rel, 1, 0 | rotateleft, elevator, rel, 1, 0
-$activesides: 19, 2, left
-$condition: 19, 2, generalName = elevator
-$movable: 19, 2, no
-$sequence: 19, 2, yes
-$target: 19, 2, command
-$value: 19, 2, rotateleft, elevator, rel, -1, 0 | rotateright, elevator, rel, -1, 0
-$group: 5, 13, 3
-$detectormode: 5, 13, lightblueball
-$activesides: 19, 3, left
-$group: 19, 3, 5
-$direction: 5, 14, down
-$group: 5, 14, 5
-$range: 5, 14, 4
-$group: 3, 12, 2
-$pistonmode: 3, 12, repeatfast
-$sticky: 3, 12, yes
-$group: 1, 1, 4
-$pistonmode: 1, 1, momentary
-$group: 1, 16, 4
-$group: 14, 11, 3
-$direction: 14, 11, up
-11111111111111111111111111111
-1ËѤ  11 11              1 131
-111  11 1          ђ    141 1
-1    18            ђ    141=1
-1    11                 141=1
-1    11=1   1  11       141=1
-1    11=1   1  118      141=1
-1    11=1   1  318      141=1
-1    11=1   1   11      141=1
-1    11=1   111111      141=1
-1  b 11=1   1    1      141=1
-1111111=      њ  1      141=1
-111Ë5B1=1   111111       5 =1
-11111ђ1=1   1          1I 1=1
-1  11й1=1   1   8      I  1=1
-1     1=11111   1        H1=1
-1m     =                H11=1
-111    =         ђ   L E111=1
-111    =  2                 1
-11111111111111111111111111111
+$target: 5, 9, command
+$value: 5, 9, move, copier, abs, 1, 1, right
+1111111111
+1 Δ      1
+1        1
+1        1
+1        1
+1        1
+1        1
+13       1
+1   2    1
+11111ђ1111

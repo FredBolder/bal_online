@@ -669,5 +669,95 @@ describe("Pistons", () => {
         expect(gameInfo.greenBalls).toBe(2);
     });
 
+    it("detectors 17", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                {
+                    x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
+                    value: "changedirection, spike, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: false,
+                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 3, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 175, 175, 175, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 3, 1],
+            [1, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 255, 174, 174, 174, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true, explosion: false });
+        expect(gameInfo.detectors).toEqual([
+            {
+                x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
+                value: "changedirection, spike, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: true,
+                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+            }
+        ]);
+    });
+
+    it("detectors 18", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                {
+                    x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "command",
+                    value: "changedirection, elevator, rel, 0, -1", display: "stone", activated: false,
+                    activatedCount: 0, sequence: false, movable: true, condition: "generalName=Elevator", text: "", group: 1
+                }
+            ],
+            horizontalElevators: [{ x: 4, y: 4, right: false, hasBlueBall: false }],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 3, 1],
+            [1, 0, 2, 0, 7, 0, 0, 0, 1],
+            [1, 1, 1, 1, 255, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 3, 1],
+            [1, 0, 2, 0, 107, 0, 0, 0, 1],
+            [1, 1, 1, 1, 255, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true, explosion: false });
+        expect(gameInfo.detectors).toEqual([
+            {
+                x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "command",
+                value: "changedirection, elevator, rel, 0, -1", display: "stone", activated: true,
+                activatedCount: 1, sequence: false, movable: true, condition: "generalName=Elevator", text: "", group: 1
+            }
+        ]);
+        expect(gameInfo.horizontalElevators).toEqual([{ x: 4, y: 4, right: true, hasBlueBall: false }]);
+    });
+
     // Insert new tests here
 });

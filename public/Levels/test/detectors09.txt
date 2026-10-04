@@ -1,0 +1,25 @@
+$detectormode: 4, 14, blueball
+$movable: 4, 14, no
+$onetime: 4, 14, yes
+$target: 4, 14, command
+$value: 4, 14, create, conveyorbeltleft, rel, 1, -1 | create, conveyorbeltmiddle, rel, 2, -1, 5, -1 | create, ConveyorBeltRight, rel, 6, -1
+$detectormode: 11, 14, blueball
+$movable: 11, 14, no
+$onetime: 11, 14, yes
+$target: 11, 14, command
+$value: 11, 14, delete, conveyorbeltleft, rel, -6, -1 | delete, conveyorbeltmiddle, rel, -5, -1, -2, -1 | delete, ConveyorBeltRight, rel, -1, -1
+111111111111111
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+13            1
+1  2          1
+1111ђ111111ђ111
