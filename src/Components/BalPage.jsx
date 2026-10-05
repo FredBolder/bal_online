@@ -45,7 +45,7 @@ import { flamethrowerMaxRange } from "../flamethrowers.js";
 import { freezeWater } from "../freeze.js";
 import { getGameInfo, getInfoByCoordinates, initGameInfo, initGameVars, switchPlayer } from "../gameInfo.js";
 import { checkGameOver } from "../gameOver.js";
-import { globalVars } from "../glob.js";
+import { globalVars, resetTime } from "../glob.js";
 import { deleteIfLava } from "../lava.js";
 import { addSolvedLevels, checkSettings, displayLevelNumber, firstOfSeries, fixLevel, getLevel, getAllLevels, getSecretStart, getRandomLevel, loadLevelSettings, numberOfLevels, updateGameInfo } from "../levels.js";
 import { checkMagnets } from "../magnets.js";
@@ -53,7 +53,7 @@ import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../mem
 import { changeMoverInverted } from "../movers.js";
 import { closeAudio, getAudioContext, instruments } from "../music.js";
 import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, transposeMusicBox } from "../musicBoxes.js";
-import { changePistonInverted, changePistonSticky } from "../pistons.js";
+import { changePistonInverted, changePistonSticky, checkPistonsTriggers } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { setProp } from "../props.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
@@ -335,6 +335,7 @@ function BalPage() {
         clearPlayedNotes();
         fixDoors(gameInfo);
         updateGameInfo(gameData, gameInfo);
+        resetTime();
         return;
       } else {
         await initLevel(gameVars.currentLevel);
@@ -827,6 +828,7 @@ function BalPage() {
         updateProgressText();
         updateGameCanvas();
         updateGreen();
+        resetTime();
       }
     }
 
@@ -886,6 +888,7 @@ function BalPage() {
       if (gameVars.startlevelmessage !== "") {
         showMessage("Message", gameVars.startlevelmessage);
       }
+      resetTime();
       globalVars.loading = false;
     }
   }
@@ -1124,6 +1127,7 @@ function BalPage() {
     updateMenuItemsDisplay();
     updateGameCanvas();
     updateCreateLevelCanvas();
+    resetTime();
   }
 
   function fillMenu(n) {
@@ -1353,6 +1357,7 @@ function BalPage() {
         clearPlayedNotes();
         clearMemory(1);
         clearMemory(2);
+        resetTime();
       }
       globalVars.loading = true;
       initGameVars(gameVars);
@@ -1485,10 +1490,29 @@ function BalPage() {
     let actionIndex = -1;
     let actions = null;
     let codes = "";
+    let detectorResult = null;
     let direction = "";
     const gravityDown = (gameVars.gravity === "down");
     let isJumping = false;
     let index = -1;
+    let playSounds = [];
+
+    function addSound(sound) {
+      if (!playSounds.includes(sound)) {
+        playSounds.push(sound);
+      }
+    }
+
+    function processDetectorResult(result) {
+      if (result.explosion) {
+        addSound("explosion");
+        gameVars.explosionCounter = 2;
+      }
+      if (result.updated) {
+        info.update = true;
+        updateGreen();
+      }
+    }
 
     if (modalOpen) {
       return;
@@ -1870,11 +1894,15 @@ function BalPage() {
         case "a":
         case "A":
           info = moveLeft(backData, gameData, gameInfo, gameVars);
+          detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveleft");
+          processDetectorResult(detectorResult);
           break;
         case "ArrowRight":
         case "d":
         case "D":
           info = moveRight(backData, gameData, gameInfo, gameVars);
+          detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveright");
+          processDetectorResult(detectorResult);
           break;
         case "ArrowUp":
         case "w":
@@ -2100,7 +2128,7 @@ function BalPage() {
     }
     for (let i = 0; i < gameOverResult.playSounds.length; i++) {
       const snd = gameOverResult.playSounds[i];
-      playSound(snd);
+      addSound(snd);
     }
     if (info.freezeTime > 0) {
       gameVars.timeFreezer = info.freezeTime;
@@ -2121,7 +2149,7 @@ function BalPage() {
     if (info.eating) {
       gameInfo.greenBalls--;
       updateGreen();
-      playSound(reverseString("tae"));
+      addSound(reverseString("tae"));
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
         ((globalVars.thisWorldGreen === 0) && (globalVars.otherWorldGreen === 0)))
       ) {
@@ -2141,7 +2169,11 @@ function BalPage() {
     }
 
     if (info.sound !== "") {
-      playSound(info.sound);
+      addSound(info.sound);
+    }
+
+    for (let i = 0; i < playSounds.length; i++) {
+      playSound(playSounds[i]);
     }
 
     if (info.message !== "") {
@@ -2259,6 +2291,7 @@ function BalPage() {
         clearPlayedNotes();
         fixDoors(gameInfo);
         updateGameInfo(gameData, gameInfo);
+        resetTime();
       } else {
         await initLevel(gameVars.currentLevel);
       }
@@ -3152,11 +3185,11 @@ function BalPage() {
                   const idx = findElementByCoordinates(column, row, gameInfo.detectors);
                   if (idx < 0) {
                     continue;
-                  }    
-                  const detector = gameInfo.detectors[idx];     
+                  }
+                  const detector = gameInfo.detectors[idx];
                   if (detector.target !== "command") {
                     continue;
-                  }    
+                  }
                   newValue = await showInput("Detectors", "Command", detector.value);
                   if (newValue === null) {
                     newValue = "";
@@ -3599,7 +3632,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Detectors", "Mode:", ["all", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball", "brown ball"], 0);
+                newValue = await showSelect("Detectors", "Mode:", ["all", "blue ball", "white ball", "light blue ball", "yellow ball", "red ball", "purple ball", "orange ball", "pink ball", "brown ball", "event"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

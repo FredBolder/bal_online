@@ -49,7 +49,7 @@ describe("Pistons", () => {
             [1, 0, 2, 0, 5, 0, 0, 0, 1],
             [1, 1, 255, 1, 255, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Hello, this is a test!");
@@ -84,7 +84,7 @@ describe("Pistons", () => {
             [1, 2, 83, 0, 5, 0, 0, 0, 1],
             [1, 1, 255, 1, 255, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Hello, this is a test!");
@@ -119,7 +119,7 @@ describe("Pistons", () => {
             [1, 2, 255, 0, 255, 4, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("");
@@ -154,7 +154,7 @@ describe("Pistons", () => {
             [1, 0, 255, 2, 255, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Καλημέρα!");
@@ -191,7 +191,7 @@ describe("Pistons", () => {
             [1, 2, 4, 0, 5, 0, 0, 209, 1],
             [1, 1, 255, 1, 255, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("");
@@ -229,7 +229,7 @@ describe("Pistons", () => {
             [1, 2, 5, 0, 5, 0, 209, 0, 1],
             [1, 1, 255, 1, 255, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameVars.message).toBe("Hello, this is a test!");
@@ -267,7 +267,7 @@ describe("Pistons", () => {
             [1, 0, 2, 0, 0, 0, 0, 0, 1],
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -309,7 +309,7 @@ describe("Pistons", () => {
             [1, 0, 2, 174, 0, 0, 0, 0, 1],
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -351,7 +351,7 @@ describe("Pistons", () => {
             [1, 0, 2, 0, 0, 0, 0, 0, 1],
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -393,7 +393,7 @@ describe("Pistons", () => {
             [1, 1, 1, 0, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -435,7 +435,7 @@ describe("Pistons", () => {
             [1, 0, 2, 0, 0, 0, 0, 0, 1],
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -483,7 +483,7 @@ describe("Pistons", () => {
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -525,7 +525,7 @@ describe("Pistons", () => {
             [1, 1, 1, 0, 0, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -567,7 +567,7 @@ describe("Pistons", () => {
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -612,7 +612,7 @@ describe("Pistons", () => {
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -656,7 +656,7 @@ describe("Pistons", () => {
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -701,7 +701,7 @@ describe("Pistons", () => {
             [1, 1, 255, 174, 174, 174, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -746,7 +746,7 @@ describe("Pistons", () => {
             [1, 1, 1, 1, 255, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
@@ -792,7 +792,7 @@ describe("Pistons", () => {
             [1, 1, 255, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([

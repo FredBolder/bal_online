@@ -3,6 +3,7 @@ import { nextConveyorBeltDirection } from "./conveyorBelts.js";
 import { commands, rotateGroup } from "./detectors.js";
 import { activateAllBombs } from "./detonator.js";
 import { setFlamethrowers } from "./flamethrowers.js";
+import { globalVars } from "./glob.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
 import { coordinatesToFishName, objectNumberToObjectGeneralName, objectNumberToObjectName } from "./objects.js";
 import { movePusher } from "./pushers.js";
@@ -120,6 +121,12 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     const objectName = objectNumberToObjectName(objectNumber);
 
     switch (sVar) {
+        case "elapsedMinutes":
+            value1 = globalVars.elapsedMinutes;
+            break;
+        case "elapsedSeconds":
+            value1 = globalVars.elapsedSeconds;
+            break;
         case "fishName":
             value1 = coordinatesToFishName(gameData, gameInfo, xp, yp, false);
             break;
@@ -294,7 +301,7 @@ export function checkPistonsDetector(gameData, gameInfo) {
     return result;
 }
 
-export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pushingDown) {
+export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, parent) {
     const top = 0;
     const bottom = 1;
     const left = 2;
@@ -304,7 +311,10 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     let checkSettingsResult = "";
     let detect = false;
     let el = -1;
+    let event = false;
+    let eventName = "";
     let flamethrowersResult = null;
+    let pushingDown = false;
     let setting = "";
     let sideStr = "?";
     let result = { updated: false, explosion: false };
@@ -313,6 +323,20 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
     let y = -1;
     let xTrigger = -1;
     let yTrigger = -1;
+
+    if (parent.startsWith("event_")) {
+        eventName = parent.slice(6);
+        event = true;
+        pushingDown = false;
+    }
+    if (parent === "pushing") {
+        event = false;
+        pushingDown = true;
+    }
+    if (parent === "scheduler") {
+        event = false;
+        pushingDown = false;
+    }
 
     if (!pushingDown) {
         for (let i = 0; i < gameInfo.detectors.length; i++) {
@@ -323,109 +347,118 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
             }
 
             detect = false;
-            for (let r = 1; r <= detector.range; r++) {
-                if (detect) {
-                    break;
-                }
 
-                const elTop = getGameDataValue(gameData, detector.x, detector.y - r);
-                const elBottom = getGameDataValue(gameData, detector.x, detector.y + r);
-                const elLeft = getGameDataValue(gameData, detector.x - r, detector.y);
-                const elRight = getGameDataValue(gameData, detector.x + r, detector.y);
-
-                for (let side = 0; side < 4; side++) {
+            if (!event && detector.mode !== "event") {
+                for (let r = 1; r <= detector.range; r++) {
                     if (detect) {
                         break;
                     }
-                    switch (side) {
-                        case top:
-                            el = elTop;
-                            sideStr = "top";
-                            x = detector.x;
-                            y = detector.y - r;
+
+                    const elTop = getGameDataValue(gameData, detector.x, detector.y - r);
+                    const elBottom = getGameDataValue(gameData, detector.x, detector.y + r);
+                    const elLeft = getGameDataValue(gameData, detector.x - r, detector.y);
+                    const elRight = getGameDataValue(gameData, detector.x + r, detector.y);
+
+                    for (let side = 0; side < 4; side++) {
+                        if (detect) {
                             break;
-                        case bottom:
-                            el = elBottom;
-                            sideStr = "bottom";
-                            x = detector.x;
-                            y = detector.y + r;
-                            break;
-                        case left:
-                            el = elLeft;
-                            sideStr = "left";
-                            x = detector.x - r;
-                            y = detector.y;
-                            break;
-                        case right:
-                            el = elRight;
-                            sideStr = "right";
-                            x = detector.x + r;
-                            y = detector.y;
-                            break;
-                        default:
-                            break;
-                    }
-                    if (detector.activeSides.includes(sideStr)) {
-                        switch (detector.mode) {
-                            case "all":
-                                if (el > 0) {
-                                    detect = true;
-                                }
+                        }
+                        switch (side) {
+                            case top:
+                                el = elTop;
+                                sideStr = "top";
+                                x = detector.x;
+                                y = detector.y - r;
                                 break;
-                            case "blueball":
-                                if (el === 2) {
-                                    detect = true;
-                                }
+                            case bottom:
+                                el = elBottom;
+                                sideStr = "bottom";
+                                x = detector.x;
+                                y = detector.y + r;
                                 break;
-                            case "whiteball":
-                                if (el === 4 || el === 245) {
-                                    detect = true;
-                                }
+                            case left:
+                                el = elLeft;
+                                sideStr = "left";
+                                x = detector.x - r;
+                                y = detector.y;
                                 break;
-                            case "lightblueball":
-                                if (el === 5) {
-                                    detect = true;
-                                }
-                                break;
-                            case "yellowball":
-                                if (el === 9) {
-                                    detect = true;
-                                }
-                                break;
-                            case "redball":
-                                if (el === 8 || el === 93 || el === 94) {
-                                    detect = true;
-                                }
-                                break;
-                            case "purpleball":
-                                if (el === 28 || el === 242) {
-                                    detect = true;
-                                }
-                                break;
-                            case "orangeball":
-                                if (el === 40) {
-                                    detect = true;
-                                }
-                                break;
-                            case "pinkball":
-                                if (el === 203) {
-                                    detect = true;
-                                }
-                                break;
-                            case "brownball":
-                                if (el === 253) {
-                                    detect = true;
-                                }
+                            case right:
+                                el = elRight;
+                                sideStr = "right";
+                                x = detector.x + r;
+                                y = detector.y;
                                 break;
                             default:
                                 break;
                         }
-                    }
-                    if (detect) {
-                        if (checkConditions(gameData, gameInfo, x, y, detector.condition) !== 1) {
-                            detect = false;
+                        if (detector.activeSides.includes(sideStr)) {
+                            switch (detector.mode) {
+                                case "all":
+                                    if (el > 0) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "blueball":
+                                    if (el === 2) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "whiteball":
+                                    if (el === 4 || el === 245) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "lightblueball":
+                                    if (el === 5) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "yellowball":
+                                    if (el === 9) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "redball":
+                                    if (el === 8 || el === 93 || el === 94) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "purpleball":
+                                    if (el === 28 || el === 242) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "orangeball":
+                                    if (el === 40) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "pinkball":
+                                    if (el === 203) {
+                                        detect = true;
+                                    }
+                                    break;
+                                case "brownball":
+                                    if (el === 253) {
+                                        detect = true;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (detect) {
+                            if (checkConditions(gameData, gameInfo, x, y, detector.condition) !== 1) {
+                                detect = false;
+                            }
                         }
                     }
+                }
+            }
+
+            if (event && detector.mode === "event") {
+                if (eventName === detector.condition.trim().toLowerCase()) {
+                    detect = true;
                 }
             }
 
@@ -498,26 +531,28 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, pus
         }
     }
 
-    for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
-        const pistonsTrigger = gameInfo.pistonsTriggers[i];
-        xTrigger = pistonsTrigger.x;
-        yTrigger = pistonsTrigger.y;
-        weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xTrigger, xTrigger, yTrigger, pushingDown);
-        if (weight) {
-            if (!activeGroups.includes(pistonsTrigger.group)) {
-                activeGroups.push(pistonsTrigger.group);
-            }
-        }
-        if (pistonsTrigger.pressed) {
-            if (!weight) {
-                pistonsTrigger.pressed = false;
-            }
-        } else {
+    if (!event) {
+        for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+            const pistonsTrigger = gameInfo.pistonsTriggers[i];
+            xTrigger = pistonsTrigger.x;
+            yTrigger = pistonsTrigger.y;
+            weight = hasWeightAbove(backData, gameData, gameInfo, gameVars, xTrigger, xTrigger, yTrigger, pushingDown);
             if (weight) {
-                pistonsTrigger.pressed = true;
-                gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] = !gameVars.pistonGroupsActivated[pistonsTrigger.group - 1];
-                if (updateGroup(gameData, gameInfo, gameVars, pistonsTrigger.group)) {
-                    result.updated = true;
+                if (!activeGroups.includes(pistonsTrigger.group)) {
+                    activeGroups.push(pistonsTrigger.group);
+                }
+            }
+            if (pistonsTrigger.pressed) {
+                if (!weight) {
+                    pistonsTrigger.pressed = false;
+                }
+            } else {
+                if (weight) {
+                    pistonsTrigger.pressed = true;
+                    gameVars.pistonGroupsActivated[pistonsTrigger.group - 1] = !gameVars.pistonGroupsActivated[pistonsTrigger.group - 1];
+                    if (updateGroup(gameData, gameInfo, gameVars, pistonsTrigger.group)) {
+                        result.updated = true;
+                    }
                 }
             }
         }

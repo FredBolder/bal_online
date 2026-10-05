@@ -3261,7 +3261,7 @@ export function jump(backData, gameData, gameInfo, gameVars) {
           checkYellowPausers(backData, gameData, gameInfo, gameVars, true);
           break;
         case 158:
-          checkPistonsTriggers(backData, gameData, gameInfo, gameVars, true);
+          checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "pushing");
           break;
         default:
           break;
@@ -3561,7 +3561,7 @@ export function pushObject(backData, gameData, gameInfo, gameVars) {
             checkYellowPausers(backData, gameData, gameInfo, gameVars, true);
             break;
           case 158:
-            checkPistonsTriggers(backData, gameData, gameInfo, gameVars, true);
+            checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "pushing");
             break;
           default:
             break;

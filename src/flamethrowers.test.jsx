@@ -53,7 +53,7 @@ describe("Flamethrowers", () => {
             [1, 0, 2, 0, 0, 0, 257, 1],
             [1, 1, 255, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(inputBack, input, gameInfo, gameVars, false);
+        let info = checkPistonsTriggers(inputBack, input, gameInfo, gameVars, "scheduler");
         expect(info).toEqual({ updated: true, explosion: false });
         info = checkFlames(inputBack, input, gameInfo);
         expect(info).toEqual({ update: true, sound: "", gameOver: false });
@@ -96,7 +96,7 @@ describe("Flamethrowers", () => {
             [1, 0, 0, 0, 0, 0, 257, 1],
             [1, 1, 255, 1, 1, 1, 1, 1],
         ];
-        let info = checkPistonsTriggers(inputBack, input, gameInfo, gameVars, false);
+        let info = checkPistonsTriggers(inputBack, input, gameInfo, gameVars, "scheduler");
         expect(info).toEqual({ updated: true, explosion: false });
         info = checkFlames(inputBack, input, gameInfo);
         expect(info).toEqual({ update: true, sound: "pain", gameOver: true });

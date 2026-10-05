@@ -48,7 +48,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
     });
@@ -78,7 +78,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.yellowBalls).toEqual([{ x: 5, y: 3, direction: "none" }]);
@@ -109,7 +109,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.yellowBalls).toEqual([{ x: 4, y: 2, direction: "none" }]);
@@ -145,7 +145,7 @@ describe("Pistons", () => {
             [1, 158, 0, 159, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.yellowBalls).toEqual([{ x: 6, y: 3, direction: "none" }]);
@@ -168,7 +168,7 @@ describe("Pistons", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false, explosion: false });
     });
@@ -202,7 +202,7 @@ describe("Pistons", () => {
             [1, 158, 0, 159, 0, 0, 0, 158, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
     });
@@ -233,7 +233,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
     });
@@ -264,7 +264,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: pistonGroupsActivated }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
     });
@@ -293,7 +293,7 @@ describe("Pistons", () => {
             [1, 158, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: true, explosion: false });
     });
@@ -315,7 +315,7 @@ describe("Pistons", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false, explosion: false });
     });
@@ -336,7 +336,7 @@ describe("Pistons", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = copy2dArray(input);
-        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, false);
+        const info = checkPistonsTriggers(backData, input, gameInfo, { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] }, "scheduler");
         expect(input).toEqual(expectedOutput);
         expect(info).toEqual({ updated: false, explosion: false });
     });

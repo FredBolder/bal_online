@@ -448,7 +448,7 @@ export function detectorDisplayModes() {
 }
 
 export function detectorModes() {
-    return ["all", "blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball", "brownball"];
+    return ["all", "blueball", "whiteball", "lightblueball", "yellowball", "redball", "purpleball", "orangeball", "pinkball", "brownball", "event"];
 }
 
 export function detectorTargets() {

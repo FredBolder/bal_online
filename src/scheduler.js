@@ -38,6 +38,7 @@ import { checkYellowPausers } from "./yellowPausers.js";
 import { checkYellowPushersTriggers } from "./yellowPushers.js";
 import { checkYellowStoppers } from "./yellowStoppers.js";
 import { checkFlames } from "./flamethrowers.js";
+import { globalVars } from "./glob.js";
 
 export async function gameScheduler(backData, gameData, gameInfo, gameVars, checkAll = true) {
     let info = {};
@@ -66,6 +67,14 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
             updateCanvas = true;
         }
     }
+
+    const currentTime = performance.now();
+    if (globalVars.startTime === null) {
+        globalVars.startTime = currentTime;
+    }
+    const elapsedTime = currentTime - globalVars.startTime;
+    globalVars.elapsedSeconds = Math.floor(elapsedTime / 1000);
+    globalVars.elapsedMinutes = Math.floor(elapsedTime / 60000);
 
     if (gameVars.message !== "") {
         if (gameVars.messageCounter < gameVars.messageTicks) {
@@ -327,7 +336,7 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
         if (info.updated) {
             updateCanvas = true;
         }
-        info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, false);
+        info = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "scheduler");
         if (info.explosion) {
             addSound("explosion");
             gameVars.explosionCounter = 2;

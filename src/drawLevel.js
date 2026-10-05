@@ -818,9 +818,12 @@ function drawLevel(
         break;
     }
     drawText(ctx, xc, yc, txt, "middle", "white", w2 * 0.6, w1 * 0.6);
-    if (mode !== "all") {
+    if (mode !== "all" && mode !== "event") {
       balColor = modeToColor(mode);
       drawFilledCircle(ctx, xmin + d1, ymin + d1, w1 * 0.14, balColor);
+    }
+    if (mode === "event") {
+      drawText(ctx, xmin + (w1 * 0.1), ymin + (w2 * 0.25), "E", "left", "white", w2 * 0.25, w1 * 0.6);
     }
   }
 
