@@ -119,6 +119,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     // Check value
     switch (prop) {
         case "answer":
+        case "event":
         case "condition":
         case "question":
         case "text":
@@ -326,7 +327,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isConveyorBelt && ["direction", "group", "mode"].includes(prop)) {
         list = "conveyorBelts";
     }
-    if (isDetector && ["condition", "display", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
+    if (isDetector && ["condition", "display", "event", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
         list = "detectors";
     }
     if (isDisappearingStone && ["group", "mode"].includes(prop)) {

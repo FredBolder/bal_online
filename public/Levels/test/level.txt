@@ -1,9 +1,14 @@
-$condition: 21, 19, moveleft
+$event: 21, 19, moveleft
 $detectormode: 21, 19, event
-$condition: 22, 19, moveright
+$event: 22, 19, moveright
 $group: 22, 19, 2
 $detectormode: 22, 19, event
 $target: 22, 19, bombs
+$event: 24, 19, moveleft
+$detectormode: 24, 19, event
+$target: 24, 19, command
+$value: 24, 19, create, spikeup, rel, 1, -1
+$pistonmode: 16, 18, momentary
 $group: 19, 12, 2
 $direction: 19, 12, left
 11111111111111111111111111111111
@@ -14,15 +19,15 @@ $direction: 19, 12, left
 1                              1
 1                              1
 1                              1
-1                              1
+1  B   B                       1
 1                 њ            1
 1                              1
 1                              1
 1                  њ           1
+1      й5                      1
 1                              1
 1                              1
 1                              1
-1                              1
-13                             1
-1         2                    1
-111111111111111111111ђђ111111111
+13              5              1
+1   m     2     ÙÙ             1
+111111111111111111111ђђ1ђ1111111

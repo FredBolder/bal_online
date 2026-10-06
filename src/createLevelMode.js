@@ -223,6 +223,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 }
                 gameInfo.detectors[idx2].condition = gameInfo.detectors[idx1].condition;
                 gameInfo.detectors[idx2].display = gameInfo.detectors[idx1].display;
+                gameInfo.detectors[idx2].event = gameInfo.detectors[idx1].event;
                 gameInfo.detectors[idx2].group = gameInfo.detectors[idx1].group;
                 gameInfo.detectors[idx2].movable = gameInfo.detectors[idx1].movable;
                 gameInfo.detectors[idx2].mode = gameInfo.detectors[idx1].mode;

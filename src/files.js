@@ -446,6 +446,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$display: ${coordinates}, ${detector.display}`;
             lines.push(line);
         }
+        if (detector.event !== "") {
+            line = `$event: ${coordinates}, ${detector.event}`;
+            lines.push(line);
+        }
         if (detector.group > 1) {
             line = `$group: ${coordinates}, ${detector.group}`;
             lines.push(line);

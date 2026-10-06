@@ -395,7 +395,8 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
         case 255: {
             let detector = {
                 x, y, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
-                display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                display: "default", activated: false, activatedCount: 0, sequence: false, 
+                movable: true, condition: "", event: "", text: "", group: 1
             };
             gameInfo.detectors.push(detector);
             break;

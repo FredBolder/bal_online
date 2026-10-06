@@ -345,10 +345,16 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
             if (detector.oneTime && detector.activatedCount > 0) {
                 continue;
             }
+            if (event && detector.mode !== "event") {
+                continue;
+            }
+            if (!event && detector.mode === "event") {
+                continue;
+            }
 
             detect = false;
 
-            if (!event && detector.mode !== "event") {
+            if (!event) {
                 for (let r = 1; r <= detector.range; r++) {
                     if (detect) {
                         break;
@@ -456,9 +462,12 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
                 }
             }
 
-            if (event && detector.mode === "event") {
-                if (eventName === detector.condition.trim().toLowerCase()) {
+            if (event) {
+                if (eventName === detector.event.trim().toLowerCase()) {
                     detect = true;
+                    if (checkConditions(gameData, gameInfo, detector.x, detector.y, detector.condition) !== 1) {
+                        detect = false;
+                    }
                 }
             }
 

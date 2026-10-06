@@ -1,0 +1,26 @@
+$event: 9, 14, eating
+$detectormode: 9, 14, event
+$target: 9, 14, command
+$value: 9, 14, create, spikeup, rel, 1, -1
+$event: 10, 14, moveleft
+$detectormode: 10, 14, event
+$event: 11, 14, moveright
+$group: 11, 14, 2
+$detectormode: 11, 14, event
+$direction: 13, 5, left
+$group: 1, 7, 2
+111111111111111
+1             1
+1             1
+1             1
+1             1
+1            њ1
+1             1
+1њ            1
+1             1
+1             1
+1             1
+1             1
+133  б        1
+1    2        1
+111111111ђђђ111

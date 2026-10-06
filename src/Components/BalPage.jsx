@@ -118,6 +118,7 @@ let createLevelColorPages = 2;
 let createLevelCommand = "";
 let createLevelCondition = "";
 let createLevelDirection = "";
+let createLevelEvent = "";
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
@@ -1235,7 +1236,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2216, 2207, 2208, 2209, 2205, 0, 0, 0];
+            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2216, 2207, 2208, 2209, 2205, 2210, 0, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -1894,15 +1895,19 @@ function BalPage() {
         case "a":
         case "A":
           info = moveLeft(backData, gameData, gameInfo, gameVars);
-          detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveleft");
-          processDetectorResult(detectorResult);
+          if (gameInfo.detectors.length > 0) {
+            detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveleft");
+            processDetectorResult(detectorResult);
+          }
           break;
         case "ArrowRight":
         case "d":
         case "D":
           info = moveRight(backData, gameData, gameInfo, gameVars);
-          detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveright");
-          processDetectorResult(detectorResult);
+          if (gameInfo.detectors.length > 0) {
+            detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveright");
+            processDetectorResult(detectorResult);
+          }
           break;
         case "ArrowUp":
         case "w":
@@ -2059,6 +2064,18 @@ function BalPage() {
     if (!Object.prototype.hasOwnProperty.call(info, "update")) {
       info.update = false;
     }
+
+    if (info.eating) {
+      if (gameInfo.detectors.length > 0) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_eating");
+        processDetectorResult(detectorResult);
+      }
+    }
+
+    if (detectorResult !== null) {
+      detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_reset");
+    }
+
 
     switch (info.action) {
       case "gateTravelling":
@@ -3177,6 +3194,9 @@ function BalPage() {
                     }
                   }
                 }
+                if (createLevelObject === 2210) {
+                  msg = setProp(gameData, gameInfo, column, row, "event", createLevelEvent, oneSelected);
+                }
                 if (createLevelObject === 2216 && oneSelected) {
                   const objectNumber = getGameDataValue(gameData, column, row);
                   if (objectNumber !== 255) {
@@ -3706,6 +3726,17 @@ function BalPage() {
                     ok = true;
                     createLevelSequence = (newValue === "yes");
                   }
+                }
+              }
+              handleCancel();
+              break;
+            case 2210:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("Detectors", "Event", createLevelEvent);
+                if (newValue !== null) {
+                  createLevelEvent = newValue.trim();
+                  ok = true;
                 }
               }
               handleCancel();

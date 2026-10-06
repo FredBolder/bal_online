@@ -27,8 +27,8 @@ describe("Pistons", () => {
             blueBall: { x: 2, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 },
-                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 2 }
+                { x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
         }
@@ -62,8 +62,8 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 },
-                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 2 }
+                { x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 1 }],
         }
@@ -97,8 +97,8 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 4, mode: "all", oneTime: false, activeSides: ["right"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 },
-                { x: 4, y: 4, mode: "all", oneTime: false, activeSides: ["right"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 2 }
+                { x: 2, y: 4, mode: "all", oneTime: false, activeSides: ["right"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 4, mode: "all", oneTime: false, activeSides: ["right"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
         }
@@ -132,8 +132,8 @@ describe("Pistons", () => {
             blueBall: { x: 3, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 4, mode: "all", oneTime: false, activeSides: ["right"], range: 1, target: "setting", value: "$message: Καλημέρα!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 },
-                { x: 4, y: 4, mode: "all", oneTime: false, activeSides: ["left"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 2 }
+                { x: 2, y: 4, mode: "all", oneTime: false, activeSides: ["right"], range: 1, target: "setting", value: "$message: Καλημέρα!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 4, mode: "all", oneTime: false, activeSides: ["left"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
         }
@@ -167,9 +167,9 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 1, mode: "purpleball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 3 },
-                { x: 2, y: 5, mode: "lightblueball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 },
-                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 2 }
+                { x: 2, y: 1, mode: "purpleball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 3 },
+                { x: 2, y: 5, mode: "lightblueball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
             pushers: [{ x: 7, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }],
@@ -205,9 +205,9 @@ describe("Pistons", () => {
             blueBall: { x: 1, y: 4 },
             greenBalls: 1,
             detectors: [
-                { x: 2, y: 1, mode: "purpleball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 3 },
-                { x: 2, y: 5, mode: "lightblueball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1 },
-                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 2 }
+                { x: 2, y: 1, mode: "purpleball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 3 },
+                { x: 2, y: 5, mode: "lightblueball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: Hello, this is a test!", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 2 }
             ],
             pistons: [{ x: 7, y: 1, activated: false, sticky: false, inverted: false, direction: "left", mode: "momentary", group: 2 }],
             pushers: [{ x: 7, y: 4, direction: "left", mode: "onestep", keepMoving: false, movable: true, group: 3 }],
@@ -246,7 +246,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "move, smallgreenball, rel, 2, -2, right", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -274,7 +274,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "move, smallgreenball, rel, 2, -2, right", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -288,7 +288,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, spikeup, abs, 3, 4", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -316,7 +316,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, spikeup, abs, 3, 4", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -330,7 +330,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "delete, spike, rel, 1, -1", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -358,7 +358,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "delete, spike, rel, 1, -1", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -372,7 +372,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 3, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "delete, stone, rel, 1, 0 | delete, stone, rel, 1, 1", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -400,7 +400,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 3, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "delete, stone, rel, 1, 0 | delete, stone, rel, 1, 1", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -414,7 +414,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, pistonright, abs, 1, 1 | $group: 1, 1, 2", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -442,7 +442,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, pistonright, abs, 1, 1 | $group: 1, 1, 2", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
         expect(gameInfo.pistons).toEqual([
@@ -462,7 +462,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 4, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, stone, rel, 1, -1, 2, -3", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -490,7 +490,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 4, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, stone, rel, 1, -1, 2, -3", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -504,7 +504,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 2, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "delete, stone, rel, 1, 0, 2, 2", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -532,7 +532,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 2, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "delete, stone, rel, 1, 0, 2, 2", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -546,7 +546,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 4, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, yellowkey, rel, 1, -2", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -574,7 +574,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 4, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, yellowkey, rel, 1, -2", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
         expect(gameInfo.keys).toEqual([{ x: 3, y: 2, color: "yellow" }]);
@@ -589,7 +589,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, trianglestonebottomright, rellist, 1, -1, 2, -2, 3, -3", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -619,7 +619,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, trianglestonebottomright, rellist, 1, -1, 2, -2, 3, -3", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -633,7 +633,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, SmallGreenBall, rel, 1, -2 | create, SmallYellowBall, rel, 2, -2", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -663,7 +663,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, SmallGreenBall, rel, 1, -2 | create, SmallYellowBall, rel, 2, -2", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
         expect(gameInfo.greenBalls).toBe(2);
@@ -678,7 +678,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "changedirection, spike, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
         }
@@ -708,7 +708,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "changedirection, spike, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
     });
@@ -722,7 +722,7 @@ describe("Pistons", () => {
                 {
                     x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "changedirection, elevator, rel, 0, -1", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: true, condition: "generalName=Elevator", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: true, condition: "generalName=Elevator", event: "", text: "", group: 1
                 }
             ],
             horizontalElevators: [{ x: 4, y: 4, right: false, hasBlueBall: false }],
@@ -753,7 +753,7 @@ describe("Pistons", () => {
             {
                 x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "changedirection, elevator, rel, 0, -1", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: true, condition: "generalName=Elevator", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: true, condition: "generalName=Elevator", event: "", text: "", group: 1
             }
         ]);
         expect(gameInfo.horizontalElevators).toEqual([{ x: 4, y: 4, right: true, hasBlueBall: false }]);
@@ -768,7 +768,7 @@ describe("Pistons", () => {
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                     value: "create, purpleball, rel, 1, -1", display: "stone", activated: false,
-                    activatedCount: 0, sequence: false, movable: false, condition: "name (abs, 7, 4) = White ball & name (abs, 7, 1) = Purple ball", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: false, condition: "name (abs, 7, 4) = White ball & name (abs, 7, 1) = Purple ball", event: "", text: "", group: 1
                 }
             ],
             horizontalElevators: [{ x: 4, y: 4, right: false, hasBlueBall: false }],
@@ -799,7 +799,7 @@ describe("Pistons", () => {
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, activeSides: ["top"], range: 1, target: "command",
                 value: "create, purpleball, rel, 1, -1", display: "stone", activated: true,
-                activatedCount: 1, sequence: false, movable: false, condition: "name (abs, 7, 4) = White ball & name (abs, 7, 1) = Purple ball", text: "", group: 1
+                activatedCount: 1, sequence: false, movable: false, condition: "name (abs, 7, 4) = White ball & name (abs, 7, 1) = Purple ball", event: "", text: "", group: 1
             }
         ]);
     });

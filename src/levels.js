@@ -316,6 +316,7 @@ export function checkSettings(data, settings) {
     { name: "$display", params: 3, xy: true, yesno: -1 },
     { name: "$displaysize", params: 2, xy: false, yesno: -1 },
     { name: "$electricitymode", params: 1, xy: false, yesno: -1 },
+    { name: "$event", params: 0, xy: true, yesno: -1 },
     { name: "$extra", params: 1, xy: false, yesno: -1 },
     { name: "$eyeoffsetx", params: 3, xy: true, yesno: -1 },
     { name: "$eyeoffsety", params: 3, xy: true, yesno: -1 },
@@ -573,6 +574,11 @@ export function checkSettings(data, settings) {
             case "$electricitymode":
               if (!electricityModes().includes(values[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for electricitymode.\n`;
+              }
+              break;
+            case "$event":
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$extra":
@@ -1676,6 +1682,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$answer":
         case "$condition":
+        case "$event":
         case "$text":
         case "$value":
           val_str = getStringAfterCoordinates(value);
