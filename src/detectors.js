@@ -82,18 +82,18 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
 
     if ((["changedirection", "create", "delete", "rotateleft", "rotateright"].includes(cmd) && values.length >= 5 && isOdd(values.length)) ||
         (cmd === "move" && values.length >= 6 && !isOdd(values.length))) {
-        // changedirection, object name, {abs|rel}, x1, y1 [, x2, y2] 
-        // changedirection, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
-        // create, object name, {abs|rel}, x1, y1 [, x2, y2] 
-        // create, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
-        // delete, object name, {abs|rel}, x1, y1 [, x2, y2] 
-        // delete, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
-        // move, object name, {abs|rel}, x1, y1 [, x2, y2], direction
-        // move, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...], direction
-        // rotateleft, object name, {abs|rel}, x1, y1 [, x2, y2] 
-        // rotateleft, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
-        // rotateright, object name, {abs|rel}, x1, y1 [, x2, y2] 
-        // rotateright, object name, {abslist|rellist}, x1, y1 [, x2, y2, ...]
+        // changedirection, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
+        // changedirection, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
+        // create, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
+        // create, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
+        // delete, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
+        // delete, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
+        // move, object name, {abs|rel|player}, x1, y1 [, x2, y2], direction
+        // move, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...], direction
+        // rotateleft, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
+        // rotateleft, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
+        // rotateright, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
+        // rotateright, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
         if (cmd === "move") {
             direction = valuesLowerCase[values.length - 1];
             if (!["left", "right", "up", "down"].includes(direction)) {
@@ -101,10 +101,10 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             }
         }
         coordinatesMode = valuesLowerCase[2];
-        if (!["abs", "rel", "abslist", "rellist"].includes(coordinatesMode)) {
+        if (!["abs", "rel", "player", "abslist", "rellist", "playerlist"].includes(coordinatesMode)) {
             return;
         }
-        if (coordinatesMode === "abslist" || coordinatesMode === "rellist") {
+        if (coordinatesMode === "abslist" || coordinatesMode === "rellist" || coordinatesMode === "playerlist") {
             n1 = Math.trunc((values.length - 3) / 2);
             if (n1 < 1) {
                 return;
@@ -155,6 +155,9 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             if (coordinatesMode === "abs" || coordinatesMode === "abslist") {
                 absX = x;
                 absY = y;
+            } else if (coordinatesMode === "player" || coordinatesMode === "playerlist") {
+                absX = gameInfo.blueBall.x + x;
+                absY = gameInfo.blueBall.y + y;
             } else {
                 absX = xRef + x;
                 absY = yRef + y;

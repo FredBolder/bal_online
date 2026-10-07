@@ -53,7 +53,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
         if (values.length !== 3) {
             return null;
         }
-        if (values[0] !== "abs" && values[0] !== "rel") {
+        if (values[0] !== "abs" && values[0] !== "rel" && values[0] !== "player") {
             return null;
         }
         xNew = tryParseInt(values[1], invalidInt);
@@ -61,7 +61,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
         if (xNew === invalidInt || yNew === invalidInt) {
             return null;
         }
-        return { name: sNew, absRel: values[0], x: xNew, y: yNew };
+        return { name: sNew, coordinatesType: values[0], x: xNew, y: yNew };
     }
 
     condition = condition.trim();
@@ -99,9 +99,12 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     coordinates = getCoordinates(sVar);
     if (coordinates !== null) {
         sVar = coordinates.name;
-        if (coordinates.absRel === "rel") {
-            xp = x + xp;
-            yp = y + yp;
+        if (coordinates.coordinatesType === "rel") {
+            xp = xp + coordinates.x;
+            yp = yp + coordinates.y;
+        } else if (coordinates.coordinatesType === "player") {
+            xp = gameInfo.blueBall.x + coordinates.x;
+            yp = gameInfo.blueBall.y + coordinates.y;
         } else {
             xp = coordinates.x;
             yp = coordinates.y;
@@ -138,6 +141,12 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
             break;
         case "name":
             value1 = objectName;
+            break;
+        case "playerX":
+            value1 = gameInfo.blueBall.x;
+            break;
+        case "playerY":
+            value1 = gameInfo.blueBall.y;
             break;
         default:
             list = getListByObjectNumber(gameInfo, objectNumber);
