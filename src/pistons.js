@@ -22,6 +22,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     const compChars = "=<>~*";
     let coordinates = null;
     let element = null;
+    let found = false;
     let idx = -1;
     let list = "";
     let n = 0;
@@ -149,18 +150,25 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
             value1 = gameInfo.blueBall.y;
             break;
         default:
+            found = false;
             list = getListByObjectNumber(gameInfo, objectNumber);
-            if (list === null) {
-                return -1;
+            if (list !== null) {
+                idx = findElementByCoordinates(xp, yp, list);
+                if (idx >= 0) {
+                    element = list[idx];
+                    if (Object.hasOwn(element, sVar)) {
+                        value1 = element[sVar];
+                        found = true;
+                    }
+                }
             }
-            idx = findElementByCoordinates(xp, yp, list);
-            if (idx < 0) {
-                return -1;
+            if (!found) {
+                if (Object.hasOwn(gameInfo, sVar)) {
+                    value1 = gameInfo[sVar];
+                    found = true;
+                }
             }
-            element = list[idx];
-            if (Object.hasOwn(element, sVar)) {
-                value1 = element[sVar];
-            } else {
+            if (!found) {
                 return -1;
             }
             break;

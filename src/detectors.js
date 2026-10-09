@@ -166,6 +166,10 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             if (obj === -1) {
                 continue;
             }
+            const objBack = getGameDataValue(backData, absX, absY);
+            if (objBack === -1) {
+                continue;
+            }
 
             const objName = valuesLowerCase[1];
             if ((cmd === "delete" || cmd === "move") && !objectPossible(cmd, objName, obj)) {
@@ -186,12 +190,20 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             }
 
             if (cmd === "create") {
-                if (obj !== 0) {
+                objectNumber = nameToObjectNumber(objName);
+                const isBackground = [20, 23, 25, 80, 90, 137].includes(objectNumber);
+                if (!isBackground && obj !== 0) {
                     continue;
                 }
-                objectNumber = nameToObjectNumber(objName);
+                if (isBackground && objBack !== 0) {
+                    continue;
+                }
                 if (objectNumber > 0) {
-                    addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
+                    if (isBackground) {
+                        backData[absY][absX] = objectNumber;
+                    } else {
+                        addObject(backData, gameData, gameInfo, absX, absY, objectNumber);
+                    }
                 }
                 if (objectNumber === 9 && ["movingyellowballdown", "movingyellowballleft", "movingyellowballright", "movingyellowballup"].includes(objName)) {
                     idx = findElementByCoordinates(absX, absY, gameInfo.yellowBalls);
@@ -650,6 +662,10 @@ function nameToObjectNumber(objName) {
         case "movingyellowballright":
         case "movingyellowballup":
             return 9;
+        case "water":
+            return 23;
+        case "watersurface":
+            return 20;
         case "yellowcopier":
             return 208;
         case "yellowdirectionchanger1":

@@ -1,14 +1,14 @@
 $extra: 1
 $stonepattern: 2
 $display: 0, 14, stone
-$event: 0, 14, eating
+$event: 0, 14, AteSmallGreenBall
 $detectormode: 0, 14, event
 $movable: 0, 14, no
 $target: 0, 14, command
 $value: 0, 14, create, SmallGreenBall, player, 2, 0
 $condition: 1, 14, playerY > 8
 $display: 1, 14, stone
-$event: 1, 14, moveright
+$event: 1, 14, MovedRightByPlayer
 $detectormode: 1, 14, event
 $movable: 1, 14, no
 $condition: 0, 13, name (abs, 7, 9) = Blue Ball

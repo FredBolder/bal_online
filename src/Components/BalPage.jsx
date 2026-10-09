@@ -1490,8 +1490,26 @@ function BalPage() {
     let action = "";
     let actionIndex = -1;
     let actions = null;
+    let previousBlueBallX = -1;
+    let previousBlueBallY = -1;
+    let previousBlueKey = false;
+    let previousDivingGlasses = false;
+    let previousGreenKey = false;
+    let previousKey = false;
+    let previousPinkKey = false;
+    let previousPurpleKey = false;
+    let previousRedKey = false;
+    let previousWhiteKey = false;
+    let previousYellowKey = false;
     let codes = "";
     let detectorResult = null;
+    let eventAteSmallGreenBall = false;
+    let eventMovedDownByPlayer = false;
+    let eventMovedLeftByPlayer = false;
+    let eventMovedRightByPlayer = false;
+    let eventMovedUpByPlayer = false;
+    let eventTookDivingGlasses = false;
+    let eventTookKey = false;
     let direction = "";
     const gravityDown = (gameVars.gravity === "down");
     let isJumping = false;
@@ -1504,6 +1522,29 @@ function BalPage() {
       }
     }
 
+    function checkChanges() {
+      if (gameInfo.blueBall.x > previousBlueBallX) {
+        eventMovedRightByPlayer = true;
+      }
+      if (gameInfo.blueBall.x < previousBlueBallX) {
+        eventMovedLeftByPlayer = true;
+      }
+      if (gameInfo.blueBall.y > previousBlueBallY) {
+        eventMovedDownByPlayer = true;
+      }
+      if (gameInfo.blueBall.y < previousBlueBallY) {
+        eventMovedUpByPlayer = true;
+      }
+      if (gameInfo.hasDivingGlasses && !previousDivingGlasses) {
+        eventTookDivingGlasses = true;
+      }
+      if ((gameInfo.hasBlueKey && !previousBlueKey) || (gameInfo.hasGreenKey && !previousGreenKey) || (gameInfo.hasKey && !previousKey) ||
+        (gameInfo.hasPinkKey && !previousPinkKey) || (gameInfo.hasPurpleKey && !previousPurpleKey) || (gameInfo.hasRedKey && !previousRedKey) ||
+        (gameInfo.hasWhiteKey && !previousWhiteKey) || (gameInfo.hasYellowKey && !previousYellowKey)) {
+        eventTookKey = true;
+      }
+    }
+
     function processDetectorResult(result) {
       if (result.explosion) {
         addSound("explosion");
@@ -1513,6 +1554,20 @@ function BalPage() {
         info.update = true;
         updateGreen();
       }
+    }
+
+    function savePrevious() {
+      previousBlueBallX = gameInfo.blueBall.x;
+      previousBlueBallY = gameInfo.blueBall.y;
+      previousBlueKey = gameInfo.hasBlueKey;
+      previousDivingGlasses = gameInfo.hasDivingGlasses;
+      previousGreenKey = gameInfo.hasGreenKey;
+      previousKey = gameInfo.hasKey;
+      previousPinkKey = gameInfo.hasPinkKey;
+      previousPurpleKey = gameInfo.hasPurpleKey;
+      previousRedKey = gameInfo.hasRedKey;
+      previousWhiteKey = gameInfo.hasWhiteKey;
+      previousYellowKey = gameInfo.hasYellowKey;
     }
 
     if (modalOpen) {
@@ -1881,10 +1936,14 @@ function BalPage() {
     if (e.shiftKey) {
       switch (e.key) {
         case "ArrowLeft":
+          savePrevious();
           info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+          checkChanges();
           break;
         case "ArrowRight":
+          savePrevious();
           info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
+          checkChanges();
           break;
         default:
           break;
@@ -1894,25 +1953,22 @@ function BalPage() {
         case "ArrowLeft":
         case "a":
         case "A":
+          savePrevious();
           info = moveLeft(backData, gameData, gameInfo, gameVars);
-          if (gameInfo.detectors.length > 0) {
-            detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveleft");
-            processDetectorResult(detectorResult);
-          }
+          checkChanges();
           break;
         case "ArrowRight":
         case "d":
         case "D":
+          savePrevious();
           info = moveRight(backData, gameData, gameInfo, gameVars);
-          if (gameInfo.detectors.length > 0) {
-            detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveright");
-            processDetectorResult(detectorResult);
-          }
+          checkChanges();
           break;
         case "ArrowUp":
         case "w":
         case "W":
           if (!dropPressed || (e.key === "ArrowUp")) {
+            savePrevious();
             if (gravityDown || ignoreGravity) {
               info = jump(backData, gameData, gameInfo, gameVars);
               if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
@@ -1921,10 +1977,12 @@ function BalPage() {
             } else {
               info = pushObject(backData, gameData, gameInfo, gameVars);
             }
+            checkChanges();
           }
           break;
         case "q":
         case "Q":
+          savePrevious();
           if (gravityDown || ignoreGravity) {
             info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
@@ -1933,9 +1991,11 @@ function BalPage() {
           } else {
             info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
           }
+          checkChanges();
           break;
         case "e":
         case "E":
+          savePrevious();
           if (gravityDown || ignoreGravity) {
             info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
@@ -1944,10 +2004,12 @@ function BalPage() {
           } else {
             info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
           }
+          checkChanges();
           break;
         case "ArrowDown":
         case "s":
         case "S":
+          savePrevious();
           if (gravityDown || ignoreGravity) {
             info = pushObject(backData, gameData, gameInfo, gameVars);
           } else {
@@ -1956,12 +2018,14 @@ function BalPage() {
               isJumping = true;
             }
           }
+          checkChanges();
           break;
         case "y":
         case "Y":
         case "z":
         case "Z":
           if (!dropPressed) {
+            savePrevious();
             if (gravityDown || ignoreGravity) {
               info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
             } else {
@@ -1970,11 +2034,13 @@ function BalPage() {
                 isJumping = true;
               }
             }
+            checkChanges();
           }
           break;
         case "c":
         case "C":
           if (!kPressed) {
+            savePrevious();
             if (gravityDown || ignoreGravity) {
               info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
             } else {
@@ -1983,6 +2049,7 @@ function BalPage() {
                 isJumping = true;
               }
             }
+            checkChanges();
           }
           break;
         default:
@@ -2066,12 +2133,41 @@ function BalPage() {
     }
 
     if (info.eating) {
-      if (gameInfo.detectors.length > 0) {
-        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_eating");
+      gameInfo.greenBalls--;
+      eventAteSmallGreenBall = true;
+    }
+
+    // Handle events
+    if (gameInfo.detectors.length > 0) {
+      if (eventAteSmallGreenBall) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_atesmallgreenball");
+        processDetectorResult(detectorResult);
+      }
+      if (eventMovedDownByPlayer) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_moveddownbyplayer");
+        processDetectorResult(detectorResult);
+      }
+      if (eventMovedLeftByPlayer) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_movedleftbyplayer");
+        processDetectorResult(detectorResult);
+      }
+      if (eventMovedRightByPlayer) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_movedrightbyplayer");
+        processDetectorResult(detectorResult);
+      }
+      if (eventMovedUpByPlayer) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_movedupbyplayer");
+        processDetectorResult(detectorResult);
+      }
+      if (eventTookDivingGlasses) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_tookdivingglasses");
+        processDetectorResult(detectorResult);
+      }
+      if (eventTookKey) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_tookkey");
         processDetectorResult(detectorResult);
       }
     }
-
     if (detectorResult !== null) {
       detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_reset");
     }
@@ -2164,7 +2260,6 @@ function BalPage() {
 
     // Check if level is solved
     if (info.eating) {
-      gameInfo.greenBalls--;
       updateGreen();
       addSound(reverseString("tae"));
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
