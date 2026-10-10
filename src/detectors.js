@@ -191,7 +191,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
 
             if (cmd === "create") {
                 objectNumber = nameToObjectNumber(objName);
-                const isBackground = [20, 23, 25, 80, 90, 137].includes(objectNumber);
+                const isBackground = [20, 23, 25, 80, 90, 137, 258].includes(objectNumber);
                 if (!isBackground && obj !== 0) {
                     continue;
                 }
@@ -495,6 +495,10 @@ export function flipDirection(direction) {
 
 function nameToObjectNumber(objName) {
     switch (objName) {
+        case "backgroundstone":
+            return 258;
+        case "bomb":
+            return 36;
         case "brownball":
             return 253;
         case "coilspring":
@@ -509,6 +513,8 @@ function nameToObjectNumber(objName) {
             return 97;
         case "detector":
             return 255;
+        case "detonator":
+            return 37;
         case "door":
             return 169;
         case "lockeddoor":
@@ -642,6 +648,8 @@ function nameToObjectNumber(objName) {
             return 174;
         case "stone":
             return 1;
+        case "timebomb":
+            return 117;
         case "timefreezer":
             return 120;
         case "trianglestonebottomleft":

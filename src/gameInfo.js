@@ -472,6 +472,9 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 backInfo = `Sea anemone, ` + extraBackInfo;
                 break;
+            case 258:
+                backInfo = "Background stone";
+                break;
             default:
                 backInfo = "";
                 break;
@@ -1350,6 +1353,8 @@ export function initGameInfo(info) {
     info.tropicalFish = [];
     info.twoBlue = false;
     info.twoBlueConnected = false;
+    info.userKey1 = "Delete";
+    info.userKey2 = ".";
     info.waterWithIceObjects = [];
     info.whiteBallSynchronisers = [];
     info.yellowBalls = [];

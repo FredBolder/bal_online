@@ -422,6 +422,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
         case 137:
         case 170:
         case 252:
+        case 258:
             backData[y][x] = objectNumber;
             break;
         default:

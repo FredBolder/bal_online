@@ -62,7 +62,7 @@ export const seriesFishEnd = 6366;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6466;
+export const seriesAnnoyingEnd = 6467;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -375,6 +375,8 @@ export function checkSettings(data, settings) {
     { name: "$target", params: 3, xy: true, yesno: -1 },
     { name: "$text", params: 0, xy: true, yesno: -1 },
     { name: "$twoblueconnected", params: 1, xy: false, yesno: 0 },
+    { name: "$userkey1", params: 0, xy: false, yesno: -1 },
+    { name: "$userkey2", params: 0, xy: false, yesno: -1 },
     { name: "$value", params: 0, xy: true, yesno: -1 },
   ];
 
@@ -1711,7 +1713,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           h = tryParseInt(values[3], -1);
           element = tryParseInt(values[4], -1);
           if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
-            ([20, 23, 25, 80, 90, 137].includes(element))) {
+            ([20, 23, 25, 80, 90, 137, 258].includes(element))) {
             for (let posY = y; posY < (y + h); posY++) {
               for (let posX = x; posX < (x + w); posX++) {
                 backData[posY][posX] = element;
@@ -2424,6 +2426,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             default:
               break;
           }
+          break;
+        case "$userkey1":
+          gameInfo.userKey1 = value;
+          break;
+        case "$userkey2":
+          gameInfo.userKey2 = value;
           break;
         default:
           break;

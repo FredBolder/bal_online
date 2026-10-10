@@ -780,6 +780,8 @@ export function charToNumber(c) {
       return 256;
     case "й":
       return 257;
+    case "ћ":
+      return 258;
     case "|":
       return 1000;
     default:
@@ -1951,6 +1953,8 @@ export function numberToChar(n) {
       return "Ѓ";
     case 257:
       return "й";
+    case 258:
+      return "ћ";
     case 1000:
       // For manual only
       return "|";
@@ -1986,7 +1990,7 @@ export function stringArrayToNumberArray(arr, importing = false) {
           data = 0;
         }
       }
-      if ([20, 22, 23, 25, 80, 90, 137, 170, 252].includes(data)) {
+      if ([20, 22, 23, 25, 80, 90, 137, 170, 252, 258].includes(data)) {
         rowBackData.push(data);
         rowGameData.push(0);
       } else {

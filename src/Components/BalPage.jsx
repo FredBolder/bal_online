@@ -1186,7 +1186,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 2092, 22, 0, 0, 0, 2101];
+                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 2092, 22, 258, 0, 0, 2101];
                 break;
             }
             break;
@@ -1493,9 +1493,11 @@ function BalPage() {
     let previousBlueBallX = -1;
     let previousBlueBallY = -1;
     let previousBlueKey = false;
+    let previousCoilSpring = false;
     let previousDivingGlasses = false;
     let previousGreenKey = false;
     let previousKey = false;
+    let previousPickaxe = false;
     let previousPinkKey = false;
     let previousPurpleKey = false;
     let previousRedKey = false;
@@ -1508,8 +1510,12 @@ function BalPage() {
     let eventMovedLeftByPlayer = false;
     let eventMovedRightByPlayer = false;
     let eventMovedUpByPlayer = false;
+    let eventTookCoilSpring = false;
     let eventTookDivingGlasses = false;
     let eventTookKey = false;
+    let eventTookPickaxe = false;
+    let eventUserKey1Pressed = false;
+    let eventUserKey2Pressed = false;
     let direction = "";
     const gravityDown = (gameVars.gravity === "down");
     let isJumping = false;
@@ -1535,6 +1541,9 @@ function BalPage() {
       if (gameInfo.blueBall.y < previousBlueBallY) {
         eventMovedUpByPlayer = true;
       }
+      if (gameInfo.hasCoilSpring && !previousCoilSpring) {
+        eventTookCoilSpring = true;
+      }
       if (gameInfo.hasDivingGlasses && !previousDivingGlasses) {
         eventTookDivingGlasses = true;
       }
@@ -1542,6 +1551,9 @@ function BalPage() {
         (gameInfo.hasPinkKey && !previousPinkKey) || (gameInfo.hasPurpleKey && !previousPurpleKey) || (gameInfo.hasRedKey && !previousRedKey) ||
         (gameInfo.hasWhiteKey && !previousWhiteKey) || (gameInfo.hasYellowKey && !previousYellowKey)) {
         eventTookKey = true;
+      }
+      if (gameInfo.hasPickaxe && !previousPickaxe) {
+        eventTookPickaxe = true;
       }
     }
 
@@ -1560,9 +1572,11 @@ function BalPage() {
       previousBlueBallX = gameInfo.blueBall.x;
       previousBlueBallY = gameInfo.blueBall.y;
       previousBlueKey = gameInfo.hasBlueKey;
+      previousCoilSpring = gameInfo.hasCoilSpring;
       previousDivingGlasses = gameInfo.hasDivingGlasses;
       previousGreenKey = gameInfo.hasGreenKey;
       previousKey = gameInfo.hasKey;
+      previousPickaxe = gameInfo.hasPickaxe;
       previousPinkKey = gameInfo.hasPinkKey;
       previousPurpleKey = gameInfo.hasPurpleKey;
       previousRedKey = gameInfo.hasRedKey;
@@ -2136,6 +2150,14 @@ function BalPage() {
       gameInfo.greenBalls--;
       eventAteSmallGreenBall = true;
     }
+    if (!globalVars.reading && !kPressed && !dropPressed) {
+      if (e.key === gameInfo.userKey1) {
+        eventUserKey1Pressed = true;
+      }
+      if (e.key === gameInfo.userKey2) {
+        eventUserKey2Pressed = true;
+      }
+    }
 
     // Handle events
     if (gameInfo.detectors.length > 0) {
@@ -2159,12 +2181,28 @@ function BalPage() {
         detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_movedupbyplayer");
         processDetectorResult(detectorResult);
       }
+      if (eventTookCoilSpring) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_tookcoilspring");
+        processDetectorResult(detectorResult);
+      }
       if (eventTookDivingGlasses) {
         detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_tookdivingglasses");
         processDetectorResult(detectorResult);
       }
       if (eventTookKey) {
         detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_tookkey");
+        processDetectorResult(detectorResult);
+      }
+      if (eventTookPickaxe) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_tookpickaxe");
+        processDetectorResult(detectorResult);
+      }
+      if (eventUserKey1Pressed) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_userkey1pressed");
+        processDetectorResult(detectorResult);
+      }
+      if (eventUserKey2Pressed) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_userkey2pressed");
         processDetectorResult(detectorResult);
       }
     }

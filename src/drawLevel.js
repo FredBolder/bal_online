@@ -3751,6 +3751,12 @@ function drawLevel(
           drawWater();
           drawAnemone(currentCol, currentRow, "background");
           break;
+        case 258:
+          drawStone(currentCol, currentRow);
+          if (globalVars.createLevel) {
+            drawText(ctx, xc, ymax - (w2 * 0.2), "bg", "center", "white", w2 * 0.7, w1 * 0.8);
+          }
+          break;
         default:
           // empty
           break;

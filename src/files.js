@@ -387,6 +387,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         line = `$twoblueconnected: yes`;
         lines.push(line);
     }
+    if (gameInfo.userKey1 !== "Delete") {
+        line = `$userKey1: ${gameInfo.userKey1}`;
+        lines.push(line);
+    }
+    if (gameInfo.userKey2 !== ".") {
+        line = `$userKey2: ${gameInfo.userKey2}`;
+        lines.push(line);
+    }
 
     for (let i = 0; i < gameInfo.answerBalls.length; i++) {
         const answerBall = gameInfo.answerBalls[i];
