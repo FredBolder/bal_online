@@ -62,7 +62,7 @@ export const seriesFishEnd = 6366;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6467;
+export const seriesAnnoyingEnd = 6468;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -370,6 +370,7 @@ export function checkSettings(data, settings) {
     { name: "$sticky", params: 3, xy: true, yesno: 2 },
     { name: "$stonepattern", params: 1, xy: false, yesno: -1 },
     { name: "$stripes", params: 3, xy: true, yesno: -1 },
+    { name: "$swapleftright", params: 1, xy: false, yesno: 0 },
     { name: "$tail", params: 3, xy: true, yesno: -1 },
     { name: "$tailstripes", params: 3, xy: true, yesno: -1 },
     { name: "$target", params: 3, xy: true, yesno: -1 },
@@ -2392,6 +2393,21 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           val_int = tryParseInt(values[2], -1);
           setProp(gameData, gameInfo, x, y, "stripes", val_int, false);
+          break;
+        case "$swapleftright":
+          if (values.length !== 1) {
+            break;
+          }
+          switch (valuesLowerCase[0]) {
+            case "no":
+              gameVars.swapLeftRight = false;
+              break;
+            case "yes":
+              gameVars.swapLeftRight = true;
+              break;
+            default:
+              break;
+          }
           break;
         case "$tail":
           if (values.length !== 3 || !validXY) {

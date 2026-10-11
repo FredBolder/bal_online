@@ -1,0 +1,41 @@
+$extra: 1
+$swapleftright: yes
+$stonepattern: 1
+$display: 0, 13, stone
+$activesides: 1, 1, right
+$group: 1, 1, 2
+$detectormode: 1, 1, lightblueball
+$target: 1, 1, command
+$value: 1, 1, rotateright, flamethrower
+$range: 4, 5, 2
+$group: 4, 1, 3
+$pistonmode: 4, 1, repeatslow
+$sticky: 4, 1, yes
+$eyepercentage: 11, 1, 40
+$fins: 11, 1, 6
+$palette: 11, 1, 13
+$shape: 11, 1, 5
+$stripes: 11, 1, 4
+$tail: 11, 1, 3
+$eyepercentage: 7, 1, 40
+$fins: 7, 1, 6
+$palette: 7, 1, 13
+$shape: 7, 1, 5
+$stripes: 7, 1, 4
+$tail: 7, 1, 3
+$background: 7, 1, 1, 1, 23
+$background: 11, 1, 1, 1, 23
+111111111111111
+1ђ 5Ö1wҼwwwҼww1
+1111111111wwww1
+11=      111111
+11=1          1
+11= й         1
+11=      p    1
+11=    2 p    1
+11111  111111 1
+1  8          1
+1  111111111111
+1            31
+1             1
+ђ11111111111111

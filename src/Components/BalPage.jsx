@@ -1521,6 +1521,7 @@ function BalPage() {
     let isJumping = false;
     let index = -1;
     let playSounds = [];
+    const swap = gameVars.swapLeftRight;
 
     function addSound(sound) {
       if (!playSounds.includes(sound)) {
@@ -1738,6 +1739,30 @@ function BalPage() {
         }
       }
       if (direction !== "") {
+        if (swap) {
+          switch (direction) {
+            case "left":
+              direction = "right";
+              break;
+            case "right":
+              direction = "left";
+              break;
+            case "upleft":
+              direction = "upright";
+              break;
+            case "upright":
+              direction = "upleft";
+              break;
+            case "downleft":
+              direction = "downright";
+              break;
+            case "downright":
+              direction = "downleft";
+              break;
+            default:
+              break;
+          }
+        }
         switch (gameInfo.action) {
           case "createTeleports":
             createTeleports(backData, gameData, gameInfo, false, direction);
@@ -1951,12 +1976,12 @@ function BalPage() {
       switch (e.key) {
         case "ArrowLeft":
           savePrevious();
-          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, swap ? "right" : "left");
           checkChanges();
           break;
         case "ArrowRight":
           savePrevious();
-          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
+          info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, swap ? "left" : "right");
           checkChanges();
           break;
         default:
@@ -1968,14 +1993,22 @@ function BalPage() {
         case "a":
         case "A":
           savePrevious();
-          info = moveLeft(backData, gameData, gameInfo, gameVars);
+          if (swap) {
+            info = moveRight(backData, gameData, gameInfo, gameVars);
+          } else {
+            info = moveLeft(backData, gameData, gameInfo, gameVars);
+          }
           checkChanges();
           break;
         case "ArrowRight":
         case "d":
         case "D":
           savePrevious();
-          info = moveRight(backData, gameData, gameInfo, gameVars);
+          if (swap) {
+            info = moveLeft(backData, gameData, gameInfo, gameVars);
+          } else {
+            info = moveRight(backData, gameData, gameInfo, gameVars);
+          }
           checkChanges();
           break;
         case "ArrowUp":
@@ -1998,12 +2031,12 @@ function BalPage() {
         case "Q":
           savePrevious();
           if (gravityDown || ignoreGravity) {
-            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, swap ? "right" : "left");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
               isJumping = true;
             }
           } else {
-            info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
+            info = moveDiagonal(backData, gameData, gameInfo, gameVars, swap ? "right" : "left");
           }
           checkChanges();
           break;
@@ -2011,12 +2044,12 @@ function BalPage() {
         case "E":
           savePrevious();
           if (gravityDown || ignoreGravity) {
-            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
+            info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, swap ? "left" : "right");
             if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
               isJumping = true;
             }
           } else {
-            info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
+            info = moveDiagonal(backData, gameData, gameInfo, gameVars, swap ? "left" : "right");
           }
           checkChanges();
           break;
@@ -2041,9 +2074,9 @@ function BalPage() {
           if (!dropPressed) {
             savePrevious();
             if (gravityDown || ignoreGravity) {
-              info = moveDiagonal(backData, gameData, gameInfo, gameVars, "left");
+              info = moveDiagonal(backData, gameData, gameInfo, gameVars, swap ? "right" : "left");
             } else {
-              info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "left");
+              info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, swap ? "right" : "left");
               if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
                 isJumping = true;
               }
@@ -2056,9 +2089,9 @@ function BalPage() {
           if (!kPressed) {
             savePrevious();
             if (gravityDown || ignoreGravity) {
-              info = moveDiagonal(backData, gameData, gameInfo, gameVars, "right");
+              info = moveDiagonal(backData, gameData, gameInfo, gameVars, swap ? "left" : "right");
             } else {
-              info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, "right");
+              info = jumpLeftOrRight(backData, gameData, gameInfo, gameVars, swap ? "left" : "right");
               if (info.player && !gameInfo.hasPropeller && !inWater(gameInfo.blueBall.x, gameInfo.blueBall.y, backData)) {
                 isJumping = true;
               }

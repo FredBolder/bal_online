@@ -221,6 +221,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.swapLeftRight) {
+        line = `$swapleftright: yes`;
+        lines.push(line);
+    }
+
     if (gameVars.timeBombsTime !== 100) {
         line = `$gameticks: timebomb, ${gameVars.timeBombsTime}`;
         lines.push(line);

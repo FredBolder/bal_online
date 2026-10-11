@@ -1,0 +1,22 @@
+$swapleftright: yes
+$detectormode: 1, 14, blueball
+$target: 1, 14, command
+$value: 1, 14, $SwapLeftRight: Yes
+$detectormode: 13, 14, blueball
+$target: 13, 14, command
+$value: 13, 14, $SwapLeftRight: No
+111111111111111
+13   d я      1
+1  2          1
+1111111111    1
+1             1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1ђ11111111111ђ1
