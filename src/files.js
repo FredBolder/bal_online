@@ -131,6 +131,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.hint !== "") {
+        line = `$hint: ${gameVars.hint}`;
+        lines.push(line);
+    }
+
     if (!gameVars.iceMeltsFromAmbientTemperature) {
         line = `$icemeltsfromambienttemperature: no`;
         lines.push(line);
@@ -236,13 +241,18 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
-    if (gameVars.yellowSlowdownerDurationTicks !== 250) {
-        line = `$gameticks: yellowslowdowner, ${gameVars.yellowSlowdownerDurationTicks}`;
+    if (gameVars.userInt1 !== 0) {
+        line = `$userint1: ${gameVars.userInt1}`;
         lines.push(line);
     }
 
-    if (gameVars.hint !== "") {
-        line = `$hint: ${gameVars.hint}`;
+    if (gameVars.userInt2 !== 0) {
+        line = `$userint2: ${gameVars.userInt2}`;
+        lines.push(line);
+    }
+
+    if (gameVars.yellowSlowdownerDurationTicks !== 250) {
+        line = `$gameticks: yellowslowdowner, ${gameVars.yellowSlowdownerDurationTicks}`;
         lines.push(line);
     }
 
@@ -473,6 +483,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
         if (!detector.movable) {
             line = `$movable: ${coordinates}, no`;
+            lines.push(line);
+        }
+        if (detector.oneCommand) {
+            line = `$onecommand: ${coordinates}, yes`;
             lines.push(line);
         }
         if (detector.oneTime) {

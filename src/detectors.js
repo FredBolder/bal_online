@@ -9,7 +9,7 @@ import { isOdd, tryParseInt } from "./utils.js";
 
 export const detectorMaxRange = 50;
 
-export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, commandLine) {
+export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, commandLine, oneCommand) {
     let absX = 0;
     let absY = 0;
     let checkSettingsResult = "";
@@ -28,6 +28,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let ticks = 50;
     let yellowBall = null;
     let val_int = 0;
+    let valid = false;
     const value = commandLine.trim();
     const values = value.split(",");
     const valuesLowerCase = [];
@@ -175,6 +176,12 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             if ((cmd === "delete" || cmd === "move") && !objectPossible(cmd, objName, obj)) {
                 continue;
             }
+
+            if (valid && oneCommand) {
+                break;
+            }
+
+            valid = true;
 
             if (cmd === "changedirection") {
                 commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], absX, absY);
@@ -449,12 +456,12 @@ export function commands(backData, gameData, gameInfo, gameVars, detector) {
             detector.activatedCount = 1;
         }
         commandLine = commandList[detector.activatedCount - 1].trim();
-        command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine);
+        command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine, detector.oneCommand);
         return;
     }
     for (let i = 0; i < commandList.length; i++) {
         commandLine = commandList[i].trim();
-        command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine);
+        command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine, detector.oneCommand);
     }
 }
 

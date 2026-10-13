@@ -16,7 +16,7 @@ function canMove(element) {
     return [2, 4, 5, 8, 9, 27, 28, 40, 82, 84, 85, 86, 93, 94, 97, 98, 109, 110, 111, 112, 138, 139, 115, 117, 155, 169, 171, 172, 173, 178, 200, 203, 208, 209, 242, 243, 244, 245, 246, 247, 248, 253, 255, 256, 257].includes(element);
 }
 
-export function checkCondition(gameData, gameInfo, x, y, condition) {
+export function checkCondition(gameData, gameInfo, gameVars, x, y, condition) {
     // Result 
     // -1 = invalid, 0 = false, 1 = true
     const compChars = "=<>~*";
@@ -163,6 +163,12 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
                 }
             }
             if (!found) {
+                if (Object.hasOwn(gameVars, sVar)) {
+                    value1 = gameVars[sVar];
+                    found = true;
+                }
+            }
+            if (!found) {
                 if (Object.hasOwn(gameInfo, sVar)) {
                     value1 = gameInfo[sVar];
                     found = true;
@@ -223,7 +229,7 @@ export function checkCondition(gameData, gameInfo, x, y, condition) {
     }
 }
 
-export function checkConditions(gameData, gameInfo, x, y, condition) {
+export function checkConditions(gameData, gameInfo, gameVars, x, y, condition) {
     // Result:
     // -1 = invalid
     //  0 = false
@@ -244,7 +250,7 @@ export function checkConditions(gameData, gameInfo, x, y, condition) {
                 return -1;
             }
 
-            const result = checkCondition(gameData, gameInfo, x, y, trimmedCondition);
+            const result = checkCondition(gameData, gameInfo, gameVars, x, y, trimmedCondition);
 
             if (result === -1) {
                 return -1;
@@ -471,7 +477,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
                             }
                         }
                         if (detect) {
-                            if (checkConditions(gameData, gameInfo, x, y, detector.condition) !== 1) {
+                            if (checkConditions(gameData, gameInfo, gameVars, x, y, detector.condition) !== 1) {
                                 detect = false;
                             }
                         }
@@ -482,7 +488,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
             if (event) {
                 if (eventName === detector.event.trim().toLowerCase()) {
                     detect = true;
-                    if (checkConditions(gameData, gameInfo, detector.x, detector.y, detector.condition) !== 1) {
+                    if (checkConditions(gameData, gameInfo, gameVars, detector.x, detector.y, detector.condition) !== 1) {
                         detect = false;
                     }
                 }

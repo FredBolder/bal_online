@@ -120,8 +120,8 @@ describe("levels", () => {
             ...defaultGameInfo,
             blueBall: { x: 3, y: 4 },
             detectors: [
-                { x: 1, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
-                { x: 4, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 }
+                { x: 1, y: 4, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 },
+                { x: 4, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 }
             ],
             greenBalls: 1,
             movers: [
@@ -151,8 +151,8 @@ describe("levels", () => {
         ];
         loadLevelSettings(backData, data, gameInfo, { ...defaultGameVars }, settings, true)
         expect(gameInfo.detectors).toEqual([
-            { x: 1, y: 4, mode: "yellowball", oneTime: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 3 },
-            { x: 4, y: 5, mode: "whiteball", oneTime: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: White ball detected", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 }
+            { x: 1, y: 4, mode: "yellowball", oneTime: false, oneCommand: false, activeSides: ["bottom"], range: 1, target: "group", value: "", display: "stone", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 3 },
+            { x: 4, y: 5, mode: "whiteball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "setting", value: "$message: White ball detected", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1 }
         ]);
         expect(gameInfo.movers).toEqual([
             { x: 5, y: 2, direction: "up", activeSides: ["left", "right"], mode: "purpleball", inverted: true, counter: 0 }
@@ -196,6 +196,29 @@ describe("levels", () => {
         expect(gameInfo.pistonsTriggers).toEqual([
             { x: 6, y: 4, pressed: false, group: 3 }
         ]);
+    });
+
+    it("loadLevelSettings C", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 3, y: 4 },
+            greenBalls: 1,
+        }
+        const gameVars = { ...defaultGameVars };
+        const data = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 2, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 0, 1, 1, 1, 1, 1]
+        ];
+        const settings = [
+            "$userint1: 125", "$userint2: -345"
+        ];
+        loadLevelSettings(backData, data, gameInfo, gameVars, settings, true)
+        expect(gameVars.userInt1).toBe(125);
+        expect(gameVars.userInt2).toBe(-345);
     });
 
     it("Hints in all easy levels", () => {

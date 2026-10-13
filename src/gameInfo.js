@@ -366,7 +366,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 255: {
-                    let detector = { x: j, y: i, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", 
+                    let detector = { x: j, y: i, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", 
                         value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, 
                         condition: "", event: "", text: "", group: 1 };
                     result.detectors.push(detector);
@@ -1220,7 +1220,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.detectors);
                 if (idx >= 0) {
                     obj = gameInfo.detectors[idx];
-                    extraInfo = `Mode: ${obj.mode}, One-time: ${obj.oneTime}, Active sides: ${obj.activeSides}, ` +
+                    extraInfo = `Mode: ${obj.mode}, One-command: ${obj.oneCommand}, One-time: ${obj.oneTime}, Active sides: ${obj.activeSides}, ` +
                         `Range: ${obj.range}, Target: ${obj.target}, Value: ${obj.value}, Display: ${obj.display}, ` +
                         `Activated: ${obj.activated}, Activated count: ${obj.activatedCount}, ` + 
                         `Sequence: ${obj.sequence}, ` +
@@ -1444,6 +1444,8 @@ export function initGameVars(vars) {
     vars.timeBombsTime = 100;
     vars.timeFreezer = 0;
     vars.tropicalFishCountToOverride = 0;
+    vars.userInt1 = 0;
+    vars.userInt2 = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;
     vars.yellowCounter = 0;

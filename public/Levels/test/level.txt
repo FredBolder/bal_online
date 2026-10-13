@@ -1,41 +1,40 @@
-$extra: 1
-$swapleftright: yes
-$stonepattern: 1
-$display: 0, 13, stone
-$activesides: 1, 1, right
-$group: 1, 1, 2
-$detectormode: 1, 1, lightblueball
-$target: 1, 1, command
-$value: 1, 1, rotateright, flamethrower
-$range: 4, 5, 2
-$group: 4, 1, 3
-$pistonmode: 4, 1, repeatslow
-$sticky: 4, 1, yes
-$eyepercentage: 11, 1, 40
-$fins: 11, 1, 6
-$palette: 11, 1, 13
-$shape: 11, 1, 5
-$stripes: 11, 1, 4
-$tail: 11, 1, 3
-$eyepercentage: 7, 1, 40
-$fins: 7, 1, 6
-$palette: 7, 1, 13
-$shape: 7, 1, 5
-$stripes: 7, 1, 4
-$tail: 7, 1, 3
-$background: 7, 1, 1, 1, 23
-$background: 11, 1, 1, 1, 23
-111111111111111
-1ђ 5Ö1wҼwwwҼww1
-1111111111wwww1
-11=      111111
-11=1          1
-11= й         1
-11=      p    1
-11=    2 p    1
-11111  111111 1
-1  8          1
-1  111111111111
-1            31
+$gameticks: piston, 5
+$activesides: 3, 0, bottom
+$condition: 3, 0, name = FlameThrower
+$movable: 3, 0, no
+$target: 3, 0, command
+$value: 3, 0, $userint1: 1
+$condition: 3, 14, name = FlameThrower
+$movable: 3, 14, no
+$target: 3, 14, command
+$value: 3, 14, $userint1: 0
+$condition: 12, 14, userInt1 = 0
+$detectormode: 12, 14, lightblueball
+$movable: 12, 14, no
+$onecommand: 12, 14, yes
+$target: 12, 14, command
+$value: 12, 14, move, flamethrower, abs, 3, 1, 3, 13, up
+$condition: 13, 14, userInt1 = 1
+$detectormode: 13, 14, lightblueball
+$movable: 13, 14, no
+$onecommand: 13, 14, yes
+$target: 13, 14, command
+$value: 13, 14, move, flamethrower, abs, 3, 1, 3, 13, down
+$group: 11, 13, 2
+$pistonmode: 11, 13, repeatfast
+$sticky: 11, 13, yes
+111ђ11111111111
 1             1
-ђ11111111111111
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1  й          1
+13            1
+1        2 Ë5 1
+ђ11ђ11111111ђђ1

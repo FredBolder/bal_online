@@ -127,6 +127,7 @@ let createLevelTarget = "";
 let createLevelMode = "";
 let createLevelMovable = false;
 let createLevelObject = -1;
+let createLevelOneCommand = false;
 let createLevelOneTime = false;
 let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
@@ -1236,7 +1237,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2216, 2207, 2208, 2209, 2205, 2210, 0, 0];
+            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2216, 2211, 2207, 2208, 2209, 2205, 2210, 0];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -3390,6 +3391,9 @@ function BalPage() {
                 if (createLevelObject === 2209) {
                   msg = setProp(gameData, gameInfo, column, row, "sequence", createLevelSequence, oneSelected);
                 }
+                if (createLevelObject === 2211) {
+                  msg = setProp(gameData, gameInfo, column, row, "oneCommand", createLevelOneCommand, oneSelected);
+                }
               }
 
               if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2117)) {
@@ -3903,6 +3907,19 @@ function BalPage() {
                 if (newValue !== null) {
                   createLevelEvent = newValue.trim();
                   ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            case 2211:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Detectors", "Execute command only once per coordinate list:", ["yes", "no"], 0);
+                if (newValue !== null) {
+                  if (newValue === "yes" || newValue === "no") {
+                    ok = true;
+                    createLevelOneCommand = (newValue === "yes");
+                  }
                 }
               }
               handleCancel();

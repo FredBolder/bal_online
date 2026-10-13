@@ -498,7 +498,7 @@ describe("Pistons", () => {
             greenBalls: 1,
             detectors: [
                 {
-                    x: 3, y: 4, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "setting",
+                    x: 3, y: 4, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "setting",
                     value: "$message: Detected", display: "default", activated: false, activatedCount: 0,
                     sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 },
@@ -530,6 +530,7 @@ describe("Pistons", () => {
                 }
             ],
         }
+        const gameVars = { ...defaultGameVars };
         const input = [
             [1, 1, 1, 0, 0, 1, 1, 1, 1],
             [1, 3, 1, 243, 0, 1, 28, 0, 1],
@@ -539,55 +540,55 @@ describe("Pistons", () => {
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
 
-        let info = checkConditions(input, gameInfo, 3, 3, "group > 10")
+        let info = checkConditions(input, gameInfo, gameVars, 3, 3, "group > 10")
         expect(info).toBe(0); // false
-        info = checkConditions(input, gameInfo, 3, 3, "group > 1")
+        info = checkConditions(input, gameInfo, gameVars, 3, 3, "group > 1")
         expect(info).toBe(1); // true
-        info = checkConditions(input, gameInfo, 3, 3, "groep > 1")
+        info = checkConditions(input, gameInfo, gameVars, 3, 3, "groep > 1")
         expect(info).toBe(-1); // invalid
-        info = checkConditions(input, gameInfo, 3, 3, "group = 2")
+        info = checkConditions(input, gameInfo, gameVars, 3, 3, "group = 2")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 3, "group <> 4")
+        info = checkConditions(input, gameInfo, gameVars, 3, 3, "group <> 4")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 4, "answer = This is a TEST!")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer = This is a TEST!")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 4, "answer = this is a test!")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer = this is a test!")
         expect(info).toBe(0);
-        info = checkConditions(input, gameInfo, 6, 4, "answer ~= this is a test!")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer ~= this is a test!")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 4, "answer *= test")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer *= test")
         expect(info).toBe(0);
-        info = checkConditions(input, gameInfo, 6, 4, "answer *= TEST")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer *= TEST")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 4, "answer ~*= TeSt")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer ~*= TeSt")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 4, "answer = ThisisaTEST!")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "answer = ThisisaTEST!")
         expect(info).toBe(0);
-        info = checkConditions(input, gameInfo, 6, 4, "name = Purple answer ball")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "name = Purple answer ball")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 1, 1, "name = small green ball")
+        info = checkConditions(input, gameInfo, gameVars, 1, 1, "name = small green ball")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 4, "delete = false")
+        info = checkConditions(input, gameInfo, gameVars, 6, 4, "delete = false")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 1, "name = purple ball")
+        info = checkConditions(input, gameInfo, gameVars, 6, 1, "name = purple ball")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 6, 1, "generalName = ball")
+        info = checkConditions(input, gameInfo, gameVars, 6, 1, "generalName = ball")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 1, "name = Tropical fish")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "name = Tropical fish")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 1, "generalName = Fish")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "generalName = Fish")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 1, "fishName = zebra angelfish")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "fishName = zebra angelfish")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 1, "generalName = Piston")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "generalName = Piston")
         expect(info).toBe(0);
-        info = checkConditions(input, gameInfo, 3, 1, "generalName <> Piston")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "generalName <> Piston")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 1, "fishName = zebra angelfish & stripes>3")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "fishName = zebra angelfish & stripes>3")
         expect(info).toBe(1);
-        info = checkConditions(input, gameInfo, 3, 1, "fishName = zebra angelfish & stripes = 3")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "fishName = zebra angelfish & stripes = 3")
         expect(info).toBe(0);
-        info = checkConditions(input, gameInfo, 3, 1, "name = Tropical fish | stripes = 3")
+        info = checkConditions(input, gameInfo, gameVars, 3, 1, "name = Tropical fish | stripes = 3")
         expect(info).toBe(1);
     });
 

@@ -346,6 +346,7 @@ export function checkSettings(data, settings) {
     { name: "$noteoverride", params: 3, xy: true, yesno: -1 },
     { name: "$octaves", params: 3, xy: true, yesno: -1 },
     { name: "$notes", params: 0, xy: true, yesno: -1 },
+    { name: "$onecommand", params: 3, xy: true, yesno: 2 },
     { name: "$onetime", params: 3, xy: true, yesno: 2 },
     { name: "$palette", params: 3, xy: true, yesno: -1 },
     { name: "$part", params: 3, xy: true, yesno: -1 },
@@ -376,6 +377,8 @@ export function checkSettings(data, settings) {
     { name: "$target", params: 3, xy: true, yesno: -1 },
     { name: "$text", params: 0, xy: true, yesno: -1 },
     { name: "$twoblueconnected", params: 1, xy: false, yesno: 0 },
+    { name: "$userint1", params: 1, xy: false, yesno: -1 },
+    { name: "$userint2", params: 1, xy: false, yesno: -1 },
     { name: "$userkey1", params: 0, xy: false, yesno: -1 },
     { name: "$userkey2", params: 0, xy: false, yesno: -1 },
     { name: "$value", params: 0, xy: true, yesno: -1 },
@@ -740,6 +743,7 @@ export function checkSettings(data, settings) {
                   break;
               }
               break;
+            case "$onecommand":
             case "$onetime":
               if (validXY && !["ђ", 255].includes(data[y][x])) {
                 msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
@@ -962,6 +966,18 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$twoblueconnected":
+              break;
+            case "$userint1":
+              val_int = tryParseInt(value, null);
+              if (val_int === null) {
+                msg += `${settingNr(i)}Invalid value ${value} for userInt1.\n`;
+              }
+              break;
+            case "$userint2":
+              val_int = tryParseInt(value, null);
+              if (val_int === null) {
+                msg += `${settingNr(i)}Invalid value ${value} for userInt2.\n`;
+              }
               break;
             case "$value":
               if (validXY && !["ђ", 255].includes(data[y][x])) {
@@ -2192,11 +2208,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             changeMusicBoxProperty(gameInfo, x, y, "octaves", val_int);
           }
           break;
+        case "$onecommand":
         case "$onetime":
           if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
             break;
           }
-          setProp(gameData, gameInfo, x, y, "oneTime", valuesLowerCase[2] === "yes", false);
+          setProp(gameData, gameInfo, x, y, name === "$onetime" ? "oneTime" : "oneCommand", valuesLowerCase[2] === "yes", false);
           break;
         case "$palette":
           if (values.length !== 3 || !validXY) {
@@ -2441,6 +2458,18 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               break;
             default:
               break;
+          }
+          break;
+        case "$userint1":
+          val_int = tryParseInt(value, null);
+          if (val_int !== null) {
+            gameVars.userInt1 = val_int;
+          }
+          break;
+        case "$userint2":
+          val_int = tryParseInt(value, null);
+          if (val_int !== null) {
+            gameVars.userInt2 = val_int;
           }
           break;
         case "$userkey1":

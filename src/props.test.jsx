@@ -21,7 +21,7 @@ describe("levels", () => {
             greenBalls: 1,
             detectors: [
                 {
-                    x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                    x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                     display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ]
@@ -38,7 +38,7 @@ describe("levels", () => {
         expect(msg).toBe("");
         expect(gameInfo.detectors).toEqual([
             {
-                x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
             }
         ]);
@@ -46,7 +46,7 @@ describe("levels", () => {
         expect(msg).toBe("Property movable does not exist on object.");
         expect(gameInfo.detectors).toEqual([
             {
-                x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
             }
         ]);
@@ -54,7 +54,7 @@ describe("levels", () => {
         expect(msg).toBe("Invalid value fred for detector property mode");
         expect(gameInfo.detectors).toEqual([
             {
-                x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
             }
         ]);
@@ -62,7 +62,7 @@ describe("levels", () => {
         expect(msg).toBe("Invalid value 900 for detector property group");
         expect(gameInfo.detectors).toEqual([
             {
-                x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
             }
         ]);
@@ -70,7 +70,7 @@ describe("levels", () => {
         expect(msg).toBe("");
         expect(gameInfo.detectors).toEqual([
             {
-                x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 32
             }
         ]);
@@ -78,7 +78,7 @@ describe("levels", () => {
         expect(msg).toBe("Property group does not exist on object.");
         expect(gameInfo.detectors).toEqual([
             {
-                x: 2, y: 5, mode: "all", oneTime: false, activeSides: ["top"], range: 1, target: "group", value: "",
+                x: 2, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 32
             }
         ]);

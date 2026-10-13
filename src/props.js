@@ -139,6 +139,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             break;
         case "inverted":
         case "movable":
+        case "oneCommand":
         case "oneTime":
         case "sequence":
         case "sticky":
@@ -327,7 +328,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isConveyorBelt && ["direction", "group", "mode"].includes(prop)) {
         list = "conveyorBelts";
     }
-    if (isDetector && ["condition", "display", "event", "group", "movable", "mode", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
+    if (isDetector && ["condition", "display", "event", "group", "movable", "mode", "oneCommand", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
         list = "detectors";
     }
     if (isDisappearingStone && ["group", "mode"].includes(prop)) {
