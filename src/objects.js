@@ -408,6 +408,7 @@ export function objectNumberToObjectGeneralName(objectNumber) {
 
 export function objectNumberToObjectName(objectNumber) {
     switch (objectNumber) {
+        case 0: return "Empty";
         case 1: return "Stone";
         case 2: return "Blue ball";
         case 3: return "Small green ball";

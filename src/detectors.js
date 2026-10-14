@@ -72,6 +72,14 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], -1, -1);
         return;
     }
+    if ((cmd === "dec" || cmd === "inc") && (values.length === 2 || values.length === 3)) {
+        n1 = 1;
+        if (values.length === 3 && intValues[2] !== invalidInt) {
+            n1 = intValues[2];
+        }
+        commandDecInc(gameVars, cmd, valuesLowerCase[1], n1);
+        return;
+    }
     if (cmd === "rotateleft" && values.length === 2) {
         commandRotate(backData, gameData, gameInfo, valuesLowerCase[1], -1, -1, true);
         return;
@@ -462,6 +470,24 @@ export function commands(backData, gameData, gameInfo, gameVars, detector) {
     for (let i = 0; i < commandList.length; i++) {
         commandLine = commandList[i].trim();
         command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine, detector.oneCommand);
+    }
+}
+
+function commandDecInc(gameVars, cmd, name, n) {
+    let value = n;
+
+    if (cmd === "dec") {
+        value = -value;
+    }
+    switch (name) {
+        case "userint1":
+            gameVars.userInt1 += value;
+            break;
+        case "userint2":
+            gameVars.userInt2 += value;
+            break;
+        default:
+            break;
     }
 }
 
