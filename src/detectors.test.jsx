@@ -811,6 +811,11 @@ describe("Pistons", () => {
             greenBalls: 1,
             detectors: [
                 {
+                    x: 5, y: 5, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
+                    value: "inc, userInt1", display: "stone", activated: false,
+                    activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
+                },
+                {
                     x: 0, y: 6, mode: "event", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group",
                     value: "", display: "stone", activated: false,
                     activatedCount: 0, sequence: false, movable: false, condition: "", event: "MovedLeftByPlayer", text: "", group: 3
@@ -820,14 +825,14 @@ describe("Pistons", () => {
                 { x: 1, y: 1, direction: "right", mode: "onestep", keepMoving: false, movable: false, group: 3 },
             ],
         }
-        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated], userInt1: 5 };
         const input = [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 209, 4, 0, 0, 0, 0, 1, 1],
             [1, 1, 1, 1, 0, 0, 0, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 3, 1],
             [1, 0, 0, 0, 0, 0, 2, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 255, 1, 1, 1],
             [255, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         const expectedOutput = [
@@ -836,7 +841,7 @@ describe("Pistons", () => {
             [1, 1, 1, 1, 0, 0, 0, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 3, 1],
             [1, 0, 0, 0, 0, 2, 0, 0, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 255, 1, 1, 1],
             [255, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
         let info = moveLeft(backData, input, gameInfo, gameVars);
@@ -846,19 +851,34 @@ describe("Pistons", () => {
         expect(info).toEqual({ updated: true, explosion: false });
         expect(gameInfo.detectors).toEqual([
             {
+                x: 5, y: 5, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
+                value: "inc, userInt1", display: "stone", activated: false,
+                activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
+            },
+            {
                 x: 0, y: 6, mode: "event", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group",
                 value: "", display: "stone", activated: true,
                 activatedCount: 1, sequence: false, movable: false, condition: "", event: "MovedLeftByPlayer", text: "", group: 3
             }
         ]);
         info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "event_reset");
+        info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "");
         expect(gameInfo.detectors).toEqual([
+            {
+                x: 5, y: 5, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
+                value: "inc, userInt1", display: "stone", activated: true,
+                activatedCount: 1, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
+            },
             {
                 x: 0, y: 6, mode: "event", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group",
                 value: "", display: "stone", activated: false,
                 activatedCount: 1, sequence: false, movable: false, condition: "", event: "MovedLeftByPlayer", text: "", group: 3
             }
         ]);
+        expect(gameVars.userInt1).toBe(6);
+        expect(gameVars.userInt2).toBe(0);
+        expect(gameVars.userInt3).toBe(0);
+        expect(gameVars.userInt4).toBe(0);
     });
 
     // Insert new tests here

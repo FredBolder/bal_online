@@ -1,22 +1,17 @@
-$movable: 5, 14, no
-$target: 5, 14, command
-$value: 5, 14, inc, userInt1
-$condition: 0, 13, userInt1 = 3
-$group: 0, 13, 3
-$movable: 0, 13, no
+$condition: 0, 11, userInt1 = 1
+$movable: 0, 11, no
 $condition: 0, 12, userInt1 = 2
 $group: 0, 12, 2
 $movable: 0, 12, no
-$condition: 0, 11, userInt1 = 1
-$movable: 0, 11, no
-$condition: 0, 14, userInt1 = 4
-$group: 0, 14, 3
-$movable: 0, 14, no
-$target: 0, 14, command
-$value: 0, 14, $userint1: 1
+$condition: 0, 13, userInt1 = 3
+$group: 0, 13, 3
+$movable: 0, 13, no
+$movable: 5, 14, no
+$target: 5, 14, command
+$value: 5, 14, inc, userInt1, 1, 3, 1
 $movable: 7, 14, no
 $target: 7, 14, command
-$value: 7, 14, dec, userInt1
+$value: 7, 14, dec, userInt1, 1, 1, 3
 $group: 1, 6, 2
 $group: 1, 7, 3
 111111111111111
@@ -33,4 +28,4 @@ $group: 1, 7, 3
 ђ             1
 ђ            31
 ђ     2       1
-ђ1111ђ1ђ1111111
+11111ђ1ђ1111111

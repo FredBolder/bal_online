@@ -25,14 +25,18 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let lockedDoor = null;
     let objectNumber = 0;
     let pusher = null;
+    let source = null;
     let ticks = 50;
     let yellowBall = null;
     let val_int = 0;
     let valid = false;
+    let variable = "";
     const value = commandLine.trim();
     const values = value.split(",");
     const valuesLowerCase = [];
     let n1 = 0;
+    let n2 = 0;
+    let n3 = 0;
     let x1 = 0;
     let y1 = 0;
     let x2 = 0;
@@ -72,12 +76,26 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], -1, -1);
         return;
     }
-    if ((cmd === "dec" || cmd === "inc") && (values.length === 2 || values.length === 3)) {
-        n1 = 1;
-        if (values.length === 3 && intValues[2] !== invalidInt) {
+    if ((cmd === "dec" || cmd === "inc") && (values.length >= 2)) {
+        n1 = null;
+        n2 = null;
+        n3 = null;
+        source = gameVars;
+        variable = valuesLowerCase[1];
+        if (values.length >= 3 && intValues[2] !== invalidInt) {
             n1 = intValues[2];
         }
-        commandDecInc(gameVars, cmd, valuesLowerCase[1], n1);
+        if (values.length >= 4 && intValues[3] !== invalidInt) {
+            n2 = intValues[3];
+        }
+        if (values.length >= 5 && intValues[4] !== invalidInt) {
+            n3 = intValues[4];
+        }
+        if (cmd === "inc") {
+            commandInc(source, variable, n1, n2, n3);
+        } else {
+            commandDec(source, variable, n1, n2, n3);
+        }
         return;
     }
     if (cmd === "rotateleft" && values.length === 2) {
@@ -450,6 +468,124 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
     }
 }
 
+function getVariable(source, name) {
+    switch (name) {
+        case "conveyorbeltcountto":
+            return source.conveyorBeltCountTo;
+        case "disappearingstonescountto":
+            return source.disappearingStonesCountTo;
+        case "elevatorcountto":
+            return source.elevatorCountTo;
+        case "fishcountto":
+            return source.fishCountTo;
+        case "pistonsrepeatfastmodecountto":
+            return source.pistonsRepeatFastModeCountTo;
+        case "tropicalfishcounttooverride":
+            return source.tropicalFishCountToOverride;
+        case "userint1":
+            return source.userInt1;
+        case "userint2":
+            return source.userInt2;
+        case "userint3":
+            return source.userInt3;
+        case "userint4":
+            return source.userInt4;
+        default:
+            return 0;
+    }
+}
+
+function setVariable(source, name, value) {
+    switch (name) {
+        case "conveyorbeltcountto":
+            if (value < 1) {
+                return;
+            }
+            source.conveyorBeltCountTo = value;
+            break;
+        case "disappearingstonescountto":
+            if (value < 1) {
+                return;
+            }
+            source.disappearingStonesCountTo = value;
+            break;
+        case "elevatorcountto":
+            if (value < 1) {
+                return;
+            }
+            source.elevatorCountTo = value;
+            break;
+        case "fishcountto":
+            if (value < 1) {
+                return;
+            }
+            source.fishCountTo = value;
+            break;
+        case "pistonsrepeatfastmodecountto":
+            if (value < 1) {
+                return;
+            }
+            source.pistonsRepeatFastModeCountTo = value;
+            break;
+        case "tropicalfishcounttooverride":
+            if (value < 0) {
+                return;
+            }
+            source.tropicalFishCountToOverride = value;
+            break;
+        case "userint1":
+            source.userInt1 = value;
+            break;
+        case "userint2":
+            source.userInt2 = value;
+            break;
+        case "userint3":
+            source.userInt3 = value;
+            break;
+        case "userint4":
+            source.userInt4 = value;
+            break;
+        default:
+            break;
+    }
+}
+
+function commandDec(source, name, decrement, min, reset) {
+    if (decrement === null) {
+        decrement = 1;
+    }
+
+    let value = getVariable(source, name) - decrement;
+
+    if (min !== null && value < min) {
+        if (reset === null || reset < min) {
+            reset = min;
+        }
+        value = reset;
+    }
+
+    setVariable(source, name, value);
+}
+
+function commandInc(source, name, increment, max, reset) {
+    if (increment === null) {
+        increment = 1;
+    }
+
+    let value = getVariable(source, name) + increment;
+
+    if (max !== null && value > max) {
+        if (reset === null || reset > max) {
+            reset = max;
+        }
+        value = reset;
+    }
+
+    setVariable(source, name, value);
+}
+
+
+
 export function commands(backData, gameData, gameInfo, gameVars, detector) {
     const value = detector.value.trim();
     let commandLine = "";
@@ -470,24 +606,6 @@ export function commands(backData, gameData, gameInfo, gameVars, detector) {
     for (let i = 0; i < commandList.length; i++) {
         commandLine = commandList[i].trim();
         command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine, detector.oneCommand);
-    }
-}
-
-function commandDecInc(gameVars, cmd, name, n) {
-    let value = n;
-
-    if (cmd === "dec") {
-        value = -value;
-    }
-    switch (name) {
-        case "userint1":
-            gameVars.userInt1 += value;
-            break;
-        case "userint2":
-            gameVars.userInt2 += value;
-            break;
-        default:
-            break;
     }
 }
 

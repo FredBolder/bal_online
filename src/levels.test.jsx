@@ -214,11 +214,13 @@ describe("levels", () => {
             [1, 1, 1, 1, 0, 1, 1, 1, 1, 1]
         ];
         const settings = [
-            "$userint1: 125", "$userint2: -345"
+            "$userint1: 125", "$userint2: -345", "$userint4: 456"
         ];
         loadLevelSettings(backData, data, gameInfo, gameVars, settings, true)
         expect(gameVars.userInt1).toBe(125);
         expect(gameVars.userInt2).toBe(-345);
+        expect(gameVars.userInt3).toBe(0);
+        expect(gameVars.userInt4).toBe(456);
     });
 
     it("Hints in all easy levels", () => {

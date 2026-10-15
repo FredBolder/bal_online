@@ -241,14 +241,12 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
-    if (gameVars.userInt1 !== 0) {
-        line = `$userint1: ${gameVars.userInt1}`;
-        lines.push(line);
-    }
-
-    if (gameVars.userInt2 !== 0) {
-        line = `$userint2: ${gameVars.userInt2}`;
-        lines.push(line);
+    for (let i = 1; i <= 4; i++) {
+        const name = `userInt${i}`;
+        if (gameVars[name] !== 0) {
+            line = `$userint${i}: ${gameVars[name]}`;
+            lines.push(line);
+        }
     }
 
     if (gameVars.yellowSlowdownerDurationTicks !== 250) {

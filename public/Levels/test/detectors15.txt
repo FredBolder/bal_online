@@ -1,0 +1,19 @@
+$movable: 2, 3, no
+$target: 2, 3, command
+$value: 2, 3, dec, FishCountTo, 1, 1
+$background: 3, 6, 1, 1, 23
+$background: 9, 7, 1, 1, 23
+$background: 4, 9, 1, 1, 23
+111111111111111
+13            1
+12            1
+11ђ1          1
+1             1
+1wwwwwwwwwwwww1
+1wwfwwwwwwwwww1
+1wwwwwwwwfwwww1
+1wwwwwwwwwwwww1
+1wwwfwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+111111111111111

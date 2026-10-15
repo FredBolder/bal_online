@@ -379,6 +379,8 @@ export function checkSettings(data, settings) {
     { name: "$twoblueconnected", params: 1, xy: false, yesno: 0 },
     { name: "$userint1", params: 1, xy: false, yesno: -1 },
     { name: "$userint2", params: 1, xy: false, yesno: -1 },
+    { name: "$userint3", params: 1, xy: false, yesno: -1 },
+    { name: "$userint4", params: 1, xy: false, yesno: -1 },
     { name: "$userkey1", params: 0, xy: false, yesno: -1 },
     { name: "$userkey2", params: 0, xy: false, yesno: -1 },
     { name: "$value", params: 0, xy: true, yesno: -1 },
@@ -968,15 +970,12 @@ export function checkSettings(data, settings) {
             case "$twoblueconnected":
               break;
             case "$userint1":
-              val_int = tryParseInt(value, null);
-              if (val_int === null) {
-                msg += `${settingNr(i)}Invalid value ${value} for userInt1.\n`;
-              }
-              break;
             case "$userint2":
+            case "$userint3":
+            case "$userint4":
               val_int = tryParseInt(value, null);
               if (val_int === null) {
-                msg += `${settingNr(i)}Invalid value ${value} for userInt2.\n`;
+                msg += `${settingNr(i)}Invalid value ${value} for userInt${name.slice(name.length - 1)}.\n`;
               }
               break;
             case "$value":
@@ -2461,15 +2460,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           break;
         case "$userint1":
-          val_int = tryParseInt(value, null);
-          if (val_int !== null) {
-            gameVars.userInt1 = val_int;
-          }
-          break;
         case "$userint2":
+        case "$userint3":
+        case "$userint4":
           val_int = tryParseInt(value, null);
           if (val_int !== null) {
-            gameVars.userInt2 = val_int;
+            gameVars[`userInt${name.slice(name.length - 1)}`] = val_int;
           }
           break;
         case "$userkey1":

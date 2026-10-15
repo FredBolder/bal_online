@@ -1446,6 +1446,8 @@ export function initGameVars(vars) {
     vars.tropicalFishCountToOverride = 0;
     vars.userInt1 = 0;
     vars.userInt2 = 0;
+    vars.userInt3 = 0;
+    vars.userInt4 = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;
     vars.yellowCounter = 0;
