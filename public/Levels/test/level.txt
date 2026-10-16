@@ -1,32 +1,24 @@
-$userint1: 2
-$condition: 0, 11, userInt1 = 1
-$movable: 0, 11, no
-$condition: 0, 12, userInt1 = 2
-$group: 0, 12, 2
-$movable: 0, 12, no
-$condition: 0, 13, userInt1 = 3
-$group: 0, 13, 3
-$movable: 0, 13, no
-$movable: 5, 14, no
-$target: 5, 14, command
-$value: 5, 14, inc, userInt1, 1, 3, 1
-$movable: 7, 14, no
-$target: 7, 14, command
-$value: 7, 14, dec, userInt1, 1, 1, 3
-$group: 1, 6, 2
-$group: 1, 7, 3
+$extra: 1
+$stonepattern: 2
+$activesides: 11, 0, bottom
+$display: 11, 0, stone
+$detectormode: 11, 0, blueball
+$onetime: 11, 0, yes
+$range: 11, 0, 2
+$target: 11, 0, command
+$value: 11, 0, delete, stone, abslist, 11, 3, 12, 3, 13, 9, 14, 8, 14, 9, 14, 10, 14, 2 | addcolumns, 5, yes | create, smallgreenball, abs, 18, 12 | create, stone, abs, 18, 11 | delete, whiteball, abs, 11, 5, 12, 5 | create, trianglestonebottomleft, abslist, 13, 9, 14, 10 | create, spikeup, abslist, 11, 5, 12, 5, 15, 13
+11111111111ђ111
+1            31
+1  =1Џ11      1
+1 9=99   111111
+1  =         11
+111=1 Џ1 4    1
+1  = p 111Џ11 1
+1  =    18    1
+1  =11  11    1
+1  =       1111
+1  =         11
+1  =         31
+1  =          1
+1  =2         1
 111111111111111
-1             1
-1             1
-1             1
-1             1
-1њ            1
-1њ            1
-1њ            1
-1             1
-1             1
-1             1
-ђ             1
-ђ            31
-ђ     2       1
-11111ђ1ђ1111111

@@ -1,0 +1,24 @@
+$extra: 1
+$stonepattern: 2
+$activesides: 11, 0, bottom
+$display: 11, 0, stone
+$detectormode: 11, 0, blueball
+$onetime: 11, 0, yes
+$range: 11, 0, 2
+$target: 11, 0, command
+$value: 11, 0, delete, stone, abslist, 11, 3, 12, 3, 13, 9, 14, 8, 14, 9, 14, 10, 14, 2 | addcolumns, 5, yes | create, smallgreenball, abs, 18, 12 | create, stone, abs, 18, 11 | delete, whiteball, abs, 11, 5, 12, 5 | create, trianglestonebottomleft, abslist, 13, 9, 14, 10 | create, spikeup, abslist, 11, 5, 12, 5, 15, 13
+11111111111ђ111
+1            31
+1  =1Џ11      1
+1 9=99   111111
+1  =         11
+111=1 Џ1 4    1
+1  = p 111Џ11 1
+1  =    18    1
+1  =11  11    1
+1  =       1111
+1  =         11
+1  =         31
+1  =          1
+1  =2         1
+111111111111111

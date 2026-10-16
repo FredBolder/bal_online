@@ -72,6 +72,21 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         }
         return;
     }
+    if (cmd === "addcolumns" || cmd === "addrows") {
+        let addStones = false;
+        n1 = 1;
+        if (values.length >= 2 && intValues[1] !== invalidInt) {
+            n1 = intValues[1];
+        }
+        if (values.length >= 3 && valuesLowerCase[2] === "yes") {
+            addStones = true;
+        }
+        if (cmd === "addcolumns") {
+            addColumns(backData, gameData, n1, addStones);
+        } else {
+            addRows(backData, gameData, n1, addStones);
+        }
+    }
     if (cmd === "changedirection" && values.length === 2) {
         commandChangeDirection(gameData, gameInfo, valuesLowerCase[1], -1, -1);
         return;
@@ -304,6 +319,64 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                 continue;
             }
         }
+    }
+}
+
+export function addColumns(backData, gameData, n, stones) {
+    if ((n < 1) || (n > 25)) {
+        return;
+    }
+    let data = 0;
+    const newCellsEmpty = [];
+    const newCellsStones = [];
+    const newCells = [];
+    for (let i = 0; i < n; i++) {
+        newCellsEmpty.push(0);
+        newCellsStones.push(1);
+        if (stones && (i === (n - 1))) {
+            data = 1;
+        } else {
+            data = 0;
+        }
+        newCells.push(data);
+    }
+    for (let i = 0; i < gameData.length; i++) {
+        if (stones && (i === 0 || i === (gameData.length - 1))) {
+            gameData[i].push(...newCellsStones);
+        } else {
+            gameData[i].push(...newCells);
+        }
+        backData[i].push(...newCellsEmpty);
+    }
+}
+
+export function addRows(backData, gameData, n, stones) {
+    if ((n < 1) || (n > 25)) {
+        return;
+    }
+
+    const columns = gameData[0].length;
+    let data = 0;
+    const newRowEmpty = [];
+    const newRowStones = [];
+    const newRow = [];
+    for (let i = 0; i < columns; i++) {
+        newRowEmpty.push(0);
+        newRowStones.push(1);
+        if (stones && (i === 0 || i === (columns - 1))) {
+            data = 1;
+        } else {
+            data = 0;
+        }
+        newRow.push(data);
+    }
+    for (let i = 0; i < n; i++) {
+        if (stones && (i === (n - 1))) {
+            gameData.push([...newRowStones]);
+        } else {
+            gameData.push([...newRow]);
+        }
+        backData.push([...newRowEmpty]);
     }
 }
 

@@ -140,6 +140,15 @@ export function checkCondition(gameData, gameInfo, gameVars, x, y, condition) {
         case "generalName":
             value1 = objectGeneralName;
             break;
+        case "levelHeight":
+            value1 = gameData.length;
+            break;
+        case "levelWidth":
+            value1 = 0;
+            if (gameData.length > 0) {
+                value1 = gameData[0].length;
+            }
+            break;
         case "name":
             value1 = objectName;
             break;
