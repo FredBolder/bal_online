@@ -141,6 +141,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         case "movable":
         case "oneCommand":
         case "oneTime":
+        case "repeat":
         case "sequence":
         case "sticky":
             if (typeof value !== "boolean") {
@@ -349,7 +350,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isMover && ["direction", "inverted", "mode"].includes(prop)) {
         list = "movers";
     }
-    if (isMusicBox && ["direction", "group", "mode"].includes(prop)) {
+    if (isMusicBox && ["direction", "group", "mode", "repeat"].includes(prop)) {
         list = "musicBoxes";
     }
     if (isPiston && ["group", "inverted", "mode", "sticky"].includes(prop)) {

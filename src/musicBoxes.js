@@ -230,7 +230,7 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 musicBox.noteIndex++;
                 if (musicBox.noteIndex >= musicBox.notes.length) {
                     musicBox.noteIndex = 0;
-                    if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door")) {
+                    if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door") || (musicBox.mode === "song" && !musicBox.repeat)) {
                         musicBox.ended = true;
                     }
                     if (musicBox.ended && isChordOrIntervalMode(musicBox.mode)) {

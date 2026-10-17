@@ -133,6 +133,7 @@ let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
 let createLevelRange = 1;
 let createLevelRaster = false;
+let createLevelRepeat = false;
 let createLevelSelectedCell = null;
 let createLevelSequence = false;
 let createLevelSides = null;
@@ -1300,7 +1301,7 @@ function BalPage() {
             break;
           case 6:
             // Music box
-            arr1 = [157, 2092, 2039, 2133, 2034, 2035, 2103, 2146, 2147];
+            arr1 = [157, 2092, 2212, 2039, 2133, 2034, 2035, 2103, 2146, 2147];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
             break;
           case 7:
@@ -3112,6 +3113,9 @@ function BalPage() {
               if (createLevelObject === 2215) {
                 msg = setProp(gameData, gameInfo, column, row, "range", createLevelRange, oneSelected);
               }
+              if (createLevelObject === 2212) {
+                msg = setProp(gameData, gameInfo, column, row, "repeat", createLevelRepeat, oneSelected);
+              }
 
 
               if ((createLevelObject === 2144) && (createLevelSides !== null)) {
@@ -3694,7 +3698,7 @@ function BalPage() {
           case 2208:
             ok = false;
             if (row > 0) {
-              newValue = await showSelect("Detectors / Flamethrowers / Forces / Pushers", "Movable by player:", ["yes", "no"], 0);
+              newValue = await showSelect("Detectors / Flamethrowers / Forces / Pushers", "Movable by player:", ["yes", "no"], createLevelMovable ? 0 : 1);
               if (newValue !== null) {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;
@@ -3984,6 +3988,19 @@ function BalPage() {
 
         if (createLevelMenu === menuToNumber("musicboxes")) {
           switch (createLevelObject) {
+            case 2212:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Music boxes", "Repeat song:", ["yes", "no"], createLevelRepeat ? 0 : 1);
+                if (newValue !== null) {
+                  if (newValue === "yes" || newValue === "no") {
+                    ok = true;
+                    createLevelRepeat = (newValue === "yes");
+                  }
+                }
+              }
+              handleCancel();
+              break;
             case 2039:
               ok = false;
               if (row > 0) {

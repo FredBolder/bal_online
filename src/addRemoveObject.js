@@ -221,6 +221,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 notes: ["C4"],
                 noteIndex: 0,
                 noteOverride: "none",
+                repeat: true,
                 octaves: 1,
                 tripletStart: -1,
                 stepsPerMeasure: 0,

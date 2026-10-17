@@ -211,6 +211,7 @@ export function getGameInfo(backData, gameData) {
                         notes: ["C4"],
                         noteIndex: 0,
                         noteOverride: "none",
+                        repeat: true,
                         octaves: 1,
                         tripletStart: -1,
                         part: "bottom",
@@ -490,10 +491,10 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 if (obj.notes.length > 0) {
                     firstNote = obj.notes[0];
                 }
-                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Ended: ${obj.ended}, 
-                Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, Note override: ${obj.noteOverride}, 
-                Octaves: ${obj.octaves}, Steps per measure: ${obj.stepsPerMeasure}, On one: ${obj.onOne}, Part: ${obj.part}, Direction: ${obj.direction}, 
-                Group: ${obj.group}`;
+                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Ended: ${obj.ended}, `; 
+                extraInfo += `Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, `;
+                extraInfo += `Note override: ${obj.noteOverride}, Repeat: ${obj.repeat}, Octaves: ${obj.octaves}, Steps per measure: ${obj.stepsPerMeasure}, `;
+                extraInfo += `On one: ${obj.onOne}, Part: ${obj.part}, Direction: ${obj.direction}, Group: ${obj.group}`;
             }
             info = `Music box, ` + extraInfo;
             break;
@@ -1378,6 +1379,7 @@ export function initGameVars(vars) {
     vars.conveyorBeltCounter = 0;
     vars.conveyorBeltCountTo = 5;
     vars.currentLevel = 200;
+    vars.darkPercentage = 0;
     vars.disappearingStonesCounter = 0;
     vars.disappearingStonesCountTo = 5;
     vars.displaySize = { columns: 0, rows: 0 };

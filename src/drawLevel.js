@@ -4727,7 +4727,7 @@ function drawLevel(
           drawAbbreviation("1cmd");
           break;
         case 2212:
-          drawAbbreviation("??");
+          drawAbbreviation("rep");
           break;
         case 2213:
           drawWater();
@@ -4780,6 +4780,11 @@ function drawLevel(
   }
 
   drawAllTeleports();
+
+  if (gameVars.darkPercentage > 0) {
+    ctx.fillStyle = `rgba(0, 0, 0, ${gameVars.darkPercentage / 100})`;
+    ctx.fillRect(leftMargin, topMargin, gameWidth, gameHeight);
+  }
 
   // Electricity
   if (gameInfo.electricityActive) {

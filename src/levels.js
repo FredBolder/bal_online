@@ -310,6 +310,7 @@ export function checkSettings(data, settings) {
     { name: "$color", params: 2, xy: false, yesno: -1 },
     { name: "$condition", params: 0, xy: true, yesno: -1 },
     { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
+    { name: "$darkpercentage", params: 1, xy: false, yesno: -1 },
     { name: "$detectormode", params: 3, xy: true, yesno: -1 },
     { name: "$direction", params: 3, xy: true, yesno: -1 },
     { name: "$disappearingstonemode", params: 3, xy: true, yesno: -1 },
@@ -359,6 +360,7 @@ export function checkSettings(data, settings) {
     { name: "$pushermode", params: 3, xy: true, yesno: -1 },
     { name: "$question", params: 0, xy: true, yesno: -1 },
     { name: "$range", params: 3, xy: true, yesno: -1 },
+    { name: "$repeat", params: 3, xy: true, yesno: 2 },
     { name: "$restorepoint", params: 1, xy: false, yesno: -1 },
     { name: "$seaanemonesswayamount", params: 1, xy: false, yesno: -1 },
     { name: "$seaanemonesswayspeed", params: 1, xy: false, yesno: -1 },
@@ -801,6 +803,7 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}No piston found at the coordinates ${x}, ${y}.\n`;
               }
               break;
+            case "$darkpercentage":
             case "$plantsswayamount":
             case "$plantsswayspeed":
             case "$seaanemonesswayamount":
@@ -846,6 +849,11 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No detector or flamethrower found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$repeat":
+              if (validXY && !["M", 157].includes(data[y][x])) {
+                msg += `${settingNr(i)}No music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$restorepoint":
@@ -1794,6 +1802,15 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$darkpercentage":
+          if (values.length !== 1) {
+            break;
+          }
+          val_int = tryParseInt(values[0], -1);
+          if ((val_int >= 0) && (val_int <= 100)) {
+            gameVars.darkPercentage = val_int;
+          }
+          break;
         case "$direction":
           if (values.length !== 3 || !validXY) {
             break;
@@ -2302,6 +2319,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           val_int = tryParseInt(values[2], -1);
           setProp(gameData, gameInfo, x, y, "range", val_int, false);
+          break;
+        case "$repeat":
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, "repeat", valuesLowerCase[2] === "yes", false);
           break;
         case "$restorepoint":
           val_int = tryParseInt(values[0], -1);

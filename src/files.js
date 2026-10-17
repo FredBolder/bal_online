@@ -106,6 +106,11 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.darkPercentage !== 0) {
+        line = `$darkpercentage: ${gameVars.darkPercentage}`;
+        lines.push(line);
+    }
+
     if (gameVars.disappearingStonesCountTo !== 5) {
         line = `$gameticks: disappearingstone, ${gameVars.disappearingStonesCountTo}`;
         lines.push(line);
@@ -648,6 +653,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
         if (musicBox.noteOverride !== "none") {
             line = `$noteoverride: ${musicBox.x}, ${musicBox.y}, ${musicBox.noteOverride}`;
+            lines.push(line);
+        }
+        if (!musicBox.repeat) {
+            line = `$repeat: ${musicBox.x}, ${musicBox.y}, no`;
             lines.push(line);
         }
         if (musicBox.octaves !== 1) {

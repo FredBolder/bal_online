@@ -545,6 +545,8 @@ function getVariable(source, name) {
     switch (name) {
         case "conveyorbeltcountto":
             return source.conveyorBeltCountTo;
+        case "darkpercentage":
+            return source.darkPercentage;
         case "disappearingstonescountto":
             return source.disappearingStonesCountTo;
         case "elevatorcountto":
@@ -575,6 +577,12 @@ function setVariable(source, name, value) {
                 return;
             }
             source.conveyorBeltCountTo = value;
+            break;
+        case "darkpercentage":
+            if (value < 0 || value > 100) {
+                return;
+            }
+            source.darkPercentage = value;
             break;
         case "disappearingstonescountto":
             if (value < 1) {
