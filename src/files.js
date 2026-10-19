@@ -65,14 +65,6 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
-    if (gameVars.fgcolor !== null) {
-        for (let i = 0; i < gameVars.fgcolor.length; i++) {
-            const fg = gameVars.fgcolor[i];
-            line = `$fgcolor: ${fg.x}, ${fg.y}, ${fg.w}, ${fg.h}, ${fg.color}`;
-            lines.push(line);
-        }
-    }
-
     if (gameVars.brownCountTo !== 5) {
         line = `$gameticks: brownball, ${gameVars.brownCountTo}`;
         lines.push(line);
@@ -91,14 +83,6 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     if (gameVars.colorWater !== "#00005A") {
         line = `$color: water, ${gameVars.colorWater}`;
         lines.push(line);
-    }
-
-    if (gameVars.ignorePattern !== null) {
-        for (let i = 0; i < gameVars.ignorePattern.length; i++) {
-            const ip = gameVars.ignorePattern[i];
-            line = `$ignorepattern: ${ip.x}, ${ip.y}, ${ip.w}, ${ip.h}`;
-            lines.push(line);
-        }
     }
 
     if (gameVars.conveyorBeltCountTo !== 5) {
@@ -131,6 +115,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.fgcolor !== null) {
+        for (let i = 0; i < gameVars.fgcolor.length; i++) {
+            const fg = gameVars.fgcolor[i];
+            line = `$fgcolor: ${fg.x}, ${fg.y}, ${fg.w}, ${fg.h}, ${fg.color}`;
+            lines.push(line);
+        }
+    }
+
     if (gameVars.fishCountTo !== 12) {
         line = `$gameticks: fish, ${gameVars.fishCountTo}`;
         lines.push(line);
@@ -141,14 +133,22 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.iceCountTo !== 250) {
+        line = `$gameticks: ice, ${gameVars.iceCountTo}`;
+        lines.push(line);
+    }
+
     if (!gameVars.iceMeltsFromAmbientTemperature) {
         line = `$icemeltsfromambienttemperature: no`;
         lines.push(line);
     }
 
-    if (gameVars.iceCountTo !== 250) {
-        line = `$gameticks: ice, ${gameVars.iceCountTo}`;
-        lines.push(line);
+    if (gameVars.ignorePattern !== null) {
+        for (let i = 0; i < gameVars.ignorePattern.length; i++) {
+            const ip = gameVars.ignorePattern[i];
+            line = `$ignorepattern: ${ip.x}, ${ip.y}, ${ip.w}, ${ip.h}`;
+            lines.push(line);
+        }
     }
 
     if (gameVars.lavaCanMove) {
@@ -221,6 +221,16 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
+    if (gameVars.redBallDisplayOverride !== "none") {
+        line = `$redballdisplayoverride: ${gameVars.redBallDisplayOverride}`;
+        lines.push(line);
+    }
+
+    if (gameVars.restorePoint !== 1) {
+        line = `$restorepoint: ${gameVars.restorePoint}`;
+        lines.push(line);
+    }
+
     if (gameVars.seaAnemonesSwayAmount !== 50) {
         line = `$seaanemonesswayamount: ${gameVars.seaAnemonesSwayAmount}`;
         lines.push(line);
@@ -228,6 +238,21 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     if (gameVars.seaAnemonesSwaySpeed !== 10) {
         line = `$seaanemonesswayspeed: ${gameVars.seaAnemonesSwaySpeed}`;
+        lines.push(line);
+    }
+
+    if (gameVars.soundLava !== "default") {
+        line = `$sound: 22, ${gameVars.soundLava}`;
+        lines.push(line);
+    }
+
+    if (gameVars.startlevelmessage !== "") {
+        line = `$startlevelmessage: ${gameVars.startlevelmessage}`;
+        lines.push(line);
+    }
+
+    if (gameVars.stonePattern !== 0) {
+        line = `$stonepattern: ${gameVars.stonePattern}`;
         lines.push(line);
     }
 
@@ -254,28 +279,13 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    if (gameVars.whiteBallDisplayOverride !== "none") {
+        line = `$whiteballdisplayoverride: ${gameVars.whiteBallDisplayOverride}`;
+        lines.push(line);
+    }
+
     if (gameVars.yellowSlowdownerDurationTicks !== 250) {
         line = `$gameticks: yellowslowdowner, ${gameVars.yellowSlowdownerDurationTicks}`;
-        lines.push(line);
-    }
-
-    if (gameVars.restorePoint !== 1) {
-        line = `$restorepoint: ${gameVars.restorePoint}`;
-        lines.push(line);
-    }
-
-    if (gameVars.soundLava !== "default") {
-        line = `$sound: 22, ${gameVars.soundLava}`;
-        lines.push(line);
-    }
-
-    if (gameVars.startlevelmessage !== "") {
-        line = `$startlevelmessage: ${gameVars.startlevelmessage}`;
-        lines.push(line);
-    }
-
-    if (gameVars.stonePattern !== 0) {
-        line = `$stonepattern: ${gameVars.stonePattern}`;
         lines.push(line);
     }
 

@@ -241,6 +241,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx2 = findElementByCoordinates(x2, y2, gameInfo.flamethrowers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.flamethrowers[idx2].direction = gameInfo.flamethrowers[idx1].direction;
+                gameInfo.flamethrowers[idx2].display = gameInfo.flamethrowers[idx1].display;
                 gameInfo.flamethrowers[idx2].group = gameInfo.flamethrowers[idx1].group;
                 gameInfo.flamethrowers[idx2].range = gameInfo.flamethrowers[idx1].range;
             }

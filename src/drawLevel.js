@@ -249,7 +249,7 @@ function drawLevel(
       if (color === "purple") {
         drawPurpleBall();
       } else {
-        drawWhiteBall();
+        drawWhiteBall(x, y, false);
       }
       switch (answer) {
         case "%car":
@@ -2977,16 +2977,31 @@ function drawLevel(
     drawLine(ctx, xmin, ymin + d1 + d1, xmax, ymin + d1 + d1, "#777777");
   }
 
-  function drawRedBall() {
-    if (gameVars.gravity === "up") {
-      ctx.save();
-      ctx.translate(Math.round(xc), Math.round(yc));
-      ctx.rotate(Math.PI);
-      ctx.translate(-Math.round(xc), -Math.round(yc));
+  function drawRedBall(x, y, override) {
+    let displayOverride = "none";
+    if (override) {
+      displayOverride = gameVars.redBallDisplayOverride.trim().toLowerCase();
     }
-    ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
-    if (gameVars.gravity === "up") {
-      ctx.restore();
+
+    switch (displayOverride) {
+      case "stone":
+        drawStone(x, y);
+        break;
+      case "whiteball":
+        drawWhiteBall(x, y, false);
+        break;
+      default:
+        if (gameVars.gravity === "up") {
+          ctx.save();
+          ctx.translate(Math.round(xc), Math.round(yc));
+          ctx.rotate(Math.PI);
+          ctx.translate(-Math.round(xc), -Math.round(yc));
+        }
+        ctx.drawImage(elements.elementRed, xmin, ymin, w1, w2);
+        if (gameVars.gravity === "up") {
+          ctx.restore();
+        }
+        break;
     }
   }
 
@@ -3507,8 +3522,23 @@ function drawLevel(
     ctx.drawImage(bitmapWeakStone, xmin, ymin, w1, w2);
   }
 
-  function drawWhiteBall() {
-    ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
+  function drawWhiteBall(x, y, override) {
+    let displayOverride = "none";
+    if (override) {
+      displayOverride = gameVars.whiteBallDisplayOverride.trim().toLowerCase();
+    }
+
+    switch (displayOverride) {
+      case "stone":
+        drawStone(x, y);
+        break;
+      case "redball":
+        drawRedBall(x, y, false);
+        break;
+      default:
+        ctx.drawImage(elements.elementWhite, xmin, ymin, w1, w2);
+        break;
+    }
   }
 
   function drawYellowBall() {
@@ -3795,7 +3825,7 @@ function drawLevel(
           drawSmallGreenBall();
           break;
         case 4:
-          drawWhiteBall();
+          drawWhiteBall(currentCol, currentRow, true);
           break;
         case 5:
           drawLightBlueBall();
@@ -3809,7 +3839,7 @@ function drawLevel(
           drawElevatorLeftRight();
           break;
         case 8:
-          drawRedBall();
+          drawRedBall(currentCol, currentRow, true);
           break;
         case 9:
           drawYellowBall();
@@ -3921,11 +3951,11 @@ function drawLevel(
           break;
         case 93:
           // Smart red ball (smart level 1)
-          drawRedBall();
+          drawRedBall(currentCol, currentRow, true);
           break;
         case 94:
           // Smart red ball (smart level 2)
-          drawRedBall();
+          drawRedBall(currentCol, currentRow, true);
           break;
         case 95:
           drawMirror(true);

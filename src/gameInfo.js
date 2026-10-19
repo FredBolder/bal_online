@@ -1429,6 +1429,7 @@ export function initGameVars(vars) {
     vars.plantsSwaySpeed = 10;
     vars.pushersCounter = 0;
     vars.pushersCountTo = 5;
+    vars.redBallDisplayOverride = "none";
     vars.redCounter = 0;
     vars.refreshCounter = 0;
     vars.refreshCountTo = 12;
@@ -1452,6 +1453,7 @@ export function initGameVars(vars) {
     vars.userInt4 = 0;
     vars.wave1 = 0;
     vars.wave2 = 0;
+    vars.whiteBallDisplayOverride = "none";
     vars.yellowCounter = 0;
     vars.yellowPaused = false;
     vars.yellowSlowCounter = 0;

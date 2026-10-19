@@ -1,6 +1,9 @@
 $extra: 1
+$gameticks: piston, 40
+$redballdisplayoverride: whiteball
 $restorepoint: 0
 $stonepattern: 2
+$whiteballdisplayoverride: redball
 $condition: 0, 1, elapsedSeconds < 10
 $display: 0, 1, stone
 $movable: 0, 1, no
@@ -35,19 +38,39 @@ $condition: 0, 7, elapsedSeconds = 60
 $display: 0, 7, stone
 $movable: 0, 7, no
 $target: 0, 7, command
-$value: 0, 7, $darkpercentage: 90
-111111111111111
-ђ             1
-ђ             1
-ђ             1
-ђ             1
-ђ             1
-ђ             1
-ђ             1
-1             1
-1             1
-1             1
-1             1
-13            1
-1        2    1
-111111111111111
+$value: 0, 7, $darkpercentage: 85
+$condition: 17, 7, name = Tropical fish
+$display: 17, 7, stone
+$group: 17, 7, 2
+$movable: 17, 7, no
+$range: 17, 7, 3
+$direction: 2, 10, down
+$display: 2, 10, stone
+$group: 2, 10, 2
+$movable: 2, 10, no
+$direction: 8, 10, down
+$display: 8, 10, stone
+$group: 8, 10, 2
+$pistonmode: 17, 10, repeatslow
+$eyepercentage: 14, 5, 35
+$fins: 14, 5, 10
+$palette: 14, 5, 19
+$shape: 14, 5, 7
+$stripes: 14, 5, 0
+$tail: 14, 5, 4
+$background: 14, 5, 1, 1, 23
+11111111111111111111
+ђ1111α    8 ι     41
+ђ        111ι     11
+ђ           ιѵ     1
+ђ           ι1wwwww1
+ђ        5  ι1Ҽwwww1
+ђ        4  ι1wwwww1
+ђ111  111111ι1111ђ11
+111α        ι      1
+111        1ι1   8 1
+11й   11й111ι1Џ11Ù11
+13          ι   1111
+1           ι      1
+1      2           1
+11111111111111111111

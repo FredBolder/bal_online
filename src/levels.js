@@ -62,7 +62,7 @@ export const seriesFishEnd = 6366;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
-export const seriesAnnoyingEnd = 6469;
+export const seriesAnnoyingEnd = 6470;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -360,6 +360,7 @@ export function checkSettings(data, settings) {
     { name: "$pushermode", params: 3, xy: true, yesno: -1 },
     { name: "$question", params: 0, xy: true, yesno: -1 },
     { name: "$range", params: 3, xy: true, yesno: -1 },
+    { name: "$redballdisplayoverride", params: 0, xy: false, yesno: -1 },
     { name: "$repeat", params: 3, xy: true, yesno: 2 },
     { name: "$restorepoint", params: 1, xy: false, yesno: -1 },
     { name: "$seaanemonesswayamount", params: 1, xy: false, yesno: -1 },
@@ -386,6 +387,7 @@ export function checkSettings(data, settings) {
     { name: "$userkey1", params: 0, xy: false, yesno: -1 },
     { name: "$userkey2", params: 0, xy: false, yesno: -1 },
     { name: "$value", params: 0, xy: true, yesno: -1 },
+    { name: "$whiteballdisplayoverride", params: 0, xy: false, yesno: -1 },
   ];
 
   let gameTicks = 0;
@@ -2320,6 +2322,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[2], -1);
           setProp(gameData, gameInfo, x, y, "range", val_int, false);
           break;
+        case "$redballdisplayoverride":
+          gameVars.redBallDisplayOverride = value;
+          break;
         case "$repeat":
           if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
             break;
@@ -2496,6 +2501,9 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           break;
         case "$userkey2":
           gameInfo.userKey2 = value;
+          break;
+        case "$whiteballdisplayoverride":
+          gameVars.whiteBallDisplayOverride = value;
           break;
         default:
           break;
