@@ -53,7 +53,7 @@ import { clearMemory, loadFromMemory, memoryIsEmpty, saveToMemory } from "../mem
 import { changeMoverInverted } from "../movers.js";
 import { closeAudio, getAudioContext, instruments } from "../music.js";
 import { changeMusicBoxProperty, checkMusicBoxes, clearPlayedNotes, fixDoors, transposeMusicBox } from "../musicBoxes.js";
-import { changePistonInverted, changePistonSticky, checkPistonsTriggers } from "../pistons.js";
+import { changePistonInverted, changePistonSticky, checkPistonsTriggers, updatePistons } from "../pistons.js";
 import { exportProgress, importProgress, initDB, loadProgress, progressLevel, saveProgress, solvedLevels } from "../progress.js";
 import { setProp } from "../props.js";
 import { gameScheduler, schedulerTime } from "../scheduler.js";
@@ -118,6 +118,7 @@ let createLevelColorPages = 2;
 let createLevelCommand = "";
 let createLevelCondition = "";
 let createLevelDirection = "";
+let createLevelEdit = false;
 let createLevelEvent = "";
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
@@ -731,7 +732,7 @@ function BalPage() {
     const value = await showSelect(
       "Load level",
       "Load the first level of series:",
-      ["1", "2", "3", "4", "5", "Small", "Easy", "Extreme", "Music"],
+      ["1", "2", "3", "Small", "Easy", "Extreme", "Music"],
       0
     );
 
@@ -746,12 +747,6 @@ function BalPage() {
         case "3":
           level = 400;
           break;
-        case "4":
-          level = 700;
-          break;
-        case "5":
-          level = 3300;
-          break;
         case "Small":
           level = 750;
           break;
@@ -763,10 +758,6 @@ function BalPage() {
           break;
         case "Music":
           level = 3200;
-          break;
-        case "Chronia Polla":
-          // Not public
-          level = 990;
           break;
         default:
           level = 200;
@@ -829,6 +820,7 @@ function BalPage() {
         gameVars = data.gameVars;
         setTimeBombsTime(gameVars.timeBombsTime);
         updateProgressText();
+        updatePistons(gameData, gameInfo, gameVars);
         updateGameCanvas();
         updateGreen();
         resetTime();
@@ -885,6 +877,7 @@ function BalPage() {
       gameVars.currentLevel = 9999;
       fixDoors(gameInfo);
       updateGameInfo(gameData, gameInfo);
+      updatePistons(gameData, gameInfo, gameVars);
       updateGameCanvas();
       updateGreen();
       updateProgressText();
@@ -1128,6 +1121,7 @@ function BalPage() {
     updateGameButtonsDisplay();
     updateCreateLevelCanvasDisplay();
     updateMenuItemsDisplay();
+    updatePistons(gameData, gameInfo, gameVars);
     updateGameCanvas();
     updateCreateLevelCanvas();
     resetTime();
@@ -1238,7 +1232,7 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2216, 2211, 2207, 2208, 2209, 2205, 2210, 0];
+            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2211, 2207, 2208, 2209, 2205, 2210, 0, 2222];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 12:
@@ -1301,8 +1295,8 @@ function BalPage() {
             break;
           case 6:
             // Music box
-            arr1 = [157, 2092, 2212, 2039, 2133, 2034, 2035, 2103, 2146, 2147];
-            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2131];
+            arr1 = [157, 2092, 2212, 2132, 2133, 2034, 2035, 2103, 2146, 2147, 2131, 0, 0, 0, 0, 2222];
+            arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2118, 2119];
             break;
           case 7:
             // Patterns
@@ -1316,7 +1310,7 @@ function BalPage() {
             break;
           case 9:
             // Answer balls
-            arr1 = [241, 2142, 2201, 242, 245, 2143, 2092];
+            arr1 = [241, 2142, 2201, 242, 245, 2143, 2092, 0, 0, 0, 0, 0, 0, 0, 0, 2222];
             arr2 = [0];
             break;
           case 15:
@@ -1388,6 +1382,7 @@ function BalPage() {
       fixDoors(gameInfo);
       updateGameInfo(gameData, gameInfo);
       updateProgressText();
+      updatePistons(gameData, gameInfo, gameVars);
       updateGameCanvas();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
@@ -3294,17 +3289,80 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2142)) {
-                msg = setProp(gameData, gameInfo, column, row, "question", createLevelQuestion, oneSelected);
-              }
-              if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2143)) {
-                msg = setProp(gameData, gameInfo, column, row, "answer", createLevelAnswer, oneSelected);
-              }
+              if (createLevelMenu === menuToNumber("answerballs")) {
+                let idx = -1;
+                let obj = null;
+                if (createLevelEdit && [2142, 2143].includes(createLevelObject)) {
+                  if (!oneSelected) {
+                    break;
+                  }
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if ((createLevelObject === 2142 && objectNumber !== 241) ||
+                    (createLevelObject === 2143 && ![241, 242, 243, 245].includes(objectNumber))) {
+                    continue;
+                  }
+                  if (createLevelObject === 2142) {
+                    idx = findElementByCoordinates(column, row, gameInfo.questionStones);
+                    if (idx >= 0) {
+                      obj = gameInfo.questionStones[idx];
+                    }
+                  }
+                  if (createLevelObject === 2143) {
+                    if (objectNumber === 241) {
+                      idx = findElementByCoordinates(column, row, gameInfo.questionStones);
+                      if (idx >= 0) {
+                        obj = gameInfo.questionStones[idx];
+                      }
+                    }
+                    if (objectNumber === 242 || objectNumber === 245) {
+                      idx = findElementByCoordinates(column, row, gameInfo.answerBalls);
+                      if (idx >= 0) {
+                        obj = gameInfo.answerBalls[idx];
+                      }
+                    }
+                    if (objectNumber === 243) {
+                      idx = findElementByCoordinates(column, row, gameInfo.tropicalFish);
+                      if (idx >= 0) {
+                        obj = gameInfo.tropicalFish[idx];
+                      }
+                    }
+                  }
+                  if (obj === null) {
+                    continue;
+                  }
+                }
+                if (createLevelObject === 2142) {
+                  if (createLevelEdit) {
+                    newValue = await showInput("Question stones", "Question", obj.question);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    } else {
+                      obj.question = newValue.trim();
+                    }
+                  } else {
+                    msg = setProp(gameData, gameInfo, column, row, "question", createLevelQuestion, oneSelected);
+                  }
+                }
+                if (createLevelObject === 2143) {
+                  if (createLevelEdit) {
+                    newValue = await showInput("Question stones / Answer balls / Tropical fish", "Answer", obj.answer);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    } else {
+                      obj.answer = newValue.trim();
+                    }
+                  } else {
+                    msg = setProp(gameData, gameInfo, column, row, "answer", createLevelAnswer, oneSelected);
+                  }
+                }
 
-              if ((createLevelMenu === menuToNumber("answerballs")) && (createLevelObject === 2201)) {
-                if (changeStyle(gameInfo, column, row, createLevelQuestionStyle) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on a question stone to set the style.");
+                if (createLevelObject === 2201) {
+                  if (changeStyle(gameInfo, column, row, createLevelQuestionStyle) === -1) {
+                    if (oneSelected) {
+                      showMessage("Info", "Click on a question stone to set the style.");
+                    }
                   }
                 }
               }
@@ -3345,6 +3403,21 @@ function BalPage() {
               }
 
               if (createLevelMenu === menuToNumber("detectors")) {
+                let detector = null;
+                if (createLevelEdit && [2205, 2206, 2210].includes(createLevelObject)) {
+                  if (!oneSelected) {
+                    break;
+                  }
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if (objectNumber !== 255) {
+                    continue;
+                  }
+                  const idx = findElementByCoordinates(column, row, gameInfo.detectors);
+                  if (idx < 0) {
+                    continue;
+                  }
+                  detector = gameInfo.detectors[idx];
+                }
                 if (createLevelObject === 2203) {
                   if (changeMessage(gameInfo, column, row, createLevelMessage) === -1) {
                     if (oneSelected) {
@@ -3356,37 +3429,49 @@ function BalPage() {
                   msg = setProp(gameData, gameInfo, column, row, "target", createLevelTarget, oneSelected);
                 }
                 if (createLevelObject === 2205) {
-                  msg = setProp(gameData, gameInfo, column, row, "condition", createLevelCondition, oneSelected);
+                  if (createLevelEdit) {
+                    newValue = await showInput("Detectors", "Condition", detector.condition);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    } else {
+                      detector.condition = newValue.trim();
+                    }
+                  } else {
+                    msg = setProp(gameData, gameInfo, column, row, "condition", createLevelCondition, oneSelected);
+                  }
                 }
                 if (createLevelObject === 2206) {
-                  if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
-                    if (oneSelected) {
-                      showMessage("Info", "Click on a detector to change the command.");
+                  if (createLevelEdit) {
+                    if (detector.target !== "command") {
+                      continue;
+                    }
+                    newValue = await showInput("Detectors", "Command", detector.value);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    } else {
+                      detector.value = newValue.trim();
+                    }
+                  } else {
+                    if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
+                      if (oneSelected) {
+                        showMessage("Info", "Click on a detector to change the command.");
+                      }
                     }
                   }
                 }
                 if (createLevelObject === 2210) {
-                  msg = setProp(gameData, gameInfo, column, row, "event", createLevelEvent, oneSelected);
-                }
-                if (createLevelObject === 2216 && oneSelected) {
-                  const objectNumber = getGameDataValue(gameData, column, row);
-                  if (objectNumber !== 255) {
-                    continue;
-                  }
-                  const idx = findElementByCoordinates(column, row, gameInfo.detectors);
-                  if (idx < 0) {
-                    continue;
-                  }
-                  const detector = gameInfo.detectors[idx];
-                  if (detector.target !== "command") {
-                    continue;
-                  }
-                  newValue = await showInput("Detectors", "Command", detector.value);
-                  if (newValue === null) {
-                    newValue = "";
-                    continue;
+                  if (createLevelEdit) {
+                    newValue = await showInput("Detectors", "Event", detector.event);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    } else {
+                      detector.event = newValue.trim();
+                    }
                   } else {
-                    detector.value = newValue.trim();
+                    msg = setProp(gameData, gameInfo, column, row, "event", createLevelEvent, oneSelected);
                   }
                 }
                 if (createLevelObject === 2207) {
@@ -3400,8 +3485,8 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2117)) {
-                if (changeMusicBoxProperty(gameInfo, column, row, "note", ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5"][createLevelObject - 2104]) === -1) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2119)) {
+                if (changeMusicBoxProperty(gameInfo, column, row, "note", ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "-", "_"][createLevelObject - 2104], globalVars.createLevelEditMode) === -1) {
                   showMessage("Info", "Click on a music box to set the note of it.");
                 }
               }
@@ -3440,7 +3525,7 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2039) && instruments().includes(createLevelInstrument)) {
+              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2132) && instruments().includes(createLevelInstrument)) {
                 if (changeMusicBoxProperty(gameInfo, column, row, "instrument", createLevelInstrument) === -1) {
                   showMessage("Info", "Click on a music box to set the instrument of it.");
                 }
@@ -3587,6 +3672,14 @@ function BalPage() {
         }
         createLevelObject = gameDataMenu[row][column];
 
+        if (createLevelObject === 2222) {
+          // Toggle Edit mode
+          globalVars.createLevelEditMode = !globalVars.createLevelEditMode;
+          updateCreateLevelCanvas();
+          createLevelObject = -1;
+          return;
+        }
+
         if (createLevelMenu === menuToNumber("delete")) {
           switch (createLevelObject) {
             case 2050:
@@ -3712,24 +3805,6 @@ function BalPage() {
             break;
         }
 
-        if (createLevelMenu === menuToNumber("answerballs")) {
-          switch (createLevelObject) {
-            case 2092:
-              ok = false;
-              if (row > 0) {
-                newValue = await showSelect("Answer balls", "Mode:", ["answer ball", "scale"], 0);
-                if (newValue !== null) {
-                  createLevelMode = removeChar(newValue, " ");
-                  ok = true;
-                }
-              }
-              handleCancel();
-              break;
-            default:
-              break;
-          }
-        }
-
         if (createLevelMenu === menuToNumber("stones")) {
           switch (createLevelObject) {
             case 2092:
@@ -3822,6 +3897,12 @@ function BalPage() {
         }
 
         if (createLevelMenu === menuToNumber("detectors")) {
+          if ([2205, 2206, 2210].includes(createLevelObject)) {
+            createLevelEdit = globalVars.createLevelEditMode;
+            if (createLevelEdit) {
+              return;
+            }
+          }
           switch (createLevelObject) {
             case 2092:
               ok = false;
@@ -4001,7 +4082,7 @@ function BalPage() {
               }
               handleCancel();
               break;
-            case 2039:
+            case 2132:
               ok = false;
               if (row > 0) {
                 newValue = await showSelect("Music boxes", "Instrument:", instruments(), 0);
@@ -4039,9 +4120,25 @@ function BalPage() {
           }
         }
 
-        if ((createLevelMenu === menuToNumber("answerballs")) && ([2142, 2143].includes(createLevelObject))) {
+        if (createLevelMenu === menuToNumber("answerballs")) {
+          if ([2142, 2143].includes(createLevelObject)) {
+            createLevelEdit = globalVars.createLevelEditMode;
+            if (createLevelEdit) {
+              return;
+            }
+          }
           ok = false;
           switch (createLevelObject) {
+            case 2092:
+              if (row > 0) {
+                newValue = await showSelect("Answer balls", "Mode:", ["answer ball", "scale"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
             case 2142:
               if (row > 0) {
                 newValue = await showInput("Question", "Question", "");
@@ -4062,12 +4159,20 @@ function BalPage() {
               }
               handleCancel();
               break;
+            case 2201:
+              if (row > 0) {
+                newValue = await showSelect("Question stones", "Text alignment:", [
+                  "center", "left", "middle", "right"
+                ], 0);
+                if (newValue !== null) {
+                  createLevelQuestionStyle = newValue;
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
             default:
               break;
-          }
-          if (!ok) {
-            createLevelMode = "";
-            createLevelObject = -1;
           }
         }
 
@@ -4345,23 +4450,6 @@ function BalPage() {
               updateGameCanvas();
             }
             createLevelObject = -1;
-            break;
-          case 2201:
-            ok = false;
-            if (row > 0) {
-              newValue = null;
-              if (createLevelMenu === menuToNumber("answerballs")) {
-                newValue = await showSelect("Question stones", "Text alignment:", [
-                  "center", "left", "middle", "right"
-                ], 0);
-              }
-              if (newValue !== null) {
-                createLevelQuestionStyle = newValue;
-                ok = true;
-              }
-              updateGameCanvas();
-            }
-            handleCancel();
             break;
           default:
             break;

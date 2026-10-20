@@ -4,6 +4,7 @@ export const globalVars = {
     createLevel: false,
     createLevelBallsPage: 1,
     createLevelColorPage: 1,
+    createLevelEditMode: false,
     createLevelMenuPage: 1,
     createLevelStonesPage: 1,
     createLevelWaterPage: 1,

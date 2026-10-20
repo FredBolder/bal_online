@@ -35,7 +35,6 @@ export function checkCondition(gameData, gameInfo, gameVars, x, y, condition) {
 
     function getCoordinates(s) {
         let c = "";
-        const invalidInt = -10000;
         const p1 = s.indexOf("(");
         const p2 = s.indexOf(")");
         let sNew = s;
@@ -57,9 +56,9 @@ export function checkCondition(gameData, gameInfo, gameVars, x, y, condition) {
         if (values[0] !== "abs" && values[0] !== "rel" && values[0] !== "player") {
             return null;
         }
-        xNew = tryParseInt(values[1], invalidInt);
-        yNew = tryParseInt(values[2], invalidInt);
-        if (xNew === invalidInt || yNew === invalidInt) {
+        xNew = tryParseInt(values[1], null);
+        yNew = tryParseInt(values[2], null);
+        if (xNew === null || yNew === null) {
             return null;
         }
         return { name: sNew, coordinatesType: values[0], x: xNew, y: yNew };
@@ -919,6 +918,29 @@ function updateGroup(gameData, gameInfo, gameVars, group) {
                 continue;
             }
             if (movePusher(gameData, gameInfo, pusher)) {
+                needsRefresh = true;
+            }
+        }
+    }
+
+    return needsRefresh;
+}
+
+export function updatePistons(gameData, gameInfo, gameVars) {
+    let needsRefresh = false;
+
+    if (globalVars.createLevel) {
+        return false;
+    }
+
+    for (let i = 0; i < gameInfo.pistons.length; i++) {
+        const piston = gameInfo.pistons[i];
+        if (gameVars.pistonGroupsActivated[piston.group - 1] !== piston.inverted) {
+            if (activatePiston(gameData, gameInfo, piston, "toggle")) {
+                needsRefresh = true;
+            }
+        } else {
+            if (deactivatePiston(gameData, gameInfo, piston, "toggle")) {
                 needsRefresh = true;
             }
         }

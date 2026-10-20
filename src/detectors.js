@@ -5,7 +5,7 @@ import { isSpike, isStone } from "./objects.js";
 import { rotateDirection } from "./rotateGame.js";
 import { setTimeBombsTime } from "./timeBombs.js";
 import { presetTropicalFish } from "./tropicalFish.js";
-import { isOdd, tryParseInt } from "./utils.js";
+import { isOdd, randomInt, tryParseInt } from "./utils.js";
 
 export const detectorMaxRange = 50;
 
@@ -19,7 +19,6 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let fish = null;
     let flamethrower = null;
     let idx = -1;
-    const invalidInt = -10000;
     const intValues = [];
     let key = null;
     let lockedDoor = null;
@@ -59,7 +58,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     for (let i = 0; i < values.length; i++) {
         values[i] = values[i].trim();
         valuesLowerCase.push(values[i].toLowerCase());
-        val_int = tryParseInt(values[i], invalidInt);
+        val_int = tryParseInt(values[i], null);
         intValues.push(val_int);
     }
     const cmd = valuesLowerCase[0];
@@ -75,7 +74,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     if (cmd === "addcolumns" || cmd === "addrows") {
         let addStones = false;
         n1 = 1;
-        if (values.length >= 2 && intValues[1] !== invalidInt) {
+        if (values.length >= 2 && intValues[1] !== null) {
             n1 = intValues[1];
         }
         if (values.length >= 3 && valuesLowerCase[2] === "yes") {
@@ -97,13 +96,13 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         n3 = null;
         source = gameVars;
         variable = valuesLowerCase[1];
-        if (values.length >= 3 && intValues[2] !== invalidInt) {
+        if (values.length >= 3 && intValues[2] !== null) {
             n1 = intValues[2];
         }
-        if (values.length >= 4 && intValues[3] !== invalidInt) {
+        if (values.length >= 4 && intValues[3] !== null) {
             n2 = intValues[3];
         }
-        if (values.length >= 5 && intValues[4] !== invalidInt) {
+        if (values.length >= 5 && intValues[4] !== null) {
             n3 = intValues[4];
         }
         if (cmd === "inc") {
@@ -111,6 +110,17 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         } else {
             commandDec(source, variable, n1, n2, n3);
         }
+        return;
+    }
+    if (cmd === "random" && values.length === 4) {
+        source = gameVars;
+        variable = valuesLowerCase[1];
+        n1 = intValues[2];
+        n2 = intValues[3];
+        if (n1 === null || n2 === null) {
+            return;
+        }
+        commandRandom(source, variable, n1, n2);
         return;
     }
     if (cmd === "rotateleft" && values.length === 2) {
@@ -154,7 +164,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             for (let i = 0; i < n1; i++) {
                 x1 = intValues[3 + (i * 2)];
                 y1 = intValues[4 + (i * 2)];
-                if (x1 === invalidInt || y1 === invalidInt) {
+                if (x1 === null || y1 === null) {
                     return;
                 }
                 coordinatesList.push({ x: x1, y: y1 });
@@ -162,13 +172,13 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         } else {
             x1 = intValues[3];
             y1 = intValues[4];
-            if (x1 === invalidInt || y1 === invalidInt) {
+            if (x1 === null || y1 === null) {
                 return;
             }
             if (values.length >= 7) {
                 x2 = intValues[5];
                 y2 = intValues[6];
-                if (x2 === invalidInt || y2 === invalidInt) {
+                if (x2 === null || y2 === null) {
                     return;
                 }
             } else {
@@ -665,7 +675,14 @@ function commandInc(source, name, increment, max, reset) {
     setVariable(source, name, value);
 }
 
+function commandRandom(source, name, min, max) {
+    if (max <= min) {
+        return;
+    }
 
+    let value = randomInt(min, max);
+    setVariable(source, name, value);
+}
 
 export function commands(backData, gameData, gameInfo, gameVars, detector) {
     const value = detector.value.trim();

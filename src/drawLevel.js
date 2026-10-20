@@ -123,9 +123,9 @@ function drawLevel(
     return result;
   }
 
-  function drawAbbreviation(s) {
-    drawFilledBox(ctx, xmin, ymin, w1, w2, "black");
-    drawText(ctx, xc, ymax - (w2 * 0.2), s, "center", "white", w2 * 0.7, w1 * 0.8);
+  function drawAbbreviation(s, bg = "black", fg = "white") {
+    drawFilledBox(ctx, xmin, ymin, w1, w2, bg);
+    drawText(ctx, xc, ymax - (w2 * 0.2), s, "center", fg, w2 * 0.7, w1 * 0.8);
   }
 
   function drawRedFish(x, y) {
@@ -4408,8 +4408,7 @@ function drawLevel(
           drawAbbreviation("s");
           break;
         case 2039:
-          // Piston - inverted OR Music box instrument
-          drawAbbreviation("i");
+          drawAbbreviation("inv");
           break;
         case 2040:
           drawArrow("left", "white", "black");
@@ -4483,50 +4482,59 @@ function drawLevel(
           drawPart("bottom");
           break;
         case 2104:
-          drawAbbreviation("C4");
+          drawAbbreviation("C4", "black", "green");
           break;
         case 2105:
-          drawAbbreviation("D4");
+          drawAbbreviation("D4", "black", "green");
           break;
         case 2106:
-          drawAbbreviation("E4");
+          drawAbbreviation("E4", "black", "green");
           break;
         case 2107:
-          drawAbbreviation("F4");
+          drawAbbreviation("F4", "black", "green");
           break;
         case 2108:
-          drawAbbreviation("G4");
+          drawAbbreviation("G4", "black", "green");
           break;
         case 2109:
-          drawAbbreviation("A4");
+          drawAbbreviation("A4", "black", "green");
           break;
         case 2110:
-          drawAbbreviation("B4");
+          drawAbbreviation("B4", "black", "green");
           break;
         case 2111:
-          drawAbbreviation("C5");
+          drawAbbreviation("C5", "black", "green");
           break;
         case 2112:
-          drawAbbreviation("D5");
+          drawAbbreviation("D5", "black", "green");
           break;
         case 2113:
-          drawAbbreviation("E5");
+          drawAbbreviation("E5", "black", "green");
           break;
         case 2114:
-          drawAbbreviation("F5");
+          drawAbbreviation("F5", "black", "green");
           break;
         case 2115:
-          drawAbbreviation("G5");
+          drawAbbreviation("G5", "black", "green");
           break;
         case 2116:
-          drawAbbreviation("A5");
+          drawAbbreviation("A5", "black", "green");
           break;
         case 2117:
-          drawAbbreviation("B5");
+          drawAbbreviation("B5", "black", "green");
+          break;
+        case 2118:
+          drawAbbreviation("hold", "black", "green");
+          break;
+        case 2119:
+          drawAbbreviation("rest", "black", "green");
           break;
         case 2131:
           // Music box transpose
           drawAbbreviation("tr");
+          break;
+        case 2132:
+          drawAbbreviation("instr");
           break;
         case 2133:
           drawDirections()
@@ -4560,10 +4568,10 @@ function drawLevel(
           drawStonePatternIcon("");
           break;
         case 2142:
-          drawAbbreviation("Q");
+          drawAbbreviation("Q", "black", "green");
           break;
         case 2143:
-          drawAbbreviation("A");
+          drawAbbreviation("A", "black", "green");
           break;
         case 2144:
           drawSides();
@@ -4736,10 +4744,10 @@ function drawLevel(
           drawAbbreviation("targ");
           break;
         case 2205:
-          drawAbbreviation("if");
+          drawAbbreviation("if", "black", "green");
           break;
         case 2206:
-          drawAbbreviation("cmd");
+          drawAbbreviation("cmd", "black", "green");
           break;
         case 2207:
           drawAbbreviation("1x");
@@ -4751,7 +4759,7 @@ function drawLevel(
           drawAbbreviation("seq");
           break;
         case 2210:
-          drawAbbreviation("evt");
+          drawAbbreviation("evt", "black", "green");
           break;
         case 2211:
           drawAbbreviation("1cmd");
@@ -4772,7 +4780,10 @@ function drawLevel(
           drawAbbreviation("range");
           break;
         case 2216:
-          drawAbbreviation("cm|d");
+          drawAbbreviation("??");
+          break;
+        case 2222:
+            drawAbbreviation(globalVars.createLevelEditMode ? "EDIT" : "REPL", "darkgreen", "white");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

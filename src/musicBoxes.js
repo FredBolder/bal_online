@@ -46,7 +46,7 @@ function blueBallIsCloseToXY(gameData, x, y) {
     return result;
 }
 
-export function changeMusicBoxProperty(gameInfo, x, y, property, value) {
+export function changeMusicBoxProperty(gameInfo, x, y, property, value, add = false) {
     let idx = -1;
 
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
@@ -64,7 +64,9 @@ export function changeMusicBoxProperty(gameInfo, x, y, property, value) {
                 }
                 break;
             case "note":
-                musicBox.notes.length = 0;
+                if (!add) {
+                    musicBox.notes.length = 0;
+                }
                 musicBox.notes.push(value);
                 break;
             case "octaves":
