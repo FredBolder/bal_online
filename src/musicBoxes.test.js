@@ -1,20 +1,20 @@
 import { beforeEach, describe, it, expect } from "vitest";
 import { jump, moveLeft, zeroArray } from "./balUtils.js";
 import { initGameInfo, initGameVars } from "./gameInfo.js";
-import { checkMusicBoxes, clearPlayedNotes } from "./musicBoxes.js";
+import { checkMusicBoxes, clearPlayedNotes, transposeMusicBox } from "./musicBoxes.js";
 import { gameScheduler } from "./scheduler.js";
 
 describe("music boxes", () => {
     let defaultGameInfo;
     let defaultGameVars;
     const inputBack = zeroArray(6, 15);
- 
+
     beforeEach(() => {
         defaultGameInfo = {};
         initGameInfo(defaultGameInfo);
         defaultGameVars = {};
         initGameVars(defaultGameVars);
-    });    
+    });
 
     it("plays the melody step-by-step", async () => {
         clearPlayedNotes();
@@ -140,6 +140,60 @@ describe("music boxes", () => {
         // Check doors after playing the right melody
         expect(input[4][10]).toBe(0);
         expect(input[4][12]).toBe(0);
+    });
+
+    it("transposeMusicBox A", async () => {
+        const gameinfo = {
+            ...defaultGameInfo,
+            musicBoxes: [
+                {
+                    x: 1,
+                    y: 1,
+                    instrument: "xylophone",
+                    volume: 90,
+                    mode: "note",
+                    active: false,
+                    ended: false,
+                    delay: 5,
+                    delayCounter: 0,
+                    notes: ["C4"],
+                    noteIndex: 0,
+                    noteOverride: "none",
+                    repeat: true,
+                    octaves: 1,
+                    tripletStart: -1,
+                    stepsPerMeasure: 0,
+                    onOne: false,
+                    chordTypeOrInterval: "?",
+                    chordsPlaced: false,
+                    part: "bottom",
+                    direction: "up",
+                    group: 1
+                }
+            ]
+        }
+
+        gameinfo.musicBoxes[0].notes.splice(0, gameinfo.musicBoxes[0].notes.length, ...["C4", "E4", "G4"]);
+        let idx = transposeMusicBox(gameinfo, 1, 1, 2);
+        expect(idx).toBe(0);
+        expect(gameinfo.musicBoxes[0].notes).toEqual(["D4", "F#4", "A4"]);
+
+        gameinfo.musicBoxes[0].notes.splice(0, gameinfo.musicBoxes[0].notes.length, ...["C4&E4&G4"]);
+        idx = transposeMusicBox(gameinfo, 1, 1, -1);
+        expect(gameinfo.musicBoxes[0].notes).toEqual(["B3&D#4&F#4"]);
+
+        gameinfo.musicBoxes[0].notes.splice(0, gameinfo.musicBoxes[0].notes.length, ...["*C4", "E4", ".G4", "_"]);
+        idx = transposeMusicBox(gameinfo, 1, 1, 2);
+        expect(gameinfo.musicBoxes[0].notes).toEqual(["*D4", "F#4", ".A4", "_"]);
+
+        gameinfo.musicBoxes[0].notes.splice(0, gameinfo.musicBoxes[0].notes.length, ...["TD5&F5&A5", "-"]);
+        idx = transposeMusicBox(gameinfo, 1, 1, -12);
+        expect(gameinfo.musicBoxes[0].notes).toEqual(["TD4&F4&A4", "-"]);
+
+        gameinfo.musicBoxes[0].notes.splice(0, gameinfo.musicBoxes[0].notes.length, ...["2E4&E4"]);
+        idx = transposeMusicBox(gameinfo, 1, 1, 12);
+        expect(gameinfo.musicBoxes[0].notes).toEqual(["2E5&E5"]);
+
     });
 
     // Insert new tests here

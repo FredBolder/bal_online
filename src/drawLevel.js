@@ -4520,7 +4520,7 @@ function drawLevel(
         case 2116:
           drawAbbreviation("A5", "black", "green");
           break;
-        case 2117:
+        case 2117:"tr"
           drawAbbreviation("B5", "black", "green");
           break;
         case 2118:
@@ -4531,7 +4531,7 @@ function drawLevel(
           break;
         case 2131:
           // Music box transpose
-          drawAbbreviation("tr");
+          drawAbbreviation("♪↕");
           break;
         case 2132:
           drawAbbreviation("instr");
@@ -4780,7 +4780,10 @@ function drawLevel(
           drawAbbreviation("range");
           break;
         case 2216:
-          drawAbbreviation("??");
+          drawAbbreviation("notes");
+          break;
+        case 2217:
+          drawAbbreviation("st/m");
           break;
         case 2222:
             drawAbbreviation(globalVars.createLevelEditMode ? "EDIT" : "REPL", "darkgreen", "white");

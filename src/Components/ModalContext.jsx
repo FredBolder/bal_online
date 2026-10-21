@@ -137,6 +137,70 @@ export const ModalProvider = ({ children }) => {
     ));
   };
 
+  const showInputNotes = (title, message, defaultValue, stepsPerMeasure) => {
+    let inputValue = defaultValue.join(", ");
+
+    // Add line feeds after each measure.
+    const formattedValue = inputValue
+      .split(",")
+      .map(note => note.trim())
+      .reduce((result, note, index, notes) => {
+        result += note;
+        if (index < notes.length - 1) {
+          result += ", ";
+        }
+        if ((index + 1) % stepsPerMeasure === 0 && index < notes.length - 1) {
+          result += "\n";
+        }
+        return result;
+      }, "");
+
+    inputValue = formattedValue;
+
+    return showModal(title, ({ close }) => (
+      <div>
+        <p>{message}</p>
+        <textarea
+          className="modal-input modal-input-notes"
+          autoFocus
+          defaultValue={formattedValue}
+          rows={10}
+          wrap="off"
+          onChange={(e) => (inputValue = e.target.value)}
+        />
+        <div className="modal-notes-label">
+          - = hold, _ = rest, * = loud, . = soft, & = and, 2 = two note sequence, 3 = three note sequence, T = triplet
+        </div>
+        <div className="modal-button-container">
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() =>
+                close(
+                  inputValue
+                    .split(",")
+                    .map(note => note.trim())
+                )
+              );
+            }}
+          >
+            OK
+          </button>
+          <button
+            className="modal-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              requestAnimationFrame(() => close(null));
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
   const showSelect = (title, message, options, defaultIndex = 0) => {
     if (options.length === 0) {
       return Promise.resolve(null);
@@ -268,6 +332,7 @@ export const ModalProvider = ({ children }) => {
       showMessage,
       showConfirm,
       showInput,
+      showInputNotes,
       showSelect,
       showSelect2,
       modalState

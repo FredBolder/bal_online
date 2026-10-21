@@ -22,3 +22,22 @@
     border-radius: 5px;
     font-weight: bold;
 }
+
+.modal-input-notes {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    resize: none;
+    overflow: auto;
+    white-space: pre;
+}
+
+.modal-notes-label {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    font-size: 0.85em;
+    color: white;
+}
+
+

@@ -138,6 +138,7 @@ let createLevelRepeat = false;
 let createLevelSelectedCell = null;
 let createLevelSequence = false;
 let createLevelSides = null;
+let createLevelStepsPerMeasure = 8;
 let createLevelStonesPages = 2;
 let createLevelTicks = -1;
 let createLevelTranspose = 0;
@@ -167,7 +168,7 @@ initGameVars(gameVarsMenu);
 
 function BalPage() {
   const navigate = useNavigate();
-  const { showMessage, showConfirm, showInput, showSelect, showSelect2 } = useModal();
+  const { showMessage, showConfirm, showInput, showInputNotes, showSelect, showSelect2 } = useModal();
   const { modalState } = useContext(ModalContext);
 
   const actionButtonRef = useRef(null);
@@ -1295,7 +1296,7 @@ function BalPage() {
             break;
           case 6:
             // Music box
-            arr1 = [157, 2092, 2212, 2132, 2133, 2034, 2035, 2103, 2146, 2147, 2131, 0, 0, 0, 0, 2222];
+            arr1 = [157, 2092, 2212, 2132, 2133, 2034, 2035, 2103, 2146, 2147, 2216, 2131, 2217, 0, 0, 2222];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2118, 2119];
             break;
           case 7:
@@ -3485,56 +3486,87 @@ function BalPage() {
                 }
               }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject >= 2104) && (createLevelObject <= 2119)) {
-                if (changeMusicBoxProperty(gameInfo, column, row, "note", ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "-", "_"][createLevelObject - 2104], globalVars.createLevelEditMode) === -1) {
-                  showMessage("Info", "Click on a music box to set the note of it.");
+              if (createLevelMenu === menuToNumber("musicboxes")) {
+                if ((createLevelObject >= 2104) && (createLevelObject <= 2119)) {
+                  if (changeMusicBoxProperty(gameInfo, column, row, "note", ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "-", "_"][createLevelObject - 2104], globalVars.createLevelEditMode) === -1) {
+                    showMessage("Info", "Click on a music box to set the note of it.");
+                  }
                 }
-              }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && [2034, 2035, 2103].includes(createLevelObject)) {
-                switch (createLevelObject) {
-                  case 2034:
-                    newValue = "top";
+                if (createLevelObject === 2216) {
+                  let musicBox = null;
+                  if (!oneSelected) {
                     break;
-                  case 2035:
-                    newValue = "middle";
-                    break;
-                  case 2103:
-                    newValue = "bottom";
-                    break;
-                  default:
-                    break;
+                  }
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if (objectNumber !== 157) {
+                    continue;
+                  }
+                  const idx = findElementByCoordinates(column, row, gameInfo.musicBoxes);
+                  if (idx < 0) {
+                    continue;
+                  }
+                  musicBox = gameInfo.musicBoxes[idx];
+                  const valuesPerMeasure = musicBox.stepsPerMeasure <= 0 ? 8 : musicBox.stepsPerMeasure;
+                  const newNotes = await showInputNotes("Music boxes", "Notes (examples: C4, Bb3, F#4)", musicBox.notes, valuesPerMeasure);
+                  if (newNotes !== null) {
+                    musicBox.notes.splice(0, musicBox.notes.length, ...newNotes);
+                  }
                 }
-                if (changeMusicBoxProperty(gameInfo, column, row, "part", newValue) === -1) {
-                  showMessage("Info", "Click on a music box to set the part of it.");
-                }
-              }
-              if ((createLevelMenu === menuToNumber("musicboxes")) && [2146, 2147].includes(createLevelObject)) {
-                switch (createLevelObject) {
-                  case 2146:
-                    newValue = 1;
-                    break;
-                  case 2147:
-                    newValue = 2;
-                    break;
-                  default:
-                    break;
-                }
-                if (changeMusicBoxProperty(gameInfo, column, row, "octaves", newValue) === -1) {
-                  showMessage("Info", "Click on a music box to set the number of octaves.");
-                }
-              }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2132) && instruments().includes(createLevelInstrument)) {
-                if (changeMusicBoxProperty(gameInfo, column, row, "instrument", createLevelInstrument) === -1) {
-                  showMessage("Info", "Click on a music box to set the instrument of it.");
+                if ([2034, 2035, 2103].includes(createLevelObject)) {
+                  switch (createLevelObject) {
+                    case 2034:
+                      newValue = "top";
+                      break;
+                    case 2035:
+                      newValue = "middle";
+                      break;
+                    case 2103:
+                      newValue = "bottom";
+                      break;
+                    default:
+                      break;
+                  }
+                  if (changeMusicBoxProperty(gameInfo, column, row, "part", newValue) === -1) {
+                    showMessage("Info", "Click on a music box to set the part of it.");
+                  }
                 }
-              }
 
-              if ((createLevelMenu === menuToNumber("musicboxes")) && (createLevelObject === 2131) && (createLevelTranspose !== 0)) {
-                if (transposeMusicBox(gameInfo, column, row, createLevelTranspose) === -1) {
-                  showMessage("Info", "Click on a music box to set the instrument of it.");
+                if ((createLevelObject === 2131) && (createLevelTranspose !== 0)) {
+                  if (transposeMusicBox(gameInfo, column, row, createLevelTranspose) === -1) {
+                    showMessage("Info", "Click on a music box to transpose the notes.");
+                  }
                 }
+
+                if ((createLevelObject === 2132) && instruments().includes(createLevelInstrument)) {
+                  if (changeMusicBoxProperty(gameInfo, column, row, "instrument", createLevelInstrument) === -1) {
+                    showMessage("Info", "Click on a music box to set the instrument of it.");
+                  }
+                }
+
+                if ([2146, 2147].includes(createLevelObject)) {
+                  switch (createLevelObject) {
+                    case 2146:
+                      newValue = 1;
+                      break;
+                    case 2147:
+                      newValue = 2;
+                      break;
+                    default:
+                      break;
+                  }
+                  if (changeMusicBoxProperty(gameInfo, column, row, "octaves", newValue) === -1) {
+                    showMessage("Info", "Click on a music box to set the number of octaves.");
+                  }
+                }
+
+                if ((createLevelObject === 2217) && (createLevelStepsPerMeasure > 0)) {
+                  if (changeMusicBoxProperty(gameInfo, column, row, "stepspermeasure", createLevelStepsPerMeasure.toString()) === -1) {
+                    showMessage("Info", "Click on a music box to set the number of steps per measure.");
+                  }
+                }
+
               }
 
               if (createLevelMenu === menuToNumber("foregroundcolors")) {
@@ -4107,10 +4139,33 @@ function BalPage() {
             case 2131:
               ok = false;
               if (row > 0) {
-                newValue = await showInput("Music boxes", "Transpose semitones (-24..24):", "-12");
+                if (createLevelTranspose < -24 || createLevelTranspose > 24) {
+                  createLevelTranspose = 0;
+                }
+                newValue = await showInput("Music boxes", "Transpose semitones (-24..24):", createLevelTranspose.toString());
                 if (newValue !== null) {
                   createLevelTranspose = tryParseInt(newValue, 100);
                   ok = ((createLevelTranspose >= -24) && (createLevelTranspose <= 24));
+                  if (!ok) {
+                    showMessage("Error", "Invalid value");
+                  }
+                }
+              }
+              handleCancel();
+              break;
+            case 2217:
+              ok = false;
+              if (row > 0) {
+                if (createLevelStepsPerMeasure < 1) {
+                  createLevelStepsPerMeasure = 8;
+                }
+                newValue = await showInput("Music boxes", "Steps per measure:", createLevelStepsPerMeasure);
+                if (newValue !== null) {
+                  createLevelStepsPerMeasure = tryParseInt(newValue, -1);
+                  ok = (createLevelStepsPerMeasure > 0);
+                  if (!ok) {
+                    showMessage("Error", "Invalid value");
+                  }
                 }
               }
               handleCancel();

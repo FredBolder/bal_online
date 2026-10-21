@@ -730,13 +730,34 @@ function randomUserSequence(notes) {
 
 export function transposeMusicBox(gameInfo, x, y, semitones) {
     let idx = -1;
+    let note = "";
+    let noteInfo1 = "";
+    let noteInfo2 = "";
+
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
         const musicBox = gameInfo.musicBoxes[idx];
         for (let i = 0; i < musicBox.notes.length; i++) {
-            if (!["-", "_"].includes(musicBox.notes[i])) {
-                musicBox.notes[i] = transpose(musicBox.notes[i], semitones);
+            const notes = musicBox.notes[i].split("&");
+            for (let j = 0; j < notes.length; j++) {
+                if (["-", "_", "|"].includes(notes[j])) {
+                    continue;
+                }
+                note = notes[j];
+                noteInfo1 = "";
+                noteInfo2 = "";
+                if ((j === 0) && (note.startsWith("T") || note.startsWith("2") || note.startsWith("3"))) {
+                    noteInfo1 = note.slice(0, 1);
+                    note = note.slice(1);
+                }
+                if (note.startsWith("*") || note.startsWith(".")) {
+                    noteInfo2 = note.slice(0, 1);
+                    note = note.slice(1);
+                }
+                note = transpose(note, semitones);
+                notes[j] = noteInfo1 + noteInfo2 + note;
             }
+            musicBox.notes[i] = notes.join("&");
         }
     }
     return idx;
