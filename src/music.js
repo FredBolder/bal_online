@@ -1220,11 +1220,11 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
 
 export function transpose(note, semitones) {
   if (!Number.isInteger(semitones) || semitones < -24 || semitones > 24) {
-    throw new RangeError('Semitones must be an integer between -24 and 24');
+    return note;
   }
   const m = String(note).trim().match(/^([A-Ga-g])([#b]?)(-?\d+)$/);
   if (!m) {
-    throw new Error('Invalid note format. Examples: A4, Bb3, C#6');
+    return note;
   }
 
   const [, letter, accidental, octaveStr] = m;

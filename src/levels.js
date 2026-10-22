@@ -58,7 +58,7 @@ export const seriesMathEnd = 6254;
 export const seriesLanguageStart = 6300;
 export const seriesLanguageEnd = 6304;
 export const seriesFishStart = 6350;
-export const seriesFishEnd = 6366;
+export const seriesFishEnd = 6367;
 export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
@@ -902,7 +902,7 @@ export function checkSettings(data, settings) {
                 case "M":
                 case 157:
                   val_int = tryParseInt(values[2], -1);
-                  if (val_int < 2) {
+                  if (val_int < 0 || val_int > 1000) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for the number of steps per measure.\n`;
                   }
                   break;

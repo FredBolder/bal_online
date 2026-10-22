@@ -4785,6 +4785,9 @@ function drawLevel(
         case 2217:
           drawAbbreviation("st/m");
           break;
+        case 2218:
+          drawAbbreviation("vol");
+          break;
         case 2222:
             drawAbbreviation(globalVars.createLevelEditMode ? "EDIT" : "REPL", "darkgreen", "white");
           break;

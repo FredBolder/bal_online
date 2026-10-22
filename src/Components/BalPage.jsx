@@ -142,6 +142,7 @@ let createLevelStepsPerMeasure = 8;
 let createLevelStonesPages = 2;
 let createLevelTicks = -1;
 let createLevelTranspose = 0;
+let createLevelVolume = 90;
 let createLevelWaterPages = 2;
 let ctx;
 let ignoreGravity = true;
@@ -1296,7 +1297,7 @@ function BalPage() {
             break;
           case 6:
             // Music box
-            arr1 = [157, 2092, 2212, 2132, 2133, 2034, 2035, 2103, 2146, 2147, 2216, 2131, 2217, 0, 0, 2222];
+            arr1 = [157, 2092, 2212, 2132, 2218, 2216, 2131, 2133, 2034, 2035, 2103, 2146, 2147, 2217, 0, 2222];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2118, 2119];
             break;
           case 7:
@@ -3493,27 +3494,6 @@ function BalPage() {
                   }
                 }
 
-                if (createLevelObject === 2216) {
-                  let musicBox = null;
-                  if (!oneSelected) {
-                    break;
-                  }
-                  const objectNumber = getGameDataValue(gameData, column, row);
-                  if (objectNumber !== 157) {
-                    continue;
-                  }
-                  const idx = findElementByCoordinates(column, row, gameInfo.musicBoxes);
-                  if (idx < 0) {
-                    continue;
-                  }
-                  musicBox = gameInfo.musicBoxes[idx];
-                  const valuesPerMeasure = musicBox.stepsPerMeasure <= 0 ? 8 : musicBox.stepsPerMeasure;
-                  const newNotes = await showInputNotes("Music boxes", "Notes (examples: C4, Bb3, F#4)", musicBox.notes, valuesPerMeasure);
-                  if (newNotes !== null) {
-                    musicBox.notes.splice(0, musicBox.notes.length, ...newNotes);
-                  }
-                }
-
                 if ([2034, 2035, 2103].includes(createLevelObject)) {
                   switch (createLevelObject) {
                     case 2034:
@@ -3562,8 +3542,35 @@ function BalPage() {
                 }
 
                 if ((createLevelObject === 2217) && (createLevelStepsPerMeasure > 0)) {
-                  if (changeMusicBoxProperty(gameInfo, column, row, "stepspermeasure", createLevelStepsPerMeasure.toString()) === -1) {
+                  if (changeMusicBoxProperty(gameInfo, column, row, "stepspermeasure", createLevelStepsPerMeasure) === -1) {
                     showMessage("Info", "Click on a music box to set the number of steps per measure.");
+                  }
+                }
+
+                if (createLevelObject === 2216) {
+                  let musicBox = null;
+                  if (!oneSelected) {
+                    break;
+                  }
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if (objectNumber !== 157) {
+                    continue;
+                  }
+                  const idx = findElementByCoordinates(column, row, gameInfo.musicBoxes);
+                  if (idx < 0) {
+                    continue;
+                  }
+                  musicBox = gameInfo.musicBoxes[idx];
+                  const valuesPerMeasure = musicBox.stepsPerMeasure <= 0 ? 8 : musicBox.stepsPerMeasure;
+                  const newNotes = await showInputNotes("Music boxes", "Notes (examples: C4, Bb3, F#4)", musicBox.notes, valuesPerMeasure);
+                  if (newNotes !== null) {
+                    musicBox.notes.splice(0, musicBox.notes.length, ...newNotes);
+                  }
+                }
+
+                if (createLevelObject === 2218) {
+                  if (changeMusicBoxProperty(gameInfo, column, row, "volume", createLevelVolume) === -1) {
+                    showMessage("Info", "Click on a music box to set the volume.");
                   }
                 }
 
@@ -3658,6 +3665,16 @@ function BalPage() {
   }
 
   async function handleCreateLevelCanvasClick(e) {
+
+    function checkInt(value, min, max) {
+      // true = ok
+      if (!Number.isInteger(value) || value < min || value > max) {
+        showMessage("Error", `Integer number expected in the range from ${min} to ${max}`);
+        return false;
+      }
+      return true;
+    }
+
     function handleCancel() {
       if (!ok) {
         createLevelObject = -1;
@@ -3694,7 +3711,6 @@ function BalPage() {
     let direction = "";
     let newValue = "";
     let ok = false;
-    let val_int = -1;
 
     if (column >= 0 && column < columns && row >= 0 && row < rows) {
       if (!e.altKey && !e.shiftKey && !e.ctrlKey) {
@@ -4044,13 +4060,13 @@ function BalPage() {
             case 2215:
               ok = false;
               if (row > 0) {
-                newValue = await showInput("Detectors", "Range", "1");
+                if (createLevelRange < 1 || createLevelRange > detectorMaxRange) {
+                  createLevelRange = 1;
+                }
+                newValue = await showInput("Detectors", "Range", createLevelRange.toString());
                 if (newValue !== null) {
-                  val_int = tryParseInt(newValue, -1);
-                  if (val_int >= 1 && val_int <= detectorMaxRange) {
-                    createLevelRange = val_int;
-                    ok = true;
-                  }
+                  createLevelRange = tryParseInt(newValue, -1);
+                  ok = checkInt(createLevelRange, 1, detectorMaxRange);
                 }
               }
               handleCancel();
@@ -4065,13 +4081,13 @@ function BalPage() {
             case 2215:
               ok = false;
               if (row > 0) {
-                newValue = await showInput("Flamethrowers", "Range", "3");
+                if (createLevelRange < 1 || createLevelRange > flamethrowerMaxRange) {
+                  createLevelRange = 3;
+                }
+                newValue = await showInput("Flamethrowers", "Range", createLevelRange.toString());
                 if (newValue !== null) {
-                  val_int = tryParseInt(newValue, -1);
-                  if (val_int >= 1 && val_int <= flamethrowerMaxRange) {
-                    createLevelRange = val_int;
-                    ok = true;
-                  }
+                  createLevelRange = tryParseInt(newValue, -1);
+                  ok = checkInt(createLevelRange, 1, flamethrowerMaxRange);
                 }
               }
               handleCancel();
@@ -4145,10 +4161,7 @@ function BalPage() {
                 newValue = await showInput("Music boxes", "Transpose semitones (-24..24):", createLevelTranspose.toString());
                 if (newValue !== null) {
                   createLevelTranspose = tryParseInt(newValue, 100);
-                  ok = ((createLevelTranspose >= -24) && (createLevelTranspose <= 24));
-                  if (!ok) {
-                    showMessage("Error", "Invalid value");
-                  }
+                  ok = checkInt(createLevelTranspose, -24, 24);
                 }
               }
               handleCancel();
@@ -4156,16 +4169,27 @@ function BalPage() {
             case 2217:
               ok = false;
               if (row > 0) {
-                if (createLevelStepsPerMeasure < 1) {
+                if (createLevelStepsPerMeasure < 1 || createLevelStepsPerMeasure > 1000) {
                   createLevelStepsPerMeasure = 8;
                 }
-                newValue = await showInput("Music boxes", "Steps per measure:", createLevelStepsPerMeasure);
+                newValue = await showInput("Music boxes", "Steps per measure:", createLevelStepsPerMeasure.toString());
                 if (newValue !== null) {
                   createLevelStepsPerMeasure = tryParseInt(newValue, -1);
-                  ok = (createLevelStepsPerMeasure > 0);
-                  if (!ok) {
-                    showMessage("Error", "Invalid value");
-                  }
+                  ok = checkInt(createLevelStepsPerMeasure, 0, 1000);
+                }
+              }
+              handleCancel();
+              break;
+            case 2218:
+              ok = false;
+              if (row > 0) {
+                if (createLevelVolume < 0 || createLevelVolume > 100) {
+                  createLevelVolume = 90;
+                }
+                newValue = await showInput("Music boxes", "Volume:", createLevelVolume.toString());
+                if (newValue !== null) {
+                  createLevelVolume = tryParseInt(newValue, -1);
+                  ok = checkInt(createLevelVolume, 0, 100);
                 }
               }
               handleCancel();
@@ -4392,13 +4416,13 @@ function BalPage() {
           case 2145:
             ok = false;
             if ((row > 0) && (createLevelMenu === menuToNumber("misc"))) {
-              newValue = await showInput("Ticks", "Enter the number of game ticks.", "3");
+              if (createLevelTicks < 1 || createLevelTicks > 100000) {
+                createLevelTicks = 3;
+              }
+              newValue = await showInput("Ticks", "Enter the number of game ticks.", createLevelTicks.toString());
               if (newValue !== null) {
-                val_int = tryParseInt(newValue, -1);
-                if (val_int >= 1) {
-                  createLevelTicks = val_int;
-                  ok = true;
-                }
+                createLevelTicks = tryParseInt(newValue, -1);
+                ok = checkInt(createLevelTicks, 1, 100000);
               }
             }
             handleCancel();

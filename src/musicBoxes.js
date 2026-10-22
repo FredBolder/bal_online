@@ -80,6 +80,9 @@ export function changeMusicBoxProperty(gameInfo, x, y, property, value, add = fa
                     musicBox.part = value;
                 }
                 break;
+            case "volume":
+                musicBox.volume = value;
+                break;
             default:
                 break;
         }
