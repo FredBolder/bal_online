@@ -1,5 +1,5 @@
 export function disappearingStoneModes() {
-    return ["pattern", "group"];
+    return ["pattern", "group", "timed"];
 }
 
 export function checkDisappearingStones(gameData, gameInfo) {
@@ -8,6 +8,11 @@ export function checkDisappearingStones(gameData, gameInfo) {
 
     for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
         const disappearingStone = gameInfo.disappearingStones[i];
+    
+        if (disappearingStone.status === -10) {
+            continue;
+        }
+
         if (disappearingStone.mode === "group") {
             if ((disappearingStone.status < 0) && (disappearingStone.status > -4)) {
                 disappearingStone.status--;
@@ -16,6 +21,7 @@ export function checkDisappearingStones(gameData, gameInfo) {
             if (disappearingStone.status === -4) {
                 if (gameData[disappearingStone.y][disappearingStone.x] === 198) {
                     gameData[disappearingStone.y][disappearingStone.x] = 0;
+                    disappearingStone.status = -10;
                     result.update = true;
                 }
             }
@@ -57,6 +63,25 @@ export function checkDisappearingStones(gameData, gameInfo) {
                 }
             }
             result.update = true;
+        }
+        if (disappearingStone.mode === "timed") {
+            if (disappearingStone.status === 0 && disappearingStone.patternCounter >= disappearingStone.pattern[disappearingStone.patternIndex]) {
+                disappearingStone.patternCounter = 0;
+                disappearingStone.patternIndex = 0;
+                disappearingStone.status = -1;
+            }
+            disappearingStone.patternCounter++;
+            if ((disappearingStone.status < 0) && (disappearingStone.status > -4)) {
+                disappearingStone.status--;
+                result.update = true;
+            }
+            if (disappearingStone.status === -4) {
+                if (gameData[disappearingStone.y][disappearingStone.x] === 198) {
+                    gameData[disappearingStone.y][disappearingStone.x] = 0;
+                    disappearingStone.status = -10;
+                    result.update = true;
+                }
+            }
         }
     }
     return result;

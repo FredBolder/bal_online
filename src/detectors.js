@@ -25,6 +25,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     let objectNumber = 0;
     let pusher = null;
     let source = null;
+    let stone = null;
     let ticks = 50;
     let yellowBall = null;
     let val_int = 0;
@@ -286,6 +287,16 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
                     }
                     lockedDoor = gameInfo.lockedDoors[idx];
                     lockedDoor.color = objName.slice(0, objName.length - 10);
+                }
+                if (objectNumber === 198 && ["timeddisappearingstone1", "timeddisappearingstone2", "timeddisappearingstone3", "timeddisappearingstone4"].includes(objName)) {
+                    idx = findElementByCoordinates(absX, absY, gameInfo.disappearingStones);
+                    if (idx < 0) {
+                        continue;
+                    }
+                    stone = gameInfo.disappearingStones[idx];
+                    stone.mode = "timed";
+                    stone.pattern.length = 0;
+                    stone.pattern.push(gameVars[`userInt${objName.slice(objName.length - 1)}`]);
                 }
                 if (objectNumber === 209 && ["movingpusherdown", "movingpusherleft", "movingpusherright", "movingpusherup"].includes(objName)) {
                     idx = findElementByCoordinates(absX, absY, gameInfo.pushers);
@@ -764,6 +775,12 @@ function nameToObjectNumber(objName) {
             return 255;
         case "detonator":
             return 37;
+        case "disappearingstone":
+        case "timeddisappearingstone1":
+        case "timeddisappearingstone2":
+        case "timeddisappearingstone3":
+        case "timeddisappearingstone4":
+            return 198;
         case "door":
             return 169;
         case "lockeddoor":

@@ -1,0 +1,25 @@
+$userint1: 10
+$target: 4, 14, command
+$value: 4, 14, create, timeddisappearingstone1, rel, -1, -2
+$disappearingstonemode: 7, 12, group
+$disappearingstonemode: 10, 12, timed
+$pattern: 10, 12, 5
+$disappearingstonemode: 12, 12, timed
+$pattern: 12, 12, 10
+$disappearingstonemode: 14, 12, timed
+$pattern: 14, 12, 20
+11111111111111111
+1               1
+1               1
+1               1
+1   ЏЏ          1
+1               1
+1               1
+1               1
+1               1
+1               1
+1               1
+1      4  4 4 4 1
+13     Џ  Џ Џ Џ 1
+1    2          1
+1111ђ1ђ1111111111

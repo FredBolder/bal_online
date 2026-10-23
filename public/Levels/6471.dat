@@ -1,0 +1,42 @@
+$extra: 1
+$stonepattern: 1
+$userint1: 40
+$userint2: 8
+$activesides: 2, 2, bottom
+$detectormode: 2, 2, blueball
+$movable: 2, 2, no
+$target: 2, 2, command
+$value: 2, 2, create, TimedDisappearingStone1, abs, 5, 5
+$activesides: 3, 2, bottom
+$detectormode: 3, 2, blueball
+$movable: 3, 2, no
+$target: 3, 2, command
+$value: 3, 2, create, TimedDisappearingStone1, abs, 7, 4
+$activesides: 4, 2, bottom
+$detectormode: 4, 2, blueball
+$movable: 4, 2, no
+$target: 4, 2, command
+$value: 4, 2, create, TimedDisappearingStone1, abs, 9, 3, 10, 3
+$detectormode: 2, 5, blueball
+$movable: 2, 5, no
+$target: 2, 5, command
+$value: 2, 5, create, Stone, abslist, 6, 5, 8, 4, 11, 3
+$condition: 2, 6, activated (abs, 2, 5) = false
+$movable: 2, 6, no
+$target: 2, 6, command
+$value: 2, 6, delete, Stone, abslist, 6, 5, 8, 4, 11, 3
+111111111111111
+11111        31
+11ђђђ         1
+1           111
+1 2           1
+1=ђ11         1
+1=ђ11         1
+1=111         1
+1=111:::::::::1
+1=1111111111111
+1=1111111111111
+1=1111111111 %1
+1             1
+1 4           1
+111111111111111

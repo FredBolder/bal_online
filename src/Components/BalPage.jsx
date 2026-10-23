@@ -1184,7 +1184,7 @@ function BalPage() {
               default:
                 // page 1
                 arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151];
-                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 2092, 22, 258, 0, 0, 2101];
+                arr2 = [152, 174, 175, 176, 177, 35, 12, 34, 99, 198, 2092, 2219, 22, 258, 0, 2101];
                 break;
             }
             break;
@@ -1521,6 +1521,7 @@ function BalPage() {
     let index = -1;
     let playSounds = [];
     const swap = gameVars.swapLeftRight;
+    let variables = "";
 
     function addSound(sound) {
       if (!playSounds.includes(sound)) {
@@ -2445,6 +2446,11 @@ function BalPage() {
           case "R":
             // Move a 3-step stairs to the right
             pressKeysSequentially("eedaaqadedqad");
+            break;
+          case "V":
+            variables = `userInt1: ${gameVars.userInt1}, userInt2: ${gameVars.userInt2}, `;
+            variables += `userInt3: ${gameVars.userInt3}, userInt4: ${gameVars.userInt4}`;
+            showMessage("Variables", variables);
             break;
           default:
             break;
@@ -3607,6 +3613,31 @@ function BalPage() {
                   saveUndo("Remove ignore stone pattern by cell", "ignorepattern", { list: gameVars.ignorePattern });
                   changeIgnoreByCell(gameVars, column, row, false);
                 }
+                if (createLevelObject === 2219) {
+                  if (!oneSelected) {
+                    break;
+                  }
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if (objectNumber !== 198) {
+                    continue;
+                  }
+                  const idx = findElementByCoordinates(column, row, gameInfo.disappearingStones);
+                  if (idx < 0) {
+                    continue;
+                  }
+                  const obj = gameInfo.disappearingStones[idx];
+                  newValue = await showInput("Disappearing stones", "Pattern", obj.pattern.join(", "));
+                  if (newValue === null) {
+                    newValue = "";
+                    continue;
+                  } else {
+                    obj.pattern = newValue.trim().split(",").map(value => {
+                      const number = tryParseInt(value.trim(), 1);
+                      return number;
+                    });
+                  }
+                }
+
               }
             } else if (createLevelObject > 0) {
               deleteIfLava(backData, gameInfo, column, row);
@@ -3858,7 +3889,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Disappearing stones", "Mode:", ["group", "pattern"], 0);
+                newValue = await showSelect("Disappearing stones", "Mode:", ["group", "pattern", "timed"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

@@ -993,7 +993,12 @@ function drawLevel(
       mode = gameInfo.disappearingStones[idx].mode;
       status = gameInfo.disappearingStones[idx].status;
     }
-    if (mode === "group") {
+    
+    if (status === -10) {
+      return;
+    }
+
+    if (mode === "group" || mode === "timed") {
       if (status >= -1) {
         n = 0;
       } else {
@@ -4520,7 +4525,7 @@ function drawLevel(
         case 2116:
           drawAbbreviation("A5", "black", "green");
           break;
-        case 2117:"tr"
+        case 2117: "tr"
           drawAbbreviation("B5", "black", "green");
           break;
         case 2118:
@@ -4788,8 +4793,11 @@ function drawLevel(
         case 2218:
           drawAbbreviation("vol");
           break;
+        case 2219:
+          drawAbbreviation("pat");
+          break;
         case 2222:
-            drawAbbreviation(globalVars.createLevelEditMode ? "EDIT" : "REPL", "darkgreen", "white");
+          drawAbbreviation(globalVars.createLevelEditMode ? "EDIT" : "REPL", "darkgreen", "white");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
