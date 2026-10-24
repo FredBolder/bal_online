@@ -33,7 +33,7 @@ describe("Flamethrowers", () => {
                 }
             ],
             flamethrowers: [
-                { x: 6, y: 3, active: false, direction: "left", range: 3, display: "default", movable: false, group: 1 }
+                { x: 6, y: 3, mode: "group", active: false, direction: "left", range: 3, display: "default", movable: false, group: 1 }
             ],
             yellowBalls: [{ x: 3, y: 3, direction: "none" }, { x: 4, y: 3, direction: "none" }],
             greenBalls: 1,
@@ -59,7 +59,7 @@ describe("Flamethrowers", () => {
         expect(info).toEqual({ update: true, sound: "", gameOver: false });
         expect(input).toEqual(expectedOutput);
         expect(gameInfo.flamethrowers).toEqual([
-            { x: 6, y: 3, active: true, direction: "left", range: 3, display: "default", movable: false, group: 1 }
+            { x: 6, y: 3, mode: "group", active: true, direction: "left", range: 3, display: "default", movable: false, group: 1 }
         ]);
         expect(gameInfo.yellowBalls).toEqual([]);
     });
@@ -77,7 +77,7 @@ describe("Flamethrowers", () => {
                 }
             ],
             flamethrowers: [
-                { x: 6, y: 3, active: false, direction: "left", range: 4, display: "stone", movable: false, group: 1 }
+                { x: 6, y: 3, mode: "group", active: false, direction: "left", range: 4, display: "stone", movable: false, group: 1 }
             ],
             greenBalls: 1,
         };
@@ -102,7 +102,7 @@ describe("Flamethrowers", () => {
         expect(info).toEqual({ update: true, sound: "pain", gameOver: true });
         expect(input).toEqual(expectedOutput);
         expect(gameInfo.flamethrowers).toEqual([
-            { x: 6, y: 3, active: true, direction: "left", range: 4, display: "stone", movable: false, group: 1 }
+            { x: 6, y: 3, mode: "group", active: true, direction: "left", range: 4, display: "stone", movable: false, group: 1 }
         ]);
     });
 

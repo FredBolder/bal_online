@@ -403,7 +403,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         }
         case 257: {
-            let flamethrower = { x, y, active: false, direction: "right", range: 3, display: "default", movable: true, group: 1 };
+            let flamethrower = { x, y, mode: "group", active: false, direction: "right", range: 3, display: "default", movable: true, group: 1 };
             gameInfo.flamethrowers.push(flamethrower);
             break;
         }

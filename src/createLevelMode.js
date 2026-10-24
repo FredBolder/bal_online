@@ -243,6 +243,8 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.flamethrowers[idx2].direction = gameInfo.flamethrowers[idx1].direction;
                 gameInfo.flamethrowers[idx2].display = gameInfo.flamethrowers[idx1].display;
                 gameInfo.flamethrowers[idx2].group = gameInfo.flamethrowers[idx1].group;
+                gameInfo.flamethrowers[idx2].mode = gameInfo.flamethrowers[idx1].mode;
+                gameInfo.flamethrowers[idx2].movable = gameInfo.flamethrowers[idx1].movable;
                 gameInfo.flamethrowers[idx2].range = gameInfo.flamethrowers[idx1].range;
             }
             break;

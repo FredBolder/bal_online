@@ -1203,6 +1203,7 @@ function drawLevel(
     let d1 = w1 * 0.07;
     let d2 = d1 * 2;
     let group = 1;
+    let mode = "group";
     let width = w1 * 0.1;
 
     idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
@@ -1210,6 +1211,7 @@ function drawLevel(
       direction = gameInfo.flamethrowers[idx].direction;
       display = gameInfo.flamethrowers[idx].display;
       group = gameInfo.flamethrowers[idx].group;
+      mode = gameInfo.flamethrowers[idx].mode;
     }
 
     switch (display) {
@@ -1230,7 +1232,9 @@ function drawLevel(
     }
 
     drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646", true);
-    drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.6, w1 * 0.6);
+    if (mode === "group") {
+      drawText(ctx, xc, yc, group.toString(), "middle", "white", w2 * 0.6, w1 * 0.6);
+    }
     switch (direction) {
       case "down":
         drawFilledBox(ctx, xmin + d1, ymax - width, w1 - d2, width, "yellow");

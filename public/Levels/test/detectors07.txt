@@ -1,19 +1,19 @@
 $activesides: 11, 3, left
 $condition: 11, 3, generalName = elevator
 $target: 11, 3, command
-$value: 11, 3, rotateright, elevator, rel, -1, 0
+$value: 11, 3, rotateright, elevators, rel, -1, 0
 $activesides: 4, 3, right
 $condition: 4, 3, generalName = elevator
 $target: 4, 3, command
-$value: 4, 3, rotateright, elevator, rel, 1, 0
+$value: 4, 3, rotateright, elevators, rel, 1, 0
 $activesides: 4, 13, right
 $condition: 4, 13, generalName = elevator
 $target: 4, 13, command
-$value: 4, 13, rotateright, elevator, rel, 1, 0
+$value: 4, 13, rotateright, elevators, rel, 1, 0
 $activesides: 11, 13, left
 $condition: 11, 13, generalName = elevator
 $target: 11, 13, command
-$value: 11, 13, rotateright, elevator, rel, -1, 0
+$value: 11, 13, rotateright, elevators, rel, -1, 0
 111111111111111
 1             1
 1             1

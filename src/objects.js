@@ -43,7 +43,7 @@ export function fishToFishName(fish, generalName) {
 
     if ((fish.palette === 35) && (fish.shape === 1) && (fish.tail === 9) &&
         (fish.fins === 4) && (fish.stripes === 0) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === -10) &&
-        (fish.eyePercentage === 50) && (fish.pupilPercentage === 40)) {
+        (fish.eyePercentage === 50) && (fish.pupilPercentage === 60)) {
         return generalName ? "Chromis" : "Blue Chromis";
     }
 
@@ -78,7 +78,7 @@ export function fishToFishName(fish, generalName) {
     }
 
     if ((fish.palette === 43) && (fish.shape === 14) && (fish.tail === 13) &&
-        (fish.fins === 17) && (fish.stripes === 0) && (fish.tailStripes === 0) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) &&
+        (fish.fins === 17) && (fish.stripes === 0) && (fish.tailStripes === 6) && (fish.eyeOffsetX === 0) && (fish.eyeOffsetY === 0) &&
         (fish.eyePercentage === 50) && (fish.pupilPercentage === 60)) {
         return generalName ? "Prochilodus" : "Flagtail Prochilodus";
     }

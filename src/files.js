@@ -563,6 +563,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${coordinates}, ${flamethrower.group}`;
             lines.push(line);
         }
+        if (flamethrower.mode !== "group") {
+            line = `$flamethrowermode: ${coordinates}, ${flamethrower.mode}`;
+            lines.push(line);
+        }
         if (!flamethrower.movable) {
             line = `$movable: ${coordinates}, no`;
             lines.push(line);

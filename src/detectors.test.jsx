@@ -677,7 +677,7 @@ describe("Pistons", () => {
             detectors: [
                 {
                     x: 2, y: 5, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
-                    value: "changedirection, spike, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: false,
+                    value: "changedirection, spikes, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: false,
                     activatedCount: 0, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
                 }
             ],
@@ -707,7 +707,7 @@ describe("Pistons", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 2, y: 5, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
-                value: "changedirection, spike, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: true,
+                value: "changedirection, spikes, rellist, 1, 0, 3, 0, 2, 0", display: "stone", activated: true,
                 activatedCount: 1, sequence: false, movable: true, condition: "", event: "", text: "", group: 1
             }
         ]);
@@ -721,7 +721,7 @@ describe("Pistons", () => {
             detectors: [
                 {
                     x: 4, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
-                    value: "changedirection, elevator, rel, 0, -1", display: "stone", activated: false,
+                    value: "changedirection, elevators, rel, 0, -1", display: "stone", activated: false,
                     activatedCount: 0, sequence: false, movable: true, condition: "generalName=Elevator", event: "", text: "", group: 1
                 }
             ],
@@ -752,7 +752,7 @@ describe("Pistons", () => {
         expect(gameInfo.detectors).toEqual([
             {
                 x: 4, y: 5, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
-                value: "changedirection, elevator, rel, 0, -1", display: "stone", activated: true,
+                value: "changedirection, elevators, rel, 0, -1", display: "stone", activated: true,
                 activatedCount: 1, sequence: false, movable: true, condition: "generalName=Elevator", event: "", text: "", group: 1
             }
         ]);

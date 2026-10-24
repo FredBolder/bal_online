@@ -5,7 +5,7 @@ import { conveyorBeltDirections, conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
 import { elevatorDirections, horizontalElevatorDirections } from "./elevators.js";
-import { flamethrowerDirections, flamethrowerDisplayModes, flamethrowerMaxRange } from "./flamethrowers.js";
+import { flamethrowerDirections, flamethrowerDisplayModes, flamethrowerMaxRange, flamethrowerModes } from "./flamethrowers.js";
 import { lockedDoorColors } from "./lockedDoors.js";
 import { moverDirections, moverModes } from "./movers.js";
 import { musicBoxDirections, musicBoxModes } from "./musicBoxes.js";
@@ -216,6 +216,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             if (isDisappearingStone && !disappearingStoneModes().includes(value)) {
                 error = true;
             }
+            if (isFlamethrower && !flamethrowerModes().includes(value)) {
+                error = true;
+            }
             if (isMover && !moverModes().includes(value)) {
                 error = true;
             }
@@ -338,7 +341,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isForce && ["movable"].includes(prop)) {
         list = "forces";
     }
-    if (isFlamethrower && ["direction", "display", "group", "movable", "range"].includes(prop)) {
+    if (isFlamethrower && ["direction", "display", "group", "mode", "movable", "range"].includes(prop)) {
         list = "flamethrowers";
     }
     if (isKey && ["color"].includes(prop)) {

@@ -1308,7 +1308,7 @@ function BalPage() {
           case 8:
             // Misc
             arr1 = [91, 119, 120, 97, 208, 157, 167, 2145, 89, 183, 184, 185, 21];
-            arr2 = [257, 2133, 2215, 2202, 2208];
+            arr2 = [257, 2092, 2133, 2215, 2202, 2208];
             break;
           case 9:
             // Answer balls
@@ -4109,6 +4109,17 @@ function BalPage() {
 
         if (createLevelMenu === menuToNumber("misc")) {
           switch (createLevelObject) {
+            case 2092:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("Flamethrowers", "Mode:", ["group", "on"], 0);
+                if (newValue !== null) {
+                  createLevelMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
             case 2215:
               ok = false;
               if (row > 0) {

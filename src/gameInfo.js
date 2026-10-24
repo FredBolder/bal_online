@@ -374,7 +374,7 @@ export function getGameInfo(backData, gameData) {
                     break;
                 }
                 case 257: {
-                    let flamethrower = { x: j, y: i, active: false, direction: "right", range: 3, display: "default", 
+                    let flamethrower = { x: j, y: i, mode: "group", active: false, direction: "right", range: 3, display: "default", 
                         movable: true, group: 1 };
                     result.flamethrowers.push(flamethrower);
                     break;
@@ -1236,7 +1236,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
                 if (idx >= 0) {
                     obj = gameInfo.flamethrowers[idx];
-                    extraInfo = `Active: ${obj.active}, Direction: ${obj.direction}, Range: ${obj.range}, Display: ${obj.display}, Movable: ${obj.movable}, Group:  ${obj.group}`;
+                    extraInfo = `Mode: ${obj.mode}, Active: ${obj.active}, Direction: ${obj.direction}, Range: ${obj.range}, Display: ${obj.display}, Movable: ${obj.movable}, Group:  ${obj.group}`;
                 }
                 info = `Flamethrower, ` + extraInfo;
                 break;

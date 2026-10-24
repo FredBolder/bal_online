@@ -6,7 +6,7 @@ $detectormode: 7, 5, blueball
 $movable: 7, 5, no
 $range: 7, 5, 10
 $target: 7, 5, command
-$value: 7, 5, changedirection, elevator
+$value: 7, 5, changedirection, elevators
 $activesides: 17, 7, right
 $display: 17, 7, stone
 $detectormode: 17, 7, blueball
@@ -26,7 +26,7 @@ $detectormode: 8, 12, blueball
 $movable: 8, 12, no
 $onetime: 8, 12, yes
 $target: 8, 12, command
-$value: 8, 12, changedirection, onedirectionport, rel, 0, 1 | changedirection, onedirectionport, rel, -2, 1
+$value: 8, 12, changedirection, onedirectionports, rel, 0, 1 | changedirection, onedirectionports, rel, -2, 1
 $group: 10, 4, 10
 $sticky: 10, 4, yes
 $pistonmode: 11, 4, momentary

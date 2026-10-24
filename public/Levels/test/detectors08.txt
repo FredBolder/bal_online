@@ -8,7 +8,7 @@ $target: 11, 3, command
 $value: 11, 3, rotateleft, pusher, rel, -1, 0
 $activesides: 1, 10, bottom
 $target: 1, 10, command
-$value: 1, 10, rotateright, rope, rel, 1, 0 | rotateright, rope, rel, 2, 0 | rotateleft, spike, rel, 3, 0
+$value: 1, 10, rotateright, ropes, rel, 1, 0 | rotateright, ropes, rel, 2, 0 | rotateleft, spikes, rel, 3, 0
 $target: 9, 10, command
 $value: 9, 10, create, movingpusherup, rel, 1, 1
 $activesides: 4, 13, right

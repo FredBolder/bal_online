@@ -410,7 +410,7 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
         if (gd <= 0) {
             return;
         }
-        if (target === "elevator") {
+        if (target === "elevators") {
             if (gd === 6 || gd === 106) {
                 idx = findElementByCoordinates(x, y, gameInfo.elevators);
                 if (idx < 0) {
@@ -453,25 +453,24 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
             flamethrower.direction = flipDirection(flamethrower.direction);
             return;
         }
-        if (target === "onedirectionport") {
-            switch (gd) {
-                case 10:
-                    gameData[y][x] = 11;
-                    break;
-                case 11:
-                    gameData[y][x] = 10;
-                    break;
-                case 87:
-                    gameData[y][x] = 88;
-                    break;
-                case 88:
-                    gameData[y][x] = 87;
-                    break;
-                default:
-                    break;
-            }
+
+        if (gd === 10 && (target === "onedirectionports" || target === "onedirectionportright")) {
+            gameData[y][x] = 11;
             return;
         }
+        if (gd === 11 && (target === "onedirectionports" || target === "onedirectionportleft")) {
+            gameData[y][x] = 10;
+            return;
+        }
+        if (gd === 87 && (target === "onedirectionports" || target === "onedirectionportup")) {
+            gameData[y][x] = 88;
+            return;
+        }
+        if (gd === 88 && (target === "onedirectionports" || target === "onedirectionportdown")) {
+            gameData[y][x] = 87;
+            return;
+        }
+
         if (target === "pusher") {
             if (gd !== 209) {
                 return;
@@ -484,25 +483,24 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
             pusher.direction = flipDirection(pusher.direction);
             return;
         }
-        if (target === "spike") {
-            switch (gd) {
-                case 174:
-                    gameData[y][x] = 175;
-                    break;
-                case 175:
-                    gameData[y][x] = 174;
-                    break;
-                case 176:
-                    gameData[y][x] = 177;
-                    break;
-                case 177:
-                    gameData[y][x] = 176;
-                    break;
-                default:
-                    break;
-            }
+
+        if (gd === 174 && (target === "spikes" || target === "spikeup")) {
+            gameData[y][x] = 175;
             return;
         }
+        if (gd === 175 && (target === "spikes" || target === "spikedown")) {
+            gameData[y][x] = 174;
+            return;
+        }
+        if (gd === 176 && (target === "spikes" || target === "spikeright")) {
+            gameData[y][x] = 177;
+            return;
+        }
+        if (gd === 177 && (target === "spikes" || target === "spikeleft")) {
+            gameData[y][x] = 176;
+            return;
+        }
+
         if (target === "tropicalfish") {
             if (gd !== 243) {
                 return;
@@ -524,7 +522,7 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
         }
         return;
     }
-    if (target === "elevator") {
+    if (target === "elevators") {
         for (let i = 0; i < gameInfo.elevators.length; i++) {
             const elevator = gameInfo.elevators[i];
             if (elevator.up) {
@@ -842,6 +840,10 @@ function nameToObjectNumber(objName) {
             return 5;
         case "magnet":
             return 119;
+        case "mirror1":
+            return 95;
+        case "mirror2":
+            return 96;
         case "onedirectionportdown":
             return 88;
         case "onedirectionportleft":
@@ -1095,7 +1097,7 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
         bd = getGameDataValue(backData, x, y);
         gd = getGameDataValue(gameData, x, y);
 
-        if (target === "elevator") {
+        if (target === "elevators") {
             newObjectNumber = -1;
             switch (gd) {
                 case 6:
@@ -1131,25 +1133,33 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
             flamethrower.direction = rotateDirection(flamethrower.direction, rotateLeft);
             return;
         }
-        if (target === "onedirectionport") {
-            switch (gd) {
-                case 10:
-                    gameData[y][x] = rotateLeft ? 87 : 88;
-                    break;
-                case 11:
-                    gameData[y][x] = rotateLeft ? 88 : 87;
-                    break;
-                case 87:
-                    gameData[y][x] = rotateLeft ? 11 : 10;
-                    break;
-                case 88:
-                    gameData[y][x] = rotateLeft ? 10 : 11;
-                    break;
-                default:
-                    break;
-            }
+
+        if (gd === 95 && (target === "mirrors" || target === "mirror1")) {
+            gameData[y][x] = 96;
             return;
         }
+        if (gd === 96 && (target === "mirrors" || target === "mirror2")) {
+            gameData[y][x] = 95;
+            return;
+        }
+
+        if (gd === 10 && (target === "onedirectionports" || target === "onedirectionportright")) {
+            gameData[y][x] = rotateLeft ? 87 : 88;
+            return;
+        }
+        if (gd === 11 && (target === "onedirectionports" || target === "onedirectionportleft")) {
+            gameData[y][x] = rotateLeft ? 88 : 87;
+            return;
+        }
+        if (gd === 87 && (target === "onedirectionports" || target === "onedirectionportup")) {
+            gameData[y][x] = rotateLeft ? 11 : 10;
+            return;
+        }
+        if (gd === 88 && (target === "onedirectionports" || target === "onedirectionportdown")) {
+            gameData[y][x] = rotateLeft ? 10 : 11;
+            return;
+        }
+
         if (target === "pusher") {
             if (gd !== 209) {
                 return;
@@ -1162,40 +1172,36 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
             pusher.direction = rotateDirection(pusher.direction, rotateLeft);
             return;
         }
-        if (target === "rope") {
-            switch (bd) {
-                case 80:
-                    backData[y][x] = 137;
-                    break;
-                case 137:
-                    backData[y][x] = 80;
-                    break;
-                default:
-                    break;
-            }
+
+        if (bd === 80 && (target === "ropes" || target === "horizontalrope")) {
+            backData[y][x] = 137;
             return;
         }
-        if (target === "spike") {
-            switch (gd) {
-                case 174:
-                    gameData[y][x] = rotateLeft ? 177 : 176;
-                    break;
-                case 175:
-                    gameData[y][x] = rotateLeft ? 176 : 177;
-                    break;
-                case 176:
-                    gameData[y][x] = rotateLeft ? 174 : 175;
-                    break;
-                case 177:
-                    gameData[y][x] = rotateLeft ? 175 : 174;
-                    break;
-                default:
-                    break;
-            }
+        if (bd === 137 && (target === "ropes" || target === "verticalrope")) {
+            backData[y][x] = 80;
             return;
         }
+
+        if (gd === 174 && (target === "spikes" || target === "spikeup")) {
+            gameData[y][x] = rotateLeft ? 177 : 176;
+            return;
+        }
+        if (gd === 175 && (target === "spikes" || target === "spikedown")) {
+            gameData[y][x] = rotateLeft ? 176 : 177;
+            return;
+        }
+        if (gd === 176 && (target === "spikes" || target === "spikeright")) {
+            gameData[y][x] = rotateLeft ? 174 : 175;
+            return;
+        }
+        if (gd === 177 && (target === "spikes" || target === "spikeleft")) {
+            gameData[y][x] = rotateLeft ? 175 : 174;
+            return;
+        }
+
         return;
     }
+
     if (target === "flamethrower") {
         for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
             const flamethrower = gameInfo.flamethrowers[i];

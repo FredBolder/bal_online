@@ -1,42 +1,179 @@
+$color: water, #0059B3
 $extra: 1
-$stonepattern: 1
-$userint1: 40
-$userint2: 8
-$activesides: 2, 2, bottom
-$detectormode: 2, 2, blueball
-$movable: 2, 2, no
-$target: 2, 2, command
-$value: 2, 2, create, TimedDisappearingStone1, abs, 5, 5
-$activesides: 3, 2, bottom
-$detectormode: 3, 2, blueball
-$movable: 3, 2, no
-$target: 3, 2, command
-$value: 3, 2, create, TimedDisappearingStone1, abs, 7, 4
-$activesides: 4, 2, bottom
-$detectormode: 4, 2, blueball
-$movable: 4, 2, no
-$target: 4, 2, command
-$value: 4, 2, create, TimedDisappearingStone1, abs, 9, 3, 10, 3
-$detectormode: 2, 5, blueball
-$movable: 2, 5, no
-$target: 2, 5, command
-$value: 2, 5, create, Stone, abslist, 6, 5, 8, 4, 11, 3
-$condition: 2, 6, activated (abs, 2, 5) = false
-$movable: 2, 6, no
-$target: 2, 6, command
-$value: 2, 6, delete, Stone, abslist, 6, 5, 8, 4, 11, 3
-111111111111111
-11111        31
-11ђђђ         1
-1           111
-1 2           1
-1=ђ11         1
-1=ђ11         1
-1=111         1
-1=111:::::::::1
-1=1111111111111
-1=1111111111111
-1=1111111111 %1
-1             1
-1 4           1
-111111111111111
+$fgcolor: 3, 6, 1, 1, #441151
+$fgcolor: 7, 6, 1, 1, #441151
+$fgcolor: 9, 6, 1, 1, #441151
+$fgcolor: 14, 6, 1, 1, #441151
+$fgcolor: 13, 6, 1, 1, #441151
+$fgcolor: 5, 6, 1, 1, #FFFF00
+$fgcolor: 10, 6, 1, 1, #FFFF00
+$fgcolor: 11, 6, 1, 1, #FFFF00
+$fgcolor: 15, 6, 1, 1, #FFFF00
+$fgcolor: 17, 6, 1, 1, #FFFF00
+$fgcolor: 1, 4, 1, 1, #441151
+$fgcolor: 2, 4, 1, 1, #441151
+$fgcolor: 4, 4, 1, 1, #441151
+$fgcolor: 8, 4, 1, 1, #441151
+$fgcolor: 12, 4, 1, 1, #441151
+$fgcolor: 16, 4, 1, 1, #FFFF00
+$fgcolor: 5, 4, 1, 1, #FFFF00
+$fgcolor: 10, 4, 1, 1, #FFFF00
+$fgcolor: 14, 4, 1, 1, #441151
+$fgcolor: 15, 4, 1, 1, #FFFF00
+$fgcolor: 18, 4, 1, 1, #FFFF00
+$fgcolor: 7, 4, 1, 1, #00BFFF
+$fgcolor: 4, 6, 1, 1, #00BFFF
+$fgcolor: 17, 4, 1, 1, #00BFFF
+$fgcolor: 16, 6, 1, 1, #00BFFF
+$ignorepattern: 3, 6, 1, 1
+$ignorepattern: 5, 6, 1, 1
+$ignorepattern: 7, 6, 1, 1
+$ignorepattern: 9, 6, 1, 1
+$ignorepattern: 10, 6, 1, 1
+$ignorepattern: 11, 6, 1, 1
+$ignorepattern: 13, 6, 1, 1
+$ignorepattern: 14, 6, 1, 1
+$ignorepattern: 15, 6, 1, 1
+$ignorepattern: 17, 6, 1, 1
+$ignorepattern: 1, 4, 1, 1
+$ignorepattern: 2, 4, 1, 1
+$ignorepattern: 4, 4, 1, 1
+$ignorepattern: 5, 4, 1, 1
+$ignorepattern: 8, 4, 1, 1
+$ignorepattern: 10, 4, 1, 1
+$ignorepattern: 12, 4, 1, 1
+$ignorepattern: 14, 4, 1, 1
+$ignorepattern: 15, 4, 1, 1
+$ignorepattern: 16, 4, 1, 1
+$ignorepattern: 18, 4, 1, 1
+$ignorepattern: 7, 4, 1, 1
+$ignorepattern: 4, 6, 1, 1
+$ignorepattern: 16, 6, 1, 1
+$ignorepattern: 17, 4, 1, 1
+$stonepattern: 3
+$condition: 1, 4, fishName = Purple tang
+$display: 1, 4, stone
+$range: 1, 4, 3
+$condition: 2, 4, fishName = Purple tang
+$display: 2, 4, stone
+$range: 2, 4, 3
+$condition: 4, 4, fishName = Purple tang
+$display: 4, 4, stone
+$range: 4, 4, 3
+$condition: 5, 4, fishName = Yellow tang
+$display: 5, 4, stone
+$group: 5, 4, 2
+$range: 5, 4, 3
+$condition: 7, 4, fishName = Blue Chromis
+$display: 7, 4, stone
+$group: 7, 4, 3
+$range: 7, 4, 3
+$condition: 8, 4, fishName = Purple tang
+$display: 8, 4, stone
+$range: 8, 4, 3
+$condition: 10, 4, fishName = Yellow tang
+$display: 10, 4, stone
+$group: 10, 4, 2
+$range: 10, 4, 3
+$condition: 12, 4, fishName = Purple tang
+$display: 12, 4, stone
+$range: 12, 4, 3
+$condition: 14, 4, fishName = Purple tang
+$display: 14, 4, stone
+$range: 14, 4, 3
+$condition: 15, 4, fishName = Yellow tang
+$display: 15, 4, stone
+$group: 15, 4, 2
+$range: 15, 4, 3
+$condition: 16, 4, fishName = Yellow tang
+$display: 16, 4, stone
+$group: 16, 4, 2
+$range: 16, 4, 3
+$condition: 17, 4, fishName = Blue Chromis
+$display: 17, 4, stone
+$group: 17, 4, 3
+$range: 17, 4, 3
+$condition: 18, 4, fishName = Yellow tang
+$display: 18, 4, stone
+$group: 18, 4, 2
+$range: 18, 4, 3
+$direction: 3, 6, down
+$display: 3, 6, stone
+$movable: 3, 6, no
+$range: 3, 6, 2
+$direction: 4, 6, down
+$display: 4, 6, stone
+$group: 4, 6, 3
+$range: 4, 6, 2
+$direction: 5, 6, down
+$display: 5, 6, stone
+$group: 5, 6, 2
+$range: 5, 6, 2
+$direction: 7, 6, down
+$display: 7, 6, stone
+$range: 7, 6, 2
+$direction: 9, 6, down
+$display: 9, 6, stone
+$range: 9, 6, 2
+$direction: 10, 6, down
+$display: 10, 6, stone
+$group: 10, 6, 2
+$range: 10, 6, 2
+$direction: 11, 6, down
+$display: 11, 6, stone
+$group: 11, 6, 2
+$range: 11, 6, 2
+$direction: 13, 6, down
+$display: 13, 6, stone
+$range: 13, 6, 2
+$direction: 14, 6, down
+$display: 14, 6, stone
+$range: 14, 6, 2
+$direction: 15, 6, down
+$display: 15, 6, stone
+$group: 15, 6, 2
+$range: 15, 6, 2
+$direction: 16, 6, down
+$display: 16, 6, stone
+$group: 16, 6, 3
+$range: 16, 6, 2
+$direction: 17, 6, down
+$display: 17, 6, stone
+$group: 17, 6, 2
+$range: 17, 6, 2
+$direction: 19, 6, down
+$display: 19, 6, stone
+$flamethrowermode: 19, 6, on
+$movable: 19, 6, no
+$range: 19, 6, 2
+$eyepercentage: 5, 1, 35
+$fins: 5, 1, 10
+$palette: 5, 1, 19
+$shape: 5, 1, 7
+$stripes: 5, 1, 0
+$tail: 5, 1, 4
+$eyepercentage: 8, 2, 35
+$fins: 8, 2, 10
+$palette: 8, 2, 20
+$shape: 8, 2, 7
+$stripes: 8, 2, 0
+$tail: 8, 2, 4
+$fins: 16, 3, 4
+$palette: 16, 3, 35
+$pupilpercentage: 16, 3, 60
+$shape: 16, 3, 1
+$stripes: 16, 3, 0
+$tail: 16, 3, 9
+$background: 5, 1, 1, 1, 23
+$background: 8, 2, 1, 1, 23
+$background: 16, 3, 1, 1, 23
+111111111111111111111
+1wwwwҼwwwwwwwwwwwwww1
+1wwwwwwwҼwwwwwwwwwww1
+1wwwwwwwwwwwwwwwҼwww1
+1ђђ1ђђ1ђђ1ђ1ђ1ђђђђђ11
+111111111111111111111
+111ййй1й1ййй1ййййй1й1
+1                 3 1
+12    1     1       1
+111111111111111111111

@@ -21,6 +21,9 @@ export function checkFlames(backData, gameData, gameInfo) {
 
     for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
         const flamethrower = gameInfo.flamethrowers[i];
+        if (flamethrower.mode === "on") {
+            flamethrower.active = true;
+        }
         if (flamethrower.active) {
             switch (flamethrower.direction) {
                 case "down":
@@ -319,13 +322,18 @@ export function flamethrowerDisplayModes() {
 
 export const flamethrowerMaxRange = 10;
 
+export function flamethrowerModes() {
+    return ["group", "on"];
+}
+
 export function setFlamethrowers(gameInfo, activeGroups) {
     let active = false;
     let result = { updated: false };
 
     for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
         const flamethrower = gameInfo.flamethrowers[i];
-        active = activeGroups.includes(flamethrower.group);
+        active = (flamethrower.mode === "on") || 
+            (flamethrower.mode === "group" && activeGroups.includes(flamethrower.group));
         if (flamethrower.active !== active) {
             flamethrower.active = active;
             result.updated = true;

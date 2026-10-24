@@ -6,7 +6,7 @@ import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
 import { electricityModes } from "./electricity.js";
-import { flamethrowerMaxRange } from "./flamethrowers.js";
+import { flamethrowerMaxRange, flamethrowerModes } from "./flamethrowers.js";
 import { globalVars } from "./glob.js";
 import { lockedDoorColors } from "./lockedDoors.js";
 import { moverDirections, moverModes } from "./movers.js";
@@ -324,6 +324,7 @@ export function checkSettings(data, settings) {
     { name: "$eyepercentage", params: 3, xy: true, yesno: -1 },
     { name: "$fgcolor", params: 5, xy: true, yesno: -1 },
     { name: "$fins", params: 3, xy: true, yesno: -1 },
+    { name: "$flamethrowermode", params: 3, xy: true, yesno: -1 },
     { name: "$gameticks", params: 2, xy: false, yesno: -1 },
     { name: "$gameticksxy", params: 3, xy: true, yesno: -1 },
     { name: "$group", params: 3, xy: true, yesno: -1 },
@@ -661,6 +662,14 @@ export function checkSettings(data, settings) {
                 "purpleball", "redball", "selfdestructingteleportscreator", "shrinker", "telekineticpower", "teleportscreator", "whiteball",
                 "weakstone", "yellowball"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
+              }
+              break;
+            case "$flamethrowermode":
+              if (!flamethrowerModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid flamethrower mode ${values[2]}.\n`;
+              }
+              if (validXY && !["й", 257].includes(data[y][x])) {
+                msg += `${settingNr(i)}No flamethrower found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$instrument":
@@ -1723,6 +1732,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         case "$conveyorbeltmode":
         case "$detectormode":
         case "$disappearingstonemode":
+        case "$flamethrowermode":
         case "$movermode":
         case "$pistonmode":
         case "$pushermode":
