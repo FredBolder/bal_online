@@ -1,14 +1,14 @@
 import { findElementByCoordinates } from "./balUtils";
 
-export const maxStonePatterns = 5;
+export const maxStonePatterns = 18;
 
 export function loadImage(src) {
   return new Promise((res, rej) => {
     const img = new Image();
+    img.crossOrigin = "anonymous";
     img.onload = () => res(img);
-    img.onerror = rej;
+    img.onerror = () => rej(new Error(`Failed to load image: ${src}`));
     img.src = src;
-    img.crossOrigin = "anonymous"; // optional if remote
   });
 }
 

@@ -1,0 +1,26 @@
+$group: 7, 14, 2
+$group2: 7, 14, 4
+$randomchance: 7, 14, 50
+$direction: 11, 13, up
+$group: 11, 13, 2
+$direction: 12, 13, up
+$group: 12, 13, 4
+$group: 3, 13, 2
+$pistonmode: 3, 13, momentary
+$group: 4, 13, 4
+$pistonmode: 4, 13, momentary
+111111111111111
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+13            1
+1  ÙÙ 2    йй 1
+1111111ђ1111111

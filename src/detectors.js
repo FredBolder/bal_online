@@ -562,6 +562,8 @@ function commandChangeDirection(gameData, gameInfo, target, x, y) {
 
 function getVariable(source, name) {
     switch (name) {
+        case "browncountto":
+            return source.brownCountTo;
         case "conveyorbeltcountto":
             return source.conveyorBeltCountTo;
         case "darkpercentage":
@@ -572,6 +574,8 @@ function getVariable(source, name) {
             return source.elevatorCountTo;
         case "fishcountto":
             return source.fishCountTo;
+        case "pinkcountto":
+            return source.pinkCountTo;
         case "pistonsrepeatfastmodecountto":
             return source.pistonsRepeatFastModeCountTo;
         case "tropicalfishcounttooverride":
@@ -591,6 +595,12 @@ function getVariable(source, name) {
 
 function setVariable(source, name, value) {
     switch (name) {
+        case "browncountto":
+            if (value < 1) {
+                return;
+            }
+            source.brownCountTo = value;
+            break;
         case "conveyorbeltcountto":
             if (value < 1) {
                 return;
@@ -620,6 +630,12 @@ function setVariable(source, name, value) {
                 return;
             }
             source.fishCountTo = value;
+            break;
+        case "pinkcountto":
+            if (value < 1) {
+                return;
+            }
+            source.pinkCountTo = value;
             break;
         case "pistonsrepeatfastmodecountto":
             if (value < 1) {

@@ -397,7 +397,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             let detector = {
                 x, y, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", value: "",
                 display: "default", activated: false, activatedCount: 0, sequence: false, 
-                movable: true, condition: "", event: "", text: "", group: 1
+                movable: true, condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0
             };
             gameInfo.detectors.push(detector);
             break;

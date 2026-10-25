@@ -29,7 +29,7 @@ describe("Flamethrowers", () => {
                 {
                     x: 2, y: 4, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group",
                     value: "", display: "default", activated: false,
-                    activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0
                 }
             ],
             flamethrowers: [
@@ -73,7 +73,7 @@ describe("Flamethrowers", () => {
                 {
                     x: 2, y: 4, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group",
                     value: "", display: "default", activated: false,
-                    activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1
+                    activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0
                 }
             ],
             flamethrowers: [

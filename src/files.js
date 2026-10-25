@@ -490,6 +490,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${coordinates}, ${detector.group}`;
             lines.push(line);
         }
+        if (detector.group2 > 0) {
+            line = `$group2: ${coordinates}, ${detector.group2}`;
+            lines.push(line);
+        }
         if (detector.mode !== "all") {
             line = `$detectormode: ${coordinates}, ${detector.mode}`;
             lines.push(line);
@@ -504,6 +508,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
         if (detector.oneTime) {
             line = `$onetime: ${coordinates}, yes`;
+            lines.push(line);
+        }
+        if (detector.randomChance > 0) {
+            line = `$randomchance: ${coordinates}, ${detector.randomChance}`;
             lines.push(line);
         }
         if (detector.range !== 1) {

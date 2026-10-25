@@ -328,6 +328,7 @@ export function checkSettings(data, settings) {
     { name: "$gameticks", params: 2, xy: false, yesno: -1 },
     { name: "$gameticksxy", params: 3, xy: true, yesno: -1 },
     { name: "$group", params: 3, xy: true, yesno: -1 },
+    { name: "$group2", params: 3, xy: true, yesno: -1 },
     { name: "$has", params: 1, xy: false, yesno: -1 },
     { name: "$hint", params: 0, xy: false, yesno: -1 },
     { name: "$icemeltsfromambienttemperature", params: 1, xy: false, yesno: 0 },
@@ -360,6 +361,7 @@ export function checkSettings(data, settings) {
     { name: "$pupilpercentage", params: 3, xy: true, yesno: -1 },
     { name: "$pushermode", params: 3, xy: true, yesno: -1 },
     { name: "$question", params: 0, xy: true, yesno: -1 },
+    { name: "$randomchance", params: 3, xy: true, yesno: -1 },
     { name: "$range", params: 3, xy: true, yesno: -1 },
     { name: "$redballdisplayoverride", params: 0, xy: false, yesno: -1 },
     { name: "$repeat", params: 3, xy: true, yesno: 2 },
@@ -656,6 +658,15 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid value ${values[2]} for group.\n`;
               }
               break;
+            case "$group2":
+              group = tryParseInt(values[2], -1);
+              if ((group < 0) || (group > 32)) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for group2.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
             case "$has":
               if (!["nothing", "coilspring", "divingglasses", "fishfood", "freezegun", "key", "bluekey", "greenkey", "pinkkey", "purplekey",
                 "redkey", "whitekey", "yellowkey", "ladder", "lightblueball", "orangeball", "pickaxe", "pinkball", "propeller",
@@ -839,6 +850,15 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["Ҹ", 241].includes(data[y][x])) {
                 msg += `${settingNr(i)}No question stone found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$randomchance":
+              val_int = tryParseInt(values[2], -1);
+              if ((val_int < 0) || (val_int > 100)) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for percentage.\n`;
+              }
+              if (validXY && !["ђ", 255].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$range":
@@ -1957,6 +1977,13 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           val_int = tryParseInt(values[2], -1);
           setProp(gameData, gameInfo, x, y, "group", val_int, false);
           break;
+        case "$group2":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "group2", val_int, false);
+          break;
         case "$has":
           switch (valuesLowerCase[0]) {
             case "nothing":
@@ -2324,6 +2351,10 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (validXY && (val_str !== "")) {
             setProp(gameData, gameInfo, x, y, "question", val_str, false);
           }
+          break;
+        case "$randomchance":
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "randomChance", val_int, false);
           break;
         case "$range":
           if (values.length !== 3 || !validXY) {

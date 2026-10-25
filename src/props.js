@@ -137,6 +137,15 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "group2":
+            if (typeof value !== "number") {
+                error = true;
+                break;
+            }
+            if ((value < 0) || (value > 32)) {
+                error = true;
+            }
+            break;
         case "inverted":
         case "movable":
         case "oneCommand":
@@ -244,6 +253,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             break;
         case "eyePercentage":
         case "pupilPercentage":
+        case "randomChance":
             if (typeof value !== "number") {
                 error = true;
                 break;
@@ -332,7 +342,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isConveyorBelt && ["direction", "group", "mode"].includes(prop)) {
         list = "conveyorBelts";
     }
-    if (isDetector && ["condition", "display", "event", "group", "movable", "mode", "oneCommand", "oneTime", "range", "sequence", "target", "text", "value"].includes(prop)) {
+    if (isDetector && ["condition", "display", "event", "group", "group2", "movable", "mode", "oneCommand", "oneTime", "randomChance", "range", "sequence", "target", "text", "value"].includes(prop)) {
         list = "detectors";
     }
     if (isDisappearingStone && ["group", "mode"].includes(prop)) {

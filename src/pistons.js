@@ -8,7 +8,7 @@ import { checkSettings, loadLevelSettings } from "./levels.js";
 import { coordinatesToFishName, objectNumberToObjectGeneralName, objectNumberToObjectName } from "./objects.js";
 import { movePusher } from "./pushers.js";
 import { setTimeBombsTime } from "./timeBombs.js";
-import { tryParseInt } from "./utils.js";
+import { randomInt, tryParseInt } from "./utils.js";
 import { activateYellowPushers } from "./yellowPushers.js";
 
 function canMove(element) {
@@ -372,6 +372,11 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
     if (!pushingDown) {
         for (let i = 0; i < gameInfo.detectors.length; i++) {
             const detector = gameInfo.detectors[i];
+            const detectorGroups = [];
+            detectorGroups.push(detector.group);
+            if (detector.group2 > 0 && detector.group2 !== detector.group) {
+                detectorGroups.push(detector.group2);
+            }
 
             if (detector.oneTime && detector.activatedCount > 0) {
                 continue;
@@ -502,9 +507,28 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
                 }
             }
 
-            if (detect && detector.target === "group" && !activeGroups.includes(detector.group)) {
-                activeGroups.push(detector.group);
+            if (detect && detector.randomChance > 0 && detectorGroups.length === 2) {
+                let r = 0;
+                if (detector.activated) {
+                    r = detector.previousRandom;
+                } else {
+                    r = randomInt(0, 99); 
+                    detector.previousRandom = r;
+                }
+                let group = (r < detector.randomChance) ? detectorGroups[1] : detectorGroups[0];
+                detectorGroups.length = 0;
+                detectorGroups.push(group);
             }
+
+            if (detect && detector.target === "group") {
+                for (let gr = 0; gr < detectorGroups.length; gr++) {
+                    const group = detectorGroups[gr];
+                    if (!activeGroups.includes(group)) {
+                        activeGroups.push(group);
+                    }
+                }
+            }
+
             if (detector.activated) {
                 if (!detect) {
                     detector.activated = false;
@@ -534,20 +558,25 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
                         gameVars.gravity = "up";
                         result.updated = true;
                     }
-                    if (detector.target === "group") {
-                        gameVars.pistonGroupsActivated[detector.group - 1] = !gameVars.pistonGroupsActivated[detector.group - 1];
-                        if (updateGroup(gameData, gameInfo, gameVars, detector.group)) {
+
+                    for (let gr = 0; gr < detectorGroups.length; gr++) {
+                        const group = detectorGroups[gr];
+                        if (detector.target === "group") {
+                            gameVars.pistonGroupsActivated[group - 1] = !gameVars.pistonGroupsActivated[group - 1];
+                            if (updateGroup(gameData, gameInfo, gameVars, group)) {
+                                result.updated = true;
+                            }
+                        }
+                        if (detector.target === "rotategroupleft") {
+                            rotateGroup(gameData, gameInfo, group, true);
+                            result.updated = true;
+                        }
+                        if (detector.target === "rotategroupright") {
+                            rotateGroup(gameData, gameInfo, group, false);
                             result.updated = true;
                         }
                     }
-                    if (detector.target === "rotategroupleft") {
-                        rotateGroup(gameData, gameInfo, detector.group, true);
-                        result.updated = true;
-                    }
-                    if (detector.target === "rotategroupright") {
-                        rotateGroup(gameData, gameInfo, detector.group, false);
-                        result.updated = true;
-                    }
+
                     if (detector.target === "setting") {
                         setting = detector.value;
                         if (!setting.startsWith("$")) {

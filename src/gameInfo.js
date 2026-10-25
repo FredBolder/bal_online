@@ -369,7 +369,7 @@ export function getGameInfo(backData, gameData) {
                 case 255: {
                     let detector = { x: j, y: i, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", 
                         value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, 
-                        condition: "", event: "", text: "", group: 1 };
+                        condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0 };
                     result.detectors.push(detector);
                     break;
                 }
@@ -1224,8 +1224,8 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraInfo = `Mode: ${obj.mode}, One-command: ${obj.oneCommand}, One-time: ${obj.oneTime}, Active sides: ${obj.activeSides}, ` +
                         `Range: ${obj.range}, Target: ${obj.target}, Value: ${obj.value}, Display: ${obj.display}, ` +
                         `Activated: ${obj.activated}, Activated count: ${obj.activatedCount}, ` + 
-                        `Sequence: ${obj.sequence}, ` +
-                        `Movable: ${obj.movable}, Condition: ${obj.condition}, Event: ${obj.event}, Text: ${obj.text}, Group: ${obj.group}`;
+                        `Sequence: ${obj.sequence}, Movable: ${obj.movable}, Condition: ${obj.condition}, ` +
+                        `Event: ${obj.event}, Text: ${obj.text}, Group: ${obj.group}, Group 2: ${obj.group2}, Random chance: ${obj.randomChance}`;
                 }
                 info = `Detector, ` + extraInfo;
                 break;

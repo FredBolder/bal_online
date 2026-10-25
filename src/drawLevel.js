@@ -993,7 +993,7 @@ function drawLevel(
       mode = gameInfo.disappearingStones[idx].mode;
       status = gameInfo.disappearingStones[idx].status;
     }
-    
+
     if (status === -10) {
       return;
     }
@@ -3127,6 +3127,10 @@ function drawLevel(
         drawLine(ctx, xc - d3, ymin + d2, xmax - d2 - d3, yc, "white");
         drawLine(ctx, xmax - d2 - d3, yc, xc - d3, ymax - d2, "white");
         break;
+      case "previous":
+        drawLine(ctx, xc + d3, ymin + d2, xmin + d2 + d3, yc, "white");
+        drawLine(ctx, xmin + d2 + d3, yc, xc + d3, ymax - d2, "white");
+        break;
       default:
         break;
     }
@@ -3705,30 +3709,18 @@ function drawLevel(
   let w1 = 0;
   let w2 = 0;
 
-  // Stone pattern
-  let stoneImg = null;
+  // Pattern
+  let patternImg = null;
   let stoneLayer = null;
-  switch (gameVars.stonePattern) {
-    case 1:
-      stoneImg = globalVars.stoneImg01;
-      break;
-    case 2:
-      stoneImg = globalVars.stoneImg02;
-      break;
-    case 3:
-      stoneImg = globalVars.stoneImg03;
-      break;
-    case 4:
-      stoneImg = globalVars.stoneImg04;
-      break;
-    case 5:
-      stoneImg = globalVars.stoneImg05;
-      break;
-    default:
-      break;
+  if (gameVars.stonePattern > 0) {
+    let numberStr = gameVars.stonePattern.toString();
+    if (numberStr.length === 1) {
+      numberStr = "0" + numberStr;
+    }
+    patternImg = globalVars[`patternImg${numberStr}`];
   }
-  if (stoneImg !== null) {
-    stoneLayer = buildPatternLayer(stoneImg, columns, rows, size1, size1 / 100);
+  if (patternImg !== null) {
+    stoneLayer = buildPatternLayer(patternImg, columns, rows, size1, size1 / 100);
   } else {
     gameVars.stonePattern = 0;
   }
@@ -4800,8 +4792,17 @@ function drawLevel(
         case 2219:
           drawAbbreviation("pat");
           break;
+        case 2220:
+          drawStonePatternIcon("previous");
+          break;
+        case 2221:
+          drawAbbreviation("gr. 2");
+          break;
         case 2222:
           drawAbbreviation(globalVars.createLevelEditMode ? "EDIT" : "REPL", "darkgreen", "white");
+          break;
+        case 2223:
+          drawAbbreviation("rand");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

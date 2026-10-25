@@ -117,9 +117,11 @@ let createLevelColor = "";
 let createLevelColorPages = 2;
 let createLevelCommand = "";
 let createLevelCondition = "";
+let createLevelDetectorPages = 2;
 let createLevelDirection = "";
 let createLevelEdit = false;
 let createLevelEvent = "";
+let createLevelGroup2 = 0;
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
@@ -132,6 +134,7 @@ let createLevelOneCommand = false;
 let createLevelOneTime = false;
 let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
+let createLevelRandomChance = 0;
 let createLevelRange = 1;
 let createLevelRaster = false;
 let createLevelRepeat = false;
@@ -1179,7 +1182,7 @@ function BalPage() {
             switch (globalVars.createLevelStonesPage) {
               case 2:
                 arr1 = [214, 210, 220, 224, 213, 221, 223, 215, 0, 0, 0, 0, 0, 36, 37, 117];
-                arr2 = [222, 218, 212, 216, 217, 225, 219, 211, 0, 0, 0, 0, 2139, 2140, 2141, 2101];
+                arr2 = [222, 218, 212, 216, 217, 225, 219, 211, 0, 0, 0, 2220, 2139, 2140, 2141, 2101];
                 break;
               default:
                 // page 1
@@ -1234,8 +1237,17 @@ function BalPage() {
             break;
           case 11:
             // detectors  
-            arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2211, 2207, 2208, 2209, 2205, 2210, 0, 2222];
-            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            switch (globalVars.createLevelDetectorPage) {
+              case 2:
+                arr1 = [2221, 2223, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2101];
+                arr2 = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
+                break;
+              default:
+                // page 1
+                arr1 = [255, 2092, 2144, 2215, 2202, 2204, 2203, 2206, 2211, 2207, 2208, 2209, 2205, 2210, 2222, 2101];
+                arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+                break;
+            }
             break;
           case 12:
             // Groups
@@ -2448,7 +2460,12 @@ function BalPage() {
             pressKeysSequentially("eedaaqadedqad");
             break;
           case "V":
-            variables = `userInt1: ${gameVars.userInt1}, userInt2: ${gameVars.userInt2}, `;
+            variables = `brownCountTo: ${gameVars.brownCountTo}, `;
+            variables += `conveyorBeltCountTo: ${gameVars.conveyorBeltCountTo}, darkPercentage: ${gameVars.darkPercentage}, `;
+            variables += `disappearingStonesCountTo: ${gameVars.disappearingStonesCountTo}, elevatorCountTo: ${gameVars.elevatorCountTo}, `;
+            variables += `fishCountTo: ${gameVars.fishCountTo}, pinkCountTo: ${gameVars.pinkCountTo}, `;
+            variables += `stonePattern: ${gameVars.stonePattern}, tropicalFishCountToOverride: ${gameVars.tropicalFishCountToOverride}, `;
+            variables += `userInt1: ${gameVars.userInt1}, userInt2: ${gameVars.userInt2}, `;
             variables += `userInt3: ${gameVars.userInt3}, userInt4: ${gameVars.userInt4}`;
             showMessage("Variables", variables);
             break;
@@ -2633,11 +2650,24 @@ function BalPage() {
         if (!initialized) {
           initialized = true;
           globalVars.createLevel = false;
-          globalVars.stoneImg01 = await loadImage('/stone1.png');
-          globalVars.stoneImg02 = await loadImage('/stone2.png');
-          globalVars.stoneImg03 = await loadImage('/stone3.png');
-          globalVars.stoneImg04 = await loadImage('/stone4.png');
-          globalVars.stoneImg05 = await loadImage('/stone5.png');
+          globalVars.patternImg01 = await loadImage('/pattern01.jpg');
+          globalVars.patternImg02 = await loadImage('/pattern02.jpg');
+          globalVars.patternImg03 = await loadImage('/pattern03.jpg');
+          globalVars.patternImg04 = await loadImage('/pattern04.jpg');
+          globalVars.patternImg05 = await loadImage('/pattern05.jpg');
+          globalVars.patternImg06 = await loadImage('/pattern06.jpg');
+          globalVars.patternImg07 = await loadImage('/pattern07.jpg');
+          globalVars.patternImg08 = await loadImage('/pattern08.jpg');
+          globalVars.patternImg09 = await loadImage('/pattern09.jpg');
+          globalVars.patternImg10 = await loadImage('/pattern10.jpg');
+          globalVars.patternImg11 = await loadImage('/pattern11.jpg');
+          globalVars.patternImg12 = await loadImage('/pattern12.jpg');
+          globalVars.patternImg13 = await loadImage('/pattern13.jpg');
+          globalVars.patternImg14 = await loadImage('/pattern14.jpg');
+          globalVars.patternImg15 = await loadImage('/pattern15.jpg');
+          globalVars.patternImg16 = await loadImage('/pattern16.jpg');
+          globalVars.patternImg17 = await loadImage('/pattern17.jpg');
+          globalVars.patternImg18 = await loadImage('/pattern18.jpg');
           loadSettings();
           cbArrowButtons.current.checked = getSettings().arrowButtons;
           cbCreateLevel.current.checked = false;
@@ -3118,6 +3148,12 @@ function BalPage() {
               }
               if (createLevelObject === 2212) {
                 msg = setProp(gameData, gameInfo, column, row, "repeat", createLevelRepeat, oneSelected);
+              }
+              if (createLevelObject === 2221) {
+                msg = setProp(gameData, gameInfo, column, row, "group2", createLevelGroup2, oneSelected);
+              }
+              if (createLevelObject === 2223) {
+                msg = setProp(gameData, gameInfo, column, row, "randomChance", createLevelRandomChance, oneSelected);
               }
 
 
@@ -4102,6 +4138,34 @@ function BalPage() {
               }
               handleCancel();
               break;
+            case 2221:
+              ok = false;
+              if (row > 0) {
+                if (createLevelGroup2 < 0 || createLevelGroup2 > 32) {
+                  createLevelGroup2 = 0;
+                }
+                newValue = await showInput("Detectors", "Group 2", createLevelGroup2.toString());
+                if (newValue !== null) {
+                  createLevelGroup2 = tryParseInt(newValue, -1);
+                  ok = checkInt(createLevelGroup2, 0, 32);
+                }
+              }
+              handleCancel();
+              break;
+            case 2223:
+              ok = false;
+              if (row > 0) {
+                if (createLevelRandomChance < 0 || createLevelRandomChance > 100) {
+                  createLevelRandomChance = 0;
+                }
+                newValue = await showInput("Detectors", "Random chance", createLevelRandomChance.toString());
+                if (newValue !== null) {
+                  createLevelRandomChance = tryParseInt(newValue, -1);
+                  ok = checkInt(createLevelRandomChance, 0, 100);
+                }
+              }
+              handleCancel();
+              break;
             default:
               break;
           }
@@ -4354,6 +4418,14 @@ function BalPage() {
               fillMenu(menuToNumber("balls"));
               updateCreateLevelCanvas();
               createLevelObject = -1;
+            } else if (createLevelMenu === menuToNumber("detectors")) {
+              globalVars.createLevelDetectorPage++;
+              if (globalVars.createLevelDetectorPage > createLevelDetectorPages) {
+                globalVars.createLevelDetectorPage = 1;
+              }
+              fillMenu(menuToNumber("detectors"));
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
             } else if (createLevelMenu === menuToNumber("water")) {
               globalVars.createLevelWaterPage++;
               if (globalVars.createLevelWaterPage > createLevelWaterPages) {
@@ -4392,6 +4464,15 @@ function BalPage() {
               }
             }
             handleCancel();
+            break;
+          case 2220:
+            // Previous stone pattern
+            if (gameVars.stonePattern > 0) {
+              gameVars.stonePattern--;
+            } else {
+              gameVars.stonePattern = maxStonePatterns;
+            }
+            updateGameCanvas();
             break;
           case 2139:
             // Next stone pattern

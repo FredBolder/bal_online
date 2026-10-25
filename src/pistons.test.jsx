@@ -500,7 +500,7 @@ describe("Pistons", () => {
                 {
                     x: 3, y: 4, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "setting",
                     value: "$message: Detected", display: "default", activated: false, activatedCount: 0,
-                    sequence: false, movable: true, condition: "", event: "", text: "", group: 1
+                    sequence: false, movable: true, condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0
                 },
             ],
             pushers: [{ x: 3, y: 3, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 2 }],
