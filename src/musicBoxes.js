@@ -229,13 +229,13 @@ export function checkMusicBoxes(backData, gameData, gameInfo, gameVars) {
                 }
             }
         }
-        if ((isChordOrIntervalMode(musicBox.mode) || ["door", "firstcount", "near", "song"].includes(musicBox.mode)) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
+        if ((isChordOrIntervalMode(musicBox.mode) || ["door", "firstcount", "near", "song", "songstart"].includes(musicBox.mode)) && musicBox.active && !musicBox.ended && (gameData[musicBox.y][musicBox.x] === 157)) {
             if ((musicBox.delayCounter >= musicBox.delay) || (musicBox.noteIndex === -1)) {
                 musicBox.delayCounter = 0;
                 musicBox.noteIndex++;
                 if (musicBox.noteIndex >= musicBox.notes.length) {
                     musicBox.noteIndex = 0;
-                    if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door") || (musicBox.mode === "song" && !musicBox.repeat)) {
+                    if (isChordOrIntervalMode(musicBox.mode) || (musicBox.mode === "door") || (musicBox.mode === "songstart") || ((musicBox.mode === "song" || musicBox.mode === "near") && !musicBox.repeat)) {
                         musicBox.ended = true;
                     }
                     if (musicBox.ended && isChordOrIntervalMode(musicBox.mode)) {
@@ -421,7 +421,7 @@ export function musicBoxDirections() {
 
 export function musicBoxModes() {
     return ["chord1", "chord2", "chord3", "chord4", "door", "firstcount", "interval1", "interval2", "keyboard",
-        "near", "note", "song"];
+        "near", "note", "song", "songstart"];
 }
 
 function placeChordObjects(gameData, gameInfo, musicBox) {

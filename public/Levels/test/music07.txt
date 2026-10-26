@@ -1,0 +1,24 @@
+$group: 10, 14, 2
+$musicbox: 13, 13, near, 5
+$notes: 13, 13, C4, E4, G4
+$repeat: 13, 13, no
+$musicbox: 1, 1, songstart, 5
+$notes: 1, 1, C4, D4, E4, F4, G4, A4, B4, C5
+$musicbox: 13, 1, song, 5
+$notes: 13, 1, C5, B4, A4, G4, F4, E4, D4, C4
+$group: 13, 1, 2
+111111111111111
+1M           M1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1    M        1
+1             1
+13            1
+1        2   M1
+1111111ђ11ђ1111

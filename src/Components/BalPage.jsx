@@ -4250,7 +4250,7 @@ function BalPage() {
             case 2092:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "near", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "interval 2", "first count"], 0);
+                newValue = await showSelect("Music boxes", "Mode:", ["note", "song", "song start", "near", "keyboard", "door", "chord 1", "chord 2", "chord 3", "chord 4", "interval 1", "interval 2", "first count"], 0);
                 if (newValue !== null) {
                   createLevelMode = removeChar(newValue, " ");
                   ok = true;

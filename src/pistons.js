@@ -512,7 +512,7 @@ export function checkPistonsTriggers(backData, gameData, gameInfo, gameVars, par
                 if (detector.activated) {
                     r = detector.previousRandom;
                 } else {
-                    r = randomInt(0, 99); 
+                    r = randomInt(0, 99);
                     detector.previousRandom = r;
                 }
                 let group = (r < detector.randomChance) ? detectorGroups[1] : detectorGroups[0];
@@ -908,13 +908,24 @@ function updateGroup(gameData, gameInfo, gameVars, group) {
     }
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
-        if (["firstcount", "song"].includes(musicBox.mode) && (musicBox.group === group)) {
+        if (musicBox.group !== group) {
+            continue;
+        }
+        if (musicBox.mode === "songstart") {
+            musicBox.delayCounter = 0;
+            musicBox.ended = false;
+            musicBox.noteIndex = -1;
+            musicBox.repeat = false;
+            musicBox.tripletStart = -1;
+            musicBox.active = true;
+        }
+        if (musicBox.mode === "firstcount" || musicBox.mode === "song") {
             if (gameVars.pistonGroupsActivated[group - 1]) {
                 if (!musicBox.active) {
+                    musicBox.delayCounter = 0;
                     musicBox.ended = false;
                     musicBox.noteIndex = -1;
                     musicBox.tripletStart = -1;
-                    musicBox.delayCounter = 0;
                 }
                 musicBox.active = true;
             } else {

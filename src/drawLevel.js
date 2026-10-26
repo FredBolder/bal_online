@@ -1934,6 +1934,7 @@ function drawLevel(
       case "near":
       case "note":
       case "song":
+      case "songstart":
         drawBox(ctx, xmin, ymin, w1, w2, "black");
         ctx.drawImage(elements.elementMusicNote, xmin + (0.5 * (w1 - musicNoteWidth)), ymin + (musicNoteMargin * w2), musicNoteWidth, musicNoteHeight);
         break;
