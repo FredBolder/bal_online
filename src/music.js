@@ -56,7 +56,7 @@ let operatorsList = [];
 export function instruments() {
   // Add test for test sound
   return ["test", "accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "crashcymbal", "crossstick", "drums", "guitar", "hammondorgan", "harp",
-    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2", "tom", "trombone", "trumpet",
+    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "sfx", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2", "tom", "trombone", "trumpet",
     "vibraphone", "xylophone"]
 }
 
@@ -349,6 +349,40 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
   }
 
+  function createExplosion(variation = 0) {
+    let brownNoiseDecay = 2000;
+    let brownNoiseFreq = 300;
+    let brownNoiseRelease = 500;
+    let lfoFreq = 4;
+    let lfoAmount = 0.3;
+    let lfoDelay = 250;
+    let whiteNoiseDecay = 40;
+    let whiteNoiseFreq = 1500;
+    let whiteNoiseRelease = 10;
+
+    switch (variation) {
+      case 1:
+        brownNoiseDecay = 1800;
+        brownNoiseFreq = 500;
+        brownNoiseRelease = 500;
+        lfoFreq = 5;
+        lfoAmount = 0.25;
+        lfoDelay = 300;
+        whiteNoiseDecay = 35;
+        whiteNoiseFreq = 1700;
+        whiteNoiseRelease = 10;
+        break;
+      default:
+        break;
+    }
+
+    operators.push(new Operator(audioCtx, "brownNoiseAndLPF", brownNoiseFreq, 0, maxVolume, 0, brownNoiseDecay, 0, brownNoiseRelease));
+    operators[0].setWaveShaper("explosion", 5, 1);
+    operators[0].setLfo("dca", "sine", lfoFreq, lfoAmount, lfoDelay);
+
+    operators.push(new Operator(audioCtx, "noiseAndLPF", whiteNoiseFreq, 0, maxVolume, 0, whiteNoiseDecay, 0, whiteNoiseRelease));
+  }
+
   function createHiHat(variation = 0) {
     const volumeFactor = 3;
     let cf_wet = 0.5;
@@ -424,6 +458,43 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     combFilter.setFeedback(cf_feedback);
     combFilter.setHP(cf_hp);
     combFilter.setLP(cf_lp);
+  }
+
+  function createLaserGun(variation = 0) {
+    let ampDecay = 180;
+    let ampRelease = 60;
+    let filterDecay = 120;
+    let filterRelease = 40;
+    let oscFreq = 120;
+    let pitchDecay = 180;
+    let pitchStart = 3.544;
+    let waveform = "sawtooth";
+    switch (variation) {
+      case 1:
+        ampDecay = 350;
+        ampRelease = 100;
+        filterDecay = 300;
+        filterRelease = 85;
+        oscFreq = 60;
+        pitchDecay = 350;
+        pitchStart = 3.544;
+        break;
+      case 2:
+        ampDecay = 250;
+        ampRelease = 80;
+        filterDecay = 250;
+        filterRelease = 80;
+        oscFreq = 200;
+        pitchDecay = 250;
+        pitchStart = 2.322;
+        break;
+      default:
+        break;
+    }
+    operators.push(new Operator(audioCtx, waveform, oscFreq, 0, maxVolume * 1, 2, ampDecay, 0, ampRelease));
+    operators[0].setPitchEnv(pitchStart, pitchDecay, 0);
+    filter1.setFilter("lowpass", 5000, 5000, 500, 500, 500, 48, 0, filterDecay, 5, filterRelease);
+    operators[0].setLfo("dco", "sine", 35, 35 / 1200, 0);
   }
 
   function createNoiseDrum(variation = 0) {
@@ -1057,6 +1128,27 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
             break;
           case "E4":
             createRideCymbal(2);
+            break;
+          default:
+            break;
+        }
+        break;
+      case "sfx":
+        switch (note) {
+          case "C4":
+            createLaserGun(0);
+            break;
+          case "D4":
+            createLaserGun(1);
+            break;
+          case "E4":
+            createLaserGun(2);
+            break;
+          case "F4":
+            createExplosion(0);
+            break;
+          case "G4":
+            createExplosion(1);
             break;
           default:
             break;

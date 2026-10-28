@@ -1,24 +1,28 @@
-$musicbox: 21, 13, song, 5
-$notes: 21, 13, C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5, A5, B5
-$musicbox: 22, 18, near, 5
-$notes: 22, 18, C4, F4, G4
-11111111111111111111111111111111
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                              1
-1                    M         1
-1                              1
-1                              1
-1                              1
-13                             1
-1          m  2       M        1
-111111111111111111ђ1111111111111
+$musicbox: 10, 10, keyboard, 5
+$instrument: 10, 10, sfx, 90
+$musicbox: 11, 10, keyboard, 5
+$notes: 11, 10, D4
+$instrument: 11, 10, sfx, 90
+$musicbox: 12, 10, keyboard, 5
+$notes: 12, 10, E4
+$instrument: 12, 10, sfx, 90
+$musicbox: 13, 10, keyboard, 5
+$notes: 13, 10, F4
+$instrument: 13, 10, sfx, 90
+$musicbox: 14, 10, keyboard, 5
+$notes: 14, 10, G4
+$instrument: 14, 10, sfx, 90
+1111111111111111111111
+1                    1
+1                    1
+1                    1
+1                    1
+1                    1
+1                    1
+1                    1
+1                    1
+1                    1
+1         MMMMM      1
+13                   1
+1      2             1
+1111111111111111111111

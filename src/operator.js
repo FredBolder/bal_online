@@ -12,7 +12,7 @@ import {
 import { tryParseInt } from "./utils.js";
 
 function createDistortionCurve({
-    type = "tanh",       // "tanh", "greek", "tube", "hard"
+    type = "tanh",  // "tanh", "greek", "tube", "hard", "explosion"
     k = 5,
     maxAmplitude = 1.0,
     samples = 1024
@@ -25,18 +25,12 @@ function createDistortionCurve({
         let y;
 
         switch (type) {
-
-            // ---------------------------------------------------
-            // 1. Soft clipping (tanh)
-            // ---------------------------------------------------
             case "tanh":
                 y = Math.tanh(x * k);
                 break;
 
-            // ---------------------------------------------------
-            // 2. Greek "TZOUK" bouzouki curve
-            //    Asymmetric bright clipping + slight gate
-            // ---------------------------------------------------
+            // Greek "TZOUK" bouzouki curve
+            // Asymmetric bright clipping + slight gate
             case "greek": {
                 const gate = 0.12;   // low-amplitude suppression
                 let s = x;
@@ -58,19 +52,21 @@ function createDistortionCurve({
                 break;
             }
 
-            // ---------------------------------------------------
-            // 3. Tube saturation (smooth, musical)
-            // ---------------------------------------------------
             case "tube":
                 y = x / (1 + Math.abs(k * x));
                 break;
 
-            // ---------------------------------------------------
-            // 4. Hard clip (near square, but normalized)
-            // ---------------------------------------------------
             case "hard":
                 y = Math.max(-1, Math.min(1, x * k));
                 break;
+
+            case "explosion": {
+                const param = 65;
+                const f1 = 1 - param * 0.01;
+                const v1 = f1 * 2 + 0.25;
+                y = x / (v1 + x * x);
+                break;
+            }
 
             default:
                 y = x;
@@ -158,8 +154,8 @@ class Operator {
         this.lfoGain.gain.value = this.lfoSettings.depth;
         this.amp = audioContext.createGain();
 
-        const isBuffer = ["blueNoise", "brownNoise", "crashNoise", "crashNoiseAndBPF", "hihatNoise", "hihatNoiseAndBPF",
-            "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF", 
+        const isBuffer = ["blueNoise", "brownNoise", "brownNoiseAndLPF", "crashNoise", "crashNoiseAndBPF", "hihatNoise", "hihatNoiseAndBPF",
+            "noise", "noiseAndBPF", "noiseAndHPF", "noiseAndLPF", "noiseAndLSF", "pinkNoise", "pinkNoiseAndBPF",
             "rideNoise", "rideNoiseAndBPF", "violetNoise"].includes(waveform);
         let oscillator = null;
 
@@ -182,6 +178,7 @@ class Operator {
                         oscillator.buffer = getBlueNoiseBuffer(audioContext);
                         break;
                     case "brownNoise":
+                    case "brownNoiseAndLPF":
                         oscillator.buffer = getBrownNoiseBuffer(audioContext);
                         break;
                     case "crashNoise":
@@ -225,6 +222,7 @@ class Operator {
                         this.filter.frequency.value = frequency;
                         this.filter.Q.value = resonancePercentToQ(detuneOrResonance);
                         break;
+                    case "brownNoiseAndLPF":
                     case "noiseAndLPF":
                         this.filter = audioContext.createBiquadFilter();
                         this.filter.type = "lowpass";
