@@ -1,8 +1,6 @@
 import { checkColor } from "./changers.js";
 import { numberToCode, secretSeriesCodePart } from "./codes.js";
-import { detectorDisplayModes } from "./detectors.js";
 import { checkDetonator } from "./detonator.js";
-import { flamethrowerDisplayModes } from "./flamethrowers.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp } from "./force.js";
 import { getHiddenMiniStart } from "./levels.js";
 import { moveLightBlueBar } from "./lightBlueBar.js";
@@ -169,37 +167,6 @@ export function changeCommand(gameInfo, x, y, command) {
     gameInfo.detectors[idx].value = command;
   }
   return idx;
-}
-
-export function changeDisplay(gameInfo, x, y, decrease) {
-  const step = decrease ? -1 : 1;
-  let values = [];
-  let idx = -1;
-  let n = 0;
-
-  idx = findElementByCoordinates(x, y, gameInfo.detectors);
-  if (idx >= 0) {
-    values = detectorDisplayModes();
-    n = values.indexOf(gameInfo.detectors[idx].display) + step;
-    if (n < 0 || n >= values.length) {
-      n = 0;
-    }
-    gameInfo.detectors[idx].display = values[n];
-    return idx;
-  }
-
-  idx = findElementByCoordinates(x, y, gameInfo.flamethrowers);
-  if (idx >= 0) {
-    values = flamethrowerDisplayModes();
-    n = values.indexOf(gameInfo.flamethrowers[idx].display) + step;
-    if (n < 0 || n >= values.length) {
-      n = 0;
-    }
-    gameInfo.flamethrowers[idx].display = values[n];
-    return idx;
-  }
-
-  return -1;
 }
 
 export function changeIntelligence(gameData, gameInfo, x, y, intelligence) {

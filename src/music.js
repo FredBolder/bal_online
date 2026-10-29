@@ -176,7 +176,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     operators.push(new Operator(audioCtx, "triangle", frequency * 1, detuneTotal, maxVolume * 1.0 * volumeFactor, 1, decayFactor * 1400, 0, releaseFactor * 1400));
     operators[0].setFilter("bandpass", bandPassFrequency, bandPassResonancePercent);
     operators[0].setPitchEnv(0.005, 15, 0);
-    operators[0].setWaveShaper("greek", 5, 0.6);
+    operators[0].setWaveShaper(2, 5, 0.6);
     operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.55 * volumeFactor, 0.5, decayFactor * 1200, 0, releaseFactor * 1200));
     operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * 0.35 * volumeFactor, 0.5, decayFactor * 1000, 0, releaseFactor * 1000));
     operators.push(new Operator(audioCtx, "sine", frequency * 4, 0, maxVolume * 0.27 * volumeFactor, 0.5, decayFactor * 700, 0, releaseFactor * 700));
@@ -377,7 +377,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
 
     operators.push(new Operator(audioCtx, "brownNoiseAndLPF", brownNoiseFreq, 0, maxVolume, 0, brownNoiseDecay, 0, brownNoiseRelease));
-    operators[0].setWaveShaper("explosion", 5, 1);
+    operators[0].setWaveShaper(5, 5, 1);
     operators[0].setLfo("dca", "sine", lfoFreq, lfoAmount, lfoDelay);
 
     operators.push(new Operator(audioCtx, "noiseAndLPF", whiteNoiseFreq, 0, maxVolume, 0, whiteNoiseDecay, 0, whiteNoiseRelease));

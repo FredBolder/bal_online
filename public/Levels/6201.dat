@@ -1,5 +1,5 @@
 $extra: 1
-$sound: 22, player
+$sound: burningInLava, player
 $startlevelmessage: Only one sound is played at a time in the required rhythm. Try this level more times for different rhythms!
 $stonepattern: 1
 $gameticksxy: 17, 7, 3

@@ -113,6 +113,10 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         }
         return;
     }
+    if (cmd === "gameover") {
+        gameVars.gameOver = true; 
+        return;
+    }
     if (cmd === "random" && values.length === 4) {
         source = gameVars;
         variable = valuesLowerCase[1];
@@ -134,7 +138,9 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
     }
 
     if ((["changedirection", "create", "delete", "rotateleft", "rotateright"].includes(cmd) && values.length >= 5 && isOdd(values.length)) ||
-        (cmd === "move" && values.length >= 6 && !isOdd(values.length))) {
+        (cmd === "move" && values.length >= 6 && !isOdd(values.length)) ||
+        (cmd === "startsong" && values.length >= 4 && !isOdd(values.length)) 
+    ) {
         // changedirection, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
         // changedirection, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
         // create, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
@@ -147,38 +153,41 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         // rotateleft, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
         // rotateright, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
         // rotateright, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
+        // startsong, {abs|rel|player}, x1, y1 [, x2, y2] 
+        // startsong, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
         if (cmd === "move") {
             direction = valuesLowerCase[values.length - 1];
             if (!["left", "right", "up", "down"].includes(direction)) {
                 return;
             }
         }
-        coordinatesMode = valuesLowerCase[2];
+        const deltaIndex = (cmd === "startsong") ? -1 : 0;
+        coordinatesMode = valuesLowerCase[2 + deltaIndex];
         if (!["abs", "rel", "player", "abslist", "rellist", "playerlist"].includes(coordinatesMode)) {
             return;
         }
         if (coordinatesMode === "abslist" || coordinatesMode === "rellist" || coordinatesMode === "playerlist") {
-            n1 = Math.trunc((values.length - 3) / 2);
+            n1 = Math.trunc((values.length - (3 + deltaIndex)) / 2);
             if (n1 < 1) {
                 return;
             }
             for (let i = 0; i < n1; i++) {
-                x1 = intValues[3 + (i * 2)];
-                y1 = intValues[4 + (i * 2)];
+                x1 = intValues[(3 + deltaIndex) + (i * 2)];
+                y1 = intValues[(4 + deltaIndex) + (i * 2)];
                 if (x1 === null || y1 === null) {
                     return;
                 }
                 coordinatesList.push({ x: x1, y: y1 });
             }
         } else {
-            x1 = intValues[3];
-            y1 = intValues[4];
+            x1 = intValues[3 + deltaIndex];
+            y1 = intValues[4 + deltaIndex];
             if (x1 === null || y1 === null) {
                 return;
             }
-            if (values.length >= 7) {
-                x2 = intValues[5];
-                y2 = intValues[6];
+            if (values.length >= (7 + deltaIndex)) {
+                x2 = intValues[5 + deltaIndex];
+                y2 = intValues[6 + deltaIndex];
                 if (x2 === null || y2 === null) {
                     return;
                 }
@@ -245,6 +254,11 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
             }
             if (cmd === "rotateright") {
                 commandRotate(backData, gameData, gameInfo, valuesLowerCase[1], absX, absY, false);
+                continue;
+            }
+
+            if (cmd === "startsong") {
+                commandStartSong(gameData, gameInfo, absX, absY);
                 continue;
             }
 
@@ -730,10 +744,6 @@ export function commands(backData, gameData, gameInfo, gameVars, detector) {
         commandLine = commandList[i].trim();
         command(backData, gameData, gameInfo, gameVars, detector.x, detector.y, commandLine, detector.oneCommand);
     }
-}
-
-export function detectorDisplayModes() {
-    return ["default", "stone", "grayball"];
 }
 
 export function detectorModes() {
@@ -1230,6 +1240,36 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
             const pusher = gameInfo.pushers[i];
             pusher.direction = rotateDirection(pusher.direction);
         }
+    }
+}
+
+function commandStartSong(gameData, gameInfo, x, y) {
+    let gd = -1;
+    let idx = -1;
+
+    if (x < 0 || y < 0) {
+        return;
+    }
+
+    gd = getGameDataValue(gameData, x, y);
+    if (gd !== 157) {
+        return;
+    }
+
+    idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
+    if (idx < 0) {
+        return;
+    }
+
+    const musicBox = gameInfo.musicBoxes[idx];
+
+    if (musicBox.mode === "songstart") {
+        musicBox.delayCounter = 0;
+        musicBox.ended = false;
+        musicBox.noteIndex = -1;
+        musicBox.repeat = false;
+        musicBox.tripletStart = -1;
+        musicBox.active = true;
     }
 }
 

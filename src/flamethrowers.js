@@ -316,10 +316,6 @@ export function flamethrowerDirections() {
     return ["left", "right", "up", "down"];
 }
 
-export function flamethrowerDisplayModes() {
-    return ["default", "stone", "grayball"];
-}
-
 export const flamethrowerMaxRange = 10;
 
 export function flamethrowerModes() {

@@ -220,6 +220,7 @@ export function getGameInfo(backData, gameData) {
                         chordTypeOrInterval: "?",
                         chordsPlaced: false,
                         direction: "up",
+                        display: "default",
                         group: 1
                     };
                     result.musicBoxes.push(musicBox);
@@ -494,7 +495,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Ended: ${obj.ended}, `; 
                 extraInfo += `Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, `;
                 extraInfo += `Note override: ${obj.noteOverride}, Repeat: ${obj.repeat}, Octaves: ${obj.octaves}, Steps per measure: ${obj.stepsPerMeasure}, `;
-                extraInfo += `On one: ${obj.onOne}, Part: ${obj.part}, Direction: ${obj.direction}, Group: ${obj.group}`;
+                extraInfo += `On one: ${obj.onOne}, Part: ${obj.part}, Direction: ${obj.direction}, Display: ${obj.display}, Group: ${obj.group}`;
             }
             info = `Music box, ` + extraInfo;
             break;
@@ -1439,7 +1440,9 @@ export function initGameVars(vars) {
     vars.seaAnemonesSwayAmount = 50;
     vars.seaAnemonesSwaySpeed = 10;
     vars.skipFalling = 0;
-    vars.soundLava = "default";
+    vars.soundBurningInLava = "default";
+    vars.soundEating = "default";
+    vars.soundOpeningDoor = "default";
     vars.startlevelmessage = "";
     vars.stonePattern = 0;
     vars.swapLeftRight = false;

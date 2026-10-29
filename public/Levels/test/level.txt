@@ -1,28 +1,27 @@
-$musicbox: 10, 10, keyboard, 5
-$instrument: 10, 10, sfx, 90
-$musicbox: 11, 10, keyboard, 5
-$notes: 11, 10, D4
-$instrument: 11, 10, sfx, 90
-$musicbox: 12, 10, keyboard, 5
-$notes: 12, 10, E4
-$instrument: 12, 10, sfx, 90
-$musicbox: 13, 10, keyboard, 5
-$notes: 13, 10, F4
-$instrument: 13, 10, sfx, 90
-$musicbox: 14, 10, keyboard, 5
-$notes: 14, 10, G4
-$instrument: 14, 10, sfx, 90
-1111111111111111111111
-1                    1
-1                    1
-1                    1
-1                    1
-1                    1
-1                    1
-1                    1
-1                    1
-1                    1
-1         MMMMM      1
-13                   1
-1      2             1
-1111111111111111111111
+$event: 31, 14, MovedLeftByPlayer
+$detectormode: 31, 14, event
+$target: 31, 14, command
+$value: 31, 14, startsong, abs, 1, 1 | gameover
+$instrument: 1, 1, sfx, 90
+$musicbox: 1, 1, songstart, 5
+$notes: 1, 1, G4
+11111111111111111111111111111111
+1M                             1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              1
+1                              ђ
+1                              1
+1                              1
+13                             1
+1             2                1
+11111111111111111111111111111111

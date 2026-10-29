@@ -8,7 +8,6 @@ import { addObject, removeObject } from "../addRemoveObject.js";
 import {
   changeChangerColors,
   changeCommand,
-  changeDisplay,
   changeIntelligence,
   changeMessage,
   changePalette,
@@ -38,6 +37,7 @@ import {
 } from "../colorUtils.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { detectorMaxRange } from "../detectors.js";
+import { changeDisplay } from "../display.js";
 import { drawLevel } from "../drawLevel.js";
 import { exportLevel, importLevel } from "../files.js";
 import { feedFish } from "../fishFood.js";
@@ -1309,7 +1309,7 @@ function BalPage() {
             break;
           case 6:
             // Music box
-            arr1 = [157, 2092, 2212, 2132, 2218, 2216, 2131, 2133, 2034, 2035, 2103, 2146, 2147, 2217, 0, 2222];
+            arr1 = [157, 2092, 2212, 2132, 2218, 2216, 2131, 2133, 2034, 2035, 2103, 2146, 2147, 2217, 2202, 2222];
             arr2 = [2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2118, 2119];
             break;
           case 7:
@@ -1521,6 +1521,7 @@ function BalPage() {
     let eventMovedLeftByPlayer = false;
     let eventMovedRightByPlayer = false;
     let eventMovedUpByPlayer = false;
+    let eventOpeningDoor = false;
     let eventTookCoilSpring = false;
     let eventTookDivingGlasses = false;
     let eventTookKey = false;
@@ -2195,6 +2196,9 @@ function BalPage() {
       gameInfo.greenBalls--;
       eventAteSmallGreenBall = true;
     }
+    if (info.sound === "unlock") {
+      eventOpeningDoor = true;
+    }
     if (!globalVars.reading && !kPressed && !dropPressed) {
       if (e.key === gameInfo.userKey1) {
         eventUserKey1Pressed = true;
@@ -2224,6 +2228,10 @@ function BalPage() {
       }
       if (eventMovedUpByPlayer) {
         detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_movedupbyplayer");
+        processDetectorResult(detectorResult);
+      }
+      if (eventOpeningDoor) {
+        detectorResult = checkPistonsTriggers(backData, gameData, gameInfo, gameVars, "event_openingdoor");
         processDetectorResult(detectorResult);
       }
       if (eventTookCoilSpring) {
@@ -2344,7 +2352,9 @@ function BalPage() {
     // Check if level is solved
     if (info.eating) {
       updateGreen();
-      addSound(reverseString("tae"));
+      if (gameVars.soundEating === "default" || gameVars.soundEating === "player") {
+        addSound(reverseString("tae"));
+      }
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
         ((globalVars.thisWorldGreen === 0) && (globalVars.otherWorldGreen === 0)))
       ) {
@@ -2368,7 +2378,11 @@ function BalPage() {
     }
 
     for (let i = 0; i < playSounds.length; i++) {
-      playSound(playSounds[i]);
+      const sound = playSounds[i];
+      if (sound === "unlock" && gameVars.soundOpeningDoor === "never") {
+        continue;
+      }
+      playSound(sound);
     }
 
     if (info.message !== "") {
@@ -3165,9 +3179,9 @@ function BalPage() {
                 }
               }
               if (createLevelObject === 2202) {
-                if (changeDisplay(gameInfo, column, row, e.altKey) === -1) {
+                if (changeDisplay(gameData, gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a flamethrower or a mover to change the display.");
+                    showMessage("Info", "Click on a detector, flamethrower or a music box to change the display.");
                   }
                 }
               }

@@ -230,6 +230,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
                 chordsPlaced: false,
                 part: "bottom",
                 direction: "up",
+                display: "default",
                 group: 1
             };
             gameInfo.musicBoxes.push(musicBox);

@@ -766,20 +766,7 @@ function drawLevel(
       target = gameInfo.detectors[idx].target;
     }
 
-    switch (display) {
-      case "stone":
-        drawStone(x, y);
-        break;
-      case "grayball":
-        drawGrayBall(0);
-        break;
-      default:
-        break;
-    }
-    if (display !== "default") {
-      if (globalVars.createLevel) {
-        drawBox(ctx, xmin, ymin, w1, w2, "white");
-      }
+    if (drawOtherObject(x, y, display)) {
       return;
     }
 
@@ -1214,20 +1201,7 @@ function drawLevel(
       mode = gameInfo.flamethrowers[idx].mode;
     }
 
-    switch (display) {
-      case "stone":
-        drawStone(x, y);
-        break;
-      case "grayball":
-        drawGrayBall(0);
-        break;
-      default:
-        break;
-    }
-    if (display !== "default") {
-      if (globalVars.createLevel) {
-        drawBox(ctx, xmin, ymin, w1, w2, "white");
-      }
+    if (drawOtherObject(x, y, display)) {
       return;
     }
 
@@ -1889,6 +1863,7 @@ function drawLevel(
     let black2width = null;
     let blackHalfWidth = null;
     let direction = "up";
+    let display = "default";
     let idx = -1;
     let lineY = null;
     let line1y1 = null;
@@ -1911,10 +1886,15 @@ function drawLevel(
     idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
     if (idx >= 0) {
       direction = gameInfo.musicBoxes[idx].direction;
+      display = gameInfo.musicBoxes[idx].display;
       mode = gameInfo.musicBoxes[idx].mode;
       notes = gameInfo.musicBoxes[idx].notes;
       stepsPerMeasure = gameInfo.musicBoxes[idx].stepsPerMeasure;
       part = gameInfo.musicBoxes[idx].part;
+    }
+
+    if (drawOtherObject(x, y, display)) {
+      return;
     }
 
     if (mode === "keyboard") {
@@ -2261,6 +2241,24 @@ function drawLevel(
 
   function drawOrangeBall() {
     ctx.drawImage(elements.elementOrange, xmin, ymin, w1, w2);
+  }
+
+  function drawOtherObject(x, y, display) {
+    switch (display) {
+      case "stone":
+        drawStone(x, y);
+        break;
+      case "grayball":
+        drawGrayBall(0);
+        break;
+      default:
+        return false;
+    }
+
+    if (globalVars.createLevel) {
+      drawBox(ctx, xmin, ymin, w1, w2, "white");
+    }
+    return true;
   }
 
   function drawPalmTreeTrunkPart() {

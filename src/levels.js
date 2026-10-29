@@ -3,8 +3,9 @@ import { answerBallModes } from "./answerBalls.js";
 import { charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
-import { detectorDisplayModes, detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
+import { detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
+import { displayModes } from "./display.js";
 import { electricityModes } from "./electricity.js";
 import { flamethrowerMaxRange, flamethrowerModes } from "./flamethrowers.js";
 import { globalVars } from "./glob.js";
@@ -569,11 +570,11 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$display":
-              if (!detectorDisplayModes().includes(valuesLowerCase[2])) {
+              if (!displayModes().includes(valuesLowerCase[2])) {
                 msg += `${settingNr(i)}Invalid value for display ${values[2]}.\n`;
               }
-              if (validXY && !["ђ", "й", 255, 257].includes(data[y][x])) {
-                msg += `${settingNr(i)}No detector or flamethrower found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["M", "ђ", "й", 157, 255, 257].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector, flamethrower or music box found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$displaysize":
@@ -2424,12 +2425,18 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 2) {
             break;
           }
-          element = tryParseInt(values[0], -1);
+          element = valuesLowerCase[0];
           sound = valuesLowerCase[1];
           if (["default", "never", "player"].includes(sound)) {
             switch (element) {
-              case 22:
-                gameVars.soundLava = sound;
+              case "burninginlava":
+                gameVars.soundBurningInLava = sound;
+                break;
+              case "eating":
+                gameVars.soundEating = sound;
+                break;
+              case "openingdoor":
+                gameVars.soundOpeningDoor = sound;
                 break;
               default:
                 break;

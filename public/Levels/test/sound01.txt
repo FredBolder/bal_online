@@ -1,0 +1,18 @@
+$sound: openingDoor, never
+$event: 13, 12, openingDoor
+$detectormode: 13, 12, event
+$musicbox: 13, 11, songstart, 5
+111111111111111
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1             1
+1111111       1
+13   1k      M1
+1    l   2   ђ1
+111111111111111

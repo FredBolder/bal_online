@@ -241,8 +241,18 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
-    if (gameVars.soundLava !== "default") {
-        line = `$sound: 22, ${gameVars.soundLava}`;
+    if (gameVars.soundBurningInLava !== "default") {
+        line = `$sound: burningInLava, ${gameVars.soundBurningInLava}`;
+        lines.push(line);
+    }
+
+    if (gameVars.soundEating !== "default") {
+        line = `$sound: eating, ${gameVars.soundEating}`;
+        lines.push(line);
+    }
+
+    if (gameVars.soundOpeningDoor !== "default") {
+        line = `$sound: openingDoor, ${gameVars.soundOpeningDoor}`;
         lines.push(line);
     }
 
@@ -635,54 +645,59 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
         const musicBox = gameInfo.musicBoxes[i];
-        if (musicBox.mode !== "note") {
-            line = `$musicbox: ${musicBox.x}, ${musicBox.y}, ${musicBox.mode}, ${musicBox.delay}`;
+        const coordinates = `${musicBox.x}, ${musicBox.y}`;
+        if (musicBox.direction !== "up") {
+            line = `$direction: ${musicBox.x}, ${musicBox.y}, ${musicBox.direction}`;
+            lines.push(line);
+        }
+        if (musicBox.display !== "default") {
+            line = `$display: ${coordinates}, ${musicBox.display}`;
+            lines.push(line);
+        }
+        if (musicBox.group > 1) {
+            line = `$group: ${coordinates}, ${musicBox.group}`;
+            lines.push(line);
+        }
+        if ((musicBox.instrument !== "xylophone") || (musicBox.volume !== 90)) {
+            line = `$instrument: ${coordinates}, ${musicBox.instrument}, ${musicBox.volume}`;
+            lines.push(line);
+        }
+        if (musicBox.mode !== "note" || (musicBox.delay !== 5)) {
+            line = `$musicbox: ${coordinates}, ${musicBox.mode}, ${musicBox.delay}`;
+            lines.push(line);
+        }
+        if (musicBox.noteOverride !== "none") {
+            line = `$noteoverride: ${coordinates}, ${musicBox.noteOverride}`;
             lines.push(line);
         }
         if (JSON.stringify(musicBox.notes) !== JSON.stringify(["C4"])) {
-            line = `$notes: ${musicBox.x}, ${musicBox.y}`;
+            line = `$notes: ${coordinates}`;
             count = 0;
             for (let j = 0; j < musicBox.notes.length; j++) {
                 count++;
                 if (count > 32) {
                     lines.push(line);
-                    line = `$addnotes: ${musicBox.x}, ${musicBox.y}`;
+                    line = `$addnotes: ${coordinates}`;
                     count = 0;
                 }
                 line += ", " + musicBox.notes[j];
             }
             lines.push(line);
         }
-        if ((musicBox.instrument !== "xylophone") || (musicBox.volume !== 90)) {
-            line = `$instrument: ${musicBox.x}, ${musicBox.y}, ${musicBox.instrument}, ${musicBox.volume}`;
+        if (musicBox.octaves !== 1) {
+            line = `$octaves: ${coordinates}, ${musicBox.octaves}`;
             lines.push(line);
         }
         if (musicBox.part !== "bottom") {
-            line = `$part: ${musicBox.x}, ${musicBox.y}, ${musicBox.part}`;
-            lines.push(line);
-        }
-        if (musicBox.stepsPerMeasure !== 0) {
-            line = `$stepspermeasure: ${musicBox.x}, ${musicBox.y}, ${musicBox.stepsPerMeasure}`;
-            lines.push(line);
-        }
-        if (musicBox.direction !== "up") {
-            line = `$direction: ${musicBox.x}, ${musicBox.y}, ${musicBox.direction}`;
-            lines.push(line);
-        }
-        if (musicBox.group > 1) {
-            line = `$group: ${musicBox.x}, ${musicBox.y}, ${musicBox.group}`;
-            lines.push(line);
-        }
-        if (musicBox.noteOverride !== "none") {
-            line = `$noteoverride: ${musicBox.x}, ${musicBox.y}, ${musicBox.noteOverride}`;
+            line = `$part: ${coordinates}, ${musicBox.part}`;
             lines.push(line);
         }
         if (!musicBox.repeat) {
-            line = `$repeat: ${musicBox.x}, ${musicBox.y}, no`;
+            line = `$repeat: ${coordinates}, no`;
             lines.push(line);
         }
-        if (musicBox.octaves !== 1) {
-            line = `$octaves: ${musicBox.x}, ${musicBox.y}, ${musicBox.octaves}`;
+        if (musicBox.stepsPerMeasure !== 0) {
+            line = `$stepspermeasure: ${coordinates}, ${musicBox.stepsPerMeasure}`;
             lines.push(line);
         }
     }

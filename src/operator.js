@@ -12,7 +12,7 @@ import {
 import { tryParseInt } from "./utils.js";
 
 function createDistortionCurve({
-    type = "tanh",  // "tanh", "greek", "tube", "hard", "explosion"
+    type = 1,
     k = 5,
     maxAmplitude = 1.0,
     samples = 1024
@@ -25,13 +25,14 @@ function createDistortionCurve({
         let y;
 
         switch (type) {
-            case "tanh":
+            // Tanh
+            case 1:
                 y = Math.tanh(x * k);
                 break;
 
             // Greek "TZOUK" bouzouki curve
             // Asymmetric bright clipping + slight gate
-            case "greek": {
+            case 2: {
                 const gate = 0.12;   // low-amplitude suppression
                 let s = x;
 
@@ -52,15 +53,17 @@ function createDistortionCurve({
                 break;
             }
 
-            case "tube":
+            // Tube
+            case 3:
                 y = x / (1 + Math.abs(k * x));
                 break;
 
-            case "hard":
+            // Hard    
+            case 4:
                 y = Math.max(-1, Math.min(1, x * k));
                 break;
 
-            case "explosion": {
+            case 5: {
                 const param = 65;
                 const f1 = 1 - param * 0.01;
                 const v1 = f1 * 2 + 0.25;
