@@ -1,3 +1,4 @@
+import { envelopeValue, startEnvelope } from "./envelopes.js";
 import { percentageToBoost, resonancePercentToQ } from "./filter.js";
 import {
     getBlueNoiseBuffer,
@@ -13,7 +14,7 @@ import { tryParseInt } from "./utils.js";
 
 function createDistortionCurve({
     type = 1,
-    k = 5,
+    amount = 5,
     maxAmplitude = 1.0,
     samples = 1024
 }) {
@@ -27,7 +28,7 @@ function createDistortionCurve({
         switch (type) {
             // Tanh
             case 1:
-                y = Math.tanh(x * k);
+                y = Math.tanh(x * amount);
                 break;
 
             // Greek "TZOUK" bouzouki curve
@@ -44,10 +45,10 @@ function createDistortionCurve({
                 // Asymmetric processing
                 if (s >= 0) {
                     // Positive side: exponential soft knee → bright
-                    y = 1 - Math.exp(-k * s);
+                    y = 1 - Math.exp(-amount * s);
                 } else {
                     // Negative side: harder cubic knee → odd harmonics
-                    y = -(Math.pow(-s * k, 3) / (1 + Math.pow(-s * k, 3)));
+                    y = -(Math.pow(-s * amount, 3) / (1 + Math.pow(-s * amount, 3)));
                 }
 
                 break;
@@ -55,19 +56,36 @@ function createDistortionCurve({
 
             // Tube
             case 3:
-                y = x / (1 + Math.abs(k * x));
+                y = x / (1 + Math.abs(amount * x));
                 break;
 
             // Hard    
             case 4:
-                y = Math.max(-1, Math.min(1, x * k));
+                y = Math.max(-1, Math.min(1, x * amount));
                 break;
 
             case 5: {
-                const param = 65;
-                const f1 = 1 - param * 0.01;
+                // amount = percentage
+                const f1 = 1 - amount * 0.01;
                 const v1 = f1 * 2 + 0.25;
                 y = x / (v1 + x * x);
+                break;
+            }
+
+            // Chebyshev Polynomial
+            case 6: {
+                // amount = order
+                const order = Math.max(2, Math.min(11, Math.round(amount)));
+                let t0 = 1;
+                let t1 = x;
+
+                for (let n = 2; n <= order; n++) {
+                    const t2 = 2 * x * t1 - t0;
+                    t0 = t1;
+                    t1 = t2;
+                }
+
+                y = t1;
                 break;
             }
 
@@ -145,8 +163,8 @@ class Operator {
         this.lfoSettings = { destination: "none", waveform: "sine", frequency: 4, delay: 0, depth: 0.1 };
         this.dcoSettings = { waveform, frequency };
         this.dcaSettings = { volume, attack, decay, sustain, release };
-        this.pitchEnvSettings = { start: 0, time: 500, end: 0 };
-
+        this.pitchEnvelopeStartValue = 0;
+        this.pitchEnvelope = [{time: 500, value: 0, curveType: "lineair" }];
         this.tremolo = audioContext.createGain();
         this.tremoloOffset = audioContext.createConstantSource();
         this.tremoloOffset.offset.value = 1 - this.lfoSettings.depth;
@@ -389,18 +407,22 @@ class Operator {
         this.makeConnections();
     }
 
-    setPitchEnv(start, time, end) {
-        this.pitchEnvSettings.start = start;
-        this.pitchEnvSettings.time = time;
-        this.pitchEnvSettings.end = end;
+    setPitchEnvelope(startValue, envelope) {
+        this.pitchEnvelopeStartValue = startValue;
+        this.pitchEnvelope = [...envelope];
     }
 
-    setWaveShaper(type, k, maxAmplitude = null) {
+    setSimplePitchEnvelope(startValue, decay, endValue) {
+        this.pitchEnvelopeStartValue = startValue;
+        this.pitchEnvelope = [{time: decay, value: endValue, curveType: "lineair" }];
+    }
+
+    setWaveShaper(type, amount, maxAmplitude = null) {
         if (maxAmplitude === null) {
             maxAmplitude = this.dcaSettings.volume;
         }
         this.waveShaper = this.audioContext.createWaveShaper();
-        this.waveShaper.curve = createDistortionCurve(type, k, maxAmplitude);
+        this.waveShaper.curve = createDistortionCurve(type, amount, maxAmplitude);
         this.makeConnections();
     }
 
@@ -416,8 +438,7 @@ class Operator {
         this.amp.gain.linearRampToValueAtTime(safeTarget(this.dcaSettings.volume), startTime + at);
         this.amp.gain.exponentialRampToValueAtTime(safeTarget(this.dcaSettings.sustain), startTime + at + dt);
         for (let i = 0; i < this.oscList.length; i++) {
-            this.oscList[i].osc.detune.setValueAtTime(this.pitchEnvSettings.start * 1200, startTime);
-            this.oscList[i].osc.detune.linearRampToValueAtTime(this.pitchEnvSettings.end * 1200, startTime + (this.pitchEnvSettings.time / 1000));
+            startEnvelope(this.oscList[i].osc.detune, startTime, this.pitchEnvelopeStartValue, this.pitchEnvelope);
             this.oscList[i].osc.start(startTime);
         }
         if (this.lfoSettings.destination === "dca") {

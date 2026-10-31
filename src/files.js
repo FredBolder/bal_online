@@ -241,18 +241,18 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         lines.push(line);
     }
 
-    if (gameVars.soundBurningInLava !== "default") {
-        line = `$sound: burningInLava, ${gameVars.soundBurningInLava}`;
+    if (!gameVars.soundBurningInLava) {
+        line = `$sound: burningInLava, no`;
         lines.push(line);
     }
 
-    if (gameVars.soundEating !== "default") {
-        line = `$sound: eating, ${gameVars.soundEating}`;
+    if (!gameVars.soundEating) {
+        line = `$sound: eating, no`;
         lines.push(line);
     }
 
-    if (gameVars.soundOpeningDoor !== "default") {
-        line = `$sound: openingDoor, ${gameVars.soundOpeningDoor}`;
+    if (!gameVars.soundOpeningDoor) {
+        line = `$sound: openingDoor, no`;
         lines.push(line);
     }
 

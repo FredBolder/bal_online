@@ -2198,6 +2198,9 @@ function BalPage() {
     }
     if (info.sound === "unlock") {
       eventOpeningDoor = true;
+      if (!gameVars.soundOpeningDoor) {
+        info.sound = "";
+      }
     }
     if (!globalVars.reading && !kPressed && !dropPressed) {
       if (e.key === gameInfo.userKey1) {
@@ -2352,7 +2355,7 @@ function BalPage() {
     // Check if level is solved
     if (info.eating) {
       updateGreen();
-      if (gameVars.soundEating === "default" || gameVars.soundEating === "player") {
+      if (gameVars.soundEating) {
         addSound(reverseString("tae"));
       }
       if (!gameVars.gameOver && ((!gameInfo.hasTravelGate && (gameInfo.greenBalls === 0)) ||
@@ -2379,9 +2382,6 @@ function BalPage() {
 
     for (let i = 0; i < playSounds.length; i++) {
       const sound = playSounds[i];
-      if (sound === "unlock" && gameVars.soundOpeningDoor === "never") {
-        continue;
-      }
       playSound(sound);
     }
 

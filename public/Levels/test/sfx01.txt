@@ -1,17 +1,20 @@
-$musicbox: 10, 10, keyboard, 5
 $instrument: 10, 10, sfx, 90
+$musicbox: 10, 10, keyboard, 5
+$instrument: 11, 10, sfx, 90
 $musicbox: 11, 10, keyboard, 5
 $notes: 11, 10, D4
-$instrument: 11, 10, sfx, 90
+$instrument: 12, 10, sfx, 90
 $musicbox: 12, 10, keyboard, 5
 $notes: 12, 10, E4
-$instrument: 12, 10, sfx, 90
+$instrument: 13, 10, sfx, 90
 $musicbox: 13, 10, keyboard, 5
 $notes: 13, 10, F4
-$instrument: 13, 10, sfx, 90
+$instrument: 14, 10, sfx, 90
 $musicbox: 14, 10, keyboard, 5
 $notes: 14, 10, G4
-$instrument: 14, 10, sfx, 90
+$instrument: 15, 10, sfx, 90
+$musicbox: 15, 10, keyboard, 5
+$notes: 15, 10, A4
 1111111111111111111111
 1                    1
 1                    1
@@ -22,7 +25,7 @@ $instrument: 14, 10, sfx, 90
 1                    1
 1                    1
 1                    1
-1         MMMMM      1
+1         MMMMMM     1
 13                   1
-1      2             1
+1     42             1
 1111111111111111111111

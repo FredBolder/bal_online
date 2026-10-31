@@ -1440,9 +1440,9 @@ export function initGameVars(vars) {
     vars.seaAnemonesSwayAmount = 50;
     vars.seaAnemonesSwaySpeed = 10;
     vars.skipFalling = 0;
-    vars.soundBurningInLava = "default";
-    vars.soundEating = "default";
-    vars.soundOpeningDoor = "default";
+    vars.soundBurningInLava = true;
+    vars.soundEating = true;
+    vars.soundOpeningDoor = true;
     vars.startlevelmessage = "";
     vars.stonePattern = 0;
     vars.swapLeftRight = false;

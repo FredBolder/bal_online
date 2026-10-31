@@ -1,4 +1,4 @@
-$sound: openingDoor, never
+$sound: openingDoor, no
 $event: 13, 12, openingDoor
 $detectormode: 13, 12, event
 $musicbox: 13, 11, songstart, 5

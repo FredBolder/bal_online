@@ -371,7 +371,7 @@ export function checkSettings(data, settings) {
     { name: "$seaanemonesswayspeed", params: 1, xy: false, yesno: -1 },
     { name: "$sequence", params: 3, xy: true, yesno: 2 },
     { name: "$shape", params: 3, xy: true, yesno: -1 },
-    { name: "$sound", params: 2, xy: false, yesno: -1 },
+    { name: "$sound", params: 2, xy: false, yesno: 1 },
     { name: "$spikeballlookslikestone", params: 1, xy: false, yesno: 0 },
     { name: "$startlevelmessage", params: 0, xy: false, yesno: -1 },
     { name: "$stepspermeasure", params: 3, xy: true, yesno: -1 },
@@ -921,12 +921,12 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$sound":
-              if (!["default", "never", "player"].includes(valuesLowerCase[1])) {
-                msg += `${settingNr(i)}Invalid sound mode ${values[1]}.\n`;
+              if (!["burninginlava", "eating", "openingdoor"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}Invalid event ${values[0]}.\n`;
               }
               break;
             case "spikeballlookslikestone":
-              break;  
+              break;
             case "$stepspermeasure":
               switch (data[y][x]) {
                 case "M":
@@ -1658,7 +1658,7 @@ async function loadFromFile(n, gateTravelling = false) {
 
 export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings, initColors = true) {
   let color = "";
-  let element = 0;
+  let event = 0;
   let gameTicks = 0;
   let instrument = "kalimba";
   let h = -1;
@@ -1666,7 +1666,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
   let mode = "";
   let p1 = -1;
   let propName = "";
-  let sound = "";
+  let val_bool = false;
   let val_int = 0;
   let val_str = "";
   let validXY = false;
@@ -1768,12 +1768,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           w = tryParseInt(values[2], -1);
           h = tryParseInt(values[3], -1);
-          element = tryParseInt(values[4], -1);
+          event = tryParseInt(values[4], -1);
           if ((x >= 0) && (y >= 0) && ((x + w - 1) < backData[0].length) && ((y + h - 1) < backData.length) &&
-            ([20, 23, 25, 80, 90, 137, 258].includes(element))) {
+            ([20, 23, 25, 80, 90, 137, 258].includes(event))) {
             for (let posY = y; posY < (y + h); posY++) {
               for (let posX = x; posX < (x + w); posX++) {
-                backData[posY][posX] = element;
+                backData[posY][posX] = event;
               }
             }
           }
@@ -2425,22 +2425,20 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if (values.length !== 2) {
             break;
           }
-          element = valuesLowerCase[0];
-          sound = valuesLowerCase[1];
-          if (["default", "never", "player"].includes(sound)) {
-            switch (element) {
-              case "burninginlava":
-                gameVars.soundBurningInLava = sound;
-                break;
-              case "eating":
-                gameVars.soundEating = sound;
-                break;
-              case "openingdoor":
-                gameVars.soundOpeningDoor = sound;
-                break;
-              default:
-                break;
-            }
+          event = valuesLowerCase[0];
+          val_bool = (valuesLowerCase[1] === "yes");
+          switch (event) {
+            case "burninginlava":
+              gameVars.soundBurningInLava = val_bool;
+              break;
+            case "eating":
+              gameVars.soundEating = val_bool;
+              break;
+            case "openingdoor":
+              gameVars.soundOpeningDoor = val_bool;
+              break;
+            default:
+              break;
           }
           break;
         case "$spikeballlookslikestone":

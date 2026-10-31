@@ -18,7 +18,7 @@ export function checkLava(backData, gameData, gameInfo, gameVars) {
         result.gameOver = true;
       }
       removeObject(backData, gameData, gameInfo, lava.x, lava.y);
-      if ((gameVars.soundBurningInLava === "default" || gameVars.soundBurningInLava === "player") && (objectNumber === 2)) {
+      if (gameVars.soundBurningInLava && (objectNumber === 2)) {
         result.sound = "pain";
       }
     }
@@ -186,7 +186,7 @@ export function moveLava(backData, gameData, gameInfo, gameVars) {
       if ([2, 3].includes(gameData[newY][newX])) {
         result.gameOver = true;
       }
-      if ((gameVars.soundBurningInLava === "default" || gameVars.soundBurningInLava === "player") && (gameData[newY][newX] === 2)) {
+      if (gameVars.soundBurningInLava && (gameData[newY][newX] === 2)) {
         result.sound = "pain";
       }
       removeObject(backData, gameData, gameInfo, newX, newY);

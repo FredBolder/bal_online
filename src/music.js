@@ -56,8 +56,8 @@ let operatorsList = [];
 export function instruments() {
   // Add test for test sound
   return ["test", "accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "crashcymbal", "crossstick", "drums", "guitar", "hammondorgan", "harp",
-    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "sfx", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2", "tom", "trombone", "trumpet",
-    "vibraphone", "xylophone"]
+    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "sfx", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2", 
+    "tom", "trombone", "trumpet", "vibraphone", "xylophone"]
 }
 
 export function noteToFreq(note) {
@@ -133,7 +133,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     freqOsc1 = 55;
     phase = 20;
     pitchDecay = 100;
-    pitchStart = 1;
+    pitchStart = 1200;
     waveform = "sine";
     switch (variation) {
       case 1:
@@ -148,7 +148,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
       wf = "sine" + phase.toString();
     }
     operators.push(new Operator(audioCtx, wf, 55, 0, maxVolume * 1, 0, 400 * decayFactorOsc1, 0, 100));
-    operators[0].setPitchEnv(1, pitchDecay, 0);
+    operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
   }
 
   function createBouzouki() {
@@ -175,7 +175,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
 
     operators.push(new Operator(audioCtx, "triangle", frequency * 1, detuneTotal, maxVolume * 1.0 * volumeFactor, 1, decayFactor * 1400, 0, releaseFactor * 1400));
     operators[0].setFilter("bandpass", bandPassFrequency, bandPassResonancePercent);
-    operators[0].setPitchEnv(0.005, 15, 0);
+    operators[0].setSimplePitchEnvelope(6, 15, 0);
     operators[0].setWaveShaper(2, 5, 0.6);
     operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.55 * volumeFactor, 0.5, decayFactor * 1200, 0, releaseFactor * 1200));
     operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * 0.35 * volumeFactor, 0.5, decayFactor * 1000, 0, releaseFactor * 1000));
@@ -377,7 +377,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
 
     operators.push(new Operator(audioCtx, "brownNoiseAndLPF", brownNoiseFreq, 0, maxVolume, 0, brownNoiseDecay, 0, brownNoiseRelease));
-    operators[0].setWaveShaper(5, 5, 1);
+    operators[0].setWaveShaper(5, 65, 1);
     operators[0].setLfo("dca", "sine", lfoFreq, lfoAmount, lfoDelay);
 
     operators.push(new Operator(audioCtx, "noiseAndLPF", whiteNoiseFreq, 0, maxVolume, 0, whiteNoiseDecay, 0, whiteNoiseRelease));
@@ -467,7 +467,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     let filterRelease = 40;
     let oscFreq = 120;
     let pitchDecay = 180;
-    let pitchStart = 3.544;
+    let pitchStart = 4252.8;
     let waveform = "sawtooth";
     switch (variation) {
       case 1:
@@ -477,7 +477,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         filterRelease = 85;
         oscFreq = 60;
         pitchDecay = 350;
-        pitchStart = 3.544;
+        pitchStart = 4252.8;
         break;
       case 2:
         ampDecay = 250;
@@ -486,13 +486,13 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         filterRelease = 80;
         oscFreq = 200;
         pitchDecay = 250;
-        pitchStart = 2.322;
+        pitchStart = 2786.4;
         break;
       default:
         break;
     }
     operators.push(new Operator(audioCtx, waveform, oscFreq, 0, maxVolume * 1, 2, ampDecay, 0, ampRelease));
-    operators[0].setPitchEnv(pitchStart, pitchDecay, 0);
+    operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
     filter1.setFilter("lowpass", 5000, 5000, 500, 500, 500, 48, 0, filterDecay, 5, filterRelease);
     operators[0].setLfo("dco", "sine", 35, 35 / 1200, 0);
   }
@@ -604,7 +604,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     levelFactorNoise = 0.4;
     levelFactorOsc1 = 0.6;
     pitchDecay = 50;
-    pitchStart = 0.1;
+    pitchStart = 120;
     switch (variation) {
       case 1:
         freqOsc1 = 180;
@@ -619,7 +619,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
     operators.push(new Operator(audioCtx, "noiseAndHPF", freqNoise, 40, maxVolume * levelFactorNoise, 0, 500 * decayFactorNoise, 0, 125));
     operators.push(new Operator(audioCtx, "sine", freqOsc1, 0, maxVolume * levelFactorOsc1, 0, 400 * decayFactorOsc1, 0, 100));
-    operators[1].setPitchEnv(pitchStart, pitchDecay, 0);
+    operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
   }
 
   function createSplashCymbal(variation = 0) {
@@ -649,6 +649,30 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
   }
 
+function createSqueakyDoor() {
+    let ampAttack = 30;
+    let ampDecay = 1200;
+    let ampRelease = 300;
+
+    let filterDecay = 1200;
+    let filterRelease = 200;
+
+    let oscFreq = 280;
+    let pitchDecay = 1000;
+    let pitchStart = 180;
+
+    operators.push(new Operator(audioCtx, "sine", oscFreq, 0, maxVolume * 0.8, ampAttack, ampDecay, 0, ampRelease));
+    operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+
+    operators.push(new Operator(audioCtx, "sawtooth", oscFreq, 0, maxVolume * 0.25, ampAttack, ampDecay, 0, ampRelease));
+    operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+
+    filter1.setFilter("lowpass", 1800, 1800, 400, 400, 400, 81, 0, filterDecay, 5, filterRelease);
+
+    operators[0].setLfo("dca", "square", 12, 0.8, 0);
+    operators[1].setLfo("dca", "square", 12, 0.8, 0);
+}
+
   function createTest() {
     attack = 100;
     decay = 1000;
@@ -670,7 +694,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     levelFactorOsc1 = 0.5;
     levelFactorOsc2 = 0.3;
     pitchDecay = 100;
-    pitchStart = 0.1;
+    pitchStart = 120;
     ratio1 = 1.92;
     switch (variation) {
       case 1:
@@ -695,8 +719,8 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     operators.push(new Operator(audioCtx, "triangle", freqOsc1, 0, maxVolume * levelFactorOsc1, 0, 600 * decayFactorOsc1, 0, 100));
     operators.push(new Operator(audioCtx, "triangle", freqOsc2, 0, maxVolume * levelFactorOsc2, 0, 500 * decayFactorOsc2, 0, 100));
     operators.push(new Operator(audioCtx, "pinkNoise", 1000, 40, maxVolume * levelFactorNoise, 0, 100 * decayFactorNoise, 0, 125));
-    operators[0].setPitchEnv(pitchStart, pitchDecay, 0);
-    operators[1].setPitchEnv(pitchStart, pitchDecay, 0);
+    operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+    operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
   }
 
   if (typeof window === "undefined") {
@@ -835,7 +859,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators.push(new Operator(audioCtx, "sine", frequency * 7, 0, maxVolume * 0.08 * f1, 50, 400, maxVolume * 0.08 * f1 * f2, 400 * f3));
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.04 * f1, 60, 300, maxVolume * 0.04 * f1 * f2, 300 * f3));
         for (let i = 0; i < operators.length; i++) {
-          operators[i].setPitchEnv(-15 / 1200, 40, 0);
+          operators[i].setSimplePitchEnvelope(-15, 40, 0);
         }
         break;
       case "bass":
@@ -1102,7 +1126,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         release = 80;
         f1 = 1 / 4.82;
         f2 = 0.9;
-        f3 = 1 / 1200;
+        f3 = 1;
         operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine5", frequency * 2, 0, maxVolume * 0.85 * f1, attack, decay, maxVolume * 0.85 * f1 * f2, release));
@@ -1116,7 +1140,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators.push(new Operator(audioCtx, "sine2", frequency * 10, 0, maxVolume * 0.04 * f1, attack, decay, maxVolume * 0.04 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine1", frequency * 11, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.01 * f1, attack, decay, maxVolume * 0.01 * f1 * f2, release));
-        operators[1].setPitchEnv(f3, 50, f3);
+        operators[1].setSimplePitchEnvelope(f3, 50, f3);
         break;
       case "ridecymbal":
         switch (note) {
@@ -1149,6 +1173,9 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
             break;
           case "G4":
             createExplosion(1);
+            break;
+          case "A4":
+            createSqueakyDoor();
             break;
           default:
             break;
@@ -1186,7 +1213,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         f2 = 0.6;
         operators.push(new Operator(audioCtx, "square", frequency, 7, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         filter1.setFilter("lowpass", 2500, 2500, 2500, 2500, 2500, 0, attack, decay, 5, release);
-        operators[0].setPitchEnv(60 / 1200, 50, 0);
+        operators[0].setSimplePitchEnvelope(60, 50, 0);
         break;
       case "strings1":
         attack = 100;
@@ -1243,7 +1270,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators.push(new Operator(audioCtx, "sine", frequency * 7, 0, maxVolume * 0.12 * f1, 50, 500, maxVolume * 0.12 * f1 * f2, 500 * f3));
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.06 * f1, 60, 400, maxVolume * 0.06 * f1 * f2, 400 * f3));
         for (let i = 0; i < operators.length; i++) {
-          operators[i].setPitchEnv(20 / 1200, 50, 0);
+          operators[i].setSimplePitchEnvelope(20, 50, 0);
         }
         break;
       case "trumpet":
@@ -1259,7 +1286,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
         operators.push(new Operator(audioCtx, "sine", frequency * 7, 0, maxVolume * 0.1 * f1, 40, 300, maxVolume * 0.1 * f1 * f2, 300 * f3));
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.05 * f1, 50, 200, maxVolume * 0.05 * f1 * f2, 200 * f3));
         for (let i = 0; i < operators.length; i++) {
-          operators[i].setPitchEnv(10 / 1200, 20, 0);
+          operators[i].setSimplePitchEnvelope(10, 20, 0);
         }
         break;
       case "vibraphone":
