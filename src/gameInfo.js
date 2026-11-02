@@ -2,27 +2,27 @@ import { findElementByCoordinates } from "./balUtils.js";
 import { globalVars } from "./glob.js";
 import { objectNumberToDirection } from "./objects.js";
 import { getPurpleTeleportColor } from "./teleports.js";
+import { initArray } from "./utils.js";
 
-export function getGameInfo(backData, gameData) {
-    let result = {};
-    initGameInfo(result);
+export function getGameInfo(backData, gameData, gameInfo) {
+    initGameInfo(gameInfo);
     for (let i = 0; i < gameData.length; i++) {
         for (let j = 0; j < gameData[i].length; j++) {
             const objectNumber = gameData[i][j];
             switch (objectNumber) {
                 case 2:
-                    result.blueBall.x = j;
-                    result.blueBall.y = i;
+                    gameInfo.blueBall.x = j;
+                    gameInfo.blueBall.y = i;
                     break;
                 case 3:
-                    result.greenBalls++;
+                    gameInfo.greenBalls++;
                     break;
                 case 37:
-                    result.detonator.x = j;
-                    result.detonator.y = i;
+                    gameInfo.detonator.x = j;
+                    gameInfo.detonator.y = i;
                     break;
                 case 39:
-                    result.elevatorInOuts.push({ x: j, y: i, player: false, status: 0 });
+                    gameInfo.elevatorInOuts.push({ x: j, y: i, player: false, status: 0 });
                     break;
                 case 8:
                 case 93:
@@ -43,7 +43,7 @@ export function getGameInfo(backData, gameData) {
                         redBall.direction = "none";
                         redBall.skipElevatorCount = 0;
                         redBall.skipFollowCount = 0;
-                        result.redBalls.push(redBall);
+                        gameInfo.redBalls.push(redBall);
                         break;
                     }
                 case 106:
@@ -54,7 +54,7 @@ export function getGameInfo(backData, gameData) {
                         up: objectNumber === 106,
                         hasBlueBall: false
                     };
-                    result.elevators.push(elevator);
+                    gameInfo.elevators.push(elevator);
                     break;
                 }
                 case 107:
@@ -65,17 +65,17 @@ export function getGameInfo(backData, gameData) {
                         right: objectNumber === 107,
                         hasBlueBall: false
                     };
-                    result.horizontalElevators.push(elevator);
+                    gameInfo.horizontalElevators.push(elevator);
                     break;
                 }
                 case 9: {
                     let yellowBall = { x: j, y: i, direction: "none" };
-                    result.yellowBalls.push(yellowBall);
+                    gameInfo.yellowBalls.push(yellowBall);
                     break;
                 }
                 case 40: {
                     let orangeBall = { x: j, y: i, direction: "none" };
-                    result.orangeBalls.push(orangeBall);
+                    gameInfo.orangeBalls.push(orangeBall);
                     break;
                 }
                 case 31:
@@ -88,7 +88,7 @@ export function getGameInfo(backData, gameData) {
                         color: "white",
                         group: 1
                     };
-                    result.teleports.push(teleport);
+                    gameInfo.teleports.push(teleport);
                     break;
                 }
                 case 27: {
@@ -103,22 +103,22 @@ export function getGameInfo(backData, gameData) {
                         outOfWater: 0,
                         isDead: false
                     };
-                    result.redFish.push(fish);
+                    gameInfo.redFish.push(fish);
                     break;
                 }
                 case 29: {
                     let key = { x: j, y: i, color: "default" }
-                    result.keys.push(key);
+                    gameInfo.keys.push(key);
                     break;
                 }
                 case 30: {
                     let lockedDoor = { x: j, y: i, color: "default" }
-                    result.lockedDoors.push(lockedDoor);
+                    gameInfo.lockedDoors.push(lockedDoor);
                     break;
                 }
                 case 91: {
                     let elec = { x: j, y: i };
-                    result.electricity.push(elec);
+                    gameInfo.electricity.push(elec);
                     break;
                 }
                 case 12: {
@@ -127,7 +127,7 @@ export function getGameInfo(backData, gameData) {
                         y: i,
                         status: 0
                     };
-                    result.damagedStones.push(damagedStone);
+                    gameInfo.damagedStones.push(damagedStone);
                     break;
                 }
                 case 13: {
@@ -136,12 +136,12 @@ export function getGameInfo(backData, gameData) {
                         y: i,
                         status: 0
                     };
-                    result.trapDoors.push(trap);
+                    gameInfo.trapDoors.push(trap);
                     break;
                 }
                 case 97: {
                     let copier = { x: j, y: i, color: "white" };
-                    result.copiers.push(copier);
+                    gameInfo.copiers.push(copier);
                     break;
                 }
                 case 109:
@@ -150,27 +150,27 @@ export function getGameInfo(backData, gameData) {
                 case 112: {
                     const direction = objectNumberToDirection(objectNumber);
                     let force = { x: j, y: i, direction, movable: true };
-                    result.forces.push(force);
+                    gameInfo.forces.push(force);
                     break;
                 }
                 case 115: {
                     let yellowBallPusher = { x: j, y: i };
-                    result.yellowBallPushers.push(yellowBallPusher);
+                    gameInfo.yellowBallPushers.push(yellowBallPusher);
                     break;
                 }
                 case 116: {
                     let yellowBallPushersTrigger = { x: j, y: i, pressed: false };
-                    result.yellowBallPushersTriggers.push(yellowBallPushersTrigger);
+                    gameInfo.yellowBallPushersTriggers.push(yellowBallPushersTrigger);
                     break;
                 }
                 case 117: {
                     let timeBomb = { x: j, y: i, status: -1 };
-                    result.timeBombs.push(timeBomb);
+                    gameInfo.timeBombs.push(timeBomb);
                     break;
                 }
                 case 119: {
                     let magnet = { x: j, y: i };
-                    result.magnets.push(magnet);
+                    gameInfo.magnets.push(magnet);
                     break;
                 }
                 case 121:
@@ -180,21 +180,21 @@ export function getGameInfo(backData, gameData) {
                         y: i,
                         direction: "none"
                     };
-                    result.yellowBars.push(yellowBar);
+                    gameInfo.yellowBars.push(yellowBar);
                     break;
                 }
                 case 131: {
                     let yellowStopper = { x: j, y: i, pressed: false };
-                    result.yellowStoppers.push(yellowStopper);
+                    gameInfo.yellowStoppers.push(yellowStopper);
                     break;
                 }
                 case 132:
-                    result.travelGate = { x: j, y: i };
-                    result.hasTravelGate = true;
+                    gameInfo.travelGate = { x: j, y: i };
+                    gameInfo.hasTravelGate = true;
                     break;
                 case 136: {
                     let yellowPauser = { x: j, y: i, pressed: false };
-                    result.yellowPausers.push(yellowPauser);
+                    gameInfo.yellowPausers.push(yellowPauser);
                     break;
                 }
                 case 157: {
@@ -223,12 +223,12 @@ export function getGameInfo(backData, gameData) {
                         display: "default",
                         group: 1
                     };
-                    result.musicBoxes.push(musicBox);
+                    gameInfo.musicBoxes.push(musicBox);
                     break;
                 }
                 case 158: {
                     let pistonTrigger = { x: j, y: i, pressed: false, group: 1 };
-                    result.pistonsTriggers.push(pistonTrigger);
+                    gameInfo.pistonsTriggers.push(pistonTrigger);
                     break;
                 }
                 case 159:
@@ -237,27 +237,27 @@ export function getGameInfo(backData, gameData) {
                 case 165: {
                     const direction = objectNumberToDirection(objectNumber);
                     let piston = { x: j, y: i, activated: false, sticky: false, inverted: false, direction, mode: "toggle", group: 1 };
-                    result.pistons.push(piston);
+                    gameInfo.pistons.push(piston);
                     break;
                 }
                 case 167: {
                     let delay = { x: j, y: i, count: 0, gameTicks: 3 };
-                    result.delays.push(delay);
+                    gameInfo.delays.push(delay);
                     break;
                 }
                 case 171: {
                     let conveyorBelt = { x: j, y: i, mode: "notrigger", direction: "right", group: 1 };
-                    result.conveyorBelts.push(conveyorBelt);
+                    gameInfo.conveyorBelts.push(conveyorBelt);
                     break;
                 }
                 case 178: {
                     let mover = { x: j, y: i, direction: "right", activeSides: ["top"], mode: "all", inverted: false, counter: 0 };
-                    result.movers.push(mover);
+                    gameInfo.movers.push(mover);
                     break;
                 }
                 case 198: {
                     let disappearingStone = { x: j, y: i, status: 0, countDown: false, pattern: [5, 3], patternIndex: 0, patternCounter: 0, mode: "pattern", group: 1 };
-                    result.disappearingStones.push(disappearingStone);
+                    gameInfo.disappearingStones.push(disappearingStone);
                     break;
                 }
                 case 200: {
@@ -266,39 +266,39 @@ export function getGameInfo(backData, gameData) {
                         y: i,
                         skip: false
                     };
-                    result.whiteBallSynchronisers.push(whiteBallSynchroniser);
+                    gameInfo.whiteBallSynchronisers.push(whiteBallSynchroniser);
                     break;
                 }
                 case 203: {
                     let pinkBall = { x: j, y: i, delete: false, counter: 0 };
-                    result.pinkBalls.push(pinkBall);
+                    gameInfo.pinkBalls.push(pinkBall);
                     break;
                 }
                 case 206: {
                     let waterWithIce = { x: j, y: i, status: 0, objectNumber: 20 };
-                    result.waterWithIceObjects.push(waterWithIce);
+                    gameInfo.waterWithIceObjects.push(waterWithIce);
                     break;
                 }
                 case 208: {
                     let copier = { x: j, y: i, color: "yellow" };
-                    result.copiers.push(copier);
+                    gameInfo.copiers.push(copier);
                     break;
                 }
                 case 209: {
                     let pusher = { x: j, y: i, direction: "right", mode: "onestep", keepMoving: false, movable: true, group: 1 };
-                    result.pushers.push(pusher);
+                    gameInfo.pushers.push(pusher);
                     break;
                 }
                 case 241: {
                     let questionStone = { x: j, y: i, question: "1+1", answer: "2", disappeared: false };
-                    result.questionStones.push(questionStone);
+                    gameInfo.questionStones.push(questionStone);
                     break;
                 }
                 case 242:
                 case 245: {
                     const color = objectNumber === 242 ? "purple" : "white";
                     let answerBall = { x: j, y: i, answer: "2", color, mode: "answerball", delete: false };
-                    result.answerBalls.push(answerBall);
+                    gameInfo.answerBalls.push(answerBall);
                     break;
                 }
                 case 243: {
@@ -325,7 +325,7 @@ export function getGameInfo(backData, gameData) {
                         counter: 0,
                         answer: "fish"
                     };
-                    result.tropicalFish.push(fish);
+                    gameInfo.tropicalFish.push(fish);
                     break;
                 }
                 case 244: {
@@ -337,7 +337,7 @@ export function getGameInfo(backData, gameData) {
                         horizontal: false,
                         ready: true
                     };
-                    result.changers.push(changer);
+                    gameInfo.changers.push(changer);
                     break;
                 }
                 case 248: {
@@ -348,7 +348,7 @@ export function getGameInfo(backData, gameData) {
                         outOfWater: 0,
                         isDead: false
                     };
-                    result.jellyfish.push(jellyfish);
+                    gameInfo.jellyfish.push(jellyfish);
                     break;
                 }
                 case 251: {
@@ -359,25 +359,25 @@ export function getGameInfo(backData, gameData) {
                         foodLeft: 8,
                         counter: 0,
                     };
-                    result.fishFood.push(food);
+                    gameInfo.fishFood.push(food);
                     break;
                 }
                 case 253: {
                     let brownBall = { x: j, y: i, delete: false, counter: 0 };
-                    result.brownBalls.push(brownBall);
+                    gameInfo.brownBalls.push(brownBall);
                     break;
                 }
                 case 255: {
                     let detector = { x: j, y: i, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", 
                         value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, 
                         condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0 };
-                    result.detectors.push(detector);
+                    gameInfo.detectors.push(detector);
                     break;
                 }
                 case 257: {
                     let flamethrower = { x: j, y: i, mode: "group", active: false, direction: "right", range: 3, display: "default", 
                         movable: true, group: 1 };
-                    result.flamethrowers.push(flamethrower);
+                    gameInfo.flamethrowers.push(flamethrower);
                     break;
                 }
                 default:
@@ -386,7 +386,7 @@ export function getGameInfo(backData, gameData) {
             switch (backData[i][j]) {
                 case 22: {
                     let lava = { x: j, y: i }
-                    result.lava.push(lava);
+                    gameInfo.lava.push(lava);
                     break;
                 }
                 case 170: {
@@ -398,7 +398,7 @@ export function getGameInfo(backData, gameData) {
                         color: getPurpleTeleportColor(),
                         group: 1
                     };
-                    result.teleports.push(teleport);
+                    gameInfo.teleports.push(teleport);
                     break;
                 }
                 case 252: {
@@ -408,7 +408,7 @@ export function getGameInfo(backData, gameData) {
                         palette: 1,
                         shape: 1
                     };
-                    result.seaAnemones.push(seaAnemone);
+                    gameInfo.seaAnemones.push(seaAnemone);
                     break;
                 }
                 default:
@@ -416,7 +416,7 @@ export function getGameInfo(backData, gameData) {
             }
         }
     }
-    return result;
+    return gameInfo;
 }
 
 export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
@@ -1275,27 +1275,27 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
 
 export function initGameInfo(info) {
     info.action = "";
-    info.answerBalls = [];
+    initArray(info, "answerBalls");
     info.blueBall1 = { x: -1, y: -1 };
     info.blueBall2 = { x: -1, y: -1 };
     info.blueBall = info.blueBall1;
-    info.brownBalls = [];
-    info.changers = [];
-    info.conveyorBelts = [];
-    info.copiers = [];
-    info.damagedStones = [];
-    info.detectors = [];
-    info.disappearingStones = [];
-    info.delays = [];
+    initArray(info, "brownBalls");
+    initArray(info, "changers");
+    initArray(info, "conveyorBelts");
+    initArray(info, "copiers");
+    initArray(info, "damagedStones");
+    initArray(info, "detectors");
+    initArray(info, "disappearingStones");
+    initArray(info, "delays");
     info.detonator = { x: -1, y: -1 };
-    info.electricity = [];
+    initArray(info, "electricity");
     info.electricityActive = false;
     info.electricityMode = "pattern";
-    info.elevatorInOuts = [];
-    info.elevators = [];
-    info.fishFood = [];
-    info.flamethrowers = [];
-    info.forces = [];
+    initArray(info, "elevatorInOuts");
+    initArray(info, "elevators");
+    initArray(info, "fishFood");
+    initArray(info, "flamethrowers");
+    initArray(info, "forces");
     info.greenBalls = 0;
     info.hasBlueKey = false;
     info.hasBrownBall = false;
@@ -1307,7 +1307,7 @@ export function initGameInfo(info) {
     info.hasKey = false;
     info.hasLadder = false;
     info.hasLightBlueBall = false;
-    info.lockedDoors = [];
+    initArray(info, "lockedDoors");
     info.hasOrangeBall = false;
     info.hasPickaxe = false;
     info.hasPinkBall = false;
@@ -1327,49 +1327,49 @@ export function initGameInfo(info) {
     info.hasWhiteKey = false;
     info.hasYellowBall = false;
     info.hasYellowKey = false;
-    info.horizontalElevators = [];
-    info.jellyfish = [];
-    info.keys = [];
+    initArray(info, "horizontalElevators");
+    initArray(info, "jellyfish");
+    initArray(info, "keys");
     info.lastMusicBox = null;
-    info.lava = [];
+    initArray(info, "lava");
     info.levelCanHaveSpikeBalls = false;
-    info.magnets = [];
-    info.movers = [];
-    info.musicBoxes = [];
-    info.orangeBalls = [];
-    info.pinkBalls = [];
-    info.pistons = [];
-    info.pistonsTriggers = [];
+    initArray(info, "magnets");
+    initArray(info, "movers");
+    initArray(info, "musicBoxes");
+    initArray(info, "orangeBalls");
+    initArray(info, "pinkBalls");
+    initArray(info, "pistons");
+    initArray(info, "pistonsTriggers");
     info.player = 1;
     info.playerCanMoveStones = false;
-    info.pushers = [];
-    info.questionStones = [];
-    info.redBalls = [];
-    info.redFish = [];
-    info.seaAnemones = [];
+    initArray(info, "pushers");
+    initArray(info, "questionStones");
+    initArray(info, "redBalls");
+    initArray(info, "redFish");
+    initArray(info, "seaAnemones");
     info.spikeBallLooksLikeStone = false;
-    info.teleports = [];
-    info.timeBombs = [];
-    info.trapDoors = [];
+    initArray(info, "teleports");
+    initArray(info, "timeBombs");
+    initArray(info, "trapDoors");
     info.travelGate = { x: -1, y: -1 };
-    info.tropicalFish = [];
+    initArray(info, "tropicalFish");
     info.twoBlue = false;
     info.twoBlueConnected = false;
     info.userKey1 = "Delete";
     info.userKey2 = ".";
-    info.waterWithIceObjects = [];
-    info.whiteBallSynchronisers = [];
-    info.yellowBalls = [];
-    info.yellowBallPushers = [];
-    info.yellowBallPushersTriggers = [];
-    info.yellowBars = [];
-    info.yellowPausers = [];
-    info.yellowStoppers = [];
+    initArray(info, "waterWithIceObjects");
+    initArray(info, "whiteBallSynchronisers");
+    initArray(info, "yellowBalls");
+    initArray(info, "yellowBallPushers");
+    initArray(info, "yellowBallPushersTriggers");
+    initArray(info, "yellowBars");
+    initArray(info, "yellowPausers");
+    initArray(info, "yellowStoppers");
 }
 
 export function initGameVars(vars) {
     vars.ballPushersActive = false;
-    vars.bgcolor = [];
+    initArray(vars, "bgcolor");
     vars.brownCountTo = 5;
     vars.checkFishOutOfWaterCounter = 0;
     vars.colorElevator = "#464646";
@@ -1390,7 +1390,7 @@ export function initGameVars(vars) {
     vars.elevatorCountTo = 5;
     vars.explosionCounter = 0;
     vars.extra = 0;
-    vars.fgcolor = [];
+    initArray(vars, "fgcolor");
     vars.fishCounter = 0;
     vars.fishCountTo = 12;
     vars.fishFoodCountTo = 5;
@@ -1400,7 +1400,7 @@ export function initGameVars(vars) {
     vars.hint = "";
     vars.iceCountTo = 250;
     vars.iceMeltsFromAmbientTemperature = true;
-    vars.ignorePattern = [];
+    initArray(vars, "ignorePattern");
     vars.laser = null;
     vars.lavaCanMove = false;
     vars.lavaCounter = 0;
@@ -1416,7 +1416,7 @@ export function initGameVars(vars) {
     vars.orangeCounter = 0;
     vars.phaseTicks = 250;
     vars.pinkCountTo = 5;
-    vars.pistonGroupsActivated = [];
+    initArray(vars, "pistonGroupsActivated");
     for (let i = 0; i < 32; i++) {
         vars.pistonGroupsActivated.push(false);
     }

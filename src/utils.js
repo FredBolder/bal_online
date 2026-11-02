@@ -19,6 +19,14 @@ export function copy2dArray(arr) {
   return arr.map(row => [...row]);
 }
 
+export function initArray(object, property) {
+    if (Array.isArray(object[property])) {
+        object[property].length = 0;
+    } else {
+        object[property] = [];
+    }
+}
+
 export function isOdd(num) { 
   return (num % 2) === 1;
 }
@@ -131,6 +139,10 @@ export function rotatePoints(points, basePoint, angle) {
     const ry = sin * dx + cos * dy + basePoint.y;
     return { x: rx, y: ry };
   });
+}
+
+export function setArray(target, source) {
+    target.splice(0, target.length, ...source);
 }
 
 export function stringToBoolean(value) {

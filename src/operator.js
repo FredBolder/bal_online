@@ -1,4 +1,4 @@
-import { envelopeValue, startEnvelope } from "./envelopes.js";
+import { envelopeDuration, envelopeValue, startEnvelope } from "./envelopes.js";
 import { percentageToBoost, resonancePercentToQ } from "./filter.js";
 import {
     getBlueNoiseBuffer,
@@ -10,7 +10,7 @@ import {
     getVioletNoiseBuffer,
     getWhiteNoiseBuffer
 } from "./noise.js";
-import { tryParseInt } from "./utils.js";
+import { setArray, tryParseInt } from "./utils.js";
 
 function createDistortionCurve({
     type = 1,
@@ -140,10 +140,6 @@ export function getPreDelay() {
     return 20 / 1000;
 }
 
-function safeTarget(v) {
-    return Math.max(v, 0.0001);
-}
-
 class Operator {
     constructor(audioContext, waveform, frequency, detuneOrResonance, volume, attack, decay, sustain, release, postFilterGain = null) {
         this.audioContext = audioContext;
@@ -160,11 +156,18 @@ class Operator {
         let nOscillators = 1;
         let phase = 0;
         let pulseWidth = 25;
+        this.volume = volume;
+        this.ampEnvelopeStartValue = 0;
+        this.ampEnvelope = [
+            { time: attack, value: volume, curveType: "lineair" },
+            { time: decay, value: sustain === 0 ? 0 : sustain, curveType: "exponential" }
+        ];
+        this.ampReleaseEnvelope = [{ time: release, value: 0, curveType: "exponential" }];
         this.lfoSettings = { destination: "none", waveform: "sine", frequency: 4, delay: 0, depth: 0.1 };
         this.dcoSettings = { waveform, frequency };
-        this.dcaSettings = { volume, attack, decay, sustain, release };
         this.pitchEnvelopeStartValue = 0;
-        this.pitchEnvelope = [{time: 500, value: 0, curveType: "lineair" }];
+        this.pitchEnvelope = [{ time: 5, value: 0, curveType: "lineair" }];
+        this.pitchReleaseEnvelope = [{ time: 5, value: 0, curveType: "lineair" }];
         this.tremolo = audioContext.createGain();
         this.tremoloOffset = audioContext.createConstantSource();
         this.tremoloOffset.offset.value = 1 - this.lfoSettings.depth;
@@ -320,22 +323,40 @@ class Operator {
         this.makeConnections();
     }
 
-    makeConnections() {
-        // Disconnect audio nodes
-        for (const { osc, gain } of this.oscList) {
-            try { osc.disconnect(); } catch { /* error */ }
-            try { gain.disconnect(); } catch { /* error */ }
-        }
-        try { this.waveShaper?.disconnect(); } catch { /* error */ }
-        try { this.filter?.disconnect(); } catch { /* error */ }
-        try { this.postGain?.disconnect(); } catch { /* error */ }
-        try { this.amp.disconnect(); } catch { /* error */ }
+    disconnectNodes() {
+        const nodes = new Set();
 
-        // Disconnect LFO routing
-        try { this.lfo.disconnect(); } catch { /* error */ }
-        try { this.lfoGain.disconnect(); } catch { /* error */ }
-        try { this.tremolo.disconnect(); } catch { /* error */ }
-        try { this.tremoloOffset.disconnect(); } catch { /* error */ }
+        const addNode = node => {
+            if (node?.disconnect) {
+                nodes.add(node);
+            }
+        };
+
+        for (const { osc, gain } of this.oscList) {
+            addNode(osc);
+            addNode(gain);
+        }
+
+        for (const node of [
+            this.waveShaper,
+            this.filter,
+            this.postGain,
+            this.amp,
+            this.lfo,
+            this.lfoGain,
+            this.tremolo,
+            this.tremoloOffset
+        ]) {
+            addNode(node);
+        }
+
+        for (const node of nodes) {
+            node.disconnect();
+        }
+    }
+
+    makeConnections() {
+        this.disconnectNodes();
 
         // Build audio processing chain ---
         const chain = [];
@@ -384,7 +405,14 @@ class Operator {
         }
     }
 
+    setAmpEnvelope(startValue, envelope) {
+        this.ampEnvelopeStartValue = startValue;
+        setArray(this.ampEnvelope, envelope);
+    }
 
+    setReleaseAmpEnvelope(envelope) {
+        setArray(this.ampReleaseEnvelope, envelope);
+    }
 
     setFilter(filterType, filterFrequency, filterResonance) {
         this.filter = this.audioContext.createBiquadFilter();
@@ -409,17 +437,21 @@ class Operator {
 
     setPitchEnvelope(startValue, envelope) {
         this.pitchEnvelopeStartValue = startValue;
-        this.pitchEnvelope = [...envelope];
+        setArray(this.pitchEnvelope, envelope);
+    }
+
+    setReleasePitchEnvelope(release, endValue) {
+        setArray(this.pitchReleaseEnvelope, [{ time: release, value: endValue, curveType: "lineair" }]);
     }
 
     setSimplePitchEnvelope(startValue, decay, endValue) {
         this.pitchEnvelopeStartValue = startValue;
-        this.pitchEnvelope = [{time: decay, value: endValue, curveType: "lineair" }];
+        setArray(this.pitchEnvelope, [{ time: decay, value: endValue, curveType: "lineair" }]);
     }
 
     setWaveShaper(type, amount, maxAmplitude = null) {
         if (maxAmplitude === null) {
-            maxAmplitude = this.dcaSettings.volume;
+            maxAmplitude = this.volume;
         }
         this.waveShaper = this.audioContext.createWaveShaper();
         this.waveShaper.curve = createDistortionCurve(type, amount, maxAmplitude);
@@ -432,11 +464,8 @@ class Operator {
         this.startScheduled = true;
         const startTime = this.audioContext.currentTime + preDelay;
         this.startTime = startTime;
-        const at = this.dcaSettings.attack / 1000;
-        const dt = this.dcaSettings.decay / 1000;
-        this.amp.gain.setValueAtTime(safeTarget(0), startTime);
-        this.amp.gain.linearRampToValueAtTime(safeTarget(this.dcaSettings.volume), startTime + at);
-        this.amp.gain.exponentialRampToValueAtTime(safeTarget(this.dcaSettings.sustain), startTime + at + dt);
+        startEnvelope(this.amp.gain, startTime, this.ampEnvelopeStartValue, this.ampEnvelope);
+
         for (let i = 0; i < this.oscList.length; i++) {
             startEnvelope(this.oscList[i].osc.detune, startTime, this.pitchEnvelopeStartValue, this.pitchEnvelope);
             this.oscList[i].osc.start(startTime);
@@ -447,65 +476,54 @@ class Operator {
         if (this.lfoSettings.destination !== "none") {
             this.lfo.start(startTime + (this.lfoSettings.delay / 1000));
         }
+
         await new Promise(resolve => setTimeout(resolve, preDelay * 1000));
         this.started = true;
-        await new Promise(resolve => setTimeout(resolve, 2 * 1000));
-        this.stop();
     }
 
-    async stop() {
-        if (this.stopScheduled) return;
+    stop() {
+        if (this.stopped) {
+            return Promise.resolve();
+        }
 
-        const isFirefox = typeof InstallTrigger !== "undefined";
-        let currentAmpGain = safeTarget(0);
+        if (this.stopPromise) {
+            return this.stopPromise;
+        }
+
+        this.stopPromise = this.stopInternal();
+        return this.stopPromise;
+    }
+
+    async stopInternal() {
+        if (this.stopScheduled) return;
 
         this.stopScheduled = true;
         const stopTime = this.audioContext.currentTime;
-        const at = this.dcaSettings.attack / 1000;
-        const dt = this.dcaSettings.decay / 1000;
-        const rt = this.dcaSettings.release / 1000;
+        const elapsed = (stopTime - this.startTime) * 1000;
+        const currentGain = envelopeValue(this.amp.gain, this.ampEnvelopeStartValue, this.ampEnvelope, elapsed);
 
-        if (isFirefox) {
-            // Calculate current amp gain
-            const maxVolume = this.dcaSettings.volume;
-            const sustainVolume = this.dcaSettings.sustain;
-            currentAmpGain = safeTarget(0);
-            if (this.startTime !== null) {
-                const elapsed = this.audioContext.currentTime - this.startTime;
-                if (elapsed <= at) {
-                    currentAmpGain = safeTarget(maxVolume * (elapsed / at));
-                }
-                if ((elapsed > at) && (elapsed <= (at + dt))) {
-                    const decayElapsed = elapsed - at;
-                    const decayRatio = decayElapsed / dt;
-                    currentAmpGain = safeTarget(maxVolume * Math.pow(sustainVolume / maxVolume, decayRatio));
-                }
-                if (elapsed > (at + dt)) {
-                    currentAmpGain = safeTarget(sustainVolume);
-                }
-            }
-        }
-
-        // exponentialRampToValueAtTime does not keep track of the current value
         this.amp.gain.cancelScheduledValues(stopTime);
-        if (isFirefox) {
-            this.amp.gain.setValueAtTime(currentAmpGain, stopTime);
-        } else {
-            this.amp.gain.setValueAtTime(this.amp.gain.value, stopTime); // Does not work in Firefox
-        }
-        this.amp.gain.exponentialRampToValueAtTime(safeTarget(0), stopTime + rt);
+        startEnvelope(this.amp.gain, stopTime, currentGain, this.ampReleaseEnvelope);
+
+        const duration = envelopeDuration(this.ampReleaseEnvelope);
+        const durationSec = duration / 1000;
         for (let i = 0; i < this.oscList.length; i++) {
-            this.oscList[i].osc.stop(stopTime + rt + 0.02);
+            const detuneValue = envelopeValue(this.oscList[i].osc.detune, this.pitchEnvelopeStartValue, this.pitchEnvelope, elapsed);
+            this.oscList[i].osc.detune.cancelScheduledValues(stopTime);
+            startEnvelope(this.oscList[i].osc.detune, stopTime, detuneValue, this.pitchReleaseEnvelope);
+            this.oscList[i].osc.stop(stopTime + durationSec + 0.02);
         }
         if (this.lfoSettings.destination !== "none") {
-            this.lfo.stop(stopTime + rt + 0.02);
+            this.lfo.stop(stopTime + durationSec + 0.02);
         }
         if (this.lfoSettings.destination === "dca") {
-            this.tremoloOffset.stop(stopTime + rt + 0.02);
+            this.tremoloOffset.stop(stopTime + durationSec + 0.02);
         }
-        await new Promise(resolve => setTimeout(resolve, (rt + 0.02) * 1000));
+
+        await new Promise(resolve => setTimeout(resolve, duration + 20));
         this.stopped = true;
     }
+
 }
 
 export { Operator };

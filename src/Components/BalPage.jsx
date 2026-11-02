@@ -187,6 +187,7 @@ function BalPage() {
   const cbMusic = useRef(null);
   const cbQuestions = useRef(null);
   const cbSound = useRef(null);
+  const cbUseBrowserAudioValues = useRef(null);
   const createLevelCanvas = useRef(null);
   const deleteColumn = useRef(null);
   const deleteRow = useRef(null);
@@ -873,8 +874,7 @@ function BalPage() {
       backData = result.backData;
       gameData = null;
       gameData = result.gameData;
-      gameInfo = null;
-      gameInfo = getGameInfo(backData, gameData);
+      getGameInfo(backData, gameData, gameInfo);
       loadLevelSettings(backData, gameData, gameInfo, gameVars, result.levelSettings);
       setTimeBombsTime(gameVars.timeBombsTime);
       gameVars.laser = null;
@@ -1093,7 +1093,8 @@ function BalPage() {
       cbArrowButtons.current.checked,
       cbQuestions.current.checked,
       tryParseInt(cbMusic.current.value, 50),
-      tryParseInt(cbSound.current.value, 50)
+      tryParseInt(cbSound.current.value, 50),
+      cbUseBrowserAudioValues.current.checked,
     );
     saveSettings();
     updateGameButtonsDisplay();
@@ -1384,8 +1385,7 @@ function BalPage() {
       backData = gd.backData;
       gameData = null;
       gameData = gd.gameData;
-      gameInfo = null;
-      gameInfo = getGameInfo(backData, gameData);
+      getGameInfo(backData, gameData, gameInfo);
       loadLevelSettings(backData, gameData, gameInfo, gameVars, data.levelSettings);
       if ((gameVars.extra > 0) && !globalVars.uf && !globalVars.up) {
         await initLevel(200, false);
@@ -2621,6 +2621,7 @@ function BalPage() {
       cbQuestions.current.checked = getSettings().lessQuestions;
       cbMusic.current.value = getSettings().music.toString();
       cbSound.current.value = getSettings().sound.toString();
+      cbUseBrowserAudioValues.current.checked = getSettings().useBrowserAudioValues;
     };
 
     waitForRefsAndInit();
@@ -2688,6 +2689,7 @@ function BalPage() {
           cbQuestions.current.checked = getSettings().lessQuestions;
           cbMusic.current.value = getSettings().music.toString();
           cbSound.current.value = getSettings().sound.toString();
+          cbUseBrowserAudioValues.current.checked = getSettings().useBrowserAudioValues;
           gameVars.currentLevel = 200;
           await loadProgress(gameVars);
 
@@ -4852,6 +4854,17 @@ function BalPage() {
                     <option value="90">90</option>
                     <option value="100">100</option>
                   </select>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    id="usebrowseraudiovalues"
+                    ref={cbUseBrowserAudioValues}
+                    name="usebrowseraudiovalues"
+                    value="usebrowseraudiovalues"
+                    onChange={handleChangeSettings}
+                  />
+                  <label htmlFor="usebrowseraudiovalues">Use browser&apos;s audio values</label>
                 </div>
                 <div>
                   <input

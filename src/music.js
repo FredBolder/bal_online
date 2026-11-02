@@ -1,6 +1,8 @@
-import { getPreDelay, Operator } from "./operator.js";
 import { CombFilter } from "./combFilter.js";
+import { createBassDrum, createHiHat, createSnareDrum } from "./drums.js";
 import { Filter } from "./filter.js";
+import { globalVars } from "./glob.js";
+import { InstrumentInstance } from "./instrumentInstance.js";
 import {
   clearCrashNoiseBuffer,
   clearHihatNoiseBuffer,
@@ -9,7 +11,9 @@ import {
   getHihatNoiseBuffer,
   getRideNoiseBuffer,
 } from "./noise.js";
+import { getPreDelay, Operator } from "./operator.js";
 import { Reverb } from "./reverb.js";
+
 let audioCtx = null;
 let reverb = null;
 
@@ -48,15 +52,10 @@ export function closeAudio() {
   clearRideNoiseBuffer();
 }
 
-
-let combFiltersList = [];
-let filtersList = [];
-let operatorsList = [];
-
 export function instruments() {
   // Add test for test sound
   return ["test", "accordion", "altsax", "bass", "bassdrum", "bell", "bouzouki", "clarinet", "cowbell", "crashcymbal", "crossstick", "drums", "guitar", "hammondorgan", "harp",
-    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "sfx", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2", 
+    "harpsichord", "hihat", "kalimba", "noisedrum", "piano", "pipeorgan", "ridecymbal", "sfx", "snaredrum", "splashcymbal", "squarelead", "strings1", "strings2",
     "tom", "trombone", "trumpet", "vibraphone", "xylophone"]
 }
 
@@ -102,54 +101,15 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
   let note = "";
   let notes = null;
   let volumeFactor = 1;
-  const newOperatorsList = [];
   let operators = [];
-  const newFiltersList = [];
   let filter1 = null;
   let filter2 = null;
-  const newCombFiltersList = [];
   let combFilter = null;
 
   // Variations
-  let decayFactorNoise = 500;
   let decayFactorOsc1 = 500;
-  let decayFactorOsc2 = 500;
   let filterCutoff = 2000;
-  let freqNoise = 1000;
-  let freqOsc1 = 500;
   let freqOsc2 = 500;
-  let levelFactorNoise = 0.4;
-  let levelFactorOsc1 = 0.6;
-  let levelFactorOsc2 = 0;
-  let phase = 0;
-  let pitchDecay = 50;
-  let pitchStart = 0.1;
-  let ratio1 = 1;
-  let waveform = "";
-  let wf = "";
-
-  function createBassDrum(variation = 0) {
-    decayFactorOsc1 = 1;
-    freqOsc1 = 55;
-    phase = 20;
-    pitchDecay = 100;
-    pitchStart = 1200;
-    waveform = "sine";
-    switch (variation) {
-      case 1:
-        pitchDecay = 75;
-        waveform = "triangle";
-        break;
-      default:
-        break;
-    }
-    wf = waveform;
-    if ((waveform === "sine") && (phase !== 0)) {
-      wf = "sine" + phase.toString();
-    }
-    operators.push(new Operator(audioCtx, wf, 55, 0, maxVolume * 1, 0, 400 * decayFactorOsc1, 0, 100));
-    operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
-  }
 
   function createBouzouki() {
     const noteNum = noteToNumber(musicalNote);
@@ -176,6 +136,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     operators.push(new Operator(audioCtx, "triangle", frequency * 1, detuneTotal, maxVolume * 1.0 * volumeFactor, 1, decayFactor * 1400, 0, releaseFactor * 1400));
     operators[0].setFilter("bandpass", bandPassFrequency, bandPassResonancePercent);
     operators[0].setSimplePitchEnvelope(6, 15, 0);
+    operators[0].setReleasePitchEnvelope(15, 0);
     operators[0].setWaveShaper(2, 5, 0.6);
     operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.55 * volumeFactor, 0.5, decayFactor * 1200, 0, releaseFactor * 1200));
     operators.push(new Operator(audioCtx, "sine", frequency * 3, 0, maxVolume * 0.35 * volumeFactor, 0.5, decayFactor * 1000, 0, releaseFactor * 1000));
@@ -191,8 +152,8 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
 
 
   function createCowbell(variation = 0) {
-    freqOsc1 = 565;
-    decayFactorOsc1 = 1;
+    let freqOsc1 = 565;
+    let decayFactorOsc1 = 1;
     switch (variation) {
       case 1:
         freqOsc1 = 500;
@@ -294,8 +255,22 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     operators.push(new Operator(audioCtx, "crashNoise", 1000, 0, maxVolume * metalVolume, 1.5, 3000 * decayFactor, 0, 1000 * decayFactor));
     operators.push(new Operator(audioCtx, "noise", 1000, 0, maxVolume * noiseVolume, 1.5, 2000 * decayFactor, 0, 700 * decayFactor));
 
-    filter1.setFilter("highpass", hp_f0, hp_f1, hp_f2, hp_f3, hp_f4, hp_resonance, t1, t2, t3, t4);
-    filter2.setFilter("lowpass", lp_f0, lp_f1, lp_f2, lp_f3, lp_f4, lp_resonance, t1, t2, t3, t4);
+    filter1.setFilter("highpass", hp_f1, hp_resonance);
+    filter1.setFilterEnvelope(hp_f0, [
+      { time: t1, value: hp_f1, curveType: "exponential" },
+      { time: t2, value: hp_f2, curveType: "exponential" },
+      { time: t3, value: hp_f3, curveType: "exponential" }
+    ]);
+    filter1.setReleaseFilterEnvelope(t4, hp_f4);
+
+    filter2.setFilter("lowpass", lp_f0, lp_resonance);
+    filter2.setFilterEnvelope(lp_f0, [
+      { time: t1, value: lp_f1, curveType: "exponential" },
+      { time: t2, value: lp_f2, curveType: "exponential" },
+      { time: t3, value: lp_f3, curveType: "exponential" }
+    ]);
+    filter2.setReleaseFilterEnvelope(t4, lp_f4);
+
     combFilter = new CombFilter(audioCtx);
     combFilter.setWet(cf_wet);
     combFilter.setDelayTime(cf_delay);
@@ -383,83 +358,6 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     operators.push(new Operator(audioCtx, "noiseAndLPF", whiteNoiseFreq, 0, maxVolume, 0, whiteNoiseDecay, 0, whiteNoiseRelease));
   }
 
-  function createHiHat(variation = 0) {
-    const volumeFactor = 3;
-    let cf_wet = 0.5;
-    let cf_delay = 6;
-    let cf_feedback = 0.32;
-    let cf_hp = 220;
-    let cf_lp = 12000;
-    let decayFactor = 1;
-    let filterFreq = 1500;
-    let filterResonance = 1500;
-    let metalVolume = 0.7;
-    let noiseVolume = 0.1;
-
-    switch (variation) {
-      default: // Closed hi-hat 1
-        decayFactor = 0.7; // was 0.6
-        filterFreq = 8500;
-        filterResonance = 8;
-        metalVolume = 0.65;
-        noiseVolume = 0.25;
-        cf_wet = 0.35;
-        cf_delay = 1.4;
-        cf_feedback = 0.22;
-        cf_hp = 250;
-        cf_lp = 11000;
-        break;
-      case 1: // Open hi-hat 1
-        decayFactor = 4.2; // was 4
-        filterFreq = 8500;
-        filterResonance = 12;
-        metalVolume = 0.70;
-        noiseVolume = 0.28;
-        cf_wet = 0.42;
-        cf_delay = 1.4;
-        cf_feedback = 0.30;
-        cf_hp = 250;
-        cf_lp = 13000;
-        break;
-      case 2: // Closed hi-hat 2
-        decayFactor = 0.9;
-        filterFreq = 10000;
-        filterResonance = 5;
-        metalVolume = 0.75;
-        noiseVolume = 0.20;
-        cf_wet = 0.40;
-        cf_delay = 1.9;
-        cf_feedback = 0.28;
-        cf_hp = 300;
-        cf_lp = 14000;
-        break;
-      case 3: // Open hi-hat 2
-        decayFactor = 3.7; // was 3.5
-        filterFreq = 10000;
-        filterResonance = 10;
-        metalVolume = 0.78;
-        noiseVolume = 0.30;
-        cf_wet = 0.50;
-        cf_delay = 1.9;
-        cf_feedback = 0.35;
-        cf_hp = 300;
-        cf_lp = 15000;
-        break;
-    }
-    metalVolume = volumeFactor * metalVolume;
-    noiseVolume = volumeFactor * noiseVolume;
-    // Frequency is only used for noiseAndBPF, noiseAndHPF and noiseAndLPF
-    operators.push(new Operator(audioCtx, "hihatNoise", 1000, 0, maxVolume * metalVolume, 0, 200 * decayFactor, 0, 50));
-    operators.push(new Operator(audioCtx, "noise", 1000, 0, maxVolume * noiseVolume, 0, 180 * decayFactor, 0, 50));
-    filter1.setFilter("highpass", filterFreq, filterFreq, filterFreq, filterFreq, filterFreq, filterResonance, 0, 200 * decayFactor, 5, 250);
-    combFilter = new CombFilter(audioCtx);
-    combFilter.setWet(cf_wet);
-    combFilter.setDelayTime(cf_delay);
-    combFilter.setFeedback(cf_feedback);
-    combFilter.setHP(cf_hp);
-    combFilter.setLP(cf_lp);
-  }
-
   function createLaserGun(variation = 0) {
     let ampDecay = 180;
     let ampRelease = 60;
@@ -493,12 +391,15 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
     operators.push(new Operator(audioCtx, waveform, oscFreq, 0, maxVolume * 1, 2, ampDecay, 0, ampRelease));
     operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
-    filter1.setFilter("lowpass", 5000, 5000, 500, 500, 500, 48, 0, filterDecay, 5, filterRelease);
+    operators[0].setReleasePitchEnvelope(pitchDecay, 0);
+    filter1.setFilter("lowpass", 5000, 48);
+    filter1.setSimpleFilterEnvelope(5000, filterDecay, 500);
+    filter1.setReleaseFilterEnvelope(filterRelease, 500);
     operators[0].setLfo("dco", "sine", 35, 35 / 1200, 0);
   }
 
   function createNoiseDrum(variation = 0) {
-    decayFactorOsc1 = 1;
+    let decayFactorOsc1 = 1;
     switch (variation) {
       case 1:
         decayFactorOsc1 = 1.3;
@@ -508,7 +409,9 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
     // Frequency is only used for noiseAndBPF, noiseAndHPF and noiseAndLPF
     operators.push(new Operator(audioCtx, "noiseAndLSF", 600, 100, maxVolume * 1, 0, 1000 * decayFactorOsc1, 0, 500));
-    filter1.setFilter("lowpass", 2000, 2000, 500, 500, 500, 0, 0, 200, 5, 200);
+    filter1.setFilter("lowpass", 2000, 0);
+    filter1.setSimpleFilterEnvelope(2000, 200, 500);
+    filter1.setReleaseFilterEnvelope(200, 500);
   }
 
   function createRideCymbal(variation = 0) {
@@ -596,32 +499,6 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
   }
 
 
-  function createSnareDrum(variation = 0) {
-    decayFactorNoise = 1;
-    decayFactorOsc1 = 1;
-    freqNoise = 1000;
-    freqOsc1 = 250;
-    levelFactorNoise = 0.4;
-    levelFactorOsc1 = 0.6;
-    pitchDecay = 50;
-    pitchStart = 120;
-    switch (variation) {
-      case 1:
-        freqOsc1 = 180;
-        freqNoise = 800;
-        decayFactorNoise = 0.9;
-        decayFactorOsc1 = 1.1;
-        levelFactorNoise = 0.3;
-        levelFactorOsc1 = 0.7;
-        break;
-      default:
-        break;
-    }
-    operators.push(new Operator(audioCtx, "noiseAndHPF", freqNoise, 40, maxVolume * levelFactorNoise, 0, 500 * decayFactorNoise, 0, 125));
-    operators.push(new Operator(audioCtx, "sine", freqOsc1, 0, maxVolume * levelFactorOsc1, 0, 400 * decayFactorOsc1, 0, 100));
-    operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
-  }
-
   function createSplashCymbal(variation = 0) {
     switch (variation) {
       case 1:
@@ -649,7 +526,7 @@ export async function playNote(instrument, volume, musicalNote, noteOverride, de
     }
   }
 
-function createSqueakyDoor() {
+  function createSqueakyDoor() {
     let ampAttack = 30;
     let ampDecay = 1200;
     let ampRelease = 300;
@@ -663,39 +540,40 @@ function createSqueakyDoor() {
 
     operators.push(new Operator(audioCtx, "sine", oscFreq, 0, maxVolume * 0.8, ampAttack, ampDecay, 0, ampRelease));
     operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+    operators[0].setReleasePitchEnvelope(pitchDecay, 0);
 
     operators.push(new Operator(audioCtx, "sawtooth", oscFreq, 0, maxVolume * 0.25, ampAttack, ampDecay, 0, ampRelease));
     operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+    operators[1].setReleasePitchEnvelope(pitchDecay, 0);
 
-    filter1.setFilter("lowpass", 1800, 1800, 400, 400, 400, 81, 0, filterDecay, 5, filterRelease);
+    filter1.setFilter("lowpass", 1800, 81);
+    filter1.setSimpleFilterEnvelope(1800, filterDecay, 400);
+    filter1.setReleaseFilterEnvelope(filterRelease, 400);
 
     operators[0].setLfo("dca", "square", 12, 0.8, 0);
     operators[1].setLfo("dca", "square", 12, 0.8, 0);
-}
+  }
 
   function createTest() {
-    attack = 100;
-    decay = 1000;
-    release = 100;
-    f1 = 0.5;
-    f2 = 0.8;
+    let attack = 100;
+    let decay = 1000;
+    let release = 100;
+    let f1 = 0.5;
+    let f2 = 0.8;
     operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
-    operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
-    operators[0].setLfo("dco", "triangle", 5, 0.002, 100);
-    filter1.setFilter("lowpass", 2500, 3000, 2500, 2500, 2500, 0, attack, decay, 5, release);
   }
 
   function createTom(variation = 0) {
-    decayFactorNoise = 1.1;
-    decayFactorOsc1 = 1.1;
-    decayFactorOsc2 = 1;
-    freqOsc1 = 165;
-    levelFactorNoise = 0.2;
-    levelFactorOsc1 = 0.5;
-    levelFactorOsc2 = 0.3;
-    pitchDecay = 100;
-    pitchStart = 120;
-    ratio1 = 1.92;
+    let decayFactorNoise = 1.1;
+    let decayFactorOsc1 = 1.1;
+    let decayFactorOsc2 = 1;
+    let freqOsc1 = 165;
+    let levelFactorNoise = 0.2;
+    let levelFactorOsc1 = 0.5;
+    let levelFactorOsc2 = 0.3;
+    let pitchDecay = 100;
+    let pitchStart = 120;
+    let ratio1 = 1.92;
     switch (variation) {
       case 1:
         decayFactorNoise = 1.2;
@@ -720,7 +598,9 @@ function createSqueakyDoor() {
     operators.push(new Operator(audioCtx, "triangle", freqOsc2, 0, maxVolume * levelFactorOsc2, 0, 500 * decayFactorOsc2, 0, 100));
     operators.push(new Operator(audioCtx, "pinkNoise", 1000, 40, maxVolume * levelFactorNoise, 0, 100 * decayFactorNoise, 0, 125));
     operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+    operators[0].setReleasePitchEnvelope(pitchDecay, 0);
     operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
+    operators[1].setReleasePitchEnvelope(pitchDecay, 0);
   }
 
   if (typeof window === "undefined") {
@@ -737,41 +617,8 @@ function createSqueakyDoor() {
     return;
   }
 
-  for (let i = 0; i < operatorsList.length; i++) {
-    if ((operatorsList[i].instrument === instrument)) {
-      operatorsList[i].operator.stop();
-    }
-    if (operatorsList[i].operator.stopped) {
-      for (let j = 0; j < operatorsList[i].operator.oscList.length; j++) {
-        operatorsList[i].operator.oscList[j].gain.disconnect();
-      }
-      operatorsList[i].operator.amp.disconnect();
-    } else {
-      newOperatorsList.push(operatorsList[i]);
-    }
-  }
-  operatorsList = newOperatorsList;
-
-  for (let i = 0; i < filtersList.length; i++) {
-    if ((filtersList[i].instrument === instrument)) {
-      filtersList[i].filter1.stop();
-      filtersList[i].filter2.stop();
-    }
-    if (!filtersList[i].filter1.stopped || !filtersList[i].filter2.stopped) {
-      newFiltersList.push(filtersList[i]);
-    }
-  }
-  filtersList = newFiltersList;
-
-  for (let i = 0; i < combFiltersList.length; i++) {
-    if ((combFiltersList[i].instrument === instrument)) {
-      combFiltersList[i].combFilter.stop();
-    }
-    if (!combFiltersList[i].combFilter.stopped) {
-      newCombFiltersList.push(combFiltersList[i]);
-    }
-  }
-  combFiltersList = newCombFiltersList;
+  stopInstrument(instrument);
+  console.log("instrumentInstances.length: ", globalVars.instrumentInstances.length);
 
   if (musicalNote.includes("_")) {
     return;
@@ -821,9 +668,19 @@ function createSqueakyDoor() {
     frequency = noteToFreq(note);
 
     filter1 = new Filter(audioCtx);
-    filter1.setFilter("highpass", 10, 10, 10, 10, 10, 0, 5, 1000, 5, 500);
+    filter1.setFilter("highpass", 10, 0);
     filter2 = new Filter(audioCtx);
-    filter2.setFilter("highpass", 10, 10, 10, 10, 10, 0, 5, 1000, 5, 500);
+    filter2.setFilter("highpass", 10, 0);
+
+    const context = {
+      audioCtx,
+      combFilter,
+      filter1,
+      filter2,
+      maxVolume, 
+      operators,
+    }
+
 
     switch (instrument) {
       case "accordion":
@@ -844,7 +701,7 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sine", frequency * 8, detune, maxVolume * 0.1 * f1, attack, decay, maxVolume * 0.1 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine", frequency * 9, detune, maxVolume * 0.07 * f1, attack, decay, maxVolume * 0.07 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine", frequency * 10, detune, maxVolume * 0.05 * f1, attack, decay, maxVolume * 0.05 * f1 * f2, release));
-        filter1.setFilter("lowpass", 8000, 8000, 8000, 8000, 8000, 0, 0, 500, 5, 250);
+        filter1.setFilter("lowpass", 8000, 0);
         break;
       case "altsax":
         f1 = 1 / 3.02;
@@ -860,19 +717,22 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.04 * f1, 60, 300, maxVolume * 0.04 * f1 * f2, 300 * f3));
         for (let i = 0; i < operators.length; i++) {
           operators[i].setSimplePitchEnvelope(-15, 40, 0);
+          operators[i].setReleasePitchEnvelope(40, 0);
         }
         break;
       case "bass":
         operators.push(new Operator(audioCtx, "pulse45", frequency * 0.5, 0, maxVolume, 3, 1700, 0, 425));
-        filter1.setFilter("lowpass", 500, 500, 90, 90, 90, 0, 5, 1000, 5, 250);
+        filter1.setFilter("lowpass", 500, 0);
+        filter1.setSimpleFilterEnvelope(500, 1000, 90);
+        filter1.setReleaseFilterEnvelope(250, 90);
         break;
       case "bassdrum":
         switch (note) {
           case "C4":
-            createBassDrum(0);
+            createBassDrum(context, 0);
             break;
           case "D4":
-            createBassDrum(1);
+            createBassDrum(context, 1);
             break;
           default:
             break;
@@ -945,22 +805,22 @@ function createSqueakyDoor() {
       case "drums":
         switch (note) {
           case "C4":
-            createBassDrum(0);
+            createBassDrum(context, 0);
             break;
           case "D4":
-            createBassDrum(1);
+            createBassDrum(context, 1);
             break;
           case "E4":
-            createSnareDrum(0);
+            createSnareDrum(context, 0);
             break;
           case "F4":
-            createSnareDrum(1);
+            createSnareDrum(context, 1);
             break;
           case "G4":
-            createHiHat(0);
+            createHiHat(context, 0);
             break;
           case "A4":
-            createHiHat(1);
+            createHiHat(context, 1);
             break;
           case "B4":
             createTom(0);
@@ -999,10 +859,10 @@ function createSqueakyDoor() {
             createRideCymbal(1);
             break;
           case "G6":
-            createHiHat(2);
+            createHiHat(context, 2);
             break;
           case "A6":
-            createHiHat(3);
+            createHiHat(context, 3);
             break;
           case "B6":
             createCrashCymbal(0);
@@ -1022,7 +882,9 @@ function createSqueakyDoor() {
         break;
       case "guitar":
         operators.push(new Operator(audioCtx, "pulse75", frequency, 0, maxVolume * 0.8, 2, 2200, 0, 500));
-        filter1.setFilter("lowpass", 1500, 1500, 1100, 1100, 1100, 10, 0, 800, 5, 600);
+        filter1.setFilter("lowpass", 1500, 10, 0);
+        filter1.setSimpleFilterEnvelope(1500, 800, 1100);
+        filter1.setReleaseFilterEnvelope(600, 1100);
         break;
       case "hammondorgan":
         attack = 3;
@@ -1059,26 +921,30 @@ function createSqueakyDoor() {
       case "harp":
         operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.4, 4, 2200, 0, 500));
         operators.push(new Operator(audioCtx, "square", frequency * 2, 0, maxVolume * 0.4, 4, 2200, 0, 500));
-        filter1.setFilter("lowpass", 1200, 1200, 500, 500, 500, 0, 0, 300, 5, 600);
+        filter1.setFilter("lowpass", 1200, 0);
+        filter1.setSimpleFilterEnvelope(1200, 300, 500);
+        filter1.setReleaseFilterEnvelope(250, 300);
         break;
       case "harpsichord":
         operators.push(new Operator(audioCtx, "pulse40", frequency, 0, maxVolume * 0.4, 1, 1500, 0, 375));
         operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * 0.6, 1, 1500, 0, 375));
-        filter1.setFilter("lowpass", 5000, 5000, 2500, 2500, 2500, 50, 1, 500, 5, 125);
+        filter1.setFilter("lowpass", 5000, 50);
+        filter1.setSimpleFilterEnvelope(5000, 500, 2500);
+        filter1.setReleaseFilterEnvelope(125, 2500);
         break;
       case "hihat":
         switch (note) {
           case "C4":
-            createHiHat(0);
+            createHiHat(context, 0);
             break;
           case "D4":
-            createHiHat(1);
+            createHiHat(context, 1);
             break;
           case "E4":
-            createHiHat(2);
+            createHiHat(context, 2);
             break;
           case "F4":
-            createHiHat(3);
+            createHiHat(context, 3);
             break;
           default:
             break;
@@ -1117,7 +983,7 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sine", frequency * 3.02, 0, maxVolume * f1 * 0.06, 2, 160, 0, 180));
         operators.push(new Operator(audioCtx, "triangle", frequency * 5.3, 0, maxVolume * f1 * 0.08, 2, 140, 0, 160));
         operators.push(new Operator(audioCtx, "pulse10", frequency * 1, 0, maxVolume * f1 * 0.1, 1, 45, 0, 80));
-        filter1.setFilter("highpass", filterCutoff, filterCutoff, filterCutoff, filterCutoff, filterCutoff, 5, 0, 800, 5, 600);
+        filter1.setFilter("highpass", filterCutoff, 5);
         break;
       }
       case "pipeorgan":
@@ -1126,9 +992,8 @@ function createSqueakyDoor() {
         release = 80;
         f1 = 1 / 4.82;
         f2 = 0.9;
-        f3 = 1;
         operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
-        operators.push(new Operator(audioCtx, "sine", frequency * 1, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
+        operators.push(new Operator(audioCtx, "sine", frequency * 2, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine5", frequency * 2, 0, maxVolume * 0.85 * f1, attack, decay, maxVolume * 0.85 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine8", frequency * 3, 0, maxVolume * 0.65 * f1, attack, decay, maxVolume * 0.65 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine4", frequency * 4, 0, maxVolume * 0.5 * f1, attack, decay, maxVolume * 0.5 * f1 * f2, release));
@@ -1140,7 +1005,6 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sine2", frequency * 10, 0, maxVolume * 0.04 * f1, attack, decay, maxVolume * 0.04 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine1", frequency * 11, 0, maxVolume * 0.02 * f1, attack, decay, maxVolume * 0.02 * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sine", frequency * 12, 0, maxVolume * 0.01 * f1, attack, decay, maxVolume * 0.01 * f1 * f2, release));
-        operators[1].setSimplePitchEnvelope(f3, 50, f3);
         break;
       case "ridecymbal":
         switch (note) {
@@ -1184,10 +1048,10 @@ function createSqueakyDoor() {
       case "snaredrum":
         switch (note) {
           case "C4":
-            createSnareDrum(0);
+            createSnareDrum(context, 0);
             break;
           case "D4":
-            createSnareDrum(1);
+            createSnareDrum(context, 1);
             break;
           default:
             break;
@@ -1212,8 +1076,9 @@ function createSqueakyDoor() {
         f1 = 0.8;
         f2 = 0.6;
         operators.push(new Operator(audioCtx, "square", frequency, 7, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
-        filter1.setFilter("lowpass", 2500, 2500, 2500, 2500, 2500, 0, attack, decay, 5, release);
+        filter1.setFilter("lowpass", 2500, 0);
         operators[0].setSimplePitchEnvelope(60, 50, 0);
+        operators[0].setReleasePitchEnvelope(50, 0);
         break;
       case "strings1":
         attack = 100;
@@ -1223,7 +1088,12 @@ function createSqueakyDoor() {
         f2 = 0.8;
         operators.push(new Operator(audioCtx, "sawtooth", frequency, 10, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         operators[0].setLfo("dco", "sine", 4, 0.005, 250);
-        filter1.setFilter("lowpass", 2000, 2500, 2000, 2000, 2000, 0, attack, decay, 5, release);
+        filter1.setFilter("lowpass", 2000, 0);
+        filter1.setFilterEnvelope(2000, [
+          { time: attack, value: 2500, curveType: "exponential" },
+          { time: decay, value: 2000, curveType: "exponential" }
+        ]);
+        filter1.setReleaseFilterEnvelope(release, 2000);
         break;
       case "strings2":
         attack = 100;
@@ -1234,7 +1104,12 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         operators.push(new Operator(audioCtx, "sawtooth", frequency * 2, 0, maxVolume * f1, attack, decay, maxVolume * f1 * f2, release));
         operators[0].setLfo("dco", "triangle", 5, 0.002, 100); // LFO only for the first oscillator
-        filter1.setFilter("lowpass", 2500, 3000, 2500, 2500, 2500, 0, attack, decay, 5, release);
+        filter1.setFilter("lowpass", 2500, 0);
+        filter1.setFilterEnvelope(2500, [
+          { time: attack, value: 3000, curveType: "exponential" },
+          { time: decay, value: 2500, curveType: "exponential" }
+        ]);
+        filter1.setReleaseFilterEnvelope(release, 2500);
         break;
       case "test":
         createTest();
@@ -1271,6 +1146,7 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.06 * f1, 60, 400, maxVolume * 0.06 * f1 * f2, 400 * f3));
         for (let i = 0; i < operators.length; i++) {
           operators[i].setSimplePitchEnvelope(20, 50, 0);
+          operators[i].setReleasePitchEnvelope(50, 0);
         }
         break;
       case "trumpet":
@@ -1287,6 +1163,7 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "sine", frequency * 8, 0, maxVolume * 0.05 * f1, 50, 200, maxVolume * 0.05 * f1 * f2, 200 * f3));
         for (let i = 0; i < operators.length; i++) {
           operators[i].setSimplePitchEnvelope(10, 20, 0);
+          operators[i].setReleasePitchEnvelope(20, 0);
         }
         break;
       case "vibraphone":
@@ -1309,11 +1186,7 @@ function createSqueakyDoor() {
         operators.push(new Operator(audioCtx, "triangle", frequency, 0, maxVolume, 5, 1000, 0, 250));
         break;
     }
-    for (let i = 0; i < operators.length; i++) {
-      operatorsList.push({ instrument, operator: operators[i] });
-    }
 
-    filtersList.push({ instrument, filter1, filter2 });
     filter1.start(getPreDelay() + delay);
     filter2.start(getPreDelay() + delay);
 
@@ -1324,7 +1197,6 @@ function createSqueakyDoor() {
     }
     filter1.filter.connect(filter2.filter);
     if (combFilter !== null) {
-      combFiltersList.push({ instrument, combFilter });
       combFilter.setSend(1.0); // how much of source -> loop
       combFilter.setHP(400);
       combFilter.setLP(12000);
@@ -1334,7 +1206,35 @@ function createSqueakyDoor() {
       reverb.connectSource(filter2.filter); // With reverb
       //filter.filter.connect(audioCtx.destination); // Without reverb
     }
+
+    const instance = new InstrumentInstance(instrument);
+
+    for (let i = 0; i < operators.length; i++) {
+      const operator = operators[i];
+      instance.addOperator(operator);
+    }
+    instance.addFilter1(filter1);
+    instance.addFilter2(filter2);
+    if (combFilter !== null) {
+      instance.addCombFilter(combFilter);
+    }
+    //instance.addWaveShaper(waveShaper);
+    
+    instance.start(getPreDelay() + delay);
+    globalVars.instrumentInstances.push(instance);
+
   }
+}
+
+async function stopInstrument(instrument) {
+  const instances = globalVars.instrumentInstances.filter(
+    instance => instance.instrument === instrument
+  );
+
+  await Promise.all(instances.map(instance => instance.clear()));
+
+  globalVars.instrumentInstances =
+    globalVars.instrumentInstances.filter(instance => !instance.delete);
 }
 
 export function transpose(note, semitones) {

@@ -108,15 +108,31 @@ class CombFilter {
         } catch (e) { /* ignore */ }
     }
 
-    async stop() {
+    stop() {
+        if (this.stopped) {
+            return Promise.resolve();
+        }
+
+        if (this.stopPromise) {
+            return this.stopPromise;
+        }
+
+        this.stopScheduled = true;
+        this.stopPromise = this.stopInternal();
+
+        return this.stopPromise;
+    }
+
+    async stopInternal() {
         if (this.stopScheduled) return;
 
         this.stopScheduled = true;
 
         await new Promise(resolve => setTimeout(resolve, 2 * 1000));
-        this.disconnect();
+        //this.disconnect();
         this.stopped = true;
     }
+
 }
 
 export { CombFilter };

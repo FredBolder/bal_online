@@ -7,6 +7,7 @@ export const settings = {
     lessQuestions: false,
     music: 50,
     sound: 50,
+    useBrowserAudioValues: false,
     user: "",
 };
 
@@ -32,6 +33,10 @@ export function loadSettings() {
         if (sound !== null) {
             settings.sound = tryParseInt(sound, 50);
         }
+        const useBrowserAudioValues = localStorage.getItem("useBrowserAudioValues")
+        if (useBrowserAudioValues !== null) {
+            settings.useBrowserAudioValues = stringToBoolean(useBrowserAudioValues);
+        }
         const user = localStorage.getItem("user")
         if (user !== null) {
             settings.user = user;
@@ -55,17 +60,19 @@ export function saveSettings() {
         localStorage.setItem("lessQuestions", booleanToString(settings.lessQuestions));
         localStorage.setItem("music", settings.music.toString());
         localStorage.setItem("sound", settings.sound.toString());
+        localStorage.setItem("useBrowserAudioValues", booleanToString(settings.useBrowserAudioValues));
         localStorage.setItem("user", settings.user);
     } catch (error) {
         console.log("Local storage is not available yet for saveSettings");
     }
 }
 
-export function setSettings(arrowButtons, lessQuestions, music, sound) {
+export function setSettings(arrowButtons, lessQuestions, music, sound, useBrowserAudioValues) {
     settings.arrowButtons = arrowButtons;
     settings.lessQuestions = lessQuestions;
     settings.music = music;
     settings.sound = sound;
+    settings.useBrowserAudioValues = useBrowserAudioValues;
 }
 
 

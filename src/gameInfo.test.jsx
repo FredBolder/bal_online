@@ -19,6 +19,7 @@ describe("Game info", () => {
             [1, 8, 3, 2, 1],
             [1, 1, 1, 1, 1],
         ];
+        const gameInfo = { ...defaultGameInfo };
         const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
@@ -29,7 +30,8 @@ describe("Game info", () => {
             ],
         };
         expectedOutput.blueBall = expectedOutput.blueBall1;
-        expect(getGameInfo(inputBack, input)).toEqual(expectedOutput);
+        getGameInfo(inputBack, input, gameInfo);
+        expect(gameInfo).toEqual(expectedOutput);
     });
 
     it("getGameInfo B", () => {
@@ -41,6 +43,7 @@ describe("Game info", () => {
             [1, 8, 1, 2, 0, 0, 3, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
+        const gameInfo = { ...defaultGameInfo };
         const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
@@ -51,7 +54,8 @@ describe("Game info", () => {
             ],
         };
         expectedOutput.blueBall = expectedOutput.blueBall1;
-        expect(getGameInfo(inputBack, input)).toEqual(expectedOutput);
+        getGameInfo(inputBack, input, gameInfo);
+        expect(gameInfo).toEqual(expectedOutput);
     });
 
     it("getGameInfo C", () => {
@@ -63,13 +67,15 @@ describe("Game info", () => {
             [1, 3, 3, 2, 0, 0, 3, 1, 3, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
+        const gameInfo = { ...defaultGameInfo };
         const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
             greenBalls: 8,
         };
         expectedOutput.blueBall = expectedOutput.blueBall1;
-        expect(getGameInfo(inputBack, input)).toEqual(expectedOutput);
+        getGameInfo(inputBack, input, gameInfo);
+        expect(gameInfo).toEqual(expectedOutput);
     });
 
     it("getGameInfo D", () => {
@@ -83,6 +89,7 @@ describe("Game info", () => {
             [1, 0, 106, 0, 2, 0, 4, 0, 37, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ];
+        const gameInfo = { ...defaultGameInfo };
         const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 4, y: 5 },
@@ -95,7 +102,8 @@ describe("Game info", () => {
             detonator: { x: 8, y: 5 },
         };
         expectedOutput.blueBall = expectedOutput.blueBall1;
-        expect(getGameInfo(inputBack, input)).toEqual(expectedOutput);
+        getGameInfo(inputBack, input, gameInfo);
+        expect(gameInfo).toEqual(expectedOutput);
     });
 
     it("getGameInfo E", () => {
@@ -107,6 +115,7 @@ describe("Game info", () => {
             [1, 8, 3, 2, 1],
             [1, 1, 1, 1, 1],
         ];
+        const gameInfo = { ...defaultGameInfo };
         const expectedOutput = {
             ...defaultGameInfo,
             blueBall1: { x: 3, y: 3 },
@@ -117,7 +126,8 @@ describe("Game info", () => {
             ],
         };
         expectedOutput.blueBall = expectedOutput.blueBall1;
-        expect(getGameInfo(inputBack, input)).toEqual(expectedOutput);
+        getGameInfo(inputBack, input, gameInfo);
+        expect(gameInfo).toEqual(expectedOutput);
     });
 
     // Insert new tests here

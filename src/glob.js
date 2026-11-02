@@ -14,6 +14,7 @@ export const globalVars = {
     elapsedSeconds: 0,
     elapsedMinutes: 0,
     input: "",
+    instrumentInstances: [],
     isInOtherWorld: false,
     loading: true,
     otherWorldGreen: -1,
