@@ -4,7 +4,7 @@ import { deleteIfSeaAnemone } from "./seaAnemone.js";
 import { deleteIfPurpleTeleport } from "./teleports.js";
 
 function canStopLava(objectNumber) {
-  return [1, 15, 16, 17, 18, 36, 38, 91, 119, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 241].includes(objectNumber);
+  return [1, 15, 16, 17, 18, 36, 38, 91, 119, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 241, 259, 260, 261, 262].includes(objectNumber);
 }
 
 export function checkLava(backData, gameData, gameInfo, gameVars) {

@@ -1,10 +1,10 @@
-$event: 9, 14, eating
+$event: 9, 14, AteSmallGreenBall
 $detectormode: 9, 14, event
 $target: 9, 14, command
 $value: 9, 14, create, spikeup, rel, 1, -1
-$event: 10, 14, moveleft
+$event: 10, 14, MovedLeftByPlayer
 $detectormode: 10, 14, event
-$event: 11, 14, moveright
+$event: 11, 14, MovedRightByPlayer
 $group: 11, 14, 2
 $detectormode: 11, 14, event
 $direction: 13, 5, left

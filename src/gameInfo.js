@@ -1241,6 +1241,18 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 }
                 info = `Flamethrower, ` + extraInfo;
                 break;
+            case 259:
+                info = `Quarter circle stone concave bottom left`;
+                break;
+            case 260:
+                info = `Quarter circle stone concave bottom right`;
+                break;
+            case 261:
+                info = `Quarter circle stone concave top left`;
+                break;
+            case 262:
+                info = `Quarter circle stone concave top right`;
+                break;
             default:
                 break;
         }

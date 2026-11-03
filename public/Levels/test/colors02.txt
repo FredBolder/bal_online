@@ -1,3 +1,4 @@
+$has: divingglasses
 $background: 1, 1, 1, 1, 23
 $background: 6, 7, 2, 1, 23
 $background: 1, 8, 7, 1, 23

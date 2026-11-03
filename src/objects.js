@@ -195,6 +195,9 @@ export function isStone(objectNumber) {
     if (objectNumber >= 234 && objectNumber <= 240) {
         return true;
     }
+    if (objectNumber >= 259 && objectNumber <= 262) {
+        return true;
+    }
     return false;
 }
 
@@ -400,6 +403,11 @@ export function objectNumberToObjectGeneralName(objectNumber) {
         case 86:
         case 138:
         case 139: return "Yellow direction changer";
+
+        case 259:
+        case 260:
+        case 261:
+        case 262: return "Quarter circle stone concave";
 
         default:
             return objectNumberToObjectName(objectNumber);
@@ -617,6 +625,11 @@ export function objectNumberToObjectName(objectNumber) {
         case 255: return "Detector";
         case 256: return "Spike ball";
         case 257: return "Flamethrower";
+
+        case 259: return "Quarter circle stone concave bottom left";
+        case 260: return "Quarter circle stone concave bottom right";
+        case 261: return "Quarter circle stone concave top left";
+        case 262: return "Quarter circle stone concave top right";
 
         default:
             return "";

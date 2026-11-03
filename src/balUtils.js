@@ -749,6 +749,14 @@ export function charToNumber(c) {
       return 257;
     case "ћ":
       return 258;
+    case "Ӻ":
+      return 259;
+    case "ӻ":
+      return 260;      
+    case "Ӽ":
+      return 261;
+    case "ӽ":
+      return 262;
     case "|":
       return 1000;
     default:
@@ -1922,6 +1930,14 @@ export function numberToChar(n) {
       return "й";
     case 258:
       return "ћ";
+    case 259:
+      return "Ӻ";
+    case 260:
+      return "ӻ";      
+    case 261:
+      return "Ӽ";
+    case 262:
+      return "ӽ";
     case 1000:
       // For manual only
       return "|";
