@@ -13,7 +13,7 @@ import { drawSeaAnemone } from "./seaAnemone.js";
 import { ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { drawFish } from "./tropicalFish.js";
-import { booleanToInt, polar, randomInt, rotatePoints } from "./utils.js";
+import { booleanToInt, polar, randomInt, rotatePoints, setArray } from "./utils.js";
 
 let bitmapLava = null;
 let bitmapWeakStone = null;
@@ -3468,6 +3468,122 @@ export function drawTropicalFish(context, x, y) {
     fish.tailStripes = gameInfo.tropicalFish[idx].tailStripes;
   }
   drawFish(ctx, xc, yc, w1, direction !== 6, fish);
+}
+
+export function drawUserObject(context, x, y) {
+  const { ctx, gameInfo, w1, w2, xmin, xmax, ymin, ymax } = context;
+  let direction = 0;
+  let idx = -1;
+  let parameters = [50, 50, 50, 50];
+  let rotation = 0;
+  let shape = 1;
+
+  const x1 = Math.round(xmin - 0.5);
+  const y1 = Math.round(ymin - 0.5);
+  const x2 = Math.round(xmax + 0.5);
+  const y2 = Math.round(ymax + 0.5);
+
+  const cx = (x1 + x2) / 2;
+  const cy = (y1 + y2) / 2;
+
+  idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+  if (idx >= 0) {
+    const userObject = gameInfo.userObjects[idx];
+    direction = userObject.direction;
+    setArray(parameters, userObject.parameters);
+    shape = userObject.shape;
+  }
+
+  if (parameters.length !== 4) {
+    setArray(parameters, [50, 50, 50, 50]);
+  }
+  const p1 = parameters[0] * 0.01;
+  const p2 = parameters[1] * 0.01;
+  const p3 = parameters[2] * 0.01;
+  const p4 = parameters[3] * 0.01;
+
+  switch (direction) {
+    case "down":
+      rotation = 2;
+      break;
+    case "left":
+      rotation = 3;
+      break;
+    case "right":
+      rotation = 1;
+      break;
+    case "up":
+      rotation = 0;
+      break;
+    default:
+      rotation = 0;
+      break;
+  }
+
+  ctx.save();
+
+  ctx.translate(cx, cy);
+  ctx.rotate(rotation * Math.PI / 2);
+  ctx.translate(-cx, -cy);
+
+  ctx.beginPath();
+  ctx.fillStyle = "white";
+  ctx.strokeStyle = "white";
+
+  switch (shape) {
+    case 2:
+      ctx.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      ctx.lineTo(cx + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      ctx.lineTo(cx + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      ctx.lineTo(x1 + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      break;
+    case 3:
+      ctx.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      ctx.lineTo(x2 - (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      ctx.lineTo(x2, cy);
+      ctx.lineTo(x2 - (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      ctx.lineTo(x1 + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      ctx.lineTo(x1, cy);
+      break;
+    case 4: {
+      const radius = Math.min(w1 * 0.5, w2 / Math.sqrt(3));
+      const halfWidth = radius * Math.max(0.1, Math.min(1, p1));
+      const halfHeight = radius * Math.sqrt(3) * 0.5 * Math.max(0.1, Math.min(1, p2));
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(p3 * 2 * Math.PI);
+
+      ctx.moveTo(-halfWidth * 0.5, -halfHeight);
+      ctx.lineTo(halfWidth * 0.5, -halfHeight);
+      ctx.lineTo(halfWidth, 0);
+      ctx.lineTo(halfWidth * 0.5, halfHeight);
+      ctx.lineTo(-halfWidth * 0.5, halfHeight);
+      ctx.lineTo(-halfWidth, 0);
+
+      ctx.restore();
+      break;
+    }
+    default:
+      // 1
+      ctx.moveTo(x1, cy);
+      ctx.arcTo(x1, y1, cx, y1, w1 * 0.5 * p1);
+      ctx.arcTo(x2, y1, x2, cy, w1 * 0.5 * p2);
+      ctx.arcTo(x2, y2, cx, y2, w1 * 0.5 * p3);
+      ctx.arcTo(x1, y2, x1, cy, w1 * 0.5 * p4);
+      break;
+  }
+
+  ctx.closePath();
+  ctx.clip();
+
+  ctx.translate(cx, cy);
+  ctx.rotate(-rotation * Math.PI / 2);
+  ctx.translate(-cx, -cy);
+
+  drawStone(context, x, y);
+
+  ctx.restore();
 }
 
 export function drawVerticalRope(context) {

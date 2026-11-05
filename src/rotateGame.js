@@ -455,6 +455,12 @@ export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
         rotateXY(gameInfo.tropicalFish[i], rows, rotateLeft);
       }
 
+      // User objects
+      for (let i = 0; i < gameInfo.userObjects.length; i++) {
+        rotateXY(gameInfo.userObjects[i], rows, rotateLeft);
+        gameInfo.userObjects[i].direction = rotateDirection(gameInfo.userObjects[i].direction, rotateLeft);
+      }
+
       // Water with ice
       for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
         rotateXY(gameInfo.waterWithIceObjects[i], rows, rotateLeft);

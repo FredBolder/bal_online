@@ -28,6 +28,7 @@ import {
   zeroArray,
   findElementByCoordinates,
   getGameDataValue,
+  changeParameters,
 } from "../balUtils.js";
 import { changerColors } from "../changers.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart, stringToCode } from "../codes.js";
@@ -72,7 +73,7 @@ import { moveObjectWithTelekineticPower } from "../telekinesis.js/";
 import { createTeleports, deleteIfPurpleTeleport } from "../teleports.js";
 import { setTimeBombsTime } from "../timeBombs.js";
 import { changeFins, changeStripes, changeTail, changeTailStripes, presetTropicalFish } from "../tropicalFish.js";
-import { onlyOneIsTrue, removeChar, reverseString, tryParseInt } from "../utils.js";
+import { onlyOneIsTrue, removeChar, reverseString, setArray, tryParseInt } from "../utils.js";
 
 import imgBlueDiving from "../Images/blue_ball_with_diving_glasses.svg";
 import imgBlueHappy from "../Images/blue_ball_happy.svg";
@@ -132,6 +133,7 @@ let createLevelMovable = false;
 let createLevelObject = -1;
 let createLevelOneCommand = false;
 let createLevelOneTime = false;
+let createLevelParameters = [];
 let createLevelQuestion = "";
 let createLevelQuestionStyle = "";
 let createLevelRandomChance = 0;
@@ -435,6 +437,29 @@ function BalPage() {
       }
       showMessage("Info", msg);
     }
+  }
+
+  async function getFourPercentages(parameters) {
+    const value = await showInput("Parameters", "Enter 4 percentages separated by commas.", parameters.join(","));
+    if (value === null) {
+      return null;
+    }
+    const values = value.split(",").map(value => value.trim());
+    if (values.length !== 4) {
+      showMessage("Error", "4 parameters expected");
+      return null;
+    }
+    const result = [];
+    for (let i = 0; i < values.length; i++) {
+      const val_int = tryParseInt(values[i], -1);
+      if (val_int >= 0 && val_int <= 100) {
+        result.push(val_int);
+      } else {
+        showMessage("Error", "Invalid parameter");
+        return null;
+      }
+    }
+    return result;
   }
 
   async function clickCode() {
@@ -1155,7 +1180,7 @@ function BalPage() {
         arr0 = [2083, 2084, 1, 4, 8, 9, 159, 209, 6, 171, 255, 2033, 2050, 2051, 2097, 2101];
         break;
       case 2:
-        arr0 = [2083, 2084, 10, 20, 31, 157, 153, 91, 241, 0, 0, 0, 0, 0, 2097, 2101];
+        arr0 = [2083, 2084, 10, 20, 31, 157, 153, 91, 241, 263, 0, 0, 0, 0, 2097, 2101];
         break;
       default:
         break;
@@ -1187,8 +1212,8 @@ function BalPage() {
                 break;
               default:
                 // page 1
-                arr1 = [1, 15, 16, 17, 18, 141, 142, 143, 144, 259, 260, 261, 262, 145, 146, 147];
-                arr2 = [148, 149, 150, 151, 152, 174, 175, 176, 177, 35, 12, 34, 99, 22, 258, 2101];
+                arr1 = [1, 258, 15, 16, 17, 18, 141, 142, 143, 144, 259, 260, 261, 262, 145, 146];
+                arr2 = [147, 148, 149, 150, 151, 152, 174, 175, 176, 177, 35, 12, 34, 99, 22, 2101];
                 break;
             }
             break;
@@ -1327,6 +1352,11 @@ function BalPage() {
             // Answer balls
             arr1 = [241, 2142, 2201, 242, 245, 2143, 2092, 0, 0, 0, 0, 0, 0, 0, 0, 2222];
             arr2 = [0];
+            break;
+          case 10:
+            // User objects
+            arr1 = [263, 2151, 2224, 2133, 2208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2222];
+            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 15:
             // Info
@@ -3225,7 +3255,7 @@ function BalPage() {
               if (createLevelObject === 2151) {
                 if (changeShape(gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
-                    showMessage("Info", "Click on a tropical fish or a sea anemone to change the shape.");
+                    showMessage("Info", "Click on a tropical fish, a sea anemone or a user object to change the shape.");
                   }
                 }
               }
@@ -3632,6 +3662,41 @@ function BalPage() {
                   }
                 }
 
+              }
+
+              if (createLevelMenu === menuToNumber("userobjects")) {
+                let userObject = null;
+                if (createLevelEdit && [2224].includes(createLevelObject)) {
+                  if (!oneSelected) {
+                    break;
+                  }
+                  const objectNumber = getGameDataValue(gameData, column, row);
+                  if (objectNumber !== 263) {
+                    continue;
+                  }
+                  const idx = findElementByCoordinates(column, row, gameInfo.userObjects);
+                  if (idx < 0) {
+                    continue;
+                  }
+                  userObject = gameInfo.userObjects[idx];
+                }
+
+                if (createLevelObject === 2224) {
+                  if (createLevelEdit) {
+                    const parameters = await getFourPercentages(userObject.parameters);
+                    if (parameters === null) {
+                      continue;
+                    } else {
+                      setArray(userObject.parameters, parameters);
+                    }
+                  } else {
+                    if (changeParameters(gameInfo, column, row, createLevelParameters) === -1) {
+                      if (oneSelected) {
+                        showMessage("Info", "Click on a user object to change the parameters.");
+                      }
+                    }
+                  }
+                }
               }
 
               if (createLevelMenu === menuToNumber("foregroundcolors")) {
@@ -4377,6 +4442,30 @@ function BalPage() {
           }
         }
 
+        if (createLevelMenu === menuToNumber("userobjects")) {
+          if ([2224].includes(createLevelObject)) {
+            createLevelEdit = globalVars.createLevelEditMode;
+            if (createLevelEdit) {
+              return;
+            }
+          }
+          switch (createLevelObject) {
+            case 2224:
+              ok = false;
+              if (row > 0) {
+                const parameters = await getFourPercentages([50, 50, 50, 50]);
+                if (parameters !== null) {
+                  setArray(createLevelParameters, parameters);
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            default:
+              break;
+          }
+        }
+
         switch (createLevelObject) {
           case 0:
             createLevelObject = backDataMenu[row][column];
@@ -4473,6 +4562,9 @@ function BalPage() {
               }
               if (createLevelMenu === menuToNumber("balls")) {
                 newValue = await showSelect("Changers", "Direction:", ["horizontal", "vertical"], 0);
+              }
+              if (createLevelMenu === menuToNumber("userobjects")) {
+                newValue = await showSelect("User objects", "Direction:", ["left", "right", "up", "down"], 2);
               }
               if (newValue !== null) {
                 createLevelDirection = removeChar(newValue, " ");

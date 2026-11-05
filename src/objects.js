@@ -631,6 +631,8 @@ export function objectNumberToObjectName(objectNumber) {
         case 261: return "Quarter circle stone concave top left";
         case 262: return "Quarter circle stone concave top right";
 
+        case 263: return "User object";
+
         default:
             return "";
     }

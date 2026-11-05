@@ -77,31 +77,29 @@ export function createLaserGun(context, variation = 0) {
 }
 
 export function createSqueakyDoor(context) {
-    const { audioCtx, filter1, maxVolume, operators } = context;
-    let ampAttack = 30;
-    let ampDecay = 1200;
-    let ampRelease = 300;
-
-    let filterDecay = 1200;
-    let filterRelease = 200;
-
-    let oscFreq = 280;
-    let pitchDecay = 1000;
+    const { audioCtx, maxVolume, operators } = context;
+    let oscFreq = 50;
     let pitchStart = 180;
 
-    operators.push(new Operator(audioCtx, "sine", oscFreq, 0, maxVolume * 0.8, ampAttack, ampDecay, 0, ampRelease));
-    operators[0].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
-    operators[0].setReleasePitchEnvelope(pitchDecay, 0);
+    const ampEnvelope = [
+        { time: 20, value: maxVolume * 0.4, curveType: "linear" },
+        { time: 500, value: maxVolume * 0.4, curveType: "linear" },
+        { time: 800, value: 0, curveType: "linear" }
+    ];
 
-    operators.push(new Operator(audioCtx, "sawtooth", oscFreq, 0, maxVolume * 0.25, ampAttack, ampDecay, 0, ampRelease));
-    operators[1].setSimplePitchEnvelope(pitchStart, pitchDecay, 0);
-    operators[1].setReleasePitchEnvelope(pitchDecay, 0);
+    const pitchEnvelope = [
+        { time: 400, value: -500, curveType: "linear" },
+        { time: 300, value: 1200, curveType: "linear" },
+        { time: 350, value: -300, curveType: "linear" },
+        { time: 150, value: -450, curveType: "linear" },
+        { time: 250, value: -300, curveType: "linear" },
+        { time: 400, value: -350, curveType: "linear" }
+    ];
 
-    filter1.setFilter("lowpass", 1800, 81);
-    filter1.setSimpleFilterEnvelope(1800, filterDecay, 400);
-    filter1.setReleaseFilterEnvelope(filterRelease, 400);
-
-    operators[0].setLfo("dca", "square", 12, 0.8, 0);
-    operators[1].setLfo("dca", "square", 12, 0.8, 0);
+    operators.push(new Operator(audioCtx, "sawtooth", oscFreq * 0.98, 0, maxVolume * 0.4, 0, 5, 0, 5));
+    operators[0].setPitchEnvelope(pitchStart, pitchEnvelope);
+    operators[0].setReleasePitchEnvelope(400, -300);
+    operators[0].setAmpEnvelope(0, ampEnvelope);
+    operators[0].setWaveShaper(7, 5, maxVolume * 0.4);
 }
 

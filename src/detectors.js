@@ -954,6 +954,8 @@ function nameToObjectNumber(objName) {
             return 17;
         case "trianglestonetopright":
             return 18;
+        case "userobject":
+            return 263;
         case "verticalrope":
             return 137;
         case "whiteball":
@@ -1066,6 +1068,7 @@ function objectPossible(cmd, objName, obj) {
             (objName === "stones" && isStone(obj)) ||
             (objName === "timefreezer" && obj === 120) ||
             (objName === "tropicalfish" && obj === 243) ||
+            (objName === "userobject" && obj === 263) ||
             (objName === "whiteball" && obj === 4) ||
             (objName === "whiteballs" && [4, 245].includes(obj)) ||
             (objName === "whiteballsynchroniser" && obj === 200) ||

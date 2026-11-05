@@ -14,6 +14,7 @@ import { objectNumberToObjectName } from "./objects.js"
 import { pistonModes } from "./pistons.js";
 import { pusherDirections, pusherModes } from "./pushers.js";
 import { tropicalFishStripes, tropicalFishTailStripes } from "./tropicalFish.js";
+import { userObjectDirections } from "./userObjects.js";
 
 export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let error = false;
@@ -37,6 +38,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let isQuestionStone = false;
     let isTeleport = false;
     let isTropicalFish = false;
+    let isUserObject = false;
     let list = "";
     let maxValue = 0;
     let msg = "";
@@ -55,10 +57,10 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             break;
         case 29:
             isKey = true;
-            break;    
+            break;
         case 30:
             isLockedDoor = true;
-            break;    
+            break;
         case 31:
         case 92:
         case 170:
@@ -88,7 +90,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         case 178:
             isMover = true;
             break;
-        case 198:    
+        case 198:
             isDisappearingStone = true;
             break;
         case 209:
@@ -112,6 +114,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             break;
         case 257:
             isFlamethrower = true;
+            break;
+        case 263:
+            isUserObject = true;
             break;
         default:
             break;
@@ -159,6 +164,8 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             }
             break;
         case "color":
+        case "color1":
+        case "color2":
             if (typeof value !== "string") {
                 error = true;
                 break;
@@ -166,7 +173,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             if ((isKey || isLockedDoor) && !lockedDoorColors().includes(value)) {
                 error = true;
             }
-            break;    
+            break;
         case "direction":
             if (typeof value !== "string") {
                 error = true;
@@ -194,6 +201,9 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             if (isPusher && !pusherDirections().includes(value)) {
+                error = true;
+            }
+            if (isUserObject && !userObjectDirections().includes(value)) {
                 error = true;
             }
             break;
@@ -278,7 +288,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
                 break;
             }
-            maxValue = (prop === "stripes") ? tropicalFishStripes : tropicalFishTailStripes; 
+            maxValue = (prop === "stripes") ? tropicalFishStripes : tropicalFishTailStripes;
             if ((value < 0) || (value > maxValue)) {
                 error = true;
             }
@@ -316,10 +326,10 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         prop = "up";
         value = (value === "up");
         if (value) {
-          gameData[y][x] = 106;
+            gameData[y][x] = 106;
         } else {
-          gameData[y][x] = 6;
-        }        
+            gameData[y][x] = 6;
+        }
         list = "elevators";
     }
 
@@ -327,10 +337,10 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         prop = "right";
         value = (value === "right");
         if (value) {
-          gameData[y][x] = 107;
+            gameData[y][x] = 107;
         } else {
-          gameData[y][x] = 7;
-        }        
+            gameData[y][x] = 7;
+        }
         list = "horizontalElevators";
     }
 
@@ -379,8 +389,12 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isTeleport && ["group"].includes(prop)) {
         list = "teleports";
     }
-    if (isTropicalFish && ["answer", "eyeOffsetX", "eyeOffsetY", "eyePercentage", "pupilPercentage",  "stripes", "tailStripes"].includes(prop)) {
+    if (isTropicalFish && ["answer", "eyeOffsetX", "eyeOffsetY", "eyePercentage", "pupilPercentage",
+        "stripes", "tailStripes"].includes(prop)) {
         list = "tropicalFish";
+    }
+    if (isUserObject && ["color1", "color2", "direction", "group", "movable",].includes(prop)) {
+        list = "userObjects";
     }
 
     if (list !== "") {

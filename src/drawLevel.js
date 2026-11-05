@@ -136,6 +136,7 @@ import {
   drawTriangleStoneTopLeft,
   drawTriangleStoneTopRight,
   drawTropicalFish,
+  drawUserObject,
   drawVerticalRope,
   drawWater,
   drawWaterColors,
@@ -956,6 +957,9 @@ function drawLevel(
         case 262:
           drawQuarterCircleStoneConcave(context, currentCol, currentRow, 2);
           break;
+        case 263:
+          drawUserObject(context, currentCol, currentRow);
+          break;
         case 1000:
           // For manual only (empty)
           break;
@@ -1161,7 +1165,7 @@ function drawLevel(
           drawAbbreviation(context, ")))");
           break;
         case 2151:
-          drawAbbreviation(context, "↕");
+          drawAbbreviation(context, "shp");
           break;
         case 2152:
           drawAbbreviation(context, "tail");
@@ -1368,6 +1372,9 @@ function drawLevel(
           break;
         case 2223:
           drawAbbreviation(context, "rand");
+          break;
+        case 2224:
+          drawAbbreviation(context, "par", "black", "green");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

@@ -1,6 +1,6 @@
 import { removeObject } from "./addRemoveObject.js";
 import { answerBallModes } from "./answerBalls.js";
-import { charToNumber, findElementByCoordinates } from "./balUtils.js";
+import { changeShape, charToNumber, findElementByCoordinates } from "./balUtils.js";
 import { checkColor } from "./changers.js";
 import { conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
@@ -21,7 +21,8 @@ import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails, tropicalFishTailStripes } from "./tropicalFish.js";
-import { randomInt, tryParseInt } from "./utils.js";
+import { userObjectDirections, userObjectsShapes } from "./userObjects.js";
+import { randomInt, setArray, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
 export const series1End = 224;
@@ -353,6 +354,7 @@ export function checkSettings(data, settings) {
     { name: "$onecommand", params: 3, xy: true, yesno: 2 },
     { name: "$onetime", params: 3, xy: true, yesno: 2 },
     { name: "$palette", params: 3, xy: true, yesno: -1 },
+    { name: "$parameters", params: 6, xy: true, yesno: -1 },
     { name: "$part", params: 3, xy: true, yesno: -1 },
     { name: "$pattern", params: 0, xy: true, yesno: -1 },
     { name: "$pistonmode", params: 3, xy: true, yesno: -1 },
@@ -556,8 +558,14 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
                   }
                   break;
+                case "Ӿ":
+                case 263:
+                  if (!userObjectDirections().includes(valuesLowerCase[2])) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for direction.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No conveyor belt, flamethrower, mover, music box or pusher found at the coordinates ${x}, ${y}.\n`;
+                  msg += `${settingNr(i)}No conveyor belt, flamethrower, mover, music box, pusher or user object found at the coordinates ${x}, ${y}.\n`;
                   break;
               }
               break;
@@ -719,8 +727,8 @@ export function checkSettings(data, settings) {
               }
               break;
             case "$movable":
-              if (validXY && !["Ω", "ω", "Φ", "φ", "њ", "ђ", "й", 109, 110, 111, 112, 209, 255, 257].includes(data[y][x])) {
-                msg += `${settingNr(i)}No detector, flamethrower, force or pusher found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["Ω", "ω", "Φ", "φ", "њ", "ђ", "й", "Ӿ", 109, 110, 111, 112, 209, 255, 257, 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No detector, flamethrower, force, pusher or user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$movermode":
@@ -795,6 +803,11 @@ export function checkSettings(data, settings) {
                 default:
                   msg += `${settingNr(i)}No tropical fish or sea anemone found at the coordinates ${x}, ${y}.\n`;
                   break;
+              }
+              break;
+            case "$parameters":
+              if (validXY && !["Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$part":
@@ -915,8 +928,15 @@ export function checkSettings(data, settings) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for shape.\n`;
                   }
                   break;
+                case "Ӿ":
+                case 263:
+                  val_int = tryParseInt(values[2], -1);
+                  if ((val_int < 1) || (val_int > userObjectsShapes)) {
+                    msg += `${settingNr(i)}Invalid value ${values[2]} for shape.\n`;
+                  }
+                  break;
                 default:
-                  msg += `${settingNr(i)}No tropical fish or sea anemone found at the coordinates ${x}, ${y}.\n`;
+                  // No object check, because a sea anemone is a background object 
                   break;
               }
               break;
@@ -1658,6 +1678,7 @@ async function loadFromFile(n, gateTravelling = false) {
 
 export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelSettings, initColors = true) {
   let color = "";
+  let error = false;
   let event = 0;
   let gameTicks = 0;
   let instrument = "kalimba";
@@ -1666,6 +1687,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
   let mode = "";
   let p1 = -1;
   let propName = "";
+  const val_array = [];
   let val_bool = false;
   let val_int = 0;
   let val_str = "";
@@ -1706,7 +1728,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           idx = findElementByCoordinates(x, y, gameInfo.movers);
           if (idx >= 0) {
             gameInfo.movers[idx].activeSides.length = 0;
-            gameInfo.movers[idx].activeSides = [];
             for (let side = 2; side < values.length; side++) {
               gameInfo.movers[idx].activeSides.push(values[side]);
             }
@@ -1714,7 +1735,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           idx = findElementByCoordinates(x, y, gameInfo.detectors);
           if (idx >= 0) {
             gameInfo.detectors[idx].activeSides.length = 0;
-            gameInfo.detectors[idx].activeSides = [];
             for (let side = 2; side < values.length; side++) {
               gameInfo.detectors[idx].activeSides.push(values[side]);
             }
@@ -2248,7 +2268,6 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           idx = findElementByCoordinates(x, y, gameInfo.musicBoxes);
           if (idx >= 0) {
             gameInfo.musicBoxes[idx].notes.length = 0;
-            gameInfo.musicBoxes[idx].notes = [];
             gameInfo.musicBoxes[idx].noteIndex = 0;
             for (let note = 2; note < values.length; note++) {
               gameInfo.musicBoxes[idx].notes.push(values[note]);
@@ -2289,6 +2308,24 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$parameters":
+          idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+          if (idx >= 0) {
+            error = false;
+            setArray(val_array, []);
+            for (let value = 2; value < values.length; value++) {
+              val_int = tryParseInt(values[value], -1);
+              if (val_int >= 0 & val_int <= 100) {
+                val_array.push(val_int);
+              } else {
+                error = true;
+              }
+            }
+            if (!error) {
+              setArray(gameInfo.userObjects[idx].parameters, val_array);
+            }
+          }
+          break;
         case "$part":
           if (values.length !== 3 || !validXY) {
             break;
@@ -2303,7 +2340,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           }
           idx = findElementByCoordinates(x, y, gameInfo.disappearingStones);
           if (idx >= 0) {
-            gameInfo.disappearingStones[idx].pattern = [];
+            gameInfo.disappearingStones[idx].pattern.length = 0;
             gameInfo.disappearingStones[idx].patternIndex = 0;
             for (let value = 2; value < values.length; value++) {
               gameInfo.disappearingStones[idx].pattern.push(tryParseInt(values[value], 1));
@@ -2408,18 +2445,7 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             break;
           }
           val_int = tryParseInt(values[2], -1);
-          if ((val_int >= 1) && (val_int <= tropicalFishShapes)) {
-            idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
-            if (idx >= 0) {
-              gameInfo.tropicalFish[idx].shape = val_int;
-            }
-          }
-          if ((idx < 0) && (val_int >= 1) && (val_int <= seaAnemonesShapes)) {
-            idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
-            if (idx >= 0) {
-              gameInfo.seaAnemones[idx].shape = val_int;
-            }
-          }
+          changeShape(gameInfo, x, y, false, val_int);
           break;
         case "$sound":
           if (values.length !== 2) {

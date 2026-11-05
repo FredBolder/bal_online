@@ -1,8 +1,18 @@
-$instrument: 18, 17, crashcymbal, 90
-$musicbox: 18, 17, keyboard, 5
-$notes: 18, 17, D4
-$instrument: 15, 17, crashcymbal, 90
-$musicbox: 15, 17, keyboard, 5
+$shape: 12, 13, 2
+$eyepercentage: 10, 13, 40
+$fins: 10, 13, 6
+$palette: 10, 13, 13
+$shape: 10, 13, 6
+$stripes: 10, 13, 4
+$tail: 10, 13, 3
+$direction: 17, 17, left
+$parameters: 17, 17, 100,100,50,50
+$shape: 17, 17, 2
+$direction: 18, 17, right
+$parameters: 18, 17, 100,100,50,50
+$direction: 17, 18, up
+$direction: 18, 18, up
+$background: 10, 13, 1, 1, 23
 11111111111111111111111111111111
 1                              1
 1                              1
@@ -16,10 +26,10 @@ $musicbox: 15, 17, keyboard, 5
 1                              1
 1                              1
 1                              1
+1         Ҽ Ӑ                  1
 1                              1
 1                              1
 1                              1
-1                              1
-13             M  M            1
-1             2                1
+13               ӾӾ            1
+1             2  ӾӾ            1
 11111111111111111111111111111111

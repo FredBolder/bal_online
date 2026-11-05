@@ -89,6 +89,29 @@ function createDistortionCurve({
                 break;
             }
 
+            // Creepy door
+            case 7: {
+                const a = amount;
+                const s = Math.sign(x);
+                const v = Math.abs(x);
+
+                // Asymmetric nonlinear distortion with multiple knees
+                y = s * (
+                    0.65 * Math.tanh(a * v) +
+                    0.25 * Math.sin(v * Math.PI * a) * v +
+                    0.10 * Math.pow(v, 0.35)
+                );
+
+                // Different treatment of positive and negative halves
+                if (x < 0) {
+                    y *= 1.0 + 0.3 * v;
+                } else {
+                    y *= 1.0 - 0.2 * v;
+                }
+
+                break;
+            }
+            
             default:
                 y = x;
         }

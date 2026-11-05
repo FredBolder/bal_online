@@ -16,6 +16,8 @@ import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
 import { tropicalFishPalettes, tropicalFishShapes } from "./tropicalFish.js";
+import { userObjectsShapes } from "./userObjects.js";
+import { setArray } from "./utils.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -134,6 +136,12 @@ function canMoveAlone(gameData, gameInfo, x, y, parent = "") {
         return gameInfo.flamethrowers[idx].movable;
       }
       return false;
+    case 263:
+      idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+      if (idx >= 0) {
+        return gameInfo.userObjects[idx].movable;
+      }
+      return false;
     default:
       return false;
   }
@@ -226,14 +234,24 @@ export function changePalette(gameInfo, x, y, decrease) {
   return idx;
 }
 
-export function changeShape(gameInfo, x, y, decrease) {
+export function changeParameters(gameInfo, x, y, parameters) {
+  let idx = -1;
+  
+  idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+  if (idx >= 0) {
+    setArray(gameInfo.userObjects[idx].parameters, parameters);
+  }
+  return idx;
+}
+
+export function changeShape(gameInfo, x, y, decrease, newValue = -1) {
   const step = decrease ? -1 : 1;
   let idx = -1;
   let shape = -1;
 
   idx = findElementByCoordinates(x, y, gameInfo.seaAnemones);
   if (idx >= 0) {
-    shape = gameInfo.seaAnemones[idx].shape + step;
+    shape = newValue >= 1 ? newValue : gameInfo.seaAnemones[idx].shape + step;
     if (shape > seaAnemonesShapes) {
       shape = 1;
     }
@@ -246,7 +264,7 @@ export function changeShape(gameInfo, x, y, decrease) {
 
   idx = findElementByCoordinates(x, y, gameInfo.tropicalFish);
   if (idx >= 0) {
-    shape = gameInfo.tropicalFish[idx].shape + step;
+    shape = newValue >= 1 ? newValue : gameInfo.tropicalFish[idx].shape + step;
     if (shape > tropicalFishShapes) {
       shape = 1;
     }
@@ -254,6 +272,19 @@ export function changeShape(gameInfo, x, y, decrease) {
       shape = tropicalFishShapes;
     }
     gameInfo.tropicalFish[idx].shape = shape;
+    return idx;
+  }
+
+  idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+  if (idx >= 0) {
+    shape = newValue >= 1 ? newValue : gameInfo.userObjects[idx].shape + step;
+    if (shape > userObjectsShapes) {
+      shape = 1;
+    }
+    if (shape < 1) {
+      shape = userObjectsShapes;
+    }
+    gameInfo.userObjects[idx].shape = shape;
     return idx;
   }
 
@@ -757,6 +788,8 @@ export function charToNumber(c) {
       return 261;
     case "ӽ":
       return 262;
+    case "Ӿ":
+      return 263;
     case "|":
       return 1000;
     default:
@@ -1279,6 +1312,8 @@ export function getListByObjectNumber(gameInfo, objectNumber) {
       return gameInfo.detectors;
     case 257:
       return gameInfo.flamethrowers;
+    case 263:
+      return gameInfo.userObjects;
     default:
       return null;
   }
@@ -1938,6 +1973,8 @@ export function numberToChar(n) {
       return "Ӽ";
     case 262:
       return "ӽ";
+    case 263:
+      return "Ӿ";
     case 1000:
       // For manual only
       return "|";
@@ -2267,6 +2304,10 @@ export function moveObjects(gameInfo, mode, x1, y1, x2, y2) {
 
   for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
     refs.push(gameInfo.tropicalFish[i]);
+  }
+
+  for (let i = 0; i < gameInfo.userObjects.length; i++) {
+    refs.push(gameInfo.userObjects[i]);
   }
 
   for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {

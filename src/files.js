@@ -839,6 +839,31 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
         }
     }
 
+    for (let i = 0; i < gameInfo.userObjects.length; i++) {
+        const userObject = gameInfo.userObjects[i];
+        const coordinates = `${userObject.x}, ${userObject.y}`;
+        if (userObject.direction !== "top") {
+            line = `$direction: ${coordinates}, ${userObject.direction}`;
+            lines.push(line);
+        }
+        if (userObject.group > 1) {
+            line = `$group: ${coordinates}, ${userObject.group}`;
+            lines.push(line);
+        }
+        if (!userObject.movable) {
+            line = `$movable: ${coordinates}, no`;
+            lines.push(line);
+        }
+        if (JSON.stringify(userObject.parameters) !== JSON.stringify([50, 50, 50, 50])) {
+            line = `$parameters: ${coordinates}, ${userObject.parameters}`;
+            lines.push(line);
+        }
+        if (userObject.shape !== 1) {
+            line = `$shape: ${coordinates}, ${userObject.shape}`;
+            lines.push(line);
+        }
+    }
+
     first = true;
     h = 1;
     w = 1;

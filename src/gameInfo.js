@@ -368,16 +368,25 @@ export function getGameInfo(backData, gameData, gameInfo) {
                     break;
                 }
                 case 255: {
-                    let detector = { x: j, y: i, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group", 
-                        value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true, 
-                        condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0 };
+                    let detector = {
+                        x: j, y: i, mode: "all", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "group",
+                        value: "", display: "default", activated: false, activatedCount: 0, sequence: false, movable: true,
+                        condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0
+                    };
                     gameInfo.detectors.push(detector);
                     break;
                 }
                 case 257: {
-                    let flamethrower = { x: j, y: i, mode: "group", active: false, direction: "right", range: 3, display: "default", 
-                        movable: true, group: 1 };
+                    let flamethrower = {
+                        x: j, y: i, mode: "group", active: false, direction: "right", range: 3, display: "default",
+                        movable: true, group: 1
+                    };
                     gameInfo.flamethrowers.push(flamethrower);
+                    break;
+                }
+                case 263: {
+                    let userObject = { x: j, y: i, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "top", movable: true, group: 1 };
+                    gameInfo.userObjects.push(userObject);
                     break;
                 }
                 default:
@@ -492,7 +501,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 if (obj.notes.length > 0) {
                     firstNote = obj.notes[0];
                 }
-                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Ended: ${obj.ended}, `; 
+                extraInfo = `Instrument: ${obj.instrument}, Volume: ${obj.volume}, Mode: ${obj.mode}, Active: ${obj.active}, Ended: ${obj.ended}, `;
                 extraInfo += `Delay: ${obj.delay}, Number of notes: ${obj.notes.length}, First note: ${firstNote}, Note index: ${obj.noteIndex}, `;
                 extraInfo += `Note override: ${obj.noteOverride}, Repeat: ${obj.repeat}, Octaves: ${obj.octaves}, Steps per measure: ${obj.stepsPerMeasure}, `;
                 extraInfo += `On one: ${obj.onOne}, Part: ${obj.part}, Direction: ${obj.direction}, Display: ${obj.display}, Group: ${obj.group}`;
@@ -1224,7 +1233,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     obj = gameInfo.detectors[idx];
                     extraInfo = `Mode: ${obj.mode}, One-command: ${obj.oneCommand}, One-time: ${obj.oneTime}, Active sides: ${obj.activeSides}, ` +
                         `Range: ${obj.range}, Target: ${obj.target}, Value: ${obj.value}, Display: ${obj.display}, ` +
-                        `Activated: ${obj.activated}, Activated count: ${obj.activatedCount}, ` + 
+                        `Activated: ${obj.activated}, Activated count: ${obj.activatedCount}, ` +
                         `Sequence: ${obj.sequence}, Movable: ${obj.movable}, Condition: ${obj.condition}, ` +
                         `Event: ${obj.event}, Text: ${obj.text}, Group: ${obj.group}, Group 2: ${obj.group2}, Random chance: ${obj.randomChance}`;
                 }
@@ -1252,6 +1261,14 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 break;
             case 262:
                 info = `Quarter circle stone concave top right`;
+                break;
+            case 263:
+                idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+                if (idx >= 0) {
+                    obj = gameInfo.userObjects[idx];
+                    extraInfo = `Color 1: ${obj.color1}, Color 2: ${obj.color2}, Shape: ${obj.shape}, Parameters: ${obj.parameters}, Direction: ${obj.direction}, Movable: ${obj.movable}, Group:  ${obj.group}`;
+                }
+                info = `User object, ` + extraInfo;
                 break;
             default:
                 break;
@@ -1369,6 +1386,7 @@ export function initGameInfo(info) {
     info.twoBlueConnected = false;
     info.userKey1 = "Delete";
     info.userKey2 = ".";
+    initArray(info, "userObjects");
     initArray(info, "waterWithIceObjects");
     initArray(info, "whiteBallSynchronisers");
     initArray(info, "yellowBalls");

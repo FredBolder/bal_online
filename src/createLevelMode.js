@@ -251,6 +251,19 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.flamethrowers[idx2].range = gameInfo.flamethrowers[idx1].range;
             }
             break;
+        case 263:
+            idx1 = findElementByCoordinates(x1, y1, gameInfo.userObjects);
+            idx2 = findElementByCoordinates(x2, y2, gameInfo.userObjects);
+            if ((idx1 >= 0) && (idx2 >= 0)) {
+                gameInfo.userObjects[idx2].color1 = gameInfo.userObjects[idx1].color1;
+                gameInfo.userObjects[idx2].color2 = gameInfo.userObjects[idx1].color2;
+                gameInfo.userObjects[idx2].group = gameInfo.userObjects[idx1].group;
+                gameInfo.userObjects[idx2].movable = gameInfo.userObjects[idx1].movable;
+                gameInfo.userObjects[idx2].pattern = gameInfo.userObjects[idx1].pattern;
+                gameInfo.userObjects[idx2].rotation = gameInfo.userObjects[idx1].rotation;
+                gameInfo.userObjects[idx2].shape = gameInfo.userObjects[idx1].shape;
+            }
+            break;
         default:
             break;
     }
@@ -415,6 +428,12 @@ function getObjectInfo(gameInfo, x, y, n) {
                 return { arr: gameInfo.flamethrowers, idx };
             }
             break;
+        case 263:
+            idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+            if (idx >= 0) {
+                return { arr: gameInfo.userObjects, idx };
+            }
+            break;
         default:
             break;
     }
@@ -538,6 +557,9 @@ export function menuToNumber(s) {
                     break;
                 case "answerballs":
                     result = 9;
+                    break;
+                case "userobjects":
+                    result = 10;
                     break;
                 case "info":
                     result = 15;
