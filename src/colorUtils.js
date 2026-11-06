@@ -115,6 +115,10 @@ export function insertColorsAtRow(colors, row) {
     }
 }
 
+export function isValidCanvasColor(color) {
+    return CSS.supports("color", color);
+}
+
 export function deleteColors(colors, x, y, w, h) {
     const newColors = [];
 

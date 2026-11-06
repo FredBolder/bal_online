@@ -310,6 +310,8 @@ export function checkSettings(data, settings) {
     { name: "$bgcolor", params: 5, xy: true, yesno: -1 },
     { name: "$changer", params: 5, xy: true, yesno: 2 },
     { name: "$color", params: 2, xy: false, yesno: -1 },
+    { name: "$color1", params: 0, xy: true, yesno: -1 },
+    { name: "$color2", params: 0, xy: true, yesno: -1 },
     { name: "$condition", params: 0, xy: true, yesno: -1 },
     { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
     { name: "$darkpercentage", params: 1, xy: false, yesno: -1 },
@@ -498,6 +500,12 @@ export function checkSettings(data, settings) {
               }
               if (valuesLowerCase[3] === valuesLowerCase[4]) {
                 msg += `${settingNr(i)}A changer must have two different colors.\n`;
+              }
+              break;
+            case "$color1":
+            case "$color2":
+              if (validXY && !["Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$condition":
@@ -1759,6 +1767,8 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           setProp(gameData, gameInfo, x, y, propName, valuesLowerCase[2], false);
           break;
         case "$answer":
+        case "$color1":
+        case "$color2":
         case "$condition":
         case "$event":
         case "$text":

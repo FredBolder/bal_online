@@ -1,0 +1,18 @@
+$stonepattern: 1
+$direction: 2, 2, up
+$color1: 4, 2, yellow
+$direction: 4, 2, up
+$shape: 4, 2, 4
+$color1: 6, 2, Blue
+$direction: 6, 2, up
+$shape: 6, 2, 5
+1111111111
+1        1
+1 Ӿ Ӿ Ӿ  1
+1        1
+1        1
+1        1
+1        1
+13       1
+1   2    1
+1111111111

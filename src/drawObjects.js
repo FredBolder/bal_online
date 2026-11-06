@@ -3472,11 +3472,14 @@ export function drawTropicalFish(context, x, y) {
 
 export function drawUserObject(context, x, y) {
   const { ctx, gameInfo, w1, w2, xmin, xmax, ymin, ymax } = context;
+  let color1 = "stone";
+  let color2 = "stone";
   let direction = 0;
   let idx = -1;
   let parameters = [50, 50, 50, 50];
   let rotation = 0;
   let shape = 1;
+  let stone = false;
 
   const x1 = Math.round(xmin - 0.5);
   const y1 = Math.round(ymin - 0.5);
@@ -3489,9 +3492,18 @@ export function drawUserObject(context, x, y) {
   idx = findElementByCoordinates(x, y, gameInfo.userObjects);
   if (idx >= 0) {
     const userObject = gameInfo.userObjects[idx];
+    color1 = userObject.color1;
+    color2 = userObject.color2;
     direction = userObject.direction;
     setArray(parameters, userObject.parameters);
     shape = userObject.shape;
+  }
+
+  if (color1.toLowerCase() === "stone") {
+    stone = true;
+  }
+  if (color2.toLowerCase() === "stone") {
+    color2 = "#464646";
   }
 
   if (parameters.length !== 4) {
@@ -3527,8 +3539,14 @@ export function drawUserObject(context, x, y) {
   ctx.translate(-cx, -cy);
 
   ctx.beginPath();
-  ctx.fillStyle = "white";
-  ctx.strokeStyle = "white";
+
+  if (stone) {
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "white";
+  } else {
+    ctx.fillStyle = color1;
+    ctx.strokeStyle = color1;
+  }
 
   switch (shape) {
     case 2:
@@ -3552,7 +3570,7 @@ export function drawUserObject(context, x, y) {
 
       ctx.save();
       ctx.translate(cx, cy);
-      ctx.rotate(p3 * 2 * Math.PI);
+      ctx.rotate(p3 * Math.PI);
 
       ctx.moveTo(-halfWidth * 0.5, -halfHeight);
       ctx.lineTo(halfWidth * 0.5, -halfHeight);
@@ -3564,6 +3582,12 @@ export function drawUserObject(context, x, y) {
       ctx.restore();
       break;
     }
+    case 5:
+      ctx.moveTo(x1 + (w1 * p1), y1);      
+      ctx.lineTo(x2, y1 + (w2 * p2));      
+      ctx.lineTo(x2 - (w1 * p3), y2);      
+      ctx.lineTo(x1, y2 - (w1 * p4));      
+      break;  
     default:
       // 1
       ctx.moveTo(x1, cy);
@@ -3575,13 +3599,21 @@ export function drawUserObject(context, x, y) {
   }
 
   ctx.closePath();
-  ctx.clip();
+
+  if (stone) {
+    ctx.clip();
+  } else {
+    ctx.fill();
+    ctx.stroke();
+  }
 
   ctx.translate(cx, cy);
   ctx.rotate(-rotation * Math.PI / 2);
   ctx.translate(-cx, -cy);
 
-  drawStone(context, x, y);
+  if (stone) {
+    drawStone(context, x, y);
+  }
 
   ctx.restore();
 }

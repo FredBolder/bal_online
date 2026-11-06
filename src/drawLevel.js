@@ -1376,6 +1376,12 @@ function drawLevel(
         case 2224:
           drawAbbreviation(context, "par", "black", "green");
           break;
+        case 2225:
+          drawAbbreviation(context, "col 1", "black", "green");
+          break;
+        case 2226:
+          drawAbbreviation(context, "col 2", "black", "green");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

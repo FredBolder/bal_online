@@ -842,6 +842,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     for (let i = 0; i < gameInfo.userObjects.length; i++) {
         const userObject = gameInfo.userObjects[i];
         const coordinates = `${userObject.x}, ${userObject.y}`;
+        if (userObject.color1 !== "stone") {
+            line = `$color1: ${coordinates}, ${userObject.color1}`;
+            lines.push(line);
+        }
+        if (userObject.color2 !== "stone") {
+            line = `$color2: ${coordinates}, ${userObject.color2}`;
+            lines.push(line);
+        }
         if (userObject.direction !== "top") {
             line = `$direction: ${coordinates}, ${userObject.direction}`;
             lines.push(line);

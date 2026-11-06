@@ -1,6 +1,7 @@
 import { answerBallModes } from "./answerBalls.js";
 import { changerDirections } from "./changers.js";
 import { getGameDataValue } from "./balUtils.js";
+import { isValidCanvasColor } from "./colorUtils.js";
 import { conveyorBeltDirections, conveyorBeltModes } from "./conveyorBelts.js";
 import { detectorMaxRange, detectorModes, detectorTargets } from "./detectors.js";
 import { disappearingStoneModes } from "./disappearingStones.js";
@@ -164,14 +165,23 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
             }
             break;
         case "color":
-        case "color1":
-        case "color2":
             if (typeof value !== "string") {
                 error = true;
                 break;
             }
             if ((isKey || isLockedDoor) && !lockedDoorColors().includes(value)) {
                 error = true;
+            }
+            break;
+        case "color1":
+        case "color2":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            if ((value.toLowerCase() !== "stone") && !isValidCanvasColor(value)) {
+                error = true;
+                break;
             }
             break;
         case "direction":

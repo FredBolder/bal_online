@@ -34,7 +34,7 @@ import { changerColors } from "../changers.js";
 import { codeToNumber, getFredCode, numberToCode, secretSeriesCodePart, stringToCode } from "../codes.js";
 import {
   changeColor, changeColors, deleteColorsAtColumn, deleteColorAtPosition, deleteColorsAtRow, deleteColors,
-  insertColorsAtColumn, insertColorsAtRow, moveColor
+  isValidCanvasColor, insertColorsAtColumn, insertColorsAtRow, moveColor
 } from "../colorUtils.js";
 import { copyCell, fixScroll, loadCellForUndo, menuToNumber, saveCellForUndo } from "../createLevelMode.js";
 import { detectorMaxRange } from "../detectors.js";
@@ -115,6 +115,8 @@ let createLevelAnswer = "";
 let createLevelBallsPages = 2;
 let createLevelChangerColors = "";
 let createLevelColor = "";
+let createLevelColor1 = "stone";
+let createLevelColor2 = "stone";
 let createLevelColorPages = 2;
 let createLevelCommand = "";
 let createLevelCondition = "";
@@ -460,6 +462,14 @@ function BalPage() {
       }
     }
     return result;
+  }
+
+  function checkColor(color) {
+    if ((color.toLowerCase() !== "stone") && !isValidCanvasColor(color)) {
+      showMessage("Error", "Invalid color");
+      return false;
+    }
+    return true;
   }
 
   async function clickCode() {
@@ -1355,7 +1365,7 @@ function BalPage() {
             break;
           case 10:
             // User objects
-            arr1 = [263, 2151, 2224, 2133, 2208, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2222];
+            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 0, 0, 0, 0, 0, 0, 0, 0, 2222];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 15:
@@ -3427,9 +3437,8 @@ function BalPage() {
                     if (newValue === null) {
                       newValue = "";
                       continue;
-                    } else {
-                      obj.question = newValue.trim();
                     }
+                    obj.question = newValue.trim();
                   } else {
                     msg = setProp(gameData, gameInfo, column, row, "question", createLevelQuestion, oneSelected);
                   }
@@ -3440,9 +3449,8 @@ function BalPage() {
                     if (newValue === null) {
                       newValue = "";
                       continue;
-                    } else {
-                      obj.answer = newValue.trim();
                     }
+                    obj.answer = newValue.trim();
                   } else {
                     msg = setProp(gameData, gameInfo, column, row, "answer", createLevelAnswer, oneSelected);
                   }
@@ -3524,9 +3532,8 @@ function BalPage() {
                     if (newValue === null) {
                       newValue = "";
                       continue;
-                    } else {
-                      detector.condition = newValue.trim();
                     }
+                    detector.condition = newValue.trim();
                   } else {
                     msg = setProp(gameData, gameInfo, column, row, "condition", createLevelCondition, oneSelected);
                   }
@@ -3540,9 +3547,8 @@ function BalPage() {
                     if (newValue === null) {
                       newValue = "";
                       continue;
-                    } else {
-                      detector.value = newValue.trim();
                     }
+                    detector.value = newValue.trim();
                   } else {
                     if (changeCommand(gameInfo, column, row, createLevelCommand) === -1) {
                       if (oneSelected) {
@@ -3557,9 +3563,8 @@ function BalPage() {
                     if (newValue === null) {
                       newValue = "";
                       continue;
-                    } else {
-                      detector.event = newValue.trim();
                     }
+                    detector.event = newValue.trim();
                   } else {
                     msg = setProp(gameData, gameInfo, column, row, "event", createLevelEvent, oneSelected);
                   }
@@ -3666,7 +3671,7 @@ function BalPage() {
 
               if (createLevelMenu === menuToNumber("userobjects")) {
                 let userObject = null;
-                if (createLevelEdit && [2224].includes(createLevelObject)) {
+                if (createLevelEdit && [2224, 2225, 2226].includes(createLevelObject)) {
                   if (!oneSelected) {
                     break;
                   }
@@ -3686,9 +3691,8 @@ function BalPage() {
                     const parameters = await getFourPercentages(userObject.parameters);
                     if (parameters === null) {
                       continue;
-                    } else {
-                      setArray(userObject.parameters, parameters);
                     }
+                    setArray(userObject.parameters, parameters);
                   } else {
                     if (changeParameters(gameInfo, column, row, createLevelParameters) === -1) {
                       if (oneSelected) {
@@ -3697,6 +3701,39 @@ function BalPage() {
                     }
                   }
                 }
+
+                if (createLevelObject === 2225) {
+                  if (createLevelEdit) {
+                    newValue = await showInput("User objects", "Color 1", userObject.color1);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    }
+                    if (!checkColor(newValue.trim())) {
+                      continue;
+                    }
+                    userObject.color1 = newValue.trim();
+                  } else {
+                    msg = setProp(gameData, gameInfo, column, row, "color1", createLevelColor1, oneSelected);
+                  }
+                }
+
+                if (createLevelObject === 2226) {
+                  if (createLevelEdit) {
+                    newValue = await showInput("User objects", "Color 2", userObject.color2);
+                    if (newValue === null) {
+                      newValue = "";
+                      continue;
+                    }
+                    if (!checkColor(newValue.trim())) {
+                      continue;
+                    }
+                    userObject.color2 = newValue.trim();
+                  } else {
+                    msg = setProp(gameData, gameInfo, column, row, "color2", createLevelColor2, oneSelected);
+                  }
+                }
+
               }
 
               if (createLevelMenu === menuToNumber("foregroundcolors")) {
@@ -3747,12 +3784,11 @@ function BalPage() {
                   if (newValue === null) {
                     newValue = "";
                     continue;
-                  } else {
-                    obj.pattern = newValue.trim().split(",").map(value => {
-                      const number = tryParseInt(value.trim(), 1);
-                      return number;
-                    });
                   }
+                  obj.pattern = newValue.trim().split(",").map(value => {
+                    const number = tryParseInt(value.trim(), 1);
+                    return number;
+                  });
                 }
 
               }
@@ -4443,7 +4479,7 @@ function BalPage() {
         }
 
         if (createLevelMenu === menuToNumber("userobjects")) {
-          if ([2224].includes(createLevelObject)) {
+          if ([2224, 2225, 2226].includes(createLevelObject)) {
             createLevelEdit = globalVars.createLevelEditMode;
             if (createLevelEdit) {
               return;
@@ -4457,6 +4493,34 @@ function BalPage() {
                 if (parameters !== null) {
                   setArray(createLevelParameters, parameters);
                   ok = true;
+                }
+              }
+              handleCancel();
+              break;
+            case 2225:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("User objects", "Color 1", createLevelColor1);
+                if (newValue !== null) {
+                  newValue = newValue.trim();
+                  if (checkColor(newValue)) {
+                    createLevelColor1 = newValue;
+                    ok = true;
+                  }
+                }
+              }
+              handleCancel();
+              break;
+            case 2226:
+              ok = false;
+              if (row > 0) {
+                newValue = await showInput("User objects", "Color 2", createLevelColor2);
+                if (newValue !== null) {
+                  newValue = newValue.trim();
+                  if (checkColor(newValue)) {
+                    createLevelColor2 = newValue;
+                    ok = true;
+                  }
                 }
               }
               handleCancel();
