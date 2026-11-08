@@ -21,7 +21,7 @@ import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails, tropicalFishTailStripes } from "./tropicalFish.js";
-import { userObjectDirections, userObjectsShapes } from "./userObjects.js";
+import { userObjectDirections, userObjectShapes } from "./userObjects.js";
 import { randomInt, setArray, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
@@ -939,7 +939,7 @@ export function checkSettings(data, settings) {
                 case "Ӿ":
                 case 263:
                   val_int = tryParseInt(values[2], -1);
-                  if ((val_int < 1) || (val_int > userObjectsShapes)) {
+                  if ((val_int < 1) || (val_int > userObjectShapes)) {
                     msg += `${settingNr(i)}Invalid value ${values[2]} for shape.\n`;
                   }
                   break;

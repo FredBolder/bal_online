@@ -1,6 +1,7 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates } from "./balUtils.js";
 import { globalVars } from "./glob.js";
+import { setArray } from "./utils.js";
 
 export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
     let idx1 = -1;
@@ -74,10 +75,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.musicBoxes[idx2].group = gameInfo.musicBoxes[idx1].group;
                 gameInfo.musicBoxes[idx2].instrument = gameInfo.musicBoxes[idx1].instrument;
                 gameInfo.musicBoxes[idx2].mode = gameInfo.musicBoxes[idx1].mode;
-                gameInfo.musicBoxes[idx2].notes.length = 0;
-                for (let i = 0; i < gameInfo.musicBoxes[idx1].notes.length; i++) {
-                    gameInfo.musicBoxes[idx2].notes.push(gameInfo.musicBoxes[idx1].notes[i]);
-                }
+                setArray(gameInfo.musicBoxes[idx2].notes, gameInfo.musicBoxes[idx1].notes);
                 gameInfo.musicBoxes[idx2].part = gameInfo.musicBoxes[idx1].part;
                 gameInfo.musicBoxes[idx2].stepsPerMeasure = gameInfo.musicBoxes[idx1].stepsPerMeasure;
                 gameInfo.musicBoxes[idx2].volume = gameInfo.musicBoxes[idx1].volume;
@@ -125,10 +123,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             idx2 = findElementByCoordinates(x2, y2, gameInfo.movers);
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.movers[idx2].direction = gameInfo.movers[idx1].direction;
-                gameInfo.movers[idx2].activeSides.length = 0;
-                for (let i = 0; i < gameInfo.movers[idx1].activeSides.length; i++) {
-                    gameInfo.movers[idx2].activeSides.push(gameInfo.movers[idx1].activeSides[i]);
-                }
+                setArray(gameInfo.movers[idx2].activeSides, gameInfo.movers[idx1].activeSides);
                 gameInfo.movers[idx2].mode = gameInfo.movers[idx1].mode;
             }
             break;
@@ -138,10 +133,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.disappearingStones[idx2].group = gameInfo.disappearingStones[idx1].group;
                 gameInfo.disappearingStones[idx2].mode = gameInfo.disappearingStones[idx1].mode;
-                gameInfo.disappearingStones[idx2].pattern.length = 0;
-                for (let i = 0; i < gameInfo.disappearingStones[idx1].pattern.length; i++) {
-                    gameInfo.disappearingStones[idx2].pattern.push(gameInfo.disappearingStones[idx1].pattern[i]);
-                }
+                setArray(gameInfo.disappearingStones[idx2].pattern, gameInfo.disappearingStones[idx1].pattern)
             }
             break;
         case 209:
@@ -259,7 +251,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.userObjects[idx2].color2 = gameInfo.userObjects[idx1].color2;
                 gameInfo.userObjects[idx2].group = gameInfo.userObjects[idx1].group;
                 gameInfo.userObjects[idx2].movable = gameInfo.userObjects[idx1].movable;
-                gameInfo.userObjects[idx2].pattern = gameInfo.userObjects[idx1].pattern;
+                setArray(gameInfo.userObjects[idx2].parameters, gameInfo.userObjects[idx1].parameters);
                 gameInfo.userObjects[idx2].rotation = gameInfo.userObjects[idx1].rotation;
                 gameInfo.userObjects[idx2].shape = gameInfo.userObjects[idx1].shape;
             }

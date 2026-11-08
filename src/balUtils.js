@@ -16,7 +16,7 @@ import { findTheOtherTeleport, isWhiteTeleport } from "./teleports.js";
 import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
 import { tropicalFishPalettes, tropicalFishShapes } from "./tropicalFish.js";
-import { userObjectsShapes } from "./userObjects.js";
+import { userObjectShapes } from "./userObjects.js";
 import { setArray } from "./utils.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
@@ -278,11 +278,11 @@ export function changeShape(gameInfo, x, y, decrease, newValue = -1) {
   idx = findElementByCoordinates(x, y, gameInfo.userObjects);
   if (idx >= 0) {
     shape = newValue >= 1 ? newValue : gameInfo.userObjects[idx].shape + step;
-    if (shape > userObjectsShapes) {
+    if (shape > userObjectShapes) {
       shape = 1;
     }
     if (shape < 1) {
-      shape = userObjectsShapes;
+      shape = userObjectShapes;
     }
     gameInfo.userObjects[idx].shape = shape;
     return idx;

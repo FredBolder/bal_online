@@ -1,18 +1,202 @@
-$stonepattern: 1
+$color1: 1, 1, #46494B
+$color2: 1, 1, #9B9B95
+$direction: 1, 1, up
+$parameters: 1, 1, 30,30,1,0
+$shape: 1, 1, 6
+$color1: 2, 1, #46494B
+$color2: 2, 1, #9B9B95
+$direction: 2, 1, up
+$parameters: 2, 1, 30,30,1,0
+$shape: 2, 1, 6
+$color1: 3, 1, #46494B
+$color2: 3, 1, #9B9B95
+$direction: 3, 1, up
+$parameters: 3, 1, 30,30,1,0
+$shape: 3, 1, 6
+$color1: 4, 1, #46494B
+$color2: 4, 1, #9B9B95
+$direction: 4, 1, up
+$parameters: 4, 1, 30,30,1,0
+$shape: 4, 1, 6
+$color1: 6, 1, #A64B35
+$color2: 6, 1, #C8BBA5
+$direction: 6, 1, up
+$parameters: 6, 1, 30,30,2,0
+$shape: 6, 1, 6
+$color1: 7, 1, #A64B35
+$color2: 7, 1, #C8BBA5
+$direction: 7, 1, up
+$parameters: 7, 1, 30,30,3,0
+$shape: 7, 1, 6
+$color1: 8, 1, #A64B35
+$color2: 8, 1, #C8BBA5
+$direction: 8, 1, up
+$parameters: 8, 1, 30,30,2,0
+$shape: 8, 1, 6
+$color1: 9, 1, #A64B35
+$color2: 9, 1, #C8BBA5
+$direction: 9, 1, up
+$parameters: 9, 1, 30,30,3,0
+$shape: 9, 1, 6
+$color1: 1, 2, #46494B
+$color2: 1, 2, #9B9B95
+$direction: 1, 2, up
+$parameters: 1, 2, 30,30,1,0
+$shape: 1, 2, 6
+$color1: 2, 2, #46494B
+$color2: 2, 2, #9B9B95
 $direction: 2, 2, up
-$color1: 4, 2, yellow
+$parameters: 2, 2, 30,30,1,0
+$shape: 2, 2, 6
+$color1: 3, 2, #46494B
+$color2: 3, 2, #9B9B95
+$direction: 3, 2, up
+$parameters: 3, 2, 30,30,1,0
+$shape: 3, 2, 6
+$color1: 4, 2, #46494B
+$color2: 4, 2, #9B9B95
 $direction: 4, 2, up
-$shape: 4, 2, 4
-$color1: 6, 2, Stone
+$parameters: 4, 2, 30,30,1,0
+$shape: 4, 2, 6
+$color1: 6, 2, #A64B35
+$color2: 6, 2, #C8BBA5
 $direction: 6, 2, up
-$shape: 6, 2, 5
-1111111111
-1        1
-1 Ӿ Ӿ Ӿ  1
-1        1
-1        1
-1        1
-1        1
-13       1
-1   2    1
-1111111111
+$parameters: 6, 2, 30,30,2,0
+$shape: 6, 2, 6
+$color1: 7, 2, #A64B35
+$color2: 7, 2, #C8BBA5
+$direction: 7, 2, up
+$parameters: 7, 2, 30,30,3,0
+$shape: 7, 2, 6
+$color1: 8, 2, #A64B35
+$color2: 8, 2, #C8BBA5
+$direction: 8, 2, up
+$parameters: 8, 2, 30,30,2,0
+$shape: 8, 2, 6
+$color1: 9, 2, #A64B35
+$color2: 9, 2, #C8BBA5
+$direction: 9, 2, up
+$parameters: 9, 2, 30,30,3,0
+$shape: 9, 2, 6
+$color1: 1, 4, #B66A45
+$color2: 1, 4, #D2C5AD
+$direction: 1, 4, up
+$parameters: 1, 4, 30,30,4,0
+$shape: 1, 4, 6
+$color1: 2, 4, #B66A45
+$color2: 2, 4, #D2C5AD
+$direction: 2, 4, up
+$parameters: 2, 4, 30,30,4,0
+$shape: 2, 4, 6
+$color1: 3, 4, #B66A45
+$color2: 3, 4, #D2C5AD
+$direction: 3, 4, up
+$parameters: 3, 4, 30,30,4,0
+$shape: 3, 4, 6
+$color1: 4, 4, #B66A45
+$color2: 4, 4, #D2C5AD
+$direction: 4, 4, up
+$parameters: 4, 4, 30,30,4,0
+$shape: 4, 4, 6
+$color1: 6, 4, #93604B
+$color2: 6, 4, #B8AA96
+$direction: 6, 4, up
+$parameters: 6, 4, 30,30,5,0
+$shape: 6, 4, 6
+$color1: 7, 4, #93604B
+$color2: 7, 4, #B8AA96
+$direction: 7, 4, up
+$parameters: 7, 4, 30,30,5,0
+$shape: 7, 4, 6
+$color1: 8, 4, #93604B
+$color2: 8, 4, #B8AA96
+$direction: 8, 4, up
+$parameters: 8, 4, 30,30,5,0
+$shape: 8, 4, 6
+$color1: 9, 4, #93604B
+$color2: 9, 4, #B8AA96
+$direction: 9, 4, up
+$parameters: 9, 4, 30,30,5,0
+$shape: 9, 4, 6
+$color1: 1, 5, #B66A45
+$color2: 1, 5, #D2C5AD
+$direction: 1, 5, up
+$parameters: 1, 5, 30,30,4,0
+$shape: 1, 5, 6
+$color1: 2, 5, #B66A45
+$color2: 2, 5, #D2C5AD
+$direction: 2, 5, up
+$parameters: 2, 5, 30,30,4,0
+$shape: 2, 5, 6
+$color1: 3, 5, #B66A45
+$color2: 3, 5, #D2C5AD
+$direction: 3, 5, up
+$parameters: 3, 5, 30,30,4,0
+$shape: 3, 5, 6
+$color1: 4, 5, #B66A45
+$color2: 4, 5, #D2C5AD
+$direction: 4, 5, up
+$parameters: 4, 5, 30,30,4,0
+$shape: 4, 5, 6
+$color1: 6, 5, #93604B
+$color2: 6, 5, #B8AA96
+$direction: 6, 5, up
+$parameters: 6, 5, 30,30,5,0
+$shape: 6, 5, 6
+$color1: 7, 5, #93604B
+$color2: 7, 5, #B8AA96
+$direction: 7, 5, up
+$parameters: 7, 5, 30,30,5,0
+$shape: 7, 5, 6
+$color1: 8, 5, #93604B
+$color2: 8, 5, #B8AA96
+$direction: 8, 5, up
+$parameters: 8, 5, 30,30,5,0
+$shape: 8, 5, 6
+$color1: 9, 5, #93604B
+$color2: 9, 5, #B8AA96
+$direction: 9, 5, up
+$parameters: 9, 5, 30,30,5,0
+$shape: 9, 5, 6
+$color1: 1, 7, #674638
+$color2: 1, 7, #B5A38D
+$parameters: 1, 7, 30,30,6,0
+$shape: 1, 7, 6
+$color1: 2, 7, #674638
+$color2: 2, 7, #B5A38D
+$parameters: 2, 7, 30,30,7,0
+$shape: 2, 7, 6
+$color1: 3, 7, #674638
+$color2: 3, 7, #B5A38D
+$parameters: 3, 7, 30,30,6,0
+$shape: 3, 7, 6
+$color1: 4, 7, #674638
+$color2: 4, 7, #B5A38D
+$parameters: 4, 7, 30,30,7,0
+$shape: 4, 7, 6
+$color1: 1, 8, #674638
+$color2: 1, 8, #B5A38D
+$parameters: 1, 8, 30,30,6,0
+$shape: 1, 8, 6
+$color1: 2, 8, #674638
+$color2: 2, 8, #B5A38D
+$parameters: 2, 8, 30,30,7,0
+$shape: 2, 8, 6
+$color1: 3, 8, #674638
+$color2: 3, 8, #B5A38D
+$parameters: 3, 8, 30,30,6,0
+$shape: 3, 8, 6
+$color1: 4, 8, #674638
+$color2: 4, 8, #B5A38D
+$parameters: 4, 8, 30,30,7,0
+$shape: 4, 8, 6
+00000000000
+0ӾӾӾӾ ӾӾӾӾ0
+0ӾӾӾӾ ӾӾӾӾ0
+0         0
+0ӾӾӾӾ ӾӾӾӾ0
+0ӾӾӾӾ ӾӾӾӾ0
+0         0
+0ӾӾӾӾ    30
+0ӾӾӾӾ    20
+00000000111

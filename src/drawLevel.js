@@ -156,6 +156,7 @@ import {
   highlightSelectedCell,
   highlightTelekinesisObject,
 } from "./drawObjects.js";
+import { presetUserObject } from "./userObjects.js";
 
 function drawLevel(
   canvas,
@@ -220,7 +221,6 @@ function drawLevel(
     size1 = size2;
   }
   size1 = Math.trunc(size1);
-  const fish = {};
   let gameWidth = columns * size1;
   let gameHeight = rows * size1;
   let leftMargin = Math.trunc((canvas.width - gameWidth) / 2);
@@ -304,6 +304,10 @@ function drawLevel(
       const bd = backData[currentRow][currentCol];
       const gd = gameData[currentRow][currentCol];
       const backgroundColor = getBgcolor(context, currentCol, currentRow, "");
+
+      const fish = {};
+      const userObject = { parameters: [50, 50, 50, 50] };
+
       if (backgroundColor !== "") {
         drawFilledBox(ctx, xmin, ymin, w1, w2, backgroundColor);
       }
@@ -1381,6 +1385,38 @@ function drawLevel(
           break;
         case 2226:
           drawAbbreviation(context, "col 2", "black", "green");
+          break;
+        case 2227:
+          presetUserObject(userObject, "stretcherbond1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2228:
+          presetUserObject(userObject, "stretcherbond2");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2229:
+          presetUserObject(userObject, "flemishbond1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2230:
+          presetUserObject(userObject, "flemishbond2");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2231:
+          presetUserObject(userObject, "englishbond");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2232:
+          presetUserObject(userObject, "headerbond");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2233:
+          presetUserObject(userObject, "longbricks1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2234:
+          presetUserObject(userObject, "longbricks2");
+          drawUserObject(context, currentCol, currentRow, userObject);
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

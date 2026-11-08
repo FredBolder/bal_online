@@ -104,6 +104,7 @@ import arrowUp from "../Images/arrow_up.svg";
 import arrowUpLeft from "../Images/arrow_up_left.svg";
 import arrowUpRight from "../Images/arrow_up_right.svg";
 import selectButton from "../Images/select_button.png";
+import { presetUserObject } from "../userObjects.js";
 
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
@@ -1365,7 +1366,7 @@ function BalPage() {
             break;
           case 10:
             // User objects
-            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 0, 0, 0, 0, 0, 0, 0, 0, 2222];
+            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2222];
             arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
             break;
           case 15:
@@ -3731,6 +3732,46 @@ function BalPage() {
                     userObject.color2 = newValue.trim();
                   } else {
                     msg = setProp(gameData, gameInfo, column, row, "color2", createLevelColor2, oneSelected);
+                  }
+                }
+
+                if (createLevelObject >= 2227 && createLevelObject <= 2234) {
+                  deleteIfLava(backData, gameInfo, column, row);
+                  deleteIfSeaAnemone(backData, gameInfo, column, row);
+                  deleteIfPurpleTeleport(backData, gameInfo, column, row);
+                  addObject(backData, gameData, gameInfo, column, row, 263);
+                  idx = findElementByCoordinates(column, row, gameInfo.userObjects);
+                  if (idx < 0) {
+                    continue;
+                  }
+                  const obj = gameInfo.userObjects[idx];
+                  switch (createLevelObject) {
+                    case 2227:
+                      presetUserObject(obj, "stretcherbond1");
+                      break;
+                    case 2228:
+                      presetUserObject(obj, "stretcherbond2");
+                      break;
+                    case 2229:
+                      presetUserObject(obj, "flemishbond1");
+                      break;
+                    case 2230:
+                      presetUserObject(obj, "flemishbond2");
+                      break;
+                    case 2231:
+                      presetUserObject(obj, "englishbond");
+                      break;
+                    case 2232:
+                      presetUserObject(obj, "headerbond");
+                      break;
+                    case 2233:
+                      presetUserObject(obj, "longbricks1");
+                      break;
+                    case 2234:
+                      presetUserObject(obj, "longbricks2");
+                      break;
+                    default:
+                      break;
                   }
                 }
 

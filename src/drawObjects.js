@@ -3470,8 +3470,9 @@ export function drawTropicalFish(context, x, y) {
   drawFish(ctx, xc, yc, w1, direction !== 6, fish);
 }
 
-export function drawUserObject(context, x, y) {
+export function drawUserObject(context, x, y, preset = null) {
   const { ctx, gameInfo, w1, w2, xmin, xmax, ymin, ymax } = context;
+  let background = false;
   let color1 = "stone";
   let color2 = "stone";
   let direction = 0;
@@ -3498,10 +3499,18 @@ export function drawUserObject(context, x, y) {
     setArray(parameters, userObject.parameters);
     shape = userObject.shape;
   }
+  if (preset !== null) {
+    color1 = preset.color1;
+    color2 = preset.color2;
+    direction = preset.direction;
+    setArray(parameters, preset.parameters);
+    shape = preset.shape;
+  }
 
   if (color1.toLowerCase() === "stone") {
     stone = true;
   }
+
   if (color2.toLowerCase() === "stone") {
     color2 = "#464646";
   }
@@ -3532,13 +3541,22 @@ export function drawUserObject(context, x, y) {
       break;
   }
 
+  if (shape === 6) {
+    background = true;
+  }
+
+  if (background) {
+    ctx.fillStyle = color2;
+    ctx.fillRect(x1, y1, w1, w2);
+  }
+
   ctx.save();
 
   ctx.translate(cx, cy);
   ctx.rotate(rotation * Math.PI / 2);
   ctx.translate(-cx, -cy);
 
-  ctx.beginPath();
+  const path = new Path2D();
 
   if (stone) {
     ctx.fillStyle = "white";
@@ -3550,61 +3568,142 @@ export function drawUserObject(context, x, y) {
 
   switch (shape) {
     case 2:
-      ctx.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
-      ctx.lineTo(cx + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
-      ctx.lineTo(cx + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
-      ctx.lineTo(x1 + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      path.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      path.lineTo(cx + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      path.lineTo(cx + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      path.lineTo(x1 + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      path.closePath();
       break;
     case 3:
-      ctx.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
-      ctx.lineTo(x2 - (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
-      ctx.lineTo(x2, cy);
-      ctx.lineTo(x2 - (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
-      ctx.lineTo(x1 + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
-      ctx.lineTo(x1, cy);
+      path.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      path.lineTo(x2 - (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
+      path.lineTo(x2, cy);
+      path.lineTo(x2 - (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      path.lineTo(x1 + (w1 * 0.5 * p2), y2 - (w2 * 0.25 * p4));
+      path.lineTo(x1, cy);
+      path.closePath();
       break;
     case 4: {
       const radius = Math.min(w1 * 0.5, w2 / Math.sqrt(3));
       const halfWidth = radius * Math.max(0.1, Math.min(1, p1));
       const halfHeight = radius * Math.sqrt(3) * 0.5 * Math.max(0.1, Math.min(1, p2));
-
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(p3 * Math.PI);
-
-      ctx.moveTo(-halfWidth * 0.5, -halfHeight);
-      ctx.lineTo(halfWidth * 0.5, -halfHeight);
-      ctx.lineTo(halfWidth, 0);
-      ctx.lineTo(halfWidth * 0.5, halfHeight);
-      ctx.lineTo(-halfWidth * 0.5, halfHeight);
-      ctx.lineTo(-halfWidth, 0);
-
-      ctx.restore();
+      const freeSpaceX = w1 - halfWidth * 2;
+      const freeSpaceY = w2 - halfHeight * 2;
+      const polygonCx = x1 + halfWidth + freeSpaceX * Math.max(0, Math.min(1, p3));
+      const polygonCy = y1 + halfHeight + freeSpaceY * (1 - Math.max(0, Math.min(1, p4)));
+      path.moveTo(polygonCx - halfWidth * 0.5, polygonCy - halfHeight);
+      path.lineTo(polygonCx + halfWidth * 0.5, polygonCy - halfHeight);
+      path.lineTo(polygonCx + halfWidth, polygonCy);
+      path.lineTo(polygonCx + halfWidth * 0.5, polygonCy + halfHeight);
+      path.lineTo(polygonCx - halfWidth * 0.5, polygonCy + halfHeight);
+      path.lineTo(polygonCx - halfWidth, polygonCy);
       break;
     }
     case 5:
-      ctx.moveTo(x1 + (w1 * p1), y1);      
-      ctx.lineTo(x2, y1 + (w2 * p2));      
-      ctx.lineTo(x2 - (w1 * p3), y2);      
-      ctx.lineTo(x1, y2 - (w1 * p4));      
-      break;  
+      path.moveTo(x1 + (w1 * p1), y1);
+      path.lineTo(x2, y1 + (w2 * p2));
+      path.lineTo(x2 - (w1 * p3), y2);
+      path.lineTo(x1, y2 - (w1 * p4));
+      path.closePath();
+      break;
+    case 6: {
+      const pattern = parameters[2];
+      const freeSpaceX = w1 * 0.2 * p1;
+      const freeSpaceY = w2 * 0.2 * p2;
+      const halfFreeSpaceX = freeSpaceX * 0.5;
+      const stoneHeight = (w2 * 0.5) - freeSpaceY;
+      let stoneWidth = w1 - freeSpaceX;
+
+      switch (pattern) {
+        case 1:
+        case 4:
+          stoneWidth = w1 - freeSpaceX;
+          break;
+        case 2:
+        case 3:
+          stoneWidth = w1 * (1.33 - (0.33 * p1));
+          break;
+        default:
+          stoneWidth = w1 - freeSpaceX;
+          break;
+      }
+
+      const halfStoneWidth = stoneWidth * 0.5;
+
+      switch (pattern) {
+        case 2: {
+          // Flemish bond - part 1
+          const d1 = (stoneWidth - w1) / 2;
+          path.rect(cx - (halfStoneWidth * 0.5), y1, halfStoneWidth, stoneHeight);
+          path.rect(x1, y1, d1, stoneHeight);
+          path.rect(x2 - d1, y1, d1, stoneHeight);
+          path.rect(x1, cy, w1, stoneHeight);
+          break;
+        }
+        case 3: {
+          // Flemish bond - part 2
+          const d1 = (stoneWidth - w1) / 2;
+          path.rect(x1, y1, w1, stoneHeight);
+          path.rect(cx - (halfStoneWidth * 0.5), cy, halfStoneWidth, stoneHeight);
+          path.rect(x1, cy, d1, stoneHeight);
+          path.rect(x2 - d1, cy, d1, stoneHeight);
+          break;
+        }
+        case 4: {
+          // English bond
+          const headerWidth = (stoneWidth - freeSpaceX) * 0.5;
+          path.rect(cx - (headerWidth * 0.5), y1, headerWidth, stoneHeight);
+          path.rect(x1, y1, headerWidth * 0.5, stoneHeight);
+          path.rect(x2 - headerWidth * 0.5, y1, headerWidth * 0.5, stoneHeight);
+          path.rect(x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight);
+          break;
+        }
+        case 5: {
+          // Header bond
+          const headerWidth = (stoneWidth - freeSpaceX) * 0.5;
+          const d1 = (w1 * 0.5) - ((headerWidth * 0.5) + freeSpaceX);
+          path.rect(cx - (headerWidth * 0.5), y1, headerWidth, stoneHeight);
+          path.rect(x1, y1, d1, stoneHeight);
+          path.rect(x2 - d1, y1, d1, stoneHeight);
+          path.rect(x1 + halfFreeSpaceX, cy, headerWidth, stoneHeight);
+          path.rect(cx + halfFreeSpaceX, cy, headerWidth, stoneHeight);
+          break;
+        }
+        case 6:
+          // Long bricks - part 1
+          path.rect(x1, y1, w1 - halfFreeSpaceX, stoneHeight);
+          path.rect(x1 + halfFreeSpaceX, cy, w1 - halfFreeSpaceX, stoneHeight);
+          break;
+        case 7:
+          // Long bricks - part 2
+          path.rect(x1 + halfFreeSpaceX, y1, w1 - halfFreeSpaceX, stoneHeight);
+          path.rect(x1, cy, w1 - halfFreeSpaceX, stoneHeight);
+          break;
+        default:
+          // 1: Stretcher bond
+          path.rect(x1, y1, halfStoneWidth, stoneHeight);
+          path.rect(cx + halfFreeSpaceX, y1, halfStoneWidth, stoneHeight);
+          path.rect(x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight);
+          break;
+      }
+      break;
+    }
     default:
       // 1
-      ctx.moveTo(x1, cy);
-      ctx.arcTo(x1, y1, cx, y1, w1 * 0.5 * p1);
-      ctx.arcTo(x2, y1, x2, cy, w1 * 0.5 * p2);
-      ctx.arcTo(x2, y2, cx, y2, w1 * 0.5 * p3);
-      ctx.arcTo(x1, y2, x1, cy, w1 * 0.5 * p4);
+      path.moveTo(x1, cy);
+      path.arcTo(x1, y1, cx, y1, w1 * 0.5 * p1);
+      path.arcTo(x2, y1, x2, cy, w1 * 0.5 * p2);
+      path.arcTo(x2, y2, cx, y2, w1 * 0.5 * p3);
+      path.arcTo(x1, y2, x1, cy, w1 * 0.5 * p4);
+      path.closePath();
       break;
   }
 
-  ctx.closePath();
-
   if (stone) {
-    ctx.clip();
+    ctx.clip(path);
   } else {
-    ctx.fill();
-    ctx.stroke();
+    ctx.fill(path);
+    ctx.stroke(path);
   }
 
   ctx.translate(cx, cy);
