@@ -13,6 +13,7 @@ import { drawSeaAnemone } from "./seaAnemone.js";
 import { ignorePatternForCell } from "./stonePatterns.js";
 import { getObjectCoordinates } from "./telekinesis.js";
 import { drawFish } from "./tropicalFish.js";
+import { drawNoteOnScore, drawTimeSignature, drawTrebleClef, numberToNoteSymbol } from "./userObjects.js";
 import { booleanToInt, polar, randomInt, rotatePoints, setArray } from "./utils.js";
 
 let bitmapLava = null;
@@ -2167,14 +2168,20 @@ export function drawNote(context, x, y, type, dots, color) {
   }
 
   // ---- Stem ----
-  let stemX = cx + rX;
-  let stemBottomY = cy - (size * 0.05);
-  let stemTopY = cy - (size * 0.6);
+  const sin = Math.sin(headRotation);
+  const cos = Math.cos(headRotation);
+
+  const stemOffsetX = Math.hypot(rX * cos, rY * sin);
+  const stemOffsetY = ((rX * rX) - (rY * rY)) * sin * cos / stemOffsetX;
+
+  const stemX = cx + stemOffsetX;
+  const stemStartY = cy + stemOffsetY;
+  const stemEndY = cy - (size * 0.6);
 
   if (type !== "whole") {
     ctx.beginPath();
-    ctx.moveTo(stemX, stemBottomY);
-    ctx.lineTo(stemX, stemTopY);
+    ctx.moveTo(stemX, stemStartY);
+    ctx.lineTo(stemX, stemEndY);
     ctx.stroke();
   }
 
@@ -2187,17 +2194,17 @@ export function drawNote(context, x, y, type, dots, color) {
     const flagSpacing = Math.max(size * 0.15, ctx.lineWidth * 2);
     const offset = i * flagSpacing;
     ctx.beginPath();
-    ctx.moveTo(stemX, stemTopY + offset);
+    ctx.moveTo(stemX, stemEndY + offset);
     ctx.quadraticCurveTo(
       cx + size * 0.45,
-      stemTopY + (size * 0.12) + offset,
+      stemEndY + (size * 0.12) + offset,
       cx + size * 0.35,
-      stemTopY + (size * 0.22) + offset
+      stemEndY + (size * 0.22) + offset
     );
     ctx.stroke();
   }
 
-  // ---- Dot ----
+  // ---- Dots ----
   if (dots > 0) {
     ctx.beginPath();
     ctx.arc(cx + (rX * 2.15), cy - (rY * 0.15), rY * 0.45, 0, Math.PI * 2);
@@ -3478,6 +3485,7 @@ export function drawUserObject(context, x, y, preset = null) {
   let direction = 0;
   let idx = -1;
   let parameters = [50, 50, 50, 50];
+  let ready = false;
   let rotation = 0;
   let shape = 1;
   let stone = false;
@@ -3515,6 +3523,12 @@ export function drawUserObject(context, x, y, preset = null) {
     color2 = "#464646";
   }
 
+  if (shape === 7) {
+    stone = false;
+    color1 = "black";
+    color2 = "white";
+  }
+
   if (parameters.length !== 4) {
     setArray(parameters, [50, 50, 50, 50]);
   }
@@ -3541,7 +3555,7 @@ export function drawUserObject(context, x, y, preset = null) {
       break;
   }
 
-  if (shape === 6) {
+  if (shape === 6 || shape === 7) {
     background = true;
   }
 
@@ -3558,6 +3572,7 @@ export function drawUserObject(context, x, y, preset = null) {
 
   const path = new Path2D();
 
+  ctx.lineWidth = 1;
   if (stone) {
     ctx.fillStyle = "white";
     ctx.strokeStyle = "white";
@@ -3679,6 +3694,28 @@ export function drawUserObject(context, x, y, preset = null) {
           path.rect(x1 + halfFreeSpaceX, y1, w1 - halfFreeSpaceX, stoneHeight);
           path.rect(x1, cy, w1 - halfFreeSpaceX, stoneHeight);
           break;
+        case 8: {
+          // Monk bond - part 1
+          const d1 = w1 - (1.5 * freeSpaceX);
+          const d2 = (4 / 5) * d1;
+          const d3 = (1 / 5) * d1;
+          path.rect(x1 + halfFreeSpaceX, y1, d2, stoneHeight);
+          path.rect(x2 - d3, y1, d3, stoneHeight);
+          path.rect(x1, cy, d3, stoneHeight);
+          path.rect(x1 + d3 + freeSpaceX, cy, d2, stoneHeight);
+          break;
+        }
+        case 9: {
+          // Monk bond - part 2
+          const d1 = w1 - (1.5 * freeSpaceX);
+          const d2 = (4 / 5) * d1;
+          const d3 = (1 / 5) * d1;
+          path.rect(x1, y1, d3, stoneHeight);
+          path.rect(x1 + d3 + freeSpaceX, y1, d2, stoneHeight);
+          path.rect(x1 + halfFreeSpaceX, cy, d2, stoneHeight);
+          path.rect(x2 - d3, cy, d3, stoneHeight);
+          break;
+        }
         default:
           // 1: Stretcher bond
           path.rect(x1, y1, halfStoneWidth, stoneHeight);
@@ -3686,6 +3723,58 @@ export function drawUserObject(context, x, y, preset = null) {
           path.rect(x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight);
           break;
       }
+      break;
+    }
+    case 7: {
+      const lineDist = w2 / 10;
+      let bottomNumber = 0;
+      let noteX = cx;
+      let noteY = cy;
+      let topNumber = 0;
+
+      for (let i = -2; i <= 2; i++) {
+        ctx.beginPath();
+        ctx.moveTo(x1, cy + (i * lineDist));
+        ctx.lineTo(x2, cy + (i * lineDist));
+        ctx.stroke();
+      }
+
+      // parameters[0] = 8; // 9 = B
+      // parameters[1] = 3 + 8 + 16;
+      // parameters[2] = 8; // 9 = B
+      // parameters[3] = 4 + 8 + 16;
+      const position1 = -Math.max(-8, Math.min(8, parameters[0] - 9));
+      const noteInfo1 = numberToNoteSymbol(parameters[1]);
+      const position2 = -Math.max(-8, Math.min(8, parameters[2] - 9));
+      const noteInfo2 = numberToNoteSymbol(parameters[3]);
+
+      switch (parameters[0]) {
+        case 20:
+          drawTrebleClef(context, cx - (w1 * 0.25), cy + (w1 * 0.37), lineDist, "black");
+          topNumber = parameters[1] & 31;
+          bottomNumber = 4;
+          if ((parameters[1] & 32) > 0) {
+            bottomNumber = 8;
+          }
+          if (topNumber > 0 && bottomNumber > 0) {
+            drawTimeSignature(context, cx + (w1 * 0.2), cy + (2 * lineDist), lineDist, topNumber, bottomNumber, "black")
+          }
+          break;
+        default:
+          if (parameters[0] > 0 && noteInfo1.value !== "") {
+            noteX = cx - (w1 * 0.3);
+            noteY = cy + (position1 * lineDist * 0.5);
+            drawNoteOnScore(context, noteX, noteY, lineDist, noteInfo1.value, noteInfo1.dots, "black");
+          }
+          if (parameters[2] > 0 && noteInfo2.value !== "") {
+            noteX = cx + (w1 * 0.1);
+            noteY = cy + (position2 * lineDist * 0.5);
+            drawNoteOnScore(context, noteX, noteY, lineDist, noteInfo2.value, noteInfo2.dots, "black");
+          }
+          break;
+      }
+
+      ready = true;
       break;
     }
     default:
@@ -3699,18 +3788,20 @@ export function drawUserObject(context, x, y, preset = null) {
       break;
   }
 
-  if (stone) {
-    ctx.clip(path);
-  } else {
-    ctx.fill(path);
-    ctx.stroke(path);
+  if (!ready) {
+    if (stone) {
+      ctx.clip(path);
+    } else {
+      ctx.fill(path);
+      ctx.stroke(path);
+    }
   }
 
   ctx.translate(cx, cy);
   ctx.rotate(-rotation * Math.PI / 2);
   ctx.translate(-cx, -cy);
 
-  if (stone) {
+  if (stone && !ready) {
     drawStone(context, x, y);
   }
 

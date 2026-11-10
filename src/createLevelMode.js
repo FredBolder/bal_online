@@ -250,6 +250,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.userObjects[idx2].color1 = gameInfo.userObjects[idx1].color1;
                 gameInfo.userObjects[idx2].color2 = gameInfo.userObjects[idx1].color2;
                 gameInfo.userObjects[idx2].group = gameInfo.userObjects[idx1].group;
+                gameInfo.userObjects[idx2].id = gameInfo.userObjects[idx1].id;
                 gameInfo.userObjects[idx2].movable = gameInfo.userObjects[idx1].movable;
                 setArray(gameInfo.userObjects[idx2].parameters, gameInfo.userObjects[idx1].parameters);
                 gameInfo.userObjects[idx2].rotation = gameInfo.userObjects[idx1].rotation;

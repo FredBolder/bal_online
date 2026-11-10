@@ -336,6 +336,7 @@ export function checkSettings(data, settings) {
     { name: "$has", params: 1, xy: false, yesno: -1 },
     { name: "$hint", params: 0, xy: false, yesno: -1 },
     { name: "$icemeltsfromambienttemperature", params: 1, xy: false, yesno: 0 },
+    { name: "$id", params: 3, xy: true, yesno: -1 },
     { name: "$ignorepattern", params: 4, xy: true, yesno: -1 },
     { name: "$instrument", params: 4, xy: true, yesno: -1 },
     { name: "$inverted", params: 3, xy: true, yesno: 2 },
@@ -650,6 +651,14 @@ export function checkSettings(data, settings) {
                   break;
               }
               break;
+            case "$flamethrowermode":
+              if (!flamethrowerModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid flamethrower mode ${values[2]}.\n`;
+              }
+              if (validXY && !["й", 257].includes(data[y][x])) {
+                msg += `${settingNr(i)}No flamethrower found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
             case "$gameticks":
               if (!["brownball", "conveyorbelt", "disappearingstone", "fish", "elevator", "ice", "lava", "message",
                 "mover", "phaseability", "pinkball", "piston", "pusher", "timebomb", "tropicalfish", "yellowslowdowner"].includes(valuesLowerCase[0])) {
@@ -692,12 +701,10 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}Invalid object or ability ${values[0]}.\n`;
               }
               break;
-            case "$flamethrowermode":
-              if (!flamethrowerModes().includes(valuesLowerCase[2])) {
-                msg += `${settingNr(i)}Invalid flamethrower mode ${values[2]}.\n`;
-              }
-              if (validXY && !["й", 257].includes(data[y][x])) {
-                msg += `${settingNr(i)}No flamethrower found at the coordinates ${x}, ${y}.\n`;
+            case "$id":
+              val_int = tryParseInt(values[2], -1);
+              if ((val_int < 0) || (val_int > 1000)) {
+                msg += `${settingNr(i)}Invalid value ${values[2]} for ID.\n`;
               }
               break;
             case "$instrument":
@@ -2148,6 +2155,13 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             default:
               break;
           }
+          break;
+        case "$id":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          val_int = tryParseInt(values[2], -1);
+          setProp(gameData, gameInfo, x, y, "id", val_int, false);
           break;
         case "$ignorepattern":
           if (values.length !== 4) {

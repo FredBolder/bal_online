@@ -409,7 +409,7 @@ export function addObject(backData, gameData, gameInfo, x, y, objectNumber) {
             break;
         }
         case 263: {
-            let userObject = { x, y, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "up", movable: true, group: 1 };
+            let userObject = { x, y, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "up", movable: true, id: 0, group: 1 };
             gameInfo.userObjects.push(userObject);
             break;
         }

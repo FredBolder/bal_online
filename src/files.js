@@ -858,6 +858,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${coordinates}, ${userObject.group}`;
             lines.push(line);
         }
+        if (userObject.id > 1) {
+            line = `$id: ${coordinates}, ${userObject.id}`;
+            lines.push(line);
+        }
         if (!userObject.movable) {
             line = `$movable: ${coordinates}, no`;
             lines.push(line);

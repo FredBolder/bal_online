@@ -1418,6 +1418,17 @@ function drawLevel(
           presetUserObject(userObject, "longbricks2");
           drawUserObject(context, currentCol, currentRow, userObject);
           break;
+        case 2235:
+          presetUserObject(userObject, "monkbond1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2236:
+          presetUserObject(userObject, "monkbond2");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2240:
+          drawAbbreviation(context, "id");
+          break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");
           break;

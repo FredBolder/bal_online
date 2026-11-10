@@ -153,6 +153,15 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "id":
+            if (typeof value !== "number") {
+                error = true;
+                break;
+            }
+            if ((value < 0) || (value > 1000)) {
+                error = true;
+            }
+            break;
         case "inverted":
         case "movable":
         case "oneCommand":
@@ -403,7 +412,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         "stripes", "tailStripes"].includes(prop)) {
         list = "tropicalFish";
     }
-    if (isUserObject && ["color1", "color2", "direction", "group", "movable",].includes(prop)) {
+    if (isUserObject && ["color1", "color2", "direction", "group", "id", "movable",].includes(prop)) {
         list = "userObjects";
     }
 

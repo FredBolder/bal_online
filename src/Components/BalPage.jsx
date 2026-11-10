@@ -105,6 +105,7 @@ import arrowUpLeft from "../Images/arrow_up_left.svg";
 import arrowUpRight from "../Images/arrow_up_right.svg";
 import selectButton from "../Images/select_button.png";
 import { presetUserObject } from "../userObjects.js";
+import { loadMusicFonts } from "../musicFonts.js";
 
 const msgAtLeastFiveColumns = "There must be at least 5 columns.";
 const msgAtLeastFiveRows = "There must be at least 5 rows.";
@@ -126,6 +127,7 @@ let createLevelDirection = "";
 let createLevelEdit = false;
 let createLevelEvent = "";
 let createLevelGroup2 = 0;
+let createLevelId = 1;
 let createLevelInstrument = "xylophone";
 let createLevelMenu = -1;
 let createLevelMenuPages = 2;
@@ -1366,8 +1368,8 @@ function BalPage() {
             break;
           case 10:
             // User objects
-            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2222];
-            arr2 = [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2240, 0, 0, 0, 0, 0, 0, 0, 2222];
+            arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 0, 0, 0, 0, 0, 0];
             break;
           case 15:
             // Info
@@ -1438,6 +1440,7 @@ function BalPage() {
       updateGameInfo(gameData, gameInfo);
       updateProgressText();
       updatePistons(gameData, gameInfo, gameVars);
+      await loadMusicFonts();
       updateGameCanvas();
       updateGreen();
       if (gameVars.startlevelmessage !== "") {
@@ -3194,23 +3197,26 @@ function BalPage() {
               if ((createLevelObject >= 2001) && (createLevelObject <= 2032)) {
                 msg = setProp(gameData, gameInfo, column, row, "group", createLevelObject - 2000, oneSelected);
               }
+              if (createLevelObject === 2221) {
+                msg = setProp(gameData, gameInfo, column, row, "group2", createLevelGroup2, oneSelected);
+              }
+              if (createLevelObject === 2240) {
+                msg = setProp(gameData, gameInfo, column, row, "id", createLevelId, oneSelected);
+              }
               if (createLevelObject === 2092) {
                 msg = setProp(gameData, gameInfo, column, row, "mode", createLevelMode, oneSelected);
               }
               if (createLevelObject === 2208) {
                 msg = setProp(gameData, gameInfo, column, row, "movable", createLevelMovable, oneSelected);
               }
+              if (createLevelObject === 2223) {
+                msg = setProp(gameData, gameInfo, column, row, "randomChance", createLevelRandomChance, oneSelected);
+              }
               if (createLevelObject === 2215) {
                 msg = setProp(gameData, gameInfo, column, row, "range", createLevelRange, oneSelected);
               }
               if (createLevelObject === 2212) {
                 msg = setProp(gameData, gameInfo, column, row, "repeat", createLevelRepeat, oneSelected);
-              }
-              if (createLevelObject === 2221) {
-                msg = setProp(gameData, gameInfo, column, row, "group2", createLevelGroup2, oneSelected);
-              }
-              if (createLevelObject === 2223) {
-                msg = setProp(gameData, gameInfo, column, row, "randomChance", createLevelRandomChance, oneSelected);
               }
 
 
@@ -3735,7 +3741,7 @@ function BalPage() {
                   }
                 }
 
-                if (createLevelObject >= 2227 && createLevelObject <= 2234) {
+                if (createLevelObject >= 2227 && createLevelObject <= 2236) {
                   deleteIfLava(backData, gameInfo, column, row);
                   deleteIfSeaAnemone(backData, gameInfo, column, row);
                   deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -3769,6 +3775,12 @@ function BalPage() {
                       break;
                     case 2234:
                       presetUserObject(obj, "longbricks2");
+                      break;
+                    case 2235:
+                      presetUserObject(obj, "monkbond1");
+                      break;
+                    case 2236:
+                      presetUserObject(obj, "monkbond2");
                       break;
                     default:
                       break;
@@ -4562,6 +4574,20 @@ function BalPage() {
                     createLevelColor2 = newValue;
                     ok = true;
                   }
+                }
+              }
+              handleCancel();
+              break;
+            case 2240:
+              ok = false;
+              if (row > 0) {
+                if (createLevelId < 0 || createLevelId > 1000) {
+                  createLevelId = 0;
+                }
+                newValue = await showInput("User objects", "id", createLevelId.toString());
+                if (newValue !== null) {
+                  createLevelId = tryParseInt(newValue, -1);
+                  ok = checkInt(createLevelId, 0, 1000);
                 }
               }
               handleCancel();

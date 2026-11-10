@@ -1,5 +1,7 @@
 export const globalVars = {
     balPageLoading: false,
+    bravuraLoaded: false,
+    bravuraLoading: null,
     clickedLevel: -1,
     createLevel: false,
     createLevelBallsPage: 1,

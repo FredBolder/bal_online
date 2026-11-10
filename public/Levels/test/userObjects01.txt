@@ -166,6 +166,14 @@ $color1: 2, 7, #674638
 $color2: 2, 7, #B5A38D
 $parameters: 2, 7, 30,30,7,0
 $shape: 2, 7, 6
+$color1: 3, 7, #674638
+$color2: 3, 7, #B5A38D
+$parameters: 3, 7, 30,30,6,0
+$shape: 3, 7, 6
+$color1: 4, 7, #674638
+$color2: 4, 7, #B5A38D
+$parameters: 4, 7, 30,30,7,0
+$shape: 4, 7, 6
 $color1: 1, 8, #674638
 $color2: 1, 8, #B5A38D
 $parameters: 1, 8, 30,30,6,0
@@ -174,29 +182,61 @@ $color1: 2, 8, #674638
 $color2: 2, 8, #B5A38D
 $parameters: 2, 8, 30,30,7,0
 $shape: 2, 8, 6
-$color1: 3, 7, #674638
-$color2: 3, 7, #B5A38D
-$parameters: 3, 7, 30,30,6,0
-$shape: 3, 7, 6
 $color1: 3, 8, #674638
 $color2: 3, 8, #B5A38D
 $parameters: 3, 8, 30,30,6,0
 $shape: 3, 8, 6
-$color1: 4, 7, #674638
-$color2: 4, 7, #B5A38D
-$parameters: 4, 7, 30,30,7,0
-$shape: 4, 7, 6
 $color1: 4, 8, #674638
 $color2: 4, 8, #B5A38D
 $parameters: 4, 8, 30,30,7,0
 $shape: 4, 8, 6
+$color1: 6, 7, #E3DCCB
+$color2: 6, 7, #B8B3A8
+$direction: 6, 7, up
+$parameters: 6, 7, 30,30,8,0
+$shape: 6, 7, 6
+$color1: 7, 7, #E3DCCB
+$color2: 7, 7, #B8B3A8
+$direction: 7, 7, up
+$parameters: 7, 7, 30,30,9,0
+$shape: 7, 7, 6
+$color1: 6, 8, #E3DCCB
+$color2: 6, 8, #B8B3A8
+$direction: 6, 8, up
+$parameters: 6, 8, 30,30,8,0
+$shape: 6, 8, 6
+$color1: 8, 7, #E3DCCB
+$color2: 8, 7, #B8B3A8
+$direction: 8, 7, up
+$parameters: 8, 7, 30,30,8,0
+$shape: 8, 7, 6
+$color1: 8, 8, #E3DCCB
+$color2: 8, 8, #B8B3A8
+$direction: 8, 8, up
+$parameters: 8, 8, 30,30,8,0
+$shape: 8, 8, 6
+$color1: 7, 8, #E3DCCB
+$color2: 7, 8, #B8B3A8
+$direction: 7, 8, up
+$parameters: 7, 8, 30,30,9,0
+$shape: 7, 8, 6
+$color1: 9, 7, #E3DCCB
+$color2: 9, 7, #B8B3A8
+$direction: 9, 7, up
+$parameters: 9, 7, 30,30,9,0
+$shape: 9, 7, 6
+$color1: 9, 8, #E3DCCB
+$color2: 9, 8, #B8B3A8
+$direction: 9, 8, up
+$parameters: 9, 8, 30,30,9,0
+$shape: 9, 8, 6
+30020000000
+0ӾӾӾӾ ӾӾӾӾ0
+0ӾӾӾӾ ӾӾӾӾ0
+0         0
+0ӾӾӾӾ ӾӾӾӾ0
+0ӾӾӾӾ ӾӾӾӾ0
+0         0
+0ӾӾӾӾ ӾӾӾӾ0
+0ӾӾӾӾ ӾӾӾӾ0
 00000000000
-0ӾӾӾӾ ӾӾӾӾ0
-0ӾӾӾӾ ӾӾӾӾ0
-0         0
-0ӾӾӾӾ ӾӾӾӾ0
-0ӾӾӾӾ ӾӾӾӾ0
-0         0
-0ӾӾӾӾ    30
-0ӾӾӾӾ    20
-00000000111
