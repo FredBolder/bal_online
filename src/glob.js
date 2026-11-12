@@ -33,14 +33,6 @@ export const globalVars = {
     patternImg08: null,
     patternImg09: null,
     patternImg10: null,
-    patternImg11: null,
-    patternImg12: null,
-    patternImg13: null,
-    patternImg14: null,
-    patternImg15: null,
-    patternImg16: null,
-    patternImg17: null,
-    patternImg18: null,
     thisWorldGreen: -1,
     uf: false,  // TODO: Set to false when publishing
     up: false  // TODO: Set to false when publishing

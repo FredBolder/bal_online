@@ -2719,14 +2719,6 @@ function BalPage() {
           globalVars.patternImg08 = await loadImage('/pattern08.jpg');
           globalVars.patternImg09 = await loadImage('/pattern09.jpg');
           globalVars.patternImg10 = await loadImage('/pattern10.jpg');
-          globalVars.patternImg11 = await loadImage('/pattern11.jpg');
-          globalVars.patternImg12 = await loadImage('/pattern12.jpg');
-          globalVars.patternImg13 = await loadImage('/pattern13.jpg');
-          globalVars.patternImg14 = await loadImage('/pattern14.jpg');
-          globalVars.patternImg15 = await loadImage('/pattern15.jpg');
-          globalVars.patternImg16 = await loadImage('/pattern16.jpg');
-          globalVars.patternImg17 = await loadImage('/pattern17.jpg');
-          globalVars.patternImg18 = await loadImage('/pattern18.jpg');
           loadSettings();
           cbArrowButtons.current.checked = getSettings().arrowButtons;
           cbCreateLevel.current.checked = false;

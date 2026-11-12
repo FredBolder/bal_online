@@ -1,6 +1,6 @@
 import { findElementByCoordinates } from "./balUtils";
 
-export const maxStonePatterns = 18;
+export const maxStonePatterns = 10;
 
 export function loadImage(src) {
   return new Promise((res, rej) => {

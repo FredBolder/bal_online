@@ -1,0 +1,148 @@
+$extra: 1
+$stonepattern: 9
+$answer: 10, 2, C
+$answer: 8, 2, A
+$answer: 9, 2, B
+$condition: 14, 1, userInt1 = 1
+$display: 14, 1, stone
+$movable: 14, 1, no
+$target: 14, 1, command
+$value: 14, 1, $parameters: 2, 1, 4, 3, 5, 3 | $parameters: 3, 1, 6, 3, 8, 3 | $parameters: 4, 1, 11, 1, 0, 0 | $parameters: 5, 1, 0, 0, 0, 0
+$condition: 14, 2, userInt1 = 2
+$display: 14, 2, stone
+$movable: 14, 2, no
+$target: 14, 2, command
+$value: 14, 2, $parameters: 2, 1, 3, 3, 4, 3 | $parameters: 3, 1, 5, 3, 7, 3 | $parameters: 4, 1, 10, 1, 0, 0 | $parameters: 5, 1, 0, 0, 0, 0
+$condition: 14, 3, userInt1 = 3
+$display: 14, 3, stone
+$movable: 14, 3, no
+$target: 14, 3, command
+$value: 14, 3, $parameters: 2, 1, 4, 3, 6, 3 | $parameters: 3, 1, 5, 3, 8, 3 | $parameters: 4, 1, 11, 1, 0, 0 | $parameters: 5, 1, 0, 0, 0, 0
+$activesides: 6, 4, left
+$condition: 6, 4, userInt1 <> 1
+$display: 6, 4, stone
+$detectormode: 6, 4, blueball
+$movable: 6, 4, no
+$activesides: 9, 4, left
+$condition: 9, 4, userInt1 <> 2
+$display: 9, 4, stone
+$group: 9, 4, 2
+$detectormode: 9, 4, blueball
+$movable: 9, 4, no
+$activesides: 12, 4, left
+$condition: 12, 4, userInt1 <> 3
+$display: 12, 4, stone
+$group: 12, 4, 3
+$detectormode: 12, 4, blueball
+$movable: 12, 4, no
+$activesides: 6, 5, left
+$condition: 6, 5, userInt1 <> 1
+$display: 6, 5, stone
+$detectormode: 6, 5, blueball
+$movable: 6, 5, no
+$activesides: 9, 5, left
+$condition: 9, 5, userInt1 <> 2
+$display: 9, 5, stone
+$group: 9, 5, 2
+$detectormode: 9, 5, blueball
+$movable: 9, 5, no
+$activesides: 12, 5, left
+$condition: 12, 5, userInt1 <> 3
+$display: 12, 5, stone
+$group: 12, 5, 3
+$detectormode: 12, 5, blueball
+$movable: 12, 5, no
+$display: 10, 10, stone
+$detectormode: 10, 10, blueball
+$movable: 10, 10, no
+$onetime: 10, 10, yes
+$target: 10, 10, command
+$value: 10, 10, random, userInt1, 1, 3
+$activesides: 3, 8, bottom
+$condition: 3, 8, answer = A
+$display: 3, 8, stone
+$group: 3, 8, 10
+$detectormode: 3, 8, purpleball
+$movable: 3, 8, no
+$target: 3, 8, command
+$value: 3, 8, delete, PurpleBalls, rel, 0, 1 | delete,  UserObject, rellist, -1, 1, -2, 1
+$activesides: 12, 1, left
+$display: 12, 1, stone
+$detectormode: 12, 1, blueball
+$movable: 12, 1, no
+$onetime: 12, 1, yes
+$range: 12, 1, 5
+$target: 12, 1, command
+$value: 12, 1, random, userInt1, 1, 3
+$movable: 4, 4, no
+$range: 4, 4, 1
+$group: 7, 4, 2
+$movable: 7, 4, no
+$range: 7, 4, 1
+$group: 10, 4, 3
+$movable: 10, 4, no
+$range: 10, 4, 1
+$movable: 4, 5, no
+$range: 4, 5, 1
+$group: 7, 5, 2
+$movable: 7, 5, no
+$range: 7, 5, 1
+$group: 10, 5, 3
+$movable: 10, 5, no
+$range: 10, 5, 1
+$instrument: 4, 6, piano, 90
+$musicbox: 4, 6, near, 5
+$notes: 4, 6, D4, E4, F4, A4, D5, -, -, -
+$repeat: 4, 6, no
+$instrument: 7, 6, piano, 90
+$musicbox: 7, 6, near, 5
+$notes: 7, 6, C4, D4, E4, G4, C5, -, -, -
+$repeat: 7, 6, no
+$instrument: 10, 6, piano, 90
+$musicbox: 10, 6, near, 5
+$notes: 10, 6, D4, F4, E4, A4, D5, -, -, -
+$repeat: 10, 6, no
+$direction: 1, 1, up
+$movable: 1, 1, no
+$parameters: 1, 1, 20,4,0,0
+$shape: 1, 1, 7
+$direction: 2, 1, up
+$id: 2, 1, 6
+$movable: 2, 1, no
+$parameters: 2, 1, 0,0,0,0
+$shape: 2, 1, 7
+$direction: 3, 1, up
+$id: 3, 1, 6
+$movable: 3, 1, no
+$parameters: 3, 1, 0,0,0,0
+$shape: 3, 1, 7
+$direction: 4, 1, up
+$id: 4, 1, 6
+$movable: 4, 1, no
+$parameters: 4, 1, 0,0,0,0
+$shape: 4, 1, 7
+$direction: 5, 1, up
+$id: 5, 1, 6
+$movable: 5, 1, no
+$parameters: 5, 1, 0,0,0,0
+$shape: 5, 1, 7
+$direction: 2, 9, up
+$id: 2, 9, 6
+$movable: 2, 9, no
+$parameters: 2, 9, 1,2,0,0
+$shape: 2, 9, 7
+$direction: 1, 9, up
+$movable: 1, 9, no
+$parameters: 1, 9, 20,4,0,0
+$shape: 1, 9, 7
+111111111111111
+1ӾӾӾӾӾ1     ђ1ђ
+1       ҹҹҹ 11ђ
+1           11ђ
+1111й ђй ђй ђ11
+1111й ђй ђй ђ11
+1111M 1M 1M 111
+1111        111
+131ђ         X1
+1ӾӾ      2    1
+1111111111ђ1111

@@ -77,6 +77,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.musicBoxes[idx2].mode = gameInfo.musicBoxes[idx1].mode;
                 setArray(gameInfo.musicBoxes[idx2].notes, gameInfo.musicBoxes[idx1].notes);
                 gameInfo.musicBoxes[idx2].part = gameInfo.musicBoxes[idx1].part;
+                gameInfo.musicBoxes[idx2].repeat = gameInfo.musicBoxes[idx1].repeat;
                 gameInfo.musicBoxes[idx2].stepsPerMeasure = gameInfo.musicBoxes[idx1].stepsPerMeasure;
                 gameInfo.musicBoxes[idx2].volume = gameInfo.musicBoxes[idx1].volume;
             }

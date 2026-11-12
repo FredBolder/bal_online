@@ -1037,6 +1037,7 @@ function objectPossible(cmd, objName, obj) {
             (objName === "key" && obj === 29) ||
             (objName === "lightblueball" && obj === 5) ||
             (objName === "lockeddoor" && obj === 30) ||
+            (objName === "musicbox" && obj === 157) ||
             (objName === "onedirectionportdown" && obj === 88) ||
             (objName === "onedirectionportleft" && obj === 11) ||
             (objName === "onedirectionportright" && obj === 10) ||
