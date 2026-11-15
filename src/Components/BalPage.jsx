@@ -456,8 +456,8 @@ function BalPage() {
     }
     const result = [];
     for (let i = 0; i < values.length; i++) {
-      const val_int = tryParseInt(values[i], -1);
-      if (val_int >= 0 && val_int <= 100) {
+      const val_int = tryParseInt(values[i], -2);
+      if (val_int >= -1 && val_int <= 100) {
         result.push(val_int);
       } else {
         showMessage("Error", "Invalid parameter");
@@ -1368,8 +1368,8 @@ function BalPage() {
             break;
           case 10:
             // User objects
-            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2240, 0, 0, 0, 0, 0, 0, 0, 2222];
-            arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 0, 0, 0, 0, 0, 0];
+            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2260, 0, 0, 0, 0, 0, 0, 0, 2222];
+            arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2242];
             break;
           case 15:
             // Info
@@ -3192,7 +3192,7 @@ function BalPage() {
               if (createLevelObject === 2221) {
                 msg = setProp(gameData, gameInfo, column, row, "group2", createLevelGroup2, oneSelected);
               }
-              if (createLevelObject === 2240) {
+              if (createLevelObject === 2260) {
                 msg = setProp(gameData, gameInfo, column, row, "id", createLevelId, oneSelected);
               }
               if (createLevelObject === 2092) {
@@ -3691,7 +3691,7 @@ function BalPage() {
                     if (parameters === null) {
                       continue;
                     }
-                    setArray(userObject.parameters, parameters);
+                    changeParameters(gameInfo, column, row, parameters);
                   } else {
                     if (changeParameters(gameInfo, column, row, createLevelParameters) === -1) {
                       if (oneSelected) {
@@ -3733,7 +3733,7 @@ function BalPage() {
                   }
                 }
 
-                if (createLevelObject >= 2227 && createLevelObject <= 2236) {
+                if (createLevelObject >= 2227 && createLevelObject <= 2242) {
                   deleteIfLava(backData, gameInfo, column, row);
                   deleteIfSeaAnemone(backData, gameInfo, column, row);
                   deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -3773,6 +3773,24 @@ function BalPage() {
                       break;
                     case 2236:
                       presetUserObject(obj, "monkbond2");
+                      break;
+                    case 2237:
+                      presetUserObject(obj, "blockbond1");
+                      break;
+                    case 2238:
+                      presetUserObject(obj, "blockbond2");
+                      break;
+                    case 2239:
+                      presetUserObject(obj, "stackbond");
+                      break;
+                    case 2240:
+                      presetUserObject(obj, "verticalstackbond");
+                      break;
+                    case 2241:
+                      presetUserObject(obj, "stretcherbondquarteroffset");
+                      break;
+                    case 2242:
+                      presetUserObject(obj, "squaretile");
                       break;
                     default:
                       break;
@@ -4570,7 +4588,7 @@ function BalPage() {
               }
               handleCancel();
               break;
-            case 2240:
+            case 2260:
               ok = false;
               if (row > 0) {
                 if (createLevelId < 0 || createLevelId > 1000) {

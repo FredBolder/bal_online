@@ -136,7 +136,6 @@ import {
   drawTriangleStoneTopLeft,
   drawTriangleStoneTopRight,
   drawTropicalFish,
-  drawUserObject,
   drawVerticalRope,
   drawWater,
   drawWaterColors,
@@ -156,7 +155,7 @@ import {
   highlightSelectedCell,
   highlightTelekinesisObject,
 } from "./drawObjects.js";
-import { presetUserObject } from "./userObjects.js";
+import { drawUserObject, presetUserObject } from "./userObjects.js";
 
 function drawLevel(
   canvas,
@@ -1426,7 +1425,31 @@ function drawLevel(
           presetUserObject(userObject, "monkbond2");
           drawUserObject(context, currentCol, currentRow, userObject);
           break;
+        case 2237:
+          presetUserObject(userObject, "blockbond1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2238:
+          presetUserObject(userObject, "blockbond2");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2239:
+          presetUserObject(userObject, "stackbond");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
         case 2240:
+          presetUserObject(userObject, "verticalstackbond");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2241:
+          presetUserObject(userObject, "stretcherbondquarteroffset");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2242:
+          presetUserObject(userObject, "squaretile");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2260:
           drawAbbreviation(context, "id");
           break;
         default:

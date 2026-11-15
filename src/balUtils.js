@@ -17,7 +17,6 @@ import { getTimeBombsTime, updateTimeBomb } from "./timeBombs.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
 import { tropicalFishPalettes, tropicalFishShapes } from "./tropicalFish.js";
 import { userObjectShapes } from "./userObjects.js";
-import { setArray } from "./utils.js";
 import { updateYellowBall } from "./yellowBalls.js";
 import { moveYellowBar } from "./yellowBars.js";
 import { checkYellowPausers } from "./yellowPausers.js";
@@ -239,7 +238,13 @@ export function changeParameters(gameInfo, x, y, parameters) {
   
   idx = findElementByCoordinates(x, y, gameInfo.userObjects);
   if (idx >= 0) {
-    setArray(gameInfo.userObjects[idx].parameters, parameters);
+    const obj = gameInfo.userObjects[idx];
+    for (let i = 0; i < obj.parameters.length; i++) {
+      // -1 = Do not change current value
+      if (i < parameters.length && parameters[i] !== -1) {
+        obj.parameters[i] = parameters[i];
+      }      
+    }
   }
   return idx;
 }
