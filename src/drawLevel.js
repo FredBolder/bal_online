@@ -1449,7 +1449,43 @@ function drawLevel(
           presetUserObject(userObject, "squaretile");
           drawUserObject(context, currentCol, currentRow, userObject);
           break;
-        case 2260:
+        case 2243:
+          presetUserObject(userObject, "basketweave1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2244:
+          presetUserObject(userObject, "basketweave2");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2245:
+          presetUserObject(userObject, "spanishbond");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2246:
+          presetUserObject(userObject, "meander1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2247:
+          presetUserObject(userObject, "meander2");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2248:
+          presetUserObject(userObject, "meander3");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2249:
+          presetUserObject(userObject, "meander4");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2250:
+          presetUserObject(userObject, "meander5");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2251:
+          presetUserObject(userObject, "meander6");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2300:
           drawAbbreviation(context, "id");
           break;
         default:

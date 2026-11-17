@@ -153,6 +153,7 @@ let createLevelStonesPages = 2;
 let createLevelTicks = -1;
 let createLevelTranspose = 0;
 let createLevelVolume = 90;
+let createLevelUserObjectPages = 2;
 let createLevelWaterPages = 2;
 let ctx;
 let ignoreGravity = true;
@@ -1368,8 +1369,17 @@ function BalPage() {
             break;
           case 10:
             // User objects
-            arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2260, 0, 0, 0, 0, 0, 0, 0, 2222];
-            arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2242];
+            switch (globalVars.createLevelUserObjectPage) {
+              case 2:
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 0, 0, 0, 0, 0, 0, 0, 2222];
+                arr2 = [2242, 2243, 2244, 2245, 2246, 2247, 2248, 2249, 2250, 2251, 0, 0, 0, 0, 0, 2101];
+                break;
+              default:
+                // page 1
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 0, 0, 0, 0, 0, 0, 0, 2222];
+                arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2101];
+                break;
+            }
             break;
           case 15:
             // Info
@@ -3192,7 +3202,7 @@ function BalPage() {
               if (createLevelObject === 2221) {
                 msg = setProp(gameData, gameInfo, column, row, "group2", createLevelGroup2, oneSelected);
               }
-              if (createLevelObject === 2260) {
+              if (createLevelObject === 2300) {
                 msg = setProp(gameData, gameInfo, column, row, "id", createLevelId, oneSelected);
               }
               if (createLevelObject === 2092) {
@@ -3733,7 +3743,7 @@ function BalPage() {
                   }
                 }
 
-                if (createLevelObject >= 2227 && createLevelObject <= 2242) {
+                if (createLevelObject >= 2227 && createLevelObject <= 2251) {
                   deleteIfLava(backData, gameInfo, column, row);
                   deleteIfSeaAnemone(backData, gameInfo, column, row);
                   deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -3791,6 +3801,33 @@ function BalPage() {
                       break;
                     case 2242:
                       presetUserObject(obj, "squaretile");
+                      break;
+                    case 2243:
+                      presetUserObject(obj, "basketweave1");
+                      break;
+                    case 2244:
+                      presetUserObject(obj, "basketweave2");
+                      break;
+                    case 2245:
+                      presetUserObject(obj, "spanishbond");
+                      break;
+                    case 2246:
+                      presetUserObject(obj, "meander1");
+                      break;
+                    case 2247:
+                      presetUserObject(obj, "meander2");
+                      break;
+                    case 2248:
+                      presetUserObject(obj, "meander3");
+                      break;
+                    case 2249:
+                      presetUserObject(obj, "meander4");
+                      break;
+                    case 2250:
+                      presetUserObject(obj, "meander5");
+                      break;
+                    case 2251:
+                      presetUserObject(obj, "meander6");
                       break;
                     default:
                       break;
@@ -4588,7 +4625,7 @@ function BalPage() {
               }
               handleCancel();
               break;
-            case 2260:
+            case 2300:
               ok = false;
               if (row > 0) {
                 if (createLevelId < 0 || createLevelId > 1000) {
@@ -4678,6 +4715,14 @@ function BalPage() {
                 globalVars.createLevelWaterPage = 1;
               }
               fillMenu(menuToNumber("water"));
+              updateCreateLevelCanvas();
+              createLevelObject = -1;
+            } else if (createLevelMenu === menuToNumber("userobjects")) {
+              globalVars.createLevelUserObjectPage++;
+              if (globalVars.createLevelUserObjectPage > createLevelUserObjectPages) {
+                globalVars.createLevelUserObjectPage = 1;
+              }
+              fillMenu(menuToNumber("userobjects"));
               updateCreateLevelCanvas();
               createLevelObject = -1;
             }

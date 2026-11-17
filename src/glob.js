@@ -10,6 +10,7 @@ export const globalVars = {
     createLevelEditMode: false,
     createLevelMenuPage: 1,
     createLevelStonesPage: 1,
+    createLevelUserObjectPage: 1,
     createLevelWaterPage: 1,
     createLevelZoom: 0,
     debug: false,

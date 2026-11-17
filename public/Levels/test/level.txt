@@ -1,16 +1,45 @@
-$stonepattern: 1
-$color1: 4, 1, #B66A45
-$color2: 4, 1, #D2C5AD
-$parameters: 4, 1, 30,30,4,2
-$shape: 4, 1, 6
+$color1: 2, 1, #173D65
+$color2: 2, 1, #F3E8D0
+$direction: 2, 1, up
+$parameters: 2, 1, 0,0,0,0
+$shape: 2, 1, 8
+$color1: 4, 1, #F3E8D0
+$color2: 4, 1, #173D65
+$direction: 4, 1, up
+$parameters: 4, 1, 0,1,0,0
+$shape: 4, 1, 8
+$color1: 6, 1, #173D65
+$color2: 6, 1, #F3E8D0
 $direction: 6, 1, up
-$color1: 3, 1, #B66A45
-$color2: 3, 1, #D2C5AD
-$direction: 3, 1, up
-$parameters: 3, 1, 30,30,4,1
-$shape: 3, 1, 6
-1000000001
-1  ӾӾ Ӿ  1
-13       1
-1   2    1
-1111111111
+$parameters: 6, 1, 1,0,0,0
+$shape: 6, 1, 8
+$color1: 8, 1, #173D65
+$color2: 8, 1, #F3E8D0
+$direction: 8, 1, up
+$parameters: 8, 1, 1,2,0,0
+$shape: 8, 1, 8
+$color1: 2, 3, #D6B36A
+$color2: 2, 3, #172D42
+$direction: 2, 3, up
+$parameters: 2, 3, 2,0,0,0
+$shape: 2, 3, 8
+$color1: 4, 3, #D6B36A
+$color2: 4, 3, #172D42
+$direction: 4, 3, up
+$parameters: 4, 3, 3,0,0,0
+$shape: 4, 3, 8
+$color1: 6, 3, #29231F
+$color2: 6, 3, #D9A477
+$direction: 6, 3, up
+$parameters: 6, 3, 4,0,0,0
+$shape: 6, 3, 8
+$color1: 8, 3, #173D65
+$color2: 8, 3, #F3E8D0
+$direction: 8, 3, up
+$parameters: 8, 3, 5,0,5,0
+$shape: 8, 3, 8
+0000000000
+0 Ӿ Ӿ Ӿ Ӿ0
+3        0
+2 Ӿ Ӿ Ӿ Ӿ0
+1000000000
