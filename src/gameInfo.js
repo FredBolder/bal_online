@@ -385,7 +385,8 @@ export function getGameInfo(backData, gameData, gameInfo) {
                     break;
                 }
                 case 263: {
-                    let userObject = { x: j, y: i, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "top", movable: true, id: 0, group: 1 };
+                    let userObject = { x: j, y: i, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "top", movable: true, id: 0, 
+                        delIfNearSameId: false, delete: false, group: 1 };
                     gameInfo.userObjects.push(userObject);
                     break;
                 }
@@ -1267,7 +1268,8 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                 if (idx >= 0) {
                     obj = gameInfo.userObjects[idx];
                     extraInfo = `Color 1: ${obj.color1}, Color 2: ${obj.color2}, Shape: ${obj.shape}, Parameters: ${obj.parameters}, `; 
-                    extraInfo += `Direction: ${obj.direction}, Movable: ${obj.movable}, ID:  ${obj.id}, Group:  ${obj.group}`;
+                    extraInfo += `Direction: ${obj.direction}, Movable: ${obj.movable}, ID:  ${obj.id}, `;
+                    extraInfo += `Delete if near to same ID:  ${obj.delIfNearSameId}, Group:  ${obj.group}`;
                 }
                 info = `User object, ` + extraInfo;
                 break;

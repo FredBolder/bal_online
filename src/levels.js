@@ -65,6 +65,8 @@ export const seriesProgrammingStart = 6400;
 export const seriesProgrammingEnd = 6402;
 export const seriesAnnoyingStart = 6450;
 export const seriesAnnoyingEnd = 6471;
+export const seriesPatternsStart = 6500;
+export const seriesPatternsEnd = 6500;
 
 export function addSolvedLevels(levelStr) {
   let level = -1;
@@ -315,6 +317,7 @@ export function checkSettings(data, settings) {
     { name: "$condition", params: 0, xy: true, yesno: -1 },
     { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
     { name: "$darkpercentage", params: 1, xy: false, yesno: -1 },
+    { name: "$delifnearsameid", params: 3, xy: true, yesno: 2 },
     { name: "$detectormode", params: 3, xy: true, yesno: -1 },
     { name: "$direction", params: 3, xy: true, yesno: -1 },
     { name: "$disappearingstonemode", params: 3, xy: true, yesno: -1 },
@@ -525,6 +528,11 @@ export function checkSettings(data, settings) {
             case "$color":
               if (!["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
                 msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
+              }
+              break;
+            case "$delifnearsameid":
+              if (validXY && !["Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$detectormode":
@@ -1234,6 +1242,10 @@ export function displayLevelNumber(level, addInfo = false) {
     current = (level - seriesAnnoyingStart) + 1;
     total = (seriesAnnoyingEnd - seriesAnnoyingStart) + 1;
     series = "Annoying";
+  } else if ((level >= seriesPatternsStart) && (level <= seriesPatternsEnd)) {
+    current = (level - seriesPatternsStart) + 1;
+    total = (seriesPatternsEnd - seriesPatternsStart) + 1;
+    series = "Patterns";
   }
 
   if (current === -1) {
@@ -1255,7 +1267,7 @@ export function firstOfSeries(level) {
   return [series1Start, series2Start, series3Start, series4Start, series5Start,
     seriesSmallStart, seriesEasy1Start, seriesExtremeStart, seriesMusic1Start, series6Start,
     seriesEasy2Start, seriesMusic2Start, seriesMathStart, seriesLanguageStart, seriesFishStart,
-    seriesProgrammingStart, seriesAnnoyingStart].includes(level)
+    seriesProgrammingStart, seriesAnnoyingStart, seriesPatternsStart].includes(level)
 }
 
 export function fixLevel(backData, gameData, gameInfo) {
@@ -1508,6 +1520,9 @@ export function getAllLevels() {
   for (let i = seriesAnnoyingStart; i <= seriesAnnoyingEnd; i++) {
     levels.push(i);
   }
+  for (let i = seriesPatternsStart; i <= seriesPatternsEnd; i++) {
+    levels.push(i);
+  }
   if (globalVars.uf) {
     for (let i = seriesChroniaPollaStart; i <= seriesChroniaPollaEnd; i++) {
       levels.push(i);
@@ -1558,7 +1573,8 @@ export async function getLevel(n, gateTravelling = false) {
       (n >= seriesLanguageStart && n <= seriesLanguageEnd) ||
       (n >= seriesFishStart && n <= seriesFishEnd) ||
       (n >= seriesProgrammingStart && n <= seriesProgrammingEnd) ||
-      (n >= seriesAnnoyingStart && n <= seriesAnnoyingEnd)
+      (n >= seriesAnnoyingStart && n <= seriesAnnoyingEnd) ||
+      (n >= seriesPatternsStart && n <= seriesPatternsEnd)
     )) ||
     ((n >= 9995) && (n <= 9999)) ||
     (n === 0)
@@ -1630,7 +1646,8 @@ export function isExtra(n) {
     ((n >= seriesLanguageStart) && (n <= seriesLanguageEnd)) ||
     ((n >= seriesFishStart) && (n <= seriesFishEnd)) ||
     ((n >= seriesProgrammingStart) && (n <= seriesProgrammingEnd)) ||
-    ((n >= seriesAnnoyingStart) && (n <= seriesAnnoyingEnd))
+    ((n >= seriesAnnoyingStart) && (n <= seriesAnnoyingEnd)) ||
+    ((n >= seriesPatternsStart) && (n <= seriesPatternsEnd))
   )
 }
 
@@ -1880,6 +1897,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
           if ((val_int >= 0) && (val_int <= 100)) {
             gameVars.darkPercentage = val_int;
           }
+          break;
+        case "$delifnearsameid":
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, "delIfNearSameId", valuesLowerCase[2] === "yes", false);
           break;
         case "$direction":
           if (values.length !== 3 || !validXY) {
@@ -2630,6 +2653,7 @@ export function numberOfLevels() {
   n += (seriesFishEnd - seriesFishStart) + 1;
   n += (seriesProgrammingEnd - seriesProgrammingStart) + 1;
   n += (seriesAnnoyingEnd - seriesAnnoyingStart) + 1;
+  n += (seriesPatternsEnd - seriesPatternsStart) + 1;
   return n;
 }
 

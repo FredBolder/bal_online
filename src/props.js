@@ -162,6 +162,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "delIfNearSameId":    
         case "inverted":
         case "movable":
         case "oneCommand":
@@ -412,7 +413,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         "stripes", "tailStripes"].includes(prop)) {
         list = "tropicalFish";
     }
-    if (isUserObject && ["color1", "color2", "direction", "group", "id", "movable",].includes(prop)) {
+    if (isUserObject && ["color1", "color2", "delIfNearSameId", "direction", "group", "id", "movable",].includes(prop)) {
         list = "userObjects";
     }
 

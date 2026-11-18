@@ -1,6 +1,7 @@
 import { falling, findElementByCoordinates, getGameDataValue, inWater, moveObject } from "./balUtils.js";
 import { hasForceDown, hasForceUp } from "./force.js";
 import { hasBottomGlideLeftToRight, hasBottomGlideRightToLeft, hasTopGlideLeftToRight, hasTopGlideRightToLeft } from "./triangleStones.js";
+import { setArray } from "./utils.js";
 
 export function checkBrownBalls(gameData, gameInfo) {
     let update = false;
@@ -29,7 +30,8 @@ export function checkBrownBalls(gameData, gameInfo) {
         }        
     }
 
-    gameInfo.brownBalls = newBrownBalls;
+    setArray(gameInfo.brownBalls, newBrownBalls);
+
     return update;
 }
 

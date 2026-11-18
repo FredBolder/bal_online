@@ -1,4 +1,4 @@
-import { findElementByCoordinates } from "./balUtils";
+import { findElementByCoordinates, getGameDataValue } from "./balUtils";
 import { drawStone } from "./drawObjects";
 import { globalVars } from "./glob";
 import { setArray } from "./utils";
@@ -10,6 +10,63 @@ export const BRICK_SHADOW_NOT_LEFT = 14;
 export const BRICK_SHADOW_RIGHT = 2;
 export const BRICK_SHADOW_NOT_RIGHT = 13;
 export const BRICK_SHADOW_TOP = 4;
+
+export function checkUserObjects(gameData, gameInfo) {
+  let update = false;
+
+  for (let i = 0; i < gameInfo.userObjects.length; i++) {
+    const userObject = gameInfo.userObjects[i];
+
+    if (!userObject.delIfNearSameId) {
+      continue;
+    }
+
+    const x = userObject.x;
+    const y = userObject.y;
+
+    const points = [
+      [x, y - 1],
+      [x, y + 1],
+      [x - 1, y],
+      [x + 1, y]
+    ];
+
+    for (let j = 0; j < points.length; j++) {
+      const [x, y] = points[j];
+      const gd = getGameDataValue(gameData, x, y);
+
+      if (gd !== 263) {
+        continue;
+      }
+      const idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+      if (idx < 0) {
+        continue;
+      }
+      const obj = gameInfo.userObjects[idx];
+      if (userObject.id !== obj.id) {
+        continue;
+      }
+      userObject.delete = true;
+      update = true;
+      break;
+    }
+  }
+
+  if (!update) return false;
+
+  for (let i = 0; i < gameInfo.userObjects.length; i++) {
+    const userObject = gameInfo.userObjects[i];
+    if (userObject.delete) {
+      gameData[userObject.y][userObject.x] = 0;
+    }
+  }
+
+  gameInfo.userObjects.splice(0, gameInfo.userObjects.length,
+    ...gameInfo.userObjects.filter(obj => !obj.delete)
+  );
+
+  return update;
+}
 
 export function drawBrick(ctx, x, y, w, h, shadowSize, shadowLines, style) {
   const s = Math.max(0, Math.min(shadowSize, w * 0.5, h * 0.5));

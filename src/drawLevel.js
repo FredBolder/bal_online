@@ -136,6 +136,7 @@ import {
   drawTriangleStoneTopLeft,
   drawTriangleStoneTopRight,
   drawTropicalFish,
+  drawTwoTextLines,
   drawVerticalRope,
   drawWater,
   drawWaterColors,
@@ -1487,6 +1488,9 @@ function drawLevel(
           break;
         case 2300:
           drawAbbreviation(context, "id");
+          break;
+        case 2301:
+          drawTwoTextLines(context, "del", "id=id");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

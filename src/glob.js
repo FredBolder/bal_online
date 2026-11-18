@@ -23,6 +23,7 @@ export const globalVars = {
     otherWorldGreen: -1,
     playedNotes: ["", "", "", "", "", "", "", "", "" , "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     reading: false,
+    schedulerBusy: false,
     startTime: null,
     patternImg01: null,
     patternImg02: null,

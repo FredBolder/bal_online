@@ -850,6 +850,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$color2: ${coordinates}, ${userObject.color2}`;
             lines.push(line);
         }
+        if (userObject.delIfNearSameId) {
+            line = `$delifnearsameid: ${coordinates}, yes`;
+            lines.push(line);
+        }
         if (userObject.direction !== "top") {
             line = `$direction: ${coordinates}, ${userObject.direction}`;
             lines.push(line);
@@ -858,7 +862,7 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$group: ${coordinates}, ${userObject.group}`;
             lines.push(line);
         }
-        if (userObject.id > 1) {
+        if (userObject.id > 0) {
             line = `$id: ${coordinates}, ${userObject.id}`;
             lines.push(line);
         }

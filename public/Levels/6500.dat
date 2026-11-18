@@ -1,0 +1,94 @@
+$extra: 1
+$pistonmode: 12, 9, repeatslow
+$color1: 15, 2, #984B38
+$color2: 15, 2, #BDB3A1
+$delifnearsameid: 15, 2, yes
+$direction: 15, 2, up
+$id: 15, 2, 1
+$parameters: 15, 2, 30,30,2,1
+$shape: 15, 2, 6
+$color1: 8, 3, #984B38
+$color2: 8, 3, #BDB3A1
+$delifnearsameid: 8, 3, yes
+$direction: 8, 3, up
+$id: 8, 3, 1
+$parameters: 8, 3, 30,30,2,1
+$shape: 8, 3, 6
+$color1: 12, 3, #984B38
+$color2: 12, 3, #BDB3A1
+$delifnearsameid: 12, 3, yes
+$direction: 12, 3, up
+$id: 12, 3, 1
+$parameters: 12, 3, 30,30,2,1
+$shape: 12, 3, 6
+$color1: 2, 4, #984B38
+$color2: 2, 4, #BDB3A1
+$delifnearsameid: 2, 4, yes
+$direction: 2, 4, up
+$id: 2, 4, 2
+$parameters: 2, 4, 30,30,3,1
+$shape: 2, 4, 6
+$color1: 4, 4, #984B38
+$color2: 4, 4, #BDB3A1
+$delifnearsameid: 4, 4, yes
+$direction: 4, 4, up
+$id: 4, 4, 2
+$parameters: 4, 4, 30,30,3,1
+$shape: 4, 4, 6
+$color1: 8, 4, #984B38
+$color2: 8, 4, #BDB3A1
+$delifnearsameid: 8, 4, yes
+$id: 8, 4, 2
+$parameters: 8, 4, 30,30,3,1
+$shape: 8, 4, 6
+$color1: 12, 4, #984B38
+$color2: 12, 4, #BDB3A1
+$delifnearsameid: 12, 4, yes
+$direction: 12, 4, up
+$id: 12, 4, 2
+$parameters: 12, 4, 30,30,3,1
+$shape: 12, 4, 6
+$color1: 2, 9, #984B38
+$color2: 2, 9, #BDB3A1
+$delifnearsameid: 2, 9, yes
+$id: 2, 9, 1
+$parameters: 2, 9, 30,30,2,1
+$shape: 2, 9, 6
+$color1: 10, 9, #984B38
+$color2: 10, 9, #BDB3A1
+$delifnearsameid: 10, 9, yes
+$direction: 10, 9, up
+$id: 10, 9, 1
+$parameters: 10, 9, 30,30,2,1
+$shape: 10, 9, 6
+$direction: 6, 10, up
+$movable: 6, 10, no
+$parameters: 6, 10, 50,50,0,0
+$shape: 6, 10, 2
+$direction: 6, 11, up
+$movable: 6, 11, no
+$parameters: 6, 11, 50,50,0,0
+$shape: 6, 11, 2
+$direction: 6, 12, up
+$movable: 6, 12, no
+$parameters: 6, 12, 50,50,0,0
+$shape: 6, 12, 2
+$direction: 6, 13, up
+$movable: 6, 13, no
+$parameters: 6, 13, 50,50,0,0
+$shape: 6, 13, 2
+111111111111111111
+1             =  1
+1             =Ӿ 1
+1       Ӿ   Ӿ =111
+1 Ӿ Ӿ   Ӿ   Ӿ =111
+11111111111111=111
+111           =  1
+131           =  1
+1             =  1
+11Ӿ       Ӿ Ö1=111
+1     Ӿ    111=111
+1     Ӿ       =  1
+1     Ӿ       =  1
+1     Ӿ   2   =  1
+111111111111111111

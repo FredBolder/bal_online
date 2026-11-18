@@ -3476,6 +3476,13 @@ export function drawTropicalFish(context, x, y) {
   drawFish(ctx, xc, yc, w1, direction !== 6, fish);
 }
 
+export function drawTwoTextLines(context, s1, s2, bg = "black", fg = "white") {
+  const { ctx, w1, w2, xc, yc, xmin, ymax, ymin } = context;
+  drawFilledBox(ctx, xmin, ymin, w1, w2, bg);
+  drawText(ctx, xc, yc - (w2 * 0.1), s1, "center", fg, w2 * 0.35, w1 * 0.8);
+  drawText(ctx, xc, ymax - (w2 * 0.1), s2, "center", fg, w2 * 0.35, w1 * 0.8);
+}
+
 export function drawVerticalRope(context) {
   const { ctx, w1, w2, xc, ymin } = context;
   let d1 = w2 / 3;

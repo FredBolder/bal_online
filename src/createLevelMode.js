@@ -250,6 +250,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 gameInfo.userObjects[idx2].color1 = gameInfo.userObjects[idx1].color1;
                 gameInfo.userObjects[idx2].color2 = gameInfo.userObjects[idx1].color2;
+                gameInfo.userObjects[idx2].delIfNearSameId = gameInfo.userObjects[idx1].delIfNearSameId;
                 gameInfo.userObjects[idx2].group = gameInfo.userObjects[idx1].group;
                 gameInfo.userObjects[idx2].id = gameInfo.userObjects[idx1].id;
                 gameInfo.userObjects[idx2].movable = gameInfo.userObjects[idx1].movable;

@@ -122,6 +122,7 @@ let createLevelColor2 = "stone";
 let createLevelColorPages = 2;
 let createLevelCommand = "";
 let createLevelCondition = "";
+let createLevelDelIfNearSameId = false;
 let createLevelDetectorPages = 2;
 let createLevelDirection = "";
 let createLevelEdit = false;
@@ -1371,12 +1372,12 @@ function BalPage() {
             // User objects
             switch (globalVars.createLevelUserObjectPage) {
               case 2:
-                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 0, 0, 0, 0, 0, 0, 0, 2222];
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 0, 0, 0, 0, 0, 0, 2222];
                 arr2 = [2242, 2243, 2244, 2245, 2246, 2247, 2248, 2249, 2250, 2251, 0, 0, 0, 0, 0, 2101];
                 break;
               default:
                 // page 1
-                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 0, 0, 0, 0, 0, 0, 0, 2222];
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 0, 0, 0, 0, 0, 0, 2222];
                 arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2101];
                 break;
             }
@@ -3193,6 +3194,9 @@ function BalPage() {
               if (createLevelObject === 2214) {
                 msg = setProp(gameData, gameInfo, column, row, "color", createLevelColor, oneSelected);
               }
+              if (createLevelObject === 2301) {
+                msg = setProp(gameData, gameInfo, column, row, "delIfNearSameId", createLevelDelIfNearSameId, oneSelected);
+              }
               if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
                 msg = setProp(gameData, gameInfo, column, row, "direction", createLevelDirection, oneSelected);
               }
@@ -4123,7 +4127,7 @@ function BalPage() {
           case 2208:
             ok = false;
             if (row > 0) {
-              newValue = await showSelect("Detectors / Flamethrowers / Forces / Pushers", "Movable by player:", ["yes", "no"], createLevelMovable ? 0 : 1);
+              newValue = await showSelect("Detectors / Flamethrowers / Forces / Pushers / User objects", "Movable by player:", ["yes", "no"], createLevelMovable ? 0 : 1);
               if (newValue !== null) {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;
@@ -4635,6 +4639,19 @@ function BalPage() {
                 if (newValue !== null) {
                   createLevelId = tryParseInt(newValue, -1);
                   ok = checkInt(createLevelId, 0, 1000);
+                }
+              }
+              handleCancel();
+              break;
+            case 2301:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("User objects", "Delete if near to same ID:", ["yes", "no"], createLevelDelIfNearSameId ? 0 : 1);
+                if (newValue !== null) {
+                  if (newValue === "yes" || newValue === "no") {
+                    ok = true;
+                    createLevelDelIfNearSameId = (newValue === "yes");
+                  }
                 }
               }
               handleCancel();
