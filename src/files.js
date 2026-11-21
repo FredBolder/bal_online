@@ -854,7 +854,7 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$delifnearsameid: ${coordinates}, yes`;
             lines.push(line);
         }
-        if (userObject.direction !== "top") {
+        if (userObject.direction !== "up") {
             line = `$direction: ${coordinates}, ${userObject.direction}`;
             lines.push(line);
         }

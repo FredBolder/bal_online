@@ -1,8 +1,9 @@
 import { addObject, removeObject } from "./addRemoveObject.js";
 import { findElementByCoordinates, getGameDataValue, moveObjectInDirection } from "./balUtils.js";
+import { flipArea } from "./flip.js";
 import { checkSettings, loadLevelSettings } from "./levels.js";
 import { isSpike, isStone } from "./objects.js";
-import { rotateDirection } from "./rotateGame.js";
+import { rotateArea, rotateDirection } from "./rotateGame.js";
 import { setTimeBombsTime } from "./timeBombs.js";
 import { presetTropicalFish } from "./tropicalFish.js";
 import { isOdd, randomInt, tryParseInt } from "./utils.js";
@@ -113,8 +114,25 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
         }
         return;
     }
+    if (values.length === 5 && intValues[1] !== null && intValues[2] !== null &&
+        intValues[3] !== null && intValues[4] !== null) {
+        switch (cmd) {
+            case "fliparea":
+                flipArea(backData, gameData, gameInfo, intValues[1], intValues[2], intValues[3], intValues[4]);
+                break;
+            case "rotatearealeft":
+                rotateArea(backData, gameData, gameInfo, true, intValues[1], intValues[2], intValues[3], intValues[4])
+                break;
+            case "rotatearearight":
+                rotateArea(backData, gameData, gameInfo, false, intValues[1], intValues[2], intValues[3], intValues[4])
+                break;
+            default:
+                break;
+        }
+    }
+
     if (cmd === "gameover") {
-        gameVars.gameOver = true; 
+        gameVars.gameOver = true;
         return;
     }
     if (cmd === "random" && values.length === 4) {
@@ -139,7 +157,7 @@ export function command(backData, gameData, gameInfo, gameVars, xRef, yRef, comm
 
     if ((["changedirection", "create", "delete", "rotateleft", "rotateright"].includes(cmd) && values.length >= 5 && isOdd(values.length)) ||
         (cmd === "move" && values.length >= 6 && !isOdd(values.length)) ||
-        (cmd === "startsong" && values.length >= 4 && !isOdd(values.length)) 
+        (cmd === "startsong" && values.length >= 4 && !isOdd(values.length))
     ) {
         // changedirection, object name, {abs|rel|player}, x1, y1 [, x2, y2] 
         // changedirection, object name, {abslist|rellist|playerlist}, x1, y1 [, x2, y2, ...]
@@ -1112,7 +1130,7 @@ export function rotateGroup(gameData, gameInfo, group, rotateLeft) {
     for (let i = 0; i < gameInfo.pushers.length; i++) {
         const pusher = gameInfo.pushers[i];
         if (pusher.group === group) {
-            pusher.direction = rotateDirection(pusher.direction, rotateLeft);
+            rotateDirection(pusher, rotateLeft);
         }
     }
 }
@@ -1160,7 +1178,7 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
                 return;
             }
             const flamethrower = gameInfo.flamethrowers[idx];
-            flamethrower.direction = rotateDirection(flamethrower.direction, rotateLeft);
+            rotateDirection(flamethrower, rotateLeft);
             return;
         }
 
@@ -1199,7 +1217,7 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
                 return;
             }
             const pusher = gameInfo.pushers[idx];
-            pusher.direction = rotateDirection(pusher.direction, rotateLeft);
+            rotateDirection(pusher, rotateLeft);
             return;
         }
 
@@ -1235,14 +1253,14 @@ function commandRotate(backData, gameData, gameInfo, target, x, y, rotateLeft) {
     if (target === "flamethrower") {
         for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
             const flamethrower = gameInfo.flamethrowers[i];
-            flamethrower.direction = rotateDirection(flamethrower.direction);
+            rotateDirection(flamethrower);
         }
         return;
     }
     if (target === "pusher") {
         for (let i = 0; i < gameInfo.pushers.length; i++) {
             const pusher = gameInfo.pushers[i];
-            pusher.direction = rotateDirection(pusher.direction);
+            rotateDirection(pusher);
         }
     }
 }

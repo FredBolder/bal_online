@@ -62,7 +62,7 @@ import {
   changeIgnoreByArea, changeIgnoreByCell, deleteIgnoreAtColumn, deleteIgnoreAtRow, insertIgnoreAtColumn,
   insertIgnoreAtRow, maxStonePatterns, moveIgnore
 } from "../stonePatterns.js";
-import { rotateGame } from "../rotateGame.js";
+import { rotateArea } from "../rotateGame.js";
 import { startSchedulers, stopSchedulers } from "../schedulerState.js";
 import { deleteIfSeaAnemone } from "../seaAnemone.js";
 import { getSettings, loadSettings, saveSettings, setSettings, settings } from "../settings.js";
@@ -2337,12 +2337,12 @@ function BalPage() {
         info.update = true;
         break;
       case "rotateLeft":
-        if (rotateGame(backData, gameData, gameInfo, true)) {
+        if (rotateArea(backData, gameData, gameInfo, true)) {
           info.update = true;
         }
         break;
       case "rotateRight":
-        if (rotateGame(backData, gameData, gameInfo)) {
+        if (rotateArea(backData, gameData, gameInfo)) {
           info.update = true;
         }
         break;

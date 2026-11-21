@@ -1225,5 +1225,42 @@ describe("Pistons", () => {
         ]);
     });
 
+    it("detectors 30", () => {
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall: { x: 2, y: 4 },
+            greenBalls: 1,
+            detectors: [
+                {
+                    x: 2, y: 5, mode: "blueball", oneTime: false, oneCommand: false, activeSides: ["top"], range: 1, target: "command",
+                    value: "fliparea, 4, 1, 7, 4", display: "stone", activated: false,
+                    activatedCount: 0, sequence: false, movable: false, condition: "", event: "", text: "", group: 1, group2: 0, randomChance: 0, previousRandom: 0
+                }
+            ],
+        }
+        const gameVars = { ...defaultGameVars, pistonGroupsActivated: [...defaultPistonGroupsActivated] };
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 0, 0, 0, 0, 16, 15, 1],
+            [1, 1, 0, 0, 0, 0, 18, 17, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 2, 0, 0, 0, 0, 4, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 0, 0, 16, 15, 0, 0, 1],
+            [1, 1, 0, 0, 18, 17, 0, 0, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 2, 0, 4, 0, 0, 0, 1],
+            [1, 1, 255, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const info = checkPistonsTriggers(backData, input, gameInfo, gameVars, "scheduler");
+        expect(input).toEqual(expectedOutput);
+        expect(info).toEqual({ updated: true, explosion: false });
+    });
+
     // Insert new tests here
 });

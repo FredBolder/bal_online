@@ -1016,175 +1016,175 @@ export function presetUserObject(userObject, preset) {
     case "stretcherbond1":
       userObject.color1 = "#A64B35";
       userObject.color2 = "#C8BBA5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 1, 1]);
       userObject.shape = 6;
       break;
     case "stretcherbond2":
       userObject.color1 = "#46494B";
       userObject.color2 = "#9B9B95";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 1, 1]);
       userObject.shape = 6;
       break;
     case "flemishbond1":
       userObject.color1 = "#984B38";
       userObject.color2 = "#BDB3A1";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 2, 1]);
       userObject.shape = 6;
       break;
     case "flemishbond2":
       userObject.color1 = "#984B38";
       userObject.color2 = "#BDB3A1";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 3, 1]);
       userObject.shape = 6;
       break;
     case "englishbond":
       userObject.color1 = "#B66A45";
       userObject.color2 = "#D2C5AD";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 4, 1]);
       userObject.shape = 6;
       break;
     case "headerbond":
       userObject.color1 = "#93604B";
       userObject.color2 = "#B8AA96";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 5, 1]);
       userObject.shape = 6;
       break;
     case "longbricks1":
       userObject.color1 = "#674638";
       userObject.color2 = "#B5A38D";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 6, 1]);
       userObject.shape = 6;
       break;
     case "longbricks2":
       userObject.color1 = "#674638";
       userObject.color2 = "#B5A38D";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 7, 1]);
       userObject.shape = 6;
       break;
     case "monkbond1":
       userObject.color1 = "#E3DCCB";
       userObject.color2 = "#B8B3A8";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 8, 1]);
       userObject.shape = 6;
       break;
     case "monkbond2":
       userObject.color1 = "#E3DCCB";
       userObject.color2 = "#B8B3A8";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 9, 1]);
       userObject.shape = 6;
       break;
     case "blockbond1":
       userObject.color1 = "#C6A77A";
       userObject.color2 = "#D8CEB9";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 10, 1]);
       userObject.shape = 6;
       break;
     case "blockbond2":
       userObject.color1 = "#C6A77A";
       userObject.color2 = "#D8CEB9";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 11, 1]);
       userObject.shape = 6;
       break;
     case "stackbond":
       userObject.color1 = "#713B32";
       userObject.color2 = "#C5B9A5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 10, 1]);
       userObject.shape = 6;
       break;
     case "verticalstackbond":
       userObject.color1 = "#713B32";
       userObject.color2 = "#C5B9A5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 12, 1]);
       userObject.shape = 6;
       break;
     case "stretcherbondquarteroffset":
       userObject.color1 = "#A64B35";
       userObject.color2 = "#C8BBA5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 13, 1]);
       userObject.shape = 6;
       break;
     case "squaretile":
       userObject.color1 = "#858585";
       userObject.color2 = "#C0BDB5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 14, 1]);
       userObject.shape = 6;
       break;
     case "basketweave1":
       userObject.color1 = "#713B32";
       userObject.color2 = "#C5B9A5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 15, 1]);
       userObject.shape = 6;
       break;
     case "basketweave2":
       userObject.color1 = "#713B32";
       userObject.color2 = "#C5B9A5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 16, 1]);
       userObject.shape = 6;
       break;
     case "spanishbond":
       userObject.color1 = "#B65335";
       userObject.color2 = "#D7C5A5";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 17, 1]);
       userObject.shape = 6;
       break;
     case "meander1":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [0, 0, 0, 0]);
       userObject.shape = 8;
       break;
     case "meander2":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [5, 0, 5, 0]);
       userObject.shape = 8;
       break;
     case "meander3":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [8, 0, 0, 0]);
       userObject.shape = 8;
       break;
     case "meander4":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [9, 0, 5, 0]);
       userObject.shape = 8;
       break;
     case "meander5":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [1, 0, 0, 0]);
       userObject.shape = 8;
       break;
     case "meander6":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
-      userObject.direction = "top";
+      userObject.direction = "up";
       setArray(userObject.parameters, [6, 0, 5, 0]);
       userObject.shape = 8;
       break;

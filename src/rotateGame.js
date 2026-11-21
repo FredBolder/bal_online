@@ -1,508 +1,594 @@
-function rotateActiveSides(activeSides, rotateLeft) {
-  const bottom = activeSides.includes("bottom");
-  const left = activeSides.includes("left");
-  const right = activeSides.includes("right");
-  const top = activeSides.includes("top");
+import { setArray } from "./utils";
 
-  activeSides.length = 0;
+function rotateActiveSides(obj, rotateLeft, xmin, ymin, xmax, ymax) {
+  if (obj.x < xmin || obj.y < ymin || obj.x > xmax || obj.y > ymax) {
+    return;
+  }
+
+  const bottom = obj.activeSides.includes("bottom");
+  const left = obj.activeSides.includes("left");
+  const right = obj.activeSides.includes("right");
+  const top = obj.activeSides.includes("top");
+
+  obj.activeSides.length = 0;
   if (rotateLeft) {
     if (top) {
-      activeSides.push("left");
+      obj.activeSides.push("left");
     }
     if (bottom) {
-      activeSides.push("right");
+      obj.activeSides.push("right");
     }
     if (left) {
-      activeSides.push("bottom");
+      obj.activeSides.push("bottom");
     }
     if (right) {
-      activeSides.push("top");
+      obj.activeSides.push("top");
     }
   } else {
     if (top) {
-      activeSides.push("right");
+      obj.activeSides.push("right");
     }
     if (bottom) {
-      activeSides.push("left");
+      obj.activeSides.push("left");
     }
     if (left) {
-      activeSides.push("top");
+      obj.activeSides.push("top");
     }
     if (right) {
-      activeSides.push("bottom");
+      obj.activeSides.push("bottom");
     }
   }
 }
 
-export function rotateDirection(direction, rotateLeft) {
+export function rotateDirection(obj, rotateLeft, xmin, ymin, xmax, ymax) {
+  let direction = "";
+
+  if (xmin !== null && ymin !== null && xmax !== null && xmax !== null) {
+    if (obj.x < xmin || obj.y < ymin || obj.x > xmax || obj.y > ymax) {
+      return;
+    }
+  }
+
   if (rotateLeft) {
-    switch (direction) {
+    switch (obj.direction) {
       case "down":
-        return "right";
+        direction = "right";
+        break;
       case "right":
-        return "up";
+        direction = "up";
+        break;
       case "up":
-        return "left";
+        direction = "left";
+        break;
       case "left":
-        return "down";
+        direction = "down";
+        break;
       case "downleft":
-        return "downright";
+        direction = "downright";
+        break;
       case "downright":
-        return "upright";
+        direction = "upright";
+        break;
       case "upright":
-        return "upleft";
+        direction = "upleft";
+        break;
       case "upleft":
-        return "downleft";
+        direction = "downleft";
+        break;
       default:
-        return direction;
+        direction = obj.direction;
+        break;
     }
   } else {
-    switch (direction) {
+    switch (obj.direction) {
       case "down":
-        return "left";
+        direction = "left";
+        break;
       case "left":
-        return "up";
+        direction = "up";
+        break;
       case "up":
-        return "right";
+        direction = "right";
+        break;
       case "right":
-        return "down";
+        direction = "down";
+        break;
       case "downleft":
-        return "upleft";
+        direction = "upleft";
+        break;
       case "upleft":
-        return "upright";
+        direction = "upright";
+        break;
       case "upright":
-        return "downright";
+        direction = "downright";
+        break;
       case "downright":
-        return "downleft";
+        direction = "downleft";
+        break;
       default:
-        return direction;
+        direction = obj.direction;
+        break;
     }
   }
+  obj.direction = direction;
 }
 
-function rotateXY(obj, rows, rotateLeft) {
-  let x = obj.x;
-  let y = obj.y;
-
-  if ((x >= 0) && (y >= 0)) {
-    if (rotateLeft) {
-      obj.y = rows - (x + 1);
-      obj.x = y;
-    } else {
-      obj.y = x;
-      obj.x = rows - (y + 1);
-    }
+function rotateXY(obj, rows, rotateLeft, xmin, ymin, xmax, ymax) {
+  if (obj.x < xmin || obj.y < ymin || obj.x > xmax || obj.y > ymax) {
+    return;
   }
+
+  let x = obj.x - xmin;
+  let y = obj.y - ymin;
+
+  if (rotateLeft) {
+    obj.y = rows - (x + 1);
+    obj.x = y;
+  } else {
+    obj.y = x;
+    obj.x = rows - (y + 1);
+  }
+
+  obj.x += xmin;
+  obj.y += ymin;
 }
 
-export function rotateGame(backData, gameData, gameInfo, rotateLeft = false) {
-  let rotated = false;
+export function rotateArea(backData, gameData, gameInfo, rotateLeft = false, xmin = null, ymin = null, xmax = null, ymax = null) {
   let newBackData = [];
   let newGameData = [];
-  let columns = 0;
-  let rows = 0;
   let x = 0;
   let y = 0;
 
-  if (gameData.length > 0) {
-    rows = gameData.length;
-    columns = gameData[0].length;
-    if (rows === columns) {
-      rotated = true;
-      for (let i = 0; i < columns; i++) {
-        let newGameRow = [];
-        let newBackRow = [];
-        for (let j = rows - 1; j >= 0; j--) {
-          let gd = 0;
-          let bd = 0;
-          if (rotateLeft) {
-            gd = gameData[(columns - 1) - j][(rows - 1) - i];
-            bd = backData[(columns - 1) - j][(rows - 1) - i];
-          } else {
-            gd = gameData[j][i];
-            bd = backData[j][i];
-          }
-          let gdMap = null;
-          let bdMap = null;
-          if (rotateLeft) {
-            gdMap = {
-              6: 107, 7: 6,
-              10: 87, 11: 88,
-              15: 16, 16: 18, 17: 15, 18: 17,
-              84: 85, 85: 84,
-              87: 11, 88: 10,
-              95: 96, 96: 95,
-              100: 104, 101: 103, 103: 100, 104: 101,
-              106: 7, 107: 106,
-              109: 112, 110: 111, 111: 109, 112: 110,
-              121: 125, 122: 124, 124: 121, 125: 122,
-              126: 130, 127: 129, 129: 126, 130: 127,
-              138: 139, 139: 138,
-              141: 142, 142: 144, 143: 141, 144: 143,
-              145: 148, 146: 147, 147: 145, 148: 146,
-              149: 150, 150: 152, 151: 149, 152: 151,
-              159: 163, 161: 165, 163: 161, 165: 159,
-              160: 164, 162: 166, 164: 162, 166: 160,
-              174: 177, 175: 176, 176: 174, 177: 175,
-              213: 212, 212: 211, 211: 210, 210: 213,
-              217: 216, 216: 215, 215: 214, 214: 217,
-              221: 220, 220: 219, 219: 218, 218: 221,
-              225: 224, 224: 223, 223: 222, 222: 225,
-              234: 235, 235: 234, 236: 237, 237: 236, 238: 239, 239: 238,
-              259: 260, 260: 262, 261: 259, 262: 261,
-            };
+  const gameRows = gameData.length;
+  if (gameRows <= 0) {
+    return false;
+  }
 
-            bdMap = {
-              25: 90,
-              80: 137,
-              90: 25,
-              137: 80
-            };
-          } else {
-            gdMap = {
-              6: 7, 7: 106,
-              10: 88, 11: 87,
-              15: 17, 16: 15, 17: 18, 18: 16,
-              84: 85, 85: 84,
-              87: 10, 88: 11,
-              95: 96, 96: 95,
-              100: 103, 101: 104, 103: 101, 104: 100,
-              106: 107, 107: 6,
-              109: 111, 110: 112, 111: 110, 112: 109,
-              121: 124, 122: 125, 124: 122, 125: 121,
-              126: 129, 127: 130, 129: 127, 130: 126,
-              138: 139, 139: 138,
-              141: 143, 142: 141, 143: 144, 144: 142,
-              145: 147, 146: 148, 147: 146, 148: 145,
-              149: 151, 150: 149, 151: 152, 152: 150,
-              159: 165, 161: 163, 163: 159, 165: 161,
-              160: 166, 162: 164, 164: 160, 166: 162,
-              174: 176, 175: 177, 176: 175, 177: 174,
-              210: 211, 211: 212, 212: 213, 213: 210,
-              214: 215, 215: 216, 216: 217, 217: 214,
-              218: 219, 219: 220, 220: 221, 221: 218,
-              222: 223, 223: 224, 224: 225, 225: 222,
-              234: 235, 235: 234, 236: 237, 237: 236, 238: 239, 239: 238,
-              259: 261, 260: 259, 261: 262, 262: 260,
-            };
+  const gameColumns = gameData[0].length;
+  if (gameColumns <= 0) {
+    return false;
+  }
 
-            bdMap = {
-              25: 90,
-              80: 137,
-              90: 25,
-              137: 80
-            };
-          }
+  if (xmin === null && ymin === null && xmax === null && ymax === null) {
+    xmin = 0;
+    ymin = 0;
+    xmax = gameColumns - 1;
+    ymax = gameRows - 1;
+  }
 
-          if (Object.prototype.hasOwnProperty.call(gdMap, gd)) gd = gdMap[gd];
-          if (Object.prototype.hasOwnProperty.call(bdMap, bd)) bd = bdMap[bd];
+  if (xmin === null || ymin === null || xmax === null || ymax === null) {
+    return false;
+  }
 
-          newGameRow.push(gd);
-          newBackRow.push(bd);
-        }
-        newGameData.push(newGameRow);
-        newBackData.push(newBackRow);
-      }
-      for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < columns; j++) {
-          backData[i][j] = newBackData[i][j];
-        }
-      }
-      for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < columns; j++) {
-          gameData[i][j] = newGameData[i][j];
-        }
-      }
+  if (xmin < 0 || ymin < 0 || xmax >= gameColumns || ymax >= gameRows ||
+    xmax < xmin || ymax < ymin
+  ) {
+    return false;
+  }
 
-      // Answer balls
-      for (let i = 0; i < gameInfo.answerBalls.length; i++) {
-        rotateXY(gameInfo.answerBalls[i], rows, rotateLeft);
-      }
+  const columns = (xmax - xmin) + 1;
+  const rows = (ymax - ymin) + 1;
 
-      // Blue ball
-      rotateXY(gameInfo.blueBall1, rows, rotateLeft);
-      if (gameInfo.twoBlue) {
-        rotateXY(gameInfo.blueBall2, rows, rotateLeft);
-      }
+  if (columns !== rows) {
+    return false;
+  }
 
-      // Brown balls
-      for (let i = 0; i < gameInfo.brownBalls.length; i++) {
-        rotateXY(gameInfo.brownBalls[i], rows, rotateLeft);
-      }
+  let gdMap = null;
+  let bdMap = null;
 
-      // Changers
-      for (let i = 0; i < gameInfo.changers.length; i++) {
-        let swap = false;
-        const changer = gameInfo.changers[i];
-        rotateXY(changer, rows, rotateLeft);
-        const c1 = changer.color1;
-        const c2 = changer.color2;
-        if (changer.horizontal) {
-          swap = rotateLeft;
-          changer.horizontal = false;
-        } else {
-          swap = !rotateLeft;
-          changer.horizontal = true;
-        }
-        if (swap) {
-          changer.color1 = c2;
-          changer.color2 = c1;
-        }
-      }
+  if (rotateLeft) {
+    gdMap = {
+      6: 107, 7: 6,
+      10: 87, 11: 88,
+      15: 16, 16: 18, 17: 15, 18: 17,
+      84: 85, 85: 84,
+      87: 11, 88: 10,
+      95: 96, 96: 95,
+      100: 104, 101: 103, 103: 100, 104: 101,
+      106: 7, 107: 106,
+      109: 112, 110: 111, 111: 109, 112: 110,
+      121: 125, 122: 124, 124: 121, 125: 122,
+      126: 130, 127: 129, 129: 126, 130: 127,
+      138: 139, 139: 138,
+      141: 142, 142: 144, 143: 141, 144: 143,
+      145: 148, 146: 147, 147: 145, 148: 146,
+      149: 150, 150: 152, 151: 149, 152: 151,
+      159: 163, 161: 165, 163: 161, 165: 159,
+      160: 164, 162: 166, 164: 162, 166: 160,
+      174: 177, 175: 176, 176: 174, 177: 175,
+      213: 212, 212: 211, 211: 210, 210: 213,
+      217: 216, 216: 215, 215: 214, 214: 217,
+      221: 220, 220: 219, 219: 218, 218: 221,
+      225: 224, 224: 223, 223: 222, 222: 225,
+      234: 235, 235: 234, 236: 237, 237: 236, 238: 239, 239: 238,
+      246: 247, 247: 246,
+      259: 260, 260: 262, 261: 259, 262: 261,
+    };
 
-      // Copiers
-      for (let i = 0; i < gameInfo.copiers.length; i++) {
-        rotateXY(gameInfo.copiers[i], rows, rotateLeft);
-      }
+    bdMap = {
+      25: 90,
+      80: 137,
+      90: 25,
+      137: 80
+    };
+  } else {
+    gdMap = {
+      6: 7, 7: 106,
+      10: 88, 11: 87,
+      15: 17, 16: 15, 17: 18, 18: 16,
+      84: 85, 85: 84,
+      87: 10, 88: 11,
+      95: 96, 96: 95,
+      100: 103, 101: 104, 103: 101, 104: 100,
+      106: 107, 107: 6,
+      109: 111, 110: 112, 111: 110, 112: 109,
+      121: 124, 122: 125, 124: 122, 125: 121,
+      126: 129, 127: 130, 129: 127, 130: 126,
+      138: 139, 139: 138,
+      141: 143, 142: 141, 143: 144, 144: 142,
+      145: 147, 146: 148, 147: 146, 148: 145,
+      149: 151, 150: 149, 151: 152, 152: 150,
+      159: 165, 161: 163, 163: 159, 165: 161,
+      160: 166, 162: 164, 164: 160, 166: 162,
+      174: 176, 175: 177, 176: 175, 177: 174,
+      210: 211, 211: 212, 212: 213, 213: 210,
+      214: 215, 215: 216, 216: 217, 217: 214,
+      218: 219, 219: 220, 220: 221, 221: 218,
+      222: 223, 223: 224, 224: 225, 225: 222,
+      234: 235, 235: 234, 236: 237, 237: 236, 238: 239, 239: 238,
+      246: 247, 247: 246,
+      259: 261, 260: 259, 261: 262, 262: 260,
+    };
 
-      // ConveyorBelts
-      for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
-        rotateXY(gameInfo.conveyorBelts[i], rows, rotateLeft);
-      }
+    bdMap = {
+      25: 90,
+      80: 137,
+      90: 25,
+      137: 80
+    };
+  }
 
-      // Damaged stones
-      for (let i = 0; i < gameInfo.damagedStones.length; i++) {
-        rotateXY(gameInfo.damagedStones[i], rows, rotateLeft);
-      }
+  const size = columns;
 
-      // Delays
-      for (let i = 0; i < gameInfo.delays.length; i++) {
-        rotateXY(gameInfo.delay[i], rows, rotateLeft);
-      }
+  newGameData = new Array(size);
+  newBackData = new Array(size);
 
-      // Detectors
-      for (let i = 0; i < gameInfo.detectors.length; i++) {
-        rotateXY(gameInfo.detectors[i], rows, rotateLeft);
-        rotateActiveSides(gameInfo.movers[i].activeSides, rotateLeft);
-      }
+  const sourceYStart = rotateLeft ? ymin : ymax;
+  const sourceYStep = rotateLeft ? 1 : -1;
 
-      // Disappearing stones
-      for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
-        rotateXY(gameInfo.disappearingStones[i], rows, rotateLeft);
-      }
+  for (let i = 0; i < size; i++) {
+    newGameData[i] = new Array(size);
+    newBackData[i] = new Array(size);
 
-      // Electricity
-      for (let i = 0; i < gameInfo.electricity.length; i++) {
-        rotateXY(gameInfo.electricity[i], rows, rotateLeft);
-      }
+    const sourceX = rotateLeft ? xmax - i : xmin + i;
+    let sourceY = sourceYStart;
 
-      // Elevators
-      let newHorElevators = [];
-      for (let i = 0; i < gameInfo.elevators.length; i++) {
-        x = gameInfo.elevators[i].x;
-        y = gameInfo.elevators[i].y;
-        let newHor = {};
-        if (rotateLeft) {
-          newHor.x = y;
-          newHor.y = rows - (x + 1);
-          newHor.right = !gameInfo.elevators[i].up;
-        } else {
-          newHor.x = rows - (y + 1);
-          newHor.y = x;
-          newHor.right = gameInfo.elevators[i].up;
-        }
-        newHorElevators.push(newHor);
-      }
-      let newVerElevators = [];
-      for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
-        x = gameInfo.horizontalElevators[i].x;
-        y = gameInfo.horizontalElevators[i].y;
-        let newVer = {};
-        if (rotateLeft) {
-          newVer.x = y;
-          newVer.y = rows - (x + 1);
-          newVer.up = gameInfo.horizontalElevators[i].right;
-        } else {
-          newVer.x = rows - (y + 1);
-          newVer.y = x;
-          newVer.up = !gameInfo.horizontalElevators[i].right;
-        }
-        newVerElevators.push(newVer);
-      }
-      while (gameInfo.horizontalElevators.length > 0) {
-        gameInfo.horizontalElevators.pop();
-      }
-      for (let i = 0; i < newHorElevators.length; i++) {
-        gameInfo.horizontalElevators.push(newHorElevators[i]);
-      }
-      while (gameInfo.elevators.length > 0) {
-        gameInfo.elevators.pop();
-      }
-      for (let i = 0; i < newVerElevators.length; i++) {
-        gameInfo.elevators.push(newVerElevators[i]);
-      }
+    for (let j = size - 1; j >= 0; j--) {
+      let gd = gameData[sourceY][sourceX];
+      let bd = backData[sourceY][sourceX];
 
-      // Elevator entrances and exits
-      for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
-        rotateXY(gameInfo.elevatorInOuts[i], rows, rotateLeft);
-      }
+      const mappedGd = gdMap[gd];
+      if (mappedGd !== undefined) gd = mappedGd;
 
-      // Fish food
-      for (let i = 0; i < gameInfo.fishFood.length; i++) {
-        rotateXY(gameInfo.fishFood[i], rows, rotateLeft);
-      }
+      const mappedBd = bdMap[bd];
+      if (mappedBd !== undefined) bd = mappedBd;
 
-      // Flamethrowers
-      for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
-        rotateXY(gameInfo.flamethrowers[i], rows, rotateLeft);
-        gameInfo.flamethrowers[i].direction = rotateDirection(gameInfo.flamethrowers[i].direction, rotateLeft);
-      }
+      const targetIndex = size - 1 - j;
 
-      // Forces
-      for (let i = 0; i < gameInfo.forces.length; i++) {
-        rotateXY(gameInfo.forces[i], rows, rotateLeft);
-        gameInfo.forces[i].direction = rotateDirection(gameInfo.forces[i].direction, rotateLeft);
-      }
+      newGameData[i][targetIndex] = gd;
+      newBackData[i][targetIndex] = bd;
 
-      // Jellyfish
-      for (let i = 0; i < gameInfo.jellyfish.length; i++) {
-        rotateXY(gameInfo.jellyfish[i], rows, rotateLeft);
-      }
-
-      // Keys
-      for (let i = 0; i < gameInfo.keys.length; i++) {
-        rotateXY(gameInfo.keys[i], rows, rotateLeft);
-      }
-
-      // Locked doors
-      for (let i = 0; i < gameInfo.lockedDoors.length; i++) {
-        rotateXY(gameInfo.lockedDoors[i], rows, rotateLeft);
-      }
-
-      // Lava
-      for (let i = 0; i < gameInfo.lava.length; i++) {
-        rotateXY(gameInfo.lava[i], rows, rotateLeft);
-      }
-
-      // Magnets
-      for (let i = 0; i < gameInfo.magnets.length; i++) {
-        rotateXY(gameInfo.magnets[i], rows, rotateLeft);
-      }
-
-      // Movers
-      for (let i = 0; i < gameInfo.movers.length; i++) {
-        rotateXY(gameInfo.movers[i], rows, rotateLeft);
-        gameInfo.movers[i].direction = rotateDirection(gameInfo.movers[i].direction, rotateLeft);
-        rotateActiveSides(gameInfo.movers[i].activeSides, rotateLeft);
-      }
-
-      // Music boxes
-      for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
-        rotateXY(gameInfo.musicBoxes[i], rows, rotateLeft);
-        gameInfo.musicBoxes[i].direction = rotateDirection(gameInfo.musicBoxes[i].direction, rotateLeft);
-      }
-
-      // Orange balls
-      for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
-        rotateXY(gameInfo.orangeBalls[i], rows, rotateLeft);
-        gameInfo.orangeBalls[i].direction = rotateDirection(gameInfo.orangeBalls[i].direction, rotateLeft);
-      }
-
-      // Pink balls
-      for (let i = 0; i < gameInfo.pinkBalls.length; i++) {
-        rotateXY(gameInfo.pinkBalls[i], rows, rotateLeft);
-      }
-
-      // Pistons
-      for (let i = 0; i < gameInfo.pistons.length; i++) {
-        rotateXY(gameInfo.pistons[i], rows, rotateLeft);
-        gameInfo.pistons[i].direction = rotateDirection(gameInfo.pistons[i].direction, rotateLeft);
-      }
-
-      // Pushers
-      for (let i = 0; i < gameInfo.pushers.length; i++) {
-        rotateXY(gameInfo.pushers[i], rows, rotateLeft);
-        gameInfo.pushers[i].direction = rotateDirection(gameInfo.pushers[i].direction, rotateLeft);
-      }
-
-      // Question stones
-      for (let i = 0; i < gameInfo.questionStones.length; i++) {
-        rotateXY(gameInfo.questionStones[i], rows, rotateLeft);
-      }
-
-      // Red balls
-      for (let i = 0; i < gameInfo.redBalls.length; i++) {
-        rotateXY(gameInfo.redBalls[i], rows, rotateLeft);
-      }
-
-      // Red fish
-      for (let i = 0; i < gameInfo.redFish.length; i++) {
-        rotateXY(gameInfo.redFish[i], rows, rotateLeft);
-      }
-
-      // Sea anemones
-      for (let i = 0; i < gameInfo.seaAnemones.length; i++) {
-        rotateXY(gameInfo.seaAnemones[i], rows, rotateLeft);
-      }
-
-      // Teleports
-      for (let i = 0; i < gameInfo.teleports.length; i++) {
-        rotateXY(gameInfo.teleports[i], rows, rotateLeft);
-      }
-
-      // Time bombs
-      for (let i = 0; i < gameInfo.timeBombs.length; i++) {
-        rotateXY(gameInfo.timeBombs[i], rows, rotateLeft);
-      }
-
-      // Trap doors
-      for (let i = 0; i < gameInfo.trapDoors.length; i++) {
-        rotateXY(gameInfo.trapDoors[i], rows, rotateLeft);
-      }
-
-      // Tropical fish
-      for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
-        rotateXY(gameInfo.tropicalFish[i], rows, rotateLeft);
-      }
-
-      // User objects
-      for (let i = 0; i < gameInfo.userObjects.length; i++) {
-        rotateXY(gameInfo.userObjects[i], rows, rotateLeft);
-        gameInfo.userObjects[i].direction = rotateDirection(gameInfo.userObjects[i].direction, rotateLeft);
-      }
-
-      // Water with ice
-      for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
-        rotateXY(gameInfo.waterWithIceObjects[i], rows, rotateLeft);
-      }
-
-      // White ball synchronisers
-      for (let i = 0; i < gameInfo.whiteBallSynchronisers.length; i++) {
-        rotateXY(gameInfo.whiteBallSynchronisers[i], rows, rotateLeft);
-      }
-
-      // Yellow balls
-      for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
-        rotateXY(gameInfo.yellowBalls[i], rows, rotateLeft);
-        gameInfo.yellowBalls[i].direction = rotateDirection(gameInfo.yellowBalls[i].direction, rotateLeft);
-      }
-
-      // Yellow bars
-      for (let i = 0; i < gameInfo.yellowBars.length; i++) {
-        rotateXY(gameInfo.yellowBars[i], rows, rotateLeft);
-        gameInfo.yellowBars[i].direction = rotateDirection(gameInfo.yellowBars[i].direction, rotateLeft);
-      }
-
-      // Triggers, detonators etc
-      rotateXY(gameInfo.detonator, rows, rotateLeft);
-      for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
-        rotateXY(gameInfo.pistonsTriggers[i], rows, rotateLeft);
-      }
-      rotateXY(gameInfo.travelGate, rows, rotateLeft);
-      for (let i = 0; i < gameInfo.yellowBallPushers.length; i++) {
-        rotateXY(gameInfo.yellowBallPushers[i], rows, rotateLeft);
-      }
-      for (let i = 0; i < gameInfo.yellowBallPushersTriggers.length; i++) {
-        rotateXY(gameInfo.yellowBallPushersTriggers[i], rows, rotateLeft);
-      }
-      for (let i = 0; i < gameInfo.yellowStoppers.length; i++) {
-        rotateXY(gameInfo.yellowStoppers[i], rows, rotateLeft);
-      }
-      for (let i = 0; i < gameInfo.yellowPausers.length; i++) {
-        rotateXY(gameInfo.yellowPausers[i], rows, rotateLeft);
-      }
+      sourceY += sourceYStep;
     }
   }
-  return rotated;
+
+  for (let i = 0; i < size; i++) {
+    const targetY = ymin + i;
+
+    for (let j = 0; j < size; j++) {
+      const targetX = xmin + j;
+
+      backData[targetY][targetX] = newBackData[i][j];
+      gameData[targetY][targetX] = newGameData[i][j];
+    }
+  }
+
+  // Answer balls
+  for (let i = 0; i < gameInfo.answerBalls.length; i++) {
+    rotateXY(gameInfo.answerBalls[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Blue ball
+  rotateXY(gameInfo.blueBall1, rows, rotateLeft, xmin, ymin, xmax, ymax);
+  if (gameInfo.twoBlue) {
+    rotateXY(gameInfo.blueBall2, rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Brown balls
+  for (let i = 0; i < gameInfo.brownBalls.length; i++) {
+    rotateXY(gameInfo.brownBalls[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Changers
+  for (let i = 0; i < gameInfo.changers.length; i++) {
+    const obj = gameInfo.changers[i];
+    if (obj.x < xmin || obj.y < ymin || obj.x > xmax || obj.y > ymax) {
+      continue;
+    }
+
+    let swap = false;
+    rotateXY(obj, rows, rotateLeft, xmin, ymin, xmax, ymax);
+    const c1 = obj.color1;
+    const c2 = obj.color2;
+    if (obj.horizontal) {
+      swap = rotateLeft;
+      obj.horizontal = false;
+    } else {
+      swap = !rotateLeft;
+      obj.horizontal = true;
+    }
+    if (swap) {
+      obj.color1 = c2;
+      obj.color2 = c1;
+    }
+  }
+
+  // Copiers
+  for (let i = 0; i < gameInfo.copiers.length; i++) {
+    rotateXY(gameInfo.copiers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // ConveyorBelts
+  for (let i = 0; i < gameInfo.conveyorBelts.length; i++) {
+    rotateXY(gameInfo.conveyorBelts[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Damaged stones
+  for (let i = 0; i < gameInfo.damagedStones.length; i++) {
+    rotateXY(gameInfo.damagedStones[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Delays
+  for (let i = 0; i < gameInfo.delays.length; i++) {
+    rotateXY(gameInfo.delays[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Detectors
+  for (let i = 0; i < gameInfo.detectors.length; i++) {
+    const obj = gameInfo.detectors[i];
+    rotateXY(obj, rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateActiveSides(obj, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Disappearing stones
+  for (let i = 0; i < gameInfo.disappearingStones.length; i++) {
+    rotateXY(gameInfo.disappearingStones[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Electricity
+  for (let i = 0; i < gameInfo.electricity.length; i++) {
+    rotateXY(gameInfo.electricity[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Elevators
+  let newHorElevators = [];
+  let newVerElevators = [];
+  for (let i = 0; i < gameInfo.elevators.length; i++) {
+    x = gameInfo.elevators[i].x;
+    y = gameInfo.elevators[i].y;
+
+    if (x < xmin || y < ymin || x > xmax || y > ymax) {
+      newVerElevators.push(gameInfo.elevators[i]);
+      continue;
+    }
+
+    let newHor = {};
+    if (rotateLeft) {
+      newHor.x = y;
+      newHor.y = rows - (x + 1);
+      newHor.right = !gameInfo.elevators[i].up;
+    } else {
+      newHor.x = rows - (y + 1);
+      newHor.y = x;
+      newHor.right = gameInfo.elevators[i].up;
+    }
+    newHorElevators.push(newHor);
+  }
+  for (let i = 0; i < gameInfo.horizontalElevators.length; i++) {
+    x = gameInfo.horizontalElevators[i].x;
+    y = gameInfo.horizontalElevators[i].y;
+
+    if (x < xmin || y < ymin || x > xmax || y > ymax) {
+      newHorElevators.push(gameInfo.horizontalElevators[i]);
+      continue;
+    }
+
+    let newVer = {};
+    if (rotateLeft) {
+      newVer.x = y;
+      newVer.y = rows - (x + 1);
+      newVer.up = gameInfo.horizontalElevators[i].right;
+    } else {
+      newVer.x = rows - (y + 1);
+      newVer.y = x;
+      newVer.up = !gameInfo.horizontalElevators[i].right;
+    }
+    newVerElevators.push(newVer);
+  }
+  setArray(gameInfo.horizontalElevators, newHorElevators);
+  setArray(gameInfo.elevators, newVerElevators);
+
+  // Elevator entrances and exits
+  for (let i = 0; i < gameInfo.elevatorInOuts.length; i++) {
+    rotateXY(gameInfo.elevatorInOuts[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Fish food
+  for (let i = 0; i < gameInfo.fishFood.length; i++) {
+    rotateXY(gameInfo.fishFood[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Flamethrowers
+  for (let i = 0; i < gameInfo.flamethrowers.length; i++) {
+    rotateXY(gameInfo.flamethrowers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.flamethrowers[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Forces
+  for (let i = 0; i < gameInfo.forces.length; i++) {
+    rotateXY(gameInfo.forces[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.forces[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Jellyfish
+  for (let i = 0; i < gameInfo.jellyfish.length; i++) {
+    rotateXY(gameInfo.jellyfish[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Keys
+  for (let i = 0; i < gameInfo.keys.length; i++) {
+    rotateXY(gameInfo.keys[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Locked doors
+  for (let i = 0; i < gameInfo.lockedDoors.length; i++) {
+    rotateXY(gameInfo.lockedDoors[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Lava
+  for (let i = 0; i < gameInfo.lava.length; i++) {
+    rotateXY(gameInfo.lava[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Magnets
+  for (let i = 0; i < gameInfo.magnets.length; i++) {
+    rotateXY(gameInfo.magnets[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Movers
+  for (let i = 0; i < gameInfo.movers.length; i++) {
+    const obj = gameInfo.movers[i];
+    rotateXY(obj, rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(obj, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateActiveSides(obj, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Music boxes
+  for (let i = 0; i < gameInfo.musicBoxes.length; i++) {
+    rotateXY(gameInfo.musicBoxes[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.musicBoxes[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Orange balls
+  for (let i = 0; i < gameInfo.orangeBalls.length; i++) {
+    rotateXY(gameInfo.orangeBalls[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.orangeBalls[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Pink balls
+  for (let i = 0; i < gameInfo.pinkBalls.length; i++) {
+    rotateXY(gameInfo.pinkBalls[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Pistons
+  for (let i = 0; i < gameInfo.pistons.length; i++) {
+    rotateXY(gameInfo.pistons[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.pistons[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Pushers
+  for (let i = 0; i < gameInfo.pushers.length; i++) {
+    rotateXY(gameInfo.pushers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.pushers[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Question stones
+  for (let i = 0; i < gameInfo.questionStones.length; i++) {
+    rotateXY(gameInfo.questionStones[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Red balls
+  for (let i = 0; i < gameInfo.redBalls.length; i++) {
+    rotateXY(gameInfo.redBalls[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Red fish
+  for (let i = 0; i < gameInfo.redFish.length; i++) {
+    rotateXY(gameInfo.redFish[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Sea anemones
+  for (let i = 0; i < gameInfo.seaAnemones.length; i++) {
+    rotateXY(gameInfo.seaAnemones[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Teleports
+  for (let i = 0; i < gameInfo.teleports.length; i++) {
+    rotateXY(gameInfo.teleports[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Time bombs
+  for (let i = 0; i < gameInfo.timeBombs.length; i++) {
+    rotateXY(gameInfo.timeBombs[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Trap doors
+  for (let i = 0; i < gameInfo.trapDoors.length; i++) {
+    rotateXY(gameInfo.trapDoors[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Tropical fish
+  for (let i = 0; i < gameInfo.tropicalFish.length; i++) {
+    rotateXY(gameInfo.tropicalFish[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // User objects
+  for (let i = 0; i < gameInfo.userObjects.length; i++) {
+    rotateXY(gameInfo.userObjects[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.userObjects[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Water with ice
+  for (let i = 0; i < gameInfo.waterWithIceObjects.length; i++) {
+    rotateXY(gameInfo.waterWithIceObjects[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // White ball synchronisers
+  for (let i = 0; i < gameInfo.whiteBallSynchronisers.length; i++) {
+    rotateXY(gameInfo.whiteBallSynchronisers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Yellow balls
+  for (let i = 0; i < gameInfo.yellowBalls.length; i++) {
+    rotateXY(gameInfo.yellowBalls[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.yellowBalls[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Yellow bars
+  for (let i = 0; i < gameInfo.yellowBars.length; i++) {
+    rotateXY(gameInfo.yellowBars[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(gameInfo.yellowBars[i], rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  // Triggers, detonators etc
+  rotateXY(gameInfo.detonator, rows, rotateLeft, xmin, ymin, xmax, ymax);
+  for (let i = 0; i < gameInfo.pistonsTriggers.length; i++) {
+    rotateXY(gameInfo.pistonsTriggers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+  rotateXY(gameInfo.travelGate, rows, rotateLeft, xmin, ymin, xmax, ymax);
+  for (let i = 0; i < gameInfo.yellowBallPushers.length; i++) {
+    rotateXY(gameInfo.yellowBallPushers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+  for (let i = 0; i < gameInfo.yellowBallPushersTriggers.length; i++) {
+    rotateXY(gameInfo.yellowBallPushersTriggers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+  for (let i = 0; i < gameInfo.yellowStoppers.length; i++) {
+    rotateXY(gameInfo.yellowStoppers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+  for (let i = 0; i < gameInfo.yellowPausers.length; i++) {
+    rotateXY(gameInfo.yellowPausers[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
+  }
+
+  return true;
 }
 
