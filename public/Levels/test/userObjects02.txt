@@ -14,22 +14,6 @@ $color1: 4, 1, #713B32
 $color2: 4, 1, #C5B9A5
 $parameters: 4, 1, 30,30,16,1
 $shape: 4, 1, 6
-$color1: 1, 2, #713B32
-$color2: 1, 2, #C5B9A5
-$parameters: 1, 2, 30,30,16,1
-$shape: 1, 2, 6
-$color1: 2, 2, #713B32
-$color2: 2, 2, #C5B9A5
-$parameters: 2, 2, 30,30,15,1
-$shape: 2, 2, 6
-$color1: 3, 2, #713B32
-$color2: 3, 2, #C5B9A5
-$parameters: 3, 2, 30,30,16,1
-$shape: 3, 2, 6
-$color1: 4, 2, #713B32
-$color2: 4, 2, #C5B9A5
-$parameters: 4, 2, 30,30,15,1
-$shape: 4, 2, 6
 $color1: 6, 1, #B65335
 $color2: 6, 1, #D7C5A5
 $parameters: 6, 1, 30,30,17,1
@@ -46,6 +30,22 @@ $color1: 9, 1, #B65335
 $color2: 9, 1, #D7C5A5
 $parameters: 9, 1, 30,30,17,1
 $shape: 9, 1, 6
+$color1: 1, 2, #713B32
+$color2: 1, 2, #C5B9A5
+$parameters: 1, 2, 30,30,16,1
+$shape: 1, 2, 6
+$color1: 2, 2, #713B32
+$color2: 2, 2, #C5B9A5
+$parameters: 2, 2, 30,30,15,1
+$shape: 2, 2, 6
+$color1: 3, 2, #713B32
+$color2: 3, 2, #C5B9A5
+$parameters: 3, 2, 30,30,16,1
+$shape: 3, 2, 6
+$color1: 4, 2, #713B32
+$color2: 4, 2, #C5B9A5
+$parameters: 4, 2, 30,30,15,1
+$shape: 4, 2, 6
 $color1: 6, 2, #B65335
 $color2: 6, 2, #D7C5A5
 $parameters: 6, 2, 30,30,17,1
@@ -62,9 +62,41 @@ $color1: 9, 2, #B65335
 $color2: 9, 2, #D7C5A5
 $parameters: 9, 2, 30,30,17,1
 $shape: 9, 2, 6
+$color1: 11, 1, #A64B35
+$color2: 11, 1, #C8BBA5
+$parameters: 11, 1, 30,30,18,1
+$shape: 11, 1, 6
+$color1: 12, 1, #A64B35
+$color2: 12, 1, #C8BBA5
+$parameters: 12, 1, 30,30,18,1
+$shape: 12, 1, 6
+$color1: 13, 1, #A64B35
+$color2: 13, 1, #C8BBA5
+$parameters: 13, 1, 30,30,18,1
+$shape: 13, 1, 6
+$color1: 14, 1, #A64B35
+$color2: 14, 1, #C8BBA5
+$parameters: 14, 1, 30,30,18,1
+$shape: 14, 1, 6
+$color1: 11, 2, #A64B35
+$color2: 11, 2, #C8BBA5
+$parameters: 11, 2, 30,30,19,1
+$shape: 11, 2, 6
+$color1: 12, 2, #A64B35
+$color2: 12, 2, #C8BBA5
+$parameters: 12, 2, 30,30,19,1
+$shape: 12, 2, 6
+$color1: 13, 2, #A64B35
+$color2: 13, 2, #C8BBA5
+$parameters: 13, 2, 30,30,19,1
+$shape: 13, 2, 6
+$color1: 14, 2, #A64B35
+$color2: 14, 2, #C8BBA5
+$parameters: 14, 2, 30,30,19,1
+$shape: 14, 2, 6
 300000000000000000000
-0ӾӾӾӾ ӾӾӾӾ          0
-0ӾӾӾӾ ӾӾӾӾ          0
+0ӾӾӾӾ ӾӾӾӾ ӾӾӾӾ     0
+0ӾӾӾӾ ӾӾӾӾ ӾӾӾӾ     0
 0                   0
 0                   0
 0                   0

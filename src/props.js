@@ -15,7 +15,8 @@ import { objectNumberToObjectName } from "./objects.js"
 import { pistonModes } from "./pistons.js";
 import { pusherDirections, pusherModes } from "./pushers.js";
 import { tropicalFishStripes, tropicalFishTailStripes } from "./tropicalFish.js";
-import { userObjectDirections } from "./userObjects.js";
+import { gameOverModes, userObjectDirections } from "./userObjects.js";
+import { setArray } from "./utils.js";
 
 export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     let error = false;
@@ -125,6 +126,11 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
 
     // Check value
     switch (prop) {
+        case "activeSides":
+            if (!Array.isArray(value)) {
+                error = true;
+            }
+            break;
         case "answer":
         case "event":
         case "condition":
@@ -162,7 +168,8 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
-        case "delIfNearSameId":    
+        case "combustible":
+        case "delIfNearSameId":
         case "inverted":
         case "movable":
         case "oneCommand":
@@ -233,6 +240,15 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 break;
             }
             if (!displayModes().includes(value)) {
+                error = true;
+            }
+            break;
+        case "gameOverMode":
+            if (typeof value !== "string") {
+                error = true;
+                break;
+            }
+            if (isUserObject && !gameOverModes().includes(value)) {
                 error = true;
             }
             break;
@@ -370,7 +386,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isConveyorBelt && ["direction", "group", "mode"].includes(prop)) {
         list = "conveyorBelts";
     }
-    if (isDetector && ["condition", "display", "event", "group", "group2", "movable", "mode", "oneCommand", "oneTime", "randomChance", "range", "sequence", "target", "text", "value"].includes(prop)) {
+    if (isDetector && ["activeSides", "condition", "display", "event", "group", "group2", "movable", "mode", "oneCommand", "oneTime", "randomChance", "range", "sequence", "target", "text", "value"].includes(prop)) {
         list = "detectors";
     }
     if (isDisappearingStone && ["group", "mode"].includes(prop)) {
@@ -388,7 +404,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
     if (isLockedDoor && ["color"].includes(prop)) {
         list = "lockedDoors";
     }
-    if (isMover && ["direction", "inverted", "mode"].includes(prop)) {
+    if (isMover && ["activeSides", "direction", "inverted", "mode"].includes(prop)) {
         list = "movers";
     }
     if (isMusicBox && ["direction", "display", "group", "mode", "repeat"].includes(prop)) {
@@ -413,7 +429,8 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         "stripes", "tailStripes"].includes(prop)) {
         list = "tropicalFish";
     }
-    if (isUserObject && ["color1", "color2", "delIfNearSameId", "direction", "group", "id", "movable",].includes(prop)) {
+    if (isUserObject && ["activeSides", "color1", "color2", "combustible", "delIfNearSameId", "direction",
+        "gameOverMode", "group", "id", "movable",].includes(prop)) {
         list = "userObjects";
     }
 
@@ -421,7 +438,11 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         for (let j = 0; j < gameInfo[list].length; j++) {
             const obj = gameInfo[list][j];
             if (obj.x === x && obj.y === y) {
-                obj[prop] = value;
+                if (Array.isArray(value)) {
+                    setArray(obj[prop], value);
+                } else {
+                    obj[prop] = value;
+                }
                 found = true;
                 break;
             }

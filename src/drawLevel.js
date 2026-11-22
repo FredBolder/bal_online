@@ -1486,11 +1486,26 @@ function drawLevel(
           presetUserObject(userObject, "meander6");
           drawUserObject(context, currentCol, currentRow, userObject);
           break;
+        case 2252:
+          presetUserObject(userObject, "stretcherbond3");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2253:
+          presetUserObject(userObject, "stretcherbond4");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
         case 2300:
           drawAbbreviation(context, "id");
           break;
         case 2301:
           drawTwoTextLines(context, "del", "id=id");
+          break;
+        case 2302:
+          // combustible
+          drawAbbreviation(context, "comb");
+          break;
+        case 2303:
+          drawTwoTextLines(context, "game", "over");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

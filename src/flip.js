@@ -355,6 +355,7 @@ export function flipArea(backData, gameData, gameInfo, xmin, ymin, xmax, ymax) {
         const obj = gameInfo.userObjects[i];
         flipXY(obj, xmin, ymin, xmax, ymax);
         flipDirection(obj, xmin, ymin, xmax, ymax);
+        flipActiveSides(obj, xmin, ymin, xmax, ymax);
     }
 
     // Water with ice

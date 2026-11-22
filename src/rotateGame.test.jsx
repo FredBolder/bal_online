@@ -79,7 +79,7 @@ describe("Rotate game", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 5 },
-            elevators: [{ x: 1, y: 4, up: true }],
+            elevators: [{ x: 1, y: 4, up: true, hasBlueBall: false }],
             greenBalls: 1,
         };
         const info = rotateArea(inputBack, input, gameInfo);
@@ -87,7 +87,7 @@ describe("Rotate game", () => {
         expect(info).toBe(true);
         expect(gameInfo.elevators).toEqual([]);
         expect(gameInfo.horizontalElevators).toEqual(
-            [{ x: 2, y: 1, right: true }]
+            [{ x: 2, y: 1, right: true, hasBlueBall: false }]
         );
     });
 
@@ -233,14 +233,14 @@ describe("Rotate game", () => {
         const gameInfo = {
             ...defaultGameInfo,
             blueBall: { x: 5, y: 5 },
-            elevators: [{ x: 1, y: 4, up: true }],
+            elevators: [{ x: 1, y: 4, up: true, hasBlueBall: false }],
             greenBalls: 1,
         };
         const info = rotateArea(inputBack, input, gameInfo, true);
         expect(input).toEqual(expectedOutput);
         expect(info).toBe(true);
         expect(gameInfo.elevators).toEqual([]);
-        expect(gameInfo.horizontalElevators).toEqual([{ x: 4, y: 5, right: false }]);
+        expect(gameInfo.horizontalElevators).toEqual([{ x: 4, y: 5, right: false, hasBlueBall: false }]);
     });
 
     it("rotateGame left 03", () => {
@@ -347,6 +347,52 @@ describe("Rotate game", () => {
         ]);
     });
 
+    it("rotateGame left 06", () => {
+        const inputBack = zeroArray(8, 10);
+        const input = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 6, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 6, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 107, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const expectedOutput = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 107, 0, 0, 0, 1],
+            [1, 0, 6, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 106, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 3, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 2, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+        const gameInfo = {
+            ...defaultGameInfo,
+            blueBall1: { x: 2, y: 4 },
+            elevators: [
+                { x: 2, y: 2, up: false, hasBlueBall: false },
+                { x: 8, y: 3, up: false, hasBlueBall: false }
+            ],
+            horizontalElevators: [
+                { x: 6, y: 6, right: true, hasBlueBall: false }
+            ],
+        };
+        gameInfo.blueBall = gameInfo.blueBall1;
+        const info = rotateArea(inputBack, input, gameInfo, true, 3, 1, 8, 6);
+        expect(input).toEqual(expectedOutput);
+        expect(info).toBe(true);
+        expect(gameInfo.blueBall).toEqual({ x: 2, y: 4 });
+        expect(gameInfo.elevators).toEqual([
+            { x: 2, y: 2, up: false, hasBlueBall: false },
+            { x: 8, y: 3, up: true, hasBlueBall: false }
+        ]);
+        expect(gameInfo.horizontalElevators).toEqual([
+            { x: 5, y: 1, right: true, hasBlueBall: false }
+        ]);
+    });
 
     // Insert new tests here
 });

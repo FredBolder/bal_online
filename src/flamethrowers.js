@@ -2,11 +2,23 @@ import { removeObject } from "./addRemoveObject";
 import { findElementByCoordinates, getGameDataValue } from "./balUtils";
 import { isSpike, isStone } from "./objects";
 
-function isCombustible(objectNumber) {
+function isCombustible(gameInfo, x, y, objectNumber) {
+    let idx = -1;
+
     if (isSpike(objectNumber) || isStone(objectNumber)) {
         return false;
     }
-    return ![20, 22, 23, 82, 83, 98, 99, 113, 114, 198, 256, 257].includes(objectNumber);
+
+    switch (objectNumber) {
+        case 263:
+            idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+            if (idx < 0) {
+                return false;
+            }
+            return gameInfo.userObjects[idx].combustible;
+        default:
+            return ![20, 22, 23, 82, 83, 98, 99, 113, 114, 198, 256, 257].includes(objectNumber);
+    }
 }
 
 export function checkFlames(backData, gameData, gameInfo) {
@@ -55,7 +67,7 @@ export function checkFlames(backData, gameData, gameInfo) {
                 if (backNumber === 0 && objectNumber === 0) {
                     continue;
                 }
-                if (!isCombustible(objectNumber)) {
+                if (!isCombustible(gameInfo, x, y, objectNumber)) {
                     break;
                 }
                 if (objectNumber > 0) {
@@ -271,7 +283,7 @@ export function drawFlames(ctx, leftMargin, topMargin, cellSize, gameData, gameI
                 x = x + dx;
                 y = y + dy;
                 objectNumber = getGameDataValue(gameData, x, y);
-                if (!isCombustible(objectNumber)) {
+                if (!isCombustible(gameInfo, x, y, objectNumber)) {
                     break;
                 }
                 lastCell.x = x;

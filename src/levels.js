@@ -21,7 +21,7 @@ import { seaAnemonesPalettes, seaAnemonesShapes } from "./seaAnemone.js";
 import { maxStonePatterns } from "./stonePatterns.js";
 import { deleteIfPurpleTeleport, getPurpleTeleportColor } from "./teleports.js";
 import { tropicalFishFinVariations, tropicalFishShapes, tropicalFishPalettes, tropicalFishStripes, tropicalFishTails, tropicalFishTailStripes } from "./tropicalFish.js";
-import { userObjectDirections, userObjectShapes } from "./userObjects.js";
+import { gameOverModes, userObjectDirections, userObjectShapes } from "./userObjects.js";
 import { randomInt, setArray, tryParseInt } from "./utils.js";
 
 export const series1Start = 200;
@@ -314,6 +314,7 @@ export function checkSettings(data, settings) {
     { name: "$color", params: 2, xy: false, yesno: -1 },
     { name: "$color1", params: 0, xy: true, yesno: -1 },
     { name: "$color2", params: 0, xy: true, yesno: -1 },
+    { name: "$combustible", params: 3, xy: true, yesno: 2 },
     { name: "$condition", params: 0, xy: true, yesno: -1 },
     { name: "$conveyorbeltmode", params: 3, xy: true, yesno: -1 },
     { name: "$darkpercentage", params: 1, xy: false, yesno: -1 },
@@ -332,6 +333,7 @@ export function checkSettings(data, settings) {
     { name: "$fgcolor", params: 5, xy: true, yesno: -1 },
     { name: "$fins", params: 3, xy: true, yesno: -1 },
     { name: "$flamethrowermode", params: 3, xy: true, yesno: -1 },
+    { name: "$gameovermode", params: 3, xy: true, yesno: -1 },
     { name: "$gameticks", params: 2, xy: false, yesno: -1 },
     { name: "$gameticksxy", params: 3, xy: true, yesno: -1 },
     { name: "$group", params: 3, xy: true, yesno: -1 },
@@ -446,8 +448,8 @@ export function checkSettings(data, settings) {
               if (values.length < 3) {
                 msg += `${settingNr(i)}At least 3 arguments expected for ${name}.\n`;
               }
-              if (validXY && !["η", 178, "ђ", 255].includes(data[y][x])) {
-                msg += `${settingNr(i)}No mover or detector found at the coordinates ${x}, ${y}.\n`;
+              if (validXY && !["η", 178, "ђ", 255, "Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No mover, detector or user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$addnotes":
@@ -506,8 +508,18 @@ export function checkSettings(data, settings) {
                 msg += `${settingNr(i)}A changer must have two different colors.\n`;
               }
               break;
+            case "$color":
+              if (!["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
+                msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
+              }
+              break;
             case "$color1":
             case "$color2":
+              if (validXY && !["Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$combustible":
               if (validXY && !["Ӿ", 263].includes(data[y][x])) {
                 msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
               }
@@ -523,11 +535,6 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["{", 171].includes(data[y][x])) {
                 msg += `${settingNr(i)}No conveyor found at the coordinates ${x}, ${y}.\n`;
-              }
-              break;
-            case "$color":
-              if (!["elevator", "elevatorarrow", "water"].includes(valuesLowerCase[0])) {
-                msg += `${settingNr(i)}Invalid value ${values[0]} for object name.\n`;
               }
               break;
             case "$delifnearsameid":
@@ -665,6 +672,14 @@ export function checkSettings(data, settings) {
               }
               if (validXY && !["й", 257].includes(data[y][x])) {
                 msg += `${settingNr(i)}No flamethrower found at the coordinates ${x}, ${y}.\n`;
+              }
+              break;
+            case "$gameovermode":
+              if (!gameOverModes().includes(valuesLowerCase[2])) {
+                msg += `${settingNr(i)}Invalid game over mode ${values[2]}.\n`;
+              }
+              if (validXY && !["Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$gameticks":
@@ -1753,25 +1768,19 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
         validXY = ((x >= 0) && (y >= 0) && (x < gameData[0].length) && (y < gameData.length));
       }
       switch (name) {
-        case "$activesides":
+        case "$activesides": {
           if (values.length < 3 || !validXY) {
             break;
           }
-          idx = findElementByCoordinates(x, y, gameInfo.movers);
-          if (idx >= 0) {
-            gameInfo.movers[idx].activeSides.length = 0;
-            for (let side = 2; side < values.length; side++) {
-              gameInfo.movers[idx].activeSides.push(values[side]);
+          let sides = [];
+          for (let side = 2; side < values.length; side++) {
+            if (side !== "none") {
+              sides.push(values[side]);
             }
           }
-          idx = findElementByCoordinates(x, y, gameInfo.detectors);
-          if (idx >= 0) {
-            gameInfo.detectors[idx].activeSides.length = 0;
-            for (let side = 2; side < values.length; side++) {
-              gameInfo.detectors[idx].activeSides.push(values[side]);
-            }
-          }
+          setProp(gameData, gameInfo, x, y, "activeSides", sides, false);
           break;
+        }
         case "$addnotes":
           if (values.length < 3 || !validXY) {
             break;
@@ -1889,6 +1898,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
             }
           }
           break;
+        case "$combustible":
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, "combustible", valuesLowerCase[2] === "yes", false);
+          break;
         case "$darkpercentage":
           if (values.length !== 1) {
             break;
@@ -1958,6 +1973,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameInfo.tropicalFish[idx].fins = val_int;
             }
           }
+          break;
+        case "$gameovermode":
+          if (values.length !== 3 || !validXY) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, "gameOverMode", valuesLowerCase[2], false);
           break;
         case "$gameticks":
           if (values.length !== 2) {

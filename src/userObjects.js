@@ -768,6 +768,11 @@ export function drawUserObject(context, x, y, preset = null) {
           stoneHeight = w2 - freeSpaceY;
           stoneWidth = (w1 / 3) - freeSpaceX;
           break;
+        case 18:
+        case 19:
+          stoneHeight = (w2 / 3) - freeSpaceY;
+          stoneWidth = (w1 / 2) - freeSpaceX;
+          break;
         default:
           stoneHeight = (w2 * 0.5) - freeSpaceY;
           stoneWidth = w1 - freeSpaceX;
@@ -897,6 +902,33 @@ export function drawUserObject(context, x, y, preset = null) {
           drawBrick(ctx, x1 + halfFreeSpaceX + d1 + freeSpaceX, y1 + d2 + freeSpaceY, d1, d2, shadowSize, BRICK_SHADOW_ALL, brickStyle);
           break;
         }
+        case 18: {
+          // Stretcher bond with 3 layers per cell 1
+          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
+          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
+
+          drawBrick(ctx, x1, y1 + stoneHeight + freeSpaceY, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
+          drawBrick(ctx, x1 + halfStoneWidth + freeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
+          drawBrick(ctx, x2 - halfStoneWidth, y1 + stoneHeight + freeSpaceY, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
+
+          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
+          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
+          break;
+        }
+        case 19: {
+          // Stretcher bond with 3 layers per cell 2
+          drawBrick(ctx, x1, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
+          drawBrick(ctx, x1 + halfStoneWidth + freeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
+          drawBrick(ctx, x2 - halfStoneWidth, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
+
+          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
+          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
+
+          drawBrick(ctx, x1, y1 + ((stoneHeight + freeSpaceY) * 2), halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
+          drawBrick(ctx, x1 + halfStoneWidth + freeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
+          drawBrick(ctx, x2 - halfStoneWidth, y1 + ((stoneHeight + freeSpaceY) * 2), halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
+          break;
+        }
         default:
           // 1: Stretcher bond
           drawBrick(ctx, x1, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
@@ -997,6 +1029,10 @@ export function drawUserObject(context, x, y, preset = null) {
   ctx.restore();
 }
 
+export function gameOverModes() {
+    return ["none", "nearactiveside"];
+}
+
 export function numberToNoteSymbol(n) {
   const v = n & 7;
   const value = ["whole", "half", "quarter", "eighth", "sixteenth", "", "", ""][v];
@@ -1025,6 +1061,20 @@ export function presetUserObject(userObject, preset) {
       userObject.color2 = "#9B9B95";
       userObject.direction = "up";
       setArray(userObject.parameters, [30, 30, 1, 1]);
+      userObject.shape = 6;
+      break;
+    case "stretcherbond3":
+      userObject.color1 = "#A64B35";
+      userObject.color2 = "#C8BBA5";
+      userObject.direction = "up";
+      setArray(userObject.parameters, [30, 30, 18, 1]);
+      userObject.shape = 6;
+      break;
+    case "stretcherbond4":
+      userObject.color1 = "#A64B35";
+      userObject.color2 = "#C8BBA5";
+      userObject.direction = "up";
+      setArray(userObject.parameters, [30, 30, 19, 1]);
       userObject.shape = 6;
       break;
     case "flemishbond1":

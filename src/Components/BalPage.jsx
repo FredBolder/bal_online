@@ -13,7 +13,6 @@ import {
   changePalette,
   changeShape,
   changeStyle,
-  changeSides,
   changeTicks,
   dropObject,
   inWater,
@@ -120,6 +119,7 @@ let createLevelColor = "";
 let createLevelColor1 = "stone";
 let createLevelColor2 = "stone";
 let createLevelColorPages = 2;
+let createLevelCombustible = false;
 let createLevelCommand = "";
 let createLevelCondition = "";
 let createLevelDelIfNearSameId = false;
@@ -127,6 +127,7 @@ let createLevelDetectorPages = 2;
 let createLevelDirection = "";
 let createLevelEdit = false;
 let createLevelEvent = "";
+let createLevelGameOverMode = "";
 let createLevelGroup2 = 0;
 let createLevelId = 1;
 let createLevelInstrument = "xylophone";
@@ -1372,12 +1373,12 @@ function BalPage() {
             // User objects
             switch (globalVars.createLevelUserObjectPage) {
               case 2:
-                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 0, 0, 0, 0, 0, 0, 2222];
-                arr2 = [2242, 2243, 2244, 2245, 2246, 2247, 2248, 2249, 2250, 2251, 0, 0, 0, 0, 0, 2101];
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 2302, 2144, 2303, 0, 0, 0, 2222];
+                arr2 = [2242, 2243, 2244, 2245, 2252, 2253, 2246, 2247, 2248, 2249, 2250, 2251, 0, 0, 0, 2101];
                 break;
               default:
                 // page 1
-                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 0, 0, 0, 0, 0, 0, 2222];
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 2302, 2144, 2303, 0, 0, 0, 2222];
                 arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2101];
                 break;
             }
@@ -3194,11 +3195,17 @@ function BalPage() {
               if (createLevelObject === 2214) {
                 msg = setProp(gameData, gameInfo, column, row, "color", createLevelColor, oneSelected);
               }
+              if (createLevelObject === 2302) {
+                msg = setProp(gameData, gameInfo, column, row, "combustible", createLevelCombustible, oneSelected);
+              }
               if (createLevelObject === 2301) {
                 msg = setProp(gameData, gameInfo, column, row, "delIfNearSameId", createLevelDelIfNearSameId, oneSelected);
               }
               if ((createLevelObject === 2133) && (createLevelDirection !== "")) {
                 msg = setProp(gameData, gameInfo, column, row, "direction", createLevelDirection, oneSelected);
+              }
+              if (createLevelObject === 2303) {
+                msg = setProp(gameData, gameInfo, column, row, "gameOverMode", createLevelGameOverMode, oneSelected);
               }
               if ((createLevelObject >= 2001) && (createLevelObject <= 2032)) {
                 msg = setProp(gameData, gameInfo, column, row, "group", createLevelObject - 2000, oneSelected);
@@ -3224,15 +3231,10 @@ function BalPage() {
               if (createLevelObject === 2212) {
                 msg = setProp(gameData, gameInfo, column, row, "repeat", createLevelRepeat, oneSelected);
               }
-
-
-              if ((createLevelObject === 2144) && (createLevelSides !== null)) {
-                if (changeSides(gameInfo, column, row, createLevelSides) === -1) {
-                  if (oneSelected) {
-                    showMessage("Info", "Click on a mover or a detector to set valid sides.");
-                  }
-                }
+              if (createLevelObject === 2144) {
+                msg = setProp(gameData, gameInfo, column, row, "activeSides", createLevelSides, oneSelected);
               }
+
               if (createLevelObject === 2202) {
                 if (changeDisplay(gameData, gameInfo, column, row, e.altKey) === -1) {
                   if (oneSelected) {
@@ -3747,7 +3749,7 @@ function BalPage() {
                   }
                 }
 
-                if (createLevelObject >= 2227 && createLevelObject <= 2251) {
+                if (createLevelObject >= 2227 && createLevelObject <= 2253) {
                   deleteIfLava(backData, gameInfo, column, row);
                   deleteIfSeaAnemone(backData, gameInfo, column, row);
                   deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -3814,6 +3816,12 @@ function BalPage() {
                       break;
                     case 2245:
                       presetUserObject(obj, "spanishbond");
+                      break;
+                    case 2252:
+                      presetUserObject(obj, "stretcherbond3");
+                      break;
+                    case 2253:
+                      presetUserObject(obj, "stretcherbond4");
                       break;
                     case 2246:
                       presetUserObject(obj, "meander1");
@@ -4132,6 +4140,19 @@ function BalPage() {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;
                   createLevelMovable = (newValue === "yes");
+                }
+              }
+            }
+            handleCancel();
+            break;
+          case 2302:
+            ok = false;
+            if (row > 0) {
+              newValue = await showSelect("User objects", "Combustible:", ["yes", "no"], createLevelCombustible ? 0 : 1);
+              if (newValue !== null) {
+                if (newValue === "yes" || newValue === "no") {
+                  ok = true;
+                  createLevelCombustible = (newValue === "yes");
                 }
               }
             }
@@ -4656,6 +4677,17 @@ function BalPage() {
               }
               handleCancel();
               break;
+            case 2303:
+              ok = false;
+              if (row > 0) {
+                newValue = await showSelect("User objects", "Game over mode:", ["none", "near active side"], 0);
+                if (newValue !== null) {
+                  createLevelGameOverMode = removeChar(newValue, " ");
+                  ok = true;
+                }
+              }
+              handleCancel();
+              break;
             default:
               break;
           }
@@ -4797,15 +4829,21 @@ function BalPage() {
           case 2144:
             ok = false;
             if (row > 0) {
-              newValue = null;
-              if (createLevelMenu === menuToNumber("elevators") || createLevelMenu === menuToNumber("detectors")) {
-                newValue = await showSelect("Active sides", "Sides:", ["top", "bottom", "left", "right", "top and bottom",
-                  "left and right", "top, bottom, left and right", "left and top", "top and right", "left and bottom",
-                  "bottom and right"], 0);
+              newValue = await showSelect("Active sides", "Sides:", ["none", "top", "bottom", "left", "right", "top and bottom",
+                "left and right", "top, bottom, left and right", "left and top", "top and right", "left and bottom",
+                "bottom and right"], 1);
+
+              if (createLevelSides !== null) {
+                createLevelSides.length = 0;
+                createLevelSides = null;
               }
+
               if (newValue !== null) {
                 ok = true;
                 switch (newValue) {
+                  case "none":
+                    createLevelSides = [];
+                    break;
                   case "top":
                     createLevelSides = ["top"];
                     break;

@@ -482,6 +482,9 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             for (let j = 0; j < detector.activeSides.length; j++) {
                 line += ", " + detector.activeSides[j];
             }
+            if (detector.activeSides.length === 0) {
+                line += ", none"; 
+            }
             lines.push(line);
         }
         if (detector.condition !== "") {
@@ -606,23 +609,27 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
 
     for (let i = 0; i < gameInfo.movers.length; i++) {
         const mover = gameInfo.movers[i];
+        const coordinates = `${mover.x}, ${mover.y}`;
         if (JSON.stringify(mover.activeSides) !== JSON.stringify(["top"])) {
-            line = `$activesides: ${mover.x}, ${mover.y}`;
+            line = `$activesides: ${coordinates}`;
             for (let j = 0; j < mover.activeSides.length; j++) {
                 line += ", " + mover.activeSides[j];
+            }
+            if (mover.activeSides.length === 0) {
+                line += ", none"; 
             }
             lines.push(line);
         }
         if (mover.direction !== "right") {
-            line = `$direction: ${mover.x}, ${mover.y}, ${mover.direction}`;
+            line = `$direction: ${coordinates}, ${mover.direction}`;
             lines.push(line);
         }
         if (mover.inverted) {
-            line = `$inverted: ${mover.x}, ${mover.y}, yes`;
+            line = `$inverted: ${coordinates}, yes`;
             lines.push(line);
         }
         if (mover.mode !== "all") {
-            line = `$movermode: ${mover.x}, ${mover.y}, ${mover.mode}`;
+            line = `$movermode: ${coordinates}, ${mover.mode}`;
             lines.push(line);
         }
     }
@@ -842,6 +849,14 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
     for (let i = 0; i < gameInfo.userObjects.length; i++) {
         const userObject = gameInfo.userObjects[i];
         const coordinates = `${userObject.x}, ${userObject.y}`;
+
+        if (JSON.stringify(userObject.activeSides) !== JSON.stringify([])) {
+            line = `$activesides: ${coordinates}`;
+            for (let j = 0; j < userObject.activeSides.length; j++) {
+                line += ", " + userObject.activeSides[j];
+            }
+            lines.push(line);
+        }
         if (userObject.color1 !== "stone") {
             line = `$color1: ${coordinates}, ${userObject.color1}`;
             lines.push(line);
@@ -850,12 +865,20 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             line = `$color2: ${coordinates}, ${userObject.color2}`;
             lines.push(line);
         }
+        if (userObject.combustible) {
+            line = `$combustible: ${coordinates}, yes`;
+            lines.push(line);
+        }
         if (userObject.delIfNearSameId) {
             line = `$delifnearsameid: ${coordinates}, yes`;
             lines.push(line);
         }
         if (userObject.direction !== "up") {
             line = `$direction: ${coordinates}, ${userObject.direction}`;
+            lines.push(line);
+        }
+        if (userObject.gameOverMode !== "none") {
+            line = `$gameovermode: ${coordinates}, ${userObject.gameOverMode}`;
             lines.push(line);
         }
         if (userObject.group > 1) {

@@ -382,14 +382,11 @@ export function rotateArea(backData, gameData, gameInfo, rotateLeft = false, xmi
       continue;
     }
 
-    let newHor = {};
+    let newHor = { x, y, right: false, hasBlueBall: false };
+    rotateXY(newHor, rows, rotateLeft, xmin, ymin, xmax, ymax);
     if (rotateLeft) {
-      newHor.x = y;
-      newHor.y = rows - (x + 1);
       newHor.right = !gameInfo.elevators[i].up;
     } else {
-      newHor.x = rows - (y + 1);
-      newHor.y = x;
       newHor.right = gameInfo.elevators[i].up;
     }
     newHorElevators.push(newHor);
@@ -403,14 +400,11 @@ export function rotateArea(backData, gameData, gameInfo, rotateLeft = false, xmi
       continue;
     }
 
-    let newVer = {};
+    let newVer = { x, y, up: false, hasBlueBall: false };
+    rotateXY(newVer, rows, rotateLeft, xmin, ymin, xmax, ymax);
     if (rotateLeft) {
-      newVer.x = y;
-      newVer.y = rows - (x + 1);
       newVer.up = gameInfo.horizontalElevators[i].right;
     } else {
-      newVer.x = rows - (y + 1);
-      newVer.y = x;
       newVer.up = !gameInfo.horizontalElevators[i].right;
     }
     newVerElevators.push(newVer);
@@ -544,8 +538,10 @@ export function rotateArea(backData, gameData, gameInfo, rotateLeft = false, xmi
 
   // User objects
   for (let i = 0; i < gameInfo.userObjects.length; i++) {
-    rotateXY(gameInfo.userObjects[i], rows, rotateLeft, xmin, ymin, xmax, ymax);
-    rotateDirection(gameInfo.userObjects[i], rotateLeft, xmin, ymin, xmax, ymax);
+    const obj = gameInfo.userObjects[i];
+    rotateXY(obj, rows, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateDirection(obj, rotateLeft, xmin, ymin, xmax, ymax);
+    rotateActiveSides(obj, rotateLeft, xmin, ymin, xmax, ymax);
   }
 
   // Water with ice

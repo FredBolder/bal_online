@@ -207,31 +207,32 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.seaAnemones[idx2].shape = gameInfo.seaAnemones[idx1].shape;
             }
             break;
-        case 255:
+        case 255: {
             idx1 = findElementByCoordinates(x1, y1, gameInfo.detectors);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.detectors);
-            if ((idx1 >= 0) && (idx2 >= 0)) {
-                gameInfo.detectors[idx2].activeSides.length = 0;
-                for (let i = 0; i < gameInfo.detectors[idx1].activeSides.length; i++) {
-                    gameInfo.detectors[idx2].activeSides.push(gameInfo.detectors[idx1].activeSides[i]);
-                }
-                gameInfo.detectors[idx2].condition = gameInfo.detectors[idx1].condition;
-                gameInfo.detectors[idx2].display = gameInfo.detectors[idx1].display;
-                gameInfo.detectors[idx2].event = gameInfo.detectors[idx1].event;
-                gameInfo.detectors[idx2].group = gameInfo.detectors[idx1].group;
-                gameInfo.detectors[idx2].group2 = gameInfo.detectors[idx1].group2;
-                gameInfo.detectors[idx2].movable = gameInfo.detectors[idx1].movable;
-                gameInfo.detectors[idx2].mode = gameInfo.detectors[idx1].mode;
-                gameInfo.detectors[idx2].oneCommand = gameInfo.detectors[idx1].oneCommand;
-                gameInfo.detectors[idx2].oneTime = gameInfo.detectors[idx1].oneTime;
-                gameInfo.detectors[idx2].randomChance = gameInfo.detectors[idx1].randomChance;
-                gameInfo.detectors[idx2].range = gameInfo.detectors[idx1].range;
-                gameInfo.detectors[idx2].sequence = gameInfo.detectors[idx1].sequence;
-                gameInfo.detectors[idx2].target = gameInfo.detectors[idx1].target;
-                gameInfo.detectors[idx2].text = gameInfo.detectors[idx1].text;
-                gameInfo.detectors[idx2].value = gameInfo.detectors[idx1].value;
+            if ((idx1 < 0) && (idx2 < 0)) {
+                break;
             }
+            const source = gameInfo.detectors[idx1];
+            const target = gameInfo.detectors[idx2];
+            setArray(target.activeSides, source.activeSides);
+            target.condition = source.condition;
+            target.display = source.display;
+            target.event = source.event;
+            target.group = source.group;
+            target.group2 = source.group2;
+            target.movable = source.movable;
+            target.mode = source.mode;
+            target.oneCommand = source.oneCommand;
+            target.oneTime = source.oneTime;
+            target.randomChance = source.randomChance;
+            target.range = source.range;
+            target.sequence = source.sequence;
+            target.target = source.target;
+            target.text = source.text;
+            target.value = source.value;
             break;
+        }
         case 257:
             idx1 = findElementByCoordinates(x1, y1, gameInfo.flamethrowers);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.flamethrowers);
@@ -244,22 +245,28 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
                 gameInfo.flamethrowers[idx2].range = gameInfo.flamethrowers[idx1].range;
             }
             break;
-        case 263:
+        case 263: {
             idx1 = findElementByCoordinates(x1, y1, gameInfo.userObjects);
             idx2 = findElementByCoordinates(x2, y2, gameInfo.userObjects);
+            const source = gameInfo.userObjects[idx1];
+            const target = gameInfo.userObjects[idx2];
             if ((idx1 >= 0) && (idx2 >= 0)) {
-                gameInfo.userObjects[idx2].color1 = gameInfo.userObjects[idx1].color1;
-                gameInfo.userObjects[idx2].color2 = gameInfo.userObjects[idx1].color2;
-                gameInfo.userObjects[idx2].delIfNearSameId = gameInfo.userObjects[idx1].delIfNearSameId;
-                gameInfo.userObjects[idx2].direction = gameInfo.userObjects[idx1].direction;
-                gameInfo.userObjects[idx2].group = gameInfo.userObjects[idx1].group;
-                gameInfo.userObjects[idx2].id = gameInfo.userObjects[idx1].id;
-                gameInfo.userObjects[idx2].movable = gameInfo.userObjects[idx1].movable;
-                setArray(gameInfo.userObjects[idx2].parameters, gameInfo.userObjects[idx1].parameters);
-                gameInfo.userObjects[idx2].rotation = gameInfo.userObjects[idx1].rotation;
-                gameInfo.userObjects[idx2].shape = gameInfo.userObjects[idx1].shape;
+                setArray(target.activeSides, source.activeSides);
+                target.color1 = source.color1;
+                target.color2 = source.color2;
+                target.combustible = source.combustible;
+                target.delIfNearSameId = source.delIfNearSameId;
+                target.direction = source.direction;
+                target.gameOverMode = source.gameOverMode;
+                target.group = source.group;
+                target.id = source.id;
+                target.movable = source.movable;
+                setArray(target.parameters, source.parameters);
+                target.rotation = source.rotation;
+                target.shape = source.shape;
             }
             break;
+        }
         default:
             break;
     }
@@ -453,7 +460,7 @@ export function loadCellForUndo(backData, gameData, gameInfo, obj) {
     if (obj.gd > 0) {
         addObject(backData, gameData, gameInfo, x, y, obj.gd);
     }
-    
+
     if (obj.bdi !== null) {
         const backDataInfo = getObjectInfo(gameInfo, x, y, obj.bd);
         if (backDataInfo !== null) {
