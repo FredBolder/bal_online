@@ -4680,7 +4680,7 @@ function BalPage() {
             case 2303:
               ok = false;
               if (row > 0) {
-                newValue = await showSelect("User objects", "Game over mode:", ["none", "near active side"], 0);
+                newValue = await showSelect("User objects", "Game over mode:", ["none", "force on active side", "near active side"], 0);
                 if (newValue !== null) {
                   createLevelGameOverMode = removeChar(newValue, " ");
                   ok = true;

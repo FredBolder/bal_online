@@ -475,9 +475,8 @@ export async function gameScheduler(backData, gameData, gameInfo, gameVars, chec
                 updateCanvas = true;
             }
 
-            if (checkUserObjects(gameData, gameInfo)) {
-                updateCanvas = true;
-            }
+            info = checkUserObjects(backData, gameData, gameInfo, gameVars);
+            processResult(info);
 
             if (moveFishFood(backData, gameData, gameInfo, gameVars)) {
                 updateCanvas = true;

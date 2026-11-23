@@ -1,4 +1,4 @@
-import { findElementByCoordinates, hasWeightAbove, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue, hasWeightAbove, moveObject } from "./balUtils.js";
 import { augmentedChords, diminishedChords, dom7Chords, maj7Chords, majorChords, minorChords, sus2Chords, sus4Chords } from "./chords.js";
 import { globalVars } from "./glob.js";
 import { intervalMajor2, intervalMajor3, intervalMinor3, intervalP4, intervalP5, intervalP8 } from "./intervals.js";
@@ -19,31 +19,16 @@ function addPlayedNote(group, note) {
 }
 
 function blueBallIsCloseToXY(gameData, x, y) {
-    let result = false;
-    const xmax = gameData[0].length - 1;
-    const ymax = gameData.length - 1;
+    const points = [{ x: x + 1, y: y }, { x: x - 1, y: y }, { x: x, y: y + 1 }, { x: x, y: y - 1 }];
 
-    if (!result && ((x + 1) >= 0) && (y >= 0) && ((x + 1) <= xmax) && (y <= ymax)) {
-        if (gameData[y][(x + 1)] === 2) {
-            result = true;
-        }
+    for (let i = 0; i < points.length; i++) {
+        const pt = points[i];
+        const gd = getGameDataValue(gameData, pt.x, pt.y);
+
+        if (gd === 2) return true;
     }
-    if (!result && ((x - 1) >= 0) && (y >= 0) && ((x - 1) <= xmax) && (y <= ymax)) {
-        if (gameData[y][(x - 1)] === 2) {
-            result = true;
-        }
-    }
-    if (!result && (x >= 0) && ((y + 1) >= 0) && (x <= xmax) && ((y + 1) <= ymax)) {
-        if (gameData[(y + 1)][x] === 2) {
-            result = true;
-        }
-    }
-    if (!result && (x >= 0) && ((y - 1) >= 0) && (x <= xmax) && ((y - 1) <= ymax)) {
-        if (gameData[(y - 1)][x] === 2) {
-            result = true;
-        }
-    }
-    return result;
+
+    return false;
 }
 
 export function changeMusicBoxProperty(gameInfo, x, y, property, value, add = false) {

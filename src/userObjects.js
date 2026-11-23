@@ -1,17 +1,13 @@
-import { findElementByCoordinates, getGameDataValue } from "./balUtils";
+import { findElementByCoordinates, getGameDataValue, hasWeightAbove, hasWeightBelow } from "./balUtils";
+import { drawBricks } from "./bricks.js";
 import { drawStone } from "./drawObjects";
+import { hasForceLeft, hasForceRight } from "./force.js";
 import { globalVars } from "./glob";
+import { midPoint } from "./graphicUtils.js";
 import { setArray } from "./utils";
 
-export const BRICK_SHADOW_ALL = 15;
-export const BRICK_SHADOW_BOTTOM = 8;
-export const BRICK_SHADOW_LEFT = 1;
-export const BRICK_SHADOW_NOT_LEFT = 14;
-export const BRICK_SHADOW_RIGHT = 2;
-export const BRICK_SHADOW_NOT_RIGHT = 13;
-export const BRICK_SHADOW_TOP = 4;
-
-export function checkUserObjects(gameData, gameInfo) {
+export function checkUserObjects(backData, gameData, gameInfo, gameVars) {
+  let gameOver = false;
   let update = false;
 
   for (let i = 0; i < gameInfo.userObjects.length; i++) {
@@ -52,87 +48,86 @@ export function checkUserObjects(gameData, gameInfo) {
     }
   }
 
-  if (!update) return false;
+  if (update) {
+    for (let i = 0; i < gameInfo.userObjects.length; i++) {
+      const userObject = gameInfo.userObjects[i];
+      if (userObject.delete) {
+        gameData[userObject.y][userObject.x] = 0;
+      }
+    }
 
+    gameInfo.userObjects.splice(0, gameInfo.userObjects.length,
+      ...gameInfo.userObjects.filter(obj => !obj.delete)
+    );
+  }
+
+  // Check game over
   for (let i = 0; i < gameInfo.userObjects.length; i++) {
     const userObject = gameInfo.userObjects[i];
-    if (userObject.delete) {
-      gameData[userObject.y][userObject.x] = 0;
+    if (userObject.gameOverMode === "none") {
+      continue;
+    }
+    for (let j = 0; j < userObject.activeSides.length; j++) {
+      const side = userObject.activeSides[j];
+      let x = -1;
+      let y = -1;
+      switch (side) {
+        case "bottom":
+          x = userObject.x;
+          y = userObject.y + 1;
+          break;
+        case "left":
+          x = userObject.x - 1;
+          y = userObject.y;
+          break;
+        case "right":
+          x = userObject.x + 1;
+          y = userObject.y;
+          break;
+        case "top":
+          x = userObject.x;
+          y = userObject.y - 1;
+          break;
+        default:
+          break;
+      }
+      const gd = getGameDataValue(gameData, x, y);
+      if (gd !== 2) {
+        continue;
+      }
+      switch (userObject.gameOverMode) {
+        case "nearactiveside":
+          return { gameOver: true, update: true };
+        case "forceonactiveside": {
+          let force = false;
+          switch (side) {
+            case "bottom":
+              force = hasWeightBelow(backData, gameData, gameInfo, gameVars, userObject.x, userObject.x, userObject.y, false);
+              break;
+            case "left":
+              force = hasForceRight(gameData, gameInfo, userObject.x, userObject.y);
+              break;
+            case "right":
+              force = hasForceLeft(gameData, gameInfo, userObject.x, userObject.y);
+              break;
+            case "top":
+              force = hasWeightAbove(backData, gameData, gameInfo, gameVars, userObject.x, userObject.x, userObject.y, false);
+              break;
+            default:
+              break;
+          }
+          if (force) {
+            return { gameOver: true, update: true };
+          }
+          break;
+        }
+        default:
+          break;
+      }
     }
   }
 
-  gameInfo.userObjects.splice(0, gameInfo.userObjects.length,
-    ...gameInfo.userObjects.filter(obj => !obj.delete)
-  );
-
-  return update;
-}
-
-export function drawBrick(ctx, x, y, w, h, shadowSize, shadowLines, style) {
-  const s = Math.max(0, Math.min(shadowSize, w * 0.5, h * 0.5));
-  const half = s * 0.5;
-  let opacity1 = 0.1;
-  let opacity2 = 0.08;
-
-  // Main brick
-  ctx.fillRect(x, y, w, h);
-
-  if (style === 0) {
-    return;
-  }
-
-  if (s <= 0 || shadowLines === 0) return;
-
-  const left = shadowLines & BRICK_SHADOW_LEFT;
-  const right = shadowLines & BRICK_SHADOW_RIGHT;
-  const top = shadowLines & BRICK_SHADOW_TOP;
-  const bottom = shadowLines & BRICK_SHADOW_BOTTOM;
-
-  ctx.lineWidth = s;
-  ctx.lineCap = 'butt';
-
-  if (style === 2) {
-    opacity1 = 0.18;
-    opacity2 = 0.28;
-  }
-
-  // Top and left highlights
-  if (top || left) {
-    ctx.beginPath();
-
-    if (top) {
-      ctx.moveTo(x, y + half);
-      ctx.lineTo(x + w, y + half);
-    }
-
-    if (left) {
-      ctx.moveTo(x + half, y);
-      ctx.lineTo(x + half, y + h);
-    }
-
-    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity1})`;
-    ctx.stroke();
-  }
-
-  // Bottom and right shadows
-  if (bottom || right) {
-    ctx.beginPath();
-
-    if (bottom) {
-      ctx.moveTo(x, y + h - half);
-      ctx.lineTo(x + w, y + h - half);
-    }
-
-    if (right) {
-      ctx.moveTo(x + w - half, y);
-      ctx.lineTo(x + w - half, y + h);
-    }
-
-    ctx.strokeStyle = `rgba(0, 0, 0, ${opacity2})`;
-    ctx.stroke();
-  }
-
-  ctx.lineWidth = 1;
+  return { gameOver, update };
 }
 
 function drawNoteOnScore(context, x, y, lineDistance, type, dots, color) {
@@ -698,6 +693,18 @@ export function drawUserObject(context, x, y, preset = null) {
     ctx.strokeStyle = color1;
   }
 
+  const objectContext = {
+    get cx() { return cx; },
+    get cy() { return cy; },
+    get parameters() { return parameters; },
+    get p1() { return p1; },
+    get p2() { return p2; },
+    get x1() { return x1; },
+    get x2() { return x2; },
+    get y1() { return y1; },
+    get y2() { return y2; },
+  };
+
   switch (shape) {
     case 2:
       path.moveTo(x1 + (w1 * 0.5 * p1), y1 + (w2 * 0.25 * p3));
@@ -738,208 +745,10 @@ export function drawUserObject(context, x, y, preset = null) {
       path.lineTo(x1, y2 - (w1 * p4));
       path.closePath();
       break;
-    case 6: {
-      const brickStyle = parameters[3];
-      const freeSpaceX = w1 * 0.2 * p1;
-      const freeSpaceY = w2 * 0.2 * p2;
-      const halfFreeSpaceX = freeSpaceX * 0.5;
-      const pattern = parameters[2];
-      const shadowSize = w1 * 0.05;
-      let stoneHeight = (w2 * 0.5) - freeSpaceY;
-      let stoneWidth = w1 - freeSpaceX;
-
-      switch (pattern) {
-        case 2:
-        case 3:
-          stoneWidth = w1 * (1.33 - (0.33 * p1));
-          break;
-        case 12:
-          stoneHeight = w2 - freeSpaceY;
-          stoneWidth = (w1 * 0.5) - freeSpaceX;
-          break;
-        case 14:
-          stoneHeight = w2 - freeSpaceY;
-          stoneWidth = w1 - freeSpaceX;
-          break;
-        case 15:
-          stoneHeight = (w2 / 3) - freeSpaceY;
-          break;
-        case 16:
-          stoneHeight = w2 - freeSpaceY;
-          stoneWidth = (w1 / 3) - freeSpaceX;
-          break;
-        case 18:
-        case 19:
-          stoneHeight = (w2 / 3) - freeSpaceY;
-          stoneWidth = (w1 / 2) - freeSpaceX;
-          break;
-        default:
-          stoneHeight = (w2 * 0.5) - freeSpaceY;
-          stoneWidth = w1 - freeSpaceX;
-          break;
-      }
-
-      const halfStoneWidth = stoneWidth * 0.5;
-
-      switch (pattern) {
-        case 2: {
-          // Flemish bond - part 1
-          const d1 = (stoneWidth - w1) / 2;
-          drawBrick(ctx, cx - (halfStoneWidth * 0.5), y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1, y1, d1, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - d1, y1, d1, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1, cy, w1, stoneHeight, shadowSize, BRICK_SHADOW_TOP + BRICK_SHADOW_BOTTOM, brickStyle);
-          break;
-        }
-        case 3: {
-          // Flemish bond - part 2
-          const d1 = (stoneWidth - w1) / 2;
-          drawBrick(ctx, x1, y1, w1, stoneHeight, shadowSize, BRICK_SHADOW_TOP + BRICK_SHADOW_BOTTOM, brickStyle);
-          drawBrick(ctx, cx - (halfStoneWidth * 0.5), cy, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1, cy, d1, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - d1, cy, d1, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          break;
-        }
-        case 4: {
-          // English bond
-          const headerWidth = (stoneWidth - freeSpaceX) * 0.5;
-          drawBrick(ctx, cx - (headerWidth * 0.5), y1, headerWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1, y1, headerWidth * 0.5, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - headerWidth * 0.5, y1, headerWidth * 0.5, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        }
-        case 5: {
-          // Header bond
-          const headerWidth = (stoneWidth - freeSpaceX) * 0.5;
-          const d1 = (w1 * 0.5) - ((headerWidth * 0.5) + freeSpaceX);
-          drawBrick(ctx, cx - (headerWidth * 0.5), y1, headerWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1, y1, d1, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - d1, y1, d1, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, headerWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, cx + halfFreeSpaceX, cy, headerWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        }
-        case 6:
-          // Long bricks - part 1
-          drawBrick(ctx, x1, y1, w1 - halfFreeSpaceX, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, w1 - halfFreeSpaceX, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          break;
-        case 7:
-          // Long bricks - part 2
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, w1 - halfFreeSpaceX, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1, cy, w1 - halfFreeSpaceX, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          break;
-        case 8: {
-          // Monk bond - part 1
-          const d1 = w1 - (1.5 * freeSpaceX);
-          const d2 = (4 / 5) * d1;
-          const d3 = (1 / 5) * d1;
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, d2, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x2 - d3, y1, d3, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1, cy, d3, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x1 + d3 + freeSpaceX, cy, d2, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        }
-        case 9: {
-          // Monk bond - part 2
-          const d1 = w1 - (1.5 * freeSpaceX);
-          const d2 = (4 / 5) * d1;
-          const d3 = (1 / 5) * d1;
-          drawBrick(ctx, x1, y1, d3, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x1 + d3 + freeSpaceX, y1, d2, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, d2, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x2 - d3, cy, d3, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          break;
-        }
-        case 10:
-          // Stack bond / Block bond 1
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        case 11:
-          // Stack bond / Block bond 2
-          drawBrick(ctx, x1, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, cx + halfFreeSpaceX, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1, cy, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, cx + halfFreeSpaceX, cy, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          break;
-        case 12:
-          // Vertical stack bond
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, cx + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        case 13:
-          // Stretcher bond with a 1/4 brick offset
-          drawBrick(ctx, x1, y1, stoneWidth * 0.75, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - (stoneWidth * 0.25), y1, stoneWidth * 0.25, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        case 14:
-          // Square tile
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        case 15:
-          // Basket waeve bond with 3 bricks per cell 1  
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        case 16:
-          // Basket waeve bond with 3 bricks per cell 2  
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + ((stoneWidth + freeSpaceX) * 2), y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        case 17: {
-          // Spanish bond
-          const d1 = (w1 / 3) - freeSpaceX;
-          const d2 = (w2 / 3) - freeSpaceY;
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, d1, (d2 * 2) + freeSpaceY, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + d1 + freeSpaceX, y1, (d1 * 2) + freeSpaceX, d2, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + ((freeSpaceX + d1) * 2), y1 + d2 + freeSpaceY, d1, (d2 * 2) + freeSpaceY, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + (d2 + freeSpaceY) * 2, (d1 * 2) + freeSpaceX, d2, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + d1 + freeSpaceX, y1 + d2 + freeSpaceY, d1, d2, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        }
-        case 18: {
-          // Stretcher bond with 3 layers per cell 1
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-
-          drawBrick(ctx, x1, y1 + stoneHeight + freeSpaceY, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x1 + halfStoneWidth + freeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - halfStoneWidth, y1 + stoneHeight + freeSpaceY, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-        }
-        case 19: {
-          // Stretcher bond with 3 layers per cell 2
-          drawBrick(ctx, x1, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x1 + halfStoneWidth + freeSpaceX, y1, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - halfStoneWidth, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-
-          drawBrick(ctx, x1 + halfFreeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX + stoneWidth + freeSpaceX, y1 + stoneHeight + freeSpaceY, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-
-          drawBrick(ctx, x1, y1 + ((stoneHeight + freeSpaceY) * 2), halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x1 + halfStoneWidth + freeSpaceX, y1 + ((stoneHeight + freeSpaceY) * 2), stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, x2 - halfStoneWidth, y1 + ((stoneHeight + freeSpaceY) * 2), halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          break;
-        }
-        default:
-          // 1: Stretcher bond
-          drawBrick(ctx, x1, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_LEFT, brickStyle);
-          drawBrick(ctx, cx + halfFreeSpaceX, y1, halfStoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_NOT_RIGHT, brickStyle);
-          drawBrick(ctx, x1 + halfFreeSpaceX, cy, stoneWidth, stoneHeight, shadowSize, BRICK_SHADOW_ALL, brickStyle);
-          break;
-      }
-
+    case 6:
+      drawBricks(context, objectContext);
       ready = true;
       break;
-    }
     case 7: {
       const lineDist = w2 / 10;
       let bottomNumber = 0;
@@ -998,6 +807,23 @@ export function drawUserObject(context, x, y, preset = null) {
       drawMeander(ctx, x1, y1, x2, y2, parameters[0], parameters[1], parameters[2]);
       ready = true;
       break;
+    case 9: {
+      const curveBend = 0.25 * p1 * (1 - (p2 * 0.5));
+      const dx = 0.25 * w1 * p2;
+      const pt1 = { x: x1 + dx, y: y2};
+      const pt2 = { x: cx, y: y1};
+      const pt3 = { x: x2 - dx, y: y2};
+      path.moveTo(pt1.x, pt1.y);
+      const cp1 = midPoint(pt1, pt2);
+      cp1.x += (pt1.y - pt2.y) * curveBend;
+      cp1.y += (pt2.x - pt1.x) * curveBend;
+      path.quadraticCurveTo(cp1.x, cp1.y, pt2.x, pt2.y);
+      // Mirror cp1 around the vertical center line
+      const cp2 = { x: (2 * pt2.x) - cp1.x, y: cp1.y };
+      path.quadraticCurveTo(cp2.x, cp2.y, pt3.x, pt3.y);
+      path.closePath();
+      break;
+    }
     default:
       // 1
       path.moveTo(x1, cy);
@@ -1030,7 +856,7 @@ export function drawUserObject(context, x, y, preset = null) {
 }
 
 export function gameOverModes() {
-    return ["none", "nearactiveside"];
+  return ["forceonactiveside", "nearactiveside", "none"];
 }
 
 export function numberToNoteSymbol(n) {
@@ -1247,4 +1073,4 @@ export function userObjectDirections() {
   return ["left", "right", "up", "down"];
 }
 
-export const userObjectShapes = 8;
+export const userObjectShapes = 9;
