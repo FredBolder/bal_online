@@ -306,7 +306,10 @@ function drawLevel(
       const backgroundColor = getBgcolor(context, currentCol, currentRow, "");
 
       const fish = {};
-      const userObject = { parameters: [50, 50, 50, 50] };
+      const userObject = {
+        x: currentCol, y: currentRow, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "up", movable: true, id: 0,
+        delIfNearSameId: false, delete: false, combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
+      };
 
       if (backgroundColor !== "") {
         drawFilledBox(ctx, xmin, ymin, w1, w2, backgroundColor);
@@ -1494,6 +1497,14 @@ function drawLevel(
           presetUserObject(userObject, "stretcherbond4");
           drawUserObject(context, currentCol, currentRow, userObject);
           break;
+        case 2254:
+          presetUserObject(userObject, "naturalstones1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
+        case 2255:
+          presetUserObject(userObject, "spike1");
+          drawUserObject(context, currentCol, currentRow, userObject);
+          break;
         case 2300:
           drawAbbreviation(context, "id");
           break;
@@ -1506,6 +1517,9 @@ function drawLevel(
           break;
         case 2303:
           drawTwoTextLines(context, "game", "over");
+          break;
+        case 2304:
+          drawTwoTextLines(context, "can", "fall");
           break;
         default:
           drawFilledBox(ctx, xmin, ymin, w1, w2, "#464646");

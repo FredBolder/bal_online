@@ -114,6 +114,7 @@ let dropPressed = false;
 let kPressed = false;
 let createLevelAnswer = "";
 let createLevelBallsPages = 2;
+let createLevelCanFall = false;
 let createLevelChangerColors = "";
 let createLevelColor = "";
 let createLevelColor1 = "stone";
@@ -1373,12 +1374,12 @@ function BalPage() {
             // User objects
             switch (globalVars.createLevelUserObjectPage) {
               case 2:
-                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 2302, 2144, 2303, 0, 0, 0, 2222];
-                arr2 = [2242, 2243, 2244, 2245, 2252, 2253, 2246, 2247, 2248, 2249, 2250, 2251, 0, 0, 0, 2101];
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 2302, 2144, 2303, 2304, 0, 0, 2222];
+                arr2 = [2242, 2243, 2244, 2245, 2252, 2253, 2254, 2246, 2247, 2248, 2249, 2250, 2251, 2255, 0, 2101];
                 break;
               default:
                 // page 1
-                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 2302, 2144, 2303, 0, 0, 0, 2222];
+                arr1 = [263, 2151, 2225, 2226, 2224, 2133, 2208, 2300, 2301, 2302, 2144, 2303, 2304, 0, 0, 2222];
                 arr2 = [2227, 2228, 2229, 2230, 2231, 2232, 2233, 2234, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2101];
                 break;
             }
@@ -3192,6 +3193,9 @@ function BalPage() {
             msg = "";
 
             if (createLevelObject >= 2000) {
+              if (createLevelObject === 2304) {
+                msg = setProp(gameData, gameInfo, column, row, "canFall", createLevelCanFall, oneSelected);
+              }
               if (createLevelObject === 2214) {
                 msg = setProp(gameData, gameInfo, column, row, "color", createLevelColor, oneSelected);
               }
@@ -3749,7 +3753,7 @@ function BalPage() {
                   }
                 }
 
-                if (createLevelObject >= 2227 && createLevelObject <= 2253) {
+                if (createLevelObject >= 2227 && createLevelObject <= 2255) {
                   deleteIfLava(backData, gameInfo, column, row);
                   deleteIfSeaAnemone(backData, gameInfo, column, row);
                   deleteIfPurpleTeleport(backData, gameInfo, column, row);
@@ -3823,6 +3827,9 @@ function BalPage() {
                     case 2253:
                       presetUserObject(obj, "stretcherbond4");
                       break;
+                    case 2254:
+                      presetUserObject(obj, "naturalstones1");
+                      break;
                     case 2246:
                       presetUserObject(obj, "meander1");
                       break;
@@ -3840,6 +3847,9 @@ function BalPage() {
                       break;
                     case 2251:
                       presetUserObject(obj, "meander6");
+                      break;
+                    case 2255:
+                      presetUserObject(obj, "spike1");
                       break;
                     default:
                       break;
@@ -4135,7 +4145,7 @@ function BalPage() {
           case 2208:
             ok = false;
             if (row > 0) {
-              newValue = await showSelect("Detectors / Flamethrowers / Forces / Pushers / User objects", "Movable by player:", ["yes", "no"], createLevelMovable ? 0 : 1);
+              newValue = await showSelect("Select object", "Movable by player:", ["yes", "no"], createLevelMovable ? 0 : 1);
               if (newValue !== null) {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;
@@ -4153,6 +4163,19 @@ function BalPage() {
                 if (newValue === "yes" || newValue === "no") {
                   ok = true;
                   createLevelCombustible = (newValue === "yes");
+                }
+              }
+            }
+            handleCancel();
+            break;
+          case 2304:
+            ok = false;
+            if (row > 0) {
+              newValue = await showSelect("User objects", "Can fall:", ["yes", "no"], createLevelCanFall ? 0 : 1);
+              if (newValue !== null) {
+                if (newValue === "yes" || newValue === "no") {
+                  ok = true;
+                  createLevelCanFall = (newValue === "yes");
                 }
               }
             }

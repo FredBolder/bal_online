@@ -386,7 +386,7 @@ export function getGameInfo(backData, gameData, gameInfo) {
                 }
                 case 263: {
                     let userObject = { x: j, y: i, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50], direction: "up", movable: true, id: 0, 
-                        delIfNearSameId: false, delete: false, combustible: false, activeSides: [], gameOverMode: "none", group: 1 };
+                        delIfNearSameId: false, delete: false, combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1 };
                     gameInfo.userObjects.push(userObject);
                     break;
                 }
@@ -1270,7 +1270,7 @@ export function getInfoByCoordinates(backData, gameData, gameInfo, x, y, all) {
                     extraInfo = `Color 1: ${obj.color1}, Color 2: ${obj.color2}, Shape: ${obj.shape}, Parameters: ${obj.parameters}, `; 
                     extraInfo += `Direction: ${obj.direction}, Movable: ${obj.movable}, ID:  ${obj.id}, `;
                     extraInfo += `Delete if near to same ID:  ${obj.delIfNearSameId}, Combustible: ${obj.combustible}, Active sides: ${obj.activeSides}, `;
-                    extraInfo += `Game over mode: ${obj.gameOverMode}, Group: ${obj.group}`;
+                    extraInfo += `Game over mode: ${obj.gameOverMode}, Can fall: ${obj.canFall}, Group: ${obj.group}`;
                 }
                 info = `User object, ` + extraInfo;
                 break;

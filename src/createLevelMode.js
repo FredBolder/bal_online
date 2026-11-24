@@ -252,6 +252,7 @@ export function copyCell(backData, gameData, gameInfo, x1, y1, x2, y2) {
             const target = gameInfo.userObjects[idx2];
             if ((idx1 >= 0) && (idx2 >= 0)) {
                 setArray(target.activeSides, source.activeSides);
+                target.canFall = source.canFall;
                 target.color1 = source.color1;
                 target.color2 = source.color2;
                 target.combustible = source.combustible;

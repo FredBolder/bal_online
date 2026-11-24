@@ -23,42 +23,42 @@ describe("user objects", () => {
                 {
                     x: 6, y: 2, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 12
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 12
                 },
                 {
                     x: 2, y: 3, color1: "green", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 2, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
                 {
                     x: 3, y: 3, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
                 {
                     x: 3, y: 4, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
                 {
                     x: 6, y: 4, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: false, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
                 {
                     x: 3, y: 5, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
                 {
                     x: 5, y: 5, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
                 {
                     x: 6, y: 5, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                    combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
                 },
             ],
             greenBalls: 1,
@@ -90,17 +90,17 @@ describe("user objects", () => {
             {
                 x: 6, y: 2, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                 direction: "up", movable: true, id: 1, delIfNearSameId: true, delete: false,
-                combustible: false, activeSides: [], gameOverMode: "none", group: 12
+                combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 12
             },
             {
                 x: 2, y: 3, color1: "green", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                 direction: "up", movable: true, id: 2, delIfNearSameId: true, delete: false,
-                combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
             },
             {
                 x: 6, y: 4, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                 direction: "up", movable: true, id: 1, delIfNearSameId: false, delete: false,
-                combustible: false, activeSides: [], gameOverMode: "none", group: 1
+                combustible: false, activeSides: [], gameOverMode: "none", canFall: false, group: 1
             }
         ]);
     });
@@ -113,7 +113,7 @@ describe("user objects", () => {
                 {
                     x: 3, y: 3, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: false, id: 0, delIfNearSameId: false, delete: false,
-                    combustible: false, activeSides: [ "left" ], gameOverMode: "nearactiveside", group: 1
+                    combustible: false, activeSides: [ "left" ], gameOverMode: "nearactiveside", canFall: false, group: 1
                 },
             ],
             greenBalls: 1,
@@ -140,7 +140,7 @@ describe("user objects", () => {
                 {
                     x: 3, y: 3, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: false, id: 0, delIfNearSameId: false, delete: false,
-                    combustible: false, activeSides: [ "left" ], gameOverMode: "none", group: 1
+                    combustible: false, activeSides: [ "left" ], gameOverMode: "none", canFall: false, group: 1
                 },
             ],
             greenBalls: 1,
@@ -167,7 +167,7 @@ describe("user objects", () => {
                 {
                     x: 3, y: 3, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: false, id: 0, delIfNearSameId: false, delete: false,
-                    combustible: false, activeSides: [ "left" ], gameOverMode: "nearactiveside", group: 1
+                    combustible: false, activeSides: [ "left" ], gameOverMode: "nearactiveside", canFall: false, group: 1
                 },
             ],
             greenBalls: 1,
@@ -194,7 +194,7 @@ describe("user objects", () => {
                 {
                     x: 3, y: 3, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: false, id: 0, delIfNearSameId: false, delete: false,
-                    combustible: false, activeSides: [ "top" ], gameOverMode: "forceonactiveside", group: 1
+                    combustible: false, activeSides: [ "top" ], gameOverMode: "forceonactiveside", canFall: false, group: 1
                 },
             ],
             greenBalls: 1,
@@ -225,7 +225,7 @@ describe("user objects", () => {
                 {
                     x: 3, y: 3, color1: "stone", color2: "stone", shape: 1, parameters: [50, 50, 50, 50],
                     direction: "up", movable: false, id: 0, delIfNearSameId: false, delete: false,
-                    combustible: false, activeSides: [ "right" ], gameOverMode: "forceonactiveside", group: 1
+                    combustible: false, activeSides: [ "right" ], gameOverMode: "forceonactiveside", canFall: false, group: 1
                 },
             ],
             greenBalls: 1,

@@ -1,0 +1,16 @@
+$background: 3, 13, 1, 1, 23
+111111111111111
+13            1
+1             1
+1             1
+1   42        1
+1   111       1
+1             1
+1             1
+1WWWWWWWWWWWWW1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwwwwwwwwwwww1
+1wwGwwwwwwwwww1
+111111111111111

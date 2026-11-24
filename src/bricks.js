@@ -294,7 +294,7 @@ function drawNaturalBrick(ctx, x, y, w, h, s, shadowLines, ellipseStyle = 0) {
         side => !(shadowLines & side)
     );
 
-    // Two or more straight sides: draw a rectangle.
+    // Two or more straight sides: draw a rectangle
     if (straight.length >= 2) {
         ctx.fillRect(x, y, w, h);
         return;
@@ -305,13 +305,13 @@ function drawNaturalBrick(ctx, x, y, w, h, s, shadowLines, ellipseStyle = 0) {
 
     ctx.beginPath();
 
-    // No straight sides: full ellipse.
+    // No straight sides: full ellipse
     if (straight.length === 0) {
         drawEllipseVariant(ctx, cx, cy, w * 0.5, h * 0.5,
             0, 0, Math.PI * 2, false, ellipseStyle);
     }
 
-    // Exactly one straight side: half ellipse.
+    // Exactly one straight side: half ellipse
     else {
         switch (straight[0]) {
             case T:
@@ -352,7 +352,7 @@ function drawEllipseVariant(
     ctx, cx, cy, rx, ry, rotation,
     startAngle, endAngle, anticlockwise, style = 0
 ) {
-    // Standard ellipse.
+    // Standard ellipse
     if (style === 0) {
         ctx.ellipse(
             cx, cy, rx, ry, rotation,
@@ -361,7 +361,7 @@ function drawEllipseVariant(
         return;
     }
 
-    // Shape exponent: smaller values produce squarer shapes.
+    // Shape exponent: smaller values produce squarer shapes
     const powers = [1, 0.85, 0.7, 0.55];
     const power = powers[style] ?? 1;
 
@@ -373,7 +373,7 @@ function drawEllipseVariant(
         return;
     }
 
-    // Determine the direction and angular range.
+    // Determine the direction and angular range
     const fullCircle = Math.PI * 2;
     let sweep = endAngle - startAngle;
 
@@ -400,14 +400,14 @@ function drawEllipseVariant(
         const cos = Math.cos(angle);
         const sin = Math.sin(angle);
 
-        // Superellipse coordinates.
+        // Superellipse coordinates
         const px = rx * Math.sign(cos) *
             Math.pow(Math.abs(cos), power);
 
         const py = ry * Math.sign(sin) *
             Math.pow(Math.abs(sin), power);
 
-        // Apply rotation.
+        // Apply rotation
         const pxRotated = px * cosRotation - py * sinRotation;
         const pyRotated = px * sinRotation + py * cosRotation;
 

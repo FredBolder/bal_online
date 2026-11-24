@@ -857,6 +857,10 @@ function buildLevelText(backData, gameData, gameInfo, gameVars) {
             }
             lines.push(line);
         }
+        if (userObject.canFall) {
+            line = `$canfall: ${coordinates}, yes`;
+            lines.push(line);
+        }
         if (userObject.color1 !== "stone") {
             line = `$color1: ${coordinates}, ${userObject.color1}`;
             lines.push(line);

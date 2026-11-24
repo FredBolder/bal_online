@@ -343,6 +343,109 @@ function drawClef(context, x, y, lineDistance, color, clef) {
   drawMusicGlyph(context, x, y, lineDistance, color, symbol, baselineOffset);
 }
 
+export function drawGhost(ctx, xmin, ymin, xmax, ymax, parameters) {
+  if (!Array.isArray(parameters)) {
+    return;
+  }
+
+  if (parameters.length !== 4) {
+    return;
+  }
+
+  const p1 = parameters[0] * 0.01;
+  const p2 = parameters[1] * 0.01;
+
+  const w = xmax - xmin;
+  const h = ymax - ymin;
+  const size = Math.min(w, h);
+
+  const xc = (xmin + xmax) * 0.5;
+  const yc = (ymin + ymax) * 0.5;
+
+  const ghostWidth = size * 0.5;
+  const ghostHeight = size * 0.85;
+
+  const topY = yc - size * 0.455;
+  const middleY = topY + ghostHeight * 0.5;
+  const bottomY = topY + ghostHeight;
+
+  const rx = ghostWidth * 0.5;
+  const leftX = xc - rx;
+  const rightX = xc + rx;
+
+  // Sides
+  const sideRadius = ghostHeight * 2;
+  const sideAngle = Math.asin((bottomY - middleY) / sideRadius);
+  const offset = sideRadius * (1 - Math.cos(sideAngle));
+
+  const bottomLeft = leftX + offset;
+  const bottomRight = rightX - offset;
+
+  ctx.beginPath();
+  ctx.fillStyle = "white";
+
+  // Top
+  ctx.ellipse(xc, middleY, rx, ghostHeight * 0.5, 0, Math.PI, 0, false);
+
+  // Right side
+  ctx.arc(rightX - sideRadius, middleY, sideRadius, 0, sideAngle);
+
+  // Bottom
+  const segments = 3;
+  const segmentWidth = (bottomRight - bottomLeft) / segments;
+
+  for (let i = 0; i < segments; i++) {
+    const x = bottomRight - segmentWidth * (i + 0.5);
+    ctx.arc(x, bottomY, segmentWidth * 0.5, 0, Math.PI);
+  }
+
+  // Left side
+  ctx.arc(leftX + sideRadius, middleY, sideRadius, Math.PI - sideAngle, Math.PI);
+
+  ctx.closePath();
+  ctx.fill();
+
+  // Eyes
+  ctx.beginPath();
+  ctx.fillStyle = "black";
+
+  const eyeAngle = p1 * Math.PI;
+  const eyeY = topY + ghostHeight * 0.3;
+  const eyeX = ghostWidth * 0.2;
+  const eyeRX = ghostWidth * (0.07 + (0.05 * p2));
+  const eyeRY = ghostHeight * 0.09;
+
+  ctx.ellipse(xc - eyeX, eyeY, eyeRX, eyeRY, eyeAngle, 0, Math.PI * 2);
+  ctx.ellipse(xc + eyeX, eyeY, eyeRX, eyeRY, Math.PI - eyeAngle, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Mouth
+
+  // Default (1)
+  let mouthAngleStart = Math.PI;
+  let mouthAngleEnd = 0;
+  let mouthRX = ghostWidth * 0.1;
+  let mouthRY = ghostHeight * 0.14;
+  let mouthY = eyeY + (ghostHeight * 0.22);
+
+  switch (parameters[2]) {
+    case 2:
+      mouthAngleStart = 0;
+      mouthAngleEnd = 2 * Math.PI;
+      mouthRX = ghostWidth * 0.08;
+      mouthRY = ghostHeight * 0.1;
+      mouthY = eyeY + (ghostHeight * 0.18);
+      break;
+    default:
+      break;
+  }
+  if (parameters[2] > 0) {
+    ctx.beginPath();
+    ctx.ellipse(xc, mouthY, mouthRX, mouthRY, 0, mouthAngleStart, mouthAngleEnd, false);
+    ctx.fill();
+  }
+}
+
 export function drawMeander(ctx, xmin, ymin, xmax, ymax, pattern, flip, position) {
   let n = 10;
 
@@ -608,21 +711,22 @@ export function drawUserObject(context, x, y, preset = null) {
   const cx = (x1 + x2) / 2;
   const cy = (y1 + y2) / 2;
 
-  idx = findElementByCoordinates(x, y, gameInfo.userObjects);
-  if (idx >= 0) {
-    const userObject = gameInfo.userObjects[idx];
-    color1 = userObject.color1;
-    color2 = userObject.color2;
-    direction = userObject.direction;
-    setArray(parameters, userObject.parameters);
-    shape = userObject.shape;
-  }
   if (preset !== null) {
     color1 = preset.color1;
     color2 = preset.color2;
     direction = preset.direction;
     setArray(parameters, preset.parameters);
     shape = preset.shape;
+  } else {
+    idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+    if (idx >= 0) {
+      const userObject = gameInfo.userObjects[idx];
+      color1 = userObject.color1;
+      color2 = userObject.color2;
+      direction = userObject.direction;
+      setArray(parameters, userObject.parameters);
+      shape = userObject.shape;
+    }
   }
 
   if (color1.toLowerCase() === "stone") {
@@ -810,9 +914,9 @@ export function drawUserObject(context, x, y, preset = null) {
     case 9: {
       const curveBend = 0.25 * p1 * (1 - (p2 * 0.5));
       const dx = 0.25 * w1 * p2;
-      const pt1 = { x: x1 + dx, y: y2};
-      const pt2 = { x: cx, y: y1};
-      const pt3 = { x: x2 - dx, y: y2};
+      const pt1 = { x: x1 + dx, y: y2 };
+      const pt2 = { x: cx, y: y1 };
+      const pt3 = { x: x2 - dx, y: y2 };
       path.moveTo(pt1.x, pt1.y);
       const cp1 = midPoint(pt1, pt2);
       cp1.x += (pt1.y - pt2.y) * curveBend;
@@ -824,6 +928,10 @@ export function drawUserObject(context, x, y, preset = null) {
       path.closePath();
       break;
     }
+    case 10:
+      drawGhost(ctx, x1, y1, x2, y2, parameters);
+      ready = true;
+      break;
     default:
       // 1
       path.moveTo(x1, cy);
@@ -1022,6 +1130,13 @@ export function presetUserObject(userObject, preset) {
       setArray(userObject.parameters, [30, 30, 17, 1]);
       userObject.shape = 6;
       break;
+    case "naturalstones1":
+      userObject.color1 = "#BBA58A";
+      userObject.color2 = "#9B8B78";
+      userObject.direction = "up";
+      setArray(userObject.parameters, [30, 30, 1, 5]);
+      userObject.shape = 6;
+      break;
     case "meander1":
       userObject.color1 = "#173D65";
       userObject.color2 = "#F3E8D0";
@@ -1064,6 +1179,15 @@ export function presetUserObject(userObject, preset) {
       setArray(userObject.parameters, [6, 0, 5, 0]);
       userObject.shape = 8;
       break;
+    case "spike1":
+      setArray(userObject.activeSides, ["top"]);
+      userObject.color1 = "#464646";
+      userObject.color2 = "#000000";
+      userObject.direction = "up";
+      userObject.gameOverMode = "forceonactiveside";
+      setArray(userObject.parameters, [70, 0, 0, 0]);
+      userObject.shape = 9;
+      break;
     default:
       break;
   }
@@ -1073,4 +1197,4 @@ export function userObjectDirections() {
   return ["left", "right", "up", "down"];
 }
 
-export const userObjectShapes = 9;
+export const userObjectShapes = 10;

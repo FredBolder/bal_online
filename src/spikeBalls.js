@@ -1,4 +1,4 @@
-import { canFall, getGameDataValue, findElementByCoordinates } from "./balUtils.js";
+import { getGameDataValue, findElementByCoordinates, objectCanFall } from "./balUtils.js";
 import { hasForceDown, hasForceLeft, hasForceRight, hasForceUp, moveableByForceOrEmpty } from "./force.js";
 
 export function drawSpikeBall(ctx, xc, yc, size, angle = 0) {
@@ -152,11 +152,11 @@ export function hasSpikeBallWeightAbove(gameData, gameInfo, x, y) {
     }
 
     for (let i = y - 1; i >= 0; i--) {
-        const obj = gameData[i][x];
+        const obj = getGameDataValue(gameData, x, i);
         if (obj === 256) {
             return true;
         }
-        if (obj === 0 || !canFall.includes(obj)) {
+        if (obj === 0 || !objectCanFall(gameData, gameInfo, x, i)) {
             return false;
         }
     }
@@ -170,11 +170,11 @@ export function hasSpikeBallWeightBelow(gameData, gameInfo, x, y) {
 
     const maxY = gameData.length - 1;
     for (let i = y + 1; i <= maxY; i++) {
-        const obj = gameData[i][x];
+        const obj = getGameDataValue(gameData, x, i);
         if (obj === 256) {
             return true;
         }
-        if (obj === 0 || !canFall.includes(obj)) {
+        if (obj === 0 || !objectCanFall(gameData, gameInfo, x, i)) {
             return false;
         }
     }

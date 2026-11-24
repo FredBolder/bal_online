@@ -310,6 +310,7 @@ export function checkSettings(data, settings) {
     { name: "$answerballmode", params: 3, xy: true, yesno: -1 },
     { name: "$background", params: 5, xy: true, yesno: -1 },
     { name: "$bgcolor", params: 5, xy: true, yesno: -1 },
+    { name: "$canfall", params: 3, xy: true, yesno: 2 },
     { name: "$changer", params: 5, xy: true, yesno: 2 },
     { name: "$color", params: 2, xy: false, yesno: -1 },
     { name: "$color1", params: 0, xy: true, yesno: -1 },
@@ -492,6 +493,11 @@ export function checkSettings(data, settings) {
               }
               if (((x + w - 1) >= data[0].length) || ((y + h - 1) >= data.length)) {
                 msg += `${settingNr(i)}The area exceeds the game raster.\n`;
+              }
+              break;
+            case "$canfall":
+              if (validXY && !["Ӿ", 263].includes(data[y][x])) {
+                msg += `${settingNr(i)}No user object found at the coordinates ${x}, ${y}.\n`;
               }
               break;
             case "$changer":
@@ -1856,6 +1862,12 @@ export function loadLevelSettings(backData, gameData, gameInfo, gameVars, levelS
               gameVars.fgcolor.push({ x, y, w, h, color });
             }
           }
+          break;
+        case "$canfall":
+          if (values.length !== 3 || !validXY || !isYesOrNo(valuesLowerCase[2])) {
+            break;
+          }
+          setProp(gameData, gameInfo, x, y, "canFall", valuesLowerCase[2] === "yes", false);
           break;
         case "$changer":
           if (values.length !== 5 || !validXY) {

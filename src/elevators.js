@@ -1,4 +1,4 @@
-import { getGameDataValue, hasWeightAbove, hasWeightBelow, moveObject } from "./balUtils.js";
+import { findElementByCoordinates, getGameDataValue, hasWeightAbove, hasWeightBelow, moveObject } from "./balUtils.js";
 
 export function elevatorDirections() {
     return ["up", "down"];
@@ -8,10 +8,11 @@ export function horizontalElevatorDirections() {
     return ["left", "right"];
 }
 
-function moveableByElevator(gameInfo, n) {
-  let result = false;
+function moveableByElevator(gameData, gameInfo, x, y) {
+  const gd = getGameDataValue(gameData, x, y);
+  let idx = -1;
 
-  switch (n) {
+  switch (gd) {
     case 4:
     case 8:
     case 40:
@@ -21,16 +22,18 @@ function moveableByElevator(gameInfo, n) {
     case 245:
     case 253:
     case 256:
-      result = true;
-      break;
+      return true;
+    case 263:
+      idx = findElementByCoordinates(x, y, gameInfo.userObjects);
+      if (idx < 0) {
+        return false;
+      }
+      return gameInfo.userObjects[idx].canFall;
     case 2:
-      result = !gameInfo.hasPropeller;
-      break;
+      return !gameInfo.hasPropeller;
     default:
-      result = false;
-      break;
+      return false;
   }
-  return result;
 }
 
 export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
@@ -59,13 +62,13 @@ export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
     switch (elevatorInOut.status) {
       case 0:
         if ([6, 7, 106, 107].includes(data1)) {
-          if (moveableByElevator(gameInfo, data2) && (data3 === 0) && (elevatorInOut.status === 0)) {
+          if (moveableByElevator(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy) && (data3 === 0) && (elevatorInOut.status === 0)) {
             // Enter from the left
             updated = true;
             moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy, elevatorInOut.x + 1, elevatorInOut.y + dy);
             elevatorInOut.status = 10;
           }
-          if (moveableByElevator(gameInfo, data3) && (data2 === 0) && (elevatorInOut.status === 0)) {
+          if (moveableByElevator(gameData, gameInfo, elevatorInOut.x + 1, elevatorInOut.y + dy) && (data2 === 0) && (elevatorInOut.status === 0)) {
             // Exit to the left
             updated = true;
             moveObject(gameData, gameInfo, elevatorInOut.x + 1, elevatorInOut.y + dy, elevatorInOut.x, elevatorInOut.y + dy);
@@ -73,13 +76,13 @@ export function checkElevatorInOuts(gameData, gameInfo, gameVars) {
           }
         }
         if ([6, 7, 106, 107].includes(data5)) {
-          if (moveableByElevator(gameInfo, data2) && (data4 === 0) && (elevatorInOut.status === 0)) {
+          if (moveableByElevator(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy) && (data4 === 0) && (elevatorInOut.status === 0)) {
             // Enter from the right
             updated = true;
             moveObject(gameData, gameInfo, elevatorInOut.x, elevatorInOut.y + dy, elevatorInOut.x - 1, elevatorInOut.y + dy);
             elevatorInOut.status = 10;
           }
-          if (moveableByElevator(gameInfo, data4) && (data2 === 0) && (elevatorInOut.status === 0)) {
+          if (moveableByElevator(gameData, gameInfo, elevatorInOut.x - 1, elevatorInOut.y + dy) && (data2 === 0) && (elevatorInOut.status === 0)) {
             // Exit to the right
             updated = true;
             moveObject(gameData, gameInfo, elevatorInOut.x - 1, elevatorInOut.y + dy, elevatorInOut.x, elevatorInOut.y + dy);
@@ -152,7 +155,7 @@ export function moveElevators(backData, gameData, gameInfo, gameVars) {
         emptyUp = j;
         break;
       }
-      if (!moveableByElevator(gameInfo, objectNumber)) {
+      if (!moveableByElevator(gameData, gameInfo, elevator.x, j)) {
         upPossible = false;
       }
       if (upPossible && (objectNumber === 2)) {
@@ -176,7 +179,7 @@ export function moveElevators(backData, gameData, gameInfo, gameVars) {
         emptyDown = j;
         break;
       }
-      if (!moveableByElevator(gameInfo, objectNumber)) {
+      if (!moveableByElevator(gameData, gameInfo, elevator.x, j)) {
         downPossible = false;
       }
       if (downPossible && (objectNumber === 2)) {
@@ -240,7 +243,7 @@ export function moveElevators(backData, gameData, gameInfo, gameVars) {
           } else {
             for (let j = y + 1; j < gameData.length; j++) {
               const objectNumber = gameData[j][x];
-              if ((gameData[j - 1][x] !== 0) || !moveableByElevator(gameInfo, objectNumber)) {
+              if ((gameData[j - 1][x] !== 0) || !moveableByElevator(gameData, gameInfo, x, j)) {
                 break;
               }
               if ((objectNumber === 2) && !elevator.hasBlueBall && !hasWeightBelow(backData, gameData, gameInfo, gameVars, x, x, j - 1, false)) {
@@ -264,7 +267,7 @@ export function moveElevators(backData, gameData, gameInfo, gameVars) {
           if (gravityDown) {
             for (let j = y - 1; j >= 0; j--) {
               const objectNumber = gameData[j][x];
-              if ((gameData[j + 1][x] !== 0) || !moveableByElevator(gameInfo, objectNumber)) {
+              if ((gameData[j + 1][x] !== 0) || !moveableByElevator(gameData, gameInfo, x, j)) {
                 break;
               }
               if ((objectNumber === 2) && !elevator.hasBlueBall && !hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, j + 1, false)) {
@@ -395,7 +398,7 @@ export function moveHorizontalElevators(backData, gameData, gameInfo, gameVars) 
         yObject = yFrom;
         while (!stop && (((yObject >= yTo) && gravityDown) || ((yObject <= yTo) && !gravityDown))) {
           const objectNumber = gameData[yObject][x];
-          if (moveableByElevator(gameInfo, objectNumber) && gameData[yObject][x + dx] === 0) {
+          if (moveableByElevator(gameData, gameInfo, x, yObject) && gameData[yObject][x + dx] === 0) {
             if (objectNumber === 2) {
               if (!elevator.hasBlueBall && gravityDown && !hasWeightAbove(backData, gameData, gameInfo, gameVars, x, x, yObject - yStep, false)) {
                 stop = true;

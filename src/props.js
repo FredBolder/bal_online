@@ -168,6 +168,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
                 error = true;
             }
             break;
+        case "canFall":
         case "combustible":
         case "delIfNearSameId":
         case "inverted":
@@ -429,7 +430,7 @@ export function setProp(gameData, gameInfo, x, y, prop, value, message) {
         "stripes", "tailStripes"].includes(prop)) {
         list = "tropicalFish";
     }
-    if (isUserObject && ["activeSides", "color1", "color2", "combustible", "delIfNearSameId", "direction",
+    if (isUserObject && ["activeSides", "canFall", "color1", "color2", "combustible", "delIfNearSameId", "direction",
         "gameOverMode", "group", "id", "movable",].includes(prop)) {
         list = "userObjects";
     }
