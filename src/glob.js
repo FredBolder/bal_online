@@ -36,7 +36,7 @@ export const globalVars = {
     patternImg09: null,
     patternImg10: null,
     thisWorldGreen: -1,
-    uf: true,  // TODO: Set to false when publishing
+    uf: false,  // TODO: Set to false when publishing
     up: false  // TODO: Set to false when publishing
 }
 
